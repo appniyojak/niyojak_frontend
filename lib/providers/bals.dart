@@ -373,6 +373,20 @@ class StaticMasterBAL {
     showAnnualBaithakkey = map["showAnnualBaithak"];
     monthYear = map["myear"];
   }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['StaticID'] = this.staticID;
+    data['PraantID'] = this.praantID;
+    data['EntityType'] = this.entityType;
+    data['Code'] = this.code;
+    data['CodeForDisplay'] = this.codeForDisplay;
+    data['DisplaySequence'] = this.displaySequence;
+    data['ViewOnly'] = this.ViewOnly;
+    data['showAnnualBaithak'] = this.showAnnualBaithakkey;
+    data['myear'] = this.monthYear;
+    return data;
+  }
 }
 
 class AayaamMasterBAL {
@@ -2000,12 +2014,22 @@ class ShaakhaaVruttaBAL {
   int? shaakhaaID;
   String? vruttaDate;
   int? shishuCount;
+  int? newshishuCount;
   int? baalVidyaarthiCount;
+  int? newbaalVidyaarthiCount;
   int? tarunVidyaarthiCount;
+  int? newtarunVidyaarthiCount;
   int? tarunVyavasaayeeCount;
+  int? newtarunVyavasaayeeCount;
   int? proudhaVyavasaayeeCount;
+  int? newproudhaVyavasaayeeCount;
+  int? matruskatiCount;
+  int? newmatruskatiCount;
+  int? pravasiKaryakartaCount;
+  int? anyaPravasiKaryakartaCount;
   int? abhyaagatCount;
   String? remark;
+
   bool? isMandatoryShaaririk = false;
   bool? isMandatoryBouddhik = false;
   bool? isOptionalShaaririk = false;
@@ -2018,6 +2042,13 @@ class ShaakhaaVruttaBAL {
   bool? isDoneSaanghikGeet = false;
   bool? isDoneAmrutaVachan = false;
   bool? isDoneSubhaashit = false;
+  bool? isDoneUrdhvapad = false;
+  bool? isDoneBoodhKatha = false;
+  bool? isDoneBoudhikDays = false;
+  String? SelectedBoudhikDaysId;
+  String? AnyaBoudhikDays;
+  bool? isDoneSewaDays = false;
+  String? SelectedSewaDaysId;
 
   ShaakhaaVruttaBAL(
       this.shaakhaaVruttaID,
@@ -2025,11 +2056,20 @@ class ShaakhaaVruttaBAL {
       this.shaakhaaID,
       this.vruttaDate,
       this.shishuCount,
+      this.newshishuCount,
       this.baalVidyaarthiCount,
+      this.newbaalVidyaarthiCount,
       this.tarunVidyaarthiCount,
+      this.newtarunVidyaarthiCount,
       this.tarunVyavasaayeeCount,
+      this.newtarunVyavasaayeeCount,
       this.proudhaVyavasaayeeCount,
+      this.newproudhaVyavasaayeeCount,
+      this.matruskatiCount,
+      this.newmatruskatiCount,
       this.abhyaagatCount,
+      this.pravasiKaryakartaCount,
+      this.anyaPravasiKaryakartaCount,
       this.remark,
       this.isMandatoryShaaririk,
       this.isMandatoryBouddhik,
@@ -2041,7 +2081,14 @@ class ShaakhaaVruttaBAL {
       this.isDoneSanchalanAbhyaas,
       this.isDoneSaanghikGeet,
       this.isDoneAmrutaVachan,
-      this.isDoneSubhaashit);
+      this.isDoneSubhaashit,
+      this.isDoneUrdhvapad,
+      this.isDoneBoodhKatha,
+      this.isDoneBoudhikDays,
+      this.SelectedBoudhikDaysId,
+      this.AnyaBoudhikDays,
+      this.isDoneSewaDays,
+      this.SelectedSewaDaysId);
 
   ShaakhaaVruttaBAL.fromMap(Map<String, dynamic> map) {
     shaakhaaVruttaID = map["ShaakhaaVruttaID"];
@@ -2049,11 +2096,20 @@ class ShaakhaaVruttaBAL {
     shaakhaaID = map["ShaakhaaID"];
     vruttaDate = map["VruttaDateStr"];
     shishuCount = map["ShishuCount"];
+    newshishuCount = map["NewShishuCount"];
     baalVidyaarthiCount = map["BaalVidyaarthiCount"];
+    newbaalVidyaarthiCount = map["NewBaalVidyaarthiCount"];
     tarunVidyaarthiCount = map["TarunVidyaarthiCount"];
+    newtarunVidyaarthiCount = map["NewTarunVidyaarthiCount"];
     tarunVyavasaayeeCount = map["TarunVyavasaayeeCount"];
+    newtarunVyavasaayeeCount = map["NewTarunVyavasaayeeCount"];
     proudhaVyavasaayeeCount = map["ProudhaVyavasaayeeCount"];
+    newproudhaVyavasaayeeCount = map["NewProudhaVyavasaayeeCount"];
+    matruskatiCount = map["MatruskatiCountCount"];
+    newmatruskatiCount = map["NewMatruskatiCountCount"];
     abhyaagatCount = map["AbhyaagatCount"];
+    pravasiKaryakartaCount = map["PravasiKaryakartaCount"];
+    anyaPravasiKaryakartaCount = map["AnyaPravasiKaryakartaCount"];
     isMandatoryShaaririk = map["IsMandatoryShaaririk"];
     isMandatoryBouddhik = map["IsMandatoryBouddhik"];
     isOptionalShaaririk = map["IsOptionalShaaririk"];
@@ -2066,6 +2122,13 @@ class ShaakhaaVruttaBAL {
     isDoneSanchalanAbhyaas = map["IsDoneSanchalanAbhyaas"];
     isDoneSooryaNamaskaar = map["IsDoneSooryaNamaskaar"];
     isDoneSubhaashit = map["IsDoneSubhaashit"];
+    isDoneUrdhvapad = map["IsDoneUrdhvapad"];
+    isDoneBoodhKatha = map["IsDoneBoodhKatha"];
+    isDoneBoudhikDays = map["IsDoneBoudhikDays"];
+    SelectedBoudhikDaysId = map["BoudhikDaysId"];
+    AnyaBoudhikDays = map["AnyaBoudhikDays"];
+    isDoneSewaDays = map["IsDoneSewaDays"];
+    SelectedSewaDaysId = map["SewaDaysId"];
   }
 }
 

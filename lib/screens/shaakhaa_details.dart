@@ -145,7 +145,7 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
       userGeoUnitId = dm.geoUnitID;
       ddm = dm;
     });
-    await populateDropdown();
+    await populateDropdown(fromClear: (dm.levelID ?? 0) > 9 && dm.levelID != 13);
   }
 
   Future<void> populateAllDropdowns(int level, DropDownModel dm) async {
@@ -160,7 +160,7 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
     if (level == 9) {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.mahaanagar).toString();
       _selctedLevel = 'Mahaanagar';
-    }*/
+    }
 
     // Step 2: Vibhaag
     await populatelinkedVibhaagDropdown('');
@@ -168,10 +168,10 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
     if (level == 8) {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.vibhaag).toString();
       _selctedLevel = 'Vibhaag';
-    }
+    }*/
 
     // Step 3: Bhaag
-    await populatelinkedBhaagDropdown(_linkedVibhaagValue!);
+    await populatelinkedBhaagDropdown(_linkedVibhaagValue ?? '');
     _linkedbhaagValue = (level == 7 ? (dm.geoUnitID ?? "").toString() : selection.bhaag) ?? '';
     if (level == 7) {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.bhaag).toString();
@@ -239,7 +239,8 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedVibhaagDropdown(String mahaanagarIDStr) async {
-    _linkedupnagarValue = _linkedupnagar = _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+    _linkedVibhaagValue = _linkedupnagarValue = _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+    _linkedVibhaag = _linkedupnagar = _linkedbhaag = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = null;
     final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar', '', isAbhiyaan: false);
     setState(() => _linkedVibhaag = data);
     return data;
@@ -248,7 +249,7 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
   Future<List<GeoUnitMasterBAL>> populatelinkedBhaagDropdown(String vibhaagIDStr) async {
     _linkedupnagarValue = _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     _linkedupnagar = _linkedbhaag = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = [];
-    final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '', isAbhiyaan: false);
+    final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, '', '');
     setState(() => _linkedbhaag = data);
     return data;
   }
@@ -632,7 +633,7 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
           ? DateFormat("hh:mm").format(new DateFormat("yyyy-MM-dd hh:mm").parse("2021-02-01 " + _toTime!.hour.toString() + ":" + _toTime!.minute.toString())) +
               (_toTime!.period == DayPeriod.am ? " AM" : " PM")
           : null),
-      "Remark": shaakhaa!.remark,
+      "Remark": shaakhaa?.remark ?? "",
       "IsSankalpit": _isSankalpit == true ? true : false,
 //========================= OLD REQ PARAM =============================================================================================================================================================================
       "SankalpAadhaar": (_isSankalpit ? _sankalpAadhaarEnum.toString().split('.').last : null),
@@ -661,8 +662,8 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
 
       "HasToli": _hasToli == true ? true : false,
       "HasPaalak": _hasPaalak == true ? true : false,
-      "OtherOptionalVishay": shaakhaa!.otherShaaririkVishay,
-      "OptionalShaaririkVishayID": shaakhaa!.shaaririkVishayID,
+      "OtherOptionalVishay": shaakhaa?.otherShaaririkVishay ?? "",
+      "OptionalShaaririkVishayID": shaakhaa?.shaaririkVishayID ?? "",
       "ModifiedBy": Statics.userDetails["userID"]
     });
 
@@ -708,12 +709,12 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
 
   Future<void> _submit() async {
     print("_submit 1");
-    // if (!_formKey.currentState!.validate()) {
-    //   print("_submit 2");
-    //
-    //   // Invalid!
-    //   return;
-    // }
+    if (!_formKey.currentState!.validate()) {
+      print("_submit 2");
+
+      // Invalid!
+      return;
+    }
     print("_submit 3");
 
     _formKey.currentState!.save();
@@ -1245,7 +1246,7 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
                             return null;
                           },
                           onSaved: (value) {
-                            shaakhaa!.frequencyID = value!.staticID;
+                            shaakhaa?.frequencyID = value?.staticID;
                           },
                         ),
                       SizedBox(
@@ -2151,7 +2152,7 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
                         SizedBox(
                           height: 10,
                         ),
-                      if (_isSankalpit == false)
+                      if (_isSankalpit == false && _frequencyValue != "36")
                         CheckboxListTile(
                           contentPadding: EdgeInsets.symmetric(horizontal: 0),
                           controlAffinity: ListTileControlAffinity.leading,
@@ -2165,7 +2166,7 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
                             });
                           },
                         ),
-                      if (_isSankalpit == false)
+                      if (_isSankalpit == false && _frequencyValue != "36")
                         SizedBox(
                           height: 10,
                         ),
@@ -2191,7 +2192,7 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
                               ),
                             ],
                           ),
-                      if (_isSankalpit == false)
+                      if (_isSankalpit == false && _frequencyValue != "36")
                         Row(
                           children: [
                             if (_shaaririkVishay != null)
@@ -2225,11 +2226,11 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
                                 icon: Icon(Icons.cancel)),
                           ],
                         ),
-                      if (_isSankalpit == false)
+                      if (_isSankalpit == false && _frequencyValue != "36")
                         SizedBox(
                           height: 10,
                         ),
-                      if (_isSankalpit == false)
+                      if (_isSankalpit == false && _frequencyValue != "36")
                         TextFormField(
                           textInputAction: TextInputAction.newline,
                           controller: _otherOptionalVishayCtrl,
@@ -2241,11 +2242,11 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
                             shaakhaa!.otherShaaririkVishay = value;
                           },
                         ),
-                      if (_isSankalpit == false)
+                      if (_isSankalpit == false && _frequencyValue != "36")
                         SizedBox(
                           height: 10,
                         ),
-                      if (_isSankalpit == false)
+                      if (_isSankalpit == false && _frequencyValue != "36")
                         TextFormField(
                           textInputAction: TextInputAction.next,
                           controller: _remarkCtrl,

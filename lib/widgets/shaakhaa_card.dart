@@ -18,10 +18,11 @@ class ShaakhaaCard extends StatelessWidget {
   final shaakhaaItem;
   final IsSankalpit;
   var onSaveDetails;
+  final Widget? traillingIcon;
 
   List<Statics.MenuItem>? menuItem;
 
-  ShaakhaaCard(this.shaakhaaItem, this.IsSankalpit, this.onSaveDetails) {
+  ShaakhaaCard(this.shaakhaaItem, this.IsSankalpit, this.onSaveDetails, {this.traillingIcon}) {
     menuItem = [
       if (((Statics.userDetails['LevelName'] == 'Praant' ||
               Statics.userDetails['LevelName'] == 'Mahaanagar' ||
@@ -316,51 +317,52 @@ class ShaakhaaCard extends StatelessWidget {
               Positioned(
                 right: 0.0,
                 top: 0.0,
-                child: PopupMenuButton(
-                  onSelected: (value) {
-                    if (value == 'ShaakhaaPat')
-                      Navigator.of(context).pushNamed(ShaakhaaPat.routeName, arguments: Statics.ScreenArguments(shaakhaaItem["ShaakhaaID"], value));
-                    else if (value == 'Vrutta')
-                      Navigator.of(context).pushNamed(ShaakhaaVrutta.routeName, arguments: Statics.ScreenArguments(shaakhaaItem["ShaakhaaID"], value));
-                    else if (value == 'ViewLocation') {
-                      if (shaakhaaItem["ShaakhaaLatitude"] != null && shaakhaaItem["ShaakhaaLatitude"].toString() != "") {
-                        _latLng.add(Statics.cLatLong(shaakhaaItem["ShaakhaaID"], shaakhaaItem["GeoUnitName"].toString(), shaakhaaItem["FrequencyCode"].toString(),
-                            LatLng(shaakhaaItem["ShaakhaaLatitude"], shaakhaaItem["ShaakhaaLongitude"])));
-                        Navigator.of(context).pushNamed(MapDisplay.routeName, arguments: _latLng);
-                      } else {
-                        Statics.showMessageDialog(context, "Co-Ordinates Not present");
-                      }
-                    } else if (value == 'SewaVasti') {
-                      Navigator.of(context).pushNamed(ShaakhaaSevaVastiLink.routeName, arguments: Statics.ScreenArguments(shaakhaaItem["ShaakhaaID"], shaakhaaItem["GeoUnitName"].toString()));
-                    } else if (value == 'Delete') {
-                      _deleteShaakhaa(context, shaakhaaItem["ShaakhaaID"].toString());
-                    } else if (value == 'RecordLocation') {
-                      _recordLocation(context);
-                    } else if (value == 'ShaakhaaToli') {
-                      Navigator.of(context).pushNamed(ShaakhaaToli.routeName, arguments: Statics.ScreenArguments(shaakhaaItem["ShaakhaaID"], shaakhaaItem["GeoUnitName"].toString()));
-                    } else
-                      Navigator.of(context).pushNamed(EditShaakhaaScreen.routeName, arguments: Statics.ScreenArguments(shaakhaaItem["ShaakhaaID"], value));
-                  },
-                  icon: Icon(
-                    FontAwesomeIcons.ellipsisV,
-                    color: Colors.grey,
-                  ),
-                  itemBuilder: (BuildContext context) {
-                    return menuItem!.map((Statics.MenuItem menuItem) {
-                      return PopupMenuItem(
-                        //value: menuItem.menuVal,
-                        value: menuItem.menuKey,
-                        child: ListTile(
-                          leading: Icon(
-                            menuItem.iconVal,
-                            color: Colors.purple,
-                          ),
-                          title: Text(menuItem.menuVal),
-                        ),
-                      );
-                    }).toList();
-                  },
-                ),
+                child: traillingIcon ??
+                    PopupMenuButton(
+                      onSelected: (value) {
+                        if (value == 'ShaakhaaPat')
+                          Navigator.of(context).pushNamed(ShaakhaaPat.routeName, arguments: Statics.ScreenArguments(shaakhaaItem["ShaakhaaID"], value));
+                        else if (value == 'Vrutta')
+                          Navigator.of(context).pushNamed(ShaakhaaVrutta.routeName, arguments: Statics.ScreenArguments(shaakhaaItem["ShaakhaaID"], value));
+                        else if (value == 'ViewLocation') {
+                          if (shaakhaaItem["ShaakhaaLatitude"] != null && shaakhaaItem["ShaakhaaLatitude"].toString() != "") {
+                            _latLng.add(Statics.cLatLong(shaakhaaItem["ShaakhaaID"], shaakhaaItem["GeoUnitName"].toString(), shaakhaaItem["FrequencyCode"].toString(),
+                                LatLng(shaakhaaItem["ShaakhaaLatitude"], shaakhaaItem["ShaakhaaLongitude"])));
+                            Navigator.of(context).pushNamed(MapDisplay.routeName, arguments: _latLng);
+                          } else {
+                            Statics.showMessageDialog(context, "Co-Ordinates Not present");
+                          }
+                        } else if (value == 'SewaVasti') {
+                          Navigator.of(context).pushNamed(ShaakhaaSevaVastiLink.routeName, arguments: Statics.ScreenArguments(shaakhaaItem["ShaakhaaID"], shaakhaaItem["GeoUnitName"].toString()));
+                        } else if (value == 'Delete') {
+                          _deleteShaakhaa(context, shaakhaaItem["ShaakhaaID"].toString());
+                        } else if (value == 'RecordLocation') {
+                          _recordLocation(context);
+                        } else if (value == 'ShaakhaaToli') {
+                          Navigator.of(context).pushNamed(ShaakhaaToli.routeName, arguments: Statics.ScreenArguments(shaakhaaItem["ShaakhaaID"], shaakhaaItem["GeoUnitName"].toString()));
+                        } else
+                          Navigator.of(context).pushNamed(EditShaakhaaScreen.routeName, arguments: Statics.ScreenArguments(shaakhaaItem["ShaakhaaID"], value));
+                      },
+                      icon: Icon(
+                        FontAwesomeIcons.ellipsisV,
+                        color: Colors.grey,
+                      ),
+                      itemBuilder: (BuildContext context) {
+                        return menuItem!.map((Statics.MenuItem menuItem) {
+                          return PopupMenuItem(
+                            //value: menuItem.menuVal,
+                            value: menuItem.menuKey,
+                            child: ListTile(
+                              leading: Icon(
+                                menuItem.iconVal,
+                                color: Colors.purple,
+                              ),
+                              title: Text(menuItem.menuVal),
+                            ),
+                          );
+                        }).toList();
+                      },
+                    ),
               ),
             ],
           ),

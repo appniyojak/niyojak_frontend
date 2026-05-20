@@ -1154,7 +1154,6 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForUpnagar(String leve
       data['ParentGraamID'],
       data['ParentUpaNagarID'],
     );
-    log(jsonEncode(info.toJson()));
     _geounitList.add(info);
   });
   return _geounitList;
@@ -1327,7 +1326,7 @@ Future<dynamic> getShaakhaaByID(String shaakhaaID) async {
 
   var responseBody = json.decode(response.body);
   var data = responseBody['ShaakhaaItem'];
-  print("Search:- $data");
+  log("Search:- $data");
 
   return ShaakhaaMasterBAL(
     data['ShaakhaaID'],
@@ -2308,9 +2307,11 @@ Future<NagarVastiSampurnaModel?> vastisarvekshanAllReportData(context, String? u
   print("${userID}  --- $targetGeoUnitID  ");
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlNagarVastisarvekshanReport), headers: jHeaders, body: json.encode({"AppUserID": userID, "GeoUnitID": int.parse(targetGeoUnitID!), "type": levelType}));
+  var response =
+      await http.post(Uri.parse(urlNagarVastisarvekshanReport), headers: jHeaders, body: json.encode({"AppUserID": userID, "GeoUnitID": int.tryParse(targetGeoUnitID ?? "0") ?? 0, "type": levelType}));
 
-  print(json.encode({"AppUserID": userID, "GeoUnitID": int.parse(targetGeoUnitID), "type": levelType}));
+  print(json.encode({"AppUserID": userID, "GeoUnitID": int.tryParse(targetGeoUnitID ?? "0") ?? 0, "type": levelType}));
+  log("api ==>  $urlNagarVastisarvekshanReport");
   log("response ==>  $response");
   // log("response ==>  ${jsonEncode(response.body)}");
 
@@ -2442,9 +2443,10 @@ Future<MandalVastisarvekshanReportModel?> vastisarvekshanOnlyMandalReportData(co
   print("${userID}  --- $targetGeoUnitID  ");
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(mandalVastisarvekshanReport), headers: jHeaders, body: json.encode({"AppUserID": userID, "GeoUnitID": int.parse(targetGeoUnitID!), "type": levelType}));
+  var response =
+      await http.post(Uri.parse(mandalVastisarvekshanReport), headers: jHeaders, body: json.encode({"AppUserID": userID, "GeoUnitID": int.tryParse(targetGeoUnitID ?? "0") ?? 0, "type": levelType}));
 
-  print(json.encode({"AppUserID": userID, "GeoUnitID": int.parse(targetGeoUnitID), "type": levelType}));
+  print(json.encode({"AppUserID": userID, "GeoUnitID": int.tryParse(targetGeoUnitID ?? "0") ?? 0, "type": levelType}));
   log("response ==>  $response");
   // log("response ==>  ${jsonEncode(response.body)}");
 
@@ -2475,10 +2477,10 @@ Future<TalukaMandalSampurnaModel?> vastisarvekshanAllReportDataForMandal(context
   var response = await http.post(
     Uri.parse(urlNagarVastisarvekshanReportForMandal),
     headers: jHeaders,
-    body: json.encode({"AppUserID": userID, "GeoUnitID": int.parse(targetGeoUnitID!), "type": levelType}),
+    body: json.encode({"AppUserID": userID, "GeoUnitID": int.tryParse(targetGeoUnitID ?? "0") ?? 0, "type": levelType}),
   );
 
-  print(json.encode({"AppUserID": userID, "GeoUnitID": int.parse(targetGeoUnitID), "type": levelType}));
+  print(json.encode({"AppUserID": userID, "GeoUnitID": int.tryParse(targetGeoUnitID ?? "0") ?? 0, "type": levelType}));
   log("response ==>  $response");
   // log("response ==>  ${jsonEncode(response.body)}");
 

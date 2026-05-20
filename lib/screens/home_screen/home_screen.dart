@@ -41,6 +41,7 @@ import '../shatabdi_vrutta_sankalan/gruh_sampark_abhiyaan/gruh_abhiyaan_main_tab
 import '../shatabdi_vrutta_sankalan/hindu_sanmelan/hindu_sanmelan_main_tab.dart';
 import '../shatabdi_vrutta_sankalan/pramukh_jansanvad/pramukh_jan_main_tab.dart';
 import '../shatabdi_vrutta_sankalan/sadbhav_baithak/sadbhav_baithak_main_tab.dart';
+import '../shatabdi_vrutta_sankalan/shaakhaa_saptah_vistar/shakha_saptah_main_tab.dart';
 import '../shatabdi_vrutta_sankalan/vijayadashami/vijaya_dashami_report.dart';
 import '../shatabdi_vrutta_sankalan/vijayadashami/vijayadashami_form_view.dart';
 import '../shatabdi_vrutta_sankalan/yuva-sangam_sanmelan/yuva_sangam_main_tab.dart';
@@ -2886,7 +2887,8 @@ class _HomeScreenState extends State<HomeScreen> {
         _cardRow([
           if (_fromAboveMandal) _cardTile(Statics.getLabel("yuvaSangam"), () => Navigator.of(context).pushNamed(YuvaSangamMainTab.routeName)),
           // _cardTile(Statics.getLabel("yuvaSangam"), () => Fluttertoast.showToast(msg: Statics.getLabel("workInProgress"), gravity: ToastGravity.BOTTOM)),
-          _cardTile(Statics.getLabel("shakhaVistaar"), () => Fluttertoast.showToast(msg: Statics.getLabel("workInProgress"), gravity: ToastGravity.BOTTOM)),
+          // _cardTile(Statics.getLabel("shakhaVistaar"), () => Fluttertoast.showToast(msg: Statics.getLabel("workInProgress"), gravity: ToastGravity.BOTTOM)),
+          _cardTile(Statics.getLabel("shakhaVistaar"), () => Navigator.of(context).pushNamed(ShakhaSaptahMainTab.routeName)),
         ]),
       ],
     );

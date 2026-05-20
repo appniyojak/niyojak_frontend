@@ -576,7 +576,7 @@ class _PramukhJansanvadReportTabState extends State<PramukhJansanvadReportTab> w
                         //   ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.namecount ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.baithakcount ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(

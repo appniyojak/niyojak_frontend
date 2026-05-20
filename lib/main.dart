@@ -93,6 +93,8 @@ import 'screens/shatabdi_vrutta_sankalan/sadbhav_baithak/sadbhav_baithak_main_ta
 import 'screens/shatabdi_vrutta_sankalan/sadbhav_baithak/sadbhav_center_creation_screen.dart';
 import 'screens/shatabdi_vrutta_sankalan/sadbhav_baithak/sadbhav_centers_list_screen.dart';
 import 'screens/shatabdi_vrutta_sankalan/sadbhav_baithak/sadbhav_search_vrutta.dart';
+import 'screens/shatabdi_vrutta_sankalan/shaakhaa_saptah_vistar/shakha_saptah_main_tab.dart';
+import 'screens/shatabdi_vrutta_sankalan/shaakhaa_saptah_vistar/shakhaa_saptah_form_screen.dart';
 import 'screens/shatabdi_vrutta_sankalan/vijayadashami/vijayadashami_form_view.dart';
 import 'screens/shatabdi_vrutta_sankalan/yuva-sangam_sanmelan/add_new_karyakram_screen.dart';
 import 'screens/shatabdi_vrutta_sankalan/yuva-sangam_sanmelan/yuva_sangam_form_screen.dart';
@@ -370,6 +372,8 @@ class NiyojakAppState extends State<NiyojakApp> {
                 AddNewKaryakramScreen.routeName: (ctx) => AddNewKaryakramScreen(),
                 YuvaSangamMainTab.routeName: (ctx) => YuvaSangamMainTab(),
                 YuvaSangamFormScreen.routeName: (ctx) => YuvaSangamFormScreen(),
+                ShakhaSaptahMainTab.routeName: (ctx) => ShakhaSaptahMainTab(),
+                ShakhaaSaptahFormScreen.routeName: (ctx) => ShakhaaSaptahFormScreen(),
                 SearchSankalpScreen.routeName: (ctx) => ChangeNotifierProvider<SankalpScreenProvider>(create: (context) => SankalpScreenProvider(), child: SearchSankalpScreen()),
                 // SearchSankalpScreen.routeName: (ctx) => ChangeNotifierProvider<SankalpScreenProvider>(create: (context) => SankalpScreenProvider(), child: SearchSankalpScreen()),
               },
@@ -381,7 +385,7 @@ class NiyojakAppState extends State<NiyojakApp> {
                 child: Container(
                   decoration: BoxDecoration(borderRadius: const BorderRadius.horizontal(left: Radius.circular(5)), color: Colors.red.withValues(alpha: 0.7)),
                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                  child: Text("Dev - 1.0.9 ", style: const TextStyle(fontSize: 13, color: Colors.white, fontWeight: FontWeight.w600)),
+                  child: Text("Dev - 1.0.10 ", style: const TextStyle(fontSize: 13, color: Colors.white, fontWeight: FontWeight.w600)),
                 ),
               ),
           ],

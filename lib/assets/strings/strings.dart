@@ -786,6 +786,10 @@ Map<String, String> resEnglish = {
   'TarunVyavasaayeeCountRange': '(26-40)',
   'ProudhaCount': 'Proudha Sankhyaa',
   'ProudhaCountRange': '(40+)',
+
+  'PravasiKaryakartaCount': 'Count of Pravasi Karyakarta in Shakhaa Pat',
+  'AnyaPravasiKaryakartaCount': 'Anya Pravasi Karyakarta Count',
+
   'AbhyaagatCount': 'Abhyaagat Sankhyaa',
   'AbhyaagatCountTip': 'Abhyaagat Sankhyaa',
   'ShaakhaaVruttaDeletedSuccessfully': 'Shaakhaa Vrutta Deleted Successfully',
@@ -913,6 +917,13 @@ Map<String, String> resEnglish = {
   'Minimum1minuteDandaPrahaar': 'Minimum 1 minute Danda Prahaar',
   'Minimum5minutesSooryaNamaskaar': 'Minimum 5 minutes Soorya-Namaskaar',
   'Minimum5minutesSanchalanAbhyaas': 'Minimum 5 minutes Sanchalan Abhyaas',
+
+  'Minimum5minutesUrdhvapad': 'Minimum 5 minutes Urdhvapad',
+  'BoodhKathaOnceWeek': 'Boodh Katha (Once a Week)',
+  'BoudhikDays': 'Boudhik Days',
+  'anyaOption': 'Anya',
+  'SewaDays': 'Sewa Days',
+
   'SaanghikGeet': 'Saanghik Geet',
   'AmrutaVachan': 'Amruta Vachan',
   'Subhaashit': 'Subhaashit',
@@ -1576,6 +1587,7 @@ Map<String, String> resEnglish = {
   'sanchalanSadanda': "Was Sanchalan with Dand ?",
   'sanchalanGhoshVadan': "Was Sanchalan with GHOSH ?",
   'presentMatrushakti': "Women",
+  'MatrushaktiCount': "Women Count",
   'presentMale': "Men",
   'anyaUpasthit': "Other Present",
   'presentSanchalanatTotal': "Present in Sanchalan",
@@ -1996,6 +2008,11 @@ Map<String, String> resEnglish = {
   'shakhaMilantitle2': "New Sankalpit Mahaavidyaalayeen Shaakha/ Milan",
   'shakhaMilantitle3': "Current Tarun Vyavasaayi Shaakha/ Milan",
   'shakhaMilantitle4': "New Sankalpit Tarun Vyavasaayi Shaakha/ Milan",
+
+  'newAdmission': "New Admission",
+
+  ////////////////////////////////////// Shakhaa Saptah Vistar //////////////////////////////////////
+  'searchShakhaa': 'Search Shakhaa',
 };
 
 ///1,584
@@ -2796,6 +2813,10 @@ Map<String, String> resMarathi = {
   'TarunVyavasaayeeCountRange': '(२६-४०)',
   'ProudhaCount': 'प्रौढ संख्या',
   'ProudhaCountRange': '(४०+)',
+
+  'PravasiKaryakartaCount': 'शाखा पटवर असलेल्या प्रवासी कार्यकर्त्यांची संख्या',
+  'AnyaPravasiKaryakartaCount': 'अन्य प्रवासी कार्यकर्त्यांची संख्या',
+
   'AbhyaagatCount': 'अभ्यागत संख्या',
   'AbhyaagatCountTip': 'Abhyaagat Sankhyaa',
   'ShaakhaaVruttaDeletedSuccessfully': 'वृत्त काढून टाकले',
@@ -2923,6 +2944,13 @@ Map<String, String> resMarathi = {
   'Minimum1minuteDandaPrahaar': 'किमान १ मिनिट दंड प्रहार',
   'Minimum5minutesSooryaNamaskaar': 'किमान ५ मिनिटे सूर्यनमस्कार',
   'Minimum5minutesSanchalanAbhyaas': 'किमान ५ मिनिटे संचलन अभ्यास',
+
+  'Minimum5minutesUrdhvapad': 'किमान ५ मिनट उर्ध्वपाद',
+  'BoodhKathaOnceWeek': 'बोध कथा (आठवड्यातून एकदा)',
+  'BoudhikDays': 'बौद्धिक दिवस',
+  'anyaOption': 'अन्य',
+  'SewaDays': 'सेवा दिवस',
+
   'SaanghikGeet': 'सांघिक गीत',
   'AmrutaVachan': 'अमृत वचन',
   'Subhaashit': 'सुभाषित',
@@ -3546,6 +3574,7 @@ Map<String, String> resMarathi = {
   'sanchalanSadanda': "संचलनात सदण्ड ?",
   'sanchalanGhoshVadan': "संचलनात घोष वादन ?",
   'presentMatrushakti': "मातृशक्ति",
+  'MatrushaktiCount': "मातृशक्ति संख्या",
   'presentMale': "पुरुष",
   'anyaUpasthit': "अन्य उपस्थित",
   'presentSanchalanatTotal': "संचलनात उपस्थित",
@@ -4006,6 +4035,11 @@ Map<String, String> resMarathi = {
   'shakhaMilantitle2': "नवीन संकल्पित महाविद्यालयीन शाखा / मिलन",
   'shakhaMilantitle3': "वर्तमान तरुण व्यवसायी शाखा / मिलन",
   'shakhaMilantitle4': "नवीन संकल्पित तरुण व्यवसायी शाखा / मिलन",
+
+  'newAdmission': "नवीन भरती",
+
+  ////////////////////////////////////// Shakhaa Saptah Vistar //////////////////////////////////////
+  'searchShakhaa': 'शाखा शोधा',
 };
 
 ///1,583
@@ -4804,6 +4838,10 @@ Map<String, String> resHindi = {
   'TarunVyavasaayeeCountRange': '(२६-४०)',
   'ProudhaCount': 'प्रौढ़ संख्या',
   'ProudhaCountRange': '(४०+)',
+
+  'PravasiKaryakartaCount': 'शाखा के पट पर हैं ऐसे प्रवासी कार्यकर्ताओं की संख्या',
+  'AnyaPravasiKaryakartaCount': 'अन्य प्रवासी कार्यकर्ताओं की संख्या',
+
   'AbhyaagatCount': 'अभ्यागत संख्या',
   'AbhyaagatCountTip': 'Abhyaagat Sankhyaa',
   'ShaakhaaVruttaDeletedSuccessfully': 'वृत्त हटा दिया गया',
@@ -4931,6 +4969,13 @@ Map<String, String> resHindi = {
   'Minimum1minuteDandaPrahaar': 'न्यूनतम १ मिनट दंड प्रहार',
   'Minimum5minutesSooryaNamaskaar': 'न्यूनतम ५ मिनट सूर्यनमस्कार',
   'Minimum5minutesSanchalanAbhyaas': 'न्यूनतम ५ मिनट संचलन अभ्यास',
+
+  'Minimum5minutesUrdhvapad': 'न्यूनतम ५ मिनट उर्ध्वपाद',
+  'BoodhKathaOnceWeek': 'बोध कथा (सप्ताह में एक बार )',
+  'BoudhikDays': 'बौद्धिक दिवस',
+  'anyaOption': 'अन्य',
+  'SewaDays': 'सेवा दिवस',
+
   'SaanghikGeet': 'सांघिक गीत',
   'AmrutaVachan': 'अमृत वचन',
   'Subhaashit': 'सुभाषित',
@@ -5597,6 +5642,7 @@ Map<String, String> resHindi = {
   'sanchalanSadanda': "संचलनात सदण्ड ?",
   'sanchalanGhoshVadan': "संचलनात घोष वादन ?",
   'presentMatrushakti': "मातृशक्ति",
+  'MatrushaktiCount': "मातृशक्ति संख्या",
   'presentMale': "पुरुष",
   'anyaUpasthit': "अन्य उपस्थित",
   'presentSanchalanatTotal': "संचलनात उपस्थित",
@@ -5992,8 +6038,8 @@ Map<String, String> resHindi = {
   'yuvaReportTable11': "अपे. वर्तमान महाविद्यालयीन\nशाखा / मिलन",
   'yuvaReportTable22': "उप. वर्तमान महाविद्यालयीन\nशाखा / मिलन",
 
-  'yuvaReportTable12': "अपे. नवीन संकल्पित\nमहाविद्यालयीन शाखा / मिलन",
-  'yuvaReportTable23': "उप. नवीन संकल्पित\nमहाविद्यालयीन शाखा / मिलन",
+  'yuvaReportTable12': "अपे. नया संकल्पित\nमहाविद्यालयीन शाखा / मिलन",
+  'yuvaReportTable23': "उप. नया संकल्पित\nमहाविद्यालयीन शाखा / मिलन",
 
   'yuvaReportTable13': "अपे. वर्तमान तरुण व्यवसायी\n शाखा / मिलन",
   'yuvaReportTable24': "उप. वर्तमान तरुण व्यवसायी\n शाखा / मिलन",
@@ -6004,15 +6050,20 @@ Map<String, String> resHindi = {
   'yuvaReportTable26': "कुल अपे. वर्तमान\nशाखा / मिलन",
   'yuvaReportTable27': "कुल उप. वर्तमान\nशाखा / मिलन",
 
-  'yuvaReportTable28': "कुल अपे. नवीन संकल्पित\nशाखा / मिलन",
-  'yuvaReportTable29': "कुल उप. नवीन संकल्पित\nशाखा / मिलन",
+  'yuvaReportTable28': "कुल अपे. नया संकल्पित\nशाखा / मिलन",
+  'yuvaReportTable29': "कुल उप. नया संकल्पित\nशाखा / मिलन",
 
   'yuvaReportTable30': "कुल अपे. शाखा / मिलन",
   'yuvaReportTable31': "कुल उप. शाखा / मिलन",
 
   'shaakhaamilan': "शाखा / मिलन",
   'shakhaMilantitle1': "वर्तमान महाविद्यालयीन शाखा / मिलन",
-  'shakhaMilantitle2': "नवीन संकल्पित महाविद्यालयीन शाखा / मिलन",
+  'shakhaMilantitle2': "नया संकल्पित महाविद्यालयीन शाखा / मिलन",
   'shakhaMilantitle3': "वर्तमान तरुण व्यवसायी शाखा / मिलन",
-  'shakhaMilantitle4': "नवीन संकल्पित तरुण व्यवसायी शाखा / मिलन",
+  'shakhaMilantitle4': "नया संकल्पित तरुण व्यवसायी शाखा / मिलन",
+
+  'newAdmission': "नयी भरती",
+
+  ////////////////////////////////////// Shakhaa Saptah Vistar //////////////////////////////////////
+  'searchShakhaa': 'शाखा खोजें',
 };

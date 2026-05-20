@@ -229,8 +229,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
       final selectedItem = _linkedNagar!.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
       selctedLevelName = selectedItem.name;
       if (!fromManual) {
-        selctedLevelId = "6";
-        utsavKontyaStaravar = "6";
+        selctedLevelId = utsavKontyaStaravar = "6";
       }
     }
 
@@ -240,16 +239,17 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
       _linkedupnagarValue = (level == 13 ? (dm.geoUnitID ?? 0).toString() : selection.upnagar) ?? _linkedupnagarValue;
       if (level == 13) {
         _selectedGeoUnitId = (dm.geoUnitID ?? selection.upnagar).toString();
+        selctedLevel = 'upnagarUpkhanda';
         selectedUpnagarList = [];
         if (!fromManual) {
-          selctedLevelId = "13";
-          utsavKontyaStaravar = "13";
+          selctedLevelId = utsavKontyaStaravar = "13";
         }
       }
     }
 
-    if ((level == 6 || level == 13) && (selctedLevelId == "6" || selctedLevelId == "13")) {
+    if ((level == 6 || level == 13) && (utsavKontyaStaravar == "6" || utsavKontyaStaravar == "13")) {
       selectedUpnagarList = [];
+      selctedLevelId = utsavKontyaStaravar;
       data = await Statics.getVijayadashamiInitData(context, Statics.userDetails["userID"], _selectedGeoUnitId, selctedLevel == 'Nagar' ? "6" : utsavKontyaStaravar);
       log("searchVijayaDashami data ${jsonDecode(jsonEncode(data))}");
       setState(() {
@@ -285,6 +285,8 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
         selectedUpnagarList = [(dm.geoUnitID ?? dm.parentUpaNagarID)];
         _linkedUpnagar?.removeWhere((e) => e.geoUnitID != (dm.geoUnitID ?? dm.parentUpaNagarID));
         setState(() {});
+        final selectedItem = _linkedUpnagar?.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
+        selctedLevelName = selectedItem?.preferedname;
       }
     }
 
@@ -298,8 +300,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.mandal).toString();
       selctedLevel = 'Mandal';
       if (!fromManual) {
-        utsavKontyaStaravar = "4";
-        selctedLevelId = "4";
+        selctedLevelId = utsavKontyaStaravar = "4";
       }
       final selectedItem = _linkedmandal!.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
       selctedLevelName = selectedItem.name;
@@ -318,8 +319,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.vasti).toString();
       selctedLevel = 'Vasti';
       if (!fromManual) {
-        utsavKontyaStaravar = "2";
-        selctedLevelId = "2";
+        selctedLevelId = utsavKontyaStaravar = "2";
       }
       final selectedItem = _linkedvasti!.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
       selctedLevelName = selectedItem.name;
@@ -433,6 +433,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
       selectedPrabhavi = null;
       selectedPerson = null;
       isVastiSearch = false;
+      _isSearching = false;
 
       selectedFilePath = null;
       _selectedFileNames1 = [];
@@ -2653,19 +2654,20 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                     children: [
                       Flexible(
                         child: Text(
-                          "${Statics.getLabel(selctedLevel ?? 'Nagar')}  ->  ",
+                          "${Statics.getLabel(selctedLevel ?? 'Nagar')}",
                           style: TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.bold, fontSize: 16),
                         ),
                       ),
-                      Flexible(
-                        child: Text(
-                          " $selctedLevelName",
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          softWrap: true,
-                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 17),
+                      if (selctedLevelName != null && selctedLevelName!.isNotEmpty)
+                        Flexible(
+                          child: Text(
+                            "  ->   $selctedLevelName",
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: true,
+                            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 17),
+                          ),
                         ),
-                      ),
                     ],
                   )),
             SizedBox(

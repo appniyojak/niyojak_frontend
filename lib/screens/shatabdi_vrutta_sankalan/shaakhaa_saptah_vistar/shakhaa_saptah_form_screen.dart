@@ -6,24 +6,24 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
-import '../helpers/static_data.dart' as Statics;
-import '../providers/bals.dart';
-import '../utils/globals.dart';
+import '../../../helpers/static_data.dart' as Statics;
+import '../../../providers/bals.dart';
+import '../../../utils/globals.dart';
 
-class EditShaakhaaVrutta extends StatefulWidget {
-  static const String routeName = '/edit-shaakhaa-vrutta-screen';
+class ShakhaaSaptahFormScreen extends StatefulWidget {
+  static const String routeName = '/shaakhaa-vistar-saptah-vrutta-screen';
   var shaakhaaID;
   var vruttaID;
   var onSaveDetails;
   var viewType;
 
-  EditShaakhaaVrutta({Key? key, this.shaakhaaID, this.vruttaID, this.onSaveDetails, this.viewType}) : super(key: key);
+  ShakhaaSaptahFormScreen({this.shaakhaaID, this.vruttaID, this.onSaveDetails, this.viewType, super.key});
 
   @override
-  _EditShaakhaaVruttaState createState() => _EditShaakhaaVruttaState();
+  State<ShakhaaSaptahFormScreen> createState() => _ShakhaaSaptahFormScreenState();
 }
 
-class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
+class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey();
 
   ShaakhaaVruttaBAL? vrutta;
@@ -80,8 +80,8 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
   @override
   void initState() {
     super.initState();
-    int vruttaID = int.tryParse(widget.vruttaID == null ? "0" : widget.vruttaID) ?? 0;
-    int shaakhaaID = int.tryParse(widget.shaakhaaID == null ? "0" : widget.shaakhaaID.toString()) ?? 0;
+    int vruttaID = int.parse(widget.vruttaID == null ? "0" : widget.vruttaID);
+    int shaakhaaID = int.parse(widget.shaakhaaID == null ? "0" : widget.shaakhaaID.toString());
     populateShaakhaVayogat(shaakhaaID.toString());
     if (vruttaID > 0) {
       getSwDetails(widget.vruttaID);
@@ -315,7 +315,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
     var data = await Statics.saveShaakhaaVruttaForApp(inputData);
     setState(() {
       widget.vruttaID = data;
-      if (widget.onSaveDetails != null) widget.onSaveDetails();
+      widget.onSaveDetails();
       Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
       Navigator.of(context).pop();
     });
@@ -923,7 +923,6 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                                   color: Theme.of(context).primaryColor,
                                   textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                                   onPressed: () {
-                                    return;
                                     _submit(context);
                                   },
                                   child: Text(
