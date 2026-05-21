@@ -102,6 +102,7 @@ import 'screens/shatabdi_vrutta_sankalan/yuva-sangam_sanmelan/yuva_sangam_main_t
 import 'screens/survey_screen/vasti_sarvekshan_screen.dart';
 import 'screens/swayamsevak_module/edit_module/edit_swayamsevak_basic_info.dart';
 import 'screens/swayamsevak_module/swayamsevak_daayitva_edit.dart';
+import 'utils/stable_geounit_class.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -250,6 +251,7 @@ class NiyojakAppState extends State<NiyojakApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => SadbhavProvider()),
+        ChangeNotifierProvider(create: (context) => GeoHierarchyController(hierarchy: [...baseHierarchy, shakhaaNode])),
       ],
       child: Directionality(
         textDirection: TextDirection.ltr,

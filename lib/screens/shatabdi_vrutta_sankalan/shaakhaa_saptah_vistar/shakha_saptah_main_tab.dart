@@ -76,12 +76,9 @@ class _ShakhaSaptahMainTabState extends State<ShakhaSaptahMainTab> with SingleTi
                   spacing: 16,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
-                      Icons.search,
-                      size: 18,
-                    ),
+                    Icon(Icons.people),
                     Text(
-                      "${Statics.getLabel('searchShakhaa')}",
+                      "${Statics.getLabel('Reportonly')}",
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 15),
                     ),
@@ -93,9 +90,12 @@ class _ShakhaSaptahMainTabState extends State<ShakhaSaptahMainTab> with SingleTi
                   spacing: 16,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.people),
+                    Icon(
+                      Icons.search,
+                      size: 18,
+                    ),
                     Text(
-                      "${Statics.getLabel('Reportonly')}",
+                      "${Statics.getLabel('searchShakhaa')}",
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 15),
                     ),
@@ -112,8 +112,8 @@ class _ShakhaSaptahMainTabState extends State<ShakhaSaptahMainTab> with SingleTi
             controller: _tabController,
             physics: NeverScrollableScrollPhysics(),
             children: <Widget>[
-              ShakhaaSaptahListTab(),
               ShakhaaSaptahReportTab(),
+              ShakhaaSaptahListTab(),
             ],
           ),
         ),

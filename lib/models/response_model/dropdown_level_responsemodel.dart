@@ -68,6 +68,7 @@ class GeoSelection {
   String? mandal;
   String? graam;
   String? vasti;
+  String? shakhaa;
 
   GeoSelection({
     this.mahaanagar,
@@ -78,5 +79,6 @@ class GeoSelection {
     this.mandal,
     this.graam,
     this.vasti,
+    this.shakhaa,
   });
 }

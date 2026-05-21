@@ -605,11 +605,11 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
       Statics.showMessageDialog(context, Statics.getLabel('SelectLinkedGeoUnit'));
       return;
     }
-    if (swDetails?.linkedShaakhaaID == null) {
-      // Invalid!
-      Statics.showMessageDialog(context, Statics.getLabel('SelectLinkedShaakhaa'));
-      return;
-    }
+    // if (swDetails?.linkedShaakhaaID == null) {
+    //   // Invalid!
+    //   Statics.showMessageDialog(context, Statics.getLabel('SelectLinkedShaakhaa'));
+    //   return;
+    // }
     _formKey.currentState!.save();
     if (mounted)
       setState(() {
@@ -795,12 +795,12 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
                               label: Statics.getLabel('Bhaag'),
                               value: _linkedbhaagValue == "" ? null : _linkedbhaagValue,
                               items: _linkedbhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                              validator: (value) {
-                                if ((value == null || value.isEmpty)) {
-                                  return Statics.getLabel('SelectBhaagValidationMessage');
-                                }
-                                return null;
-                              },
+                              // validator: (value) {
+                              //   if ((value == null || value.isEmpty)) {
+                              //     return Statics.getLabel('SelectBhaagValidationMessage');
+                              //   }
+                              //   return null;
+                              // },
                               onChanged: (value) {
                                 setState(() {
                                   _linkedbhaagValue = value;
@@ -835,12 +835,12 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
                               label: Statics.getLabel('Nagar'),
                               value: _linkednagarValue == "" ? null : _linkednagarValue,
                               items: _linkednagar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                              validator: (value) {
-                                if ((value == null || value.isEmpty)) {
-                                  return Statics.getLabel('SelectNagarValidationMessage');
-                                }
-                                return null;
-                              },
+                              // validator: (value) {
+                              //   if ((value == null || value.isEmpty)) {
+                              //     return Statics.getLabel('SelectNagarValidationMessage');
+                              //   }
+                              //   return null;
+                              // },
                               onChanged: (value) {
                                 setState(() {
                                   _linkednagarValue = value;
@@ -878,12 +878,12 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
                               label: Statics.getLabel('Mandal'),
                               value: _linkedmandalValue == "" ? null : _linkedmandalValue,
                               items: _linkedmandal!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                              validator: (value) {
-                                if ((value == null || value.isEmpty)) {
-                                  return Statics.getLabel('SelectMandalValidationMessage');
-                                }
-                                return null;
-                              },
+                              // validator: (value) {
+                              //   if ((value == null || value.isEmpty)) {
+                              //     return Statics.getLabel('SelectMandalValidationMessage');
+                              //   }
+                              //   return null;
+                              // },
                               onChanged: (value) {
                                 setState(() {
                                   _linkedmandalValue = value;
@@ -901,12 +901,12 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
                               label: Statics.getLabel('Graam'),
                               value: _linkedgraamValue == "" ? null : _linkedgraamValue,
                               items: _linkedgraam!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                              validator: (value) {
-                                if ((value == null || value.isEmpty) && (_linkedvastiValue == null || _linkedvastiValue!.isEmpty)) {
-                                  return Statics.getLabel('SelectGraamValidationMessage');
-                                }
-                                return null;
-                              },
+                              // validator: (value) {
+                              //   if ((value == null || value.isEmpty) && (_linkedvastiValue == null || _linkedvastiValue!.isEmpty)) {
+                              //     return Statics.getLabel('SelectGraamValidationMessage');
+                              //   }
+                              //   return null;
+                              // },
                               onChanged: (value) {
                                 setState(() {
                                   _linkedgraamValue = value;
@@ -920,12 +920,12 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
                               label: Statics.getLabel('Vasti'),
                               value: _linkedvastiValue == "" ? null : _linkedvastiValue,
                               items: _linkedvasti!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                              validator: (value) {
-                                if ((value == null || value.isEmpty)) {
-                                  return Statics.getLabel('VastiValidationMessage');
-                                }
-                                return null;
-                              },
+                              // validator: (value) {
+                              //   if ((value == null || value.isEmpty)) {
+                              //     return Statics.getLabel('VastiValidationMessage');
+                              //   }
+                              //   return null;
+                              // },
                               onChanged: (value) {
                                 setState(() {
                                   _linkedvastiValue = value;
@@ -942,12 +942,12 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
                         isExpanded: true,
                         value: _linkedShaakhaaValue == "" ? null : _linkedShaakhaaValue,
                         items: _linkedShaakhaa!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                        validator: (value) {
-                          if ((value == null || value.isEmpty)) {
-                            return Statics.getLabel('SelectShakhaaValidationMessage');
-                          }
-                          return null;
-                        },
+                        // validator: (value) {
+                        //   if ((value == null || value.isEmpty)) {
+                        //     return Statics.getLabel('SelectShakhaaValidationMessage');
+                        //   }
+                        //   return null;
+                        // },
                         onChanged: (value) {
                           setState(() {
                             _linkedShaakhaaValue = value;

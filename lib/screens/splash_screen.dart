@@ -7,7 +7,6 @@ import 'package:horizontal_data_table/refresh/pull_to_refresh/src/smart_refreshe
 import 'package:niyojak_prod/helpers/database_helper.dart';
 import 'package:niyojak_prod/models/response_model/AbhiyaanLoginDataResponse.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-
 // import 'package:package_info/package_info.dart';
 // import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,10 +15,10 @@ import 'package:sqflite/sqflite.dart';
 import '../helpers/static_data.dart' as Statics;
 import '../providers/login.dart';
 import '../screens/change_password.dart';
-import 'home_screen/home_screen.dart';
 import '../screens/login_screen.dart';
 import '../screens/update_version.dart';
 import 'AbhiyanScreen.dart';
+import 'home_screen/home_screen.dart';
 import 'shatabdi_vrutta_sankalan/gruh_sampark_abhiyaan/gruh_abhiyaan_main_tab_screen.dart';
 import 'swayamsevak_module/edit_module/edit_swayamsevak_screen.dart';
 
@@ -120,7 +119,6 @@ class _SplashScreenCheckState extends State<SplashScreenCheck> {
           if (otpuser != null && otpuser == "true") {
             landingPage = EditSwayamsevakScreen();
           } else {
-            print("test ?????????????????????????????????????????????????");
             print(Statics.userDetails['LevelID']);
             print(Statics.userDetails['LevelID'] == null);
             // print(Statics.userDetails['LevelID'].toString().isEmpty);
