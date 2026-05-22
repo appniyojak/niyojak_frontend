@@ -59,6 +59,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  DateTime? currentBackPressTime;
+
   // ─── Scroll ────────────────────────────────────────────────────────────────
   final ScrollController _scrollController = ScrollController();
 
@@ -1688,66 +1690,86 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(Statics.getLabel('homeScreenTitle'), style: const TextStyle(fontSize: 20)),
-          bottom: TabBar(
-            unselectedLabelStyle: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w500),
-            labelStyle: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700),
-            onTap: (value) {
-              if (value == 1) {
-                _initScreen();
-              }
-            },
-            tabs: [
-              Tab(text: Statics.getLabel('menu')),
-              Tab(text: Statics.getLabel('mainScreenTab2')),
-            ],
-          ),
-          actions: [
-            // Notification bell with badge
-            Stack(
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.notifications),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => NotificationListPage(userId: Statics.userDetails['userID']),
-                      ),
-                    ).then((_) => _fetchNotificationData());
-                    setState(() {});
-                  },
-                ),
-                if (notificationListdata?.notificationcount != "null" && notificationListdata?.notificationcount != '0' && notificationListdata?.notificationcount != '')
-                  Positioned(
-                    right: 4,
-                    top: 4,
-                    child: Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(8)),
-                      constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
-                      child: Text('${notificationListdata?.notificationcount}', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
-                    ),
-                  ),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        DateTime now = DateTime.now();
+        if (currentBackPressTime == null || now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
+          currentBackPressTime = now;
+          Fluttertoast.showToast(
+            msg: 'Press again to exit',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: Color.fromARGB(255, 92, 92, 92),
+            textColor: const Color.fromARGB(255, 255, 255, 255),
+          );
+
+          return;
+        }
+        exit(1);
+      },
+      child: DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(Statics.getLabel('homeScreenTitle'), style: const TextStyle(fontSize: 20)),
+            bottom: TabBar(
+              unselectedLabelStyle: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w500),
+              labelStyle: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700),
+              onTap: (value) {
+                if (value == 1) {
+                  _initScreen();
+                }
+              },
+              tabs: [
+                Tab(text: Statics.getLabel('menu')),
+                Tab(text: Statics.getLabel('mainScreenTab2')),
               ],
             ),
-            PopupMenuButton<MenuChoices>(
-              onSelected: _onMenuSelected,
-              icon: const Icon(Icons.settings),
-              itemBuilder: (ctx) => choices.map((c) => PopupMenuItem(value: c, child: ListTile(leading: Icon(c.icon), title: Text(c.menuText!)))).toList(),
-            ),
-          ],
-        ),
-        drawer: AppDrawer(),
-        body: TabBarView(
-          children: [
-            _buildMenuTab(),
-            _buildDashboardTab(),
-          ],
+            actions: [
+              // Notification bell with badge
+              Stack(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.notifications),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => NotificationListPage(userId: Statics.userDetails['userID']),
+                        ),
+                      ).then((_) => _fetchNotificationData());
+                      setState(() {});
+                    },
+                  ),
+                  if (notificationListdata?.notificationcount != "null" && notificationListdata?.notificationcount != '0' && notificationListdata?.notificationcount != '')
+                    Positioned(
+                      right: 4,
+                      top: 4,
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(8)),
+                        constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
+                        child: Text('${notificationListdata?.notificationcount}', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+                      ),
+                    ),
+                ],
+              ),
+              PopupMenuButton<MenuChoices>(
+                onSelected: _onMenuSelected,
+                icon: const Icon(Icons.settings),
+                itemBuilder: (ctx) => choices.map((c) => PopupMenuItem(value: c, child: ListTile(leading: Icon(c.icon), title: Text(c.menuText!)))).toList(),
+              ),
+            ],
+          ),
+          drawer: AppDrawer(),
+          body: TabBarView(
+            children: [
+              _buildMenuTab(),
+              _buildDashboardTab(),
+            ],
+          ),
         ),
       ),
     );

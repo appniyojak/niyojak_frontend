@@ -5564,6 +5564,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                     type: "url",
                     value: txtUrlsController.text.trim(),
                     description: txtUrlDescController.text.trim(),
+                    pkid: 0,
                   ));
                   txtUrlsController.clear();
                   txtUrlDescController.clear();

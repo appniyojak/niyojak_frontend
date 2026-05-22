@@ -282,7 +282,7 @@ class _LogInOTPCardState extends State<LogInOTPCard> {
     // Clean up the controller when the widget is disposed.
     _phoneNumberController.dispose();
     _otpController.dispose();
-    timer!.cancel();
+    timer?.cancel();
     super.dispose();
   }
 

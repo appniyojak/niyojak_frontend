@@ -24,6 +24,7 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> {
   // static const String routeName = '/vijayadashami-form-view';
   final _searchController = TextEditingController();
   bool _isSearching = false;
+  bool _searched = false;
 
   List<GeoUnitMasterBAL>? _linkedMahaanagar;
   List<GeoUnitMasterBAL>? _linkedVibhaag;
@@ -44,12 +45,14 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> {
   String? _linkedvastiValue = "";
 
   List<StaticMasterBAL>? _vayogat;
-  List<StaticMasterBAL>? _frequency;
+
+  // List<StaticMasterBAL>? _frequency;
   List shakhaSapMasSanghList = [];
   List<GeoUnitMasterBAL>? _linkedupnagar;
 
   String? _vayogatValue;
-  String? _frequencyValue;
+
+  // String? _frequencyValue;
 
   // String? geoUnitIDnew;
   String? _selctedLevel = 'praant';
@@ -63,7 +66,9 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> {
   String? _linkedvastiName = '';
   bool _isExpanded = false;
 
-  Future<List<dynamic>>? _shaakhaaList;
+  List<dynamic>? _shaakhaaList = [];
+  List<dynamic> _sankalpitShaakhaaList = [];
+  List<dynamic> _newShaakhaaList = [];
   List<Statics.cLatLong> _latLng = [];
 
   @override
@@ -96,7 +101,8 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> {
       //       Statics.userDetails['DaayitvaName'] == 'कार्यवाह')) {
       print("jfhdjkfh asjkhjkfhd sjkahjkhk f shkjshfk f");
     } else {
-      _shaakhaaList = _getshaakhaaList(-1, "get nothing", null, null);
+      // _shaakhaaList = await _getshaakhaaList(-1, "get nothing", null, null);
+      // _shaakhaaList = await _getshaakhaaList(-1, "get nothing", null, null);
     }
   }
 
@@ -235,7 +241,7 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> {
     if (!mounted) return;
     setState(() {
       _vayogat = data;
-      _frequency = data1;
+      // _frequency = data1;
     });
   }
 
@@ -443,80 +449,41 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> {
 
   Future<void> _search(String strType, var ctx) async {
     setState(() {
+      _shaakhaaList = _sankalpitShaakhaaList = _newShaakhaaList = [];
       _isSearching = true;
     });
 
-    int? bhaagVal = _linkedbhaagValue == null || _linkedbhaagValue == "" ? null : int.parse(_linkedbhaagValue!);
-    int? shaharVal = _linkedshaharValue == null || _linkedshaharValue == "" ? null : int.parse(_linkedshaharValue!);
-    int? nagarVal = _linkednagarValue == null || _linkednagarValue == "" ? null : int.parse(_linkednagarValue!);
-
-    int? mandalVal = _linkedmandalValue == null || _linkedmandalValue == "" ? null : int.parse(_linkedmandalValue!);
-
-    int? graamVal = _linkedgraamValue == null || _linkedgraamValue == "" ? null : int.parse(_linkedgraamValue!);
-
-    int? vastiVal = _linkedvastiValue == null || _linkedvastiValue == "" ? null : int.parse(_linkedvastiValue!);
-
-    int? frequencyVal = _frequencyValue == null || _frequencyValue == "" ? null : int.parse(_frequencyValue!);
+    // int? frequencyVal = _frequencyValue == null || _frequencyValue == "" ? null : int.parse(_frequencyValue!);
 
     int? vayogatVal = _vayogatValue == null || _vayogatValue == "" ? null : int.parse(_vayogatValue!);
 
-    int? geoUnitID;
-    geoUnitID = vastiVal != null
-        ? vastiVal
-        : graamVal != null
-            ? graamVal
-            : mandalVal != null
-                ? mandalVal
-                : nagarVal != null
-                    ? nagarVal
-                    : shaharVal != null
-                        ? shaharVal
-                        : bhaagVal != null
-                            ? bhaagVal
-                            : null;
+    print("Search :-  ${_selectedGeoUnitId}");
 
-    if (strType == "Search") {
-      if (mandalVal == null && graamVal == null && vastiVal == null) {
-        print("Search :-  ${_selectedGeoUnitId}");
-      } else {
-        print("mandalVal :-  ${mandalVal}");
-        print("graamVal :-  ${graamVal}");
-        print("vastiVal :-  ${vastiVal}");
-      }
+    print("Search :-  ${_selectedGeoUnitId}");
+    final _list = await _getshaakhaaList(int.parse(_selectedGeoUnitId ?? "0"), _searchController.text, 34, vayogatVal);
 
-      setState(() {
-        if (mandalVal == null && graamVal == null && vastiVal == null) {
-          print("Search :-  ${_selectedGeoUnitId}");
-          _shaakhaaList = _getshaakhaaList(int.parse(_selectedGeoUnitId ?? "0"), _searchController.text, frequencyVal, vayogatVal);
-        } else {
-          _shaakhaaList = _getshaakhaaList(geoUnitID, _searchController.text, frequencyVal, vayogatVal);
-          print("mandalVal :-  ${mandalVal}");
-          print("graamVal :-  ${graamVal}");
-          print("vastiVal :-  ${vastiVal}");
-        }
-        // _shaakhaaList = _getshaakhaaList(
-        //     geoUnitID, _searchController.text, frequencyVal, vayogatVal);
-        _isSearching = false;
-        _isExpanded = false;
-        print(_shaakhaaList);
-      });
-    } else {
-      print("ViewLocation :-  $geoUnitID");
-      var dataList = await _getshaakhaaList(geoUnitID, _searchController.text, frequencyVal, vayogatVal);
-      print("dataList $dataList");
-      if (dataList.isEmpty) {
-        Statics.showErrorDialog(context, Statics.getLabel("noDataFoundTryAnotherSearch"));
-        setState(() {
-          _isSearching = false;
-        });
-        return;
-      }
-      setState(() {
-        _isSearching = false;
-        _isExpanded = false;
-      });
-      viewLocation(dataList, ctx);
-    }
+    // _shaakhaaList = _getshaakhaaList(
+    //     geoUnitID, _searchController.text, frequencyVal, vayogatVal);
+
+    final _isSankalpitList = _list.where((e) => e["IsSankalpit"] == true);
+    final _isNotSankalpitList = _list.where((e) => e["IsSankalpit"] == false);
+
+    _shaakhaaList = _isNotSankalpitList.toList();
+    _sankalpitShaakhaaList = _isSankalpitList.toList();
+    _newShaakhaaList = _isNotSankalpitList.toList();
+
+    // _shaakhaaList?.removeWhere((e) => e["IsSankalpit"] == true);
+    setState(() {
+      _shaakhaaList;
+      _sankalpitShaakhaaList;
+      _newShaakhaaList;
+      _isSearching = false;
+      _searched = true;
+      _isExpanded = false;
+    });
+    print(_shaakhaaList?.length);
+    print(_sankalpitShaakhaaList.length);
+    print(_newShaakhaaList.length);
   }
 
   void _getCsv() async {
@@ -525,7 +492,7 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> {
     // });
 
     // Await the future resolution to get the actual list
-    List<dynamic> dataList = await _shaakhaaList!;
+    List<dynamic> dataList = _shaakhaaList!;
 
     // Prepare the CSV headers
     List<List<dynamic>> rows = [];
@@ -674,9 +641,10 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> {
         if (didpop) return;
         Navigator.pushNamedAndRemoveUntil(context, Navigator.of(context).pushNamed(HomeScreen.routeName).toString(), (route) => false);
       },
-      child: Container(
-        padding: EdgeInsets.all(20.0),
-        child: SingleChildScrollView(
+      child: DefaultTabController(
+        length: 3,
+        child: Container(
+          padding: EdgeInsets.all(20.0),
           child: Column(
             children: <Widget>[
               Text(
@@ -876,138 +844,9 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> {
                                   });
                                 },
                               ),
-                            // if(_linkedbhaag != null)
-                            // DropdownButtonFormField(
-                            //   decoration: InputDecoration(labelText: Statics.getLabel('Bhaag')),
-                            //   isExpanded: true,
-                            //   value: _linkedbhaagValue == "" ? null : _linkedbhaagValue,
-                            //   items: _linkedbhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                            //   onChanged: (value) {
-                            //     setState(() {
-                            //       _linkedbhaagValue = value;
-                            //       populatelinkedShaharDropdown(value!);
-                            //       populatelinkedNagarDropdown(value, null);
-                            //     });
-                            //   },
-                            // ),
-                            // SizedBox(
-                            //   height: 10,
-                            // ),
-                            // if (_linkedshahar != null && _linkedshahar!.length > 0)
-                            //   DropdownButtonFormField(
-                            //     decoration: InputDecoration(labelText: Statics.getLabel('Shahar')),
-                            //     isExpanded: true,
-                            //     value: _linkedshaharValue == "" ? null : _linkedshaharValue,
-                            //     items: _linkedshahar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                            //     onChanged: (value) {
-                            //       setState(() {
-                            //         _linkedshaharValue = value;
-                            //         populatelinkedNagarDropdown(null, value);
-                            //       });
-                            //     },
-                            //   ),
-                            // if (_linkedshahar != null && _linkedshahar!.length > 0)
-                            //   SizedBox(
-                            //     height: 10,
-                            //   ),
-                            // if (_linkednagar != null && _linkednagar!.length > 0)
-                            //   DropdownButtonFormField(
-                            //     decoration: InputDecoration(labelText: Statics.getLabel('Nagar')),
-                            //     isExpanded: true,
-                            //     value: _linkednagarValue == "" ? null : _linkednagarValue,
-                            //     items: _linkednagar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                            //     onChanged: (value) {
-                            //       setState(() {
-                            //         _linkednagarValue = value;
-                            //         populatelinkedMandalDropdown(value!);
-                            //         populatelinkedVastiDropdown(value);
-                            //       });
-                            //     },
-                            //   ),
-                            // LevelWiseDropdown(
-                            //   onFinalSelection: (String level, String? geoUnitID) {
-                            //     print("geoUnitID :- $geoUnitID");
-                            //     setState(() {
-                            //       geoUnitIDnew = geoUnitID;
-                            //       populatelinkedMandalDropdown(geoUnitID!);
-                            //       populatelinkedVastiDropdown(geoUnitID);
-                            //     });
-                            //   },
-                            // ),
-                            // if (_linkednagar != null &&
-                            //     _linkednagar!.length > 0)
-                            //   SizedBox(
-                            //     height: 10,
-                            //   ),
-                            // if (_linkedmandal != null &&
-                            //     _linkedmandal!.length > 0)
-                            //   DropdownButtonFormField(
-                            //     decoration: InputDecoration(
-                            //         labelText: Statics.getLabel('Mandal')),
-                            //     isExpanded: true,
-                            //     value: _linkedmandalValue == ""
-                            //         ? null
-                            //         : _linkedmandalValue,
-                            //     items: _linkedmandal!
-                            //         .map((bg) => DropdownMenuItem(
-                            //             value: bg.geoUnitID.toString(),
-                            //             child: Text(bg.name!)))
-                            //         .toList(),
-                            //     onChanged: (value) {
-                            //       setState(() {
-                            //         _linkedmandalValue = value;
-                            //         populatelinkedGraamDropdown(value!);
-                            //       });
-                            //     },
-                            //   ),
-                            // if (_linkedmandal != null &&
-                            //     _linkedmandal!.length > 0)
-                            //   SizedBox(
-                            //     height: 10,
-                            //   ),
-                            // if (_linkedgraam != null &&
-                            //     _linkedgraam!.length > 0)
-                            //   DropdownButtonFormField(
-                            //     decoration: InputDecoration(
-                            //         labelText: Statics.getLabel('Graam')),
-                            //     isExpanded: true,
-                            //     value: _linkedgraamValue == ""
-                            //         ? null
-                            //         : _linkedgraamValue,
-                            //     items: _linkedgraam!
-                            //         .map((bg) => DropdownMenuItem(
-                            //             value: bg.geoUnitID.toString(),
-                            //             child: Text(bg.name!)))
-                            //         .toList(),
-                            //     onChanged: (value) {
-                            //       setState(() {
-                            //         _linkedgraamValue = value;
-                            //       });
-                            //     },
-                            //   ),
-                            // if (_linkedvasti != null &&
-                            //     _linkedvasti!.length > 0)
-                            //   DropdownButtonFormField(
-                            //     decoration: InputDecoration(
-                            //         labelText: Statics.getLabel('Vasti')),
-                            //     isExpanded: true,
-                            //     value: _linkedvastiValue == ""
-                            //         ? null
-                            //         : _linkedvastiValue,
-                            //     items: _linkedvasti!
-                            //         .map((bg) => DropdownMenuItem(
-                            //             value: bg.geoUnitID.toString(),
-                            //             child: Text(bg.name!)))
-                            //         .toList(),
-                            //     onChanged: (value) {
-                            //       setState(() {
-                            //         _linkedvastiValue = value;
-                            //       });
-                            //     },
-                            //   ),
 
                             //======================================================================================================================
-                            if (_frequency != null)
+                            /*if (_frequency != null)
                               DropdownButtonFormField<StaticMasterBAL>(
                                 decoration: InputDecoration(labelText: Statics.getLabel('SelectFrequency')),
                                 isExpanded: true,
@@ -1025,7 +864,7 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> {
                               ),
                             SizedBox(
                               height: 10,
-                            ),
+                            ),*/
                             if (_vayogat != null)
                               DropdownButtonFormField(
                                 decoration: InputDecoration(labelText: Statics.getLabel('Vayogat')),
@@ -1056,12 +895,10 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> {
                 //       Statics.userDetails['DaayitvaName'] == 'कार्यवाह'))
                 Container(
                   margin: EdgeInsets.all(20),
-                  child: Column(
-                    children: [
-                      if (_isSearching == true)
-                        CircularProgressIndicator()
-                      else
-                        Wrap(
+                  child: _isSearching == true
+                      ? CircularProgressIndicator()
+                      : Wrap(
+                          spacing: 10,
                           children: [
                             MaterialButton(
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
@@ -1076,95 +913,117 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> {
                               },
                               child: Text(
                                 Statics.getLabel('Search'),
-                                style: TextStyle(fontSize: 25),
+                                style: TextStyle(fontSize: 18),
                               ),
                             ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            // Text(
-                            //     "${Statics.userDetails['LevelID']} ---${Statics.userDetails['LevelName']} --- $geoUnitIDnew"),
                             MaterialButton(
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 15,
-                                vertical: 8,
-                              ),
-                              color: Theme.of(context).primaryColor,
-                              textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
-                              onPressed: () {
-                                _search("ViewLocation", context);
-                              },
-                              child: Wrap(
-                                children: [
-                                  Icon(
-                                    Icons.location_pin,
-                                    color: Theme.of(context).primaryTextTheme.labelMedium?.color,
-                                  ),
-                                  Text(
-                                    Statics.getLabel("MapView"),
-                                    style: TextStyle(fontSize: 20),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
+                                onPressed: () {
+                                  print("clear button pressed");
+                                  setState(() {
+                                    _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedvastiValue = _linkedgraamValue = null;
+                                    _linkedbhaag = _linkedshahar = _linkedgraam = _linkedmandal = _linkedvasti = _linkednagar = null;
+                                    _searchController.text = "";
+                                    _selectedGeoUnitId = "";
+                                    _isSearching = _searched = false;
+                                  });
+                                  // _frequencyValue = null;
+                                  _vayogatValue = null;
+                                  // _shaakhaaList = _getshaakhaaList(-1, "get nothing", null, null);
+                                  populatelinkedBhaagDropdown(_linkedVibhaagValue!);
+                                  _isExpanded = false;
+                                  _shaakhaaList = [];
+                                  populateDropdown();
+                                },
+                                child: Text(Statics.getLabel('clear'))),
                           ],
                         ),
-                      MaterialButton(
-                          onPressed: () {
-                            print("clear button pressed");
-                            setState(() {
-                              _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedvastiValue = _linkedgraamValue = null;
-                              _linkedbhaag = _linkedshahar = _linkedgraam = _linkedmandal = _linkedvasti = _linkednagar = null;
-                              _searchController.text = "";
-                              _selectedGeoUnitId = "";
-                              _isSearching = false;
-                            });
-                            _frequencyValue = null;
-                            _vayogatValue = null;
-                            // _shaakhaaList = _getshaakhaaList(-1, "get nothing", null, null);
-                            populatelinkedBhaagDropdown(_linkedVibhaagValue!);
-                            _isExpanded = false;
-                            _shaakhaaList = Future.value([]);
-                            populateDropdown();
-                          },
-                          child: Text(Statics.getLabel('clear'))),
-                    ],
-                  ),
                 ),
-              FutureBuilder<List<dynamic>>(
-                future: _shaakhaaList,
-                builder: (ctx, dataSnapshot) {
-                  if (dataSnapshot.connectionState != ConnectionState.done) {
-                    return _isSearching == true ? CircularProgressIndicator() : Container();
-                  }
-                  if (dataSnapshot.hasError) {
-                    print("  dataSnapshot  ${dataSnapshot}  ");
-                    return Center(child: Text(Statics.getLabel('noDataFoundTryAnotherSearch')));
-                  }
-                  return dataSnapshot.hasData && dataSnapshot.data!.length > 0
-                      ? Column(
-                          children: dataSnapshot.data!
-                              .map((shaakhaa) => ShaakhaaCard(shaakhaa, shaakhaa['IsSankalpit'], _search,
-                                  traillingIcon: IconButton(
-                                      onPressed: () => Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => EditShaakhaaVrutta(
-                                                    shaakhaaID: shaakhaa["ShaakhaaID"].toString(),
-                                                    vruttaID: shaakhaa["ShaakhaaVruttaID"].toString(),
-                                                    onSaveDetails: null,
-                                                    viewType: "EditVrutta",
-                                                  ))),
-                                      icon: Icon(Icons.edit))))
-                              .toList(),
-                        )
-                      : Center(child: Text(Statics.getLabel('noDataFoundTryAnotherSearch')));
-                },
-              ),
+              if (_searched) ...[
+                TabBar(labelColor: Colors.purple, unselectedLabelColor: Colors.grey, tabs: [
+                  Tab(
+                      child: Text(
+                    Statics.getLabel("Shaakhaa"),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 15),
+                  )),
+                  Tab(
+                      child: Text(
+                    Statics.getLabel("Consolidated"),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 15),
+                  )),
+                  Tab(
+                      child: Text(
+                    Statics.getLabel("new"),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 15),
+                  )),
+                ]),
+                Flexible(
+                  child: TabBarView(children: [
+                    ListView.separated(
+                      shrinkWrap: true,
+                      // physics: NeverScrollableScrollPhysics(),
+                      separatorBuilder: (context, index) => SizedBox(height: 8),
+                      itemCount: _shaakhaaList?.length ?? 0,
+                      itemBuilder: (context, index) {
+                        return ShaakhaaCard(_shaakhaaList?[index], _shaakhaaList?[index]['IsSankalpit'], _search,
+                            traillingIcon: IconButton(
+                                onPressed: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => EditShaakhaaVrutta(
+                                              shaakhaaID: _shaakhaaList?[index]["ShaakhaaID"].toString(),
+                                              vruttaID: _shaakhaaList?[index]["ShaakhaaVruttaID"].toString(),
+                                              onSaveDetails: null,
+                                              viewType: "EditVrutta",
+                                            ))),
+                                icon: Icon(Icons.edit)));
+                      },
+                    ),
+                    ListView.separated(
+                      shrinkWrap: true,
+                      // physics: NeverScrollableScrollPhysics(),
+                      separatorBuilder: (context, index) => SizedBox(height: 8),
+                      itemCount: _sankalpitShaakhaaList.length ?? 0,
+                      itemBuilder: (context, index) {
+                        return ShaakhaaCard(_sankalpitShaakhaaList[index], _sankalpitShaakhaaList[index]['IsSankalpit'], _search,
+                            traillingIcon: IconButton(
+                                onPressed: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => EditShaakhaaVrutta(
+                                              shaakhaaID: _sankalpitShaakhaaList?[index]["ShaakhaaID"].toString(),
+                                              vruttaID: _sankalpitShaakhaaList?[index]["ShaakhaaVruttaID"].toString(),
+                                              onSaveDetails: null,
+                                              viewType: "EditVrutta",
+                                            ))),
+                                icon: Icon(Icons.edit)));
+                      },
+                    ),
+                    ListView.separated(
+                      shrinkWrap: true,
+                      // physics: NeverScrollableScrollPhysics(),
+                      separatorBuilder: (context, index) => SizedBox(height: 8),
+                      itemCount: _newShaakhaaList.length ?? 0,
+                      itemBuilder: (context, index) {
+                        return ShaakhaaCard(_newShaakhaaList[index], _newShaakhaaList[index]['IsSankalpit'], _search,
+                            traillingIcon: IconButton(
+                                onPressed: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => EditShaakhaaVrutta(
+                                              shaakhaaID: _newShaakhaaList?[index]["ShaakhaaID"].toString(),
+                                              vruttaID: _newShaakhaaList?[index]["ShaakhaaVruttaID"].toString(),
+                                              onSaveDetails: null,
+                                              viewType: "EditVrutta",
+                                            ))),
+                                icon: Icon(Icons.edit)));
+                      },
+                    ),
+                  ]),
+                )
+              ],
             ],
           ),
         ),

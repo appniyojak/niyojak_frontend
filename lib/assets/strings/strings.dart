@@ -2010,6 +2010,7 @@ Map<String, String> resEnglish = {
   'shakhaMilantitle4': "New Sankalpit Tarun Vyavasaayi Shaakha/ Milan",
 
   'newAdmission': "New Admission",
+  'new': "New",
 
   ////////////////////////////////////// Shakhaa Saptah Vistar //////////////////////////////////////
   'searchShakhaa': 'Search Shakhaa',
@@ -4037,6 +4038,7 @@ Map<String, String> resMarathi = {
   'shakhaMilantitle4': "नवीन संकल्पित तरुण व्यवसायी शाखा / मिलन",
 
   'newAdmission': "नवीन भरती",
+  'new': "नवीन",
 
   ////////////////////////////////////// Shakhaa Saptah Vistar //////////////////////////////////////
   'searchShakhaa': 'शाखा शोधा',
@@ -6063,6 +6065,7 @@ Map<String, String> resHindi = {
   'shakhaMilantitle4': "नया संकल्पित तरुण व्यवसायी शाखा / मिलन",
 
   'newAdmission': "नयी भरती",
+  'new': "नयी",
 
   ////////////////////////////////////// Shakhaa Saptah Vistar //////////////////////////////////////
   'searchShakhaa': 'शाखा खोजें',
