@@ -57,7 +57,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.mahaanagar).toString();
       selctedLevel = 'Mahaanagar';
       final selectedItem = _linkedMahaanagar!.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
-      selctedLevelName = selectedItem.name;
+      _selctedLevelName = selectedItem.name;
     }
 
     // Step 2: Vibhaag
@@ -67,7 +67,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.vibhaag).toString();
       selctedLevel = 'Vibhaag';
       final selectedItem = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
-      selctedLevelName = selectedItem.name;
+      _selctedLevelName = selectedItem.name;
     }
 
     // Step 3: Bhaag
@@ -77,7 +77,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.bhaag).toString();
       selctedLevel = 'Bhaag';
       final selectedItem = _linkedBhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
-      selctedLevelName = selectedItem.name;
+      _selctedLevelName = selectedItem.name;
     }
 
     // Step 4: Nagar
@@ -87,7 +87,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.nagar).toString();
       selctedLevel = 'Nagar';
       final selectedItem = _linkedNagar!.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
-      selctedLevelName = selectedItem.name;
+      _selctedLevelName = selectedItem.name;
     }
 
     // Step 5: Upnagar (conditional)
@@ -98,7 +98,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
         _selectedGeoUnitId = (dm.geoUnitID ?? selection.upnagar).toString();
         selctedLevel = 'Upnagar';
         final selectedItem = _linkedupnagar!.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
-        selctedLevelName = selectedItem.name;
+        _selctedLevelName = selectedItem.name;
       }
     }
 
@@ -130,7 +130,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.vasti).toString();
       selctedLevel = 'Vasti';
       final selectedItem = _linkedvasti!.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
-      selctedLevelName = selectedItem.name;
+      _selctedLevelName = selectedItem.name;
       getMyDetailsColumnsAndRows();
       // _getForm();
     }
@@ -159,7 +159,8 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
   String? mahanagarId = '';
   String? vibhagId = '';
   String? selctedLevel = 'praant';
-  String? selctedLevelName = '';
+
+  // String? selctedLevelName = '';
 
   // String? selctedLevelId = '';
   String? selctedLevelNameNew = '';
@@ -287,16 +288,14 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
       _linkedBhaagValue = null;
       _linkedNagarValue = null;
       mahanagarId = '';
-      selctedLevelName = "";
+      _selctedLevelName = "";
       selctedLevel = 'praant';
       _linkedvastiValue = '';
       _selectedGeoUnitId = '';
-      selctedLevelName = "";
       _linkedBhaag = null;
       _linkedNagar = null;
       _linkedvasti = null;
       isVastiSearch = false;
-      selctedLevelName = '';
       _isExpanded = false;
       populateDropdown();
     });
@@ -546,11 +545,11 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
               //   ),
               // ),
               vastiMandalDropdown(),
-              if (selctedLevel == "Vasti" && selctedLevelName != "" && isVastiSearch == true)
+              if (selctedLevel == "Vasti" && _selctedLevelName != "" && isVastiSearch == true)
                 SizedBox(
                   height: 20,
                 ),
-              if (selctedLevel == "Vasti" && selctedLevelName != "" && isVastiSearch == true)
+              if (selctedLevel == "Vasti" && _selctedLevelName != "" && isVastiSearch == true)
                 Container(
                     height: 40,
                     width: double.infinity,
@@ -567,7 +566,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                           style: TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.bold, fontSize: 16),
                         ),
                         Text(
-                          " $selctedLevelName",
+                          " $_selctedLevelName",
                           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 17),
                         ),
                       ],
@@ -588,7 +587,40 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                         SingleColumnRow(txtString: "${Statics.getLabel('vastiSamitiSadasyaCount')}", value: data?.vastiSamitiSadhyasyaCount.toString(), fontsize: 15),
                         SingleColumnRow(txtString: "${Statics.getLabel('vastitSewaVastiCount')}", value: data?.vastiSewaVastiCount.toString(), fontsize: 15),
                         SingleColumnRow(txtString: "${Statics.getLabel('vastichiLoksankhya')}", value: data?.vastichiLoksankhyaCount, fontsize: 15),
-                        SingleColumnRow(txtString: "${Statics.getLabel('vastiBhougolikSima')}", value: data?.vastiBhougolikSima, fontsize: 15),
+                        // SingleColumnRow(txtString: "${Statics.getLabel('vastiBhougolikSima')}", value: data?.vastiBhougolikSima, fontsize: 15),
+                        Container(
+                          padding: EdgeInsets.symmetric(vertical: 8),
+                          // color: Colors.red,
+                          child: Center(
+                            child: SizedBox(
+                              width: Statics.getDeviceSize(context).width * 0.84,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Text(Statics.getLabel('vastichiLoksankhya'), style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
+                                  ),
+                                  Flexible(
+                                    child: Container(
+                                      margin: EdgeInsets.only(left: 8),
+                                      child: Text(data?.vastichiLoksankhyaCount == "null" || data?.vastichiLoksankhyaCount == null ? "0" : data!.vastichiLoksankhyaCount.toString(),
+                                          softWrap: true, overflow: TextOverflow.ellipsis, maxLines: 2, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Center(
+                          child: Container(
+                            width: Statics.getDeviceSize(context).width,
+                            child: Divider(
+                              height: 1,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
                         Column(
                           children: [
                             Center(
@@ -2308,7 +2340,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                           style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.purpleAccent)),
                           onPressed: () {
                             if (_selctedLevel == "Vasti" || _selctedLevel == "Graam") {
-                              print("selctedLevel $_selctedLevel -- selctedLevelId $_selectedGeoUnitId -- selctedLevelName $selctedLevelName");
+                              print("selctedLevel $_selctedLevel -- selctedLevelId $_selectedGeoUnitId -- selctedLevelName $_selctedLevelName");
                               getMyDetailsColumnsAndRows();
                             } else {
                               Statics.showToast(Statics.getLabel('vastiGramValidation'));

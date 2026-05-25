@@ -18,6 +18,13 @@ enum GeoLevel {
   shakhaa,
 }
 
+enum GeoHierarchyFetchMode {
+  all,
+  mandalOnly,
+  vastiOnly,
+  upnagarOnly,
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 class GeoHierarchyState {
@@ -202,9 +209,7 @@ final shakhaaNode = GeoHierarchyNode(
 class GeoHierarchyController extends ChangeNotifier {
   final List<GeoHierarchyNode> hierarchy;
 
-  GeoHierarchyController({
-    required this.hierarchy,
-  });
+  GeoHierarchyController({required this.hierarchy});
 
   final GeoHierarchyState state = GeoHierarchyState();
 
@@ -322,7 +327,7 @@ class GeoHierarchyController extends ChangeNotifier {
     return lockedLevels[restrictedLevel]?.contains(level) ?? false;
   }
 
-  Future<void> loadHierarchyForUser() async {
+  Future<void> loadHierarchyForUser({GeoHierarchyFetchMode fetchMode = GeoHierarchyFetchMode.all}) async {
     try {
       final selection = prepareSelection(userData!);
 
@@ -334,21 +339,21 @@ class GeoHierarchyController extends ChangeNotifier {
       // // if (_isRestrictedAt(9)) return;
 
       /// STEP 2
-      await loadLevel(GeoLevel.vibhaag);
+      await loadLevel(GeoLevel.vibhaag, fetchMode: fetchMode);
 
       state.selectedValues[GeoLevel.vibhaag] = selection.vibhaag;
 
       // if (_isRestrictedAt(9)) return;
 
       /// STEP 3
-      await loadLevel(GeoLevel.bhaag);
+      await loadLevel(GeoLevel.bhaag, fetchMode: fetchMode);
 
       state.selectedValues[GeoLevel.bhaag] = selection.bhaag;
 
       // if (_isRestrictedAt(8)) return;
 
       /// STEP 4
-      await loadLevel(GeoLevel.nagar);
+      await loadLevel(GeoLevel.nagar, fetchMode: fetchMode);
 
       state.selectedValues[GeoLevel.nagar] = selection.nagar;
 
@@ -424,7 +429,7 @@ class GeoHierarchyController extends ChangeNotifier {
 
   ////////////////////////////////////////////
 
-  Future<void> loadLevel(GeoLevel level) async {
+  Future<void> loadLevel(GeoLevel level, {GeoHierarchyFetchMode fetchMode = GeoHierarchyFetchMode.all}) async {
     final node = hierarchy.firstWhere((e) => e.level == level);
 
     String parentId = '';
@@ -447,6 +452,7 @@ class GeoHierarchyController extends ChangeNotifier {
       node,
       parentId,
       parentType,
+      fetchMode,
     );
 
     state.items[level] = data;
@@ -456,26 +462,59 @@ class GeoHierarchyController extends ChangeNotifier {
 
   ////////////////////////////////////////////
 
-  Future<List<GeoUnitMasterBAL>> _fetchData(GeoHierarchyNode node, String parentId, String parentType) async {
+  Future<List<GeoUnitMasterBAL>> _fetchData(GeoHierarchyNode node, String parentId, String parentType, GeoHierarchyFetchMode fetchMode) async {
     final levelId = Statics.levels[node.levelIdKey].toString();
 
-    /// UPNAGAR API
-    if (parentType == 'Upnagar') {
-      return await Statics.getGeoUnitsByLevelAndParentForUpnagar(
-        levelId,
-        parentId,
-        parentType,
-        '',
-      );
-    }
+    switch (fetchMode) {
+      //////////////////////////////////////////
+      /// ALL NORMAL DATA
+      //////////////////////////////////////////
 
-    return await Statics.getGeoUnitsByLevelAndParent(
-      levelId,
-      parentId,
-      parentType,
-      '',
-      isAbhiyaan: false,
-    );
+      case GeoHierarchyFetchMode.all:
+        return await Statics.getGeoUnitsByLevelAndParent(
+          levelId,
+          parentId,
+          parentType,
+          '',
+          isAbhiyaan: false,
+        );
+
+      //////////////////////////////////////////
+      /// MANDAL ONLY TRAIL
+      //////////////////////////////////////////
+
+      case GeoHierarchyFetchMode.mandalOnly:
+        return await Statics.getGeoUnitsByLevelAndParentForMandal(
+          levelId,
+          parentId,
+          parentType,
+          '',
+        );
+
+      //////////////////////////////////////////
+      /// VASTI ONLY TRAIL
+      //////////////////////////////////////////
+
+      case GeoHierarchyFetchMode.vastiOnly:
+        return await Statics.getGeoUnitsByLevelAndParentForVasti(
+          levelId,
+          parentId,
+          parentType,
+          '',
+        );
+
+      //////////////////////////////////////////
+      /// UPNAGAR ONLY TRAIL
+      //////////////////////////////////////////
+
+      case GeoHierarchyFetchMode.upnagarOnly:
+        return await Statics.getGeoUnitsByLevelAndParentForUpnagar(
+          levelId,
+          parentId,
+          parentType,
+          '',
+        );
+    }
   }
 
   ////////////////////////////////////////////
