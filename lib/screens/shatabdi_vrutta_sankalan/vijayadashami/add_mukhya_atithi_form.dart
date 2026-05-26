@@ -741,7 +741,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                                   if (vastisarvekshanDropDownDataModel != null)
                                     vastisarvekshanDropdown3(
                                       filterTypeName: "श्रेणी",
-                                      hintText: "${Statics.getLabel('otherUpshreni')}",
+                                      hintText: "${Statics.getLabel('selectShrenihint')}",
                                       anyaPrabhaviLokShreniId: anyaPrabhaviLokShreniIdEdit,
                                       anyaPrabhaviLokUpShreniId: anyaPrabhaviLokUpShreniIdEdit,
                                       anyaPrabhaviLokUpShreni1Id: anyaPrabhaviLokUpShreni1IdEdit,
@@ -1574,7 +1574,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
           iconEnabledColor: iconColor ?? Colors.black,
           hint: Text(
             value != null && viewName == true ? value.value ?? "" : hintText,
-            style: TextStyle(color: textColor ?? Colors.black),
+            style: TextStyle(color: textColor ?? Colors.grey.shade600),
           ),
           value: items.any((e) => e.id == value?.id) ? value : null,
           isExpanded: true,

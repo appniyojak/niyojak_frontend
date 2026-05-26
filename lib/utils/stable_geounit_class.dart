@@ -6,16 +6,16 @@ import '../providers/bals.dart';
 import 'globals.dart';
 
 enum GeoLevel {
-  mahaanagar,
-  vibhaag,
-  bhaag,
+  Mahaanagar,
+  Vibhaag,
+  Bhaag,
   // shahar,
-  nagar,
-  upnagar,
-  mandal,
-  graam,
-  vasti,
-  shakhaa,
+  Nagar,
+  upnagarUpkhanda,
+  Mandal,
+  Graam,
+  Vasti,
+  Shaakhaa,
 }
 
 enum GeoHierarchyFetchMode {
@@ -33,6 +33,8 @@ class GeoHierarchyState {
 
   /// SELECTED VALUES
   final Map<GeoLevel, String?> selectedValues = {};
+
+  final Map<GeoLevel, String?> selectedNames = {};
 }
 
 class GeoHierarchyTrail {
@@ -73,16 +75,54 @@ class GeoHierarchyTrail {
   }
 }
 
+class GeoHierarchyNameTrail {
+  final String? mahaanagarName;
+  final String? vibhaagName;
+  final String? bhaagName;
+  final String? nagarName;
+  final String? upnagarName;
+  final String? mandalName;
+  final String? graamName;
+  final String? vastiName;
+  final String? shakhaaName;
+
+  const GeoHierarchyNameTrail({
+    this.mahaanagarName,
+    this.vibhaagName,
+    this.bhaagName,
+    this.nagarName,
+    this.upnagarName,
+    this.mandalName,
+    this.graamName,
+    this.vastiName,
+    this.shakhaaName,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'mahaanagarName': mahaanagarName,
+      'vibhaagName': vibhaagName,
+      'bhaagName': bhaagName,
+      'nagarName': nagarName,
+      'upnagarName': upnagarName,
+      'mandalName': mandalName,
+      'graamName': graamName,
+      'vastiName': vastiName,
+      'shakhaaName': shakhaaName,
+    };
+  }
+}
+
 final Map<GeoLevel, int> geoLevelIds = {
-  GeoLevel.mahaanagar: 9,
-  GeoLevel.vibhaag: 8,
-  GeoLevel.bhaag: 7,
-  GeoLevel.nagar: 6,
-  GeoLevel.upnagar: 13,
-  GeoLevel.mandal: 4,
-  GeoLevel.graam: 3,
-  GeoLevel.vasti: 2,
-  GeoLevel.shakhaa: 1,
+  GeoLevel.Mahaanagar: 9,
+  GeoLevel.Vibhaag: 8,
+  GeoLevel.Bhaag: 7,
+  GeoLevel.Nagar: 6,
+  GeoLevel.upnagarUpkhanda: 13,
+  GeoLevel.Mandal: 4,
+  GeoLevel.Graam: 3,
+  GeoLevel.Vasti: 2,
+  GeoLevel.Shaakhaa: 1,
 };
 
 ///////////////////////////////////////////////// NODE ////////////////////////////////////////////////
@@ -103,17 +143,17 @@ class GeoHierarchyNode {
 
 final baseHierarchy = [
   GeoHierarchyNode(
-    level: GeoLevel.mahaanagar,
+    level: GeoLevel.Mahaanagar,
     levelName: 'Mahaanagar',
     levelIdKey: 'MahaanagarLevelID',
   ),
 
   GeoHierarchyNode(
-    level: GeoLevel.vibhaag,
+    level: GeoLevel.Vibhaag,
     levelName: 'Vibhaag',
     levelIdKey: 'VibhaagLevelID',
     parentResolver: (state) {
-      final mahaanagar = state.selectedValues[GeoLevel.mahaanagar];
+      final mahaanagar = state.selectedValues[GeoLevel.Mahaanagar];
 
       /// NO MAHAANAGAR SELECTED
       /// LOAD ROOT VIBHAAG
@@ -122,82 +162,86 @@ final baseHierarchy = [
         return null;
       }
 
-      return GeoLevel.mahaanagar;
+      return GeoLevel.Mahaanagar;
     },
   ),
 
   GeoHierarchyNode(
-    level: GeoLevel.bhaag,
+    level: GeoLevel.Bhaag,
     levelName: 'Bhaag',
     levelIdKey: 'BhaagLevelID',
-    parentResolver: (_) => GeoLevel.vibhaag,
+    parentResolver: (_) => GeoLevel.Vibhaag,
   ),
 
   GeoHierarchyNode(
-    level: GeoLevel.nagar,
+    level: GeoLevel.Nagar,
     levelName: 'Nagar',
     levelIdKey: 'NagarLevelID',
-    parentResolver: (_) => GeoLevel.bhaag,
+    parentResolver: (_) => GeoLevel.Bhaag,
   ),
 
   GeoHierarchyNode(
-    level: GeoLevel.upnagar,
+    level: GeoLevel.upnagarUpkhanda,
     levelName: 'Upnagar',
     levelIdKey: 'UpaNagarLevelID',
-    parentResolver: (_) => GeoLevel.nagar,
+    parentResolver: (_) => GeoLevel.Nagar,
   ),
 
   /// DYNAMIC PARENT
   GeoHierarchyNode(
-    level: GeoLevel.mandal,
+    level: GeoLevel.Mandal,
     levelName: 'Mandal',
     levelIdKey: 'MandalLevelID',
     parentResolver: (state) {
-      if (state.selectedValues[GeoLevel.upnagar] != null) {
-        return GeoLevel.upnagar;
+      final upnagar = state.selectedValues[GeoLevel.upnagarUpkhanda];
+
+      if (upnagar != null && upnagar.isNotEmpty) {
+        return GeoLevel.upnagarUpkhanda;
       }
 
-      return GeoLevel.nagar;
+      return GeoLevel.Nagar;
     },
   ),
 
   /// DYNAMIC PARENT
   GeoHierarchyNode(
-    level: GeoLevel.vasti,
+    level: GeoLevel.Vasti,
     levelName: 'Vasti',
     levelIdKey: 'VastiLevelID',
     parentResolver: (state) {
-      if (state.selectedValues[GeoLevel.upnagar] != null) {
-        return GeoLevel.upnagar;
+      final upnagar = state.selectedValues[GeoLevel.upnagarUpkhanda];
+
+      if (upnagar != null && upnagar.isNotEmpty) {
+        return GeoLevel.upnagarUpkhanda;
       }
 
-      return GeoLevel.nagar;
+      return GeoLevel.Nagar;
     },
   ),
 
   GeoHierarchyNode(
-    level: GeoLevel.graam,
+    level: GeoLevel.Graam,
     levelName: 'Graam',
     levelIdKey: 'GraamLevelID',
-    parentResolver: (_) => GeoLevel.mandal,
+    parentResolver: (_) => GeoLevel.Mandal,
   ),
 ];
 
 final shakhaaNode = GeoHierarchyNode(
-  level: GeoLevel.shakhaa,
+  level: GeoLevel.Shaakhaa,
   levelName: 'Shaakhaa',
   levelIdKey: 'ShaakhaaLevelID',
   parentResolver: (state) {
     /// PRIORITY TO VASTI
 
-    if (state.selectedValues[GeoLevel.vasti] != null) {
-      return GeoLevel.vasti;
+    if (state.selectedValues[GeoLevel.Vasti] != null) {
+      return GeoLevel.Vasti;
     }
 
     /// OTHERWISE GRAAM
 
-    if (state.selectedValues[GeoLevel.graam] != null) {
-      return GeoLevel.graam;
+    if (state.selectedValues[GeoLevel.Graam] != null) {
+      return GeoLevel.Graam;
     }
 
     return null;
@@ -213,51 +257,64 @@ class GeoHierarchyController extends ChangeNotifier {
 
   final GeoHierarchyState state = GeoHierarchyState();
 
-  DropDownModel? userData;
+  DropDownModel? ctrlUserData;
 
-  int? userLevelId;
+  int? ctrlUserLevelId;
 
   String? userGeoUnitId;
 
   ////////////////////////////////////////////
 
-  Future<void> initialize(DropDownModel dm) async {
-    userData = dm;
+  Future<void> initialize(DropDownModel dm, {GeoHierarchyFetchMode fetchMode = GeoHierarchyFetchMode.all}) async {
+    ctrlUserData = dm;
 
-    userLevelId = dm.levelID;
+    ctrlUserLevelId = dm.levelID;
 
     userGeoUnitId = (dm.geoUnitID ?? 0).toString();
 
-    await loadHierarchyForUser();
+    await loadHierarchyForUser(fetchMode: fetchMode);
   }
 
   ////////////////////////////////////////////
 
+  void setSelectedValue({
+    required GeoLevel level,
+    required String? id,
+    String? name,
+  }) {
+    state.selectedValues[level] = id;
+
+    state.selectedNames[level] = name;
+  }
+
   GeoLevel? _mapLevelIdToGeoLevel(int? levelId) {
     switch (levelId) {
       case 9:
-        return GeoLevel.mahaanagar;
+        return GeoLevel.Mahaanagar;
 
       case 8:
-        return GeoLevel.vibhaag;
+        return GeoLevel.Vibhaag;
 
       case 7:
-        return GeoLevel.bhaag;
+        return GeoLevel.Bhaag;
 
       case 6:
-        return GeoLevel.nagar;
+        return GeoLevel.Nagar;
 
       case 13:
-        return GeoLevel.upnagar;
+        return GeoLevel.upnagarUpkhanda;
 
       case 4:
-        return GeoLevel.mandal;
+        return GeoLevel.Mandal;
 
       case 3:
-        return GeoLevel.graam;
+        return GeoLevel.Graam;
 
       case 2:
-        return GeoLevel.vasti;
+        return GeoLevel.Vasti;
+
+      case 1:
+        return GeoLevel.Shaakhaa;
 
       default:
         return null;
@@ -265,154 +322,224 @@ class GeoHierarchyController extends ChangeNotifier {
   }
 
   bool isLevelLocked(GeoLevel level) {
-    final restrictedLevel = _mapLevelIdToGeoLevel(userLevelId);
+    final restrictedLevel = _mapLevelIdToGeoLevel(ctrlUserLevelId);
 
     if (restrictedLevel == null) {
       return false;
     }
 
     final lockedLevels = {
-      GeoLevel.mahaanagar: [
-        GeoLevel.mahaanagar,
+      GeoLevel.Mahaanagar: [
+        GeoLevel.Mahaanagar,
       ],
-      GeoLevel.vibhaag: [
-        GeoLevel.mahaanagar,
-        GeoLevel.vibhaag,
+      GeoLevel.Vibhaag: [
+        GeoLevel.Mahaanagar,
+        GeoLevel.Vibhaag,
       ],
-      GeoLevel.bhaag: [
-        GeoLevel.mahaanagar,
-        GeoLevel.vibhaag,
-        GeoLevel.bhaag,
+      GeoLevel.Bhaag: [
+        GeoLevel.Mahaanagar,
+        GeoLevel.Vibhaag,
+        GeoLevel.Bhaag,
       ],
-      GeoLevel.nagar: [
-        GeoLevel.mahaanagar,
-        GeoLevel.vibhaag,
-        GeoLevel.bhaag,
-        GeoLevel.nagar,
+      GeoLevel.Nagar: [
+        GeoLevel.Mahaanagar,
+        GeoLevel.Vibhaag,
+        GeoLevel.Bhaag,
+        GeoLevel.Nagar,
       ],
-      GeoLevel.upnagar: [
-        GeoLevel.mahaanagar,
-        GeoLevel.vibhaag,
-        GeoLevel.bhaag,
-        GeoLevel.nagar,
-        GeoLevel.upnagar,
+      GeoLevel.upnagarUpkhanda: [
+        GeoLevel.Mahaanagar,
+        GeoLevel.Vibhaag,
+        GeoLevel.Bhaag,
+        GeoLevel.Nagar,
+        GeoLevel.upnagarUpkhanda,
       ],
-      GeoLevel.mandal: [
-        GeoLevel.mahaanagar,
-        GeoLevel.vibhaag,
-        GeoLevel.bhaag,
-        GeoLevel.nagar,
-        GeoLevel.upnagar,
-        GeoLevel.mandal,
+      GeoLevel.Mandal: [
+        GeoLevel.Mahaanagar,
+        GeoLevel.Vibhaag,
+        GeoLevel.Bhaag,
+        GeoLevel.Nagar,
+        GeoLevel.upnagarUpkhanda,
+        GeoLevel.Mandal,
       ],
-      GeoLevel.graam: [
-        GeoLevel.mahaanagar,
-        GeoLevel.vibhaag,
-        GeoLevel.bhaag,
-        GeoLevel.nagar,
-        GeoLevel.upnagar,
-        GeoLevel.mandal,
-        GeoLevel.graam,
+      GeoLevel.Graam: [
+        GeoLevel.Mahaanagar,
+        GeoLevel.Vibhaag,
+        GeoLevel.Bhaag,
+        GeoLevel.Nagar,
+        GeoLevel.upnagarUpkhanda,
+        GeoLevel.Mandal,
+        GeoLevel.Graam,
       ],
-      GeoLevel.vasti: [
-        GeoLevel.mahaanagar,
-        GeoLevel.vibhaag,
-        GeoLevel.bhaag,
-        GeoLevel.nagar,
-        GeoLevel.upnagar,
-        GeoLevel.vasti,
+      GeoLevel.Vasti: [
+        GeoLevel.Mahaanagar,
+        GeoLevel.Vibhaag,
+        GeoLevel.Bhaag,
+        GeoLevel.Nagar,
+        GeoLevel.upnagarUpkhanda,
+        GeoLevel.Vasti,
+      ],
+      GeoLevel.Shaakhaa: [
+        GeoLevel.Mahaanagar,
+        GeoLevel.Vibhaag,
+        GeoLevel.Bhaag,
+        GeoLevel.Nagar,
+        GeoLevel.upnagarUpkhanda,
+        GeoLevel.Mandal,
+        GeoLevel.Graam,
+        GeoLevel.Vasti,
+        GeoLevel.Shaakhaa,
       ],
     };
 
     return lockedLevels[restrictedLevel]?.contains(level) ?? false;
   }
 
-  Future<void> loadHierarchyForUser({GeoHierarchyFetchMode fetchMode = GeoHierarchyFetchMode.all}) async {
+  String? _resolveSelectedName({required GeoLevel level, required List<GeoUnitMasterBAL> items, required String? selectedId}) {
+    if (selectedId == null) {
+      return null;
+    }
+
     try {
-      final selection = prepareSelection(userData!);
+      return items.firstWhere((e) => e.geoUnitID.toString() == selectedId).geoUnitName;
+    } catch (_) {
+      return null;
+    }
+  }
 
-      /// STEP 1
-      await loadLevel(GeoLevel.mahaanagar);
+  String? _resolveSelectedValue({required GeoLevel level, required String? trailValue}) {
+    final currentLevel = _mapLevelIdToGeoLevel(ctrlUserLevelId);
 
-      state.selectedValues[GeoLevel.mahaanagar] = selection.mahaanagar;
+    /// CURRENT USER LEVEL
+    if (currentLevel == level) {
+      return userGeoUnitId;
+    }
 
-      // // if (_isRestrictedAt(9)) return;
+    /// PARENT LEVELS
+    return (trailValue?.isNotEmpty ?? false) ? trailValue : null;
+  }
 
-      /// STEP 2
-      await loadLevel(GeoLevel.vibhaag, fetchMode: fetchMode);
+  Future<void> _loadAndSetLevel({
+    required GeoLevel level,
+    required String? trailValue,
+    GeoHierarchyFetchMode fetchMode = GeoHierarchyFetchMode.all,
+  }) async {
+    /// LOAD ITEMS
+    await loadLevel(level, fetchMode: fetchMode);
 
-      state.selectedValues[GeoLevel.vibhaag] = selection.vibhaag;
+    /// RESOLVE ID
+    final resolvedId = _resolveSelectedValue(level: level, trailValue: trailValue);
 
+    /// RESOLVE NAME
+    final resolvedName = _resolveSelectedName(level: level, items: state.items[level] ?? [], selectedId: resolvedId);
+
+    /// SET BOTH
+    setSelectedValue(level: level, id: resolvedId, name: resolvedName);
+  }
+
+  Future<void> loadHierarchyForUser({int? loadFromLevel, GeoHierarchyFetchMode fetchMode = GeoHierarchyFetchMode.all}) async {
+    try {
+      print("Loading hierarchy for user with level ID: $ctrlUserLevelId and geo unit ID: $userGeoUnitId and fetchMode: $fetchMode");
+
+      clearBelow(GeoLevel.Mahaanagar);
+
+      final selection = prepareSelection(ctrlUserData!);
+
+      await _loadAndSetLevel(
+        level: GeoLevel.Mahaanagar,
+        trailValue: selection.mahaanagar,
+        fetchMode: fetchMode,
+      );
       // if (_isRestrictedAt(9)) return;
 
-      /// STEP 3
-      await loadLevel(GeoLevel.bhaag, fetchMode: fetchMode);
+      await _loadAndSetLevel(
+        level: GeoLevel.Vibhaag,
+        trailValue: selection.vibhaag,
+        fetchMode: fetchMode,
+      );
+      // if (_isRestrictedAt(9)) return;
 
-      state.selectedValues[GeoLevel.bhaag] = selection.bhaag;
-
+      await _loadAndSetLevel(
+        level: GeoLevel.Bhaag,
+        trailValue: selection.bhaag,
+        fetchMode: fetchMode,
+      );
       // if (_isRestrictedAt(8)) return;
 
-      /// STEP 4
-      await loadLevel(GeoLevel.nagar, fetchMode: fetchMode);
-
-      state.selectedValues[GeoLevel.nagar] = selection.nagar;
-
+      if (shouldLoadLevel(GeoLevel.Nagar)) {
+        await _loadAndSetLevel(
+          level: GeoLevel.Nagar,
+          trailValue: selection.nagar,
+          fetchMode: fetchMode,
+        );
+      }
       // if (_isRestrictedAt(7)) return;
 
-      ////////////////////////////////////////
-      /// LOAD UPNAGAR
-      ////////////////////////////////////////
+      /// UPNAGAR
 
-      await loadLevel(GeoLevel.upnagar);
+      await loadLevel(GeoLevel.upnagarUpkhanda);
 
-      final hasUpnagar = state.items[GeoLevel.upnagar]?.isNotEmpty ?? false;
-
-      ////////////////////////////////////////
-      /// IF UPNAGAR EXISTS
-      ////////////////////////////////////////
+      final hasUpnagar = state.items[GeoLevel.upnagarUpkhanda]?.isNotEmpty ?? false;
 
       if (hasUpnagar) {
-        state.selectedValues[GeoLevel.upnagar] = selection.upnagar;
+        final resolvedId = _resolveSelectedValue(
+          level: GeoLevel.upnagarUpkhanda,
+          trailValue: selection.upnagar,
+        );
 
-        // if (_isRestrictedAt(6)) return;
+        final resolvedName = _resolveSelectedName(
+          level: GeoLevel.upnagarUpkhanda,
+          items: state.items[GeoLevel.upnagarUpkhanda] ?? [],
+          selectedId: resolvedId,
+        );
+        if (shouldLoadLevel(GeoLevel.upnagarUpkhanda)) {
+          setSelectedValue(
+            level: GeoLevel.upnagarUpkhanda,
+            id: resolvedId,
+            name: resolvedName,
+          );
+          // if (_isRestrictedAt(6)) return;
+        }
       }
 
-      ////////////////////////////////////////
-      /// LOAD MANDAL
-      ////////////////////////////////////////
+      /// MANDAL
 
-      await loadLevel(GeoLevel.mandal);
-
-      state.selectedValues[GeoLevel.mandal] = selection.mandal;
-
+      if (shouldLoadLevel(GeoLevel.Mandal)) {
+        await _loadAndSetLevel(
+          level: GeoLevel.Mandal,
+          trailValue: selection.mandal,
+        );
+      }
       // if (_isRestrictedAt(6) || _isRestrictedAt(13)) return;
 
-      ////////////////////////////////////////
-      /// LOAD GRAAM
-      ////////////////////////////////////////
+      /// GRAAM
 
-      await loadLevel(GeoLevel.graam);
-
-      state.selectedValues[GeoLevel.graam] = selection.graam;
-
+      if (shouldLoadLevel(GeoLevel.Graam)) {
+        await _loadAndSetLevel(
+          level: GeoLevel.Graam,
+          trailValue: selection.graam,
+        );
+      }
       // if (_isRestrictedAt(4)) return;
 
-      ////////////////////////////////////////
-      /// LOAD VASTI
-      ////////////////////////////////////////
+      /// VASTI
 
-      await loadLevel(GeoLevel.vasti);
-
-      state.selectedValues[GeoLevel.vasti] = selection.vasti;
+      if (shouldLoadLevel(GeoLevel.Vasti)) {
+        await _loadAndSetLevel(
+          level: GeoLevel.Vasti,
+          trailValue: selection.vasti,
+        );
+      }
       // if (_isRestrictedAt(2)) return;
 
-      ////////////////////////////////////////
-      /// LOAD VASTI
-      ////////////////////////////////////////
+      /// SHAKHAA
 
-      await loadLevel(GeoLevel.shakhaa);
-
-      state.selectedValues[GeoLevel.shakhaa] = selection.shakhaa;
+      if (shouldLoadLevel(GeoLevel.Shaakhaa)) {
+        await _loadAndSetLevel(
+          level: GeoLevel.Shaakhaa,
+          trailValue: selection.shakhaa,
+        );
+      }
       // if (_isRestrictedAt(2)) return;
 
       notifyListeners();
@@ -424,7 +551,7 @@ class GeoHierarchyController extends ChangeNotifier {
   ////////////////////////////////////////////
 
   bool _isRestrictedAt(int level) {
-    return userLevelId == level;
+    return ctrlUserLevelId == level;
   }
 
   ////////////////////////////////////////////
@@ -441,11 +568,7 @@ class GeoHierarchyController extends ChangeNotifier {
     if (parentLevel != null) {
       parentId = state.selectedValues[parentLevel] ?? '';
 
-      parentType = hierarchy
-          .firstWhere(
-            (e) => e.level == parentLevel,
-          )
-          .levelName;
+      parentType = hierarchy.firstWhere((e) => e.level == parentLevel).levelName;
     }
 
     final data = await _fetchData(
@@ -519,49 +642,49 @@ class GeoHierarchyController extends ChangeNotifier {
 
   ////////////////////////////////////////////
 
-  Future<void> onDropdownChanged({required GeoLevel level, required String? value}) async {
+  Future<void> onDropdownChanged({required GeoLevel level, required String? value, GeoHierarchyFetchMode fetchMode = GeoHierarchyFetchMode.all}) async {
     /// SAVE SELECTION
-    state.selectedValues[level] = value;
+    final selectedItem = state.items[level]?.firstWhere((e) => e.geoUnitID.toString() == value);
+
+    setSelectedValue(level: level, id: value, name: selectedItem?.geoUnitName);
 
     /// CLEAR BELOW LEVEL
     clearBelow(level);
 
-    ////////////////////////////////////////
     /// SPECIAL CASE
-    ////////////////////////////////////////
 
-    if (level == GeoLevel.nagar) {
+    if (level == GeoLevel.Nagar) {
       /// LOAD UPNAGAR
-      await loadLevel(GeoLevel.upnagar);
+      await loadLevel(GeoLevel.upnagarUpkhanda, fetchMode: fetchMode);
 
       // final hasUpnagar = state.items[GeoLevel.upnagar]?.isNotEmpty ?? false;
 
       // if (!hasUpnagar) {
-      await loadLevel(GeoLevel.mandal);
+      await loadLevel(GeoLevel.Mandal);
 
-      await loadLevel(GeoLevel.vasti);
+      await loadLevel(GeoLevel.Vasti);
       // }
     }
 
     ////////////////////////////////////////
 
-    else if (level == GeoLevel.upnagar) {
-      await loadLevel(GeoLevel.mandal);
+    else if (level == GeoLevel.upnagarUpkhanda) {
+      await loadLevel(GeoLevel.Mandal);
 
-      await loadLevel(GeoLevel.vasti);
+      await loadLevel(GeoLevel.Vasti);
     }
 
     ////////////////////////////////////////
 
-    else if (level == GeoLevel.mandal) {
-      await loadLevel(GeoLevel.graam);
+    else if (level == GeoLevel.Mandal) {
+      await loadLevel(GeoLevel.Graam);
     }
 
     ////////////////////////////////////////
 
-    else if (level == GeoLevel.graam || level == GeoLevel.vasti) {
-      if (_hasLevel(GeoLevel.shakhaa)) {
-        await loadLevel(GeoLevel.shakhaa);
+    else if (level == GeoLevel.Graam || level == GeoLevel.Vasti) {
+      if (_hasLevel(GeoLevel.Shaakhaa)) {
+        await loadLevel(GeoLevel.Shaakhaa);
       }
     }
     ////////////////////////////////////////
@@ -572,7 +695,7 @@ class GeoHierarchyController extends ChangeNotifier {
       if (currentIndex + 1 < GeoLevel.values.length) {
         final nextLevel = GeoLevel.values[currentIndex + 1];
 
-        await loadLevel(nextLevel);
+        await loadLevel(nextLevel, fetchMode: fetchMode);
       }
     }
 
@@ -588,26 +711,83 @@ class GeoHierarchyController extends ChangeNotifier {
   ////////////////////////////////////////////
 
   void clearBelow(GeoLevel level) {
-    bool shouldClear = false;
+    final currentIndex = hierarchy.indexWhere(
+      (e) => e.level == level,
+    );
 
-    for (final lvl in GeoLevel.values) {
-      if (lvl == level) {
-        shouldClear = true;
-        continue;
-      }
-
-      if (shouldClear) {
-        state.items.remove(lvl);
-
-        state.selectedValues.remove(lvl);
-      }
+    if (currentIndex == -1) {
+      return;
     }
+
+    /// CLEAR ALL LOWER LEVELS
+
+    for (int i = currentIndex + 1; i < hierarchy.length; i++) {
+      final lvl = hierarchy[i].level;
+
+      state.items.remove(lvl);
+
+      state.selectedValues.remove(lvl);
+
+      state.selectedNames.remove(lvl);
+    }
+
+    notifyListeners();
   }
 
   ////////////////////////////////////////////
 
-  bool hasItems(GeoLevel level) {
-    return state.items[level]?.isNotEmpty ?? false;
+  bool hasItems(GeoLevel level) => state.items[level]?.isNotEmpty ?? false;
+
+  bool shouldLoadLevel(GeoLevel level) {
+    final currentLevel = _mapLevelIdToGeoLevel(ctrlUserLevelId);
+
+    /// NO RESTRICTION
+
+    if (currentLevel == null) {
+      return true;
+    }
+
+    /// ALWAYS LOAD ROOTS
+
+    if (13 > (ctrlUserLevelId ?? 0) && (ctrlUserLevelId ?? 0) > 7) {
+      return true;
+    }
+
+    /// LEVEL 6 (NAGAR)
+
+    if (currentLevel == GeoLevel.Nagar) {
+      return [
+        GeoLevel.Nagar,
+        GeoLevel.upnagarUpkhanda,
+        GeoLevel.Mandal,
+        GeoLevel.Graam,
+        GeoLevel.Vasti,
+        GeoLevel.Shaakhaa,
+      ].contains(level);
+    }
+
+    /// LEVEL 4 (MANDAL)
+
+    if (currentLevel == GeoLevel.Mandal) {
+      return [
+        GeoLevel.Mandal,
+        GeoLevel.Graam,
+        GeoLevel.Shaakhaa,
+      ].contains(level);
+    }
+
+    /// LEVEL 2 (VASTI)
+
+    if (currentLevel == GeoLevel.Vasti) {
+      return [
+        GeoLevel.Vasti,
+        GeoLevel.Shaakhaa,
+      ].contains(level);
+    }
+
+    /// DEFAULT
+
+    return true;
   }
 
   GeoLevel? get deepestSelectedLevel {
@@ -644,20 +824,249 @@ class GeoHierarchyController extends ChangeNotifier {
     return state.selectedValues[level];
   }
 
+  String? get deepestSelectedGeoUnitName {
+    final level = deepestSelectedLevel;
+
+    if (level == null) {
+      return null;
+    }
+
+    final selectedId = state.selectedValues[level];
+
+    final item = state.items[level]?.firstWhere(
+      (e) => e.geoUnitID.toString() == selectedId,
+      // orElse: () => GeoUnitMasterBAL(),
+    );
+
+    return item?.geoUnitName ?? "--";
+  }
+
   String? get deepestSelectedLevelName => deepestSelectedLevel?.name;
 
   GeoHierarchyTrail get hierarchyTrail {
     return GeoHierarchyTrail(
-      mahaanagarId: state.selectedValues[GeoLevel.mahaanagar],
-      vibhaagId: state.selectedValues[GeoLevel.vibhaag],
-      bhaagId: state.selectedValues[GeoLevel.bhaag],
-      nagarId: state.selectedValues[GeoLevel.nagar],
-      upnagarId: state.selectedValues[GeoLevel.upnagar],
-      mandalId: state.selectedValues[GeoLevel.mandal],
-      graamId: state.selectedValues[GeoLevel.graam],
-      vastiId: state.selectedValues[GeoLevel.vasti],
-      shakhaaId: state.selectedValues[GeoLevel.shakhaa],
+      mahaanagarId: state.selectedValues[GeoLevel.Mahaanagar],
+      vibhaagId: state.selectedValues[GeoLevel.Vibhaag],
+      bhaagId: state.selectedValues[GeoLevel.Bhaag],
+      nagarId: state.selectedValues[GeoLevel.Nagar],
+      upnagarId: state.selectedValues[GeoLevel.upnagarUpkhanda],
+      mandalId: state.selectedValues[GeoLevel.Mandal],
+      graamId: state.selectedValues[GeoLevel.Graam],
+      vastiId: state.selectedValues[GeoLevel.Vasti],
+      shakhaaId: state.selectedValues[GeoLevel.Shaakhaa],
     );
+  }
+
+  GeoHierarchyNameTrail get hierarchyNameTrail {
+    return GeoHierarchyNameTrail(
+      mahaanagarName: state.selectedNames[GeoLevel.Mahaanagar],
+      vibhaagName: state.selectedNames[GeoLevel.Vibhaag],
+      bhaagName: state.selectedNames[GeoLevel.Bhaag],
+      nagarName: state.selectedNames[GeoLevel.Nagar],
+      upnagarName: state.selectedNames[GeoLevel.upnagarUpkhanda],
+      mandalName: state.selectedNames[GeoLevel.Mandal],
+      graamName: state.selectedNames[GeoLevel.Graam],
+      vastiName: state.selectedNames[GeoLevel.Vasti],
+      shakhaaName: state.selectedNames[GeoLevel.Shaakhaa],
+    );
+  }
+
+  ////////////////////////////////////////////
+
+  Future<GeoHierarchyTrail?> getTrailFromGeoUnitId(String geoUnitId) async {
+    final data = await Statics.getGeoUnitsByID(geoUnitId);
+
+    if (data == null) {
+      return null;
+    }
+
+    return GeoHierarchyTrail(
+      mahaanagarId: data.levelID == 9 ? data.geoUnitID.toString() : data.parentMahaanagarID?.toString(),
+      vibhaagId: data.levelID == 8 ? data.geoUnitID.toString() : data.parentVibhaagID?.toString(),
+      bhaagId: data.levelID == 7 ? data.geoUnitID.toString() : data.parentBhaagID?.toString(),
+      nagarId: data.levelID == 6 ? data.geoUnitID.toString() : data.parentNagarID?.toString(),
+      upnagarId: data.levelID == 13 ? data.geoUnitID.toString() : data.parentUpaNagarID?.toString(),
+      mandalId: data.levelID == 4 ? data.geoUnitID.toString() : data.parentMandalID?.toString(),
+      graamId: data.levelID == 3 ? data.geoUnitID.toString() : data.parentGraamID?.toString(),
+      vastiId: data.levelID == 2 ? data.geoUnitID.toString() : data.parentVastiID?.toString(),
+      shakhaaId: data.levelID == 1 ? data.geoUnitID.toString() : null,
+    );
+  }
+
+  Future<void> setHierarchyFromTrail({required GeoHierarchyTrail trail, GeoHierarchyFetchMode fetchMode = GeoHierarchyFetchMode.all}) async {
+    /// CLEAR OLD STATE
+
+    state.items.clear();
+
+    state.selectedValues.clear();
+
+    state.selectedNames.clear();
+
+    notifyListeners();
+
+    /// MAHAANAGAR
+    if (trail.mahaanagarId != null && trail.mahaanagarId!.isNotEmpty) {
+      await loadLevel(
+        GeoLevel.Mahaanagar,
+        fetchMode: fetchMode,
+      );
+
+      final selectedItem = state.items[GeoLevel.Mahaanagar]?.firstWhere(
+        (e) => e.geoUnitID.toString() == trail.mahaanagarId,
+      );
+
+      setSelectedValue(
+        level: GeoLevel.Mahaanagar,
+        id: trail.mahaanagarId,
+        name: selectedItem?.geoUnitName,
+      );
+    }
+
+    /// VIBHAAG
+    if (trail.vibhaagId != null && trail.vibhaagId!.isNotEmpty) {
+      await loadLevel(
+        GeoLevel.Vibhaag,
+        fetchMode: fetchMode,
+      );
+
+      final selectedItem = state.items[GeoLevel.Vibhaag]?.firstWhere(
+        (e) => e.geoUnitID.toString() == trail.vibhaagId,
+      );
+
+      setSelectedValue(
+        level: GeoLevel.Vibhaag,
+        id: trail.vibhaagId,
+        name: selectedItem?.geoUnitName,
+      );
+    }
+
+    /// BHAAG
+    if (trail.bhaagId != null && trail.bhaagId!.isNotEmpty) {
+      await loadLevel(
+        GeoLevel.Bhaag,
+        fetchMode: fetchMode,
+      );
+
+      final selectedItem = state.items[GeoLevel.Bhaag]?.firstWhere(
+        (e) => e.geoUnitID.toString() == trail.bhaagId,
+      );
+
+      setSelectedValue(
+        level: GeoLevel.Bhaag,
+        id: trail.bhaagId,
+        name: selectedItem?.geoUnitName,
+      );
+    }
+
+    /// NAGAR
+    if (trail.nagarId != null && trail.nagarId!.isNotEmpty) {
+      await loadLevel(
+        GeoLevel.Nagar,
+        fetchMode: fetchMode,
+      );
+
+      final selectedItem = state.items[GeoLevel.Nagar]?.firstWhere(
+        (e) => e.geoUnitID.toString() == trail.nagarId,
+      );
+
+      setSelectedValue(
+        level: GeoLevel.Nagar,
+        id: trail.nagarId,
+        name: selectedItem?.geoUnitName,
+      );
+    }
+
+    /// UPNAGAR
+    if (trail.upnagarId != null && trail.upnagarId!.isNotEmpty) {
+      await loadLevel(
+        GeoLevel.upnagarUpkhanda,
+        fetchMode: fetchMode,
+      );
+
+      final selectedItem = state.items[GeoLevel.upnagarUpkhanda]?.firstWhere(
+        (e) => e.geoUnitID.toString() == trail.upnagarId,
+      );
+
+      setSelectedValue(
+        level: GeoLevel.upnagarUpkhanda,
+        id: trail.upnagarId,
+        name: selectedItem?.geoUnitName,
+      );
+    }
+
+    /// MANDAL
+    if (trail.mandalId != null && trail.mandalId!.isNotEmpty) {
+      await loadLevel(
+        GeoLevel.Mandal,
+        fetchMode: fetchMode,
+      );
+
+      final selectedItem = state.items[GeoLevel.Mandal]?.firstWhere(
+        (e) => e.geoUnitID.toString() == trail.mandalId,
+      );
+
+      setSelectedValue(
+        level: GeoLevel.Mandal,
+        id: trail.mandalId,
+        name: selectedItem?.geoUnitName,
+      );
+    }
+
+    /// GRAAM
+    if (trail.graamId != null && trail.graamId!.isNotEmpty) {
+      await loadLevel(
+        GeoLevel.Graam,
+        fetchMode: fetchMode,
+      );
+
+      final selectedItem = state.items[GeoLevel.Graam]?.firstWhere(
+        (e) => e.geoUnitID.toString() == trail.graamId,
+      );
+
+      setSelectedValue(
+        level: GeoLevel.Graam,
+        id: trail.graamId,
+        name: selectedItem?.geoUnitName,
+      );
+    }
+
+    /// VASTI
+    if (trail.vastiId != null && trail.vastiId!.isNotEmpty) {
+      await loadLevel(
+        GeoLevel.Vasti,
+        fetchMode: fetchMode,
+      );
+
+      final selectedItem = state.items[GeoLevel.Vasti]?.firstWhere(
+        (e) => e.geoUnitID.toString() == trail.vastiId,
+      );
+
+      setSelectedValue(
+        level: GeoLevel.Vasti,
+        id: trail.vastiId,
+        name: selectedItem?.geoUnitName,
+      );
+    }
+
+    /// SHAAKHAA
+    if (trail.shakhaaId != null && trail.shakhaaId!.isNotEmpty) {
+      await loadLevel(
+        GeoLevel.Shaakhaa,
+        fetchMode: fetchMode,
+      );
+
+      final selectedItem = state.items[GeoLevel.Shaakhaa]?.firstWhere(
+        (e) => e.geoUnitID.toString() == trail.shakhaaId,
+      );
+
+      setSelectedValue(
+        level: GeoLevel.Shaakhaa,
+        id: trail.shakhaaId,
+        name: selectedItem?.geoUnitName,
+      );
+    }
+
+    notifyListeners();
   }
 
   ////////////////////////////////////////////
@@ -684,7 +1093,9 @@ class GeoDropdownWidget extends StatelessWidget {
   final String title;
   final GeoHierarchyController controller;
   final String? Function(dynamic)? validator;
+  final void Function()? onChanged;
   final void Function(dynamic)? onSaved;
+  final GeoHierarchyFetchMode fetchMode;
 
   const GeoDropdownWidget({
     super.key,
@@ -693,6 +1104,8 @@ class GeoDropdownWidget extends StatelessWidget {
     required this.controller,
     this.validator,
     this.onSaved,
+    this.onChanged,
+    this.fetchMode = GeoHierarchyFetchMode.all,
   });
 
   @override
@@ -713,7 +1126,9 @@ class GeoDropdownWidget extends StatelessWidget {
         await controller.onDropdownChanged(
           level: level,
           value: value,
+          fetchMode: fetchMode,
         );
+        if (onChanged != null) onChanged!.call();
       },
       validator: validator,
       onSaved: onSaved,

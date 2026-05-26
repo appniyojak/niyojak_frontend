@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -396,6 +397,8 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
       var data1 = await Statics.getStaticLDB("DaayitvaFor");
       await populateDropdown();
       await populateDropdownT();
+
+      log(jsonEncode(data.toJson()));
 
       if (data != null) {
         var data2 = await Statics.getDaayitvaLDB("", "", data.daayitvaID.toString());

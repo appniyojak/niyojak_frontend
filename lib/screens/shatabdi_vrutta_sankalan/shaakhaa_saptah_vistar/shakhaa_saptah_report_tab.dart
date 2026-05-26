@@ -224,28 +224,28 @@ class _ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> {
               child: Column(
                 children: [
                   GeoDropdownWidget(
-                    level: GeoLevel.mahaanagar,
+                    level: GeoLevel.Mahaanagar,
                     title: 'Mahaanagar',
                     controller: ctrl,
                   ),
 
                   // if (ctrl.hasItems(GeoLevel.vibhaag))
                   GeoDropdownWidget(
-                    level: GeoLevel.vibhaag,
+                    level: GeoLevel.Vibhaag,
                     title: 'Vibhaag',
                     controller: ctrl,
                   ),
 
-                  if (ctrl.hasItems(GeoLevel.bhaag))
+                  if (ctrl.hasItems(GeoLevel.Bhaag))
                     GeoDropdownWidget(
-                      level: GeoLevel.bhaag,
+                      level: GeoLevel.Bhaag,
                       title: 'Bhaag',
                       controller: ctrl,
                     ),
 
-                  if (ctrl.hasItems(GeoLevel.nagar))
+                  if (ctrl.hasItems(GeoLevel.Nagar))
                     GeoDropdownWidget(
-                      level: GeoLevel.nagar,
+                      level: GeoLevel.Nagar,
                       title: 'Nagar',
                       controller: ctrl,
                     ),
@@ -253,39 +253,39 @@ class _ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> {
                   ////////////////////////////////////////
                   /// CONDITIONAL
 
-                  if (ctrl.hasItems(GeoLevel.upnagar))
+                  if (ctrl.hasItems(GeoLevel.upnagarUpkhanda))
                     GeoDropdownWidget(
-                      level: GeoLevel.upnagar,
+                      level: GeoLevel.upnagarUpkhanda,
                       title: 'upnagarUpkhanda',
                       controller: ctrl,
                     ),
 
                   ////////////////////////////////////////
 
-                  if (ctrl.hasItems(GeoLevel.mandal))
+                  if (ctrl.hasItems(GeoLevel.Mandal))
                     GeoDropdownWidget(
-                      level: GeoLevel.mandal,
+                      level: GeoLevel.Mandal,
                       title: 'Mandal',
                       controller: ctrl,
                     ),
 
-                  if (ctrl.hasItems(GeoLevel.graam))
+                  if (ctrl.hasItems(GeoLevel.Graam))
                     GeoDropdownWidget(
-                      level: GeoLevel.graam,
+                      level: GeoLevel.Graam,
                       title: 'Graam',
                       controller: ctrl,
                     ),
 
-                  if (ctrl.hasItems(GeoLevel.vasti))
+                  if (ctrl.hasItems(GeoLevel.Vasti))
                     GeoDropdownWidget(
-                      level: GeoLevel.vasti,
+                      level: GeoLevel.Vasti,
                       title: 'Vasti',
                       controller: ctrl,
                     ),
 
-                  if (ctrl.hasItems(GeoLevel.shakhaa))
+                  if (ctrl.hasItems(GeoLevel.Shaakhaa))
                     GeoDropdownWidget(
-                      level: GeoLevel.shakhaa,
+                      level: GeoLevel.Shaakhaa,
                       title: 'Shaakhaa',
                       controller: ctrl,
                     ),

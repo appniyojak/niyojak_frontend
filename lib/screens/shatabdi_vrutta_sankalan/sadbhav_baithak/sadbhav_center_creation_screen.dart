@@ -519,7 +519,7 @@ class _SadbhavCenterCreationScreenState extends State<SadbhavCenterCreationScree
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "${Statics.getLabel('selectKaryakramLevel')}",
+          "${Statics.getLabel(_isViewOnly ? 'viewKaryakramLevel' : 'selectKaryakramLevel')}",
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
         ),
       ),
@@ -556,7 +556,7 @@ class _SadbhavCenterCreationScreenState extends State<SadbhavCenterCreationScree
                     nagarList = [];
                     print("baithakId >>>>>>>>>>>>>>>> ${baithakId}");
                   },
-                  isDisabled: false,
+                  isDisabled: _isViewOnly,
                 ),
                 SizedBox(height: 18),
                 if ([2, 3, 4].contains(_selectedKaryakramLevelId))
@@ -883,7 +883,7 @@ class _SadbhavCenterCreationScreenState extends State<SadbhavCenterCreationScree
                   // populatelinkedVastiDropdown('Nagar', value);
                 });
               },
-              isDisabled: ((userLevelId ?? 0) < 6 || userLevelId == 13),
+              isDisabled: ((userLevelId ?? 0) < 6 || userLevelId == 13) == true ? true : _isViewOnly,
             ),
           if ([6, 7].contains(_selectedKaryakramLevelId) && _linkedupnagar != null && _linkedupnagar!.isNotEmpty)
             buildDropdownField(
@@ -907,7 +907,7 @@ class _SadbhavCenterCreationScreenState extends State<SadbhavCenterCreationScree
                     // populatelinkedVastiDropdown('Upnagar', value);
                   });
                 },
-                isDisabled: ((userLevelId ?? 0) < 6 || userLevelId == 13)),
+                isDisabled: ((userLevelId ?? 0) < 6 || userLevelId == 13) == true ? true : _isViewOnly),
           if ([7].contains(_selectedKaryakramLevelId) && _linkedmandal != null && _linkedmandal!.isNotEmpty)
             buildDropdownField(
               label: Statics.getLabel('Mandal'),
@@ -929,7 +929,7 @@ class _SadbhavCenterCreationScreenState extends State<SadbhavCenterCreationScree
                   // populatelinkedGraamDropdown(value);
                 });
               },
-              isDisabled: ((userLevelId ?? 0) < 4),
+              isDisabled: ((userLevelId ?? 0) < 4) == true ? true : _isViewOnly,
             ),
           // if (_linkedgraam != null && _linkedgraam!.isNotEmpty)
           //   _buildDropdownField(

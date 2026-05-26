@@ -477,8 +477,8 @@ class _TulnatmakBaithakEkatritVruttaState extends State<TulnatmakBaithakEkatritV
   // }
 
   Future<dynamic> _getTulnatmakEkatritVrutta(
-      int baithakTypeID1,
-      int baithakTypeID2,
+      int? baithakTypeID1,
+      int? baithakTypeID2,
       int? baithakTypeID3,
       int? geoID,
       String? tulnatmakBindu,
@@ -499,8 +499,8 @@ class _TulnatmakBaithakEkatritVruttaState extends State<TulnatmakBaithakEkatritV
     if (isConnected) {
       String strInput = json.encode({
         "iAppUserID": int.parse(Statics.userDetails['userID']),
-        "iBaithakTypeID1": baithakTypeID1,
-        "iBaithakTypeID2": baithakTypeID2,
+        "iBaithakTypeID1": baithakTypeID1 ?? 0,
+        "iBaithakTypeID2": baithakTypeID2 ?? 0,
         "iBaithakTypeID3": baithakTypeID3 ?? 0,
         "iGeoUnitID": _selectedGeoUnitId ?? geoID ?? 0,
         "tulnakmakbindu": tulnatmakBindu,
@@ -586,9 +586,12 @@ class _TulnatmakBaithakEkatritVruttaState extends State<TulnatmakBaithakEkatritV
         print("_search 3");
 
         try {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('प्रक्रिया करत आहे')),
+          );
           obj = await _getTulnatmakEkatritVrutta(
-              _baithakType1!,
-              _baithakType2!,
+              _baithakType1,
+              _baithakType2,
               _baithakType3,
               geoID,
               _tulnatmakvruttapoint,
@@ -1683,10 +1686,6 @@ class _TulnatmakBaithakEkatritVruttaState extends State<TulnatmakBaithakEkatritV
                               onPressed: () {
                                 if (_completeFormKey.currentState?.validate() ?? false) {
                                   _search();
-
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text('प्रक्रिया करत आहे')),
-                                  );
                                 }
                               },
                               child: Text(

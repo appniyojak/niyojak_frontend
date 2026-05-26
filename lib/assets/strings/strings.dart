@@ -1410,6 +1410,7 @@ Map<String, String> resEnglish = {
   'samparakSootraDoorbhash': 'Contact Person Mobile',
   'samparkVibhaagYaadi': 'Member Contact List',
   'otherUpshreni': 'Other subtype',
+  'selectShrenihint': 'Select Type/Subtype',
   'anyaVisheshMahiti': 'Other Speical Information',
   'festivals': 'Festivals',
   'Sampark': 'Contact',
@@ -1885,6 +1886,7 @@ Map<String, String> resEnglish = {
   'dhaarmiknetritva': 'Dharmik Netrutwa',
   ////////////////////////////////////// Sadbhav Baithak Block //////////////////////////////////////
   'selectKaryakramLevel': "Select Program Level",
+  'viewKaryakramLevel': "View Program Level",
   'searchBaithak': "Search Baithak",
   'baithak': "Baithak",
   'baithakVrutta': "Baithak Vrutta",
@@ -3438,6 +3440,7 @@ Map<String, String> resMarathi = {
   'samparakSootraDoorbhash': 'संपर्क सूत्रांचे दूरभाष ',
   'samparkVibhaagYaadi': 'संपर्क विभागाची यादी',
   'otherUpshreni': 'अन्य उपश्रेणी',
+  'selectShrenihint': 'श्रेणी/उपश्रेणी निवडा',
   'anyaVisheshMahiti': 'अन्य विशेष माहिती',
   'festivals': 'सण',
   'Sampark': 'संपर्क',
@@ -3910,6 +3913,7 @@ Map<String, String> resMarathi = {
   'dhaarmiknetritva': 'धार्मिक नेतृत्व',
   ////////////////////////////////////// Sadbhav Baithak Block //////////////////////////////////////
   'selectKaryakramLevel': "कार्यक्रम स्तर निवडा",
+  'viewKaryakramLevel': "कार्यक्रम माहिती",
   'searchBaithak': "बैठक शोधा",
   'baithak': "बैठक",
   'baithakVrutta': "बैठक वृत्त",
@@ -5466,6 +5470,7 @@ Map<String, String> resHindi = {
   'samparakSootraDoorbhash': 'संपर्क स्रोतों के मोबाइल',
   'samparkVibhaagYaadi': 'संपर्क विभागों की सूची',
   'otherUpshreni': 'अन्य उपश्रेणियाँ',
+  'selectShrenihint': 'श्रेणी/उपश्रेणी चुनें',
   'anyaVisheshMahiti': 'अन्य विशेष जानकारी',
   'festivals': 'त्यौहार',
   'Sampark': 'संपर्क',
@@ -5937,6 +5942,7 @@ Map<String, String> resHindi = {
   'dhaarmiknetritva': 'धार्मिक नेतृत्व',
   ////////////////////////////////////// Sadbhav Baithak Block //////////////////////////////////////
   'selectKaryakramLevel': "कार्यक्रम स्तर चुने",
+  'viewKaryakramLevel': "कार्यक्रम जानकारी",
   'searchBaithak': "बैठक खोजें",
   'baithak': "बैठक",
   'baithakVrutta': "बैठक वृत्त",

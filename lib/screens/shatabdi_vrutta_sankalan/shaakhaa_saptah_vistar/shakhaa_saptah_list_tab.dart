@@ -1008,6 +1008,7 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> {
                       itemCount: _newShaakhaaList.length ?? 0,
                       itemBuilder: (context, index) {
                         return ShaakhaaCard(_newShaakhaaList[index], _newShaakhaaList[index]['IsSankalpit'], _search,
+                            IsNew: true,
                             traillingIcon: IconButton(
                                 onPressed: () => Navigator.push(
                                     context,

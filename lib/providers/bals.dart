@@ -347,6 +347,30 @@ class SwayamsevakDaayitvaBAL {
       this.otherSocialOrganizationRemark,
       this.isCurrent,
       this.areaOfOperationIDs);
+
+  Map<String, dynamic> toJson() {
+    return {
+      'swayamsevakID': swayamsevakID,
+      'praantID': praantID,
+      'daayitvaFor': daayitvaFor,
+      'daayitvaID': daayitvaID,
+      'daayitvaName': daayitvaName,
+      'levelID': levelID,
+      'daayitvaGeoUnitID': daayitvaGeoUnitID,
+      'gatividhiID': gatividhiID,
+      'aayaamID': aayaamID,
+      'startYear': startYear,
+      'endYear': endYear,
+      'sanghaPreritSansthaaID': sanghaPreritSansthaaID,
+      'sanghaPreritSansthaaDesignation': sanghaPreritSansthaaDesignation,
+      'sanghaPreritSansthaaRemark': sanghaPreritSansthaaRemark,
+      'otherSocialOrganizationName': otherSocialOrganizationName,
+      'otherSocialOrganizationDesignation': otherSocialOrganizationDesignation,
+      'otherSocialOrganizationRemark': otherSocialOrganizationRemark,
+      'isCurrent': isCurrent,
+      'areaOfOperationIDs': areaOfOperationIDs,
+    };
+  }
 }
 
 class StaticMasterBAL {

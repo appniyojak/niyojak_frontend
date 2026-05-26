@@ -156,6 +156,8 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
         break;
     }
 
+    print(allowedIds);
+
     return allowedIds.map((id) {
       final key = Statics.getLabel(levelMap[id]!);
       return {id.toString(): key.toString()};
@@ -175,6 +177,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     _getInitialData();
     setState(() {
       utsavKontyaStaravarList = getFilteredLevels(dm.levelID ?? 0);
+      utsavKontyaStaravar = "6";
     });
     await populateDropdown();
   }
@@ -478,11 +481,13 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
   Future<List<GeoUnitMasterBAL>> populatelinkedVibhaagDropdown(String mahaanagarIDStr) async {
     _linkedupnagarValue = _linkedupnagar = _linkedUpnagar = _linkedBhaagValue = _linkedNagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     _linkedUpnagar = [];
-    final data = utsavKontyaStaravar == "4"
-        ? await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar', '')
-        : utsavKontyaStaravar == "13"
-            ? await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar', '')
-            : await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar', '');
+    final data = utsavKontyaStaravar == "2"
+        ? await Statics.getGeoUnitsByLevelAndParentForVasti(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar', '')
+        : utsavKontyaStaravar == "4"
+            ? await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar', '')
+            : utsavKontyaStaravar == "13"
+                ? await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar', '')
+                : await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar', '');
     setState(() => _linkedVibhaag = data);
     return data;
   }
@@ -492,11 +497,13 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     _linkedBhaagName = _linkedNagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
     _linkedupnagar = _linkedBhaag = _linkedNagar = _linkedmandal = _linkedgraam = _linkedvasti = [];
     _linkedUpnagar = [];
-    final data = utsavKontyaStaravar == "4"
-        ? await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '')
-        : utsavKontyaStaravar == "13"
-            ? await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '')
-            : await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '');
+    final data = utsavKontyaStaravar == "2"
+        ? await Statics.getGeoUnitsByLevelAndParentForVasti(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '')
+        : utsavKontyaStaravar == "4"
+            ? await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '')
+            : utsavKontyaStaravar == "13"
+                ? await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '')
+                : await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '');
     setState(() => _linkedBhaag = data);
     return data;
   }
@@ -516,11 +523,13 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     _linkedUpnagar = [];
     final parentID = shaharIDStr ?? bhaagIDStr!;
     final parentType = shaharIDStr != null ? 'Shahar' : 'Bhaag';
-    final data = utsavKontyaStaravar == "4"
-        ? await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['NagarLevelID'].toString(), parentID, parentType, '')
-        : utsavKontyaStaravar == "13"
-            ? await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['NagarLevelID'].toString(), parentID, parentType, '')
-            : await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), parentID, parentType, '');
+    final data = utsavKontyaStaravar == "2"
+        ? await Statics.getGeoUnitsByLevelAndParentForVasti(Statics.levels['NagarLevelID'].toString(), parentID, parentType, '')
+        : utsavKontyaStaravar == "4"
+            ? await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['NagarLevelID'].toString(), parentID, parentType, '')
+            : utsavKontyaStaravar == "13"
+                ? await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['NagarLevelID'].toString(), parentID, parentType, '')
+                : await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), parentID, parentType, '');
     setState(() => _linkedNagar = data.isNotEmpty ? data : null);
     return data;
   }

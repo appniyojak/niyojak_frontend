@@ -291,7 +291,7 @@ class SwayamsevakProvider {
     }
   }
 
-  Future<dynamic> getSwayamSevakDaayitva(String swayamSevakID, String daayitvaForID, String daayitvaForCode, String dataID) async {
+  Future<SwayamsevakDaayitvaBAL> getSwayamSevakDaayitva(String swayamSevakID, String daayitvaForID, String daayitvaForCode, String dataID) async {
     Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
     var response = await http.post(Uri.parse(Statics.urlGetSwayamsevakDaayitvaDetailForApp),
