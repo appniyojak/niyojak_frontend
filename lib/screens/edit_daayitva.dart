@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'swayamsevak_module/swayamsevak_daayitva_edit.dart';
+
 import '../helpers/static_data.dart' as Statics;
+import 'swayamsevak_module/swayamsevak_daayitva_edit.dart';
 
 class EditDaayitva extends StatefulWidget {
   static const routeName = '/edit-daayitva-screen';
@@ -22,12 +23,12 @@ class _EditDaayitvaState extends State<EditDaayitva> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     args = ModalRoute.of(context)!.settings.arguments as Statics.ScreenArguments2;
-    theId = args!.swayamsevakID;
-    viewType = args!.viewType;
-    onSaveDetails = args!.onSaveDetails;
-    daayitvaForID = args!.daayitvaForID;
-    daayitvaForCode = args!.daayitvaForCode;
-    dataID = args!.dataID;
+    theId = args?.swayamsevakID;
+    viewType = args?.viewType;
+    onSaveDetails = args?.onSaveDetails;
+    daayitvaForID = args?.daayitvaForID;
+    daayitvaForCode = args?.daayitvaForCode;
+    dataID = args?.dataID;
 
     print("daayitvaForCode daayitvaForCode :----$daayitvaForCode");
   }

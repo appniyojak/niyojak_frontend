@@ -2132,7 +2132,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               if (_linkedVibhaag != null)
                 buildDropdownField(
-                  isDisabled: MyAppGlobals.isDropdownDisabled('Vibhaag'),
+                  isDisabled: ((userLevelId ?? 0) < 8 || userLevelId == 13),
                   label: Statics.getLabel('Vibhaag'),
                   value: _linkedVibhaagValue,
                   items: _linkedVibhaag!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),
@@ -2150,7 +2150,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               if (_linkedbhaag != null && _linkedbhaag!.isNotEmpty)
                 buildDropdownField(
-                  isDisabled: MyAppGlobals.isDropdownDisabled('Bhaag'),
+                  isDisabled: ((userLevelId ?? 0) < 7 || userLevelId == 13),
                   label: Statics.getLabel('Bhaag'),
                   value: _linkedbhaagValue,
                   items: _linkedbhaag!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),
@@ -2189,7 +2189,7 @@ class _HomeScreenState extends State<HomeScreen> {
               //   ),
               if (_linkednagar != null && _linkednagar!.isNotEmpty)
                 buildDropdownField(
-                  isDisabled: MyAppGlobals.isDropdownDisabled('Nagar'),
+                  isDisabled: ((userLevelId ?? 0) < 6 || userLevelId == 13),
                   label: Statics.getLabel('Nagar'),
                   value: _linkednagarValue,
                   items: _linkednagar!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),
@@ -2210,7 +2210,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               if (_linkedupnagar != null && _linkedupnagar!.isNotEmpty)
                 buildDropdownField(
-                  isDisabled: MyAppGlobals.isDropdownDisabled('upnagarUpkhanda'),
+                  isDisabled: ((userLevelId ?? 0) < 6 || userLevelId == 13),
                   label: Statics.getLabel('upnagarUpkhanda'),
                   value: _linkedupnagarValue,
                   items: _linkedupnagar!
@@ -2241,7 +2241,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               if (_linkedmandal != null && _linkedmandal!.isNotEmpty)
                 buildDropdownField(
-                  isDisabled: MyAppGlobals.isDropdownDisabled('Mandal'),
+                  isDisabled: ((userLevelId ?? 0) < 4),
                   label: Statics.getLabel('Mandal'),
                   value: _linkedmandalValue,
                   items: _linkedmandal!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),
@@ -2260,7 +2260,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               if (_linkedgraam != null && _linkedgraam!.isNotEmpty)
                 buildDropdownField(
-                  isDisabled: MyAppGlobals.isDropdownDisabled('Graam'),
+                  isDisabled: ((userLevelId ?? 0) < 3),
                   label: Statics.getLabel('Graam'),
                   value: _linkedgraamValue,
                   items: _linkedgraam!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),
@@ -2278,7 +2278,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               if (_linkedvasti != null && _linkedvasti!.isNotEmpty)
                 buildDropdownField(
-                  isDisabled: MyAppGlobals.isDropdownDisabled('Vasti'),
+                  isDisabled: ((userLevelId ?? 0) < 2),
                   label: Statics.getLabel('Vasti'),
                   value: _linkedvastiValue,
                   items: _linkedvasti!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),

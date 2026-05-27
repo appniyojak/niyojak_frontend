@@ -232,10 +232,11 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
     kendraList = _baithak ?? [];
     selectedKendra = null;
 
-    setState(() {
-      _searched = true;
-      _isExpanded = false;
-    });
+    if (mounted)
+      setState(() {
+        _searched = true;
+        _isExpanded = false;
+      });
   }
 
   // createSadbhavBaithakFun() async {
@@ -684,24 +685,27 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          padding: EdgeInsets.symmetric(vertical: 16),
           child: Column(
             children: [
               SizedBox(height: 12),
               stharDropdown(),
               SizedBox(height: 24),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  buildFilterChips(),
-                  OutlinedButton(
-                    style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)), side: BorderSide(color: Colors.purple, width: 0.7)),
-                    onPressed: () => Navigator.of(context).pushNamed(AddNewKaryakramScreen.routeName).then(
-                          (value) => getKendraListData(),
-                        ),
-                    child: Text("+  " + Statics.getLabel("addKaryakram")),
-                  )
-                ],
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    buildFilterChips(),
+                    OutlinedButton(
+                      style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)), side: BorderSide(color: Colors.purple, width: 0.7)),
+                      onPressed: () => Navigator.of(context).pushNamed(AddNewKaryakramScreen.routeName).then(
+                            (value) => getKendraListData(),
+                          ),
+                      child: Text("+  " + Statics.getLabel("addKaryakram")),
+                    )
+                  ],
+                ),
               ),
               SizedBox(height: 24),
               // myAreaReport(),
@@ -715,7 +719,8 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
                         ),
                       ),
                     )
-                  : ListView.separated(
+                  : kendraTable(),
+              /* : ListView.separated(
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       padding: EdgeInsets.only(bottom: 24, top: 16),
@@ -839,7 +844,7 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
                           ),
                         );
                       },
-                    ),
+                    ),*/
               // SizedBox(height: 18),
               // Row(
               //   crossAxisAlignment: CrossAxisAlignment.start,
@@ -862,6 +867,135 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget kendraTable() {
+    return SingleChildScrollView(
+      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      scrollDirection: Axis.horizontal,
+      child: DataTable(
+        showCheckboxColumn: false,
+        headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
+        columnSpacing: 16,
+        horizontalMargin: 12,
+        border: TableBorder.all(color: Colors.black26),
+        columns: [
+          DataColumn(
+            label: Container(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              constraints: const BoxConstraints(minWidth: 30, maxWidth: 130),
+              child: Text(
+                Statics.getLabel('serialNo'),
+                softWrap: true,
+                maxLines: 2,
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+          DataColumn(label: SizedBox()),
+          DataColumn(
+            label: Container(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              constraints: const BoxConstraints(minWidth: 30, maxWidth: 130),
+              child: Text(
+                Statics.getLabel('SelectLevelName'),
+                softWrap: true,
+                maxLines: 2,
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+          DataColumn(
+            label: Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              constraints: const BoxConstraints(minWidth: 30, maxWidth: 150),
+              child: Text(
+                Statics.getLabel('sadbhavCentre'),
+                softWrap: true,
+                maxLines: 2,
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+          DataColumn(
+            label: Container(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              constraints: const BoxConstraints(minWidth: 30, maxWidth: 150),
+              child: Text(
+                Statics.getLabel('date2'),
+                softWrap: true,
+                maxLines: 2,
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+          DataColumn(label: SizedBox()),
+        ],
+        rows: kendraList.asMap().entries.map(
+          (e) {
+            final index = e.key;
+            final data = e.value;
+            return DataRow(
+              cells: [
+                DataCell(Center(child: Text((index + 1).toString()))),
+                DataCell(
+                  InkWell(
+                    onTap: () => Navigator.of(context).pushNamed(YuvaSangamFormScreen.routeName, arguments: {
+                      "pkid": data.pkid,
+                      "type": _karyakramLevelsListYuva.firstWhere((e) => e.values.first == data.shatapdistharlevelid).keys.first,
+                      "date": data.yuvadate,
+                      "geo": data.trailNames,
+                    }).then((value) => getKendraListData()),
+                    child: Container(
+                      padding: EdgeInsets.all(6),
+                      decoration: BoxDecoration(shape: BoxShape.circle, color: (data.isstarted == 0 ? Color(0xFF008719) : Color(0xFFD37B31)).withOpacity(0.4)),
+                      child: Icon(
+                        Icons.edit_calendar,
+                        size: 16,
+                        color: data.isstarted == 0 ? Color(0xFF008719) : Color(0xFFD37B31),
+                      ),
+                    ),
+                  ),
+                ),
+                DataCell(Center(child: Text(_karyakramLevelsListYuva.firstWhere((e) => e.values.first == data.shatapdistharlevelid).keys.first))),
+                DataCell(Center(child: Text(data.trailNames ?? data.name ?? "--"))),
+                DataCell(Center(child: Text(data.yuvadate ?? "--"))),
+                DataCell(
+                  InkWell(
+                    onTap: () => deleteYuvaSangam(data.pkid ?? 0),
+                    child: Container(
+                      padding: EdgeInsets.all(6),
+                      decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.red.withOpacity(0.4)),
+                      child: Icon(
+                        Icons.delete_forever_outlined,
+                        color: Colors.red,
+                        size: 16,
+                      ),
+                    ),
+                  ),
+                ),
+                // DataCell(OutlinedButton(
+                //   style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)), side: BorderSide(color: Colors.purple, width: 0.7)),
+                //   onPressed: () {
+                //     // sadbhavProvider.updateSadbhavVal(SadbhavCenter(centername: "पार्ले", geounitname: "पार्ले", sthartype: Statics.getLabel("railwayStation")));
+                //   },
+                //   child: Text("+  " + Statics.getLabel("baithak")),
+                // )),
+              ],
+            );
+          },
+        ).toList(),
       ),
     );
   }
@@ -900,7 +1034,7 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
 
   Widget stharDropdown() {
     return Container(
-      // margin: EdgeInsets.symmetric(horizontal: 16),
+      margin: EdgeInsets.symmetric(horizontal: 24),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
         border: Border.all(width: 0.7, color: Colors.grey.shade700),

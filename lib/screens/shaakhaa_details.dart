@@ -111,6 +111,8 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) => initData());
     int shaakhaaID = int.parse(widget.shaakhaaId);
+    log("hghmjbjhj >>>>>>>>>>>>>>>> " + widget.shaakhaaId);
+    log("hghmjbjhj  vsdvsdvsdvsvsd >>>>>>>>>>>>>>>> " + shaakhaaID.toString());
     if (shaakhaaID > 0) {
       getShaakhaaDetails(widget.shaakhaaId);
     } else {
@@ -311,6 +313,8 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
   }
 
   saveShaakhaaDetails() async {
+    log(widget.shaakhaaId);
+    // return;
     var _dayOfWeek = "";
     if (_isSun == true) _dayOfWeek = _dayOfWeek + "0,";
     if (_isMon == true) _dayOfWeek = _dayOfWeek + "1,";
@@ -331,19 +335,19 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
 
     var inputData = json.encode({
       "PraantID": 1,
-      "ParentBhaagID": context.read<GeoHierarchyController>().hierarchyTrail.bhaagId,
+      "ParentBhaagID": int.tryParse(context.read<GeoHierarchyController>().hierarchyTrail.bhaagId ?? ""),
       "ParentShaharID": null,
       //_shaharValue == null || _shaharValue!.isEmpty ? null : _shaharValue,
-      "ParentNagarID": context.read<GeoHierarchyController>().hierarchyTrail.nagarId,
-      "ParentMandalID": context.read<GeoHierarchyController>().hierarchyTrail.mandalId,
-      "ParentGraamID": context.read<GeoHierarchyController>().hierarchyTrail.graamId,
-      "ParentVastiID": context.read<GeoHierarchyController>().hierarchyTrail.vastiId,
+      "ParentNagarID": int.tryParse(context.read<GeoHierarchyController>().hierarchyTrail.nagarId ?? ""),
+      "ParentMandalID": int.tryParse(context.read<GeoHierarchyController>().hierarchyTrail.mandalId ?? ""),
+      "ParentGraamID": int.tryParse(context.read<GeoHierarchyController>().hierarchyTrail.graamId ?? ""),
+      "ParentVastiID": int.tryParse(context.read<GeoHierarchyController>().hierarchyTrail.vastiId ?? ""),
       "ShaakhaaID": int.parse(widget.shaakhaaId),
       "ShaakhaaName": shaakhaa!.geoUnitName,
       "ShaakhaaNameDevNaagari": shaakhaa!.geoUnitName,
       "FrequencyID": shaakhaa!.frequencyID,
-      "DaysOfWeek": shaakhaa!.dayOfWeek,
-      "DayOfMonth": shaakhaa!.dayOfMonth,
+      "DaysOfWeek": shaakhaa?.dayOfWeek ?? '',
+      "DayOfMonth": shaakhaa?.dayOfMonth ?? '',
       "VayogatID": shaakhaa!.vayogatID == null ? null : shaakhaa!.vayogatID,
       "Location": shaakhaa!.location,
       //"Timing": shaakhaa!.timing,
@@ -385,8 +389,8 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
       "HasToli": _hasToli == true ? true : false,
       "HasPaalak": _hasPaalak == true ? true : false,
       "OtherOptionalVishay": shaakhaa?.otherShaaririkVishay ?? "",
-      "OptionalShaaririkVishayID": shaakhaa?.shaaririkVishayID ?? "",
-      "ModifiedBy": Statics.userDetails["userID"]
+      "OptionalShaaririkVishayID": shaakhaa?.shaaririkVishayID,
+      "ModifiedBy": int.tryParse(Statics.userDetails["userID"]) ?? 0
     });
 
     log("inputData =-=->  $inputData");
@@ -513,12 +517,20 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
                                 level: GeoLevel.Vibhaag,
                                 title: 'Vibhaag',
                                 controller: ctrl,
+                                validator: (v) {
+                                  if (v == null || v!.isEmpty) return (Statics.getLabel('GeoUnitValidationMessage'));
+                                  return null;
+                                },
                               ),
                             if (ctrl.hasItems(GeoLevel.Bhaag))
                               GeoDropdownWidget(
                                 level: GeoLevel.Bhaag,
                                 title: 'Bhaag',
                                 controller: ctrl,
+                                validator: (v) {
+                                  if (v == null || v!.isEmpty) return (Statics.getLabel('SelectBhaagValidationMessage'));
+                                  return null;
+                                },
                               ),
 
                             if (ctrl.hasItems(GeoLevel.Nagar))
@@ -526,6 +538,10 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
                                 level: GeoLevel.Nagar,
                                 title: 'Nagar',
                                 controller: ctrl,
+                                validator: (v) {
+                                  if (v == null || v!.isEmpty) return (Statics.getLabel('SelectNagarValidationMessage'));
+                                  return null;
+                                },
                               ),
 
                             /// CONDITIONAL
@@ -541,6 +557,10 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
                                 level: GeoLevel.Mandal,
                                 title: 'Mandal',
                                 controller: ctrl,
+                                validator: (v) {
+                                  if (v == null || v!.isEmpty) return (Statics.getLabel('SelectMandalValidationMessage'));
+                                  return null;
+                                },
                               ),
 
                             if (ctrl.hasItems(GeoLevel.Graam))
@@ -548,6 +568,10 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
                                 level: GeoLevel.Graam,
                                 title: 'Graam',
                                 controller: ctrl,
+                                validator: (v) {
+                                  if (v == null || v!.isEmpty) return (Statics.getLabel('SelectGraamValidationMessage'));
+                                  return null;
+                                },
                               ),
 
                             if (ctrl.hasItems(GeoLevel.Vasti))
@@ -555,6 +579,10 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
                                 level: GeoLevel.Vasti,
                                 title: 'Vasti',
                                 controller: ctrl,
+                                validator: (v) {
+                                  if (v == null || v!.isEmpty) return (Statics.getLabel('VastiValidationMessage'));
+                                  return null;
+                                },
                               ),
                           ],
                         );

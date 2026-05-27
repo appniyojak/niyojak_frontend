@@ -1138,7 +1138,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> with Automati
                           level: GeoLevel.Mahaanagar,
                           title: 'Mahaanagar',
                           controller: ctrl,
-                          onChanged: () => setState(() => _searched = false),
+                          onChanged: (v) => setState(() => _searched = false),
                         ),
 
                         // if (ctrl.hasItems(GeoLevel.vibhaag))
@@ -1146,7 +1146,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> with Automati
                           level: GeoLevel.Vibhaag,
                           title: 'Vibhaag',
                           controller: ctrl,
-                          onChanged: () => setState(() => _searched = false),
+                          onChanged: (v) => setState(() => _searched = false),
                         ),
 
                         if (ctrl.hasItems(GeoLevel.Bhaag))
@@ -1154,7 +1154,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> with Automati
                             level: GeoLevel.Bhaag,
                             title: 'Bhaag',
                             controller: ctrl,
-                            onChanged: () => setState(() => _searched = false),
+                            onChanged: (v) => setState(() => _searched = false),
                           ),
 
                         if (ctrl.hasItems(GeoLevel.Nagar))
@@ -1162,10 +1162,9 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> with Automati
                             level: GeoLevel.Nagar,
                             title: 'Nagar',
                             controller: ctrl,
-                            onChanged: () => setState(() => _searched = false),
+                            onChanged: (v) => setState(() => _searched = false),
                           ),
 
-                        ////////////////////////////////////////
                         /// CONDITIONAL
 
                         if (ctrl.hasItems(GeoLevel.upnagarUpkhanda))
@@ -1173,7 +1172,26 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> with Automati
                             level: GeoLevel.upnagarUpkhanda,
                             title: 'upnagarUpkhanda',
                             controller: ctrl,
-                            onChanged: () => setState(() => _searched = false),
+                            onChanged: (v) => setState(() => _searched = false),
+                          ),
+
+                        if (ctrl.hasItems(GeoLevel.Mandal))
+                          GeoDropdownWidget(
+                            level: GeoLevel.Mandal,
+                            title: 'Mandal',
+                            controller: ctrl,
+                            onChanged: (v) => setState(() => _searched = false),
+                          ),
+
+                        ////////////////////////////////////////
+                        /// CONDITIONAL
+
+                        if (ctrl.hasItems(GeoLevel.Vasti))
+                          GeoDropdownWidget(
+                            level: GeoLevel.Vasti,
+                            title: 'Vasti',
+                            controller: ctrl,
+                            onChanged: (v) => setState(() => _searched = false),
                           ),
                         SizedBox(height: 21),
                         Row(

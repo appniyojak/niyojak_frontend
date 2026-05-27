@@ -435,7 +435,7 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
                           level: GeoLevel.Mahaanagar,
                           title: 'Mahaanagar',
                           controller: ctrl,
-                          onChanged: () => setState(() => _searched = false),
+                          onChanged: (v) => setState(() => _searched = false),
                         ),
 
                         // if (ctrl.hasItems(GeoLevel.vibhaag))
@@ -443,7 +443,7 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
                           level: GeoLevel.Vibhaag,
                           title: 'Vibhaag',
                           controller: ctrl,
-                          onChanged: () => setState(() => _searched = false),
+                          onChanged: (v) => setState(() => _searched = false),
                         ),
 
                         if (ctrl.hasItems(GeoLevel.Bhaag))
@@ -451,7 +451,7 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
                             level: GeoLevel.Bhaag,
                             title: 'Bhaag',
                             controller: ctrl,
-                            onChanged: () => setState(() => _searched = false),
+                            onChanged: (v) => setState(() => _searched = false),
                           ),
 
                         if (ctrl.hasItems(GeoLevel.Nagar))
@@ -459,10 +459,9 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
                             level: GeoLevel.Nagar,
                             title: 'Nagar',
                             controller: ctrl,
-                            onChanged: () => setState(() => _searched = false),
+                            onChanged: (v) => setState(() => _searched = false),
                           ),
 
-                        ////////////////////////////////////////
                         /// CONDITIONAL
 
                         if (ctrl.hasItems(GeoLevel.upnagarUpkhanda))
@@ -470,7 +469,15 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
                             level: GeoLevel.upnagarUpkhanda,
                             title: 'upnagarUpkhanda',
                             controller: ctrl,
-                            onChanged: () => setState(() => _searched = false),
+                            onChanged: (v) => setState(() => _searched = false),
+                          ),
+
+                        if (ctrl.hasItems(GeoLevel.Mandal))
+                          GeoDropdownWidget(
+                            level: GeoLevel.Mandal,
+                            title: 'Mandal',
+                            controller: ctrl,
+                            onChanged: (v) => setState(() => _searched = false),
                           ),
                         SizedBox(height: 21),
                         Row(

@@ -1093,7 +1093,7 @@ class GeoDropdownWidget extends StatelessWidget {
   final String title;
   final GeoHierarchyController controller;
   final String? Function(dynamic)? validator;
-  final void Function()? onChanged;
+  final void Function(dynamic)? onChanged;
   final void Function(dynamic)? onSaved;
   final GeoHierarchyFetchMode fetchMode;
 
@@ -1128,7 +1128,7 @@ class GeoDropdownWidget extends StatelessWidget {
           value: value,
           fetchMode: fetchMode,
         );
-        if (onChanged != null) onChanged!.call();
+        if (onChanged != null) onChanged!.call(value);
       },
       validator: validator,
       onSaved: onSaved,

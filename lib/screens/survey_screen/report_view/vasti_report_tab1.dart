@@ -691,7 +691,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                     title: 'Mahaanagar',
                                     controller: ctrl,
                                     fetchMode: GeoHierarchyFetchMode.vastiOnly,
-                                    onChanged: () => setState(() => isVastiSearch = false),
+                                    onChanged: (v) => setState(() => isVastiSearch = false),
                                   ),
 
                                   // if (ctrl.hasItems(GeoLevel.vibhaag))
@@ -700,7 +700,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                     title: 'Vibhaag',
                                     controller: ctrl,
                                     fetchMode: GeoHierarchyFetchMode.vastiOnly,
-                                    onChanged: () => setState(() => isVastiSearch = false),
+                                    onChanged: (v) => setState(() => isVastiSearch = false),
                                   ),
 
                                   if (ctrl.hasItems(GeoLevel.Bhaag))
@@ -709,7 +709,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                       title: 'Bhaag',
                                       controller: ctrl,
                                       fetchMode: GeoHierarchyFetchMode.vastiOnly,
-                                      onChanged: () => setState(() => isVastiSearch = false),
+                                      onChanged: (v) => setState(() => isVastiSearch = false),
                                     ),
 
                                   if (ctrl.hasItems(GeoLevel.Nagar))
@@ -718,7 +718,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                       title: 'Nagar',
                                       controller: ctrl,
                                       fetchMode: GeoHierarchyFetchMode.vastiOnly,
-                                      onChanged: () => setState(() => isVastiSearch = false),
+                                      onChanged: (v) => setState(() => isVastiSearch = false),
                                     ),
 
                                   /// CONDITIONAL
@@ -727,7 +727,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                       level: GeoLevel.upnagarUpkhanda,
                                       title: 'upnagarUpkhanda',
                                       controller: ctrl,
-                                      onChanged: () => setState(() => isVastiSearch = false),
+                                      onChanged: (v) => setState(() => isVastiSearch = false),
                                     ),
 
                                   if (ctrl.hasItems(GeoLevel.Vasti))
@@ -735,7 +735,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                       level: GeoLevel.Vasti,
                                       title: 'Vasti',
                                       controller: ctrl,
-                                      onChanged: () => setState(() => isVastiSearch = false),
+                                      onChanged: (v) => setState(() => isVastiSearch = false),
                                     ),
                                   // if(selctedLevel == "Vasti")
                                   Align(

@@ -4026,8 +4026,8 @@ Future<dynamic> getAnnualBaithakEkatritVruttaForApp(String strInput) async {
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  print(strInput);
-  print(Uri.parse(urlGetAnnualBaithakEkatritVruttaForApp));
+  log(strInput);
+  log(urlGetAnnualBaithakEkatritVruttaForApp);
   var response = await http.post(Uri.parse(urlGetAnnualBaithakEkatritVruttaForApp), headers: jHeaders, body: strInput);
 
   var responseBody = json.decode(response.body);
@@ -4079,8 +4079,8 @@ Future<TulnatmakBaithakResponse?> getTulnatmakBaithakEkatritVruttaForApp(String 
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  print(strInput);
-  print(Uri.parse(tulnatmakEkatritVruttaForApp));
+  log(strInput);
+  log(tulnatmakEkatritVruttaForApp);
 
   var response = await http.post(Uri.parse(tulnatmakEkatritVruttaForApp), headers: jHeaders, body: strInput);
 

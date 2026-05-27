@@ -12,12 +12,13 @@ import 'package:niyojak_prod/screens/tulnatmak_sankalit_baithak.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:provider/provider.dart';
 
 import '../helpers/static_data.dart' as Statics;
-import '../models/response_model/dropdown_level_responsemodel.dart';
 import '../models/response_model/sankalit_data_names_model.dart';
 import '../providers/bals.dart';
 import '../utils/globals.dart';
+import '../utils/stable_geounit_class.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/legend.dart';
 import '../widgets/single_column_row.dart';
@@ -36,35 +37,14 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
   bool _isSearching = false;
   bool _isExpanded = false;
 
-  List<GeoUnitMasterBAL>? _linkedMahaanagar;
-  List<GeoUnitMasterBAL>? _linkedVibhaag;
-  List<GeoUnitMasterBAL>? _linkedBhaag;
-  List<GeoUnitMasterBAL>? _linkedShahar;
-  List<GeoUnitMasterBAL>? _linkedNagar;
-  List<GeoUnitMasterBAL>? _linkedupnagar;
   List<StaticMasterBAL>? _baithakTypes;
   List<List<String>> donloadexportList = [];
 
-  String? _linkedupnagarValue = '';
-  String? _selctedLevel = 'praant';
-  String? _selctedLevelName = '';
-  String _selctedLevelNames = '';
-  List<String?> _selctedLevelNameList = [];
-  String? _selectedGeoUnitId;
-
-  String? _linkedMahaanagarValue = '';
-  String? _linkedVibhaagValue = '';
-  String? _linkedBhaagValue = '';
-  String? _linkedShaharValue = '';
-  String? _linkedNagarValue = '';
   String? _baithakTypeValue = '';
   String? _baithakTypeYear = '';
   String? _selectedBaithak = '';
   int? _baithakType;
-  int? geoID;
   String _selectedNagarAndBaithak = '';
-  String? mahanagarId = '';
-  String? vibhagId = '';
 
   dynamic _ekatritVrutta;
   int? _geoLevel;
@@ -84,13 +64,13 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
   }
 
   Future<void> initData() async {
-    DropDownModel dm = await MyAppGlobals.getLevelLDB();
+    final dm = await MyAppGlobals.getLevelLDB();
 
-    setState(() {
-      userLevelId = dm.levelID;
-      userGeoUnitId = dm.geoUnitID;
-      ddm = dm;
-    });
+    final controller = context.read<GeoHierarchyController>();
+
+    await controller.initialize(dm);
+
+    setState(() {});
     await populateDropdown();
   }
 
@@ -106,63 +86,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
   //   });
   // }
 
-  Future<void> populateAllDropdowns(int level, DropDownModel dm) async {
-    setState(() {
-      _selectedGeoUnitId = _linkedMahaanagarValue = _linkedVibhaagValue = _linkedBhaagValue = _linkedNagarValue = _linkedupnagarValue = null;
-    });
-    final selection = prepareSelection(dm);
-
-    // Step 1: Mahaanagar
-    await populatelinkedMahaanagarDropdown();
-    _selectedGeoUnitId = _linkedMahaanagarValue = (level == 9 ? (dm.geoUnitID ?? "").toString() : selection.mahaanagar) ?? '';
-    _selctedLevel = 'Mahaanagar';
-
-    // Step 2: Vibhaag
-    await populatelinkedVibhaagDropdown(_linkedMahaanagarValue!);
-    _selectedGeoUnitId = _linkedVibhaagValue = (level == 8 ? (dm.geoUnitID ?? "").toString() : selection.vibhaag) ?? '';
-    _selctedLevel = 'Vibhaag';
-
-    // Step 3: Bhaag
-    await populatelinkedBhaagDropdown(_linkedVibhaagValue!);
-    _selectedGeoUnitId = _linkedBhaagValue = (level == 7 ? (dm.geoUnitID ?? "").toString() : selection.bhaag) ?? '';
-    _selctedLevel = 'Bhaag';
-
-    // Step 4: Nagar
-    await populatelinkedNagarDropdown(_linkedBhaagValue, null);
-    _selectedGeoUnitId = _linkedNagarValue = (level == 6 ? (dm.geoUnitID ?? "").toString() : selection.nagar) ?? '';
-    _selctedLevel = 'Nagar';
-
-    //if (selection.upnagar != null && selection.upnagar!.isNotEmpty) {
-    await populatelinkedUpnagarDropdown(_linkedNagarValue);
-    _linkedupnagarValue = (level == 13 ? (dm.geoUnitID ?? 0).toString() : selection.upnagar) ?? _linkedupnagarValue;
-    if (level == 13) {
-      _selectedGeoUnitId = (dm.geoUnitID ?? selection.upnagar).toString();
-      _selctedLevel = 'Upnagar';
-    }
-    // }
-
-    // if (_linkedVibhaag != null && _linkedVibhaag!.isNotEmpty) _linkedVibhaagName = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _linkedBhaagValue).name;
-    // if (_linkedBhaag != null && _linkedBhaag!.isNotEmpty) _linkedbhaagName = _linkedBhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _linkedBhaagValue).name;
-    // if (_linkedNagar != null && _linkedNagar!.isNotEmpty) _linkednagarName = _linkedNagar!.firstWhere((bg) => bg.geoUnitID.toString() == _linkedBhaagValue).name;
-
-    setState(() {});
-  }
-
   Future<void> populateDropdown({bool fromClear = false}) async {
-    setState(() {
-      _linkedMahaanagarValue = _linkedVibhaagValue = _linkedBhaagValue = _linkedNagarValue = _linkedupnagarValue = null;
-      _linkedMahaanagar = _linkedVibhaag = _linkedBhaag = _linkedNagar = _linkedupnagar = null;
-      _selctedLevelName = _selectedGeoUnitId = null;
-      _selctedLevel = "praant";
-    });
-    await populatelinkedMahaanagarDropdown();
-    await populatelinkedVibhaagDropdown('');
-    if (fromClear || userLevelId == null || ddm == null) {
-      print("object is null");
-      return;
-    }
-    print("object is not null >>>>>>>>>>>>>>>>>>>>>>");
-    await populateAllDropdowns(userLevelId!, ddm!);
     var data = await Statics.getStaticLDB('AnnualBaithakType');
     if (!mounted) return;
     log("datadata ${data.map((e) => e.monthYear)}");
@@ -171,103 +95,13 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
     });
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedMahaanagarDropdown() async {
-    final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MahaanagarLevelID'].toString(), '', '', '', isAbhiyaan: false);
-    setState(() => _linkedMahaanagar = data);
-    return data;
-  }
-
-  Future<List<GeoUnitMasterBAL>> populatelinkedVibhaagDropdown(String mahaanagarIDStr) async {
-    _linkedupnagarValue = _linkedupnagar = _linkedBhaagValue = _linkedNagarValue = null;
-    final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar', '', isAbhiyaan: false);
-    setState(() => _linkedVibhaag = data);
-    return data;
-  }
-
-  Future<List<GeoUnitMasterBAL>> populatelinkedBhaagDropdown(String vibhaagIDStr) async {
-    _linkedupnagarValue = _linkedNagarValue = null;
-    //_linkedbhaagName = _linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
-    _linkedupnagar = _linkedBhaag = _linkedNagar = [];
-    final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '', isAbhiyaan: false);
-    setState(() => _linkedBhaag = data);
-    return data;
-  }
-
-  Future<List<GeoUnitMasterBAL>> populatelinkedNagarDropdown(String? bhaagIDStr, String? shaharIDStr) async {
-    _linkedupnagarValue = _linkedNagarValue = null;
-    //_linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
-    _linkedupnagar = _linkedNagar = null;
-    final parentID = shaharIDStr ?? bhaagIDStr!;
-    final parentType = shaharIDStr != null ? 'Shahar' : 'Bhaag';
-    final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), parentID, parentType, '', isAbhiyaan: false);
-    setState(() => _linkedNagar = data.isNotEmpty ? data : null);
-    return data;
-  }
-
-  Future<List<GeoUnitMasterBAL>> populatelinkedUpnagarDropdown(String? nagarIDStr) async {
-    _linkedupnagarValue = _linkedupnagar = null;
-    var mnDD;
-    mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['UpaNagarLevelID'].toString(), nagarIDStr!, 'Nagar', '');
-    setState(() {
-      _linkedupnagar = (mnDD.length > 0 ? mnDD : null);
-    });
-    return mnDD;
-  }
-
-  // void populatelinkedMahaanagarDropdown() async {
-  //   var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MahaanagarLevelID'].toString(), '', '', '');
-  //   setState(() {
-  //     _linkedMahaanagar = data;
-  //   });
-  // }
-  //
-  // void populatelinkedVibhaagDropdown(String mahaanagarIDStr) async {
-  //   _linkedBhaagValue = null;
-  //   var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'), '');
-  //   setState(() {
-  //     _linkedVibhaag = data;
-  //   });
-  // }
-  //
-  // void populatelinkedBhaagDropdown(String vibhaagIDStr) async {
-  //   _linkedShaharValue = _linkedNagarValue = null;
-  //   var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '');
-  //   setState(() {
-  //     _linkedBhaag = data;
-  //   });
-  // }
-  //
-  // void populatelinkedShaharDropdown(String? bhaagIDStr) async {
-  //   _linkedShaharValue = _linkedShahar = null;
-  //   var shDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['ShaharLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
-  //   setState(() {
-  //     _linkedShahar = (shDD.length > 0 ? shDD : null);
-  //   });
-  // }
-  //
-  // void populatelinkedNagarDropdown(String? bhaagIDStr, String? shaharIDStr) async {
-  //   _linkedNagarValue = null;
-  //   _linkedNagar = null;
-  //   if (shaharIDStr != null) {
-  //     var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), shaharIDStr, 'Shahar', '');
-  //     setState(() {
-  //       _linkedNagar = (ngDD.length > 0 ? ngDD : null);
-  //     });
-  //   } else {
-  //     var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
-  //     setState(() {
-  //       _linkedNagar = (ngDD.length > 0 ? ngDD : null);
-  //     });
-  //   }
-  // }
-
   Future<dynamic> _getEkatritVrutta(int baithakTypeID, int? geoID) async {
     bool isConnected = await Statics.isInternetConnected();
     if (isConnected) {
       String strInput = json.encode({
         "AppUserID": Statics.userDetails['userID'],
         "AnnualBaithakTypeID": baithakTypeID,
-        "GeoUnitID": _selectedGeoUnitId,
+        "GeoUnitID": geoID,
       });
       dynamic retVal = await Statics.getAnnualBaithakEkatritVruttaForApp(strInput);
       return retVal;
@@ -277,24 +111,16 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
     }
   }
 
-  Future<void> _search() async {
+  Future<void> _search(String? geoID) async {
     setState(() {
       _isSearching = true;
     });
-    int? mahaanagarVal = _linkedMahaanagarValue == null || _linkedMahaanagarValue == "" ? null : int.parse(_linkedMahaanagarValue!);
-    int? vibhaagVal = _linkedVibhaagValue == null || _linkedVibhaagValue == "" ? null : int.parse(_linkedVibhaagValue!);
-    int? bhaagVal = _linkedBhaagValue == null || _linkedBhaagValue == "" ? null : int.parse(_linkedBhaagValue!);
-    int? shaharVal = _linkedShaharValue == null || _linkedShaharValue == "" ? null : int.parse(_linkedShaharValue!);
-    int? nagarVal = _linkedNagarValue == null || _linkedNagarValue == "" ? null : int.parse(_linkedNagarValue!);
-    int? upnagar = _linkedupnagarValue == null || _linkedupnagarValue == '' ? null : int.parse(_linkedupnagarValue!);
-    geoID = (upnagar != null ? upnagar : (nagarVal != null ? nagarVal : (bhaagVal != null ? bhaagVal : (vibhaagVal != null ? vibhaagVal : (mahaanagarVal != null ? mahaanagarVal : null)))));
     _baithakType = _baithakTypeValue == null || _baithakTypeValue == "" ? null : int.parse(_baithakTypeValue!);
     //print("printing all selected things:${mahaanagarVal} :${vibhaagVal} :${bhaagVal} :${nagarVal} :${upnagar} :${_baithakType} :${_baithakTypeYear}");
-    _geoLevel = (upnagar != null ? 13 : (nagarVal != null ? 6 : (bhaagVal != null ? 7 : (vibhaagVal != null ? 8 : (mahaanagarVal != null ? 9 : 10)))));
 
     dynamic obj;
     if (_baithakType != null) {
-      obj = await _getEkatritVrutta(_baithakType!, geoID);
+      obj = await _getEkatritVrutta(_baithakType!, int.tryParse(geoID ?? "0"));
     } else {
       Statics.showMessageDialog(context, Statics.getLabel('baithakTypeNotSelected'));
     }
@@ -309,17 +135,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
         log("obj $obj");
         _ekatritVrutta = obj;
         _hasGraaminKshetra = (_ekatritVrutta['HasGraaminKshetra'].toString() == '1' ? true : false);
-        _selectedNagarAndBaithak = (mahaanagarVal == null ? '' : _linkedMahaanagar!.firstWhere((element) => element.geoUnitID == mahaanagarVal).name!) +
-            ' | ' +
-            (vibhaagVal == null ? ' - ' : _linkedVibhaag!.firstWhere((element) => element.geoUnitID == vibhaagVal).name!) +
-            ' | ' +
-            (bhaagVal == null ? ' - ' : _linkedBhaag!.firstWhere((element) => element.geoUnitID == bhaagVal).name!) +
-            ' | ' +
-            (nagarVal == null ? ' - ' : _linkedNagar!.firstWhere((element) => element.geoUnitID == nagarVal).name!) +
-            ' | ' +
-            (upnagar == null ? '-' : _linkedupnagar!.firstWhere((element) => element.geoUnitID == upnagar).name!);
       }
-
       _isSearching = false;
       _isExpanded = false;
     });
@@ -430,7 +246,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
     return byteData!.buffer.asUint8List();
   }
 
-  Future<void> redirctToList(String? type, String? annualBaithakTypeID, int? geoUnitID, String? infoName) async {
+  Future<void> redirctToList(String? type, String? annualBaithakTypeID, String? geoUnitID, String? infoName) async {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -444,7 +260,8 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
     bool isConnected = await Statics.isInternetConnected();
     if (isConnected) {
       try {
-        String strInput = json.encode({"AppUserID": Statics.userDetails['userID'], "AnnualBaithakTypeID": int.parse(annualBaithakTypeID!), "GeoUnitID": _selectedGeoUnitId, "type": type});
+        String strInput =
+            json.encode({"AppUserID": Statics.userDetails['userID'], "AnnualBaithakTypeID": int.parse(annualBaithakTypeID!), "GeoUnitID": int.tryParse(geoUnitID ?? "0") ?? 0, "type": type});
 
         SankalitBaithakVruttaDataNamesModel? dataModel = await Statics.getSankalitBaithakVruttaDataNames(strInput);
 
@@ -511,421 +328,161 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                 style: TextStyle(fontSize: 20),
               ),
               SizedBox(height: 20),
-              ExpansionPanelList(
-                expansionCallback: (int index, bool isExpanded) {
-                  setState(() {
-                    _isExpanded = isExpanded;
-                  });
-                },
-                children: [
-                  ExpansionPanel(
-                    headerBuilder: (BuildContext context, bool isExpanded) {
-                      return ListTile(
-                        title: Text(Statics.getLabel('Filters')),
-                      );
-                    },
-                    body: Container(
+              Consumer<GeoHierarchyController>(builder: (_, ctrl, __) {
+                return Column(
+                  children: [
+                    ExpansionPanelList(
+                      expansionCallback: (int index, bool isExpanded) {
+                        setState(() {
+                          _isExpanded = isExpanded;
+                        });
+                      },
+                      children: [
+                        ExpansionPanel(
+                          headerBuilder: (BuildContext context, bool isExpanded) {
+                            return ListTile(
+                              title: Text(Statics.getLabel('Filters')),
+                            );
+                          },
+                          body: Container(
+                            margin: EdgeInsets.all(20),
+                            child: Column(
+                              children: [
+                                GeoDropdownWidget(
+                                  level: GeoLevel.Mahaanagar,
+                                  title: 'Mahaanagar',
+                                  controller: ctrl,
+                                ),
+
+                                // if (ctrl.hasItems(GeoLevel.vibhaag))
+                                GeoDropdownWidget(
+                                  level: GeoLevel.Vibhaag,
+                                  title: 'Vibhaag',
+                                  controller: ctrl,
+                                ),
+
+                                if (ctrl.hasItems(GeoLevel.Bhaag))
+                                  GeoDropdownWidget(
+                                    level: GeoLevel.Bhaag,
+                                    title: 'Bhaag',
+                                    controller: ctrl,
+                                  ),
+
+                                if (ctrl.hasItems(GeoLevel.Nagar))
+                                  GeoDropdownWidget(
+                                    level: GeoLevel.Nagar,
+                                    title: 'Nagar',
+                                    controller: ctrl,
+                                  ),
+
+                                /// CONDITIONAL
+
+                                if (ctrl.hasItems(GeoLevel.upnagarUpkhanda))
+                                  GeoDropdownWidget(
+                                    level: GeoLevel.upnagarUpkhanda,
+                                    title: 'upnagarUpkhanda',
+                                    controller: ctrl,
+                                  ),
+                                SizedBox(height: 12),
+                                DropdownButtonFormField(
+                                  decoration: InputDecoration(labelText: Statics.getLabel('SankalpCompletionYear')),
+                                  isExpanded: true,
+                                  value: _baithakTypeYear == "" ? null : _baithakTypeYear,
+                                  items: _baithakTypes
+                                      ?.map((bg) => bg.monthYear.toString().split(',').last)
+                                      .toSet()
+                                      .map((year) => DropdownMenuItem(
+                                            value: year,
+                                            child: Text(year),
+                                          ))
+                                      .toList(),
+                                  onChanged: (value) {
+                                    print("Year ---==>  $value");
+                                    setState(() {
+                                      _baithakTypeYear = value;
+                                      _baithakTypeValue = null;
+                                    });
+                                  },
+                                ),
+
+                                SizedBox(height: 12),
+
+                                if (_baithakTypes != null)
+                                  DropdownButtonFormField(
+                                    decoration: InputDecoration(labelText: Statics.getLabel('baithakType')),
+                                    isExpanded: true,
+                                    value: _baithakTypeValue == "" ? null : _baithakTypeValue,
+                                    items: _baithakTypes!
+                                        .where((bg) => bg.monthYear.toString().split(',').last == _baithakTypeYear)
+                                        .map((bg) => DropdownMenuItem(
+                                              value: bg.staticID.toString(),
+                                              child: Text(bg.codeForDisplay!),
+                                            ))
+                                        .toList(),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _baithakTypeValue = value;
+                                      });
+                                    },
+                                  ),
+                                SizedBox(height: 10),
+                              ],
+                            ),
+                          ),
+                          isExpanded: _isExpanded,
+                        ),
+                      ],
+                    ),
+                    Container(
                       margin: EdgeInsets.all(20),
                       child: Column(
                         children: [
-                          if (_linkedMahaanagar != null)
-                            buildDropdownField(
-                              isDisabled: ((userLevelId ?? 0) < 9 || userLevelId == 13),
-                              label: Statics.getLabel('Mahaanagar'),
-                              value: _linkedMahaanagarValue,
-                              items: _linkedMahaanagar!
-                                  .map((bg) => DropdownMenuItem(
-                                        value: bg.geoUnitID.toString(),
-                                        child: Text(bg.name!),
-                                      ))
-                                  .toList(),
-                              onChanged: (value) {
-                                print("Mahaanagar---   $value");
-                                setState(() {
-                                  _linkedMahaanagarValue = value;
-                                  _linkedVibhaagValue = null;
-                                  _linkedBhaagValue = null;
-                                  _linkedShaharValue = null;
-                                  _linkedNagarValue = null;
-                                  _linkedupnagarValue = null;
-                                  mahanagarId = value;
-                                  _selectedGeoUnitId = value;
-                                });
-                                populatelinkedVibhaagDropdown(value!);
-                              },
-                            ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          if (_linkedVibhaag != null)
-                            buildDropdownField(
-                              isDisabled: ((userLevelId ?? 0) < 8 || userLevelId == 13),
-                              label: Statics.getLabel('Vibhaag'),
-                              value: _linkedVibhaagValue,
-                              items: _linkedVibhaag!
-                                  .map((bg) => DropdownMenuItem(
-                                        value: bg.geoUnitID.toString(),
-                                        child: Text(bg.name!),
-                                      ))
-                                  .toList(),
-                              onChanged: (value) {
-                                print("Vibhaag---   $value");
-                                setState(() {
-                                  _linkedVibhaagValue = value;
-                                  _linkedBhaagValue = null;
-                                  _linkedShaharValue = null;
-                                  _linkedNagarValue = null;
-                                  _selectedGeoUnitId = value;
-                                  vibhagId = value;
-                                });
-                                populatelinkedBhaagDropdown(value!);
-                              },
-                            ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          if (_linkedBhaag != null)
-                            buildDropdownField(
-                              isDisabled: ((userLevelId ?? 0) < 7 || userLevelId == 13),
-                              label: Statics.getLabel('Bhaag'),
-                              value: _linkedBhaagValue,
-                              items: _linkedBhaag!
-                                  .map((bg) => DropdownMenuItem(
-                                        value: bg.geoUnitID.toString(),
-                                        child: Text(bg.name!),
-                                      ))
-                                  .toList(),
-                              onChanged: (value) {
-                                print("Bhaag---   $value");
-                                setState(() {
-                                  _linkedBhaagValue = value;
-                                  _linkedShaharValue = null;
-                                  _selectedGeoUnitId = value;
-                                  _linkedNagarValue = null;
-                                });
-                                populatelinkedNagarDropdown(value, null);
-                              },
-                            ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          // if (_linkedShahar != null && _linkedShahar!.length > 0)
-                          //   DropdownButtonFormField(
-                          //     decoration: InputDecoration(labelText: Statics.getLabel('Shahar')),
-                          //     isExpanded: true,
-                          //     value: _linkedShaharValue == "" ? null : _linkedShaharValue,
-                          //     items: _linkedShahar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                          //     onChanged:MyAppGlobals.isDropdownDisabled('Mahaanagar')
-                          //         ? null
-                          //         :  (value) {
-                          //       print("Shahar---   $value");
-                          //       setState(() {
-                          //         _linkedShaharValue = value;
-                          //         populatelinkedNagarDropdown(null, value);
-                          //         _linkedNagarValue = null;
-                          //       });
-                          //     },
-                          //   ),
-                          // if (_linkedShahar != null && _linkedShahar!.length > 0)
-                          //   SizedBox(
-                          //     height: 10,
-                          //   ),
-                          if (_linkedNagar != null && _linkedNagar!.length > 0)
-                            buildDropdownField(
-                              isDisabled: ((userLevelId ?? 0) < 6 || userLevelId == 13),
-                              label: Statics.getLabel('Nagar'),
-                              value: _linkedNagarValue,
-                              items: _linkedNagar!
-                                  .map((bg) => DropdownMenuItem(
-                                        value: bg.geoUnitID.toString(),
-                                        child: Text(bg.name!),
-                                      ))
-                                  .toList(),
-                              onChanged: (value) {
-                                print("Nagar---   $value");
-                                setState(() {
-                                  _linkedNagarValue = value;
-                                  _selectedGeoUnitId = value;
-                                });
-                                populatelinkedUpnagarDropdown(value);
-                              },
-                            ),
-                          if (_linkedNagar != null && _linkedNagar!.length > 0)
-                            SizedBox(
-                              height: 10,
-                            ),
-                          //--------------new dropdown added----------------------//
-                          if (_linkedupnagar != null && _linkedupnagar!.isNotEmpty)
-                            buildDropdownField(
-                              isDisabled: ((userLevelId ?? 0) < 6 || userLevelId == 13),
-                              label: Statics.getLabel('upnagarUpkhanda'),
-                              value: _linkedupnagarValue,
-                              items: _linkedupnagar!
-                                  .map((bg) => DropdownMenuItem(
-                                        value: bg.geoUnitID.toString(),
-                                        child: Text(bg.name!),
-                                      ))
-                                  .toList(),
-                              onChanged: (value) {
-                                final selectedItem = _linkedupnagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
-                                setState(() {
-                                  _linkedupnagarValue = value;
-                                  _selectedGeoUnitId = value;
-                                  _selctedLevel = 'upnagarUpkhanda';
-                                  _selctedLevelName = selectedItem.name ?? "";
-                                  // populatelinkedVastiDropdown(value!);
-                                  // populatelinkedMandalDropdown(true, value);
-                                  // populatelinkedNagarDropdown(null, value);
-                                });
-                              },
-                            ),
-                          if (_linkedupnagar != null && _linkedupnagar!.isNotEmpty)
-                            SizedBox(
-                              height: 10,
-                            ),
-                          DropdownButtonFormField(
-                            decoration: InputDecoration(labelText: Statics.getLabel('SankalpCompletionYear')),
-                            isExpanded: true,
-                            value: _baithakTypeYear == "" ? null : _baithakTypeYear,
-                            items: _baithakTypes
-                                ?.map((bg) => bg.monthYear.toString().split(',').last)
-                                .toSet()
-                                .map((year) => DropdownMenuItem(
-                                      value: year,
-                                      child: Text(year),
-                                    ))
-                                .toList(),
-                            onChanged: (value) {
-                              print("Year ---==>  $value");
-                              setState(() {
-                                _baithakTypeYear = value;
-                                _baithakTypeValue = null;
-                              });
-                            },
-                          ),
+                          Wrap(
+                            children: [
+                              MaterialButton(
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 15,
+                                  vertical: 8,
+                                ),
+                                color: Theme.of(context).primaryColor,
+                                textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+                                onPressed: () async {
+                                  await _search(ctrl.deepestSelectedGeoUnitId);
 
-                          SizedBox(height: 10),
-
-                          if (_baithakTypes != null)
-                            DropdownButtonFormField(
-                              decoration: InputDecoration(labelText: Statics.getLabel('baithakType')),
-                              isExpanded: true,
-                              value: _baithakTypeValue == "" ? null : _baithakTypeValue,
-                              items: _baithakTypes!
-                                  .where((bg) => bg.monthYear.toString().split(',').last == _baithakTypeYear)
-                                  .map((bg) => DropdownMenuItem(
-                                        value: bg.staticID.toString(),
-                                        child: Text(bg.codeForDisplay!),
-                                      ))
-                                  .toList(),
-                              onChanged: (value) {
-                                setState(() {
-                                  _baithakTypeValue = value;
-                                });
-                              },
-                            ),
-
-                          // DropdownButtonFormField(
-                          //   decoration: InputDecoration(labelText: Statics.getLabel('SankalpCompletionYear')),
-                          //   isExpanded: true,
-                          //   value: _baithakTypeYear == "" ? null : _baithakTypeYear,
-                          //   items: _baithakTypes
-                          //       ?.map((bg) => bg.monthYear.toString().split(',').last) // Extracting only year
-                          //       .toSet() // Removing duplicates
-                          //       .map((year) => DropdownMenuItem(
-                          //     value: year,
-                          //     child: Text(year),
-                          //   ))
-                          //       .toList(),
-                          //   onChanged: (value) {
-                          //     print("Year ---==>  $value");
-                          //     setState(() {
-                          //       _baithakTypeYear = value;
-                          //     });
-                          //   },
-                          // ),
-                          //
-                          // SizedBox(
-                          //     height: 10,
-                          //   ),
-                          // if(_baithakTypes != null)
-                          // DropdownButtonFormField(
-                          //   decoration: InputDecoration(labelText: Statics.getLabel('baithakType')),
-                          //   isExpanded: true,
-                          //   value: _baithakTypeValue == "" ? null : _baithakTypeValue,
-                          //   items:
-                          //       _baithakTypes!.map((bg) => DropdownMenuItem(value: bg.staticID.toString(), child: Text(bg.codeForDisplay!))).toList(),
-                          //   onChanged: (value) {
-                          //     setState(() {
-                          //       _baithakTypeValue = value;
-                          //     });
-                          //   },
-                          // ),
-                          //   DropdownSearch<String>(
-                          //     popupProps: PopupProps.bottomSheet(
-                          //       showSearchBox: true,
-                          //       fit: FlexFit.tight, // Ensures the popup width matches the dropdown width
-                          //       itemBuilder: (context, item, isSelected) {
-                          //         return Container(
-                          //           margin: EdgeInsets.symmetric(horizontal: 8),
-                          //           decoration: !isSelected
-                          //               ? null
-                          //               : BoxDecoration(
-                          //             border: Border.all(color: Theme.of(context).primaryColor),
-                          //             borderRadius: BorderRadius.circular(5),
-                          //             color: Colors.grey[300],
-                          //           ),
-                          //           child: ListTile(
-                          //             title: Text(
-                          //               item,
-                          //               style: TextStyle(fontSize: 14), // Adjust the font size here
-                          //             ),
-                          //           ),
-                          //         );
-                          //       },
-                          //       searchFieldProps: TextFieldProps(
-                          //         decoration: InputDecoration(
-                          //           border: OutlineInputBorder(),
-                          //           contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                          //         ),
-                          //       ),
-                          //       constraints: BoxConstraints.tightFor(
-                          //         width: double.infinity, // Ensures the popup width matches the dropdown width
-                          //       ),
-                          //     ),
-                          //     items: _baithakTypes!.map((bg) => bg.codeForDisplay!).toList(),
-                          //     dropdownDecoratorProps: DropDownDecoratorProps(
-                          //       dropdownSearchDecoration: InputDecoration(
-                          //         labelText: Statics.getLabel('baithakType'),
-                          //       ),
-                          //     ),
-                          //     selectedItem: _baithakTypeValue == "" ? null : _baithakTypes?.firstWhere((element) => element.staticID.toString() == _baithakTypeValue).codeForDisplay,
-                          //     onChanged: (value) {
-                          //       setState(() {
-                          //         _baithakTypeValue = _baithakTypes!.firstWhere((element) => element.codeForDisplay == value).staticID.toString();
-                          //       });
-                          //     },
-                          //   ),
-                          //   DropdownSearch<String>(
-                          //     popupProps: PopupProps.bottomSheet(
-                          //       showSearchBox: true,
-                          //       fit: FlexFit.tight, // Ensures the popup width matches the dropdown width
-                          //       itemBuilder: (context, item, isSelected) {
-                          //         return Container(
-                          //           margin: EdgeInsets.symmetric(horizontal: 8),
-                          //           decoration: !isSelected
-                          //               ? null
-                          //               : BoxDecoration(
-                          //             border: Border.all(color: Theme.of(context).primaryColor),
-                          //             borderRadius: BorderRadius.circular(5),
-                          //             color: Colors.grey[300],
-                          //           ),
-                          //           child: ListTile(
-                          //             title: Text(
-                          //               item,
-                          //               style: TextStyle(fontSize: 14), // Adjust the font size here
-                          //             ),
-                          //             contentPadding: EdgeInsets.symmetric(vertical: 4, horizontal: 8), // Adjust padding here
-                          //             visualDensity: VisualDensity(vertical: -4), // Adjust density here
-                          //           ),
-                          //         );
-                          //       },
-                          //       searchFieldProps: TextFieldProps(
-                          //         decoration: InputDecoration(
-                          //           border: OutlineInputBorder(),
-                          //           contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                          //         ),
-                          //       ),
-                          //       constraints: BoxConstraints.tightFor(
-                          //         width: double.infinity, // Ensures the popup width matches the dropdown width
-                          //       ),
-                          //       containerBuilder: (context, popupWidget) {
-                          //         return Stack(
-                          //           children: [
-                          //             popupWidget,
-                          //             Positioned(
-                          //               right: 10,
-                          //               top: 10,
-                          //               child: IconButton(
-                          //                 icon: Icon(Icons.close),
-                          //                 onPressed: () {
-                          //                   Navigator.of(context).pop(); // Close the dropdown
-                          //                 },
-                          //               ),
-                          //             ),
-                          //           ],
-                          //         );
-                          //       },
-                          //     ),
-                          //     items: _baithakTypes!.map((bg) => bg.codeForDisplay!).toList(),
-                          //     dropdownDecoratorProps: DropDownDecoratorProps(
-                          //       dropdownSearchDecoration: InputDecoration(
-                          //         labelText: Statics.getLabel('baithakType'),
-                          //       ),
-                          //     ),
-                          //     selectedItem: _baithakTypeValue == "" ? null : _baithakTypes?.firstWhere((element) => element.staticID.toString() == _baithakTypeValue).codeForDisplay,
-                          //     onChanged: (value) {
-                          //       print(value);
-                          //             setState(() {
-                          //               _baithakTypeValue = _baithakTypes!.firstWhere((element) => element.codeForDisplay == value).staticID.toString();
-                          //             });
-                          //     },
-                          //   ),
-                          SizedBox(
-                            height: 10,
+                                  final trail = ctrl.hierarchyNameTrail;
+                                  _selectedNagarAndBaithak =
+                                      (trail.vibhaagName ?? "--") + ' | ' + (trail.bhaagName ?? "--") + ' | ' + (trail.nagarName ?? "--") + ' | ' + (trail.upnagarName ?? "--") + ' | ';
+                                },
+                                child: Text(
+                                  Statics.getLabel('Search'),
+                                  style: TextStyle(fontSize: 25),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              MaterialButton(
+                                  onPressed: () async {
+                                    setState(() {
+                                      _baithakTypeValue = _selectedNagarAndBaithak = '';
+                                      _baithakTypeYear = null;
+                                      _ekatritVrutta = null;
+                                      _isSearching = false;
+                                      _selectedBaithak = '';
+                                    });
+                                    //populatelinkedBhaagDropdown();
+                                    await populateDropdown();
+                                  },
+                                  child: Text(Statics.getLabel('clear'))),
+                            ],
                           ),
                         ],
                       ),
                     ),
-                    isExpanded: _isExpanded,
-                  ),
-                ],
-              ),
-              Container(
-                margin: EdgeInsets.all(20),
-                child: Column(
-                  children: [
-                    Wrap(
-                      children: [
-                        MaterialButton(
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 15,
-                            vertical: 8,
-                          ),
-                          color: Theme.of(context).primaryColor,
-                          textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
-                          onPressed: () {
-                            _search();
-                          },
-                          child: Text(
-                            Statics.getLabel('Search'),
-                            style: TextStyle(fontSize: 25),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        MaterialButton(
-                            onPressed: () async {
-                              setState(() {
-                                mahanagarId = _linkedMahaanagarValue = _linkedVibhaagValue = _linkedBhaagValue = _linkedShaharValue = _linkedNagarValue = _linkedupnagarValue = _baithakType = null;
-                                _linkedMahaanagar = _linkedVibhaag = _linkedBhaag = _linkedShahar = _linkedNagar = _linkedupnagar = null;
-                                _baithakTypeValue = _selectedNagarAndBaithak = '';
-                                _baithakTypeYear = null;
-                                _ekatritVrutta = null;
-                                _isSearching = false;
-                                _selectedBaithak = '';
-                              });
-                              //populatelinkedBhaagDropdown();
-                              await populateDropdown();
-                            },
-                            child: Text(Statics.getLabel('clear'))),
-                      ],
-                    ),
                   ],
-                ),
-              ),
+                );
+              }),
               if (_isSearching) CircularProgressIndicator(),
               if (_ekatritVrutta != null)
                 RepaintBoundary(
@@ -1003,7 +560,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                                 fontsize: 18,
                                 view: true,
                                 btnAction: () {
-                                  redirctToList("mahanagar", _baithakType.toString(), geoID, Statics.getLabel('mahaanagar'));
+                                  redirctToList("mahanagar", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('mahaanagar'));
                                 }),
                             NewFourColumnRow(
                               txtString: Statics.getLabel('sambhaagSam'),
@@ -1064,7 +621,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                                 fontsize: 18,
                                 view: true,
                                 btnAction: () {
-                                  redirctToList("anyaNagar", _baithakType.toString(), geoID, Statics.getLabel('anyaNagar'));
+                                  redirctToList("anyaNagar", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('anyaNagar'));
                                 }),
                             NewFiveColumnRow(
                               // txtString: Statics.getLabel('Total')+" "+Statics.getLabel('nagarCount'),
@@ -1095,7 +652,8 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                                 fontsize: 18,
                                 view: true,
                                 btnAction: () {
-                                  redirctToList("nagarCountTotal", _baithakType.toString(), geoID, "एकूण " + Statics.getLabel('nagarCount').split(" ").first);
+                                  redirctToList("nagarCountTotal", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId,
+                                      "एकूण " + Statics.getLabel('nagarCount').split(" ").first);
                                 }),
                             NewFiveColumnRow(
                               txtString: "एकूण\n" + Statics.getLabel('nagarCount'),
@@ -1131,7 +689,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                                 fontsize: 18,
                                 view: true,
                                 btnAction: () {
-                                  redirctToList("graaminTaaluka", _baithakType.toString(), geoID, Statics.getLabel('graaminTaaluka'));
+                                  redirctToList("graaminTaaluka", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('graaminTaaluka'));
                                 }),
                             NewThreeColumnRow(
                               txtString: Statics.getLabel('graaminTaaluka') + "\n" + Statics.getLabel('nagarCount').split(" ").last,
@@ -1157,7 +715,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                                 fontsize: 18,
                                 view: true,
                                 btnAction: () {
-                                  redirctToList("mandal", _baithakType.toString(), geoID, "मंडळ");
+                                  redirctToList("mandal", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, "मंडळ");
                                 }),
                             NewFourColumnRow(
                               txtString: "मंडळ\n" + Statics.getLabel('nagarCount').split(" ").last,
@@ -1227,7 +785,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                                 fontsize: 18,
                                 view: true,
                                 btnAction: () {
-                                  redirctToList("vasti", _baithakType.toString(), geoID, Statics.getLabel('vastiCount'));
+                                  redirctToList("vasti", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('vastiCount'));
                                 }),
                             NewFourColumnRow(
                               txtString: "एकूण\n" + Statics.getLabel('vastiCount'),
@@ -1275,7 +833,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                                 fontsize: 18,
                                 view: true,
                                 btnAction: () {
-                                  redirctToList("sthaan", _baithakType.toString(), geoID, Statics.getLabel('sthaan'));
+                                  redirctToList("sthaan", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('sthaan'));
                                 }),
                             NewThreeColumnRow(
                               txtString: 'महानगरीय\nस्थान',
@@ -1319,7 +877,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                             fontsize: 18,
                             view: true,
                             btnAction: () {
-                              redirctToList("sewaVrutta", _baithakType.toString(), geoID, Statics.getLabel('sewaVrutta'));
+                              redirctToList("sewaVrutta", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('sewaVrutta'));
                             }),
                         TwoColumnRow(
                           txtString: 'सेवा वस्ती संख्या',
@@ -1416,7 +974,8 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                                     ),
                                     IconButton(
                                         onPressed: () {
-                                          redirctToList("kiman5ShakhaJilaKendra", _baithakType.toString(), geoID, Statics.getLabel('shakhaJilhaKendra'));
+                                          redirctToList("kiman5ShakhaJilaKendra", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId,
+                                              Statics.getLabel('shakhaJilhaKendra'));
                                         },
                                         icon: Icon(
                                           FontAwesomeIcons.list,
@@ -1499,7 +1058,8 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                                         ),
                                         IconButton(
                                             onPressed: () {
-                                              redirctToList("purnaVartamaanAndSankalp", _baithakType.toString(), geoID, Statics.getLabel('vartamaanAndSankalp'));
+                                              redirctToList("purnaVartamaanAndSankalp", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId,
+                                                  Statics.getLabel('vartamaanAndSankalp'));
                                             },
                                             icon: Icon(
                                               FontAwesomeIcons.list,
@@ -1926,7 +1486,8 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                             fontsize: 18,
                             view: true,
                             btnAction: () {
-                              redirctToList("kaaryaSthitiSankhyaatmak", _baithakType.toString(), geoID, Statics.getLabel('kaaryaSthitiSankhyaatmak'));
+                              redirctToList(
+                                  "kaaryaSthitiSankhyaatmak", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('kaaryaSthitiSankhyaatmak'));
                             }),
                         Table(
                           columnWidths: {
@@ -2176,7 +1737,8 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                                 fontsize: 18,
                                 view: true,
                                 btnAction: () {
-                                  redirctToList("graaminSaaptaahik", _baithakType.toString(), geoID, Statics.getLabel('graaminSaaptaahikSthan'));
+                                  redirctToList(
+                                      "graaminSaaptaahik", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('graaminSaaptaahikSthan'));
                                 }),
                             Single1ColumnRow(txtString: Statics.getLabel('graaminSaaptaahikMilanYuktyaSthan'), value: getTotalCount(_ekatritVrutta), fontsize: 15),
                             Legend(
@@ -2280,7 +1842,8 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                                 fontsize: 18,
                                 view: true,
                                 btnAction: () {
-                                  redirctToList("totalKaryastithiSaaptaahikMilan", _baithakType.toString(), geoID, Statics.getLabel('TotalSaaptaahikMilan'));
+                                  redirctToList("totalKaryastithiSaaptaahikMilan", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId,
+                                      Statics.getLabel('TotalSaaptaahikMilan'));
                                 }),
                             Table(
                               columnWidths: {
@@ -2434,7 +1997,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                             fontsize: 18,
                             view: true,
                             btnAction: () {
-                              redirctToList("maasikMilan", _baithakType.toString(), geoID, Statics.getLabel('MaasikMilan'));
+                              redirctToList("maasikMilan", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('MaasikMilan'));
                             }),
                         Table(
                           columnWidths: {
@@ -2520,7 +2083,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                             fontsize: 18,
                             view: true,
                             btnAction: () {
-                              redirctToList("sanghaMandali", _baithakType.toString(), geoID, Statics.getLabel('SanghaMandali'));
+                              redirctToList("sanghaMandali", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('SanghaMandali'));
                             }),
                         Table(
                           columnWidths: {
@@ -2661,7 +2224,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                             fontsize: 18,
                             view: true,
                             btnAction: () {
-                              redirctToList("shaakhaToli", _baithakType.toString(), geoID, Statics.getLabel('shaakhaaToli'));
+                              redirctToList("shaakhaToli", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('shaakhaaToli'));
                             }),
                         SingleColumnRow(txtString: Statics.getLabel('baalSanyukt'), value: _ekatritVrutta['BaalShaakhaaToliYuktaCount'].toString(), fontsize: 15),
                         SingleColumnRow(txtString: Statics.getLabel('mahaavidyaalayeen'), value: _ekatritVrutta['TarunVidyaarthiShaakhaaToliYuktaCount'].toString(), fontsize: 15),
@@ -2679,7 +2242,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                             fontsize: 18,
                             view: true,
                             btnAction: () {
-                              redirctToList("saptahikMilanToli", _baithakType.toString(), geoID, Statics.getLabel('saptahikMilanToli'));
+                              redirctToList("saptahikMilanToli", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('saptahikMilanToli'));
                             }),
                         SingleColumnRow(
                             txtString: Statics.getLabel('baalSanyukt'),
@@ -2704,7 +2267,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                             fontsize: 18,
                             view: true,
                             btnAction: () {
-                              redirctToList("baithakKrnaraShakha", _baithakType.toString(), geoID, Statics.getLabel('baithakKrnaraShakha'));
+                              redirctToList("baithakKrnaraShakha", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('baithakKrnaraShakha'));
                             }),
                         SingleColumnRow(txtString: Statics.getLabel('baalSanyukt'), value: _ekatritVrutta['BalBaithakShaakaaCount'].toString(), fontsize: 15),
                         SingleColumnRow(txtString: Statics.getLabel('mahaavidyaalayeen'), value: _ekatritVrutta['TarunBaithakShaakaaCount'].toString(), fontsize: 15),

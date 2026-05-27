@@ -584,6 +584,16 @@ class LevelMasterBAL {
     //levelNameForDisplay = map["LevelNameForDisplay"];
     hierarchy = map["Hierarchy"];
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "LevelID": levelID,
+      "PraantID": praantID,
+      "LevelName": levelName,
+      //"LevelNameForDisplay": levelNameForDisplay,
+      "Hierarchy": hierarchy,
+    };
+  }
 }
 
 class DaayitvaMasterBAL {
@@ -2149,10 +2159,10 @@ class ShaakhaaVruttaBAL {
     isDoneUrdhvapad = map["IsDoneUrdhvapad"];
     isDoneBoodhKatha = map["IsDoneBoodhKatha"];
     isDoneBoudhikDays = map["IsDoneBoudhikDays"];
-    SelectedBoudhikDaysId = map["BoudhikDaysId"];
+    SelectedBoudhikDaysId = map["BoudhikDaysId"].toString();
     AnyaBoudhikDays = map["AnyaBoudhikDays"];
     isDoneSewaDays = map["IsDoneSewaDays"];
-    SelectedSewaDaysId = map["SewaDaysId"];
+    SelectedSewaDaysId = map["SewaDaysId"].toString();
   }
 }
 

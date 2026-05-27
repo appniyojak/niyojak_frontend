@@ -358,7 +358,6 @@ class SwayamsevakProvider {
 
   Future<List<dynamic>> getSwayamsevaks(String inputJson) async {
     Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
-    print(Uri.parse(Statics.urlGetSwayamsevaksForAppGrid));
     log(inputJson);
     print(Statics.urlGetSwayamsevaksForAppGrid);
     var response = await http.post(Uri.parse(Statics.urlGetSwayamsevaksForAppGrid), headers: jHeaders, body: inputJson);

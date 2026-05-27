@@ -1585,7 +1585,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                         level: GeoLevel.Mahaanagar,
                         title: 'Mahaanagar',
                         controller: ctrl,
-                        onChanged: () => setState(() => _isSearched = false),
+                        onChanged: (v) => setState(() => _isSearched = false),
                       ),
 
                       // if (ctrl.hasItems(GeoLevel.vibhaag))
@@ -1593,7 +1593,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                         level: GeoLevel.Vibhaag,
                         title: 'Vibhaag',
                         controller: ctrl,
-                        onChanged: () => setState(() => _isSearched = false),
+                        onChanged: (v) => setState(() => _isSearched = false),
                       ),
 
                       if (ctrl.hasItems(GeoLevel.Bhaag))
@@ -1601,7 +1601,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                           level: GeoLevel.Bhaag,
                           title: 'Bhaag',
                           controller: ctrl,
-                          onChanged: () => setState(() => _isSearched = false),
+                          onChanged: (v) => setState(() => _isSearched = false),
                         ),
 
                       if (ctrl.hasItems(GeoLevel.Nagar))
@@ -1609,10 +1609,9 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                           level: GeoLevel.Nagar,
                           title: 'Nagar',
                           controller: ctrl,
-                          onChanged: () => setState(() => _isSearched = false),
+                          onChanged: (v) => setState(() => _isSearched = false),
                         ),
 
-                      ////////////////////////////////////////
                       /// CONDITIONAL
 
                       if (ctrl.hasItems(GeoLevel.upnagarUpkhanda))
@@ -1620,7 +1619,23 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                           level: GeoLevel.upnagarUpkhanda,
                           title: 'upnagarUpkhanda',
                           controller: ctrl,
-                          onChanged: () => setState(() => _isSearched = false),
+                          onChanged: (v) => setState(() => _isSearched = false),
+                        ),
+
+                      if (ctrl.hasItems(GeoLevel.Mandal))
+                        GeoDropdownWidget(
+                          level: GeoLevel.Mandal,
+                          title: 'Mandal',
+                          controller: ctrl,
+                          onChanged: (v) => setState(() => _isSearched = false),
+                        ),
+
+                      if (ctrl.hasItems(GeoLevel.Vasti))
+                        GeoDropdownWidget(
+                          level: GeoLevel.Vasti,
+                          title: 'Vasti',
+                          controller: ctrl,
+                          onChanged: (v) => setState(() => _isSearched = false),
                         ),
                       SizedBox(height: 21),
                       // if (selctedLevelId != '')

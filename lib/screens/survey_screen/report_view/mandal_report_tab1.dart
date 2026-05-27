@@ -2140,7 +2140,7 @@ class _MandalSurveyReportViewScreen1State extends State<MandalSurveyReportViewSc
                           title: 'Mahaanagar',
                           controller: ctrl,
                           fetchMode: GeoHierarchyFetchMode.mandalOnly,
-                          onChanged: () => setState(() => isVastiSearch = false),
+                          onChanged: (v) => setState(() => isVastiSearch = false),
                         ),
 
                         // if (ctrl.hasItems(GeoLevel.vibhaag))
@@ -2149,7 +2149,7 @@ class _MandalSurveyReportViewScreen1State extends State<MandalSurveyReportViewSc
                           title: 'Vibhaag',
                           controller: ctrl,
                           fetchMode: GeoHierarchyFetchMode.mandalOnly,
-                          onChanged: () => setState(() => isVastiSearch = false),
+                          onChanged: (v) => setState(() => isVastiSearch = false),
                         ),
 
                         if (ctrl.hasItems(GeoLevel.Bhaag))
@@ -2158,7 +2158,7 @@ class _MandalSurveyReportViewScreen1State extends State<MandalSurveyReportViewSc
                             title: 'Bhaag',
                             controller: ctrl,
                             fetchMode: GeoHierarchyFetchMode.mandalOnly,
-                            onChanged: () => setState(() => isVastiSearch = false),
+                            onChanged: (v) => setState(() => isVastiSearch = false),
                           ),
 
                         if (ctrl.hasItems(GeoLevel.Nagar))
@@ -2167,7 +2167,7 @@ class _MandalSurveyReportViewScreen1State extends State<MandalSurveyReportViewSc
                             title: 'Nagar',
                             controller: ctrl,
                             fetchMode: GeoHierarchyFetchMode.mandalOnly,
-                            onChanged: () => setState(() => isVastiSearch = false),
+                            onChanged: (v) => setState(() => isVastiSearch = false),
                           ),
 
                         /// CONDITIONAL
@@ -2176,7 +2176,7 @@ class _MandalSurveyReportViewScreen1State extends State<MandalSurveyReportViewSc
                             level: GeoLevel.upnagarUpkhanda,
                             title: 'upnagarUpkhanda',
                             controller: ctrl,
-                            onChanged: () => setState(() => isVastiSearch = false),
+                            onChanged: (v) => setState(() => isVastiSearch = false),
                           ),
 
                         if (ctrl.hasItems(GeoLevel.Mandal))
@@ -2184,7 +2184,7 @@ class _MandalSurveyReportViewScreen1State extends State<MandalSurveyReportViewSc
                             level: GeoLevel.Mandal,
                             title: 'Mandal',
                             controller: ctrl,
-                            onChanged: () => setState(() => isVastiSearch = false),
+                            onChanged: (v) => setState(() => isVastiSearch = false),
                           ),
                         Align(
                           alignment: Alignment.center,

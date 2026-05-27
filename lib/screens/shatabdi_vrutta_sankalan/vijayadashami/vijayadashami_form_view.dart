@@ -174,11 +174,11 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
       isuservasti = dm.isvasti;
       isusermandal = dm.ismandal;
     });
-    _getInitialData();
     setState(() {
       utsavKontyaStaravarList = getFilteredLevels(dm.levelID ?? 0);
       utsavKontyaStaravar = "6";
     });
+    _getInitialData();
     await populateDropdown();
   }
 
@@ -5995,7 +5995,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     Map<String, dynamic> formData = {
       "GeoUnitID": selectedUpnagarList.isEmpty ? _selectedGeoUnitId.toString() : selectedUpnagarList.join(","),
       "AppUserID": int.parse(Statics.userDetails['userID']),
-      "isnagar": int.parse(utsavKontyaStaravar!),
+      "isnagar": int.parse(utsavKontyaStaravar ?? "6"),
       "pkid": formId ?? 0,
     };
 
@@ -6030,10 +6030,13 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
         _linkedNagarValue = _geodata.parentNagarID.toString();
       }
       if (_geodata.levelID == 6) {
+        selctedLevel = "Nagar";
         _linkedNagarValue = _geodata.geounitid.toString();
       } else if (_geodata.levelID == 4) {
+        selctedLevel = "Mandal";
         _linkedmandalValue = _geodata.geounitid.toString();
       } else if (_geodata.levelID == 2) {
+        selctedLevel = "Vasti";
         _linkedvastiValue = _geodata.geounitid.toString();
       }
       if (_geodata.geounitid != null && _geodata.geounitid != 0 && _geodata.levelID != 13) {

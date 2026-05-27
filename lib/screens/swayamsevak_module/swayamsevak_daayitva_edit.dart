@@ -6,11 +6,13 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:provider/provider.dart';
 
 import '../../helpers/static_data.dart' as Statics;
 import '../../providers/bals.dart';
 import '../../providers/swayamsevak_provider.dart';
 import '../../utils/globals.dart';
+import '../../utils/stable_geounit_class.dart';
 import '../../widgets/legend.dart';
 
 class SwayamSevakDaayitvaEdit extends StatefulWidget {
@@ -78,6 +80,8 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
 
   List<AreaOfOperationsBAL> _areaOfOperations = [];
 
+  GeoHierarchyTrail? trail;
+
   List<GeoUnitMasterBAL>? _linkedMahaanagar;
   List<GeoUnitMasterBAL>? _linkedVibhaag;
   List<GeoUnitMasterBAL>? _linkedbhaag;
@@ -134,6 +138,20 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
     }
   }
 
+  Future<void> initData() async {
+    final dm = await MyAppGlobals.getLevelLDB();
+    isuservasti = dm.isvasti;
+    isusermandal = dm.ismandal;
+
+    final controller = context.read<GeoHierarchyController>();
+
+    populateDropdown();
+
+    await controller.initialize(dm);
+
+    setState(() {});
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -156,6 +174,8 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
 
     data2.removeWhere((e) => e.levelID == 5);
 
+    // final _data2 = getFilteredLevels(data2);
+
     setState(() {
       _daayitvaFor = data;
       _level = data2;
@@ -163,6 +183,56 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
       _gatividhi = data4;
       _sanghaPreritSanstha = data5;
     });
+  }
+
+  List<LevelMasterBAL> getFilteredLevels(List<LevelMasterBAL> list2) {
+    final _userLevelId = context.read<GeoHierarchyController>().ctrlUserLevelId ?? 12;
+
+    // Sort by hierarchy first
+    list2.sort((a, b) => (a.hierarchy ?? 0).compareTo(b.hierarchy ?? 0));
+
+    List<LevelMasterBAL> filteredList = [];
+
+    // User at very top levels
+    if (_userLevelId >= 6) {
+      final userHierarchy = list2.firstWhere((e) => e.levelID == _userLevelId).hierarchy ?? 0;
+
+      filteredList = list2.where((e) => (e.hierarchy ?? 0) <= userHierarchy).toList();
+    }
+
+    // Level 4 → only 4,3,1
+    else if (_userLevelId == 4) {
+      filteredList = list2.where((e) => e.levelID == 4 || e.levelID == 3 || e.levelID == 1).toList();
+    }
+
+    // Level 3 → only 3,1
+    else if (_userLevelId == 3) {
+      filteredList = list2.where((e) => e.levelID == 3 || e.levelID == 1).toList();
+    }
+
+    // Level 2 → only 2,1
+    else if (_userLevelId == 2) {
+      filteredList = list2.where((e) => e.levelID == 2 || e.levelID == 1).toList();
+    }
+
+    // Level 1 → only 1
+    else if (_userLevelId == 1) {
+      filteredList = list2.where((e) => e.levelID == 1).toList();
+    }
+
+    // If Vasti enabled and Mandal disabled
+    // remove LevelID 3 and 4
+    if (isuservasti == 1 && isusermandal == 0) {
+      filteredList.removeWhere((e) => e.levelID == 3 || e.levelID == 4);
+    }
+
+    // If Mandal enabled and Vasti disabled
+    // remove LevelID 2
+    else if (isusermandal == 1 && isuservasti == 0) {
+      filteredList.removeWhere((e) => e.levelID == 2);
+    }
+
+    return filteredList;
   }
 
   Future<void> populateDropdownT({bool isClear = false}) async {
@@ -186,7 +256,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
     _linkedupnagarValue = _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     _linkedbhaagName = _linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
     _linkedupnagar = _linkedbhaag = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = null;
-    print("populatelinkedVibhaagDropdown $mahaanagarIDStr");
+    log("populatelinkedVibhaagDropdown $mahaanagarIDStr");
     var data;
     if (_levelValue == 4 || _levelValue == 3) {
       data = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'), '');
@@ -234,8 +304,8 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
     _linkedupnagarValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     _linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
     _linkedupnagar = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = null;
-    print("print LevelID > ${Statics.userDetails["LevelID"]}");
-    print("shaharIDStr shaharIDStr $shaharIDStr");
+    log("print LevelID > ${Statics.userDetails["LevelID"]}");
+    log("shaharIDStr shaharIDStr $shaharIDStr");
     if (shaharIDStr != null) {
       var ngDD;
       if (_levelValue == 4 || _levelValue == 3) {
@@ -314,7 +384,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
     _linkedvastiName = null;
     var vsDD;
     if (haveParentUp) {
-      print("i am in parents upnagar");
+      log("i am in parents upnagar");
       vsDD = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, "Upnagar", '');
       // print("${mnDD}");
     } else {
@@ -396,12 +466,43 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
       var data = await SwayamsevakProvider().getSwayamSevakDaayitva(swayamsevakID, daayitvaForID, daayitvaForCode, dataID);
       var data1 = await Statics.getStaticLDB("DaayitvaFor");
       await populateDropdown();
-      await populateDropdownT();
 
       log(jsonEncode(data.toJson()));
 
       if (data != null) {
         var data2 = await Statics.getDaayitvaLDB("", "", data.daayitvaID.toString());
+        final controller = context.read<GeoHierarchyController>();
+
+        trail = await controller.getTrailFromGeoUnitId((data.daayitvaGeoUnitID).toString());
+        setState(() {});
+        if (trail != null) {
+          await controller.setHierarchyFromTrail(trail: trail!);
+
+          _linkedMahaanagarValue = trail!.mahaanagarId;
+          if (swDaayitva?.levelID == 13 || 9 > (swDaayitva?.levelID ?? 0)) await populatelinkedVibhaagDropdown(_linkedMahaanagarValue ?? "");
+          _linkedVibhaagValue = trail!.vibhaagId;
+          if (swDaayitva?.levelID == 13 || 8 > (swDaayitva?.levelID ?? 0)) await populatelinkedBhaagDropdown(_linkedVibhaagValue ?? "");
+          _linkedbhaagValue = trail!.bhaagId;
+          if (swDaayitva?.levelID == 13 || 7 > (swDaayitva?.levelID ?? 0)) await populatelinkedNagarDropdown(_linkedbhaagValue ?? "", null);
+          _linkednagarValue = trail!.nagarId;
+          if ((6 > (swDaayitva?.levelID ?? 0) || swDaayitva?.levelID == 13)) await populatelinkedUpnagarDropdown(_linkednagarValue ?? "");
+          _linkedupnagarValue = trail!.upnagarId;
+          if (5 > (swDaayitva?.levelID ?? 0))
+            await populatelinkedMandalDropdown((_linkedupnagarValue != null && _linkedupnagarValue!.isNotEmpty) ? "Upnagar" : "Nagar",
+                (_linkedupnagarValue != null && _linkedupnagarValue!.isNotEmpty) ? _linkedupnagarValue! : (_linkednagarValue ?? ""));
+          _linkedmandalValue = trail!.mandalId;
+          if (4 > (swDaayitva?.levelID ?? 0)) await populatelinkedGraamDropdown(_linkedmandalValue ?? "");
+          _linkedgraamValue = trail!.graamId;
+          if (3 > (swDaayitva?.levelID ?? 0))
+            await populatelinkedVastiDropdown(
+                (_linkedupnagarValue != null && _linkedupnagarValue!.isNotEmpty), (_linkedupnagarValue != null && _linkedupnagarValue!.isNotEmpty) ? _linkedupnagarValue! : (_linkednagarValue ?? ""));
+          _linkedvastiValue = trail!.vastiId;
+          if (2 > (swDaayitva?.levelID ?? 0))
+            await populatelinkedShaakhaaDropdown(
+                _linkedgraamValue ?? _linkedvastiValue ?? "", (_linkedgraamValue != null && _linkedgraamValue!.isNotEmpty) ? (_linkedgraamValue ?? "") : (_linkedvastiValue ?? ""));
+          _linkedshaakhaaValue = trail!.shakhaaId;
+        }
+
         if (!mounted) return;
         setState(() {
           swDaayitva = data;
@@ -413,6 +514,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
                   : null
               : null;
           //}
+
           _daayitvaValue = swDaayitva!.daayitvaID == null ? null : swDaayitva!.daayitvaID.toString();
           _levelValue = swDaayitva!.levelID == null ? null : swDaayitva!.levelID;
           if (_levelValue != null) populateGeoUnits(_levelValue!);
@@ -462,6 +564,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
 
   saveSwDetails() async {
     var areaOfOperationIDs = '';
+    // final _controller = context.read<GeoHierarchyController>();
 
     for (var data in _areaOfOperations) {
       if (data.isSelected!) areaOfOperationIDs = areaOfOperationIDs + data.staticID.toString() + ",";
@@ -677,6 +780,14 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
                                               populateGeoUnits(value);
                                             else
                                               populateDropdownT();
+                                            /*context.read<GeoHierarchyController>().loadHierarchyForUser(
+                                                  fetchMode: value == 2
+                                                      ? GeoHierarchyFetchMode.vastiOnly
+                                                      : (value == 3 || value == 4)
+                                                          ? GeoHierarchyFetchMode.mandalOnly
+                                                          : value == 13
+                                                              ? GeoHierarchyFetchMode.upnagarOnly
+                                                              : GeoHierarchyFetchMode.all);*/
                                             _lblValue = value == "1" ? "Shaakhaa/Saaptaahik/Maasik/Mandali" : "SelectLevelName";
                                           });
                                           print("_levelValue >>>>>>>> $_levelValue");
@@ -1505,3 +1616,71 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
     );
   }
 }
+
+/*
+
+            if (_levelValue != null && ((_levelValue ?? 0) < 9 || (_levelValue ?? 0) > 12) && ctrl.hasItems(GeoLevel.Vibhaag))
+              GeoDropdownWidget(
+                level: GeoLevel.Vibhaag,
+                title: 'Vibhaag',
+                controller: ctrl,
+                onChanged: (v) => setState(() => swDaayitva?.daayitvaGeoUnitID = v),
+              ),
+
+            if (_levelValue != null && ((_levelValue ?? 0) < 8 || (_levelValue ?? 0) > 12) && ctrl.hasItems(GeoLevel.Bhaag))
+              GeoDropdownWidget(
+                level: GeoLevel.Bhaag,
+                title: 'Bhaag',
+                controller: ctrl,
+                onChanged: (v) => setState(() => swDaayitva?.daayitvaGeoUnitID = v),
+              ),
+
+            if (_levelValue != null && ((_levelValue ?? 0) < 7 || (_levelValue ?? 0) > 12) && ctrl.hasItems(GeoLevel.Nagar))
+              GeoDropdownWidget(
+                level: GeoLevel.Nagar,
+                title: 'Nagar',
+                controller: ctrl,
+                onChanged: (v) => setState(() => swDaayitva?.daayitvaGeoUnitID = v),
+              ),
+
+            /// CONDITIONAL
+            if (_levelValue != null && ((_levelValue ?? 0) < 6 || _levelValue == 13) && ctrl.hasItems(GeoLevel.upnagarUpkhanda))
+              GeoDropdownWidget(
+                level: GeoLevel.upnagarUpkhanda,
+                title: 'upnagarUpkhanda',
+                controller: ctrl,
+                onChanged: (v) => setState(() => swDaayitva?.daayitvaGeoUnitID = v),
+              ),
+
+            if (_levelValue != null && (_levelValue ?? 0) < 5 && ctrl.hasItems(GeoLevel.Mandal))
+              GeoDropdownWidget(
+                level: GeoLevel.Mandal,
+                title: 'Mandal',
+                controller: ctrl,
+                onChanged: (v) => setState(() => swDaayitva?.daayitvaGeoUnitID = v),
+              ),
+
+            if (_levelValue != null && (_levelValue ?? 0) < 4 && ctrl.hasItems(GeoLevel.Graam))
+              GeoDropdownWidget(
+                level: GeoLevel.Graam,
+                title: 'Graam',
+                controller: ctrl,
+                onChanged: (v) => setState(() => swDaayitva?.daayitvaGeoUnitID = v),
+              ),
+
+            if (_levelValue != null && (_levelValue ?? 0) < 3 && ctrl.hasItems(GeoLevel.Vasti))
+              GeoDropdownWidget(
+                level: GeoLevel.Vasti,
+                title: 'Vasti',
+                controller: ctrl,
+                onChanged: (v) => setState(() => swDaayitva?.daayitvaGeoUnitID = v),
+              ),
+
+            if (_levelValue != null && (_levelValue ?? 0) < 2 && ctrl.hasItems(GeoLevel.Shaakhaa))
+              GeoDropdownWidget(
+                level: GeoLevel.Shaakhaa,
+                title: 'Shaakhaa',
+                controller: ctrl,
+                onChanged: (v) => setState(() => swDaayitva?.daayitvaGeoUnitID = v),
+              ),
+*/

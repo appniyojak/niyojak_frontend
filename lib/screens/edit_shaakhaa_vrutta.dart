@@ -384,6 +384,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                         ),
                         Expanded(
                           child: numTextField(
+                            readOnly: _shishuCtrl.text.isEmpty,
                             controller: _newshishuCtrl,
                             expectedController: _shishuCtrl,
                             labelText: Statics.getLabel('newAdmission'),
@@ -412,6 +413,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                       ),
                       Expanded(
                         child: numTextField(
+                          readOnly: _baalCtrl.text.isEmpty,
                           controller: _newbaalCtrl,
                           expectedController: _baalCtrl,
                           labelText: Statics.getLabel('newAdmission'),
@@ -439,6 +441,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                       ),
                       Expanded(
                         child: numTextField(
+                          readOnly: _tarunVidhyaarthiCtrl.text.isEmpty,
                           controller: _newtarunVidhyaarthiCtrl,
                           expectedController: _tarunVidhyaarthiCtrl,
                           labelText: Statics.getLabel('newAdmission'),
@@ -466,6 +469,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                       ),
                       Expanded(
                         child: numTextField(
+                          readOnly: _tarunVyavsaayeeCtrl.text.isEmpty,
                           controller: _newtarunVyavsaayeeCtrl,
                           expectedController: _tarunVyavsaayeeCtrl,
                           labelText: Statics.getLabel('newAdmission'),
@@ -493,6 +497,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                       ),
                       Expanded(
                         child: numTextField(
+                          readOnly: _proudhaCtrl.text.isEmpty,
                           controller: _newproudhaCtrl,
                           expectedController: _proudhaCtrl,
                           labelText: Statics.getLabel('newAdmission'),
@@ -923,7 +928,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                                   color: Theme.of(context).primaryColor,
                                   textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                                   onPressed: () {
-                                    return;
+                                    // return;
                                     _submit(context);
                                   },
                                   child: Text(
@@ -941,14 +946,32 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
     );
   }
 
-  Widget numTextField(
-      {required TextEditingController controller, Color? fillColor, bool readOnly = false, TextEditingController? expectedController, required String labelText, void Function(String?)? onSaved}) {
+  Widget numTextField({
+    required TextEditingController controller,
+    Color? fillColor,
+    bool readOnly = false,
+    TextEditingController? expectedController,
+    required String labelText,
+    void Function(String?)? onSaved,
+    String? Function(String?)? validator,
+  }) {
+    if (expectedController != null) {
+      expectedController.addListener(() {
+        final expected = int.tryParse(expectedController.text) ?? 0;
+        final current = int.tryParse(controller.text) ?? 0;
+
+        if (current > expected) {
+          controller.clear(); // or controller.text = "0";
+        }
+      });
+    }
     return TextFormField(
       controller: controller,
       keyboardType: TextInputType.number,
       textInputAction: TextInputAction.next,
       readOnly: readOnly,
       onSaved: onSaved,
+      validator: validator,
       inputFormatters: [
         FilteringTextInputFormatter.digitsOnly,
         LengthLimitingTextInputFormatter(10),

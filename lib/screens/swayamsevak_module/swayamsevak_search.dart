@@ -1377,13 +1377,14 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 import '../../helpers/static_data.dart' as Statics;
-import '../../models/response_model/dropdown_level_responsemodel.dart';
 import '../../providers/bals.dart';
 import '../../providers/swayamsevak_provider.dart';
 import '../../utils/globals.dart';
+import '../../utils/stable_geounit_class.dart';
 import '../../widgets/app_drawer.dart';
 import '../../widgets/legend.dart';
 import '../../widgets/swayamsevak_card.dart';
@@ -1467,38 +1468,6 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
   bool? _isFri = null;
   bool? _isSat = null;
   bool? _isSun = null;
-
-  // ─── Geo-unit dropdowns ───────────────────────────────────────────────────
-  List<GeoUnitMasterBAL>? _linkedMahaanagar, _linkedVibhaag, _linkedbhaag;
-  List<GeoUnitMasterBAL>? _linkedshahar, _linkednagar, _linkedupnagar, _linkedmandal;
-  List<GeoUnitMasterBAL>? _linkedgraam, _linkedvasti;
-
-  String? _linkedMahaanagarValue = '';
-  String? _linkedVibhaagValue = '';
-  String? _linkedbhaagValue = '';
-  String? _linkedshaharValue = '';
-  String? _linkednagarValue = '';
-  String? _linkedNagarValuePopup = '';
-  String? _linkedupnagarValue = '';
-  String? _linkedmandalValue = '';
-  String? _linkedgraamValue = '';
-  String? _linkedvastiValue = '';
-
-  String? _linkedbhaagName = '';
-  String? _linkedshaharName = '';
-  String? _linkednagarName = '';
-  String? _linkedupnagarName = '';
-  String? _linkedmandalName = '';
-  String? _linkedgraamName = '';
-  String? _linkedvastiName = '';
-
-  String? _selctedLevel = 'praant';
-  String? _selctedLevelName = '';
-  String _selctedLevelNames = '';
-  List<String?> _selctedLevelNameList = [];
-  String? _selectedGeoUnitId;
-
-  //-------------------------------------
 
   //bool _isShaakhaaSanchalan = null;
 
@@ -1689,100 +1658,14 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
   }
 
   Future<void> initData() async {
-    DropDownModel dm = await MyAppGlobals.getLevelLDB();
+    final dm = await MyAppGlobals.getLevelLDB();
 
-    setState(() {
-      userLevelId = dm.levelID;
-      userGeoUnitId = dm.geoUnitID;
-      ddm = dm;
-    });
-    await populateDropdown();
-  }
+    final controller = context.read<GeoHierarchyController>();
 
-  Future<void> populateAllGeoDropdowns(int level, DropDownModel dm) async {
-    setState(() {
-      _selectedGeoUnitId =
-          _linkedMahaanagarValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedupnagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
-    });
-    final selection = prepareSelection(dm);
-
-    // Step 1: Mahaanagar
-    await populatelinkedMahaanagarDropdown();
-    _linkedMahaanagarValue = (level == 9 ? (dm.geoUnitID ?? "").toString() : selection.mahaanagar) ?? '';
-    if (level == 9) {
-      _selectedGeoUnitId = (dm.geoUnitID ?? selection.mahaanagar).toString();
-      _selctedLevel = 'Mahaanagar';
-    }
-
-    // Step 2: Vibhaag
-    await populatelinkedVibhaagDropdown(_linkedMahaanagarValue!);
-    _linkedVibhaagValue = (level == 8 ? (dm.geoUnitID ?? "").toString() : selection.vibhaag) ?? '';
-    if (level == 8) {
-      _selectedGeoUnitId = (dm.geoUnitID ?? selection.vibhaag).toString();
-      _selctedLevel = 'Vibhaag';
-    }
-
-    // Step 3: Bhaag
-    await populatelinkedBhaagDropdown(_linkedVibhaagValue!);
-    _linkedbhaagValue = (level == 7 ? (dm.geoUnitID ?? "").toString() : selection.bhaag) ?? '';
-    if (level == 7) {
-      _selectedGeoUnitId = (dm.geoUnitID ?? selection.bhaag).toString();
-      _selctedLevel = 'Bhaag';
-    }
-
-    // Step 4: Nagar
-    await populatelinkedNagarDropdown(_linkedbhaagValue, null);
-    _linkednagarValue = (level == 6 ? (dm.geoUnitID ?? "").toString() : selection.nagar) ?? '';
-    if (level == 6) {
-      _selectedGeoUnitId = (dm.geoUnitID ?? selection.nagar).toString();
-      _selctedLevel = 'Nagar';
-    }
-
-    // Step 5: Upnagar (conditional)
-    await populatelinkedUpnagarDropdown(_linkednagarValue);
-    if (selection.upnagar != null && selection.upnagar!.isNotEmpty) {
-      _linkedupnagarValue = (level == 13 ? (dm.geoUnitID ?? "").toString() : selection.upnagar) ?? '';
-      if (level == 13) {
-        _selectedGeoUnitId = (dm.geoUnitID ?? selection.upnagar).toString();
-        _selctedLevel = 'Upnagar';
-      }
-    }
-
-    // Step 6: Mandal
-    await populatelinkedMandalDropdown(
-      (selection.upnagar != null && selection.upnagar!.isNotEmpty),
-      (selection.upnagar != null && selection.upnagar!.isNotEmpty) ? (_linkedupnagarValue) : _linkednagarValue,
-    );
-    _linkedmandalValue = (level == 4 ? (dm.geoUnitID ?? "").toString() : selection.mandal) ?? '';
-    if (level == 4) {
-      _selectedGeoUnitId = (dm.geoUnitID ?? selection.mandal).toString();
-      _selctedLevel = 'Mandal';
-    }
-    // Step 7: Graam
-    await populatelinkedGraamDropdown(_linkedmandalValue);
-    _linkedgraamValue = (level == 3 ? (dm.geoUnitID ?? "").toString() : selection.graam) ?? '';
-    if (level == 3) {
-      _selectedGeoUnitId = (dm.geoUnitID ?? selection.graam).toString();
-      _selctedLevel = 'Graam';
-    }
-    // Step 8: Vasti
-    await populatelinkedVastiDropdown(
-      (selection.upnagar != null && selection.upnagar!.isNotEmpty),
-      (selection.upnagar != null && selection.upnagar!.isNotEmpty) ? (_linkedupnagarValue) : _linkednagarValue,
-    );
-    _linkedvastiValue = (level == 2 ? (dm.geoUnitID ?? "").toString() : selection.vasti) ?? '';
-    if (level == 2) {
-      _selectedGeoUnitId = (dm.geoUnitID ?? selection.vasti).toString();
-      _selctedLevel = 'Vasti';
-    }
-    if (level == 1) {
-      _selectedGeoUnitId = (selection.vasti ?? selection.graam).toString();
-    }
-    // if (_linkedVibhaag != null && _linkedVibhaag!.isNotEmpty) _linkedVibhaagName = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _linkedbhaagValue).name;
-    // if (_linkedbhaag != null && _linkedbhaag!.isNotEmpty) _linkedbhaagName = _linkedbhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _linkedbhaagValue).name;
-    // if (_linkednagar != null && _linkednagar!.isNotEmpty) _linkednagarName = _linkednagar!.firstWhere((bg) => bg.geoUnitID.toString() == _linkedbhaagValue).name;
+    await controller.initialize(dm);
 
     setState(() {});
+    await populateDropdown();
   }
 
   @override
@@ -1907,32 +1790,8 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
       _motherTongue = data2;
       _shaakhaSanchalan = data3;
       _sanghaPreritSanstha = data6;
-      _linkedbhaag = data7;
-      _linkedshaharValue = null;
-      _linkednagarValue = null;
-      _linkedmandalValue = null;
-      _linkedgraamValue = null;
-      _linkedvastiValue = null;
     });
-    populateGeoDropdown();
   }
-
-  // void populateProgram(String strType) async {
-  //   var data;
-  //   if (strType == "Jr College")
-  //     data = await Statics.getStaticLDB('JrCollegeProgram');
-  //   else if (strType == "Senior College")
-  //     data = await Statics.getStaticLDB('SrCollegeProgram');
-  //   else if (strType == "Post Graduate")
-  //     data = await Statics.getStaticLDB('PostGraduateProgram');
-  //   else if (strType == "Correspondence Course")
-  //     data = await Statics.getStaticLDB('CorrespndenceProgram');
-  //   else if (strType == "Professional Studies")
-  //     data = await Statics.getStaticLDB('ProfessionalProgram');
-  //   setState(() {
-  //     _program = data;
-  //   });
-  // }
 
   void populateStandard(String strType) async {
     var data;
@@ -1945,126 +1804,6 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
     setState(() {
       _standard = data;
     });
-  }
-
-  Future<void> populateGeoDropdown({bool fromClear = false}) async {
-    setState(() {
-      _linkedMahaanagarValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
-      _linkedMahaanagar = _linkedVibhaag = _linkedbhaag = _linkednagar = _linkedmandal = null;
-      _selctedLevelName = _selectedGeoUnitId = null;
-      _selctedLevel = "praant";
-    });
-    await populatelinkedMahaanagarDropdown();
-    await populatelinkedVibhaagDropdown('');
-    if (fromClear || userLevelId == null || ddm == null) {
-      return;
-    }
-    setState(() {
-      _linkedMahaanagarValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
-    });
-    await populateAllGeoDropdowns(userLevelId!, ddm!);
-  }
-
-  Future<List<GeoUnitMasterBAL>> populatelinkedMahaanagarDropdown() async {
-    final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MahaanagarLevelID'].toString(), '', '', '', isAbhiyaan: false);
-    setState(() => _linkedMahaanagar = data);
-    return data;
-  }
-
-  Future<List<GeoUnitMasterBAL>> populatelinkedVibhaagDropdown(String mahaanagarIDStr) async {
-    _linkedupnagarValue =
-        _linkedupnagar = _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
-    final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar', '', isAbhiyaan: false);
-    setState(() => _linkedVibhaag = data);
-    return data;
-  }
-
-  Future<List<GeoUnitMasterBAL>> populatelinkedBhaagDropdown(String vibhaagIDStr) async {
-    _linkedupnagarValue = _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
-    _linkedbhaagName = _linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
-    _linkedupnagar = _linkedbhaag = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = [];
-    final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '', isAbhiyaan: false);
-    setState(() => _linkedbhaag = data);
-    return data;
-  }
-
-  void populatelinkedShaharDropdown(String bhaagIDStr) async {
-    _linkedshaharValue = _linkedvastiValue = _linkedshahar = _linkedvasti = null;
-    var shDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['ShaharLevelID'].toString(), bhaagIDStr, 'Bhaag', '');
-    setState(() {
-      _linkedshahar = (shDD.length > 0 ? shDD : null);
-    });
-  }
-
-  Future<List<GeoUnitMasterBAL>> populatelinkedNagarDropdown(String? bhaagIDStr, String? shaharIDStr) async {
-    _linkedupnagarValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
-    _linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
-    _linkedupnagar = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = null;
-    final parentID = shaharIDStr ?? bhaagIDStr!;
-    final parentType = shaharIDStr != null ? 'Shahar' : 'Bhaag';
-    final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), parentID, parentType, '', isAbhiyaan: false);
-    setState(() => _linkednagar = data.isNotEmpty ? data : null);
-    return data;
-  }
-
-  Future<List<GeoUnitMasterBAL>> populatelinkedUpnagarDropdown(String? nagarIDStr) async {
-    _linkedupnagarValue = _linkedmandalValue = _linkedgraamValue = null;
-    _linkedupnagarName = _linkedmandalName = _linkedgraamName = null;
-    _linkedupnagar = _linkedmandal = _linkedgraam = null;
-    var mnDD;
-
-    mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['UpaNagarLevelID'].toString(), nagarIDStr!, 'Nagar', '');
-
-    setState(() {
-      _linkedupnagar = (mnDD.length > 0 ? mnDD : null);
-      //_linkedupnagarValue = (userparentUpanagarid ?? userGeoUnitId).toString();
-    });
-
-    return mnDD;
-  }
-
-  Future<List<GeoUnitMasterBAL>> populatelinkedMandalDropdown(bool haveParentUp, String? nagarIDStr) async {
-    _linkedmandalValue = _linkedgraamValue = null;
-    _linkedmandalName = _linkedgraamName = null;
-    _linkedmandal = _linkedgraam = null;
-    var mnDD;
-    if (haveParentUp) {
-      print("i am in parents upnagar");
-      mnDD = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['MandalLevelID'].toString(), nagarIDStr!, "Upnagar", '');
-      print("${mnDD}");
-    } else {
-      mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MandalLevelID'].toString(), nagarIDStr!, "Nagar", '');
-    }
-
-    setState(() {
-      _linkedmandal = (mnDD.length > 0 ? mnDD : null);
-    });
-    if (_linkedmandal != null) {}
-
-    return mnDD;
-  }
-
-  Future<List<GeoUnitMasterBAL>> populatelinkedGraamDropdown(String? mandalIDStr) async {
-    _linkedgraamValue = null;
-    _linkedgraamName = null;
-    final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['GraamLevelID'].toString(), mandalIDStr!, 'Mandal', '', isAbhiyaan: false);
-    setState(() => _linkedgraam = data.isNotEmpty ? data : null);
-    return data;
-  }
-
-  Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(bool haveParentUp, String? nagarIDStr) async {
-    _linkedvastiValue = null;
-    _linkedvastiName = null;
-    var data;
-    if (haveParentUp) {
-      print("i am in parents upnagar vasti");
-      data = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, "Upnagar", '');
-      // print("${mnDD}");
-    } else {
-      data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, "Nagar", '');
-    }
-    setState(() => _linkedvasti = data.isNotEmpty ? data : null);
-    return data;
   }
 
   void populateGeoUnitforDaayitva(String levelID) async {
@@ -2087,31 +1826,6 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
     // print("strType :- $strType");
     bool isConnected = await Statics.isInternetConnected();
     if (isConnected) {
-      int? bhaagVal = _linkedbhaagValue == null || _linkedbhaagValue == "" ? null : int.parse(_linkedbhaagValue!);
-      int? shaharVal = _linkedshaharValue == null || _linkedshaharValue == "" ? null : int.parse(_linkedshaharValue!);
-      int? nagarVal = _linkednagarValue == null || _linkednagarValue == "" ? null : int.parse(_linkednagarValue!);
-
-      int? mandalVal = _linkedmandalValue == null || _linkedmandalValue == "" ? null : int.parse(_linkedmandalValue!);
-
-      int? graamVal = _linkedgraamValue == null || _linkedgraamValue == "" ? null : int.parse(_linkedgraamValue!);
-
-      int? vastiVal = _linkedvastiValue == null || _linkedvastiValue == "" ? null : int.parse(_linkedvastiValue!);
-
-      int? geoUnitID;
-      geoUnitID = vastiVal != null
-          ? vastiVal
-          : graamVal != null
-          ? graamVal
-          : mandalVal != null
-          ? mandalVal
-          : nagarVal != null
-          ? nagarVal
-          : shaharVal != null
-          ? shaharVal
-          : bhaagVal != null
-          ? bhaagVal
-          : null;
-
       String? mukhyaVishay = "";
       String? anyaVishay = "";
 
@@ -2212,14 +1926,13 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
 
       _weeklyOffDay = _weeklyOffDay == "" ? null : _weeklyOffDay.substring(0, _weeklyOffDay.length - 1);
       print("_geoUnitsValue  $_geoUnitsValue");
-      print("geoUnitID  $geoUnitID");
       var inputData = json.encode({
         "AppUserID": Statics.userDetails["userID"],
         "SearchCriteria": _searchController.text.isEmpty ? null : _searchController.text.trim(),
         "BloodGroupID": _bldGrpvalue == "" ? null : _bldGrpvalue,
         "MotherTongueID": _mthrTngvalue == "" ? null : _mthrTngvalue,
         "ShaakhaaExperienceYearID": _shaakhaSanchalanvalue == "" ? null : _shaakhaSanchalanvalue,
-        "GeoUnitID": _selectedGeoUnitId == "" ? null : _selectedGeoUnitId,
+        "GeoUnitID": context.read<GeoHierarchyController>().deepestSelectedGeoUnitId,
         "IsPratidnyit": _isPratidnyit,
         "PratidnyaYear": _pratidnyaYearCtrl.text.isEmpty ? null : _pratidnyaYearCtrl.text,
         "IsGanaveshComplete": _isGanveshComplete,
@@ -2255,27 +1968,27 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
         "EducationUniversityName": _educationUniversityNameCntrl.text.trim() != "Other"
             ? null
             : _educationOthrUniversityNameCntrl.text.trim() == ""
-            ? null
-            : _educationOthrUniversityNameCntrl.text,
+                ? null
+                : _educationOthrUniversityNameCntrl.text,
         "EducationInstitutionID": _collegeID,
         "EducationInstitutionName": educationOrgName == "" ? null : educationOrgName,
         "EducationProgramID": _educationProgramID,
         "EducationProgramName": _educationProgramName.text.trim() != "Other"
             ? null
             : _educationOthrProgramName.text.trim() == ""
-            ? null
-            : _educationOthrProgramName.text,
+                ? null
+                : _educationOthrProgramName.text,
         "EducationCourseID": _educationCourseID,
         "EducationCourseName": _educationCourseName.text.trim() != "Other"
             ? null
             : _educationOthrCourseName.text.trim() == ""
-            ? null
-            : _educationOthrCourseName.text,
+                ? null
+                : _educationOthrCourseName.text,
         "EducationStandardID": _standardValue == null ? null : _standardValue!.staticID,
         "EducationStandardName": _standardValue != null && _standardValue!.code == "Other"
             ? _educationOthrStandardNameCntrl.text.trim() == ""
-            ? null
-            : _educationStandardNameCntrl.text
+                ? null
+                : _educationStandardNameCntrl.text
             : null,
         "GovernmentDepartment": _govtDeptCtrl.text.isEmpty ? null : _govtDeptCtrl.text,
         "Designation": null,
@@ -2505,8 +2218,8 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
       row.add(data["BasicInfo"]["CanUseApp"] == null
           ? ""
           : data["BasicInfo"]["CanUseApp"] == true
-          ? "Yes"
-          : "No");
+              ? "Yes"
+              : "No");
       row.add(data["CurrentDaayitva"]["DaayitvaGeoUnitName"] == null ? "" : data["CurrentDaayitva"]["DaayitvaGeoUnitName"].toString());
       row.add(data["CurrentDaayitva"]["LevelName"] == null ? "" : data["CurrentDaayitva"]["LevelName"].toString());
       row.add(data["CurrentDaayitva"]["DaayitvaName"] == null ? "" : data["CurrentDaayitva"]["DaayitvaName"].toString());
@@ -2544,74 +2257,74 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
       row.add(data["OtherInfo"]["IsPratidnyit"] == null
           ? ""
           : data["OtherInfo"]["IsPratidnyit"] == true
-          ? "Yes"
-          : "No");
+              ? "Yes"
+              : "No");
       row.add(data["OtherInfo"]["PratidnyaYear"] == null ? "" : data["OtherInfo"]["PratidnyaYear"].toString());
 
       row.add(data["OtherInfo"]["IsGanaveshComplete"] == null
           ? ""
           : data["OtherInfo"]["IsGanaveshComplete"] == true
-          ? "Yes"
-          : "No");
+              ? "Yes"
+              : "No");
       row.add(data["OtherInfo"]["HasCap"] == null
           ? ""
           : data["OtherInfo"]["HasCap"] == true
-          ? "Yes"
-          : "No");
+              ? "Yes"
+              : "No");
       row.add(data["OtherInfo"]["HasShirt"] == null
           ? ""
           : data["OtherInfo"]["HasShirt"] == true
-          ? "Yes"
-          : "No");
+              ? "Yes"
+              : "No");
       row.add(data["OtherInfo"]["HasPant"] == null
           ? ""
           : data["OtherInfo"]["HasPant"] == true
-          ? "Yes"
-          : "No");
+              ? "Yes"
+              : "No");
       row.add(data["OtherInfo"]["HasBelt"] == null
           ? ""
           : data["OtherInfo"]["HasBelt"] == true
-          ? "Yes"
-          : "No");
+              ? "Yes"
+              : "No");
       row.add(data["OtherInfo"]["HasShoes"] == null
           ? ""
           : data["OtherInfo"]["HasShoes"] == true
-          ? "Yes"
-          : "No");
+              ? "Yes"
+              : "No");
       row.add(data["OtherInfo"]["HasSocks"] == null
           ? ""
           : data["OtherInfo"]["HasSocks"] == true
-          ? "Yes"
-          : "No");
+              ? "Yes"
+              : "No");
       row.add(data["OtherInfo"]["HasDanda"] == null
           ? ""
           : data["OtherInfo"]["HasDanda"] == true
-          ? "Yes"
-          : "No");
+              ? "Yes"
+              : "No");
 
       row.add(data["OtherInfo"]["Has2WVehicle"] == null
           ? ""
           : data["OtherInfo"]["Has2WVehicle"] == true
-          ? "Yes"
-          : "No");
+              ? "Yes"
+              : "No");
 
       row.add(data["OtherInfo"]["Has3WVehicle"] == null
           ? ""
           : data["OtherInfo"]["Has3WVehicle"] == true
-          ? "Yes"
-          : "No");
+              ? "Yes"
+              : "No");
 
       row.add(data["OtherInfo"]["Has4WVehicle"] == null
           ? ""
           : data["OtherInfo"]["Has4WVehicle"] == true
-          ? "Yes"
-          : "No");
+              ? "Yes"
+              : "No");
 
       row.add(data["OtherInfo"]["HasVehicleDriver"] == null
           ? ""
           : data["OtherInfo"]["HasVehicleDriver"] == true
-          ? "Yes"
-          : "No");
+              ? "Yes"
+              : "No");
 
       row.add(data["OtherInfo"]["BloodGroupCode"] == null ? "" : data["OtherInfo"]["BloodGroupCode"].toString());
       row.add(data["OtherInfo"]["MotherTongueCode"].toString());
@@ -2652,64 +2365,64 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
       row.add(data["AllGhoshVishay"]["VanshiIsUnderstandLipi"] == null
           ? ""
           : data["AllGhoshVishay"]["VanshiIsUnderstandLipi"] == true
-          ? "Yes"
-          : "No");
+              ? "Yes"
+              : "No");
 
       row.add(data["AllGhoshVishay"]["VenuFamiliarity"].toString());
       row.add(data["AllGhoshVishay"]["VenuRachanaaCount"] == null ? "" : data["AllGhoshVishay"]["VenuRachanaaCount"].toString());
       row.add(data["AllGhoshVishay"]["VenuIsUnderstandLipi"] == null
           ? ""
           : data["AllGhoshVishay"]["VenuIsUnderstandLipi"] == true
-          ? "Yes"
-          : "No");
+              ? "Yes"
+              : "No");
 
       row.add(data["AllGhoshVishay"]["AanakFamiliarity"].toString());
       row.add(data["AllGhoshVishay"]["AanakRachanaaCount"] == null ? "" : data["AllGhoshVishay"]["AanakRachanaaCount"].toString());
       row.add(data["AllGhoshVishay"]["AanakIsUnderstandLipi"] == null
           ? ""
           : data["AllGhoshVishay"]["AanakIsUnderstandLipi"] == true
-          ? "Yes"
-          : "No");
+              ? "Yes"
+              : "No");
 
       row.add(data["AllGhoshVishay"]["ShankhaFamiliarity"].toString());
       row.add(data["AllGhoshVishay"]["ShankhaRachanaaCount"] == null ? "" : data["AllGhoshVishay"]["ShankhaRachanaaCount"].toString());
       row.add(data["AllGhoshVishay"]["ShankhaIsUnderstandLipi"] == null
           ? ""
           : data["AllGhoshVishay"]["ShankhaIsUnderstandLipi"] == true
-          ? "Yes"
-          : "No");
+              ? "Yes"
+              : "No");
 
       row.add(data["AllGhoshVishay"]["NaagaangaFamiliarity"].toString());
       row.add(data["AllGhoshVishay"]["NaagaangaRachanaaCount"] == null ? "" : data["AllGhoshVishay"]["NaagaangaRachanaaCount"].toString());
       row.add(data["AllGhoshVishay"]["NaagaangaIsUnderstandLipi"] == null
           ? ""
           : data["AllGhoshVishay"]["NaagaangaIsUnderstandLipi"] == true
-          ? "Yes"
-          : "No");
+              ? "Yes"
+              : "No");
 
       row.add(data["AllGhoshVishay"]["TuryaFamiliarity"].toString());
       row.add(data["AllGhoshVishay"]["TuryaRachanaaCount"] == null ? "" : data["AllGhoshVishay"]["TuryaRachanaaCount"].toString());
       row.add(data["AllGhoshVishay"]["TuryaIsUnderstandLipi"] == null
           ? ""
           : data["AllGhoshVishay"]["TuryaIsUnderstandLipi"] == true
-          ? "Yes"
-          : "No");
+              ? "Yes"
+              : "No");
 
       row.add(data["AllGhoshVishay"]["SwaradaFamiliarity"].toString());
       row.add(data["AllGhoshVishay"]["SwaradaRachanaaCount"] == null ? "" : data["AllGhoshVishay"]["SwaradaRachanaaCount"].toString());
       row.add(data["AllGhoshVishay"]["SwaradaIsUnderstandLipi"] == null
           ? ""
           : data["AllGhoshVishay"]["SwaradaIsUnderstandLipi"] == true
-          ? "Yes"
-          : "No");
+              ? "Yes"
+              : "No");
 
       row.add(data["AllGhoshVishay"]["GomukhaFamiliarity"].toString());
       row.add(data["AllGhoshVishay"]["GomukhaRachanaaCount"] == null ? "" : data["AllGhoshVishay"]["GomukhaRachanaaCount"].toString());
       row.add(data["AllGhoshVishay"]["GomukhaIsUnderstandLipi"] == null
           ? ""
           : data["AllGhoshVishay"]["GomukhaIsUnderstandLipi"] == true
-          ? "Yes"
-          : "No");
+              ? "Yes"
+              : "No");
 
       row.add(data["Occupation"]["OccupationCategoryCode"].toString());
       row.add(data["Occupation"]["EducationUniversityName"].toString());
@@ -2963,12 +2676,6 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                 FocusManager.instance.primaryFocus?.unfocus();
                 setState(() {
                   _swList = null;
-                  _linkedbhaagValue = null;
-                  _linkedshaharValue = null;
-                  _linkednagarValue = null;
-                  _linkedmandalValue = null;
-                  _linkedgraamValue = null;
-                  _linkedvastiValue = null;
                   _daayitvaForValue = null;
                   _levelValue = null;
                   _daayitvaValue = null;
@@ -3089,7 +2796,6 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                   _hasBeenShikshak = false;
                   _noDaayitva = false;
                   _pravaasi = false;
-                  _selectedGeoUnitId = "";
                   //
                   _wasVistaarak = null;
                   _wasPrachaarak = null;
@@ -3135,7 +2841,6 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
             child: TabBarView(
               controller: _tabController,
               children: <Widget>[
-
                 ///
                 SingleChildScrollView(
                   child: Container(
@@ -3184,9 +2889,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                           margin: EdgeInsets.only(
                             left: 10,
                           ),
-                          width: Statics
-                              .getDeviceSize(context)
-                              .width * 0.85, //300,
+                          width: Statics.getDeviceSize(context).width * 0.85, //300,
                           child: TextFormField(
                             controller: _searchController,
                             textInputAction: TextInputAction.done,
@@ -3414,9 +3117,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                       spacing: 10,
                                       children: [
                                         SizedBox(
-                                          width: Statics
-                                              .getDeviceSize(context)
-                                              .width * 0.4,
+                                          width: Statics.getDeviceSize(context).width * 0.4,
                                           child: TextFormField(
                                             textInputAction: TextInputAction.next,
                                             controller: _rachanaaCountPrathamCntrl,
@@ -3426,9 +3127,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                           ),
                                         ),
                                         SizedBox(
-                                          width: Statics
-                                              .getDeviceSize(context)
-                                              .width * 0.4,
+                                          width: Statics.getDeviceSize(context).width * 0.4,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('UnderstandLipi'), style: TextStyle(fontSize: 15)),
@@ -3444,9 +3143,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                           ),
                                         ),
                                         SizedBox(
-                                          width: (Statics
-                                              .getDeviceSize(context)
-                                              .width - 20) * 0.3,
+                                          width: (Statics.getDeviceSize(context).width - 20) * 0.3,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('Vanshi'), style: TextStyle(fontSize: 15)),
@@ -3462,9 +3159,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                           ),
                                         ),
                                         SizedBox(
-                                          width: (Statics
-                                              .getDeviceSize(context)
-                                              .width - 20) * 0.3,
+                                          width: (Statics.getDeviceSize(context).width - 20) * 0.3,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('Venu') + '               ', style: TextStyle(fontSize: 15)),
@@ -3480,9 +3175,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                           ),
                                         ),
                                         SizedBox(
-                                          width: (Statics
-                                              .getDeviceSize(context)
-                                              .width - 20) * 0.3,
+                                          width: (Statics.getDeviceSize(context).width - 20) * 0.3,
                                           child: CheckboxListTile(
                                               contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                               title: Text(Statics.getLabel('Aanak'), style: TextStyle(fontSize: 15)),
@@ -3497,9 +3190,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                               }),
                                         ),
                                         SizedBox(
-                                          width: (Statics
-                                              .getDeviceSize(context)
-                                              .width - 20) * 0.3,
+                                          width: (Statics.getDeviceSize(context).width - 20) * 0.3,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('Shankha'), style: TextStyle(fontSize: 15)),
@@ -3515,9 +3206,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                           ),
                                         ),
                                         SizedBox(
-                                          width: (Statics
-                                              .getDeviceSize(context)
-                                              .width - 20) * 0.3,
+                                          width: (Statics.getDeviceSize(context).width - 20) * 0.3,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('Naagaanga'), style: TextStyle(fontSize: 15)),
@@ -3533,9 +3222,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                           ),
                                         ),
                                         SizedBox(
-                                          width: (Statics
-                                              .getDeviceSize(context)
-                                              .width - 20) * 0.3,
+                                          width: (Statics.getDeviceSize(context).width - 20) * 0.3,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('Turya'), style: TextStyle(fontSize: 15)),
@@ -3551,9 +3238,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                           ),
                                         ),
                                         SizedBox(
-                                          width: (Statics
-                                              .getDeviceSize(context)
-                                              .width - 20) * 0.3,
+                                          width: (Statics.getDeviceSize(context).width - 20) * 0.3,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('Swarad'), style: TextStyle(fontSize: 15)),
@@ -3569,9 +3254,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                           ),
                                         ),
                                         SizedBox(
-                                          width: (Statics
-                                              .getDeviceSize(context)
-                                              .width - 20) * 0.3,
+                                          width: (Statics.getDeviceSize(context).width - 20) * 0.3,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('Gomukha') + '      ', style: TextStyle(fontSize: 15)),
@@ -3618,9 +3301,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                       spacing: 10,
                                       children: [
                                         SizedBox(
-                                          width: Statics
-                                              .getDeviceSize(context)
-                                              .width * 0.4,
+                                          width: Statics.getDeviceSize(context).width * 0.4,
                                           child: TextFormField(
                                             textInputAction: TextInputAction.next,
                                             controller: _rachanaaCountDwitiyaCntrl,
@@ -3630,9 +3311,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                           ),
                                         ),
                                         SizedBox(
-                                          width: Statics
-                                              .getDeviceSize(context)
-                                              .width * 0.4,
+                                          width: Statics.getDeviceSize(context).width * 0.4,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('UnderstandLipi'), style: TextStyle(fontSize: 15)),
@@ -3648,9 +3327,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                           ),
                                         ),
                                         SizedBox(
-                                          width: (Statics
-                                              .getDeviceSize(context)
-                                              .width - 20) * 0.3,
+                                          width: (Statics.getDeviceSize(context).width - 20) * 0.3,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('Vanshi'), style: TextStyle(fontSize: 15)),
@@ -3666,9 +3343,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                           ),
                                         ),
                                         SizedBox(
-                                          width: (Statics
-                                              .getDeviceSize(context)
-                                              .width - 20) * 0.3,
+                                          width: (Statics.getDeviceSize(context).width - 20) * 0.3,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('Venu') + '               ', style: TextStyle(fontSize: 15)),
@@ -3684,9 +3359,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                           ),
                                         ),
                                         SizedBox(
-                                          width: (Statics
-                                              .getDeviceSize(context)
-                                              .width - 20) * 0.3,
+                                          width: (Statics.getDeviceSize(context).width - 20) * 0.3,
                                           child: CheckboxListTile(
                                               contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                               title: Text(Statics.getLabel('Aanak'), style: TextStyle(fontSize: 15)),
@@ -3701,9 +3374,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                               }),
                                         ),
                                         SizedBox(
-                                          width: (Statics
-                                              .getDeviceSize(context)
-                                              .width - 20) * 0.3,
+                                          width: (Statics.getDeviceSize(context).width - 20) * 0.3,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('Shankha'), style: TextStyle(fontSize: 15)),
@@ -3719,9 +3390,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                           ),
                                         ),
                                         SizedBox(
-                                          width: (Statics
-                                              .getDeviceSize(context)
-                                              .width - 20) * 0.3,
+                                          width: (Statics.getDeviceSize(context).width - 20) * 0.3,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('Naagaanga'), style: TextStyle(fontSize: 15)),
@@ -3737,9 +3406,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                           ),
                                         ),
                                         SizedBox(
-                                          width: (Statics
-                                              .getDeviceSize(context)
-                                              .width - 20) * 0.3,
+                                          width: (Statics.getDeviceSize(context).width - 20) * 0.3,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('Turya'), style: TextStyle(fontSize: 15)),
@@ -3755,9 +3422,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                           ),
                                         ),
                                         SizedBox(
-                                          width: (Statics
-                                              .getDeviceSize(context)
-                                              .width - 20) * 0.3,
+                                          width: (Statics.getDeviceSize(context).width - 20) * 0.3,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('Swarad'), style: TextStyle(fontSize: 15)),
@@ -3773,9 +3438,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                           ),
                                         ),
                                         SizedBox(
-                                          width: (Statics
-                                              .getDeviceSize(context)
-                                              .width - 20) * 0.3,
+                                          width: (Statics.getDeviceSize(context).width - 20) * 0.3,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('Gomukha') + '      ', style: TextStyle(fontSize: 15)),
@@ -3822,9 +3485,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                       spacing: 10,
                                       children: [
                                         SizedBox(
-                                          width: Statics
-                                              .getDeviceSize(context)
-                                              .width * 0.4,
+                                          width: Statics.getDeviceSize(context).width * 0.4,
                                           child: TextFormField(
                                             textInputAction: TextInputAction.next,
                                             controller: _rachanaaCountTrutiyaCntrl,
@@ -3834,9 +3495,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                           ),
                                         ),
                                         SizedBox(
-                                          width: Statics
-                                              .getDeviceSize(context)
-                                              .width * 0.4,
+                                          width: Statics.getDeviceSize(context).width * 0.4,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('UnderstandLipi'), style: TextStyle(fontSize: 15)),
@@ -3852,9 +3511,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                           ),
                                         ),
                                         SizedBox(
-                                          width: (Statics
-                                              .getDeviceSize(context)
-                                              .width - 20) * 0.3,
+                                          width: (Statics.getDeviceSize(context).width - 20) * 0.3,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('Vanshi'), style: TextStyle(fontSize: 15)),
@@ -3870,9 +3527,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                           ),
                                         ),
                                         SizedBox(
-                                          width: (Statics
-                                              .getDeviceSize(context)
-                                              .width - 20) * 0.3,
+                                          width: (Statics.getDeviceSize(context).width - 20) * 0.3,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('Venu') + '               ', style: TextStyle(fontSize: 15)),
@@ -3888,9 +3543,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                           ),
                                         ),
                                         SizedBox(
-                                          width: (Statics
-                                              .getDeviceSize(context)
-                                              .width - 20) * 0.3,
+                                          width: (Statics.getDeviceSize(context).width - 20) * 0.3,
                                           child: CheckboxListTile(
                                               contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                               title: Text(Statics.getLabel('Aanak'), style: TextStyle(fontSize: 15)),
@@ -3905,9 +3558,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                               }),
                                         ),
                                         SizedBox(
-                                          width: (Statics
-                                              .getDeviceSize(context)
-                                              .width - 20) * 0.3,
+                                          width: (Statics.getDeviceSize(context).width - 20) * 0.3,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('Shankha'), style: TextStyle(fontSize: 15)),
@@ -3923,9 +3574,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                           ),
                                         ),
                                         SizedBox(
-                                          width: (Statics
-                                              .getDeviceSize(context)
-                                              .width - 20) * 0.3,
+                                          width: (Statics.getDeviceSize(context).width - 20) * 0.3,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('Naagaanga'), style: TextStyle(fontSize: 15)),
@@ -3941,9 +3590,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                           ),
                                         ),
                                         SizedBox(
-                                          width: (Statics
-                                              .getDeviceSize(context)
-                                              .width - 20) * 0.3,
+                                          width: (Statics.getDeviceSize(context).width - 20) * 0.3,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('Turya'), style: TextStyle(fontSize: 15)),
@@ -3959,9 +3606,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                           ),
                                         ),
                                         SizedBox(
-                                          width: (Statics
-                                              .getDeviceSize(context)
-                                              .width - 20) * 0.3,
+                                          width: (Statics.getDeviceSize(context).width - 20) * 0.3,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('Swarad'), style: TextStyle(fontSize: 15)),
@@ -3977,9 +3622,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                           ),
                                         ),
                                         SizedBox(
-                                          width: (Statics
-                                              .getDeviceSize(context)
-                                              .width - 20) * 0.3,
+                                          width: (Statics.getDeviceSize(context).width - 20) * 0.3,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('Gomukha') + '      ', style: TextStyle(fontSize: 15)),
@@ -4026,9 +3669,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                       spacing: 10,
                                       children: [
                                         SizedBox(
-                                          width: Statics
-                                              .getDeviceSize(context)
-                                              .width * 0.4,
+                                          width: Statics.getDeviceSize(context).width * 0.4,
                                           child: TextFormField(
                                             textInputAction: TextInputAction.next,
                                             controller: _rachanaaCountAnyaCntrl,
@@ -4038,9 +3679,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                           ),
                                         ),
                                         SizedBox(
-                                          width: Statics
-                                              .getDeviceSize(context)
-                                              .width * 0.4,
+                                          width: Statics.getDeviceSize(context).width * 0.4,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('UnderstandLipi'), style: TextStyle(fontSize: 15)),
@@ -4056,9 +3695,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                           ),
                                         ),
                                         SizedBox(
-                                          width: (Statics
-                                              .getDeviceSize(context)
-                                              .width - 20) * 0.3,
+                                          width: (Statics.getDeviceSize(context).width - 20) * 0.3,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('Vanshi'), style: TextStyle(fontSize: 15)),
@@ -4074,9 +3711,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                           ),
                                         ),
                                         SizedBox(
-                                          width: (Statics
-                                              .getDeviceSize(context)
-                                              .width - 20) * 0.3,
+                                          width: (Statics.getDeviceSize(context).width - 20) * 0.3,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('Venu') + '               ', style: TextStyle(fontSize: 15)),
@@ -4092,9 +3727,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                           ),
                                         ),
                                         SizedBox(
-                                          width: (Statics
-                                              .getDeviceSize(context)
-                                              .width - 20) * 0.3,
+                                          width: (Statics.getDeviceSize(context).width - 20) * 0.3,
                                           child: CheckboxListTile(
                                               contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                               title: Text(Statics.getLabel('Aanak'), style: TextStyle(fontSize: 15)),
@@ -4109,9 +3742,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                               }),
                                         ),
                                         SizedBox(
-                                          width: (Statics
-                                              .getDeviceSize(context)
-                                              .width - 20) * 0.3,
+                                          width: (Statics.getDeviceSize(context).width - 20) * 0.3,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('Shankha'), style: TextStyle(fontSize: 15)),
@@ -4127,9 +3758,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                           ),
                                         ),
                                         SizedBox(
-                                          width: (Statics
-                                              .getDeviceSize(context)
-                                              .width - 20) * 0.3,
+                                          width: (Statics.getDeviceSize(context).width - 20) * 0.3,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('Naagaanga'), style: TextStyle(fontSize: 15)),
@@ -4145,9 +3774,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                           ),
                                         ),
                                         SizedBox(
-                                          width: (Statics
-                                              .getDeviceSize(context)
-                                              .width - 20) * 0.3,
+                                          width: (Statics.getDeviceSize(context).width - 20) * 0.3,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('Turya'), style: TextStyle(fontSize: 15)),
@@ -4163,9 +3790,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                           ),
                                         ),
                                         SizedBox(
-                                          width: (Statics
-                                              .getDeviceSize(context)
-                                              .width - 20) * 0.3,
+                                          width: (Statics.getDeviceSize(context).width - 20) * 0.3,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('Swarad'), style: TextStyle(fontSize: 15)),
@@ -4181,9 +3806,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                           ),
                                         ),
                                         SizedBox(
-                                          width: (Statics
-                                              .getDeviceSize(context)
-                                              .width - 20) * 0.3,
+                                          width: (Statics.getDeviceSize(context).width - 20) * 0.3,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('Gomukha') + '      ', style: TextStyle(fontSize: 15)),
@@ -4232,9 +3855,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                       spacing: 10,
                                       children: [
                                         SizedBox(
-                                          width: Statics
-                                              .getDeviceSize(context)
-                                              .width * 0.4,
+                                          width: Statics.getDeviceSize(context).width * 0.4,
                                           child: CheckboxListTile(
                                               contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                               title: Text(Statics.getLabel('Danda'), style: TextStyle(fontSize: 15)),
@@ -4249,9 +3870,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                               }),
                                         ),
                                         SizedBox(
-                                          width: Statics
-                                              .getDeviceSize(context)
-                                              .width * 0.4,
+                                          width: Statics.getDeviceSize(context).width * 0.4,
                                           child: CheckboxListTile(
                                               contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                               title: Text(Statics.getLabel('Niyuddha'), style: TextStyle(fontSize: 15)),
@@ -4266,9 +3885,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                               }),
                                         ),
                                         SizedBox(
-                                          width: Statics
-                                              .getDeviceSize(context)
-                                              .width * 0.4,
+                                          width: Statics.getDeviceSize(context).width * 0.4,
                                           child: CheckboxListTile(
                                               contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                               title: Text(Statics.getLabel('Yogaasan'), style: TextStyle(fontSize: 15)),
@@ -4283,9 +3900,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                               }),
                                         ),
                                         SizedBox(
-                                          width: Statics
-                                              .getDeviceSize(context)
-                                              .width * 0.4,
+                                          width: Statics.getDeviceSize(context).width * 0.4,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('Yogachaap'), style: TextStyle(fontSize: 15)),
@@ -4301,9 +3916,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                           ),
                                         ),
                                         SizedBox(
-                                          width: Statics
-                                              .getDeviceSize(context)
-                                              .width * 0.4,
+                                          width: Statics.getDeviceSize(context).width * 0.4,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('Padavinyas'), style: TextStyle(fontSize: 15)),
@@ -4319,9 +3932,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                           ),
                                         ),
                                         SizedBox(
-                                          width: Statics
-                                              .getDeviceSize(context)
-                                              .width * 0.4,
+                                          width: Statics.getDeviceSize(context).width * 0.4,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('DandaYuddha'), style: TextStyle(fontSize: 15)),
@@ -4368,9 +3979,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                       spacing: 10,
                                       children: [
                                         SizedBox(
-                                          width: Statics
-                                              .getDeviceSize(context)
-                                              .width * 0.4,
+                                          width: Statics.getDeviceSize(context).width * 0.4,
                                           child: CheckboxListTile(
                                               contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                               title: Text(Statics.getLabel('Danda'), style: TextStyle(fontSize: 15)),
@@ -4385,9 +3994,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                               }),
                                         ),
                                         SizedBox(
-                                          width: Statics
-                                              .getDeviceSize(context)
-                                              .width * 0.4,
+                                          width: Statics.getDeviceSize(context).width * 0.4,
                                           child: CheckboxListTile(
                                               contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                               title: Text(Statics.getLabel('Niyuddha'), style: TextStyle(fontSize: 15)),
@@ -4402,9 +4009,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                               }),
                                         ),
                                         SizedBox(
-                                          width: Statics
-                                              .getDeviceSize(context)
-                                              .width * 0.4,
+                                          width: Statics.getDeviceSize(context).width * 0.4,
                                           child: CheckboxListTile(
                                               contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                               title: Text(Statics.getLabel('Yogaasan'), style: TextStyle(fontSize: 15)),
@@ -4419,9 +4024,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                               }),
                                         ),
                                         SizedBox(
-                                          width: Statics
-                                              .getDeviceSize(context)
-                                              .width * 0.4,
+                                          width: Statics.getDeviceSize(context).width * 0.4,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('Yogachaap'), style: TextStyle(fontSize: 15)),
@@ -4437,9 +4040,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                           ),
                                         ),
                                         SizedBox(
-                                          width: Statics
-                                              .getDeviceSize(context)
-                                              .width * 0.4,
+                                          width: Statics.getDeviceSize(context).width * 0.4,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('Padavinyas'), style: TextStyle(fontSize: 15)),
@@ -4455,9 +4056,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                           ),
                                         ),
                                         SizedBox(
-                                          width: Statics
-                                              .getDeviceSize(context)
-                                              .width * 0.4,
+                                          width: Statics.getDeviceSize(context).width * 0.4,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('DandaYuddha'), style: TextStyle(fontSize: 15)),
@@ -4485,9 +4084,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                         Legend(legendString: "Daayitva", fontsize: 18),
                         SizedBox(height: 12),
                         SizedBox(
-                          width: Statics
-                              .getDeviceSize(context)
-                              .width * 0.85,
+                          width: Statics.getDeviceSize(context).width * 0.85,
                           child: CheckboxListTile(
                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                             controlAffinity: ListTileControlAffinity.leading,
@@ -4504,9 +4101,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                         ),
                         SizedBox(height: 12),
                         SizedBox(
-                          width: Statics
-                              .getDeviceSize(context)
-                              .width * 0.85,
+                          width: Statics.getDeviceSize(context).width * 0.85,
                           child: CheckboxListTile(
                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                             controlAffinity: ListTileControlAffinity.leading,
@@ -4609,22 +4204,21 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                     value: _levelValue == "" ? null : _levelValue,
                                     items: _level!
                                         .map(
-                                          (bg) =>
-                                          DropdownMenuItem(
+                                          (bg) => DropdownMenuItem(
                                             value: bg.levelID.toString(),
                                             child: Text(
                                               Statics.getLabel(
                                                   bg.levelID == 13
                                                       ? "upnagarUpkhanda"
                                                       : bg.levelID == 6
-                                                      ? "Nagar/Taluka"
-                                                      : bg.levelName == "Akhil Bhaaratiya"
-                                                      ? "AkhilBhaaratiya"
-                                                      : bg.levelName!,
+                                                          ? "Nagar/Taluka"
+                                                          : bg.levelName == "Akhil Bhaaratiya"
+                                                              ? "AkhilBhaaratiya"
+                                                              : bg.levelName!,
                                                   returnKey: true),
                                             ),
                                           ),
-                                    )
+                                        )
                                         .toList(),
                                     onChanged: (value) {
                                       setState(() {
@@ -4641,10 +4235,10 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                     value: _geoUnitsValue == ""
                                         ? null
                                         : _geoUnits != null
-                                        ? _geoUnits!.indexWhere((p) => p.geoUnitID.toString() == _geoUnitsValue) > -1
-                                        ? _geoUnitsValue
-                                        : null
-                                        : null,
+                                            ? _geoUnits!.indexWhere((p) => p.geoUnitID.toString() == _geoUnitsValue) > -1
+                                                ? _geoUnitsValue
+                                                : null
+                                            : null,
                                     items: _geoUnits!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                                     onChanged: (value) {
                                       setState(() {
@@ -4656,9 +4250,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                 Row(
                                   children: [
                                     Container(
-                                      width: Statics
-                                          .getDeviceSize(context)
-                                          .width * 0.75,
+                                      width: Statics.getDeviceSize(context).width * 0.75,
                                       child: TypeAheadField<DaayitvaMasterBAL>(
                                         controller: _daayitvaController,
                                         builder: (context, controller, focusNode) {
@@ -4709,9 +4301,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                         Legend(legendString: "ShaakhaExp", fontsize: 18),
                         SizedBox(height: 5),
                         SizedBox(
-                          width: Statics
-                              .getDeviceSize(context)
-                              .width * 0.8,
+                          width: Statics.getDeviceSize(context).width * 0.8,
                           child: CheckboxListTile(
                               contentPadding: EdgeInsets.symmetric(horizontal: 0),
                               title: Text(Statics.getLabel('HasShaakhaaSanchaalanExperience'), style: TextStyle(fontSize: 15)),
@@ -4734,9 +4324,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                             spacing: 10,
                             children: [
                               SizedBox(
-                                width: Statics
-                                    .getDeviceSize(context)
-                                    .width * 0.4,
+                                width: Statics.getDeviceSize(context).width * 0.4,
                                 child: CheckboxListTile(
                                     contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                     title: Text(Statics.getLabel('Baal'), style: TextStyle(fontSize: 15)),
@@ -4751,9 +4339,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                     }),
                               ),
                               SizedBox(
-                                width: Statics
-                                    .getDeviceSize(context)
-                                    .width * 0.4,
+                                width: Statics.getDeviceSize(context).width * 0.4,
                                 child: CheckboxListTile(
                                     contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                     title: Text(Statics.getLabel('TarunVidyaarthi'), style: TextStyle(fontSize: 15)),
@@ -4768,9 +4354,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                     }),
                               ),
                               SizedBox(
-                                width: Statics
-                                    .getDeviceSize(context)
-                                    .width * 0.4,
+                                width: Statics.getDeviceSize(context).width * 0.4,
                                 child: CheckboxListTile(
                                     contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                     title: Text(Statics.getLabel('TarunVyavasaayee'), style: TextStyle(fontSize: 15)),
@@ -4785,9 +4369,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                     }),
                               ),
                               SizedBox(
-                                width: Statics
-                                    .getDeviceSize(context)
-                                    .width * 0.4,
+                                width: Statics.getDeviceSize(context).width * 0.4,
                                 child: CheckboxListTile(
                                   contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                   title: Text(Statics.getLabel('ProudhVyavasaayee'), style: TextStyle(fontSize: 15)),
@@ -4852,49 +4434,67 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                 ),
                               ],
                             )
-                          else
-                            if (_categoryValue!.code == 'Senior College' ||
-                                _categoryValue!.code == 'Post Graduate' ||
-                                _categoryValue!.code == 'Professional Studies' ||
-                                _categoryValue!.code == 'Correspondence Course')
-                              Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Container(
-                                        width: Statics
-                                            .getDeviceSize(context)
-                                            .width * 0.75,
-                                        child: TypeAheadField<dynamic>(
-                                          controller: _educationUniversityNameCntrl,
-                                          builder: (context, controller, focusNode) {
-                                            return TextField(
-                                                controller: _educationUniversityNameCntrl,
-                                                focusNode: focusNode,
-                                                decoration: InputDecoration(
-                                                  isDense: true,
-                                                  border: UnderlineInputBorder(),
-                                                  labelText: Statics.getLabel('University'),
-                                                ));
-                                          },
-                                          // textFieldConfiguration: TextFieldConfiguration(
-                                          //     controller: this._educationUniversityNameCntrl,
-                                          //     decoration: InputDecoration(labelText: Statics.getLabel('University'))),
-                                          suggestionsCallback: (pattern) {
-                                            this._educationUniversityID = null;
-                                            return populateUniversity(pattern, _categoryValue!.code == "Correspondence Course" ? true : false);
-                                          },
-                                          itemBuilder: (context, suggestion) {
-                                            return ListTile(
-                                              title: Text(suggestion["UniversityName"]),
-                                            );
-                                          },
-                                          // transitionBuilder: (context, suggestionsBox, controller) {
-                                          //   return suggestionsBox;
-                                          // },
-                                          onSelected: (suggestion) {
-                                            _educationUniversityNameCntrl.text = suggestion["UniversityName"];
-                                            _educationUniversityID = suggestion["EducationUniversityID"];
+                          else if (_categoryValue!.code == 'Senior College' ||
+                              _categoryValue!.code == 'Post Graduate' ||
+                              _categoryValue!.code == 'Professional Studies' ||
+                              _categoryValue!.code == 'Correspondence Course')
+                            Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Container(
+                                      width: Statics.getDeviceSize(context).width * 0.75,
+                                      child: TypeAheadField<dynamic>(
+                                        controller: _educationUniversityNameCntrl,
+                                        builder: (context, controller, focusNode) {
+                                          return TextField(
+                                              controller: _educationUniversityNameCntrl,
+                                              focusNode: focusNode,
+                                              decoration: InputDecoration(
+                                                isDense: true,
+                                                border: UnderlineInputBorder(),
+                                                labelText: Statics.getLabel('University'),
+                                              ));
+                                        },
+                                        // textFieldConfiguration: TextFieldConfiguration(
+                                        //     controller: this._educationUniversityNameCntrl,
+                                        //     decoration: InputDecoration(labelText: Statics.getLabel('University'))),
+                                        suggestionsCallback: (pattern) {
+                                          this._educationUniversityID = null;
+                                          return populateUniversity(pattern, _categoryValue!.code == "Correspondence Course" ? true : false);
+                                        },
+                                        itemBuilder: (context, suggestion) {
+                                          return ListTile(
+                                            title: Text(suggestion["UniversityName"]),
+                                          );
+                                        },
+                                        // transitionBuilder: (context, suggestionsBox, controller) {
+                                        //   return suggestionsBox;
+                                        // },
+                                        onSelected: (suggestion) {
+                                          _educationUniversityNameCntrl.text = suggestion["UniversityName"];
+                                          _educationUniversityID = suggestion["EducationUniversityID"];
+                                          _educationOthrUniversityNameCntrl.text = "";
+                                          _collegeNameCntrl.text = "";
+                                          _collegeOthrNameCntrl.text = "";
+                                          _educationStandardNameCntrl.text = "";
+                                          _educationOthrStandardNameCntrl.text = "";
+                                          _educationProgramName.text = "";
+                                          _educationOthrProgramName.text = "";
+                                          _educationCourseName.text = "";
+                                          _educationOthrCourseName.text = "";
+                                          _educationCourseID = _collegeID = _educationStandardID = _educationProgramID = null;
+                                          _progValue = null;
+                                          setState(() {});
+                                        },
+                                      ),
+                                    ),
+                                    IconButton(
+                                        color: Colors.purple,
+                                        onPressed: () {
+                                          setState(() {
+                                            this._educationUniversityNameCntrl.text = "";
+                                            _educationUniversityID = null;
                                             _educationOthrUniversityNameCntrl.text = "";
                                             _collegeNameCntrl.text = "";
                                             _collegeOthrNameCntrl.text = "";
@@ -4906,7 +4506,57 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                             _educationOthrCourseName.text = "";
                                             _educationCourseID = _collegeID = _educationStandardID = _educationProgramID = null;
                                             _progValue = null;
-                                            setState(() {});
+                                          });
+                                        },
+                                        icon: Icon(Icons.cancel)),
+                                  ],
+                                ),
+                                if (_educationUniversityNameCntrl.text == "Other") SizedBox(height: 10),
+                                if (_educationUniversityNameCntrl.text == "Other")
+                                  TextFormField(
+                                    textInputAction: TextInputAction.next,
+                                    controller: _educationOthrUniversityNameCntrl,
+                                    decoration: InputDecoration(labelText: Statics.getLabel('UniversityName')),
+                                    keyboardType: TextInputType.text,
+                                  ),
+                                if (_educationUniversityNameCntrl.text != "Other") SizedBox(height: 10),
+                                if (_educationUniversityNameCntrl.text != "Other")
+                                  Row(
+                                    children: [
+                                      Container(
+                                        width: Statics.getDeviceSize(context).width * 0.75,
+                                        child: TypeAheadField<dynamic>(
+                                          controller: _collegeNameCntrl,
+                                          builder: (context, controller, focusNode) {
+                                            return TextField(
+                                                controller: _collegeNameCntrl,
+                                                focusNode: focusNode,
+                                                decoration: InputDecoration(
+                                                  isDense: true,
+                                                  border: UnderlineInputBorder(),
+                                                  labelText: Statics.getLabel('College'),
+                                                ));
+                                          },
+                                          // textFieldConfiguration: TextFieldConfiguration(
+                                          //     controller: this._collegeNameCntrl,
+                                          //     decoration: InputDecoration(labelText: Statics.getLabel('College'))),
+                                          suggestionsCallback: (pattern) {
+                                            this._collegeID = null;
+                                            return populateCollege(_educationUniversityID == null ? "0" : _educationUniversityID.toString(), pattern);
+                                          },
+                                          itemBuilder: (context, suggestion) {
+                                            return ListTile(
+                                              title: Text(suggestion["InstitutionName"]),
+                                            );
+                                          },
+                                          // transitionBuilder: (context, suggestionsBox, controller) {
+                                          //   return suggestionsBox;
+                                          // },
+                                          onSelected: (suggestion) {
+                                            setState(() {
+                                              this._collegeNameCntrl.text = suggestion["InstitutionName"];
+                                              _collegeID = suggestion["EducationInstitutionID"];
+                                            });
                                           },
                                         ),
                                       ),
@@ -4914,99 +4564,26 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                           color: Colors.purple,
                                           onPressed: () {
                                             setState(() {
-                                              this._educationUniversityNameCntrl.text = "";
-                                              _educationUniversityID = null;
-                                              _educationOthrUniversityNameCntrl.text = "";
-                                              _collegeNameCntrl.text = "";
-                                              _collegeOthrNameCntrl.text = "";
-                                              _educationStandardNameCntrl.text = "";
-                                              _educationOthrStandardNameCntrl.text = "";
-                                              _educationProgramName.text = "";
-                                              _educationOthrProgramName.text = "";
-                                              _educationCourseName.text = "";
-                                              _educationOthrCourseName.text = "";
-                                              _educationCourseID = _collegeID = _educationStandardID = _educationProgramID = null;
-                                              _progValue = null;
+                                              this._collegeNameCntrl.text = "";
+                                              _collegeID = null;
                                             });
                                           },
                                           icon: Icon(Icons.cancel)),
                                     ],
                                   ),
-                                  if (_educationUniversityNameCntrl.text == "Other") SizedBox(height: 10),
-                                  if (_educationUniversityNameCntrl.text == "Other")
-                                    TextFormField(
-                                      textInputAction: TextInputAction.next,
-                                      controller: _educationOthrUniversityNameCntrl,
-                                      decoration: InputDecoration(labelText: Statics.getLabel('UniversityName')),
-                                      keyboardType: TextInputType.text,
-                                    ),
-                                  if (_educationUniversityNameCntrl.text != "Other") SizedBox(height: 10),
-                                  if (_educationUniversityNameCntrl.text != "Other")
-                                    Row(
-                                      children: [
-                                        Container(
-                                          width: Statics
-                                              .getDeviceSize(context)
-                                              .width * 0.75,
-                                          child: TypeAheadField<dynamic>(
-                                            controller: _collegeNameCntrl,
-                                            builder: (context, controller, focusNode) {
-                                              return TextField(
-                                                  controller: _collegeNameCntrl,
-                                                  focusNode: focusNode,
-                                                  decoration: InputDecoration(
-                                                    isDense: true,
-                                                    border: UnderlineInputBorder(),
-                                                    labelText: Statics.getLabel('College'),
-                                                  ));
-                                            },
-                                            // textFieldConfiguration: TextFieldConfiguration(
-                                            //     controller: this._collegeNameCntrl,
-                                            //     decoration: InputDecoration(labelText: Statics.getLabel('College'))),
-                                            suggestionsCallback: (pattern) {
-                                              this._collegeID = null;
-                                              return populateCollege(_educationUniversityID == null ? "0" : _educationUniversityID.toString(), pattern);
-                                            },
-                                            itemBuilder: (context, suggestion) {
-                                              return ListTile(
-                                                title: Text(suggestion["InstitutionName"]),
-                                              );
-                                            },
-                                            // transitionBuilder: (context, suggestionsBox, controller) {
-                                            //   return suggestionsBox;
-                                            // },
-                                            onSelected: (suggestion) {
-                                              setState(() {
-                                                this._collegeNameCntrl.text = suggestion["InstitutionName"];
-                                                _collegeID = suggestion["EducationInstitutionID"];
-                                              });
-                                            },
-                                          ),
-                                        ),
-                                        IconButton(
-                                            color: Colors.purple,
-                                            onPressed: () {
-                                              setState(() {
-                                                this._collegeNameCntrl.text = "";
-                                                _collegeID = null;
-                                              });
-                                            },
-                                            icon: Icon(Icons.cancel)),
-                                      ],
-                                    ),
-                                  if (_educationUniversityNameCntrl.text == "Other" || _collegeNameCntrl.text == "Other") SizedBox(height: 10),
-                                  if (_educationUniversityNameCntrl.text == "Other" || _collegeNameCntrl.text == "Other")
-                                    TextFormField(
-                                      textInputAction: TextInputAction.next,
-                                      controller: _collegeOthrNameCntrl,
-                                      decoration: InputDecoration(labelText: Statics.getLabel('CollegeName')),
-                                      keyboardType: TextInputType.text,
-                                    ),
-                                  SizedBox(
-                                    height: 10,
+                                if (_educationUniversityNameCntrl.text == "Other" || _collegeNameCntrl.text == "Other") SizedBox(height: 10),
+                                if (_educationUniversityNameCntrl.text == "Other" || _collegeNameCntrl.text == "Other")
+                                  TextFormField(
+                                    textInputAction: TextInputAction.next,
+                                    controller: _collegeOthrNameCntrl,
+                                    decoration: InputDecoration(labelText: Statics.getLabel('CollegeName')),
+                                    keyboardType: TextInputType.text,
                                   ),
-                                ],
-                              ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                              ],
+                            ),
                         if (_categoryValue != null)
                           if (_categoryValue!.code == 'School Student' || _categoryValue!.code == 'Jr College' || _categoryValue!.code == 'Senior College')
                             Column(
@@ -5018,10 +4595,10 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                     value: _standardValue == null
                                         ? null
                                         : _standard != null
-                                        ? _standard!.indexWhere((p) => p.staticID == _standardValue!.staticID) > -1
-                                        ? _standard![_standard!.indexWhere((p) => p.staticID == _standardValue!.staticID)]
-                                        : null
-                                        : null,
+                                            ? _standard!.indexWhere((p) => p.staticID == _standardValue!.staticID) > -1
+                                                ? _standard![_standard!.indexWhere((p) => p.staticID == _standardValue!.staticID)]
+                                                : null
+                                            : null,
                                     items: _standard!.map((bg) => DropdownMenuItem(value: bg, child: Text(bg.codeForDisplay!))).toList(),
                                     onChanged: (value) {
                                       setState(() {
@@ -5049,8 +4626,8 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                               value: _progValue == ""
                                   ? null
                                   : _prog.indexWhere((p) => p.value == _progValue) > -1
-                                  ? _progValue
-                                  : null,
+                                      ? _progValue
+                                      : null,
                               items: _prog,
                               onChanged: (value) {
                                 setState(() {
@@ -5058,148 +4635,143 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                 });
                               },
                             )
-                          else
-                            if (_categoryValue!.code == 'Professional Studies' ||
-                                _categoryValue!.code == 'Jr College' ||
-                                _categoryValue!.code == 'Senior College' ||
-                                _categoryValue!.code == 'Post Graduate' ||
-                                _categoryValue!.code == 'Correspondence Course')
-                              Column(
-                                children: [
-                                  if (_educationUniversityNameCntrl.text != "Other") SizedBox(height: 10),
-                                  if (_educationUniversityNameCntrl.text != "Other")
-                                    Row(
-                                      children: [
-                                        Container(
-                                          width: Statics
-                                              .getDeviceSize(context)
-                                              .width * 0.75,
-                                          child: TypeAheadField<dynamic>(
-                                            controller: _educationProgramName,
-                                            builder: (context, controller, focusNode) {
-                                              return TextField(
-                                                  controller: controller,
-                                                  focusNode: focusNode,
-                                                  decoration: InputDecoration(
-                                                    isDense: true,
-                                                    border: UnderlineInputBorder(),
-                                                    labelText: Statics.getLabel('Program'),
-                                                  ));
-                                            },
-                                            // textFieldConfiguration: TextFieldConfiguration(
-                                            //     controller: this._educationProgramName,
-                                            //     decoration: InputDecoration(labelText: Statics.getLabel('Program'))),
-                                            suggestionsCallback: (pattern) {
-                                              this._educationProgramID = null;
-                                              return populateProgram(_educationUniversityID.toString(), pattern);
-                                            },
-                                            itemBuilder: (context, suggestion) {
-                                              return ListTile(
-                                                title: Text(suggestion["ProgramName"]),
-                                              );
-                                            },
-                                            // transitionBuilder: (context, suggestionsBox, controller) {
-                                            //   return suggestionsBox;
-                                            // },
-                                            onSelected: (suggestion) {
-                                              setState(() {
-                                                this._educationProgramName.text = suggestion["ProgramName"];
-                                                _educationProgramID = suggestion["EducationProgramID"];
-                                                _educationOthrProgramName.text = "";
-                                              });
-                                            },
-                                          ),
+                          else if (_categoryValue!.code == 'Professional Studies' ||
+                              _categoryValue!.code == 'Jr College' ||
+                              _categoryValue!.code == 'Senior College' ||
+                              _categoryValue!.code == 'Post Graduate' ||
+                              _categoryValue!.code == 'Correspondence Course')
+                            Column(
+                              children: [
+                                if (_educationUniversityNameCntrl.text != "Other") SizedBox(height: 10),
+                                if (_educationUniversityNameCntrl.text != "Other")
+                                  Row(
+                                    children: [
+                                      Container(
+                                        width: Statics.getDeviceSize(context).width * 0.75,
+                                        child: TypeAheadField<dynamic>(
+                                          controller: _educationProgramName,
+                                          builder: (context, controller, focusNode) {
+                                            return TextField(
+                                                controller: controller,
+                                                focusNode: focusNode,
+                                                decoration: InputDecoration(
+                                                  isDense: true,
+                                                  border: UnderlineInputBorder(),
+                                                  labelText: Statics.getLabel('Program'),
+                                                ));
+                                          },
+                                          // textFieldConfiguration: TextFieldConfiguration(
+                                          //     controller: this._educationProgramName,
+                                          //     decoration: InputDecoration(labelText: Statics.getLabel('Program'))),
+                                          suggestionsCallback: (pattern) {
+                                            this._educationProgramID = null;
+                                            return populateProgram(_educationUniversityID.toString(), pattern);
+                                          },
+                                          itemBuilder: (context, suggestion) {
+                                            return ListTile(
+                                              title: Text(suggestion["ProgramName"]),
+                                            );
+                                          },
+                                          // transitionBuilder: (context, suggestionsBox, controller) {
+                                          //   return suggestionsBox;
+                                          // },
+                                          onSelected: (suggestion) {
+                                            setState(() {
+                                              this._educationProgramName.text = suggestion["ProgramName"];
+                                              _educationProgramID = suggestion["EducationProgramID"];
+                                              _educationOthrProgramName.text = "";
+                                            });
+                                          },
                                         ),
-                                        IconButton(
-                                            color: Colors.purple,
-                                            onPressed: () {
-                                              setState(() {
-                                                this._educationProgramName.text = "";
-                                                _educationProgramID = null;
-                                                _educationOthrProgramName.text = "";
-                                              });
-                                            },
-                                            icon: Icon(Icons.cancel)),
-                                      ],
-                                    ),
-                                  if (_educationUniversityNameCntrl.text == "Other" || _educationProgramName.text == "Other") SizedBox(height: 10),
-                                  if (_educationUniversityNameCntrl.text == "Other" || _educationProgramName.text == "Other")
-                                    TextFormField(
-                                      textInputAction: TextInputAction.next,
-                                      controller: _educationOthrProgramName,
-                                      decoration: InputDecoration(labelText: Statics.getLabel('ProgramName')),
-                                      keyboardType: TextInputType.text,
-                                    ),
-                                  SizedBox(
-                                    height: 10,
+                                      ),
+                                      IconButton(
+                                          color: Colors.purple,
+                                          onPressed: () {
+                                            setState(() {
+                                              this._educationProgramName.text = "";
+                                              _educationProgramID = null;
+                                              _educationOthrProgramName.text = "";
+                                            });
+                                          },
+                                          icon: Icon(Icons.cancel)),
+                                    ],
                                   ),
-                                  if (_educationUniversityNameCntrl.text != "Other") SizedBox(height: 10),
-                                  if (_educationUniversityNameCntrl.text != "Other")
-                                    Row(
-                                      children: [
-                                        Container(
-                                          width: Statics
-                                              .getDeviceSize(context)
-                                              .width * 0.75,
-                                          child: TypeAheadField<dynamic>(
-                                            controller: _daayitvaController,
-                                            builder: (context, controller, focusNode) {
-                                              return TextField(
-                                                  controller: _educationCourseName,
-                                                  focusNode: focusNode,
-                                                  decoration: InputDecoration(
-                                                    isDense: true,
-                                                    border: UnderlineInputBorder(),
-                                                    labelText: Statics.getLabel('Course'),
-                                                  ));
-                                            },
-                                            // textFieldConfiguration: TextFieldConfiguration(
-                                            //     controller: this._educationCourseName,
-                                            //     decoration: InputDecoration(labelText: Statics.getLabel('Course'))),
-                                            suggestionsCallback: (pattern) {
-                                              this._educationCourseID = null;
-                                              return populateCourse(_educationUniversityID.toString(), pattern);
-                                            },
-                                            itemBuilder: (context, suggestion) {
-                                              return ListTile(
-                                                title: Text(suggestion["CourseName"]),
-                                              );
-                                            },
-                                            // transitionBuilder: (context, suggestionsBox, controller) {
-                                            //   return suggestionsBox;
-                                            // },
-                                            onSelected: (suggestion) {
-                                              setState(() {
-                                                this._educationCourseName.text = suggestion["CourseName"];
-                                                _educationCourseID = suggestion["EducationCourseID"];
-                                              });
-                                            },
-                                          ),
+                                if (_educationUniversityNameCntrl.text == "Other" || _educationProgramName.text == "Other") SizedBox(height: 10),
+                                if (_educationUniversityNameCntrl.text == "Other" || _educationProgramName.text == "Other")
+                                  TextFormField(
+                                    textInputAction: TextInputAction.next,
+                                    controller: _educationOthrProgramName,
+                                    decoration: InputDecoration(labelText: Statics.getLabel('ProgramName')),
+                                    keyboardType: TextInputType.text,
+                                  ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                if (_educationUniversityNameCntrl.text != "Other") SizedBox(height: 10),
+                                if (_educationUniversityNameCntrl.text != "Other")
+                                  Row(
+                                    children: [
+                                      Container(
+                                        width: Statics.getDeviceSize(context).width * 0.75,
+                                        child: TypeAheadField<dynamic>(
+                                          controller: _daayitvaController,
+                                          builder: (context, controller, focusNode) {
+                                            return TextField(
+                                                controller: _educationCourseName,
+                                                focusNode: focusNode,
+                                                decoration: InputDecoration(
+                                                  isDense: true,
+                                                  border: UnderlineInputBorder(),
+                                                  labelText: Statics.getLabel('Course'),
+                                                ));
+                                          },
+                                          // textFieldConfiguration: TextFieldConfiguration(
+                                          //     controller: this._educationCourseName,
+                                          //     decoration: InputDecoration(labelText: Statics.getLabel('Course'))),
+                                          suggestionsCallback: (pattern) {
+                                            this._educationCourseID = null;
+                                            return populateCourse(_educationUniversityID.toString(), pattern);
+                                          },
+                                          itemBuilder: (context, suggestion) {
+                                            return ListTile(
+                                              title: Text(suggestion["CourseName"]),
+                                            );
+                                          },
+                                          // transitionBuilder: (context, suggestionsBox, controller) {
+                                          //   return suggestionsBox;
+                                          // },
+                                          onSelected: (suggestion) {
+                                            setState(() {
+                                              this._educationCourseName.text = suggestion["CourseName"];
+                                              _educationCourseID = suggestion["EducationCourseID"];
+                                            });
+                                          },
                                         ),
-                                        IconButton(
-                                            color: Colors.purple,
-                                            onPressed: () {
-                                              setState(() {
-                                                this._educationCourseName.text = "";
-                                                _educationCourseID = null;
-                                              });
-                                            },
-                                            icon: Icon(Icons.cancel)),
-                                      ],
-                                    ),
-                                  if (_educationUniversityNameCntrl.text == "Other" || _educationCourseName.text == "Other") SizedBox(height: 10),
-                                  if (_educationUniversityNameCntrl.text == "Other" || _educationCourseName.text == "Other")
-                                    TextFormField(
-                                      textInputAction: TextInputAction.next,
-                                      controller: _educationOthrCourseName,
-                                      decoration: InputDecoration(labelText: Statics.getLabel('CourseName')),
-                                      keyboardType: TextInputType.text,
-                                    ),
-                                  SizedBox(
-                                    height: 10,
+                                      ),
+                                      IconButton(
+                                          color: Colors.purple,
+                                          onPressed: () {
+                                            setState(() {
+                                              this._educationCourseName.text = "";
+                                              _educationCourseID = null;
+                                            });
+                                          },
+                                          icon: Icon(Icons.cancel)),
+                                    ],
                                   ),
-                                ],
-                              ),
+                                if (_educationUniversityNameCntrl.text == "Other" || _educationCourseName.text == "Other") SizedBox(height: 10),
+                                if (_educationUniversityNameCntrl.text == "Other" || _educationCourseName.text == "Other")
+                                  TextFormField(
+                                    textInputAction: TextInputAction.next,
+                                    controller: _educationOthrCourseName,
+                                    decoration: InputDecoration(labelText: Statics.getLabel('CourseName')),
+                                    keyboardType: TextInputType.text,
+                                  ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                              ],
+                            ),
                         if (_categoryValue != null)
                           if (_categoryValue!.code == 'Government Employee')
                             Column(
@@ -5256,9 +4828,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                 Wrap(
                                   children: [
                                     SizedBox(
-                                      width: Statics
-                                          .getDeviceSize(context)
-                                          .width * 0.25,
+                                      width: Statics.getDeviceSize(context).width * 0.25,
                                       child: CheckboxListTile(
                                         contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                         controlAffinity: ListTileControlAffinity.leading,
@@ -5274,9 +4844,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                       ),
                                     ),
                                     SizedBox(
-                                      width: Statics
-                                          .getDeviceSize(context)
-                                          .width * 0.25,
+                                      width: Statics.getDeviceSize(context).width * 0.25,
                                       child: CheckboxListTile(
                                         contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                         controlAffinity: ListTileControlAffinity.leading,
@@ -5292,9 +4860,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                       ),
                                     ),
                                     SizedBox(
-                                      width: Statics
-                                          .getDeviceSize(context)
-                                          .width * 0.25,
+                                      width: Statics.getDeviceSize(context).width * 0.25,
                                       child: CheckboxListTile(
                                         contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                         controlAffinity: ListTileControlAffinity.leading,
@@ -5310,9 +4876,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                       ),
                                     ),
                                     SizedBox(
-                                      width: Statics
-                                          .getDeviceSize(context)
-                                          .width * 0.25,
+                                      width: Statics.getDeviceSize(context).width * 0.25,
                                       child: CheckboxListTile(
                                         contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                         controlAffinity: ListTileControlAffinity.leading,
@@ -5328,9 +4892,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                       ),
                                     ),
                                     SizedBox(
-                                      width: Statics
-                                          .getDeviceSize(context)
-                                          .width * 0.25,
+                                      width: Statics.getDeviceSize(context).width * 0.25,
                                       child: CheckboxListTile(
                                         contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                         controlAffinity: ListTileControlAffinity.leading,
@@ -5346,9 +4908,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                       ),
                                     ),
                                     SizedBox(
-                                      width: Statics
-                                          .getDeviceSize(context)
-                                          .width * 0.25,
+                                      width: Statics.getDeviceSize(context).width * 0.25,
                                       child: CheckboxListTile(
                                         contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                         controlAffinity: ListTileControlAffinity.leading,
@@ -5364,9 +4924,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                       ),
                                     ),
                                     SizedBox(
-                                      width: Statics
-                                          .getDeviceSize(context)
-                                          .width * 0.25,
+                                      width: Statics.getDeviceSize(context).width * 0.25,
                                       child: CheckboxListTile(
                                         contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                         controlAffinity: ListTileControlAffinity.leading,
@@ -5426,9 +4984,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                         Wrap(
                           children: [
                             SizedBox(
-                              width: Statics
-                                  .getDeviceSize(context)
-                                  .width * 0.4,
+                              width: Statics.getDeviceSize(context).width * 0.4,
                               child: CheckboxListTile(
                                   contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                   controlAffinity: ListTileControlAffinity.leading,
@@ -5443,9 +4999,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                   }),
                             ),
                             SizedBox(
-                              width: Statics
-                                  .getDeviceSize(context)
-                                  .width * 0.4,
+                              width: Statics.getDeviceSize(context).width * 0.4,
                               child: TextFormField(
                                 textInputAction: TextInputAction.next,
                                 controller: _pratidnyaYearCtrl,
@@ -5498,9 +5052,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                         Wrap(
                           children: [
                             SizedBox(
-                              width: Statics
-                                  .getDeviceSize(context)
-                                  .width * 0.4,
+                              width: Statics.getDeviceSize(context).width * 0.4,
                               child: TextFormField(
                                 textInputAction: TextInputAction.next,
                                 controller: _shikshaFromYearCntrl,
@@ -5509,13 +5061,9 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                 maxLength: 4,
                               ),
                             ),
-                            SizedBox(width: Statics
-                                .getDeviceSize(context)
-                                .width * 0.1),
+                            SizedBox(width: Statics.getDeviceSize(context).width * 0.1),
                             SizedBox(
-                              width: Statics
-                                  .getDeviceSize(context)
-                                  .width * 0.4,
+                              width: Statics.getDeviceSize(context).width * 0.4,
                               child: TextFormField(
                                 textInputAction: TextInputAction.next,
                                 controller: _shikshaToYearCntrl,
@@ -5595,9 +5143,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                         Legend(legendString: "GanveshDetails", fontsize: 18),
                         SizedBox(height: 5),
                         SizedBox(
-                          width: Statics
-                              .getDeviceSize(context)
-                              .width * 0.4,
+                          width: Statics.getDeviceSize(context).width * 0.4,
                           child: CheckboxListTile(
                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                             title: Text(Statics.getLabel('IsGanveshComplete'), style: TextStyle(fontSize: 15)),
@@ -5623,9 +5169,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                             spacing: 10,
                             children: [
                               SizedBox(
-                                width: Statics
-                                    .getDeviceSize(context)
-                                    .width * 0.4,
+                                width: Statics.getDeviceSize(context).width * 0.4,
                                 child: CheckboxListTile(
                                     contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                     title: Text(Statics.getLabel('NoCap'), style: TextStyle(fontSize: 15)),
@@ -5640,9 +5184,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                     }),
                               ),
                               SizedBox(
-                                width: Statics
-                                    .getDeviceSize(context)
-                                    .width * 0.4,
+                                width: Statics.getDeviceSize(context).width * 0.4,
                                 child: CheckboxListTile(
                                     contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                     title: Text(Statics.getLabel('NoShirt'), style: TextStyle(fontSize: 15)),
@@ -5657,9 +5199,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                     }),
                               ),
                               SizedBox(
-                                width: Statics
-                                    .getDeviceSize(context)
-                                    .width * 0.4,
+                                width: Statics.getDeviceSize(context).width * 0.4,
                                 child: CheckboxListTile(
                                     contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                     title: Text(Statics.getLabel('NoPant'), style: TextStyle(fontSize: 15)),
@@ -5674,9 +5214,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                     }),
                               ),
                               SizedBox(
-                                width: Statics
-                                    .getDeviceSize(context)
-                                    .width * 0.4,
+                                width: Statics.getDeviceSize(context).width * 0.4,
                                 child: CheckboxListTile(
                                   contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                   title: Text(Statics.getLabel('NoBelt'), style: TextStyle(fontSize: 15)),
@@ -5692,9 +5230,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                 ),
                               ),
                               SizedBox(
-                                width: Statics
-                                    .getDeviceSize(context)
-                                    .width * 0.4,
+                                width: Statics.getDeviceSize(context).width * 0.4,
                                 child: CheckboxListTile(
                                   contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                   title: Text(Statics.getLabel('NoShoes'), style: TextStyle(fontSize: 15)),
@@ -5710,9 +5246,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                 ),
                               ),
                               SizedBox(
-                                width: Statics
-                                    .getDeviceSize(context)
-                                    .width * 0.4,
+                                width: Statics.getDeviceSize(context).width * 0.4,
                                 child: CheckboxListTile(
                                   contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                   title: Text(Statics.getLabel('NoSocks'), style: TextStyle(fontSize: 15)),
@@ -5728,9 +5262,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                 ),
                               ),
                               SizedBox(
-                                width: Statics
-                                    .getDeviceSize(context)
-                                    .width * 0.4,
+                                width: Statics.getDeviceSize(context).width * 0.4,
                                 child: CheckboxListTile(
                                   contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                   title: Text(Statics.getLabel('NoDanda'), style: TextStyle(fontSize: 15)),
@@ -5758,14 +5290,14 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                 children: [
                                   Expanded(
                                       child: reusableCheckbox(
-                                        title: Statics.getLabel("Facebook"),
-                                        value: _isfb,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            _isfb = value;
-                                          });
-                                        },
-                                      )),
+                                    title: Statics.getLabel("Facebook"),
+                                    value: _isfb,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _isfb = value;
+                                      });
+                                    },
+                                  )),
                                   if (_isfb == true)
                                     Expanded(
                                       child: DropdownButtonFormField(
@@ -5786,14 +5318,14 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                 children: [
                                   Expanded(
                                       child: reusableCheckbox(
-                                        title: Statics.getLabel("Insta"),
-                                        value: _isinsta,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            _isinsta = value;
-                                          });
-                                        },
-                                      )),
+                                    title: Statics.getLabel("Insta"),
+                                    value: _isinsta,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _isinsta = value;
+                                      });
+                                    },
+                                  )),
                                   if (_isinsta == true)
                                     Expanded(
                                       child: DropdownButtonFormField(
@@ -5814,27 +5346,27 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                 children: [
                                   Expanded(
                                       child: reusableCheckbox(
-                                        title: Statics.getLabel("Twitter"),
-                                        value: _istwt,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            _istwt = value;
-                                          });
-                                        },
-                                      )),
+                                    title: Statics.getLabel("Twitter"),
+                                    value: _istwt,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _istwt = value;
+                                      });
+                                    },
+                                  )),
                                   if (_istwt == true)
                                     Expanded(
                                         child: DropdownButtonFormField(
-                                          decoration: InputDecoration(labelText: Statics.getLabel('SelectTwitterUsage')),
-                                          isExpanded: true,
-                                          value: _twtUsage,
-                                          items: _usage,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              _twtUsage = value;
-                                            });
-                                          },
-                                        )),
+                                      decoration: InputDecoration(labelText: Statics.getLabel('SelectTwitterUsage')),
+                                      isExpanded: true,
+                                      value: _twtUsage,
+                                      items: _usage,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          _twtUsage = value;
+                                        });
+                                      },
+                                    )),
                                 ],
                               ),
                             ],
@@ -5844,12 +5376,8 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                         Legend(legendString: "AreasOfInterestShort", fontsize: 18),
                         SizedBox(height: 5),
                         Container(
-                          width: Statics
-                              .getDeviceSize(context)
-                              .width * 0.8,
-                          height: Statics
-                              .getDeviceSize(context)
-                              .height * 0.3,
+                          width: Statics.getDeviceSize(context).width * 0.8,
+                          height: Statics.getDeviceSize(context).height * 0.3,
                           child: ListView(
                             children: _areaOfInterestForSearch.map((area) {
                               return reusableCheckbox(
@@ -5868,12 +5396,8 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                         Legend(legendString: "AreaOfExpertiseShort", fontsize: 18),
                         SizedBox(height: 5),
                         Container(
-                          width: Statics
-                              .getDeviceSize(context)
-                              .width * 0.8,
-                          height: Statics
-                              .getDeviceSize(context)
-                              .height * 0.3,
+                          width: Statics.getDeviceSize(context).width * 0.8,
+                          height: Statics.getDeviceSize(context).height * 0.3,
                           child: ListView(
                             children: _areaOfExpertiseForSearch.map((area) {
                               return reusableCheckbox(
@@ -5896,9 +5420,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                           spacing: 10,
                           children: [
                             SizedBox(
-                              width: Statics
-                                  .getDeviceSize(context)
-                                  .width * 0.4,
+                              width: Statics.getDeviceSize(context).width * 0.4,
                               child: CheckboxListTile(
                                   contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                   title: Text(Statics.getLabel('Shishu'), style: TextStyle(fontSize: 15)),
@@ -5913,9 +5435,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                   }),
                             ),
                             SizedBox(
-                              width: Statics
-                                  .getDeviceSize(context)
-                                  .width * 0.4,
+                              width: Statics.getDeviceSize(context).width * 0.4,
                               child: CheckboxListTile(
                                   contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                   title: Text(Statics.getLabel('Baal'), style: TextStyle(fontSize: 15)),
@@ -5930,9 +5450,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                   }),
                             ),
                             SizedBox(
-                              width: Statics
-                                  .getDeviceSize(context)
-                                  .width * 0.4,
+                              width: Statics.getDeviceSize(context).width * 0.4,
                               child: CheckboxListTile(
                                   contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                   title: Text(Statics.getLabel('TarunVidyaarthi'), style: TextStyle(fontSize: 15)),
@@ -5947,9 +5465,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                   }),
                             ),
                             SizedBox(
-                              width: Statics
-                                  .getDeviceSize(context)
-                                  .width * 0.4,
+                              width: Statics.getDeviceSize(context).width * 0.4,
                               child: CheckboxListTile(
                                 contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                 title: Text(Statics.getLabel('TarunVyavasaayee'), style: TextStyle(fontSize: 15)),
@@ -5965,9 +5481,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                               ),
                             ),
                             SizedBox(
-                              width: Statics
-                                  .getDeviceSize(context)
-                                  .width * 0.4,
+                              width: Statics.getDeviceSize(context).width * 0.4,
                               child: CheckboxListTile(
                                 contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                 title: Text(Statics.getLabel('ProudhaVyavasaayeeLabel'), style: TextStyle(fontSize: 15)),
@@ -5983,9 +5497,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                               ),
                             ),
                             SizedBox(
-                              width: Statics
-                                  .getDeviceSize(context)
-                                  .width * 0.4,
+                              width: Statics.getDeviceSize(context).width * 0.4,
                               child: CheckboxListTile(
                                 contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                 title: Text(Statics.getLabel('UnkownAge'), style: TextStyle(fontSize: 15)),
@@ -6030,239 +5542,86 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
   }
 
   Widget vastiGraamDropdown() {
-    return ExpansionPanelList(
-      expandedHeaderPadding: EdgeInsets.zero,
-      expansionCallback: (_, isExpanded) => setState(() => _isExpanded = isExpanded),
-      children: [
-        ExpansionPanel(
-          headerBuilder: (BuildContext context, bool isExpanded) {
-            return ListTile(
-              title: Text(Statics.getLabel('SelectGeoUnit')),
-            );
-          },
-          body: Container(
-            margin: const EdgeInsets.all(10),
-            child: Column(
-              children: [
-                if (_linkedMahaanagar != null)
-                  buildDropdownField(
-                    isDisabled: ((userLevelId ?? 0) < 9 || (userLevelId ?? 0) == 13),
-                    label: Statics.getLabel('Mahaanagar'),
-                    value: _linkedMahaanagarValue,
-                    items: _linkedMahaanagar!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),
-                    onChanged: (value) async {
-                      final item = _linkedMahaanagar!.firstWhere((g) => g.geoUnitID.toString() == value);
-                      setState(() {
-                        _linkedMahaanagarValue = value;
-                        _linkedVibhaagValue = null;
-                        _selctedLevel = 'Mahanagar';
-                        _selctedLevelName = item.name ?? "";
-                        _selectedGeoUnitId = value;
-                      });
-                      populatelinkedVibhaagDropdown(value!);
-                      populatelinkedBhaagDropdown("");
-                    },
+    return Consumer<GeoHierarchyController>(builder: (_, ctrl, __) {
+      return ExpansionPanelList(
+        expandedHeaderPadding: EdgeInsets.zero,
+        expansionCallback: (_, isExpanded) => setState(() => _isExpanded = isExpanded),
+        children: [
+          ExpansionPanel(
+            headerBuilder: (BuildContext context, bool isExpanded) {
+              return ListTile(
+                title: Text(Statics.getLabel('SelectGeoUnit')),
+              );
+            },
+            body: Container(
+              margin: const EdgeInsets.all(10),
+              child: Column(
+                children: [
+                  GeoDropdownWidget(
+                    level: GeoLevel.Mahaanagar,
+                    title: 'Mahaanagar',
+                    controller: ctrl,
                   ),
-                if (_linkedVibhaag != null)
-                  buildDropdownField(
-                    isDisabled: ((userLevelId ?? 0) < 8 || (userLevelId ?? 0) == 13),
-                    label: Statics.getLabel('Vibhaag'),
-                    value: _linkedVibhaagValue,
-                    items: _linkedVibhaag!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),
-                    onChanged: (value) {
-                      final item = _linkedVibhaag!.firstWhere((g) => g.geoUnitID.toString() == value);
-                      setState(() {
-                        _linkedVibhaagValue = value;
-                        _selctedLevel = 'Vibhaag';
-                        _selctedLevelName = item.name ?? "";
-                        _selectedGeoUnitId = value;
-                      });
-                      populatelinkedBhaagDropdown(value!);
-                    },
-                  ),
-                if (_linkedbhaag != null && _linkedbhaag!.isNotEmpty)
-                  buildDropdownField(
-                    isDisabled: ((userLevelId ?? 0) < 7 || (userLevelId ?? 0) == 13),
-                    label: Statics.getLabel('Bhaag'),
-                    value: _linkedbhaagValue,
-                    items: _linkedbhaag!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),
-                    onChanged: (value) {
-                      final item = _linkedbhaag!.firstWhere((g) => g.geoUnitID.toString() == value);
-                      setState(() {
-                        _linkedbhaagValue = value;
-                        _selctedLevel = 'Bhaag';
-                        _selctedLevelName = item.name ?? "";
-                        _linkedbhaagName = item.name ?? "";
-                        _selectedGeoUnitId = value;
-                        //populatelinkedShaharDropdown(value!);
-                        populatelinkedNagarDropdown(value, null);
-                      });
-                    },
-                  ),
-                // if (_linkedshahar != null && _linkedshahar!.isNotEmpty)
-                //   buildDropdownField(
-                //     isDisabled: MyAppGlobals.isDropdownDisabled('Nagar'),
-                //     label: Statics.getLabel('Shahar'),
-                //     value: _linkedshaharValue,
-                //     items: _linkedshahar!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),
-                //     onChanged: (value) {
-                //       final item = _linkedshahar!.firstWhere((g) => g.geoUnitID.toString() == value);
-                //       setState(() {
-                //         _linkedshaharValue = value;
-                //         _selectedGeoUnitId = value;
-                //         _selctedLevel = 'Shahar';
-                //         _selctedLevelName = item.name ?? "";
-                //         _linkedshaharName = item.name ?? "";
-                //         populatelinkedNagarDropdown(null, value);
-                //       });
-                //     },
-                //   ),
-                if (_linkednagar != null && _linkednagar!.isNotEmpty)
-                  buildDropdownField(
-                    isDisabled: ((userLevelId ?? 0) < 6 || (userLevelId ?? 0) == 13),
-                    label: Statics.getLabel('Nagar'),
-                    value: _linkednagarValue,
-                    items: _linkednagar!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),
-                    onChanged: (value) {
-                      final item = _linkednagar!.firstWhere((g) => g.geoUnitID.toString() == value);
-                      setState(() {
-                        _linkednagarValue = value;
-                        _selectedGeoUnitId = value;
-                        _selctedLevel = 'Nagar';
-                        _selctedLevelName = item.name ?? "";
-                        _linkednagarName = item.name ?? "";
-                        populatelinkedUpnagarDropdown(value);
-                        populatelinkedMandalDropdown(false, value);
-                        populatelinkedVastiDropdown(false, value);
-                      });
-                    },
-                  ),
-                if (_linkedupnagar != null && _linkedupnagar!.isNotEmpty)
-                  buildDropdownField(
-                    isDisabled: ((userLevelId ?? 0) < 6 || (userLevelId ?? 0) == 13),
-                    label: Statics.getLabel('upnagarUpkhanda'),
-                    value: _linkedupnagarValue,
-                    items: _linkedupnagar!
-                        .map((bg) =>
-                        DropdownMenuItem(
-                          value: bg.geoUnitID.toString(),
-                          child: Text(bg.name!),
-                        ))
-                        .toList(),
-                    onChanged: (value) {
-                      final selectedItem = _linkedupnagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
-                      setState(() {
-                        _linkedupnagarValue = value;
-                        _selectedGeoUnitId = value;
-                        _selctedLevel = 'upnagarUpkhanda';
-                        _selctedLevelName = selectedItem.name ?? "";
-                        _linkedshaharName = selectedItem.name ?? "";
-                        populatelinkedMandalDropdown(true, value);
-                        populatelinkedVastiDropdown(true, value);
 
-                        // populatelinkedNagarDropdown(null, value);
-                      });
-                    },
+                  // if (ctrl.hasItems(GeoLevel.vibhaag))
+                  GeoDropdownWidget(
+                    level: GeoLevel.Vibhaag,
+                    title: 'Vibhaag',
+                    controller: ctrl,
                   ),
-                if (_linkedmandal != null && _linkedmandal!.isNotEmpty)
-                  buildDropdownField(
-                    isDisabled: ((userLevelId ?? 0) < 4),
-                    label: Statics.getLabel('Mandal'),
-                    value: _linkedmandalValue,
-                    items: _linkedmandal!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),
-                    onChanged: (value) {
-                      final item = _linkedmandal!.firstWhere((g) => g.geoUnitID.toString() == value);
-                      setState(() {
-                        _linkedmandalValue = value;
-                        _selectedGeoUnitId = value.toString();
-                        _selctedLevel = 'Mandal';
-                        _selctedLevelName = item.name ?? "";
-                        _linkedmandalName = item.name ?? "";
-                        populatelinkedGraamDropdown(value);
-                      });
-                    },
-                  ),
-                if (_linkedvasti != null && _linkedvasti!.isNotEmpty)
-                  buildDropdownField(
-                    isDisabled: ((userLevelId ?? 0) < 2),
-                    label: Statics.getLabel('Vasti'),
-                    value: _linkedvastiValue,
-                    items: _linkedvasti!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),
-                    onChanged: (value) async {
-                      final item = _linkedvasti!.firstWhere((g) => g.geoUnitID.toString() == value);
-                      setState(() {
-                        _linkedvastiValue = value;
-                        _selectedGeoUnitId = value.toString();
-                        _selctedLevel = 'Vasti';
-                        _selctedLevelName = item.name ?? "";
-                        _linkedvastiName = item.name ?? "";
-                      });
-                      // if (userLevelId == 2) {
-                      //   _selctedLevelNameList = [];
-                      //   setState(() {});
-                      //   _selctedLevelNameList.addAll([
-                      //     _linkedbhaagName,
-                      //     _linkedshaharName,
-                      //     _linkednagarName,
-                      //     _linkedmandalName,
-                      //     _linkedgraamName,
-                      //     _linkedvastiName,
-                      //   ]);
-                      //   await _getForm();
-                      //   setState(() {
-                      //     _selctedLevelNames = _selctedLevelNameList.where((e) => e != null && e.isNotEmpty).cast<String>().join(' -> ');
-                      //     _searched = true;
-                      //     _isExpanded = false;
-                      //     isVastiSearch = true;
-                      //   });
-                      // }
-                    },
-                  ),
-                if (_linkedgraam != null && _linkedgraam!.isNotEmpty)
-                  buildDropdownField(
-                    isDisabled: ((userLevelId ?? 0) < 3),
-                    label: Statics.getLabel('Graam'),
-                    value: _linkedgraamValue,
-                    items: _linkedgraam!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),
-                    onChanged: (value) async {
-                      final item = _linkedgraam!.firstWhere((g) => g.geoUnitID.toString() == value);
-                      setState(() {
-                        _linkedvastiValue = value;
-                        _selectedGeoUnitId = value.toString();
-                        _selctedLevel = 'Graam';
-                        _selctedLevelName = item.name ?? "";
-                        _linkedvastiName = item.name ?? "";
-                      });
 
-                      // if (userLevelId == 3) {
-                      //   _selctedLevelNameList = [];
-                      //   setState(() {});
-                      //   _selctedLevelNameList.addAll([
-                      //     _linkedbhaagName,
-                      //     _linkedshaharName,
-                      //     _linkednagarName,
-                      //     _linkedmandalName,
-                      //     _linkedgraamName,
-                      //     _linkedvastiName,
-                      //   ]);
-                      //   await _getForm();
-                      //   setState(() {
-                      //     _selctedLevelNames = _selctedLevelNameList.where((e) => e != null && e.isNotEmpty).cast<String>().join(' -> ');
-                      //     _searched = true;
-                      //     _isExpanded = false;
-                      //     isVastiSearch = true;
-                      //   });
-                      // }
-                    },
-                  ),
-                const SizedBox(height: 15),
-              ],
+                  if (ctrl.hasItems(GeoLevel.Bhaag))
+                    GeoDropdownWidget(
+                      level: GeoLevel.Bhaag,
+                      title: 'Bhaag',
+                      controller: ctrl,
+                    ),
+
+                  if (ctrl.hasItems(GeoLevel.Nagar))
+                    GeoDropdownWidget(
+                      level: GeoLevel.Nagar,
+                      title: 'Nagar',
+                      controller: ctrl,
+                    ),
+
+                  /// CONDITIONAL
+                  if (ctrl.hasItems(GeoLevel.upnagarUpkhanda))
+                    GeoDropdownWidget(
+                      level: GeoLevel.upnagarUpkhanda,
+                      title: 'upnagarUpkhanda',
+                      controller: ctrl,
+                    ),
+
+                  if (ctrl.hasItems(GeoLevel.Mandal))
+                    GeoDropdownWidget(
+                      level: GeoLevel.Mandal,
+                      title: 'Mandal',
+                      controller: ctrl,
+                    ),
+
+                  if (ctrl.hasItems(GeoLevel.Graam))
+                    GeoDropdownWidget(
+                      level: GeoLevel.Graam,
+                      title: 'Graam',
+                      controller: ctrl,
+                    ),
+
+                  if (ctrl.hasItems(GeoLevel.Vasti))
+                    GeoDropdownWidget(
+                      level: GeoLevel.Vasti,
+                      title: 'Vasti',
+                      controller: ctrl,
+                    ),
+
+                  const SizedBox(height: 15),
+                ],
+              ),
             ),
+            isExpanded: _isExpanded,
           ),
-          isExpanded: _isExpanded,
-        ),
-      ],
-    );
+        ],
+      );
+    });
   }
 
   Widget reusableCheckbox({required String? title, required bool? value, void Function(bool?)? onChanged, Color? activeColor, Color? checkColor}) {
@@ -6273,7 +5632,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
       activeColor: activeColor ?? Colors.purple,
       checkColor: checkColor ?? Colors.white,
       onChanged: onChanged ??
-              (bool? val) {
+          (bool? val) {
             setState(() {
               value = val;
             });

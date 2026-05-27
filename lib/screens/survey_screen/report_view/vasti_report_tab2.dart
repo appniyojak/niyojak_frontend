@@ -1951,6 +1951,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                           level: GeoLevel.Mahaanagar,
                           title: 'Mahaanagar',
                           controller: ctrl,
+                          fetchMode: GeoHierarchyFetchMode.vastiOnly,
                         ),
 
                         // if (ctrl.hasItems(GeoLevel.vibhaag))
@@ -1958,6 +1959,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                           level: GeoLevel.Vibhaag,
                           title: 'Vibhaag',
                           controller: ctrl,
+                          fetchMode: GeoHierarchyFetchMode.vastiOnly,
                         ),
 
                         if (ctrl.hasItems(GeoLevel.Bhaag))
@@ -1965,6 +1967,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                             level: GeoLevel.Bhaag,
                             title: 'Bhaag',
                             controller: ctrl,
+                            fetchMode: GeoHierarchyFetchMode.vastiOnly,
                           ),
 
                         if (ctrl.hasItems(GeoLevel.Nagar))
@@ -1972,6 +1975,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                             level: GeoLevel.Nagar,
                             title: 'Nagar',
                             controller: ctrl,
+                            fetchMode: GeoHierarchyFetchMode.vastiOnly,
                           ),
 
                         /// CONDITIONAL
