@@ -172,13 +172,26 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
   Widget _shaakhaaVruttaOtherColumns(BuildContext context, int index) {
     var widgetArray = <Widget>[
       Statics.createWidgetFromString(context, lstShaakhaaVrutta[index].shishuCount.toString(), 60, 52, Alignment.center, isTotalRow: false),
+      Statics.createWidgetFromString(context, lstShaakhaaVrutta[index].newshishuCount.toString(), 60, 52, Alignment.center, isTotalRow: false),
       Statics.createWidgetFromString(context, lstShaakhaaVrutta[index].baalVidyaarthiCount.toString(), 60, 52, Alignment.center, isTotalRow: false),
+      Statics.createWidgetFromString(context, lstShaakhaaVrutta[index].newbaalVidyaarthiCount.toString(), 60, 52, Alignment.center, isTotalRow: false),
       Statics.createWidgetFromString(context, lstShaakhaaVrutta[index].tarunVidyaarthiCount.toString(), 60, 52, Alignment.center, isTotalRow: false),
+      Statics.createWidgetFromString(context, lstShaakhaaVrutta[index].newtarunVidyaarthiCount.toString(), 60, 52, Alignment.center, isTotalRow: false),
       Statics.createWidgetFromString(context, lstShaakhaaVrutta[index].tarunVyavasaayeeCount.toString(), 60, 52, Alignment.center, isTotalRow: false),
+      Statics.createWidgetFromString(context, lstShaakhaaVrutta[index].newtarunVyavasaayeeCount.toString(), 60, 52, Alignment.center, isTotalRow: false),
       Statics.createWidgetFromString(context, lstShaakhaaVrutta[index].proudhaVyavasaayeeCount.toString(), 60, 52, Alignment.center, isTotalRow: false),
+      Statics.createWidgetFromString(context, lstShaakhaaVrutta[index].newproudhaVyavasaayeeCount.toString(), 60, 52, Alignment.center, isTotalRow: false),
     ];
+
+    widgetArray.add(Statics.createWidgetFromString(context, lstShaakhaaVrutta[index].pravasiKaryakartaCount.toString(), 60, 52, Alignment.center, isTotalRow: false));
+    widgetArray.add(Statics.createWidgetFromString(context, lstShaakhaaVrutta[index].anyaPravasiKaryakartaCount.toString(), 60, 52, Alignment.center, isTotalRow: false));
+
     if (vayogatCode == 'Proudh Vyavasaayee') {
       widgetArray.add(lstShaakhaaVrutta[index].isDoneDeepBreathing == true
+          ? Statics.createWidgetFromIcon(context, Icons.check, 80, 52, Alignment.center, isTotalRow: false)
+          : Statics.createWidgetFromString(context, '-', 80, 52, Alignment.center, isTotalRow: false));
+    } else if (vayogatCode == "Baal") {
+      widgetArray.add(lstShaakhaaVrutta[index].isDoneUrdhvapad == true
           ? Statics.createWidgetFromIcon(context, Icons.check, 80, 52, Alignment.center, isTotalRow: false)
           : Statics.createWidgetFromString(context, '-', 80, 52, Alignment.center, isTotalRow: false));
     } else {
@@ -192,6 +205,25 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
           ? Statics.createWidgetFromIcon(context, Icons.check, 80, 52, Alignment.center, isTotalRow: false)
           : Statics.createWidgetFromString(context, '-', 80, 52, Alignment.center, isTotalRow: false));
     }
+
+    widgetArray.add(lstShaakhaaVrutta[index].isDoneBoodhKatha == true
+        ? Statics.createWidgetFromIcon(context, Icons.check, 80, 52, Alignment.center, isTotalRow: false)
+        : Statics.createWidgetFromString(context, '-', 80, 52, Alignment.center, isTotalRow: false));
+
+    /*widgetArray.add((lstShaakhaaVrutta[index].SelectedBoudhikDaysId!=null &&lstShaakhaaVrutta[index].SelectedBoudhikDaysId!.isNotEmpty)?
+    Statics.createWidgetFromIcon(context, Icons.check, 70, 52, Alignment.center, isTotalRow: false):
+    Statics.createWidgetFromString(context, '-', 70, 52, Alignment.center, isTotalRow: false));
+
+    widgetArray.add((lstShaakhaaVrutta[index].AnyaBoudhikDays!=null &&lstShaakhaaVrutta[index].AnyaBoudhikDays!.isNotEmpty)
+        ?    Statics.createWidgetFromIcon(context, Icons.check, 70, 52, Alignment.center, isTotalRow: false)
+        :Statics.createWidgetFromString(context, '-', 70, 52, Alignment.center, isTotalRow: false));*/
+
+    widgetArray.add(lstShaakhaaVrutta[index].isDoneBoudhikDays == true
+        ? Statics.createWidgetFromIcon(context, Icons.check, 80, 52, Alignment.center, isTotalRow: false)
+        : Statics.createWidgetFromString(context, '-', 80, 52, Alignment.center, isTotalRow: false));
+    widgetArray.add(lstShaakhaaVrutta[index].isDoneSewaDays == true
+        ? Statics.createWidgetFromIcon(context, Icons.check, 80, 52, Alignment.center, isTotalRow: false)
+        : Statics.createWidgetFromString(context, '-', 80, 52, Alignment.center, isTotalRow: false));
 
     widgetArray.add(lstShaakhaaVrutta[index].isDoneSaanghikGeet == true
         ? Statics.createWidgetFromIcon(context, Icons.check, 80, 52, Alignment.center, isTotalRow: false)
@@ -208,37 +240,37 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
     widgetArray.add(lstShaakhaaVrutta[index].isOptionalOther == true
         ? Statics.createWidgetFromIcon(context, Icons.check, 100, 52, Alignment.center, isTotalRow: false)
         : Statics.createWidgetFromString(context, '-', 100, 52, Alignment.center, isTotalRow: false));
-    if (
+    /*if (
 
         // (lst1.contains(Statics.userDetails['LevelName']) &&
         // lst2.contains(Statics.userDetails['DaayitvaName'])) ||
         (Statics.userDetails['LevelName'] == 'Shaakhaa' || Statics.userDetails['LevelName'] == 'शाखा' && lst3.contains(Statics.userDetails['DaayitvaName'])) ||
-            lst4.contains(Statics.userDetails['DaayitvaName'])) {
-      widgetArray.add(Container(
-          width: 70,
-          child: Row(
-            children: [
-              IconButton(
-                icon: Icon(Icons.edit),
-                iconSize: 20,
-                color: Colors.purple,
-                onPressed: () => _onEditVrutta(lstShaakhaaVrutta[index].shaakhaaVruttaID.toString(), lstShaakhaaVrutta[index].shaakhaaID.toString()),
-              ),
-            ],
-          )));
-      widgetArray.add(Container(
-          width: 70,
-          child: Row(
-            children: [
-              IconButton(
-                icon: Icon(Icons.delete),
-                iconSize: 20,
-                color: Colors.purple,
-                onPressed: () => _onDeleteVrutta(lstShaakhaaVrutta[index].shaakhaaVruttaID.toString()),
-              ),
-            ],
-          )));
-    }
+            lst4.contains(Statics.userDetails['DaayitvaName'])) {*/
+    widgetArray.add(Container(
+        width: 70,
+        child: Row(
+          children: [
+            IconButton(
+              icon: Icon(Icons.edit),
+              iconSize: 20,
+              color: Colors.purple,
+              onPressed: () => _onEditVrutta(lstShaakhaaVrutta[index].shaakhaaVruttaID.toString(), lstShaakhaaVrutta[index].shaakhaaID.toString()),
+            ),
+          ],
+        )));
+    widgetArray.add(Container(
+        width: 70,
+        child: Row(
+          children: [
+            IconButton(
+              icon: Icon(Icons.delete),
+              iconSize: 20,
+              color: Colors.purple,
+              onPressed: () => _onDeleteVrutta(lstShaakhaaVrutta[index].shaakhaaVruttaID.toString()),
+            ),
+          ],
+        )));
+    //}
     return Row(
       children: widgetArray,
     );
@@ -262,31 +294,47 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
     List<Widget> headerRow = [];
     headerRow.add(Statics.createWidgetFromString(context, 'दिनांक', 100, 56, Alignment.centerLeft, isTotalRow: false));
     headerRow.add(Statics.createWidgetFromString(context, 'शिशु', 60, 56, Alignment.center, isTotalRow: false));
+    headerRow.add(Statics.createWidgetFromString(context, 'नवीन शिशु', 60, 56, Alignment.center, isTotalRow: false));
     headerRow.add(Statics.createWidgetFromString(context, 'बाल', 60, 56, Alignment.center, isTotalRow: false));
+    headerRow.add(Statics.createWidgetFromString(context, 'नवीन बाल', 60, 56, Alignment.center, isTotalRow: false));
     headerRow.add(Statics.createWidgetFromString(context, 'त.वि.', 60, 56, Alignment.center, isTotalRow: false));
+    headerRow.add(Statics.createWidgetFromString(context, 'नवीन त.वि.', 60, 56, Alignment.center, isTotalRow: false));
     headerRow.add(Statics.createWidgetFromString(context, 'त.व्य.', 60, 56, Alignment.center, isTotalRow: false));
+    headerRow.add(Statics.createWidgetFromString(context, 'नवीन त.व्य.', 60, 56, Alignment.center, isTotalRow: false));
     headerRow.add(Statics.createWidgetFromString(context, 'प्रौ.', 60, 56, Alignment.center, isTotalRow: false));
+    headerRow.add(Statics.createWidgetFromString(context, 'नवीन प्रौ.', 60, 56, Alignment.center, isTotalRow: false));
+
+    headerRow.add(Statics.createWidgetFromString(context, 'प्रवासी कार्य.', 60, 56, Alignment.center, isTotalRow: false));
+    headerRow.add(Statics.createWidgetFromString(context, 'अन्य प्र. कार्य', 60, 56, Alignment.center, isTotalRow: false));
+
     if (vayogatCode == 'Proudh Vyavasaayee') {
       headerRow.add(Statics.createWidgetFromString(context, 'दीर्घश्वसन', 80, 56, Alignment.centerLeft, isTotalRow: false));
+    } else if (vayogatCode == "Baal") {
+      headerRow.add(Statics.createWidgetFromString(context, 'उर्ध्वपाद', 80, 56, Alignment.centerLeft, isTotalRow: false));
     } else {
       headerRow.add(Statics.createWidgetFromString(context, 'दंडप्रहार', 80, 56, Alignment.centerLeft, isTotalRow: false));
       headerRow.add(Statics.createWidgetFromString(context, 'सूर्यनमस्कार', 80, 56, Alignment.centerLeft, isTotalRow: false));
       headerRow.add(Statics.createWidgetFromString(context, 'संचलन अभ्यास', 80, 56, Alignment.centerLeft, isTotalRow: false));
     }
+
+    headerRow.add(Statics.createWidgetFromString(context, 'बोध कथा', 80, 56, Alignment.center, isTotalRow: false));
+    headerRow.add(Statics.createWidgetFromString(context, 'बौद्धिक दिवस', 80, 56, Alignment.center, isTotalRow: false));
+    headerRow.add(Statics.createWidgetFromString(context, 'सेवा दिवस', 80, 56, Alignment.center, isTotalRow: false));
+
     headerRow.add(Statics.createWidgetFromString(context, 'सांघिक गीत', 80, 56, Alignment.center, isTotalRow: false));
     headerRow.add(Statics.createWidgetFromString(context, 'अमृतवचन', 70, 56, Alignment.center, isTotalRow: false));
     headerRow.add(Statics.createWidgetFromString(context, 'सुभाषित', 60, 56, Alignment.center, isTotalRow: false));
     headerRow.add(Statics.createWidgetFromString(context, 'वैकल्पिक शारीरिक विषय', 100, 56, Alignment.centerLeft, isTotalRow: false));
     headerRow.add(Statics.createWidgetFromString(context, 'अन्य वैकल्पिक कार्यक्रम', 100, 56, Alignment.centerLeft, isTotalRow: false));
 
-    if ((
+    /* if ((
             // lst1.contains(Statics.userDetails['LevelName']) &&
             lst2.contains(Statics.userDetails['DaayitvaName'])) ||
         (Statics.userDetails['LevelName'] == 'Shaakhaa' || Statics.userDetails['LevelName'] == 'शाखा' && lst3.contains(Statics.userDetails['DaayitvaName'])) ||
-        lst4.contains(Statics.userDetails['DaayitvaName'])) {
-      headerRow.add(Statics.createWidgetFromString(context, Statics.getLabel('Edit'), 70, 56, Alignment.centerLeft, isTotalRow: false));
-      headerRow.add(Statics.createWidgetFromString(context, Statics.getLabel('Delete'), 70, 56, Alignment.centerLeft, isTotalRow: false));
-    }
+        lst4.contains(Statics.userDetails['DaayitvaName']))
+    if (![2, 3].contains(userLevelId))*/
+    headerRow.add(Statics.createWidgetFromString(context, Statics.getLabel('Edit'), 70, 56, Alignment.centerLeft, isTotalRow: false));
+    headerRow.add(Statics.createWidgetFromString(context, Statics.getLabel('Delete'), 70, 56, Alignment.centerLeft, isTotalRow: false));
 
     if (!mounted) return;
     setState(() {
@@ -359,16 +407,17 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
           style: TextStyle(fontSize: 24),
         ),
         actions: <Widget>[
-          if ((
+          /*if ((
                   // lst1.contains(Statics.userDetails['LevelName']) &&
                   lst2.contains(Statics.userDetails['DaayitvaName'])) ||
               (Statics.userDetails['LevelName'] == 'Shaakhaa' || Statics.userDetails['LevelName'] == 'शाखा' && lst3.contains(Statics.userDetails['DaayitvaName'])) ||
               lst4.contains(Statics.userDetails['DaayitvaName']))
-            IconButton(
-              padding: EdgeInsets.all(8),
-              icon: const Icon(Icons.add),
-              onPressed: () => _onEditVrutta("0", shaakhaaID),
-            ),
+          if (![1, 2, 3].contains(userLevelId))*/
+          IconButton(
+            padding: EdgeInsets.all(8),
+            icon: const Icon(Icons.add),
+            onPressed: () => _onEditVrutta("0", shaakhaaID),
+          ),
         ],
       ),
       body: SingleChildScrollView(
@@ -393,7 +442,7 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
                       : _headerRow != null
                           ? HorizontalDataTable(
                               leftHandSideColumnWidth: 100,
-                              rightHandSideColumnWidth: (vayogatCode == 'Proudh Vyavasaayee' ? 930 : 1090),
+                              rightHandSideColumnWidth: ((vayogatCode == 'Proudh Vyavasaayee' || vayogatCode == "Baal") ? 1600 : 1750),
                               isFixedHeader: true,
                               headerWidgets: _headerRow,
                               leftSideItemBuilder: _shaakhaaVruttaFirstColumn,

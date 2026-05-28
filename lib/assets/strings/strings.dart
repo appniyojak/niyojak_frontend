@@ -150,6 +150,11 @@ Map<String, String> resEnglish = {
   'AreyouSureYouWantToDeleteSahbhagiKaryakarta': 'Are you Sure You Want To Delete Sahabhagi Karyakarta',
   'EditSwayamsevakTransferLabel': 'Edit Swayamsevak Transfer',
   'CardMenuSwayamsevakTransfer': 'Transfer',
+  'isFrom': 'From',
+  'toPlace': 'To',
+  'initiatedOnDate': 'Initiated On',
+  'transferStatus': 'Status',
+
   'searchEventScreenLabel': 'Events',
   'eventSearch': 'Event Search',
   'CanNotCreateEventInPast': 'Event Date cannot be a past Date',
@@ -2177,6 +2182,11 @@ Map<String, String> resMarathi = {
   'AreyouSureYouWantToDeleteSahbhagiKaryakarta': 'आपण सहभागी कार्यकर्ता रद्द करू इच्छिता',
   'EditSwayamsevakTransferLabel': 'स्वयंसेवक स्थलांतर सुधारणा',
   'CardMenuSwayamsevakTransfer': 'स्थलांतर',
+  'isFrom': 'पासून',
+  'toPlace': 'पर्यंत',
+  'initiatedOnDate': 'सुरू दिनांक',
+  'transferStatus': 'स्थिती',
+
   'searchEventScreenLabel': 'कार्यक्रम',
   'eventSearch': 'कार्यक्रम शोध',
   'CanNotCreateEventInPast': 'कार्यक्रम दिनांक आजचा किंवा भविष्यातील आवश्यक',
@@ -2817,7 +2827,7 @@ Map<String, String> resMarathi = {
   'ProudhaCount': 'प्रौढ संख्या',
   'ProudhaCountRange': '(४०+)',
 
-  'PravasiKaryakartaCount': 'शाखा पटवर असलेल्या प्रवासी कार्यकर्त्यांची संख्या',
+  'PravasiKaryakartaCount': 'शाखा पटावर असलेल्या प्रवासी कार्यकर्त्यांची संख्या',
   'AnyaPravasiKaryakartaCount': 'अन्य प्रवासी कार्यकर्त्यांची संख्या',
 
   'AbhyaagatCount': 'अभ्यागत संख्या',
@@ -4207,6 +4217,11 @@ Map<String, String> resHindi = {
   'AreyouSureYouWantToDeleteSahbhagiKaryakarta': 'क्या आप सहभागी कार्यकर्ता निरस्त कराना चाहते है',
   'EditSwayamsevakTransferLabel': 'स्वयंसेवक स्थलांतर बदल',
   'CardMenuSwayamsevakTransfer': 'स्थलांतर',
+  'isFrom': 'से',
+  'toPlace': 'तक',
+  'initiatedOnDate': 'आरंभ दिनांक',
+  'transferStatus': 'स्थिति',
+
   'searchEventScreenLabel': 'कार्यक्रम',
   'eventSearch': 'कार्यक्रम ढूँढें',
   'CanNotCreateEventInPast': 'कार्यक्रम दिनांक आज या भविष्यमें आवश्यक',

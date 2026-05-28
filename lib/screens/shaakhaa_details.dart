@@ -597,6 +597,7 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
                             setState(() {
                               _vayogatValue = value;
                             });
+                            print(value);
                           },
                           validator: (value) {
                             if (value == null || value.isEmpty) return (Statics.getLabel('VayogatValidationMessage'));
@@ -859,8 +860,8 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
                           onChanged: (value) {
                             setState(() {
                               _frequencyValue = value!.staticID.toString();
-                              print("_frequencyValue  =-=-> $_frequencyValue");
                             });
+                            print("_frequencyValue  =-=-> $_frequencyValue");
                           },
                           validator: (value) {
                             if (value == null) return (Statics.getLabel('FrequencyValidationMessage'));
@@ -1792,7 +1793,8 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
                           height: 10,
                         ),
                       if (_vayogat != null && _isSankalpit == false)
-                        if (_vayogat!.indexWhere((e) => e.staticID.toString() == _vayogatValue && e.code == 'Baal') > -1 ? true : false)
+                        if (!((_vayogat!.where((e) => e.staticID.toString() == _vayogatValue && e.code == 'Baal').isNotEmpty) &&
+                            (_frequency!.where((e) => e.staticID.toString() == _frequencyValue && e.code == 'Monthly').isNotEmpty)))
                           Column(
                             children: [
                               CheckboxListTile(

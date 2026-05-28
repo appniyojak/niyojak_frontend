@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-import '../screens/swayamsevak_module/edit_module/edit_swayamsevak_transfer.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
+
 import '../helpers/static_data.dart' as Statics;
+import '../screens/swayamsevak_module/edit_module/edit_swayamsevak_transfer.dart';
 
 class SwayamsevakTransferCard extends StatefulWidget {
   final swTransferItem;
@@ -141,10 +141,10 @@ class _SwayamsevakTransferCardState extends State<SwayamsevakTransferCard> {
                     Wrap(
                       spacing: 1,
                       children: [
-                        Text('From:' + widget.swTransferItem["SourceBhaagName"]),
-                        Text(', To:' + widget.swTransferItem["DestinationBhaagName"]),
-                        Text(', Initiated On:' + widget.swTransferItem["TransferInitiatedDateStr"]),
-                        Text(', Status:' + widget.swTransferItem["StatusCode"]),
+                        Text('${Statics.getLabel("isFrom")}:' + widget.swTransferItem["SourceBhaagName"]),
+                        Text(', ${Statics.getLabel("toPlace")}:' + widget.swTransferItem["DestinationBhaagName"]),
+                        Text(', ${Statics.getLabel("initiatedOnDate")}:' + widget.swTransferItem["TransferInitiatedDateStr"]),
+                        Text(', ${Statics.getLabel("transferStatus")}:' + widget.swTransferItem["StatusCode"].toString()),
                       ],
                     ),
                   SizedBox(

@@ -1233,27 +1233,28 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> with Automati
           SizedBox(height: 20),
           if (_searched)
             Container(
-                height: 40,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.purpleAccent, width: 1),
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
+              height: 40,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.purpleAccent, width: 1),
+                borderRadius: BorderRadius.all(Radius.circular(15)),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "${Statics.getLabel(ctrl.deepestSelectedLevelName ?? "praant")}",
+                    style: TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  if (ctrl.deepestSelectedGeoUnitName != null && ctrl.deepestSelectedGeoUnitName!.isNotEmpty)
                     Text(
-                      "${Statics.getLabel(ctrl.deepestSelectedLevelName ?? "praant")}",
-                      style: TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.bold, fontSize: 16),
+                      "  ->   ${ctrl.deepestSelectedGeoUnitName}",
+                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 17),
                     ),
-                    if (ctrl.deepestSelectedGeoUnitName != null && ctrl.deepestSelectedGeoUnitName!.isNotEmpty)
-                      Text(
-                        "  ->   ${ctrl.deepestSelectedGeoUnitName}",
-                        style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 17),
-                      ),
-                  ],
-                )),
+                ],
+              ),
+            ),
         ],
       );
     });

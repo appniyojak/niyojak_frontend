@@ -49,6 +49,10 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
       });
       print("searchVastiData req param :-  $strInput");
       vastiDataByIdModel = await Statics.getVastidataByIDForApp(context, strInput);
+      setState(() {
+        isVastiSearch = true;
+        _isExpanded = false;
+      });
       setDataAfterSearch();
     } else {
       Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));

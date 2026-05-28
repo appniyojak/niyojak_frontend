@@ -1702,7 +1702,7 @@ class _SwayamsevakCardState extends State<SwayamsevakCard> {
             children: [
               Icon(Icons.edit, size: 16, color: canEdit ? Colors.green[700] : Colors.grey[600]),
               SizedBox(width: 2),
-              Text("Edit", style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: canEdit ? Colors.green[700] : Colors.grey[600])),
+              Text(Statics.getLabel("Edit"), style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: canEdit ? Colors.green[700] : Colors.grey[600])),
             ],
           ),
           Transform.scale(
@@ -1745,7 +1745,7 @@ class _SwayamsevakCardState extends State<SwayamsevakCard> {
           children: [
             Icon(Icons.more_vert, size: 16, color: Colors.deepPurple),
             SizedBox(width: 2),
-            Text("Menu", style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: Colors.deepPurple)),
+            Text(Statics.getLabel("menu"), style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: Colors.deepPurple)),
           ],
         ),
       ),

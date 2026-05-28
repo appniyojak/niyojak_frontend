@@ -4750,6 +4750,8 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitMasterForApp(
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
+  print(urlGetGeoUnitMasterForApp);
+
   var response = await http.post(
     Uri.parse(urlGetGeoUnitMasterForApp),
     headers: jHeaders,
@@ -5081,6 +5083,8 @@ Future<List<dynamic>> getSwayamsevakTransferList(String strInput) async {
     return [];
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  print(urlGetSwayamsevakTransferForAppGrid);
 
   var response = await http.post(Uri.parse(urlGetSwayamsevakTransferForAppGrid), headers: jHeaders, body: strInput);
 

@@ -423,7 +423,7 @@ class _SearchSwayamsevakTransferState extends State<SearchSwayamsevakTransfer> {
 
   bool _isExpanded = false;
 
-  Future<List<dynamic>>? _swayamsevakTransferList;
+  List<dynamic>? _swayamsevakTransferList;
 
   _pickFromDate() async {
     DateTime? date = await showDatePicker(
@@ -471,7 +471,7 @@ class _SearchSwayamsevakTransferState extends State<SearchSwayamsevakTransfer> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    _swayamsevakTransferList = _getSwayamsevakTransferList(null, null, "", null, null);
+    // _swayamsevakTransferList = _getSwayamsevakTransferList(null, null, "", null, null);
   }
 
   @override
@@ -486,8 +486,8 @@ class _SearchSwayamsevakTransferState extends State<SearchSwayamsevakTransfer> {
   void initState() {
     super.initState();
     populateLinkedBhaagDropdown();
-    _search();
-    _swayamsevakTransferList;
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) => _search());
+    // _swayamsevakTransferList;
   }
 
   void onCheckCard(var emailID, var mobileNum) {
@@ -508,7 +508,7 @@ class _SearchSwayamsevakTransferState extends State<SearchSwayamsevakTransfer> {
     }
   }
 
-  void onSelectAll(value) {
+  /*void onSelectAll(value) {
     _swayamsevakTransferList!.then((dataList) {
       for (var data in dataList) {
         if (value == true)
@@ -520,7 +520,7 @@ class _SearchSwayamsevakTransferState extends State<SearchSwayamsevakTransfer> {
     setState(() {
       _isSelectAll = value;
     });
-  }
+  }*/
 
   void populateLinkedBhaagDropdown() async {
     List<GeoUnitMasterBAL?> data = await Statics.getGeoUnitMasterForApp('', '1', '', Statics.levels['BhaagLevelID']!, '', '', '', '', '', '', '', '');
@@ -544,8 +544,8 @@ class _SearchSwayamsevakTransferState extends State<SearchSwayamsevakTransfer> {
     int sourceBhaagVal = _linkedSourceBhaagValue == "" || _linkedSourceBhaagValue == null ? 0 : int.parse(_linkedSourceBhaagValue.toString());
     int destinationBhaagVal = _linkedDestinationBhaagValue == "" || _linkedDestinationBhaagValue == null ? 0 : int.parse(_linkedDestinationBhaagValue.toString());
 
+    _swayamsevakTransferList = await _getSwayamsevakTransferList(sourceBhaagVal, destinationBhaagVal, searchString, frmDate, toDate);
     setState(() {
-      _swayamsevakTransferList = _getSwayamsevakTransferList(sourceBhaagVal, destinationBhaagVal, searchString, frmDate, toDate);
       _isSearching = false;
       _isExpanded = false;
     });
@@ -736,26 +736,12 @@ class _SearchSwayamsevakTransferState extends State<SearchSwayamsevakTransfer> {
                   ],
                 ),
               ),
-              FutureBuilder<List<dynamic>>(
-                future: _swayamsevakTransferList,
-                builder: (ctx, dataSnapshot) {
-                  if (dataSnapshot.connectionState != ConnectionState.done) {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                  if (dataSnapshot.hasError) {
-                    return Center(
-                        child: Text(
-                      'Server Error, Please Try Again Later',
-                      style: TextStyle(color: Colors.red),
-                    ));
-                  }
-                  return dataSnapshot.hasData && dataSnapshot.data!.length > 0
-                      ? Column(
-                          children: dataSnapshot.data!.map((swTransferItem) => SwayamsevakTransferCard(swTransferItem, onCheckCard, onUnCheckCard, _isSelectAll, _search)).toList(),
-                        )
-                      : Center(child: Text(Statics.getLabel('noDataFoundTryAnotherSearch')));
-                },
-              ),
+              if (_isSearching) Center(child: CircularProgressIndicator()),
+              _swayamsevakTransferList != null && _swayamsevakTransferList!.length > 0
+                  ? Column(
+                      children: _swayamsevakTransferList!.map((swTransferItem) => SwayamsevakTransferCard(swTransferItem, onCheckCard, onUnCheckCard, _isSelectAll, _search)).toList(),
+                    )
+                  : Center(child: Text(Statics.getLabel('noDataFoundTryAnotherSearch')))
             ],
           ),
         ));

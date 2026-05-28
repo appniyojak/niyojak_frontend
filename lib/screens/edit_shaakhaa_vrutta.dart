@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 import '../helpers/static_data.dart' as Statics;
 import '../providers/bals.dart';
@@ -68,7 +69,8 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
   String? _selectedBoudhikDaysId;
   var _anyaBoudhikDaysCtrl = TextEditingController();
   bool _isDoneSewaDays = false;
-  String? _selectedSewaDaysId;
+
+  // String? _selectedSewaDaysId;
 
   bool _isDoneSaanghikGeet = false;
   bool _isDoneAmrutaVachan = false;
@@ -76,6 +78,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
 
   List<StaticMasterBAL?> _boudhikDaysList = [];
   List<StaticMasterBAL?> _sewaDaysList = [];
+  List<int?> _selectedSewaDaysList = [];
 
   @override
   void initState() {
@@ -145,10 +148,10 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
         frequencyId = freq ?? 0;
       });
 
-      print("code >>>>>>>>>>>>>>>>>>>>>>>>>>>>> $code");
+      // print("code >>>>>>>>>>>>>>>>>>>>>>>>>>>>> $code");
     }
     setState(() {});
-    _boudhikDaysList.forEach((e) => print("e >>>>>>>>>>>>>>>>>>>> ${e?.toJson()}"));
+    // _boudhikDaysList.forEach((e) => print("e >>>>>>>>>>>>>>>>>>>> ${e?.toJson()}"));
   }
 
   void getSwDetails(var theId) async {
@@ -209,7 +212,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
 
           _selectedBoudhikDaysId = vrutta?.SelectedBoudhikDaysId;
           _anyaBoudhikDaysCtrl.text = vrutta?.AnyaBoudhikDays ?? "";
-          _selectedSewaDaysId = vrutta?.SelectedSewaDaysId;
+          _selectedSewaDaysList = vrutta?.SelectedSewaDaysId?.split(',').map((e) => int.tryParse(e)).where((e) => e != null).cast<int>().toList() ?? [];
         }
       });
     }
@@ -306,7 +309,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
       "BoudhikDaysId": _selectedBoudhikDaysId,
       "AnyaBoudhikDays": _anyaBoudhikDaysCtrl.text.trim(),
       "IsDoneSewaDays": _isDoneSewaDays,
-      "SewaDaysId": _selectedSewaDaysId,
+      "SewaDaysId": _selectedSewaDaysList.isNotEmpty ? _selectedSewaDaysList.where((e) => e != null).join(",") : "",
       "IsOptionalShaaririk": _isOptionalShaaririk,
       "IsOptionalOther": _isOptionalOther,
       "Remark": _remarkCtrl.text.trim() == "" ? null : _remarkCtrl.text,
@@ -507,7 +510,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                         ),
                       ),
                     ]),
-                    if (frequencyId == 36) ...[
+                    /*if (frequencyId == 36) ...[
                       SizedBox(height: 14),
                       Text(
                         Statics.getLabel('MatrushaktiCount'),
@@ -535,7 +538,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                           ),
                         ),
                       ])
-                    ],
+                    ],*/
                     SizedBox(height: 10),
                     TextFormField(
                       textInputAction: TextInputAction.next,
@@ -809,19 +812,50 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                     ),
                     SizedBox(height: 10),
                     if (_isDoneSewaDays) ...[
-                      buildDropdownField(
-                        label: Statics.getLabel('SewaDays'),
-                        value: _selectedSewaDaysId,
-                        items: _sewaDaysList!
-                            .map((bg) => DropdownMenuItem(
-                                  value: bg?.staticID.toString(),
-                                  child: Text(bg?.codeForDisplay ?? "--"),
-                                ))
-                            .toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedSewaDaysId = value;
-                          });
+                      MultiSelectDialogField(
+                        title: Text(Statics.getLabel('SewaDays')),
+                        buttonText: Text(Statics.getLabel('SewaDays')),
+                        buttonIcon: Icon(Icons.arrow_drop_down),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                          border: Border.all(color: _sewaDaysList.isEmpty ? Colors.grey.shade400 : Colors.transparent),
+                        ),
+                        confirmText: Text(
+                          Statics.getLabel('Submit'),
+                          style: const TextStyle(color: Colors.purple),
+                        ),
+                        cancelText: Text(
+                          Statics.getLabel('clear'),
+                          style: const TextStyle(color: Colors.purple),
+                        ),
+                        searchable: false,
+                        listType: MultiSelectListType.LIST,
+                        items: _sewaDaysList.map((bg) => MultiSelectItem(bg?.staticID, (bg?.codeForDisplay ?? "--").toString())).toList(),
+                        initialValue: _selectedSewaDaysList,
+                        chipDisplay: MultiSelectChipDisplay(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.purple, width: 0.7),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            // icon: Icon(Icons.done, color: Colors.purple, size: 16),
+                            chipColor: Colors.white,
+                            textStyle: TextStyle(fontSize: 12, color: Colors.purple, fontWeight: FontWeight.w500)),
+                        // onSaved: (newValue) {},
+                        onConfirm: (values) {
+                          _selectedSewaDaysList = values.map((e) {
+                            // Check if the element is an integer
+                            if (e is int) {
+                              return e;
+                            }
+                            // If it's a string, try to parse it
+                            else if (e is String) {
+                              return int.tryParse(e); // Use tryParse to handle invalid strings and return null
+                            }
+                            // Otherwise, return null or handle as needed
+                            return null;
+                          }).toList();
+                          print("valueeeeeeeesssss >>>>>>>>>>>>>>> $values");
+                          setState(() {});
                         },
                       ),
                       SizedBox(height: 10),

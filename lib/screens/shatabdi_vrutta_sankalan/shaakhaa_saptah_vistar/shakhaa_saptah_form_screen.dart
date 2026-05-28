@@ -145,10 +145,10 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
         frequencyId = freq ?? 0;
       });
 
-      print("code >>>>>>>>>>>>>>>>>>>>>>>>>>>>> $code");
+      // print("code >>>>>>>>>>>>>>>>>>>>>>>>>>>>> $code");
     }
     setState(() {});
-    _boudhikDaysList.forEach((e) => print("e >>>>>>>>>>>>>>>>>>>> ${e?.toJson()}"));
+    // _boudhikDaysList.forEach((e) => print("e >>>>>>>>>>>>>>>>>>>> ${e?.toJson()}"));
   }
 
   void getSwDetails(var theId) async {
