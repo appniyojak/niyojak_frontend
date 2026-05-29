@@ -557,6 +557,23 @@ class GeoHierarchyController extends ChangeNotifier {
   ////////////////////////////////////////////
 
   Future<void> loadLevel(GeoLevel level, {GeoHierarchyFetchMode fetchMode = GeoHierarchyFetchMode.all}) async {
+    /// DO NOT LOAD SHAAKHAA
+    /// UNTIL GRAAM OR VASTI IS SELECTED
+
+    if (level == GeoLevel.Shaakhaa) {
+      final hasGraam = (state.selectedValues[GeoLevel.Graam]?.isNotEmpty ?? false);
+      final hasVasti = (state.selectedValues[GeoLevel.Vasti]?.isNotEmpty ?? false);
+
+      if (!hasGraam && !hasVasti) {
+        state.items.remove(GeoLevel.Shaakhaa);
+        state.selectedValues.remove(GeoLevel.Shaakhaa);
+        state.selectedNames.remove(GeoLevel.Shaakhaa);
+
+        notifyListeners();
+        return;
+      }
+    }
+
     final node = hierarchy.firstWhere((e) => e.level == level);
 
     String parentId = '';

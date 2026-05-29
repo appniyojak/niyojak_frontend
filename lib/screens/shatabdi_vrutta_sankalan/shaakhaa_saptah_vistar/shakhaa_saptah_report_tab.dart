@@ -65,6 +65,8 @@ class _ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> {
 
       await controller.initialize(dm);
 
+      isShakhaaSelected = (controller.ctrlUserLevelId == 1);
+
       setState(() {});
     });
   }
@@ -193,7 +195,7 @@ class _ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _LegendDot(color: color ?? Color(0xFF1565C0), label: !isDailySelected ? 'पिछले सप्ताह' : 'कल', bold: false),
+              _LegendDot(color: color ?? Color(0xFFB0BEC5), label: !isDailySelected ? 'पिछले सप्ताह' : 'कल', bold: false),
               SizedBox(width: 24),
               _LegendDot(color: color ?? Color(0xFF1565C0), label: !isDailySelected ? 'इस सप्ताह' : 'आज', bold: true),
             ],
@@ -399,31 +401,32 @@ class _ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> {
               decoration: BoxDecoration(color: Colors.purple, borderRadius: BorderRadius.circular(12)),
             ),
           ),
-          Row(
-            // mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Expanded(
-                child: InkWell(
-                  onTap: () => _getData(true),
-                  child: Container(
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4),
-                    child: Text("Shakhaa Only", style: TextStyle(color: isShakhaaSelected ? Colors.white : Colors.black)),
+          if ((userLevelId ?? 0) > 1)
+            Row(
+              // mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Expanded(
+                  child: InkWell(
+                    onTap: () => _getData(true),
+                    child: Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4),
+                      child: Text("Shaakhaa Only", style: TextStyle(color: isShakhaaSelected ? Colors.white : Colors.black)),
+                    ),
                   ),
                 ),
-              ),
-              Expanded(
-                child: InkWell(
-                  onTap: () => _getData(false),
-                  child: Container(
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4),
-                    child: Text("Level Wise", style: TextStyle(color: isShakhaaSelected ? Colors.black : Colors.white)),
+                Expanded(
+                  child: InkWell(
+                    onTap: () => _getData(false),
+                    child: Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4),
+                      child: Text("Level Wise", style: TextStyle(color: isShakhaaSelected ? Colors.black : Colors.white)),
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
         ],
       ),
     );
@@ -562,74 +565,73 @@ class _HorizontalBarChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RotatedBox(
-      quarterTurns: 1, // ← KEY FIX: was 3, must be 1 for left→right bars
-      child: BarChart(
-        BarChartData(
-          maxY: maxX,
-          minY: 0,
-          groupsSpace: 20,
-          barGroups: _buildGroups(),
-          borderData: FlBorderData(show: false),
-          gridData: FlGridData(
-            show: true,
-            drawVerticalLine: true,
-            drawHorizontalLine: false,
-            verticalInterval: 40,
-            getDrawingVerticalLine: (_) => const FlLine(
-              color: Color(0xFFEEEEEE),
-              strokeWidth: 1,
-            ),
-          ),
-          titlesData: FlTitlesData(
-            // After quarterTurns:1 rotation:
-            //   original LEFT axis  → visual BOTTOM  (shows 0–160 numbers)
-            //   original BOTTOM axis → visual LEFT    (shows category label)
-            //   original RIGHT & TOP → hidden
-            leftTitles: AxisTitles(
-              sideTitles: SideTitles(
-                showTitles: true,
-                reservedSize: 40,
-                interval: 40,
-                getTitlesWidget: _leftTitleWidget,
-              ),
-            ),
-            bottomTitles: AxisTitles(
-              sideTitles: SideTitles(
-                showTitles: true,
-                reservedSize: 52,
-                getTitlesWidget: _bottomTitleWidget,
-              ),
-            ),
-            rightTitles: const AxisTitles(
-              sideTitles: SideTitles(showTitles: false),
-            ),
-            topTitles: const AxisTitles(
-              sideTitles: SideTitles(showTitles: false),
-            ),
-          ),
-          barTouchData: BarTouchData(
-            enabled: true,
-            touchTooltipData: BarTouchTooltipData(
-              getTooltipColor: (_) => const Color(0xFF1A1A2E),
-              // tooltipRoundedRadius: 8,
-              getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                final label = rodIndex == 0 ? 'कल' : 'आज';
-                return BarTooltipItem(
-                  '$label: ${rod.toY.toInt()}',
-                  const TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                  ),
-                );
-              },
-            ),
+    return BarChart(
+      BarChartData(
+        rotationQuarterTurns: 1,
+        maxY: maxX,
+        minY: 0,
+        groupsSpace: 20,
+        barGroups: _buildGroups(),
+        borderData: FlBorderData(show: false),
+        gridData: FlGridData(
+          show: true,
+          drawVerticalLine: true,
+          drawHorizontalLine: false,
+          verticalInterval: 40,
+          getDrawingVerticalLine: (_) => const FlLine(
+            color: Color(0xFFEEEEEE),
+            strokeWidth: 1,
           ),
         ),
-        duration: const Duration(milliseconds: 800),
-        curve: Curves.easeOutCubic,
+        titlesData: FlTitlesData(
+          // After quarterTurns:1 rotation:
+          //   original LEFT axis  → visual BOTTOM  (shows 0–160 numbers)
+          //   original BOTTOM axis → visual LEFT    (shows category label)
+          //   original RIGHT & TOP → hidden
+          leftTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              reservedSize: 40,
+              interval: 40,
+              getTitlesWidget: _leftTitleWidget,
+            ),
+          ),
+          bottomTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              reservedSize: 52,
+              getTitlesWidget: _bottomTitleWidget,
+            ),
+          ),
+          rightTitles: const AxisTitles(
+            sideTitles: SideTitles(showTitles: false),
+          ),
+          topTitles: const AxisTitles(
+            sideTitles: SideTitles(showTitles: false),
+          ),
+        ),
+        barTouchData: BarTouchData(
+          enabled: true,
+          touchTooltipData: BarTouchTooltipData(
+            fitInsideHorizontally: true,
+            fitInsideVertically: true,
+            getTooltipColor: (_) => const Color(0xFF1A1A2E),
+            getTooltipItem: (group, groupIndex, rod, rodIndex) {
+              final label = rodIndex == 0 ? 'कल' : 'आज';
+              return BarTooltipItem(
+                '$label: ${rod.toY.toInt()}',
+                const TextStyle(
+                  color: Colors.white,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                ),
+              );
+            },
+          ),
+        ),
       ),
+      duration: const Duration(milliseconds: 800),
+      curve: Curves.easeOutCubic,
     );
   }
 }
