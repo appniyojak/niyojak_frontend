@@ -57,6 +57,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
   bool _isOptionalOther = false;
   var vayogatCode = '';
   var frequencyId = 0;
+  List<StaticMasterBAL> _frequency = [];
 
   bool _isDoneDeepBreathing = false;
   bool _isDoneDandaPrahaar = false;
@@ -138,6 +139,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
   void populateShaakhaVayogat(shaakhaaID) async {
     var data = await Statics.getShaakhaaByID(shaakhaaID);
     var data2 = await Statics.getStaticLDB('ShaakhaaVayogat');
+    var data3 = await Statics.getStaticLDB('ShaakhaaFrequency');
     _boudhikDaysList = await Statics.getStaticLDB('boudhikDaysList');
     _sewaDaysList = await Statics.getStaticLDB('sewaDaysList');
     if (data != null) {
@@ -145,10 +147,12 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
       var freq = data.frequencyID;
       setState(() {
         vayogatCode = code!;
+        _frequency = data3;
         frequencyId = freq ?? 0;
       });
 
       // print("code >>>>>>>>>>>>>>>>>>>>>>>>>>>>> $code");
+      print("frequencyId >>>>>>>>>>>>>>>>>>>>>>>>>>>>> $frequencyId");
     }
     setState(() {});
     // _boudhikDaysList.forEach((e) => print("e >>>>>>>>>>>>>>>>>>>> ${e?.toJson()}"));
@@ -510,7 +514,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                         ),
                       ),
                     ]),
-                    /*if (frequencyId == 36) ...[
+                    if (_frequency.isNotEmpty && _frequency.firstWhere((e) => e.staticID == frequencyId).code == "Monthly") ...[
                       SizedBox(height: 14),
                       Text(
                         Statics.getLabel('MatrushaktiCount'),
@@ -538,7 +542,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                           ),
                         ),
                       ])
-                    ],*/
+                    ],
                     SizedBox(height: 10),
                     TextFormField(
                       textInputAction: TextInputAction.next,
@@ -570,374 +574,377 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                       },
                     ),
                     SizedBox(height: 10),
-                    if (vayogatCode == "Proudh Vyavasaayee")
-                      Column(
-                        children: [
-                          SizedBox(
-                            width: Statics.getDeviceSize(context).width * 0.8,
-                            child: CheckboxListTile(
-                              contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                              controlAffinity: ListTileControlAffinity.leading,
-                              title: Text(Statics.getLabel("Minimum5minutesDeepBreathing"), style: TextStyle(fontSize: 15)),
-                              checkColor: Colors.white,
-                              activeColor: Colors.purple,
-                              value: _isDoneDeepBreathing,
-                              onChanged: (value) {
-                                setState(() {
-                                  _isDoneDeepBreathing = value!;
-                                });
-                              },
+                    if (_frequency.isNotEmpty && _frequency.firstWhere((e) => e.staticID == frequencyId).code != "Monthly") ...[
+                      if (vayogatCode == "Proudh Vyavasaayee")
+                        Column(
+                          children: [
+                            SizedBox(
+                              width: Statics.getDeviceSize(context).width * 0.8,
+                              child: CheckboxListTile(
+                                contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                                controlAffinity: ListTileControlAffinity.leading,
+                                title: Text(Statics.getLabel("Minimum5minutesDeepBreathing"), style: TextStyle(fontSize: 15)),
+                                checkColor: Colors.white,
+                                activeColor: Colors.purple,
+                                value: _isDoneDeepBreathing,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _isDoneDeepBreathing = value!;
+                                  });
+                                },
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 10),
-                        ],
-                      )
-                    else if (vayogatCode == "Baal")
-                      Column(
-                        children: [
-                          SizedBox(
-                            width: Statics.getDeviceSize(context).width * 0.8,
-                            child: CheckboxListTile(
-                              contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                              controlAffinity: ListTileControlAffinity.leading,
-                              title: Text(Statics.getLabel("Minimum5minutesUrdhvapad"), style: TextStyle(fontSize: 15)),
-                              checkColor: Colors.white,
-                              activeColor: Colors.purple,
-                              value: _isDoneUrdhvapad,
-                              onChanged: (value) {
-                                setState(() {
-                                  _isDoneUrdhvapad = value!;
-                                });
-                              },
+                            SizedBox(height: 10),
+                          ],
+                        )
+                      else if (vayogatCode == "Baal")
+                        Column(
+                          children: [
+                            SizedBox(
+                              width: Statics.getDeviceSize(context).width * 0.8,
+                              child: CheckboxListTile(
+                                contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                                controlAffinity: ListTileControlAffinity.leading,
+                                title: Text(Statics.getLabel("Minimum5minutesUrdhvapad"), style: TextStyle(fontSize: 15)),
+                                checkColor: Colors.white,
+                                activeColor: Colors.purple,
+                                value: _isDoneUrdhvapad,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _isDoneUrdhvapad = value!;
+                                  });
+                                },
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 10),
-                        ],
-                      )
-                    else
-                      Column(
-                        children: [
-                          SizedBox(
-                            width: Statics.getDeviceSize(context).width * 0.8,
-                            child: CheckboxListTile(
-                              contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                              controlAffinity: ListTileControlAffinity.leading,
-                              title: Text(Statics.getLabel("Minimum1minuteDandaPrahaar"), style: TextStyle(fontSize: 15)),
-                              checkColor: Colors.white,
-                              activeColor: Colors.purple,
-                              value: _isDoneDandaPrahaar,
-                              onChanged: (value) {
-                                setState(() {
-                                  _isDoneDandaPrahaar = value!;
-                                });
-                              },
+                            SizedBox(height: 10),
+                          ],
+                        )
+                      else
+                        Column(
+                          children: [
+                            SizedBox(
+                              width: Statics.getDeviceSize(context).width * 0.8,
+                              child: CheckboxListTile(
+                                contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                                controlAffinity: ListTileControlAffinity.leading,
+                                title: Text(Statics.getLabel("Minimum1minuteDandaPrahaar"), style: TextStyle(fontSize: 15)),
+                                checkColor: Colors.white,
+                                activeColor: Colors.purple,
+                                value: _isDoneDandaPrahaar,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _isDoneDandaPrahaar = value!;
+                                  });
+                                },
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 10),
-                          SizedBox(
-                            width: Statics.getDeviceSize(context).width * 0.8,
-                            child: CheckboxListTile(
-                              contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                              controlAffinity: ListTileControlAffinity.leading,
-                              title: Text(Statics.getLabel("Minimum5minutesSooryaNamaskaar"), style: TextStyle(fontSize: 15)),
-                              checkColor: Colors.white,
-                              activeColor: Colors.purple,
-                              value: _isDoneSooryaNamaskaar,
-                              onChanged: (value) {
-                                setState(() {
-                                  _isDoneSooryaNamaskaar = value!;
-                                });
-                              },
+                            SizedBox(height: 10),
+                            SizedBox(
+                              width: Statics.getDeviceSize(context).width * 0.8,
+                              child: CheckboxListTile(
+                                contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                                controlAffinity: ListTileControlAffinity.leading,
+                                title: Text(Statics.getLabel("Minimum5minutesSooryaNamaskaar"), style: TextStyle(fontSize: 15)),
+                                checkColor: Colors.white,
+                                activeColor: Colors.purple,
+                                value: _isDoneSooryaNamaskaar,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _isDoneSooryaNamaskaar = value!;
+                                  });
+                                },
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 10),
-                          SizedBox(
-                            width: Statics.getDeviceSize(context).width * 0.8,
-                            child: CheckboxListTile(
-                              contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                              controlAffinity: ListTileControlAffinity.leading,
-                              title: Text(Statics.getLabel("Minimum5minutesSanchalanAbhyaas"), style: TextStyle(fontSize: 15)),
-                              checkColor: Colors.white,
-                              activeColor: Colors.purple,
-                              value: _isDoneSanchalanAbhyaas,
-                              onChanged: (value) {
-                                setState(() {
-                                  _isDoneSanchalanAbhyaas = value!;
-                                });
-                              },
+                            SizedBox(height: 10),
+                            SizedBox(
+                              width: Statics.getDeviceSize(context).width * 0.8,
+                              child: CheckboxListTile(
+                                contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                                controlAffinity: ListTileControlAffinity.leading,
+                                title: Text(Statics.getLabel("Minimum5minutesSanchalanAbhyaas"), style: TextStyle(fontSize: 15)),
+                                checkColor: Colors.white,
+                                activeColor: Colors.purple,
+                                value: _isDoneSanchalanAbhyaas,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _isDoneSanchalanAbhyaas = value!;
+                                  });
+                                },
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 10),
-                        ],
-                      ),
-                    SizedBox(
-                      width: Statics.getDeviceSize(context).width * 0.8,
-                      child: CheckboxListTile(
-                        contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                        controlAffinity: ListTileControlAffinity.leading,
-                        title: Text(Statics.getLabel("SaanghikGeet"), style: TextStyle(fontSize: 15)),
-                        checkColor: Colors.white,
-                        activeColor: Colors.purple,
-                        value: _isDoneSaanghikGeet,
-                        onChanged: (value) {
-                          setState(() {
-                            _isDoneSaanghikGeet = value!;
-                          });
-                        },
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    SizedBox(
-                      width: Statics.getDeviceSize(context).width * 0.8,
-                      child: CheckboxListTile(
-                        contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                        controlAffinity: ListTileControlAffinity.leading,
-                        title: Text(Statics.getLabel("AmrutaVachan"), style: TextStyle(fontSize: 15)),
-                        checkColor: Colors.white,
-                        activeColor: Colors.purple,
-                        value: _isDoneAmrutaVachan,
-                        onChanged: (value) {
-                          setState(() {
-                            _isDoneAmrutaVachan = value!;
-                          });
-                        },
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    SizedBox(
-                      width: Statics.getDeviceSize(context).width * 0.8,
-                      child: CheckboxListTile(
-                        contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                        controlAffinity: ListTileControlAffinity.leading,
-                        title: Text(Statics.getLabel("Subhaashit"), style: TextStyle(fontSize: 15)),
-                        checkColor: Colors.white,
-                        activeColor: Colors.purple,
-                        value: _isDoneSubhaashit,
-                        onChanged: (value) {
-                          setState(() {
-                            _isDoneSubhaashit = value!;
-                          });
-                        },
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    SizedBox(
-                      width: Statics.getDeviceSize(context).width * 0.8,
-                      child: CheckboxListTile(
-                        contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                        controlAffinity: ListTileControlAffinity.leading,
-                        title: Text(Statics.getLabel("BoodhKathaOnceWeek"), style: TextStyle(fontSize: 15)),
-                        checkColor: Colors.white,
-                        activeColor: Colors.purple,
-                        value: _isDoneBoodhKatha,
-                        onChanged: (value) {
-                          setState(() {
-                            _isDoneBoodhKatha = value!;
-                          });
-                        },
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    SizedBox(
-                      width: Statics.getDeviceSize(context).width * 0.8,
-                      child: CheckboxListTile(
-                        contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                        controlAffinity: ListTileControlAffinity.leading,
-                        title: Text(Statics.getLabel("BoudhikDays"), style: TextStyle(fontSize: 15)),
-                        checkColor: Colors.white,
-                        activeColor: Colors.purple,
-                        value: _isDoneBoudhikDays,
-                        onChanged: (value) {
-                          setState(() {
-                            _isDoneBoudhikDays = value!;
-                          });
-                        },
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    if (_isDoneBoudhikDays) ...[
-                      buildDropdownField(
-                        label: Statics.getLabel('BoudhikDays'),
-                        value: _selectedBoudhikDaysId,
-                        items: _boudhikDaysList!
-                            .map((bg) => DropdownMenuItem(
-                                  value: bg?.staticID.toString(),
-                                  child: Text(bg?.codeForDisplay ?? "--"),
-                                ))
-                            .toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedBoudhikDaysId = value;
-                          });
-                          print(_selectedBoudhikDaysId);
-                          print(_boudhikDaysList.firstWhere((e) => e?.codeForDisplay == Statics.getLabel("anyaOption"))?.staticID);
-                          print(_selectedBoudhikDaysId == _boudhikDaysList.firstWhere((e) => e?.codeForDisplay == Statics.getLabel("anyaOption"))?.staticID.toString());
-                        },
+                            SizedBox(height: 10),
+                          ],
+                        ),
+
+                      SizedBox(
+                        width: Statics.getDeviceSize(context).width * 0.8,
+                        child: CheckboxListTile(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                          controlAffinity: ListTileControlAffinity.leading,
+                          title: Text(Statics.getLabel("SaanghikGeet"), style: TextStyle(fontSize: 15)),
+                          checkColor: Colors.white,
+                          activeColor: Colors.purple,
+                          value: _isDoneSaanghikGeet,
+                          onChanged: (value) {
+                            setState(() {
+                              _isDoneSaanghikGeet = value!;
+                            });
+                          },
+                        ),
                       ),
                       SizedBox(height: 10),
-                      if (_selectedBoudhikDaysId == _boudhikDaysList.firstWhere((e) => e?.codeForDisplay == Statics.getLabel("anyaOption"))?.staticID.toString())
-                        TextFormField(
-                          controller: _anyaBoudhikDaysCtrl,
-                          textInputAction: TextInputAction.next,
-                          onChanged: (value) => setState(() {}),
-                          decoration: InputDecoration(
-                            labelText: Statics.getLabel("anyaOption"),
-                            labelStyle: const TextStyle(color: Colors.black, fontSize: 14),
-                            // fillColor: Colors.grey.shade50,
-                            // filled: true,
-                            // border: OutlineInputBorder(
-                            //   borderRadius: BorderRadius.circular(8),
-                            //   borderSide: BorderSide.none, // Hide default border
-                            // ),
-                            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12), // Align left of field
-                          ),
-                          style: const TextStyle(color: Colors.black, fontSize: 14), // Original fields looked greyed out
+                      SizedBox(
+                        width: Statics.getDeviceSize(context).width * 0.8,
+                        child: CheckboxListTile(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                          controlAffinity: ListTileControlAffinity.leading,
+                          title: Text(Statics.getLabel("AmrutaVachan"), style: TextStyle(fontSize: 15)),
+                          checkColor: Colors.white,
+                          activeColor: Colors.purple,
+                          value: _isDoneAmrutaVachan,
+                          onChanged: (value) {
+                            setState(() {
+                              _isDoneAmrutaVachan = value!;
+                            });
+                          },
                         ),
-                    ],
-                    SizedBox(
-                      width: Statics.getDeviceSize(context).width * 0.8,
-                      child: CheckboxListTile(
-                        contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                        controlAffinity: ListTileControlAffinity.leading,
-                        title: Text(Statics.getLabel("SewaDays"), style: TextStyle(fontSize: 15)),
-                        checkColor: Colors.white,
-                        activeColor: Colors.purple,
-                        value: _isDoneSewaDays,
-                        onChanged: (value) {
-                          setState(() {
-                            _isDoneSewaDays = value!;
-                          });
-                        },
                       ),
-                    ),
-                    SizedBox(height: 10),
-                    if (_isDoneSewaDays) ...[
-                      MultiSelectDialogField(
-                        title: Text(Statics.getLabel('SewaDays')),
-                        buttonText: Text(Statics.getLabel('SewaDays')),
-                        buttonIcon: Icon(Icons.arrow_drop_down),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                          border: Border.all(color: _sewaDaysList.isEmpty ? Colors.grey.shade400 : Colors.transparent),
+                      SizedBox(height: 10),
+                      SizedBox(
+                        width: Statics.getDeviceSize(context).width * 0.8,
+                        child: CheckboxListTile(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                          controlAffinity: ListTileControlAffinity.leading,
+                          title: Text(Statics.getLabel("Subhaashit"), style: TextStyle(fontSize: 15)),
+                          checkColor: Colors.white,
+                          activeColor: Colors.purple,
+                          value: _isDoneSubhaashit,
+                          onChanged: (value) {
+                            setState(() {
+                              _isDoneSubhaashit = value!;
+                            });
+                          },
                         ),
-                        confirmText: Text(
-                          Statics.getLabel('Submit'),
-                          style: const TextStyle(color: Colors.purple),
+                      ),
+                      SizedBox(height: 10),
+                      SizedBox(
+                        width: Statics.getDeviceSize(context).width * 0.8,
+                        child: CheckboxListTile(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                          controlAffinity: ListTileControlAffinity.leading,
+                          title: Text(Statics.getLabel("BoodhKathaOnceWeek"), style: TextStyle(fontSize: 15)),
+                          checkColor: Colors.white,
+                          activeColor: Colors.purple,
+                          value: _isDoneBoodhKatha,
+                          onChanged: (value) {
+                            setState(() {
+                              _isDoneBoodhKatha = value!;
+                            });
+                          },
                         ),
-                        cancelText: Text(
-                          Statics.getLabel('clear'),
-                          style: const TextStyle(color: Colors.purple),
+                      ),
+                      SizedBox(height: 10),
+                      SizedBox(
+                        width: Statics.getDeviceSize(context).width * 0.8,
+                        child: CheckboxListTile(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                          controlAffinity: ListTileControlAffinity.leading,
+                          title: Text(Statics.getLabel("BoudhikDays"), style: TextStyle(fontSize: 15)),
+                          checkColor: Colors.white,
+                          activeColor: Colors.purple,
+                          value: _isDoneBoudhikDays,
+                          onChanged: (value) {
+                            setState(() {
+                              _isDoneBoudhikDays = value!;
+                            });
+                          },
                         ),
-                        searchable: false,
-                        listType: MultiSelectListType.LIST,
-                        items: _sewaDaysList.map((bg) => MultiSelectItem(bg?.staticID, (bg?.codeForDisplay ?? "--").toString())).toList(),
-                        initialValue: _selectedSewaDaysList,
-                        chipDisplay: MultiSelectChipDisplay(
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.purple, width: 0.7),
-                              borderRadius: BorderRadius.circular(12),
+                      ),
+                      SizedBox(height: 10),
+                      if (_isDoneBoudhikDays) ...[
+                        buildDropdownField(
+                          label: Statics.getLabel('BoudhikDays'),
+                          value: _selectedBoudhikDaysId,
+                          items: _boudhikDaysList!
+                              .map((bg) => DropdownMenuItem(
+                                    value: bg?.staticID.toString(),
+                                    child: Text(bg?.codeForDisplay ?? "--"),
+                                  ))
+                              .toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              _selectedBoudhikDaysId = value;
+                            });
+                            print(_selectedBoudhikDaysId);
+                            print(_boudhikDaysList.firstWhere((e) => e?.codeForDisplay == Statics.getLabel("anyaOption"))?.staticID);
+                            print(_selectedBoudhikDaysId == _boudhikDaysList.firstWhere((e) => e?.codeForDisplay == Statics.getLabel("anyaOption"))?.staticID.toString());
+                          },
+                        ),
+                        SizedBox(height: 10),
+                        if (_selectedBoudhikDaysId == _boudhikDaysList.firstWhere((e) => e?.codeForDisplay == Statics.getLabel("anyaOption"))?.staticID.toString())
+                          TextFormField(
+                            controller: _anyaBoudhikDaysCtrl,
+                            textInputAction: TextInputAction.next,
+                            onChanged: (value) => setState(() {}),
+                            decoration: InputDecoration(
+                              labelText: Statics.getLabel("anyaOption"),
+                              labelStyle: const TextStyle(color: Colors.black, fontSize: 14),
+                              // fillColor: Colors.grey.shade50,
+                              // filled: true,
+                              // border: OutlineInputBorder(
+                              //   borderRadius: BorderRadius.circular(8),
+                              //   borderSide: BorderSide.none, // Hide default border
+                              // ),
+                              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12), // Align left of field
                             ),
-                            // icon: Icon(Icons.done, color: Colors.purple, size: 16),
-                            chipColor: Colors.white,
-                            textStyle: TextStyle(fontSize: 12, color: Colors.purple, fontWeight: FontWeight.w500)),
-                        // onSaved: (newValue) {},
-                        onConfirm: (values) {
-                          _selectedSewaDaysList = values.map((e) {
-                            // Check if the element is an integer
-                            if (e is int) {
-                              return e;
-                            }
-                            // If it's a string, try to parse it
-                            else if (e is String) {
-                              return int.tryParse(e); // Use tryParse to handle invalid strings and return null
-                            }
-                            // Otherwise, return null or handle as needed
-                            return null;
-                          }).toList();
-                          print("valueeeeeeeesssss >>>>>>>>>>>>>>> $values");
-                          setState(() {});
-                        },
+                            style: const TextStyle(color: Colors.black, fontSize: 14), // Original fields looked greyed out
+                          ),
+                      ],
+                      SizedBox(
+                        width: Statics.getDeviceSize(context).width * 0.8,
+                        child: CheckboxListTile(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                          controlAffinity: ListTileControlAffinity.leading,
+                          title: Text(Statics.getLabel("SewaDays"), style: TextStyle(fontSize: 15)),
+                          checkColor: Colors.white,
+                          activeColor: Colors.purple,
+                          value: _isDoneSewaDays,
+                          onChanged: (value) {
+                            setState(() {
+                              _isDoneSewaDays = value!;
+                            });
+                          },
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      if (_isDoneSewaDays) ...[
+                        MultiSelectDialogField(
+                          title: Text(Statics.getLabel('SewaDays')),
+                          buttonText: Text(Statics.getLabel('SewaDays')),
+                          buttonIcon: Icon(Icons.arrow_drop_down),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                            border: Border.all(color: _sewaDaysList.isEmpty ? Colors.grey.shade400 : Colors.transparent),
+                          ),
+                          confirmText: Text(
+                            Statics.getLabel('Submit'),
+                            style: const TextStyle(color: Colors.purple),
+                          ),
+                          cancelText: Text(
+                            Statics.getLabel('clear'),
+                            style: const TextStyle(color: Colors.purple),
+                          ),
+                          searchable: false,
+                          listType: MultiSelectListType.LIST,
+                          items: _sewaDaysList.map((bg) => MultiSelectItem(bg?.staticID, (bg?.codeForDisplay ?? "--").toString())).toList(),
+                          initialValue: _selectedSewaDaysList,
+                          chipDisplay: MultiSelectChipDisplay(
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.purple, width: 0.7),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              // icon: Icon(Icons.done, color: Colors.purple, size: 16),
+                              chipColor: Colors.white,
+                              textStyle: TextStyle(fontSize: 12, color: Colors.purple, fontWeight: FontWeight.w500)),
+                          // onSaved: (newValue) {},
+                          onConfirm: (values) {
+                            _selectedSewaDaysList = values.map((e) {
+                              // Check if the element is an integer
+                              if (e is int) {
+                                return e;
+                              }
+                              // If it's a string, try to parse it
+                              else if (e is String) {
+                                return int.tryParse(e); // Use tryParse to handle invalid strings and return null
+                              }
+                              // Otherwise, return null or handle as needed
+                              return null;
+                            }).toList();
+                            print("valueeeeeeeesssss >>>>>>>>>>>>>>> $values");
+                            setState(() {});
+                          },
+                        ),
+                        SizedBox(height: 10),
+                      ],
+                      // SizedBox(
+                      //   width: Statics.getDeviceSize(context).width * 0.8,
+                      //   child: CheckboxListTile(
+                      //     contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                      //     controlAffinity: ListTileControlAffinity.leading,
+                      //     title: Text(Statics.getLabel("ConductedAnivaaryaShaaririkKaaryakram"),
+                      //         style: TextStyle(fontSize: 15)),
+                      //     checkColor: Colors.white,
+                      //     activeColor: Colors.purple,
+                      //     value: _isMandatoryShaaririk == null
+                      //         ? false
+                      //         : _isMandatoryShaaririk,
+                      //     onChanged: (value) {
+                      //       setState(() {
+                      //         _isMandatoryShaaririk = value;
+                      //       });
+                      //     },
+                      //   ),
+                      // ),
+                      // SizedBox(
+                      //   height: 10
+                      // ),
+                      // SizedBox(
+                      //   width: Statics.getDeviceSize(context).width * 0.8,
+                      //   child: CheckboxListTile(
+                      //     contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                      //     controlAffinity: ListTileControlAffinity.leading,
+                      //     title: Text(Statics.getLabel("ConductedAnivaaryaBouddhikKaaryakram"),
+                      //         style: TextStyle(fontSize: 15)),
+                      //     checkColor: Colors.white,
+                      //     activeColor: Colors.purple,
+                      //     value: _isMandatoryBouddhik == null
+                      //         ? false
+                      //         : _isMandatoryBouddhik,
+                      //     onChanged: (value) {
+                      //       setState(() {
+                      //         _isMandatoryBouddhik = value;
+                      //       });
+                      //     },
+                      //   ),
+                      // ),
+                      // SizedBox(
+                      //   height: 10
+                      // ),
+                      SizedBox(
+                        width: Statics.getDeviceSize(context).width * 0.8,
+                        child: CheckboxListTile(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                          controlAffinity: ListTileControlAffinity.leading,
+                          title: Text(Statics.getLabel("ConductedOptionalShaaririkVishay"), style: TextStyle(fontSize: 15)),
+                          checkColor: Colors.white,
+                          activeColor: Colors.purple,
+                          value: _isOptionalShaaririk,
+                          onChanged: (value) {
+                            setState(() {
+                              _isOptionalShaaririk = value!;
+                            });
+                          },
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      SizedBox(
+                        width: Statics.getDeviceSize(context).width * 0.8,
+                        child: CheckboxListTile(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                          controlAffinity: ListTileControlAffinity.leading,
+                          title: Text(Statics.getLabel("ConductedOtherOptionalKaaryakram"), style: TextStyle(fontSize: 15)),
+                          checkColor: Colors.white,
+                          activeColor: Colors.purple,
+                          value: _isOptionalOther,
+                          onChanged: (value) {
+                            setState(() {
+                              _isOptionalOther = value!;
+                            });
+                          },
+                        ),
                       ),
                       SizedBox(height: 10),
                     ],
-                    // SizedBox(
-                    //   width: Statics.getDeviceSize(context).width * 0.8,
-                    //   child: CheckboxListTile(
-                    //     contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                    //     controlAffinity: ListTileControlAffinity.leading,
-                    //     title: Text(Statics.getLabel("ConductedAnivaaryaShaaririkKaaryakram"),
-                    //         style: TextStyle(fontSize: 15)),
-                    //     checkColor: Colors.white,
-                    //     activeColor: Colors.purple,
-                    //     value: _isMandatoryShaaririk == null
-                    //         ? false
-                    //         : _isMandatoryShaaririk,
-                    //     onChanged: (value) {
-                    //       setState(() {
-                    //         _isMandatoryShaaririk = value;
-                    //       });
-                    //     },
-                    //   ),
-                    // ),
-                    // SizedBox(
-                    //   height: 10
-                    // ),
-                    // SizedBox(
-                    //   width: Statics.getDeviceSize(context).width * 0.8,
-                    //   child: CheckboxListTile(
-                    //     contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                    //     controlAffinity: ListTileControlAffinity.leading,
-                    //     title: Text(Statics.getLabel("ConductedAnivaaryaBouddhikKaaryakram"),
-                    //         style: TextStyle(fontSize: 15)),
-                    //     checkColor: Colors.white,
-                    //     activeColor: Colors.purple,
-                    //     value: _isMandatoryBouddhik == null
-                    //         ? false
-                    //         : _isMandatoryBouddhik,
-                    //     onChanged: (value) {
-                    //       setState(() {
-                    //         _isMandatoryBouddhik = value;
-                    //       });
-                    //     },
-                    //   ),
-                    // ),
-                    // SizedBox(
-                    //   height: 10
-                    // ),
-                    SizedBox(
-                      width: Statics.getDeviceSize(context).width * 0.8,
-                      child: CheckboxListTile(
-                        contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                        controlAffinity: ListTileControlAffinity.leading,
-                        title: Text(Statics.getLabel("ConductedOptionalShaaririkVishay"), style: TextStyle(fontSize: 15)),
-                        checkColor: Colors.white,
-                        activeColor: Colors.purple,
-                        value: _isOptionalShaaririk,
-                        onChanged: (value) {
-                          setState(() {
-                            _isOptionalShaaririk = value!;
-                          });
-                        },
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    SizedBox(
-                      width: Statics.getDeviceSize(context).width * 0.8,
-                      child: CheckboxListTile(
-                        contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                        controlAffinity: ListTileControlAffinity.leading,
-                        title: Text(Statics.getLabel("ConductedOtherOptionalKaaryakram"), style: TextStyle(fontSize: 15)),
-                        checkColor: Colors.white,
-                        activeColor: Colors.purple,
-                        value: _isOptionalOther,
-                        onChanged: (value) {
-                          setState(() {
-                            _isOptionalOther = value!;
-                          });
-                        },
-                      ),
-                    ),
-                    SizedBox(height: 10),
                     TextFormField(
                       textInputAction: TextInputAction.next,
                       controller: _remarkCtrl,

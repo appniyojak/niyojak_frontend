@@ -1174,6 +1174,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                   level: GeoLevel.Mahaanagar,
                                   title: 'Mahaanagar',
                                   controller: ctrl,
+                                  fetchMode: GeoHierarchyFetchMode.vastiOnly,
                                 ),
 
                                 // if (ctrl.hasItems(GeoLevel.vibhaag))
@@ -1181,6 +1182,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                   level: GeoLevel.Vibhaag,
                                   title: 'Vibhaag',
                                   controller: ctrl,
+                                  fetchMode: GeoHierarchyFetchMode.vastiOnly,
                                 ),
 
                                 if (ctrl.hasItems(GeoLevel.Bhaag))
@@ -1188,6 +1190,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                     level: GeoLevel.Bhaag,
                                     title: 'Bhaag',
                                     controller: ctrl,
+                                    fetchMode: GeoHierarchyFetchMode.vastiOnly,
                                   ),
 
                                 if (ctrl.hasItems(GeoLevel.Nagar))
@@ -1195,6 +1198,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                     level: GeoLevel.Nagar,
                                     title: 'Nagar',
                                     controller: ctrl,
+                                    fetchMode: GeoHierarchyFetchMode.vastiOnly,
                                   ),
 
                                 /// CONDITIONAL

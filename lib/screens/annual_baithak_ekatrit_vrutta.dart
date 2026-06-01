@@ -473,6 +473,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                                     });
                                     //populatelinkedBhaagDropdown();
                                     await populateDropdown();
+                                    ctrl.loadHierarchyForUser();
                                   },
                                   child: Text(Statics.getLabel('clear'))),
                             ],
