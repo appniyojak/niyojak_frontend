@@ -527,7 +527,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                             controller: _matrushaktiCtrl,
                             labelText: Statics.getLabel('Total'),
                             onSaved: (value) {
-                              vrutta!.proudhaVyavasaayeeCount = value == "" ? null : int.parse(value!);
+                              vrutta!.matruskatiCount = value == "" ? null : int.parse(value!);
                             },
                           ),
                         ),
@@ -537,7 +537,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                             expectedController: _matrushaktiCtrl,
                             labelText: Statics.getLabel('newAdmission'),
                             onSaved: (value) {
-                              vrutta!.newproudhaVyavasaayeeCount = value == "" ? null : int.parse(value!);
+                              vrutta!.newmatruskatiCount = value == "" ? null : int.parse(value!);
                             },
                           ),
                         ),

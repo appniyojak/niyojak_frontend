@@ -248,6 +248,15 @@ final shakhaaNode = GeoHierarchyNode(
   },
 );
 
+GeoHierarchyController createGeoController() {
+  return GeoHierarchyController(
+    hierarchy: [
+      ...baseHierarchy,
+      shakhaaNode,
+    ],
+  );
+}
+
 ////////////////////////////////////////////// CONTROLLER /////////////////////////////////////////////
 
 class GeoHierarchyController extends ChangeNotifier {

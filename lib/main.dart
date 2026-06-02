@@ -93,6 +93,7 @@ import 'screens/shatabdi_vrutta_sankalan/sadbhav_baithak/sadbhav_baithak_main_ta
 import 'screens/shatabdi_vrutta_sankalan/sadbhav_baithak/sadbhav_center_creation_screen.dart';
 import 'screens/shatabdi_vrutta_sankalan/sadbhav_baithak/sadbhav_centers_list_screen.dart';
 import 'screens/shatabdi_vrutta_sankalan/sadbhav_baithak/sadbhav_search_vrutta.dart';
+import 'screens/shatabdi_vrutta_sankalan/shaakhaa_saptah_vistar/add_new_shaakhaa_vistaar_screen.dart';
 import 'screens/shatabdi_vrutta_sankalan/shaakhaa_saptah_vistar/shakha_saptah_main_tab.dart';
 import 'screens/shatabdi_vrutta_sankalan/shaakhaa_saptah_vistar/shakhaa_saptah_form_screen.dart';
 import 'screens/shatabdi_vrutta_sankalan/vijayadashami/vijayadashami_form_view.dart';
@@ -376,6 +377,7 @@ class NiyojakAppState extends State<NiyojakApp> {
                 YuvaSangamFormScreen.routeName: (ctx) => YuvaSangamFormScreen(),
                 ShakhaSaptahMainTab.routeName: (ctx) => ShakhaSaptahMainTab(),
                 ShakhaaSaptahFormScreen.routeName: (ctx) => ShakhaaSaptahFormScreen(),
+                AddNewShaakhaaVistaarScreen.routeName: (ctx) => AddNewShaakhaaVistaarScreen(),
                 SearchSankalpScreen.routeName: (ctx) => ChangeNotifierProvider<SankalpScreenProvider>(create: (context) => SankalpScreenProvider(), child: SearchSankalpScreen()),
                 // SearchSankalpScreen.routeName: (ctx) => ChangeNotifierProvider<SankalpScreenProvider>(create: (context) => SankalpScreenProvider(), child: SearchSankalpScreen()),
               },
