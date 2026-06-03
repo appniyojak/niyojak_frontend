@@ -2833,7 +2833,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                             ),
                           )),
                         ],
-                        rows: names.split(",").toList().asMap().entries.map((entry) {
+                        rows: names.split("{niyodev}").toList().asMap().entries.map((entry) {
                           int index = entry.key;
                           var data = entry.value;
                           String? id;

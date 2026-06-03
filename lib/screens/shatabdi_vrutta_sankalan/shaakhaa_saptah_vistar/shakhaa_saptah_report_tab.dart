@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../../helpers/static_data.dart' as Statics;
 import '../../../models/response_model/shaakhaa_vistar_report_repo_model.dart';
+import '../../../providers/bals.dart';
 import '../../../utils/globals.dart';
 import '../../../utils/stable_geounit_class.dart';
 import 'shakhaa_saptah_form_screen.dart';
@@ -49,6 +50,9 @@ class _ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Au
   List<AttendanceData> _weeklyPresent = [];
   List<AttendanceData> _weeklyNew = [];
 
+  List<GeoUnitMasterBAL>? _linkedshaakhaa;
+  GeoUnitMasterBAL? _selectedshaakhaa;
+
   // _getData(bool isShakhaa, {bool isStart = false}) async {
   //   // await _setData();
   //   if (!isStart) isShakhaaSelected = isShakhaa;
@@ -70,26 +74,53 @@ class _ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Au
     // TODO: implement initState
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final dm = await MyAppGlobals.getLevelLDB();
+    WidgetsBinding.instance.addPostFrameCallback((_) => initData());
+  }
 
-      final controller = context.read<GeoHierarchyController>();
+  initData() async {
+    final dm = await MyAppGlobals.getLevelLDB();
 
-      await controller.initialize(dm);
+    final controller = context.read<GeoHierarchyController>();
 
-      // isShakhaaSelected = (controller.ctrlUserLevelId == 1);
+    await controller.initialize(dm);
 
-      setState(() {});
-    });
+    // isShakhaaSelected = (controller.ctrlUserLevelId == 1);
+
+    setState(() {});
+
+    if ([2, 3].contains(controller.ctrlUserLevelId)) {
+      populatelinkedShaakhaDropdown(controller.deepestSelectedGeoUnitId ?? "0", controller.ctrlUserLevelId == 3);
+    }
+  }
+
+  populatelinkedShaakhaDropdown(String iDStr, bool isGraam) async {
+    _selectedshaakhaa = null;
+    _searched = false;
+    report = null;
+    setState(() {});
+    Map<String, dynamic> formData = {
+      "Geounitid": iDStr,
+      "appuserid": int.tryParse(Statics.userDetails['userID']) ?? null,
+    };
+
+    // String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
+    // log("Form Data (JSON):\n$formattedJson");
+    final _list = await Statics.getGeoShaakhaaForReportData(context, formData);
+    // var vsDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['ShaakhaaLevelID'].toString(), iDStr, isGraam ? "Graam" : "Vasti", '');
+    if (mounted)
+      setState(() {
+        _linkedshaakhaa = _list ?? [];
+      });
   }
 
   ///////////////////////////////////////////////////////////////////////
-  getReportDataFun(String? selectedGeoUnitId) async {
+  getReportDataFun(dynamic selectedGeoUnitId) async {
     report = null;
     setState(() {});
     Map<String, dynamic> formData = {
       "Geounitid": selectedGeoUnitId == null ? null : int.tryParse(selectedGeoUnitId.toString()),
       "appuserid": int.tryParse(Statics.userDetails['userID']) ?? null,
+      "isnew": _selectedshaakhaa?.isnew ?? 0,
     };
 
     // String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
@@ -148,8 +179,8 @@ class _ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Au
               else ...[
                 _typeResultTab(),
                 _buildHeader(),
-                _attendanceCard(title: isDailySelected ? "कुल उपस्थिति" : "साप्ताहिक उपस्थिति", data: isDailySelected ? _dailyPresent : _weeklyPresent, isDaily: isDailySelected),
-                _attendanceCard(title: isDailySelected ? "कुल नई भरती" : "साप्ताहिक नई भरती", data: isDailySelected ? _dailyNew : _weeklyNew, isDaily: isDailySelected)
+                _attendanceCard(title: "कुल उपस्थिति", data: isDailySelected ? _dailyPresent : _weeklyPresent, isDaily: isDailySelected),
+                _attendanceCard(title: "कुल नई भरती", data: isDailySelected ? _dailyNew : _weeklyNew, isDaily: isDailySelected)
               ]
           ],
         ),
@@ -232,7 +263,8 @@ class _ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Au
           // ── Horizontal bar chart ─────────────────
           SizedBox(
             height: chartHeight,
-            child: _HorizontalBarChart(data: data, shaakhaaId: report?.mid, isDaily: isDaily),
+            width: MediaQuery.sizeOf(context).width,
+            child: _HorizontalBarChart(data: data, shaakhaaId: report?.mid, isDaily: isDaily, selectedshaakhaa: _selectedshaakhaa),
           ),
 
           const SizedBox(height: 16),
@@ -275,6 +307,10 @@ class _ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Au
                     level: GeoLevel.Mahaanagar,
                     title: 'Mahaanagar',
                     controller: ctrl,
+                    onChanged: (p0) => setState(() {
+                      _searched = false;
+                      _linkedshaakhaa = _selectedshaakhaa = null;
+                    }),
                   ),
 
                   // if (ctrl.hasItems(GeoLevel.vibhaag))
@@ -282,6 +318,10 @@ class _ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Au
                     level: GeoLevel.Vibhaag,
                     title: 'Vibhaag',
                     controller: ctrl,
+                    onChanged: (p0) => setState(() {
+                      _searched = false;
+                      _linkedshaakhaa = _selectedshaakhaa = null;
+                    }),
                   ),
 
                   if (ctrl.hasItems(GeoLevel.Bhaag))
@@ -289,6 +329,10 @@ class _ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Au
                       level: GeoLevel.Bhaag,
                       title: 'Bhaag',
                       controller: ctrl,
+                      onChanged: (p0) => setState(() {
+                        _searched = false;
+                        _linkedshaakhaa = _selectedshaakhaa = null;
+                      }),
                     ),
 
                   if (ctrl.hasItems(GeoLevel.Nagar))
@@ -296,6 +340,10 @@ class _ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Au
                       level: GeoLevel.Nagar,
                       title: 'Nagar',
                       controller: ctrl,
+                      onChanged: (p0) => setState(() {
+                        _searched = false;
+                        _linkedshaakhaa = _selectedshaakhaa = null;
+                      }),
                     ),
 
                   ////////////////////////////////////////
@@ -306,6 +354,10 @@ class _ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Au
                       level: GeoLevel.upnagarUpkhanda,
                       title: 'upnagarUpkhanda',
                       controller: ctrl,
+                      onChanged: (p0) => setState(() {
+                        _searched = false;
+                        _linkedshaakhaa = _selectedshaakhaa = null;
+                      }),
                     ),
 
                   ////////////////////////////////////////
@@ -315,6 +367,10 @@ class _ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Au
                       level: GeoLevel.Mandal,
                       title: 'Mandal',
                       controller: ctrl,
+                      onChanged: (p0) => setState(() {
+                        _searched = false;
+                        _linkedshaakhaa = _selectedshaakhaa = null;
+                      }),
                     ),
 
                   if (ctrl.hasItems(GeoLevel.Graam))
@@ -322,6 +378,7 @@ class _ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Au
                       level: GeoLevel.Graam,
                       title: 'Graam',
                       controller: ctrl,
+                      onChanged: (p0) => populatelinkedShaakhaDropdown(p0, true),
                     ),
 
                   if (ctrl.hasItems(GeoLevel.Vasti))
@@ -329,13 +386,33 @@ class _ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Au
                       level: GeoLevel.Vasti,
                       title: 'Vasti',
                       controller: ctrl,
+                      onChanged: (p0) => populatelinkedShaakhaDropdown(p0, false),
                     ),
 
-                  if (ctrl.hasItems(GeoLevel.Shaakhaa))
+                  if (ctrl.ctrlUserLevelId == 1 && ctrl.hasItems(GeoLevel.Shaakhaa))
                     GeoDropdownWidget(
                       level: GeoLevel.Shaakhaa,
                       title: 'Shaakhaa',
                       controller: ctrl,
+                    ),
+                  if (ctrl.ctrlUserLevelId != 1 && _linkedshaakhaa != null && _linkedshaakhaa!.isNotEmpty)
+                    DropdownButtonFormField<GeoUnitMasterBAL>(
+                      decoration: InputDecoration(labelText: Statics.getLabel("Shaakhaa")),
+                      isExpanded: true,
+                      value: _selectedshaakhaa,
+                      items: _linkedshaakhaa!
+                          .map((bg) => DropdownMenuItem(
+                                value: bg,
+                                child: Text(
+                                  bg.geoUnitName.toString(),
+                                  style: TextStyle(color: bg.isnew == 1 ? Colors.blue : Colors.black),
+                                ),
+                              ))
+                          .toList(),
+                      onChanged: (value) => setState(() {
+                        _searched = false;
+                        _selectedshaakhaa = value;
+                      }),
                     ),
 
                   SizedBox(height: 12),
@@ -400,7 +477,7 @@ class _ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Au
                             setState(() {
                               _searched = true;
                             });
-                            getReportDataFun(ctrl.deepestSelectedGeoUnitId);
+                            getReportDataFun(_selectedshaakhaa?.geoUnitID ?? ctrl.deepestSelectedGeoUnitId);
                           },
                           child: Text(
                             Statics.getLabel('Search'),
@@ -413,6 +490,7 @@ class _ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Au
 
                               setState(() {
                                 _searched = false;
+                                _linkedshaakhaa = _selectedshaakhaa = null;
                               });
                               ctrl.loadHierarchyForUser();
                             },
@@ -534,8 +612,9 @@ class _HorizontalBarChart extends StatefulWidget {
   final List<AttendanceData> data;
   final int? shaakhaaId;
   final bool isDaily;
+  final GeoUnitMasterBAL? selectedshaakhaa;
 
-  const _HorizontalBarChart({required this.data, required this.shaakhaaId, required this.isDaily});
+  const _HorizontalBarChart({required this.data, required this.shaakhaaId, required this.isDaily, this.selectedshaakhaa});
 
   @override
   State<_HorizontalBarChart> createState() => _HorizontalBarChartState();
@@ -547,7 +626,55 @@ class _HorizontalBarChartState extends State<_HorizontalBarChart> {
   int? _touchedGroupIndex;
   int? _touchedRodIndex;
 
+  // Compute maximum bound dynamically to align grid lines uniformly
+  double get _calculatedMaxX {
+    if (widget.data.isEmpty) return 150.0;
+    double maxVal = 0;
+    for (var d in widget.data) {
+      if (d.today > maxVal) maxVal = d.today;
+      if (d.yesterday > maxVal) maxVal = d.yesterday;
+    }
+    return maxVal < 50 ? 100 : ((maxVal / 50).ceil() * 50).toDouble();
+  }
+
   List<BarChartGroupData> _buildGroups() {
+    final maxLimit = _calculatedMaxX;
+
+    return List.generate(widget.data.length, (i) {
+      final d = widget.data[i];
+      return BarChartGroupData(
+        x: i,
+        groupVertically: false,
+        barsSpace: 6,
+        barRods: [
+          // 1. Yesterday / Previous Week Track
+          BarChartRodData(
+            toY: maxLimit, // ◄ Stretches the touch hit-box to full length
+            width: 18,
+            borderRadius: BorderRadius.circular(4),
+            rodStackItems: [
+              BarChartRodStackItem(0, d.yesterday, const Color(0xFFB0BEC5)), // Filled value segment
+              BarChartRodStackItem(d.yesterday, maxLimit, const Color(0xFFF0F0F0)), // Empty background segment
+            ],
+          ),
+          // 2. Today / Current Week Track
+          BarChartRodData(
+            toY: maxLimit, // ◄ Stretches the touch hit-box to full length
+            width: 18,
+            borderRadius: BorderRadius.circular(4),
+            rodStackItems: [
+              BarChartRodStackItem(0, d.today, const Color(0xFF1565C0)), // Filled value segment
+              BarChartRodStackItem(d.today, maxLimit, const Color(0xFFF0F0F0)), // Empty background segment
+            ],
+          ),
+        ],
+      );
+    });
+  }
+
+  /*List<BarChartGroupData> _buildGroups() {
+    final maxLimit = _calculatedMaxX;
+
     return List.generate(widget.data.length, (i) {
       final d = widget.data[i];
       return BarChartGroupData(
@@ -582,7 +709,7 @@ class _HorizontalBarChartState extends State<_HorizontalBarChart> {
         ],
       );
     });
-  }
+  }*/
 
   Widget _leftTitleWidget(double value, TitleMeta meta) {
     if (value % 40 != 0) return const SizedBox.shrink();
@@ -620,12 +747,14 @@ class _HorizontalBarChartState extends State<_HorizontalBarChart> {
   @override
   Widget build(BuildContext context) {
     return Stack(
+      clipBehavior: Clip.none,
       children: [
         // 1. The Chart
         BarChart(
           BarChartData(
             rotationQuarterTurns: 1,
-            maxY: (widget.data[0].yesterday > widget.data[0].today ? widget.data[0].yesterday : widget.data[0].today) + 100,
+            maxY: _calculatedMaxX,
+            // maxY: (widget.data[0].yesterday > widget.data[0].today ? widget.data[0].yesterday : widget.data[0].today) + 100,
             minY: 0,
             groupsSpace: 20,
             barGroups: _buildGroups(),
@@ -700,8 +829,8 @@ class _HorizontalBarChartState extends State<_HorizontalBarChart> {
         // 3. Floating Edit Button Container
         if (_tapPosition != null)
           Positioned(
-            top: _tapPosition!.dx,
-            left: _tapPosition!.dy,
+            top: _tapPosition!.dx + 40,
+            right: _tapPosition!.dy - 90,
             // FractionalTranslation shifts the container so it centers itself
             // above the exact tap point rather than starting from the top-left corner
             child: FractionalTranslation(
@@ -710,7 +839,7 @@ class _HorizontalBarChartState extends State<_HorizontalBarChart> {
                 color: Colors.transparent,
                 child: InkWell(
                   borderRadius: BorderRadius.circular(8),
-                  onTap: context.read<GeoHierarchyController>().deepestSelectedLevelId != 1
+                  onTap: (widget.selectedshaakhaa == null)
                       ? null
                       : () {
                           // TODO: Execute your edit logic here
@@ -755,7 +884,7 @@ class _HorizontalBarChartState extends State<_HorizontalBarChart> {
                           ),
                         ),
                         SizedBox(width: 8),
-                        if (context.read<GeoHierarchyController>().deepestSelectedLevelId == 1 && widget.isDaily) Icon(Icons.edit, size: 16, color: Colors.grey.shade900),
+                        if ((widget.selectedshaakhaa != null) && widget.isDaily) Icon(Icons.edit, size: 16, color: Colors.grey.shade900),
                       ],
                     ),
                   ),

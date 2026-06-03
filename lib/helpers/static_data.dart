@@ -287,6 +287,7 @@ const String urlSaveShakhaaVistar = baseUrlAPI + '/saveshakhaavistar';
 const String urlGetShaakhaaVistarVrutta = baseUrlAPI + '/GetVistarShaakhaaVruttaListForApp';
 const String urlSaveShaakhaaVistarVrutta = baseUrlAPI + '/SaveVistarShaakhaaVrutta';
 const String urlShaakhaaVistarReport = baseUrlAPI + '/GetVistarShaakhaaVruttaReport';
+const String urlGeoShaakhaaForReport = baseUrlAPI + '/getshakhaforvistarreport';
 
 const String urlVastiSarvekshanDataDump = baseUrlAPI + '/VastisarVekshanDataDump';
 const String urlGetReleaseNotes = baseUrlAPI + '/getreleasenote';
@@ -921,6 +922,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevel(String levelID) async {
       data['GeoUnitID'],
       data['PraantID'],
       data['LevelID'],
+      data['isnew'] ?? 0,
       data['GeoUnitName'],
       "",
       "",
@@ -995,6 +997,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForVasti(String levelI
       data['GeoUnitID'],
       data['PraantID'],
       data['LevelID'],
+      data['isnew'] ?? 0,
       data['GeoUnitName'],
       "",
       "",
@@ -1070,6 +1073,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForMandal(String level
       data['GeoUnitID'],
       data['PraantID'],
       data['LevelID'],
+      data['isnew'] ?? 0,
       data['GeoUnitName'],
       "",
       "",
@@ -1145,6 +1149,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForUpnagar(String leve
       data['GeoUnitID'],
       data['PraantID'],
       data['LevelID'],
+      data['isnew'] ?? 0,
       data['GeoUnitName'],
       "",
       "",
@@ -1209,6 +1214,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParent(String levelID, Strin
       data['GeoUnitID'],
       data['PraantID'],
       data['LevelID'],
+      data['isnew'] ?? 0,
       data['GeoUnitName'],
       "",
       "",
@@ -1248,6 +1254,7 @@ Future<GeoUnitMasterBAL?> getGeoUnitsByID(String geoUnitID) async {
       result[0]['GeoUnitID'],
       result[0]['PraantID'],
       result[0]['LevelID'],
+      result[0]['isnew'] ?? 0,
       result[0]['GeoUnitName'],
       result[0]['FullName'],
       result[0]['LevelName'],
@@ -4331,9 +4338,10 @@ Future<List<dynamic>> getShaakhaaVruttaListForApp(var shaakhaaID, var shaakhaaVr
     return [];
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+  log("getShaakhaaVruttaListForApp inputJson -> ${json.encode({"ShaakhaaID": shaakhaaID, "ShaakhaaVruttaID": shaakhaaVruttaID})}");
 
   var response = await http.post(Uri.parse(urlGetShaakhaaVruttaListForApp), headers: jHeaders, body: json.encode({"ShaakhaaID": shaakhaaID, "ShaakhaaVruttaID": shaakhaaVruttaID}));
-
+  log("getShaakhaaVruttaListForApp response.body -> ${response.body}");
   var responseBody = json.decode(response.body);
 
   // lstShaakhaaVrutta= [];
@@ -4352,12 +4360,12 @@ Future<String> saveShaakhaaVruttaForApp(String inputJson) async {
     return "";
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+  log("saveShaakhaaVruttaForApp inputJson -> $inputJson");
 
   var response = await http.post(Uri.parse(urlSaveShaakhaaVruttaForApp), headers: jHeaders, body: inputJson);
+  log("saveShaakhaaVruttaForApp responseBody -> ${response.body}");
 
   var responseBody = json.decode(response.body);
-  print("saveShaakhaaVruttaForApp inputJson -> $inputJson");
-  print("saveShaakhaaVruttaForApp responseBody -> $responseBody");
   return responseBody['OutputShaakhaaVruttaID'].toString();
 }
 
@@ -4458,7 +4466,9 @@ Future<String> deleteShaakhaaVrutta(String inputJson) async {
     return "";
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+  log("saveShaakhaaVruttaForApp inputJson -> $inputJson");
   var response = await http.post(Uri.parse(urlDeleteShaakhaaVruttaForApp), headers: jHeaders, body: inputJson);
+  log("saveShaakhaaVruttaForApp responseBody -> ${response.body}");
   var responseBody = json.decode(response.body);
   return responseBody['Message'].toString();
 }
@@ -4789,6 +4799,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitMasterForApp(
       data['GeoUnitID'],
       data['PraantID'],
       data['LevelID'],
+      data['isnew'] ?? 0,
       data['GeoUnitName'],
       "",
       data['LevelName'],
@@ -6474,6 +6485,73 @@ Future<List<Yuvrpt>?> YuvaSangamReportData(BuildContext context, Map<String, dyn
       return model.yuvrpt; // ✅ return karna zaroori hai
     } else {
       print("Error: ${response.statusCode} - ${response.body}");
+      return null; // ✅ error case
+    }
+  } catch (e) {
+    // Navigator.of(context, rootNavigator: true).pop();
+    print("Exception: $e");
+    return null;
+  } finally {
+    Navigator.of(context, rootNavigator: true).pop();
+  }
+}
+
+Future<List<GeoUnitMasterBAL>?> getGeoShaakhaaForReportData(BuildContext context, Map<String, dynamic> inputJson) async {
+  bool? connected = await isInternetConnected();
+  if (connected == false) {
+    return null;
+  }
+  showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+  log(urlGeoShaakhaaForReport);
+  try {
+    var response = await http.post(Uri.parse(urlGeoShaakhaaForReport), headers: jHeaders, body: jsonEncode(inputJson));
+
+    // Navigator.of(context, rootNavigator: true).pop();
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      List<GeoUnitMasterBAL>? geoUnitList = [];
+
+      log(jsonEncode(data));
+
+      if (data["Status"] == "Success") {
+        data["geodata"].forEach((data) {
+          var info = GeoUnitMasterBAL(
+            data['GeoUnitID'],
+            data['PraantID'],
+            data['LevelID'],
+            data['isnew'] ?? 0,
+            data['name'],
+            data['fullName'],
+            data['levelName'],
+            data['geoUnitName'],
+            data['DisplaySequence'],
+            data['HasGraaminKshetra'] == 1,
+            data['ParentKshetraID'],
+            data['ParentPraantID'],
+            data['ParentMahaanagarID'],
+            data['ParentVibhaagID'],
+            data['ParentBhaagID'],
+            data['ParentNagarID'],
+            data['ParentShaharID'],
+            data['ParentMandalID'],
+            data['ParentVastiID'],
+            data['ParentGraamID'],
+            data['ParentUpaNagarID'],
+          );
+          geoUnitList.add(info);
+        });
+        return geoUnitList;
+      }
+      Statics.showToast(Statics.getLabel('errorOccurred'));
+
+      return null;
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      Statics.showToast(Statics.getLabel('errorOccurred'));
       return null; // ✅ error case
     }
   } catch (e) {

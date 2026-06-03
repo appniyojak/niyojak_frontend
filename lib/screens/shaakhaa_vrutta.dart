@@ -136,6 +136,8 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
     if (!mounted) return;
     setState(() {
       _isFetchingData = true;
+      _headerRow = null;
+      lstShaakhaaVrutta = [];
     });
     bool isConnected = await Statics.isInternetConnected();
 
@@ -146,7 +148,6 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
 
       await populateShaakhaVayogat(shaakhaaID.toString());
       if (data.length > 0) {
-        lstShaakhaaVrutta = [];
         for (var dataItem in data) {
           lstShaakhaaVrutta.add(ShaakhaaVruttaBAL.fromMap(dataItem));
         }
@@ -181,10 +182,13 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
       Statics.createWidgetFromString(context, lstShaakhaaVrutta[index].newtarunVyavasaayeeCount.toString(), 60, 52, Alignment.center, isTotalRow: false),
       Statics.createWidgetFromString(context, lstShaakhaaVrutta[index].proudhaVyavasaayeeCount.toString(), 60, 52, Alignment.center, isTotalRow: false),
       Statics.createWidgetFromString(context, lstShaakhaaVrutta[index].newproudhaVyavasaayeeCount.toString(), 60, 52, Alignment.center, isTotalRow: false),
+      Statics.createWidgetFromString(context, lstShaakhaaVrutta[index].matruskatiCount.toString(), 60, 52, Alignment.center, isTotalRow: false),
+      Statics.createWidgetFromString(context, lstShaakhaaVrutta[index].newmatruskatiCount.toString(), 60, 52, Alignment.center, isTotalRow: false),
     ];
 
     widgetArray.add(Statics.createWidgetFromString(context, lstShaakhaaVrutta[index].pravasiKaryakartaCount.toString(), 60, 52, Alignment.center, isTotalRow: false));
     widgetArray.add(Statics.createWidgetFromString(context, lstShaakhaaVrutta[index].anyaPravasiKaryakartaCount.toString(), 60, 52, Alignment.center, isTotalRow: false));
+    widgetArray.add(Statics.createWidgetFromString(context, lstShaakhaaVrutta[index].abhyaagatCount.toString(), 60, 52, Alignment.center, isTotalRow: false));
 
     if (vayogatCode == 'Proudh Vyavasaayee') {
       widgetArray.add(lstShaakhaaVrutta[index].isDoneDeepBreathing == true
@@ -303,9 +307,12 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
     headerRow.add(Statics.createWidgetFromString(context, 'नवीन त.व्य.', 60, 56, Alignment.center, isTotalRow: false));
     headerRow.add(Statics.createWidgetFromString(context, 'प्रौ.', 60, 56, Alignment.center, isTotalRow: false));
     headerRow.add(Statics.createWidgetFromString(context, 'नवीन प्रौ.', 60, 56, Alignment.center, isTotalRow: false));
+    headerRow.add(Statics.createWidgetFromString(context, 'मातृ.', 60, 56, Alignment.center, isTotalRow: false));
+    headerRow.add(Statics.createWidgetFromString(context, 'नवीन मातृ.', 60, 56, Alignment.center, isTotalRow: false));
 
     headerRow.add(Statics.createWidgetFromString(context, 'प्रवासी कार्य.', 60, 56, Alignment.center, isTotalRow: false));
     headerRow.add(Statics.createWidgetFromString(context, 'अन्य प्र. कार्य', 60, 56, Alignment.center, isTotalRow: false));
+    headerRow.add(Statics.createWidgetFromString(context, 'अभ्यागत', 60, 56, Alignment.center, isTotalRow: false));
 
     if (vayogatCode == 'Proudh Vyavasaayee') {
       headerRow.add(Statics.createWidgetFromString(context, 'दीर्घश्वसन', 80, 56, Alignment.centerLeft, isTotalRow: false));
@@ -382,7 +389,7 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
                 },
               ),
               MaterialButton(
-                child: Text(Statics.getLabel('ConfirmationYes')),
+                child: Text(Statics.getLabel('ConfirmationNo')),
                 onPressed: () {
                   Navigator.of(ctx).pop();
                 },
@@ -442,7 +449,7 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
                       : _headerRow != null
                           ? HorizontalDataTable(
                               leftHandSideColumnWidth: 100,
-                              rightHandSideColumnWidth: ((vayogatCode == 'Proudh Vyavasaayee' || vayogatCode == "Baal") ? 1600 : 1750),
+                              rightHandSideColumnWidth: ((vayogatCode == 'Proudh Vyavasaayee' || vayogatCode == "Baal") ? 1800 : 1950),
                               isFixedHeader: true,
                               headerWidgets: _headerRow,
                               leftSideItemBuilder: _shaakhaaVruttaFirstColumn,

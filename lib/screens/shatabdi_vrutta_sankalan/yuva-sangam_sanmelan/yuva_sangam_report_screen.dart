@@ -534,7 +534,7 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                             ),
                           )),
                         ],
-                        rows: names.split(",").toList().asMap().entries.map((entry) {
+                        rows: names.split("{niyodev}").toList().asMap().entries.map((entry) {
                           int index = entry.key;
                           var data = entry.value;
                           return DataRow(cells: [

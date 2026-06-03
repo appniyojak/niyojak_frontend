@@ -1059,7 +1059,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> with Automati
                             ),
                           )),
                         ],
-                        rows: names.split(",").toList().asMap().entries.map((entry) {
+                        rows: names.split("{niyodev}").toList().asMap().entries.map((entry) {
                           int index = entry.key;
                           var data = entry.value;
                           String? id;

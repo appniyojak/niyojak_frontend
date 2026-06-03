@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -168,61 +169,63 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
       Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));
     } else {
       dataList = await Statics.getShaakhaaVruttaListForApp(null, theId);
-      var data = ShaakhaaVruttaBAL.fromMap(dataList[0]);
-      if (!mounted) return;
+      if (dataList != null && dataList.isNotEmpty) {
+        var data = ShaakhaaVruttaBAL.fromMap(dataList[0]);
+        if (!mounted) return;
+        setState(() {
+          vrutta = data;
+          if (vrutta != null) {
+            _vruttaDate = ((vrutta!.vruttaDate != null && vrutta!.vruttaDate != "") ? DateFormat("yyyy/MM/dd").parse(vrutta!.vruttaDate!) : null);
+            _vruttaDateCntrl.text = ((vrutta!.vruttaDate != null && vrutta!.vruttaDate != "") ? DateFormat('dd-MMM-yyyy').format(_vruttaDate!) : '');
+            _shishuCtrl.text = vrutta!.shishuCount == null ? "" : vrutta!.shishuCount.toString();
+            _newshishuCtrl.text = vrutta!.newshishuCount == null ? "" : vrutta!.newshishuCount.toString();
+            _baalCtrl.text = vrutta!.baalVidyaarthiCount == null ? "" : vrutta!.baalVidyaarthiCount.toString();
+            _newbaalCtrl.text = vrutta!.newbaalVidyaarthiCount == null ? "" : vrutta!.newbaalVidyaarthiCount.toString();
+            _tarunVidhyaarthiCtrl.text = vrutta!.tarunVidyaarthiCount == null ? "" : vrutta!.tarunVidyaarthiCount.toString();
+            _newtarunVidhyaarthiCtrl.text = vrutta!.newtarunVidyaarthiCount == null ? "" : vrutta!.newtarunVidyaarthiCount.toString();
+            _tarunVyavsaayeeCtrl.text = vrutta!.tarunVyavasaayeeCount == null ? "" : vrutta!.tarunVyavasaayeeCount.toString();
+            _newtarunVyavsaayeeCtrl.text = vrutta!.newtarunVyavasaayeeCount == null ? "" : vrutta!.newtarunVyavasaayeeCount.toString();
+            _proudhaCtrl.text = vrutta!.proudhaVyavasaayeeCount == null ? "" : vrutta!.proudhaVyavasaayeeCount.toString();
+            _newproudhaCtrl.text = vrutta!.newproudhaVyavasaayeeCount == null ? "" : vrutta!.newproudhaVyavasaayeeCount.toString();
+            _matrushaktiCtrl.text = vrutta!.matruskatiCount == null ? "" : vrutta!.matruskatiCount.toString();
+            _newmatrushaktiCtrl.text = vrutta!.newmatruskatiCount == null ? "" : vrutta!.newmatruskatiCount.toString();
+            _abhyaagatCtrl.text = vrutta!.abhyaagatCount == null ? "" : vrutta!.abhyaagatCount.toString();
+            _pravasiKaryakartaCountCtrl.text = vrutta!.pravasiKaryakartaCount == null ? "" : vrutta!.pravasiKaryakartaCount.toString();
+            _anyaPravasiKaryakartaCountCtrl.text = vrutta!.anyaPravasiKaryakartaCount == null ? "" : vrutta!.anyaPravasiKaryakartaCount.toString();
+            _remarkCtrl.text = vrutta!.remark == null ? "" : vrutta!.remark.toString();
+
+            // _isMandatoryShaaririk =
+            //     vrutta!.isMandatoryShaaririk == true ? true : false;
+
+            // _isMandatoryBouddhik =
+            //     vrutta!.isMandatoryBouddhik == true ? true : false;
+
+            _isOptionalShaaririk = vrutta?.isOptionalShaaririk ?? false;
+
+            _isOptionalOther = vrutta?.isOptionalOther ?? false;
+
+            _isDoneDeepBreathing = vrutta?.isDoneDeepBreathing ?? false;
+            _isDoneDandaPrahaar = vrutta?.isDoneDandaPrahaar ?? false;
+            _isDoneSooryaNamaskaar = vrutta?.isDoneSooryaNamaskaar ?? false;
+            _isDoneSanchalanAbhyaas = vrutta?.isDoneSanchalanAbhyaas ?? false;
+            _isDoneSaanghikGeet = vrutta?.isDoneSaanghikGeet ?? false;
+            _isDoneAmrutaVachan = vrutta?.isDoneAmrutaVachan ?? false;
+            _isDoneSubhaashit = vrutta?.isDoneSubhaashit ?? false;
+            _isDoneUrdhvapad = vrutta?.isDoneUrdhvapad ?? false;
+            _isDoneBoodhKatha = vrutta?.isDoneBoodhKatha ?? false;
+            _isDoneBoudhikDays = vrutta?.isDoneBoudhikDays ?? false;
+            _isDoneSewaDays = vrutta?.isDoneSewaDays ?? false;
+
+            _selectedBoudhikDaysId = vrutta?.SelectedBoudhikDaysId;
+            _anyaBoudhikDaysCtrl.text = vrutta?.AnyaBoudhikDays ?? "";
+            _selectedSewaDaysList = vrutta?.SelectedSewaDaysId?.split(',').map((e) => int.tryParse(e)).where((e) => e != null).cast<int>().toList() ?? [];
+          }
+        });
+      }
       setState(() {
-        vrutta = data;
-        if (vrutta != null) {
-          _vruttaDate = ((vrutta!.vruttaDate != null && vrutta!.vruttaDate != "") ? DateFormat("yyyy/MM/dd").parse(vrutta!.vruttaDate!) : null);
-          _vruttaDateCntrl.text = ((vrutta!.vruttaDate != null && vrutta!.vruttaDate != "") ? DateFormat('dd-MMM-yyyy').format(_vruttaDate!) : '');
-          _shishuCtrl.text = vrutta!.shishuCount == null ? "" : vrutta!.shishuCount.toString();
-          _newshishuCtrl.text = vrutta!.newshishuCount == null ? "" : vrutta!.newshishuCount.toString();
-          _baalCtrl.text = vrutta!.baalVidyaarthiCount == null ? "" : vrutta!.baalVidyaarthiCount.toString();
-          _newbaalCtrl.text = vrutta!.newbaalVidyaarthiCount == null ? "" : vrutta!.newbaalVidyaarthiCount.toString();
-          _tarunVidhyaarthiCtrl.text = vrutta!.tarunVidyaarthiCount == null ? "" : vrutta!.tarunVidyaarthiCount.toString();
-          _newtarunVidhyaarthiCtrl.text = vrutta!.newtarunVidyaarthiCount == null ? "" : vrutta!.newtarunVidyaarthiCount.toString();
-          _tarunVyavsaayeeCtrl.text = vrutta!.tarunVyavasaayeeCount == null ? "" : vrutta!.tarunVyavasaayeeCount.toString();
-          _newtarunVyavsaayeeCtrl.text = vrutta!.newtarunVyavasaayeeCount == null ? "" : vrutta!.newtarunVyavasaayeeCount.toString();
-          _proudhaCtrl.text = vrutta!.proudhaVyavasaayeeCount == null ? "" : vrutta!.proudhaVyavasaayeeCount.toString();
-          _newproudhaCtrl.text = vrutta!.newproudhaVyavasaayeeCount == null ? "" : vrutta!.newproudhaVyavasaayeeCount.toString();
-          _matrushaktiCtrl.text = vrutta!.matruskatiCount == null ? "" : vrutta!.matruskatiCount.toString();
-          _newmatrushaktiCtrl.text = vrutta!.newmatruskatiCount == null ? "" : vrutta!.newmatruskatiCount.toString();
-          _abhyaagatCtrl.text = vrutta!.abhyaagatCount == null ? "" : vrutta!.abhyaagatCount.toString();
-          _pravasiKaryakartaCountCtrl.text = vrutta!.pravasiKaryakartaCount == null ? "" : vrutta!.pravasiKaryakartaCount.toString();
-          _anyaPravasiKaryakartaCountCtrl.text = vrutta!.anyaPravasiKaryakartaCount == null ? "" : vrutta!.anyaPravasiKaryakartaCount.toString();
-          _remarkCtrl.text = vrutta!.remark == null ? "" : vrutta!.remark.toString();
-
-          // _isMandatoryShaaririk =
-          //     vrutta!.isMandatoryShaaririk == true ? true : false;
-
-          // _isMandatoryBouddhik =
-          //     vrutta!.isMandatoryBouddhik == true ? true : false;
-
-          _isOptionalShaaririk = vrutta?.isOptionalShaaririk ?? false;
-
-          _isOptionalOther = vrutta?.isOptionalOther ?? false;
-
-          _isDoneDeepBreathing = vrutta?.isDoneDeepBreathing ?? false;
-          _isDoneDandaPrahaar = vrutta?.isDoneDandaPrahaar ?? false;
-          _isDoneSooryaNamaskaar = vrutta?.isDoneSooryaNamaskaar ?? false;
-          _isDoneSanchalanAbhyaas = vrutta?.isDoneSanchalanAbhyaas ?? false;
-          _isDoneSaanghikGeet = vrutta?.isDoneSaanghikGeet ?? false;
-          _isDoneAmrutaVachan = vrutta?.isDoneAmrutaVachan ?? false;
-          _isDoneSubhaashit = vrutta?.isDoneSubhaashit ?? false;
-          _isDoneUrdhvapad = vrutta?.isDoneUrdhvapad ?? false;
-          _isDoneBoodhKatha = vrutta?.isDoneBoodhKatha ?? false;
-          _isDoneBoudhikDays = vrutta?.isDoneBoudhikDays ?? false;
-          _isDoneSewaDays = vrutta?.isDoneSewaDays ?? false;
-
-          _selectedBoudhikDaysId = vrutta?.SelectedBoudhikDaysId;
-          _anyaBoudhikDaysCtrl.text = vrutta?.AnyaBoudhikDays ?? "";
-          _selectedSewaDaysList = vrutta?.SelectedSewaDaysId?.split(',').map((e) => int.tryParse(e)).where((e) => e != null).cast<int>().toList() ?? [];
-        }
+        _isFetchingData = false;
       });
     }
-    setState(() {
-      _isFetchingData = false;
-    });
   }
 
   _pickFromDate() async {
@@ -266,9 +269,13 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
       } else {
         await saveVruttaDetails(context);
       }
-    } on Exception catch (error) {
+    } on Exception catch (error, stack) {
+      log(error.toString());
+      log(stack.toString());
       Statics.showErrorDialog(context, Statics.getLabel('unableToCompleteProcess'));
-    } catch (error) {
+    } catch (error, stack) {
+      log(error.toString());
+      log(stack.toString());
       Statics.showErrorDialog(context, Statics.getLabel('unableToCompleteProcess'));
     }
 
@@ -293,8 +300,8 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
       "NewTarunVyavasaayeeCount": _newtarunVyavsaayeeCtrl.text.trim() == "" ? null : int.parse(_newtarunVyavsaayeeCtrl.text),
       "ProudhaVyavasaayeeCount": _proudhaCtrl.text.trim() == "" ? null : int.parse(_proudhaCtrl.text),
       "NewProudhaVyavasaayeeCount": _newproudhaCtrl.text.trim() == "" ? null : int.parse(_newproudhaCtrl.text),
-      "MatrushaktiCount": _matrushaktiCtrl.text.trim() == "" ? null : int.parse(_matrushaktiCtrl.text),
-      "NewMatrushaktiCount": _newmatrushaktiCtrl.text.trim() == "" ? null : int.parse(_newmatrushaktiCtrl.text),
+      "matruskatiCount": _matrushaktiCtrl.text.trim() == "" ? null : int.parse(_matrushaktiCtrl.text),
+      "newmatruskatiCount": _newmatrushaktiCtrl.text.trim() == "" ? null : int.parse(_newmatrushaktiCtrl.text),
       "AbhyaagatCount": _abhyaagatCtrl.text.trim() == "" ? null : int.parse(_abhyaagatCtrl.text),
       "PravasiKaryakartaCount": _pravasiKaryakartaCountCtrl.text.trim() == "" ? null : int.parse(_pravasiKaryakartaCountCtrl.text),
       "AnyaPravasiKaryakartaCount": _anyaPravasiKaryakartaCountCtrl.text.trim() == "" ? null : int.parse(_anyaPravasiKaryakartaCountCtrl.text),
@@ -310,7 +317,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
       "IsDoneSubhaashit": _isDoneSubhaashit,
       "IsDoneBoodhKatha": _isDoneBoodhKatha,
       "IsDoneBoudhikDays": _isDoneBoudhikDays,
-      "BoudhikDaysId": _selectedBoudhikDaysId,
+      "BoudhikDaysId": int.tryParse(_selectedBoudhikDaysId ?? ""),
       "AnyaBoudhikDays": _anyaBoudhikDaysCtrl.text.trim(),
       "IsDoneSewaDays": _isDoneSewaDays,
       "SewaDaysId": _selectedSewaDaysList.isNotEmpty ? _selectedSewaDaysList.where((e) => e != null).join(",") : "",

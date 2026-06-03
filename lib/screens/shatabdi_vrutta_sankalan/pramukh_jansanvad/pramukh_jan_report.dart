@@ -370,7 +370,7 @@ class _PramukhJansanvadReportTabState extends State<PramukhJansanvadReportTab> w
                             ),
                           )),
                         ],
-                        rows: names.split(",").toList().asMap().entries.map((entry) {
+                        rows: names.split("{niyodev}").toList().asMap().entries.map((entry) {
                           int index = entry.key;
                           var data = entry.value;
                           return DataRow(cells: [

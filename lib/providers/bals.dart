@@ -470,6 +470,9 @@ class GeoUnitMasterBAL {
   int? geoUnitID;
   int? praantID;
   int? levelID;
+
+  int? isnew;
+
   String? name;
   String? fullName;
   String? levelName;
@@ -496,6 +499,7 @@ class GeoUnitMasterBAL {
     this.geoUnitID,
     this.praantID,
     this.levelID,
+    this.isnew,
     this.name,
     this.fullName,
     this.levelName,
@@ -521,6 +525,7 @@ class GeoUnitMasterBAL {
     geoUnitID = map["GeoUnitID"];
     praantID = map["PraantID"];
     levelID = map["LevelID"];
+    isnew = map["isnew"];
     name = map["Name"];
     fullName = map["FullName"];
     levelName = map["LevelName"];
@@ -546,6 +551,7 @@ class GeoUnitMasterBAL {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['DisplaySequence'] = this.displaySequence;
     data['GeoUnitID'] = this.geoUnitID;
+    data['isnew'] = this.isnew;
     data['GeoUnitName'] = this.geoUnitName;
     data['HasGraaminKshetra'] = this.hasGraaminKshetra;
     data['LevelID'] = this.levelID;
@@ -2139,8 +2145,8 @@ class ShaakhaaVruttaBAL {
     newtarunVyavasaayeeCount = map["NewTarunVyavasaayeeCount"];
     proudhaVyavasaayeeCount = map["ProudhaVyavasaayeeCount"];
     newproudhaVyavasaayeeCount = map["NewProudhaVyavasaayeeCount"];
-    matruskatiCount = map["MatruskatiCountCount"];
-    newmatruskatiCount = map["NewMatruskatiCountCount"];
+    matruskatiCount = map["matruskatiCount"] ?? map["MatruskatiCountCount"];
+    newmatruskatiCount = map["newmatruskatiCount"] ?? map["NewMatruskatiCountCount"];
     abhyaagatCount = map["AbhyaagatCount"];
     pravasiKaryakartaCount = map["PravasiKaryakartaCount"];
     anyaPravasiKaryakartaCount = map["AnyaPravasiKaryakartaCount"];

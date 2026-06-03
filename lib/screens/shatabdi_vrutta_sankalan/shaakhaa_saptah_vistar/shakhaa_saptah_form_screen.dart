@@ -262,8 +262,8 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
       "NewTarunVyavasaayeeCount": _newtarunVyavsaayeeCtrl.text.trim() == "" ? null : int.parse(_newtarunVyavsaayeeCtrl.text),
       "ProudhaVyavasaayeeCount": _proudhaCtrl.text.trim() == "" ? null : int.parse(_proudhaCtrl.text),
       "NewProudhaVyavasaayeeCount": _newproudhaCtrl.text.trim() == "" ? null : int.parse(_newproudhaCtrl.text),
-      "MatrushaktiCount": _matrushaktiCtrl.text.trim() == "" ? null : int.parse(_matrushaktiCtrl.text),
-      "NewMatrushaktiCount": _newmatrushaktiCtrl.text.trim() == "" ? null : int.parse(_newmatrushaktiCtrl.text),
+      "matruskatiCount": _matrushaktiCtrl.text.trim() == "" ? null : int.parse(_matrushaktiCtrl.text),
+      "newmatruskatiCount": _newmatrushaktiCtrl.text.trim() == "" ? null : int.parse(_newmatrushaktiCtrl.text),
       "totalCount": ((int.tryParse(_shishuCtrl.text) ?? 0) +
           (int.tryParse(_baalCtrl.text) ?? 0) +
           (int.tryParse(_tarunVidhyaarthiCtrl.text) ?? 0) +
