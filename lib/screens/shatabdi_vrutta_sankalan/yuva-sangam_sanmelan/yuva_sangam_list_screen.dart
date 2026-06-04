@@ -917,7 +917,7 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
               padding: EdgeInsets.symmetric(horizontal: 8),
               constraints: const BoxConstraints(minWidth: 30, maxWidth: 150),
               child: Text(
-                Statics.getLabel('sadbhavCentre'),
+                Statics.getLabel('yuvaSangamLevel'),
                 softWrap: true,
                 maxLines: 2,
                 textAlign: TextAlign.center,

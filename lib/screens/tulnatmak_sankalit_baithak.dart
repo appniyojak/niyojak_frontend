@@ -25,6 +25,8 @@ class TulnatmakBaithakEkatritVrutta extends StatefulWidget {
 }
 
 class _TulnatmakBaithakEkatritVruttaState extends State<TulnatmakBaithakEkatritVrutta> {
+  final controller = createGeoController();
+
   final GlobalKey<FormState> _formKey = GlobalKey();
   final GlobalKey<FormState> _completeFormKey = GlobalKey();
   TulnatmakBaithakResponse? tulnatmakBaithakResponse;
@@ -224,8 +226,6 @@ class _TulnatmakBaithakEkatritVruttaState extends State<TulnatmakBaithakEkatritV
 
   Future<void> initData() async {
     final dm = await MyAppGlobals.getLevelLDB();
-
-    final controller = context.read<GeoHierarchyController>();
 
     await controller.initialize(dm);
 
@@ -499,1338 +499,1341 @@ class _TulnatmakBaithakEkatritVruttaState extends State<TulnatmakBaithakEkatritV
             )
           : Container(),
       // drawer: AppDrawer(),
-      body: SingleChildScrollView(
-        child: Container(
-            padding: EdgeInsets.all(20),
-            width: Statics.getDeviceSize(context).width,
-            child: Form(
-              key: _completeFormKey,
-              child: Column(
-                children: <Widget>[
-                  Text(
-                    Statics.getLabel('tulnatmakBaithakEkatritVruttaBanner'),
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  SizedBox(height: 10),
-                  ExpansionPanelList(
-                    expansionCallback: (int index, bool isExpanded) {
-                      setState(() {
-                        _isExpanded = isExpanded;
-                      });
-                    },
-                    children: [
-                      ExpansionPanel(
-                        headerBuilder: (BuildContext context, bool isExpanded) {
-                          return ListTile(
-                            title: Text(Statics.getLabel('Filters')),
-                          );
-                        },
-                        body: Container(
-                          margin: EdgeInsets.all(20),
-                          child: Column(
-                            children: [
-// ==============================================   BAITHAK TYPE DROPDOWNS  ==========================================================================================================================================
-                              Text(Statics.getLabel('selectbaithakType'), style: TextStyle(color: Theme.of(context).primaryColor)),
-                              if (_baithakTypes != null)
-                                DropdownSearch<String>(
-                                  popupProps: PopupProps.bottomSheet(
-                                    showSearchBox: true,
-                                    fit: FlexFit.tight,
-                                    itemBuilder: (context, item, isSelected, val) {
-                                      return Container(
-                                        margin: EdgeInsets.symmetric(horizontal: 8),
-                                        decoration: !isSelected
-                                            ? null
-                                            : BoxDecoration(
-                                                border: Border.all(color: Theme.of(context).primaryColor),
-                                                borderRadius: BorderRadius.circular(5),
-                                                color: Colors.grey[300],
-                                              ),
-                                        child: ListTile(
-                                          title: Text(
-                                            item,
-                                            style: TextStyle(fontSize: 14),
+      body: ChangeNotifierProvider.value(
+        value: controller,
+        child: SingleChildScrollView(
+          child: Container(
+              padding: EdgeInsets.all(20),
+              width: Statics.getDeviceSize(context).width,
+              child: Form(
+                key: _completeFormKey,
+                child: Column(
+                  children: <Widget>[
+                    Text(
+                      Statics.getLabel('tulnatmakBaithakEkatritVruttaBanner'),
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    SizedBox(height: 10),
+                    ExpansionPanelList(
+                      expansionCallback: (int index, bool isExpanded) {
+                        setState(() {
+                          _isExpanded = isExpanded;
+                        });
+                      },
+                      children: [
+                        ExpansionPanel(
+                          headerBuilder: (BuildContext context, bool isExpanded) {
+                            return ListTile(
+                              title: Text(Statics.getLabel('Filters')),
+                            );
+                          },
+                          body: Container(
+                            margin: EdgeInsets.all(20),
+                            child: Column(
+                              children: [
+                                // ==============================================   BAITHAK TYPE DROPDOWNS  ==========================================================================================================================================
+                                Text(Statics.getLabel('selectbaithakType'), style: TextStyle(color: Theme.of(context).primaryColor)),
+                                if (_baithakTypes != null)
+                                  DropdownSearch<String>(
+                                    popupProps: PopupProps.bottomSheet(
+                                      showSearchBox: true,
+                                      fit: FlexFit.tight,
+                                      itemBuilder: (context, item, isSelected, val) {
+                                        return Container(
+                                          margin: EdgeInsets.symmetric(horizontal: 8),
+                                          decoration: !isSelected
+                                              ? null
+                                              : BoxDecoration(
+                                                  border: Border.all(color: Theme.of(context).primaryColor),
+                                                  borderRadius: BorderRadius.circular(5),
+                                                  color: Colors.grey[300],
+                                                ),
+                                          child: ListTile(
+                                            title: Text(
+                                              item,
+                                              style: TextStyle(fontSize: 14),
+                                            ),
+                                            contentPadding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                                            visualDensity: VisualDensity(vertical: -4),
                                           ),
-                                          contentPadding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                                          visualDensity: VisualDensity(vertical: -4),
+                                        );
+                                      },
+                                      searchFieldProps: TextFieldProps(
+                                        decoration: InputDecoration(
+                                          border: OutlineInputBorder(),
+                                          contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                                         ),
-                                      );
-                                    },
-                                    searchFieldProps: TextFieldProps(
+                                      ),
+                                      constraints: BoxConstraints.tightFor(width: double.infinity),
+                                      containerBuilder: (context, popupWidget) {
+                                        return Stack(
+                                          children: [
+                                            popupWidget,
+                                            Positioned(
+                                              right: 10,
+                                              top: 10,
+                                              child: IconButton(
+                                                icon: Icon(Icons.close),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    ),
+                                    items: (filter, loadProps) =>
+                                        _baithakTypes?.map((e) => e.codeForDisplay.toString()).where((name) => name.toLowerCase().contains(filter.toLowerCase() ?? "")).toList() ?? [],
+                                    decoratorProps: DropDownDecoratorProps(
                                       decoration: InputDecoration(
-                                        border: OutlineInputBorder(),
-                                        contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                                        labelText: Statics.getLabel('selectbaithakTypeLabel') + " 1",
                                       ),
                                     ),
-                                    constraints: BoxConstraints.tightFor(width: double.infinity),
-                                    containerBuilder: (context, popupWidget) {
-                                      return Stack(
-                                        children: [
-                                          popupWidget,
-                                          Positioned(
-                                            right: 10,
-                                            top: 10,
-                                            child: IconButton(
-                                              icon: Icon(Icons.close),
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
+                                    selectedItem: _baithakTypeValue1 == "" ? null : _baithakTypes?.firstWhere((element) => element.staticID.toString() == _baithakTypeValue1).codeForDisplay,
+                                    onChanged: (value) {
+                                      print(value);
+                                      setState(() {
+                                        _baithakTypeValue1 = _baithakTypes!.firstWhere((element) => element.codeForDisplay == value).staticID.toString();
+                                        _baithakTypeValue1Name = _baithakTypes!.firstWhere((element) => element.codeForDisplay == value).codeForDisplay.toString();
+                                      });
+                                    },
+                                  ),
+                                SizedBox(height: 10),
+                                if (_baithakTypes != null)
+                                  DropdownSearch<String>(
+                                    popupProps: PopupProps.bottomSheet(
+                                      showSearchBox: true,
+                                      fit: FlexFit.tight,
+                                      itemBuilder: (context, item, isSelected, val) {
+                                        return Container(
+                                          margin: EdgeInsets.symmetric(horizontal: 8),
+                                          decoration: !isSelected
+                                              ? null
+                                              : BoxDecoration(
+                                                  border: Border.all(color: Theme.of(context).primaryColor),
+                                                  borderRadius: BorderRadius.circular(5),
+                                                  color: Colors.grey[300],
+                                                ),
+                                          child: ListTile(
+                                            title: Text(
+                                              item,
+                                              style: TextStyle(fontSize: 14),
                                             ),
+                                            contentPadding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                                            visualDensity: VisualDensity(vertical: -4),
                                           ),
-                                        ],
-                                      );
-                                    },
-                                  ),
-                                  items: (filter, loadProps) =>
-                                      _baithakTypes?.map((e) => e.codeForDisplay.toString()).where((name) => name.toLowerCase().contains(filter.toLowerCase() ?? "")).toList() ?? [],
-                                  decoratorProps: DropDownDecoratorProps(
-                                    decoration: InputDecoration(
-                                      labelText: Statics.getLabel('selectbaithakTypeLabel') + " 1",
-                                    ),
-                                  ),
-                                  selectedItem: _baithakTypeValue1 == "" ? null : _baithakTypes?.firstWhere((element) => element.staticID.toString() == _baithakTypeValue1).codeForDisplay,
-                                  onChanged: (value) {
-                                    print(value);
-                                    setState(() {
-                                      _baithakTypeValue1 = _baithakTypes!.firstWhere((element) => element.codeForDisplay == value).staticID.toString();
-                                      _baithakTypeValue1Name = _baithakTypes!.firstWhere((element) => element.codeForDisplay == value).codeForDisplay.toString();
-                                    });
-                                  },
-                                ),
-                              SizedBox(height: 10),
-                              if (_baithakTypes != null)
-                                DropdownSearch<String>(
-                                  popupProps: PopupProps.bottomSheet(
-                                    showSearchBox: true,
-                                    fit: FlexFit.tight,
-                                    itemBuilder: (context, item, isSelected, val) {
-                                      return Container(
-                                        margin: EdgeInsets.symmetric(horizontal: 8),
-                                        decoration: !isSelected
-                                            ? null
-                                            : BoxDecoration(
-                                                border: Border.all(color: Theme.of(context).primaryColor),
-                                                borderRadius: BorderRadius.circular(5),
-                                                color: Colors.grey[300],
-                                              ),
-                                        child: ListTile(
-                                          title: Text(
-                                            item,
-                                            style: TextStyle(fontSize: 14),
-                                          ),
-                                          contentPadding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                                          visualDensity: VisualDensity(vertical: -4),
+                                        );
+                                      },
+                                      searchFieldProps: TextFieldProps(
+                                        decoration: InputDecoration(
+                                          border: OutlineInputBorder(),
+                                          contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                                         ),
-                                      );
-                                    },
-                                    searchFieldProps: TextFieldProps(
+                                      ),
+                                      constraints: BoxConstraints.tightFor(width: double.infinity),
+                                      containerBuilder: (context, popupWidget) {
+                                        return Stack(
+                                          children: [
+                                            popupWidget,
+                                            Positioned(
+                                              right: 10,
+                                              top: 10,
+                                              child: IconButton(
+                                                icon: Icon(Icons.close),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    ),
+                                    items: (filter, loadProps) =>
+                                        _baithakTypes?.map((e) => e.codeForDisplay.toString()).where((name) => name.toLowerCase().contains(filter.toLowerCase() ?? "")).toList() ?? [],
+                                    decoratorProps: DropDownDecoratorProps(
                                       decoration: InputDecoration(
-                                        border: OutlineInputBorder(),
-                                        contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                                        labelText: Statics.getLabel('selectbaithakTypeLabel') + " 2",
                                       ),
                                     ),
-                                    constraints: BoxConstraints.tightFor(width: double.infinity),
-                                    containerBuilder: (context, popupWidget) {
-                                      return Stack(
-                                        children: [
-                                          popupWidget,
-                                          Positioned(
-                                            right: 10,
-                                            top: 10,
-                                            child: IconButton(
-                                              icon: Icon(Icons.close),
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
+                                    selectedItem: _baithakTypeValue2 == "" ? null : _baithakTypes?.firstWhere((element) => element.staticID.toString() == _baithakTypeValue2).codeForDisplay,
+                                    onChanged: (value) {
+                                      print(value);
+                                      setState(() {
+                                        _baithakTypeValue2 = _baithakTypes!.firstWhere((element) => element.codeForDisplay == value).staticID.toString();
+                                        _baithakTypeValue2Name = _baithakTypes!.firstWhere((element) => element.codeForDisplay == value).codeForDisplay.toString();
+                                      });
+                                    },
+                                  ),
+                                SizedBox(height: 10),
+                                if (_baithakTypes != null)
+                                  DropdownSearch<String>(
+                                    popupProps: PopupProps.bottomSheet(
+                                      showSearchBox: true,
+                                      fit: FlexFit.tight,
+                                      itemBuilder: (context, item, isSelected, val) {
+                                        return Container(
+                                          margin: EdgeInsets.symmetric(horizontal: 8),
+                                          decoration: !isSelected
+                                              ? null
+                                              : BoxDecoration(
+                                                  border: Border.all(color: Theme.of(context).primaryColor),
+                                                  borderRadius: BorderRadius.circular(5),
+                                                  color: Colors.grey[300],
+                                                ),
+                                          child: ListTile(
+                                            title: Text(
+                                              item,
+                                              style: TextStyle(fontSize: 14),
                                             ),
+                                            contentPadding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                                            visualDensity: VisualDensity(vertical: -4),
                                           ),
-                                        ],
-                                      );
-                                    },
-                                  ),
-                                  items: (filter, loadProps) =>
-                                      _baithakTypes?.map((e) => e.codeForDisplay.toString()).where((name) => name.toLowerCase().contains(filter.toLowerCase() ?? "")).toList() ?? [],
-                                  decoratorProps: DropDownDecoratorProps(
-                                    decoration: InputDecoration(
-                                      labelText: Statics.getLabel('selectbaithakTypeLabel') + " 2",
-                                    ),
-                                  ),
-                                  selectedItem: _baithakTypeValue2 == "" ? null : _baithakTypes?.firstWhere((element) => element.staticID.toString() == _baithakTypeValue2).codeForDisplay,
-                                  onChanged: (value) {
-                                    print(value);
-                                    setState(() {
-                                      _baithakTypeValue2 = _baithakTypes!.firstWhere((element) => element.codeForDisplay == value).staticID.toString();
-                                      _baithakTypeValue2Name = _baithakTypes!.firstWhere((element) => element.codeForDisplay == value).codeForDisplay.toString();
-                                    });
-                                  },
-                                ),
-                              SizedBox(height: 10),
-                              if (_baithakTypes != null)
-                                DropdownSearch<String>(
-                                  popupProps: PopupProps.bottomSheet(
-                                    showSearchBox: true,
-                                    fit: FlexFit.tight,
-                                    itemBuilder: (context, item, isSelected, val) {
-                                      return Container(
-                                        margin: EdgeInsets.symmetric(horizontal: 8),
-                                        decoration: !isSelected
-                                            ? null
-                                            : BoxDecoration(
-                                                border: Border.all(color: Theme.of(context).primaryColor),
-                                                borderRadius: BorderRadius.circular(5),
-                                                color: Colors.grey[300],
-                                              ),
-                                        child: ListTile(
-                                          title: Text(
-                                            item,
-                                            style: TextStyle(fontSize: 14),
-                                          ),
-                                          contentPadding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                                          visualDensity: VisualDensity(vertical: -4),
+                                        );
+                                      },
+                                      searchFieldProps: TextFieldProps(
+                                        decoration: InputDecoration(
+                                          border: OutlineInputBorder(),
+                                          contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                                         ),
-                                      );
-                                    },
-                                    searchFieldProps: TextFieldProps(
+                                      ),
+                                      constraints: BoxConstraints.tightFor(width: double.infinity),
+                                      containerBuilder: (context, popupWidget) {
+                                        return Stack(
+                                          children: [
+                                            popupWidget,
+                                            Positioned(
+                                              right: 10,
+                                              top: 10,
+                                              child: IconButton(
+                                                icon: Icon(Icons.close),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    ),
+                                    items: (filter, loadProps) =>
+                                        _baithakTypes?.map((e) => e.codeForDisplay.toString()).where((name) => name.toLowerCase().contains(filter.toLowerCase() ?? "")).toList() ?? [],
+                                    decoratorProps: DropDownDecoratorProps(
                                       decoration: InputDecoration(
-                                        border: OutlineInputBorder(),
-                                        contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                                        labelText: Statics.getLabel('selectbaithakTypeLabel') + " 3",
                                       ),
                                     ),
-                                    constraints: BoxConstraints.tightFor(width: double.infinity),
-                                    containerBuilder: (context, popupWidget) {
-                                      return Stack(
-                                        children: [
-                                          popupWidget,
-                                          Positioned(
-                                            right: 10,
-                                            top: 10,
-                                            child: IconButton(
-                                              icon: Icon(Icons.close),
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                            ),
-                                          ),
-                                        ],
-                                      );
+                                    selectedItem: _baithakTypeValue3 == "" ? null : _baithakTypes?.firstWhere((element) => element.staticID.toString() == _baithakTypeValue3).codeForDisplay,
+                                    onChanged: (value) {
+                                      print(value);
+                                      setState(() {
+                                        _baithakTypeValue3 = _baithakTypes!.firstWhere((element) => element.codeForDisplay == value).staticID.toString();
+                                        _baithakTypeValue3Name = _baithakTypes!.firstWhere((element) => element.codeForDisplay == value).codeForDisplay.toString();
+                                      });
                                     },
                                   ),
-                                  items: (filter, loadProps) =>
-                                      _baithakTypes?.map((e) => e.codeForDisplay.toString()).where((name) => name.toLowerCase().contains(filter.toLowerCase() ?? "")).toList() ?? [],
-                                  decoratorProps: DropDownDecoratorProps(
-                                    decoration: InputDecoration(
-                                      labelText: Statics.getLabel('selectbaithakTypeLabel') + " 3",
-                                    ),
-                                  ),
-                                  selectedItem: _baithakTypeValue3 == "" ? null : _baithakTypes?.firstWhere((element) => element.staticID.toString() == _baithakTypeValue3).codeForDisplay,
-                                  onChanged: (value) {
-                                    print(value);
-                                    setState(() {
-                                      _baithakTypeValue3 = _baithakTypes!.firstWhere((element) => element.codeForDisplay == value).staticID.toString();
-                                      _baithakTypeValue3Name = _baithakTypes!.firstWhere((element) => element.codeForDisplay == value).codeForDisplay.toString();
-                                    });
-                                  },
-                                ),
-                              SizedBox(height: 15),
+                                SizedBox(height: 15),
 
-// ==============================================  BHOUGOLIK STHAR DROPDOWNS  ==========================================================================================================================================
+                                // ==============================================  BHOUGOLIK STHAR DROPDOWNS  ==========================================================================================================================================
 
-                              Consumer<GeoHierarchyController>(builder: (_, ctrl, __) {
-                                return Column(
-                                  children: [
-                                    Text(Statics.getLabel('selectBhaugolikSthar'), style: TextStyle(color: Theme.of(context).primaryColor)),
-                                    GeoDropdownWidget(
-                                      level: GeoLevel.Mahaanagar,
-                                      title: 'Mahaanagar',
-                                      controller: ctrl,
-                                    ),
-
-                                    // if (ctrl.hasItems(GeoLevel.vibhaag))
-                                    GeoDropdownWidget(
-                                      level: GeoLevel.Vibhaag,
-                                      title: 'Vibhaag',
-                                      controller: ctrl,
-                                    ),
-
-                                    if (ctrl.hasItems(GeoLevel.Bhaag))
+                                Consumer<GeoHierarchyController>(builder: (_, ctrl, __) {
+                                  return Column(
+                                    children: [
+                                      Text(Statics.getLabel('selectBhaugolikSthar'), style: TextStyle(color: Theme.of(context).primaryColor)),
                                       GeoDropdownWidget(
-                                        level: GeoLevel.Bhaag,
-                                        title: 'Bhaag',
+                                        level: GeoLevel.Mahaanagar,
+                                        title: 'Mahaanagar',
                                         controller: ctrl,
                                       ),
 
-                                    if (ctrl.hasItems(GeoLevel.Nagar))
+                                      // if (ctrl.hasItems(GeoLevel.vibhaag))
                                       GeoDropdownWidget(
-                                        level: GeoLevel.Nagar,
-                                        title: 'Nagar',
+                                        level: GeoLevel.Vibhaag,
+                                        title: 'Vibhaag',
                                         controller: ctrl,
                                       ),
 
-                                    ////////////////////////////////////////
-                                    /// CONDITIONAL
+                                      if (ctrl.hasItems(GeoLevel.Bhaag))
+                                        GeoDropdownWidget(
+                                          level: GeoLevel.Bhaag,
+                                          title: 'Bhaag',
+                                          controller: ctrl,
+                                        ),
 
-                                    if (ctrl.hasItems(GeoLevel.upnagarUpkhanda))
-                                      GeoDropdownWidget(
-                                        level: GeoLevel.upnagarUpkhanda,
-                                        title: 'upnagarUpkhanda',
-                                        controller: ctrl,
-                                      ),
-                                    SizedBox(height: 21),
-                                  ],
-                                );
-                              }),
+                                      if (ctrl.hasItems(GeoLevel.Nagar))
+                                        GeoDropdownWidget(
+                                          level: GeoLevel.Nagar,
+                                          title: 'Nagar',
+                                          controller: ctrl,
+                                        ),
 
-// =================================================  Select Tulnatmak Bindu =======================================================================================================================================================================================================================================================================================
+                                      ////////////////////////////////////////
+                                      /// CONDITIONAL
 
-                              Text(Statics.getLabel('selectcomparativevruttapoint'), style: TextStyle(color: Theme.of(context).primaryColor)),
-                              DropdownButtonFormField<String>(
-                                decoration: InputDecoration(labelText: Statics.getLabel('comparativevruttapoint')),
-                                isExpanded: true,
-                                value: _tulnatmakvruttapoint == "" ? null : _tulnatmakvruttapoint,
-                                items: _tulnatmakvruttapointItems,
-                                onChanged: (value) {
-                                  print("valuevaluevalue  $value");
-                                  setState(() {
-                                    _tulnatmakvruttapoint = value ?? "";
-                                    _selectedcomparativevruttapoint = (_tulnatmakvruttapointItems.firstWhere((item) => item.value == value).child as Text).data!;
-                                    _selectedmahAnyEkunManBasGram = "";
-                                    _selectedbhougolikkaryastithisubpoint = "";
-                                    _selectedtalukasubpoint = "";
+                                      if (ctrl.hasItems(GeoLevel.upnagarUpkhanda))
+                                        GeoDropdownWidget(
+                                          level: GeoLevel.upnagarUpkhanda,
+                                          title: 'upnagarUpkhanda',
+                                          controller: ctrl,
+                                        ),
+                                      SizedBox(height: 21),
+                                    ],
+                                  );
+                                }),
 
-                                    _bhougolikkaryastithisubpoint = "";
-                                    _mahAnyEkunManBasGram = "";
-                                    _talukasubpoint = "";
-                                    _sthansubpoint = "";
-                                    _selectedsthansubpoint = "";
-                                    _sewavruttasubpoint = "";
-                                    _selectedsewavruttasubpoint = "";
-                                    _purnasubpoint = "";
-                                    _selectedpurnasubpoint = "";
-                                    _karyastithisubpoint = "";
-                                    _selectedkaryastithisubpoint = "";
-                                    _selectedtoliyuktasubpoint = "";
-                                    _selectedbaithakkarnaryasubpoint = "";
-                                    _selectvayogatsubpoint = "";
-                                    _saptahikmilansubpoint = "";
-                                    _selectvayogatsubpoint = "";
-                                    _selectedsaptahikmilansubpoint = '';
-                                    _selectedvayogatsubpoint = '';
-                                    _toliyuktasubpoint = "";
-                                    _baithakkarnaryasubpoint = "";
-                                    _palakyuktasubpoint = "";
-                                    _varshikotsavkarnaryasubpoint = "";
-                                    if (value == "purna" || value == "karyastiti") {
-                                      _sankalpBar = true;
-                                    } else {
-                                      _sankalpBar = false;
-                                    }
-                                  });
-                                },
-                                validator: (value) {
-                                  if (value == null || value.isEmpty || value == "") {
-                                    return (Statics.getLabel('mandatoryInformation'));
-                                  }
-                                  return null;
-                                },
-                              ),
-                              SizedBox(
-                                height: 15,
-                              ),
-// ================================================= Tulnatmak Bindu ==> bahugolik  =======================================================================================================================================================================================================================================================================================
-                              if (_tulnatmakvruttapoint == "bahugolik") Text(Statics.getLabel('selectedBhougolikkaryastithi'), style: TextStyle(color: Theme.of(context).primaryColor)),
-                              if (_tulnatmakvruttapoint == "bahugolik")
+                                // =================================================  Select Tulnatmak Bindu =======================================================================================================================================================================================================================================================================================
+
+                                Text(Statics.getLabel('selectcomparativevruttapoint'), style: TextStyle(color: Theme.of(context).primaryColor)),
                                 DropdownButtonFormField<String>(
-                                  decoration: InputDecoration(labelText: Statics.getLabel('selectedBhougolikkaryastithi')),
+                                  decoration: InputDecoration(labelText: Statics.getLabel('comparativevruttapoint')),
                                   isExpanded: true,
-                                  value: _bhougolikkaryastithisubpoint == "" ? null : _bhougolikkaryastithisubpoint,
-                                  items: _bhougolikkaryastithisubpointItems,
+                                  value: _tulnatmakvruttapoint == "" ? null : _tulnatmakvruttapoint,
+                                  items: _tulnatmakvruttapointItems,
                                   onChanged: (value) {
-                                    print("भौगौलिक कार्यस्थिती निवडल तर == > $value");
+                                    print("valuevaluevalue  $value");
                                     setState(() {
-                                      _bhougolikkaryastithisubpoint = value ?? "";
-                                      _selectedbhougolikkaryastithisubpoint = (_bhougolikkaryastithisubpointItems.firstWhere((item) => item.value == value).child as Text).data!;
+                                      _tulnatmakvruttapoint = value ?? "";
+                                      _selectedcomparativevruttapoint = (_tulnatmakvruttapointItems.firstWhere((item) => item.value == value).child as Text).data!;
                                       _selectedmahAnyEkunManBasGram = "";
+                                      _selectedbhougolikkaryastithisubpoint = "";
                                       _selectedtalukasubpoint = "";
+
+                                      _bhougolikkaryastithisubpoint = "";
                                       _mahAnyEkunManBasGram = "";
                                       _talukasubpoint = "";
-                                      _selectedsthansubpoint = "";
                                       _sthansubpoint = "";
-
-                                      _mahAnyEkunManBasGramItems.clear();
-                                      _mahAnyEkunManBasGramItems.addAll([
-                                        DropdownMenuItem(value: 'sakhayukta', child: Text("${Statics.getLabel('shaakhaaYukta')}")),
-                                        DropdownMenuItem(value: 'saptahikmilanyukt', child: Text('साप्ताहिक मिलन युक्त')),
-                                        DropdownMenuItem(value: 'mandaliyukt', child: Text('मंडळी युक्त')),
-                                        DropdownMenuItem(value: 'kimandosakha', child: Text('किमान दो शाखा')),
-                                      ]);
-                                      if (value == "graam") {
-                                        _mahAnyEkunManBasGramItems.removeWhere((element) => element.value == "kimandosakha");
-                                      } else if (value == "madal") {
-                                        _mahAnyEkunManBasGramItems.removeWhere((element) => element.value == "kimandosakha");
+                                      _selectedsthansubpoint = "";
+                                      _sewavruttasubpoint = "";
+                                      _selectedsewavruttasubpoint = "";
+                                      _purnasubpoint = "";
+                                      _selectedpurnasubpoint = "";
+                                      _karyastithisubpoint = "";
+                                      _selectedkaryastithisubpoint = "";
+                                      _selectedtoliyuktasubpoint = "";
+                                      _selectedbaithakkarnaryasubpoint = "";
+                                      _selectvayogatsubpoint = "";
+                                      _saptahikmilansubpoint = "";
+                                      _selectvayogatsubpoint = "";
+                                      _selectedsaptahikmilansubpoint = '';
+                                      _selectedvayogatsubpoint = '';
+                                      _toliyuktasubpoint = "";
+                                      _baithakkarnaryasubpoint = "";
+                                      _palakyuktasubpoint = "";
+                                      _varshikotsavkarnaryasubpoint = "";
+                                      if (value == "purna" || value == "karyastiti") {
+                                        _sankalpBar = true;
+                                      } else {
+                                        _sankalpBar = false;
                                       }
                                     });
                                   },
                                   validator: (value) {
-                                    if (value == null || value.isEmpty || value == "" && _tulnatmakvruttapoint == "bahugolik") {
-                                      return (Statics.getLabel('mandatoryInformation'));
-                                    }
-                                    return null;
-                                  },
-                                ),
-                              if (_tulnatmakvruttapoint == "bahugolik")
-                                SizedBox(
-                                  height: 15,
-                                ),
-// =================================================   Tulnatmak Bindu ==> bahugolik => mahanagar || anyanagar || ekunnagar || madal || basti || graam  =======================================================================================================================================================================================================================================================================================
-                              if (_tulnatmakvruttapoint == "bahugolik" && _bhougolikkaryastithisubpoint == 'mahanagar' ||
-                                  _bhougolikkaryastithisubpoint == 'anyanagar' ||
-                                  _bhougolikkaryastithisubpoint == 'ekunnagar' ||
-                                  _bhougolikkaryastithisubpoint == 'madal' ||
-                                  _bhougolikkaryastithisubpoint == 'basti' ||
-                                  _bhougolikkaryastithisubpoint == 'graam')
-                                Text(Statics.getLabel('Type'), style: TextStyle(color: Theme.of(context).primaryColor)),
-                              if (_tulnatmakvruttapoint == "bahugolik" && _bhougolikkaryastithisubpoint == 'mahanagar' ||
-                                  _bhougolikkaryastithisubpoint == 'anyanagar' ||
-                                  _bhougolikkaryastithisubpoint == 'ekunnagar' ||
-                                  _bhougolikkaryastithisubpoint == 'madal' ||
-                                  _bhougolikkaryastithisubpoint == 'basti' ||
-                                  _bhougolikkaryastithisubpoint == 'graam')
-                                DropdownButtonFormField<String>(
-                                  decoration: InputDecoration(labelText: Statics.getLabel('Type')),
-                                  isExpanded: true,
-                                  value: _mahAnyEkunManBasGram == "" ? null : _mahAnyEkunManBasGram,
-                                  items: _mahAnyEkunManBasGramItems,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _mahAnyEkunManBasGram = value ?? "";
-                                      _selectedmahAnyEkunManBasGram = (_mahAnyEkunManBasGramItems.firstWhere((item) => item.value == value).child as Text).data!;
-                                      _talukasubpoint = "";
-                                      _selectedtalukasubpoint = "";
-                                      _selectedsthansubpoint = "";
-                                    });
-                                  },
-                                  validator: (value) {
                                     if (value == null || value.isEmpty || value == "") {
                                       return (Statics.getLabel('mandatoryInformation'));
                                     }
                                     return null;
                                   },
                                 ),
-                              if (_tulnatmakvruttapoint == "bahugolik" && _bhougolikkaryastithisubpoint == 'mahanagar' ||
-                                  _bhougolikkaryastithisubpoint == 'anyanagar' ||
-                                  _bhougolikkaryastithisubpoint == 'ekunnagar' ||
-                                  _bhougolikkaryastithisubpoint == 'madal' ||
-                                  _bhougolikkaryastithisubpoint == 'basti' ||
-                                  _bhougolikkaryastithisubpoint == 'graam')
                                 SizedBox(
                                   height: 15,
                                 ),
+                                // ================================================= Tulnatmak Bindu ==> bahugolik  =======================================================================================================================================================================================================================================================================================
+                                if (_tulnatmakvruttapoint == "bahugolik") Text(Statics.getLabel('selectedBhougolikkaryastithi'), style: TextStyle(color: Theme.of(context).primaryColor)),
+                                if (_tulnatmakvruttapoint == "bahugolik")
+                                  DropdownButtonFormField<String>(
+                                    decoration: InputDecoration(labelText: Statics.getLabel('selectedBhougolikkaryastithi')),
+                                    isExpanded: true,
+                                    value: _bhougolikkaryastithisubpoint == "" ? null : _bhougolikkaryastithisubpoint,
+                                    items: _bhougolikkaryastithisubpointItems,
+                                    onChanged: (value) {
+                                      print("भौगौलिक कार्यस्थिती निवडल तर == > $value");
+                                      setState(() {
+                                        _bhougolikkaryastithisubpoint = value ?? "";
+                                        _selectedbhougolikkaryastithisubpoint = (_bhougolikkaryastithisubpointItems.firstWhere((item) => item.value == value).child as Text).data!;
+                                        _selectedmahAnyEkunManBasGram = "";
+                                        _selectedtalukasubpoint = "";
+                                        _mahAnyEkunManBasGram = "";
+                                        _talukasubpoint = "";
+                                        _selectedsthansubpoint = "";
+                                        _sthansubpoint = "";
 
-// =================================================  Tulnatmak Bindu ==> bahugolik => taluka =======================================================================================================================================================================================================================================================================================
+                                        _mahAnyEkunManBasGramItems.clear();
+                                        _mahAnyEkunManBasGramItems.addAll([
+                                          DropdownMenuItem(value: 'sakhayukta', child: Text("${Statics.getLabel('shaakhaaYukta')}")),
+                                          DropdownMenuItem(value: 'saptahikmilanyukt', child: Text('साप्ताहिक मिलन युक्त')),
+                                          DropdownMenuItem(value: 'mandaliyukt', child: Text('मंडळी युक्त')),
+                                          DropdownMenuItem(value: 'kimandosakha', child: Text('किमान दो शाखा')),
+                                        ]);
+                                        if (value == "graam") {
+                                          _mahAnyEkunManBasGramItems.removeWhere((element) => element.value == "kimandosakha");
+                                        } else if (value == "madal") {
+                                          _mahAnyEkunManBasGramItems.removeWhere((element) => element.value == "kimandosakha");
+                                        }
+                                      });
+                                    },
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty || value == "" && _tulnatmakvruttapoint == "bahugolik") {
+                                        return (Statics.getLabel('mandatoryInformation'));
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                if (_tulnatmakvruttapoint == "bahugolik")
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                // =================================================   Tulnatmak Bindu ==> bahugolik => mahanagar || anyanagar || ekunnagar || madal || basti || graam  =======================================================================================================================================================================================================================================================================================
+                                if (_tulnatmakvruttapoint == "bahugolik" && _bhougolikkaryastithisubpoint == 'mahanagar' ||
+                                    _bhougolikkaryastithisubpoint == 'anyanagar' ||
+                                    _bhougolikkaryastithisubpoint == 'ekunnagar' ||
+                                    _bhougolikkaryastithisubpoint == 'madal' ||
+                                    _bhougolikkaryastithisubpoint == 'basti' ||
+                                    _bhougolikkaryastithisubpoint == 'graam')
+                                  Text(Statics.getLabel('Type'), style: TextStyle(color: Theme.of(context).primaryColor)),
+                                if (_tulnatmakvruttapoint == "bahugolik" && _bhougolikkaryastithisubpoint == 'mahanagar' ||
+                                    _bhougolikkaryastithisubpoint == 'anyanagar' ||
+                                    _bhougolikkaryastithisubpoint == 'ekunnagar' ||
+                                    _bhougolikkaryastithisubpoint == 'madal' ||
+                                    _bhougolikkaryastithisubpoint == 'basti' ||
+                                    _bhougolikkaryastithisubpoint == 'graam')
+                                  DropdownButtonFormField<String>(
+                                    decoration: InputDecoration(labelText: Statics.getLabel('Type')),
+                                    isExpanded: true,
+                                    value: _mahAnyEkunManBasGram == "" ? null : _mahAnyEkunManBasGram,
+                                    items: _mahAnyEkunManBasGramItems,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _mahAnyEkunManBasGram = value ?? "";
+                                        _selectedmahAnyEkunManBasGram = (_mahAnyEkunManBasGramItems.firstWhere((item) => item.value == value).child as Text).data!;
+                                        _talukasubpoint = "";
+                                        _selectedtalukasubpoint = "";
+                                        _selectedsthansubpoint = "";
+                                      });
+                                    },
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty || value == "") {
+                                        return (Statics.getLabel('mandatoryInformation'));
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                if (_tulnatmakvruttapoint == "bahugolik" && _bhougolikkaryastithisubpoint == 'mahanagar' ||
+                                    _bhougolikkaryastithisubpoint == 'anyanagar' ||
+                                    _bhougolikkaryastithisubpoint == 'ekunnagar' ||
+                                    _bhougolikkaryastithisubpoint == 'madal' ||
+                                    _bhougolikkaryastithisubpoint == 'basti' ||
+                                    _bhougolikkaryastithisubpoint == 'graam')
+                                  SizedBox(
+                                    height: 15,
+                                  ),
 
-                              if (_bhougolikkaryastithisubpoint == 'taluka' && _tulnatmakvruttapoint == "bahugolik")
-                                Text(Statics.getLabel('Type'), style: TextStyle(color: Theme.of(context).primaryColor)),
-                              if (_bhougolikkaryastithisubpoint == 'taluka' && _tulnatmakvruttapoint == "bahugolik")
-                                DropdownButtonFormField<String>(
-                                  decoration: InputDecoration(labelText: Statics.getLabel('Type')),
-                                  isExpanded: true,
-                                  value: _talukasubpoint == "" ? null : _talukasubpoint,
-                                  items: _talukasubpointItems,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _talukasubpoint = value;
-                                      _selectedtalukasubpoint = (_talukasubpointItems.firstWhere((item) => item.value == value).child as Text).data!;
-                                      _selectedmahAnyEkunManBasGram = "";
-                                      _mahAnyEkunManBasGram = "";
-                                      _selectedsthansubpoint = "";
-                                    });
-                                  },
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty || value == "") {
-                                      return (Statics.getLabel('mandatoryInformation'));
-                                    }
-                                    return null;
-                                  },
-                                ),
-                              if (_bhougolikkaryastithisubpoint == 'taluka' && _tulnatmakvruttapoint == "bahugolik")
-                                SizedBox(
-                                  height: 15,
-                                ),
-// ================================================= Tulnatmak Bindu ==> bahugolik => sthan  =======================================================================================================================================================================================================================================================================================
+                                // =================================================  Tulnatmak Bindu ==> bahugolik => taluka =======================================================================================================================================================================================================================================================================================
 
-                              if (_bhougolikkaryastithisubpoint == 'sthan' && _tulnatmakvruttapoint == "bahugolik")
-                                Text(Statics.getLabel('Type'), style: TextStyle(color: Theme.of(context).primaryColor)),
-                              if (_bhougolikkaryastithisubpoint == 'sthan' && _tulnatmakvruttapoint == "bahugolik")
-                                DropdownButtonFormField<String>(
-                                  decoration: InputDecoration(labelText: Statics.getLabel('Type')),
-                                  isExpanded: true,
-                                  value: _sthansubpoint == "" ? null : _sthansubpoint,
-                                  items: _sthansubpointItems,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _sthansubpoint = value;
-                                      _selectedsthansubpoint = (_sthansubpointItems.firstWhere((item) => item.value == value).child as Text).data!;
-                                    });
-                                  },
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty || value == "") {
-                                      return (Statics.getLabel('mandatoryInformation'));
-                                    }
-                                    return null;
-                                  },
-                                ),
-                              if (_bhougolikkaryastithisubpoint == 'sthan' && _tulnatmakvruttapoint == "bahugolik")
-                                SizedBox(
-                                  height: 15,
-                                ),
-// ================================================= Tulnatmak Bindu ==> bahugolik => sevavrutta  =======================================================================================================================================================================================================================================================================================
+                                if (_bhougolikkaryastithisubpoint == 'taluka' && _tulnatmakvruttapoint == "bahugolik")
+                                  Text(Statics.getLabel('Type'), style: TextStyle(color: Theme.of(context).primaryColor)),
+                                if (_bhougolikkaryastithisubpoint == 'taluka' && _tulnatmakvruttapoint == "bahugolik")
+                                  DropdownButtonFormField<String>(
+                                    decoration: InputDecoration(labelText: Statics.getLabel('Type')),
+                                    isExpanded: true,
+                                    value: _talukasubpoint == "" ? null : _talukasubpoint,
+                                    items: _talukasubpointItems,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _talukasubpoint = value;
+                                        _selectedtalukasubpoint = (_talukasubpointItems.firstWhere((item) => item.value == value).child as Text).data!;
+                                        _selectedmahAnyEkunManBasGram = "";
+                                        _mahAnyEkunManBasGram = "";
+                                        _selectedsthansubpoint = "";
+                                      });
+                                    },
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty || value == "") {
+                                        return (Statics.getLabel('mandatoryInformation'));
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                if (_bhougolikkaryastithisubpoint == 'taluka' && _tulnatmakvruttapoint == "bahugolik")
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                // ================================================= Tulnatmak Bindu ==> bahugolik => sthan  =======================================================================================================================================================================================================================================================================================
 
-                              if (_tulnatmakvruttapoint == "sevavrutta") Text(Statics.getLabel('Type'), style: TextStyle(color: Theme.of(context).primaryColor)),
-                              if (_tulnatmakvruttapoint == "sevavrutta")
-                                DropdownButtonFormField<String>(
-                                  decoration: InputDecoration(labelText: Statics.getLabel('Type')),
-                                  isExpanded: true,
-                                  value: _sewavruttasubpoint == "" ? null : _sewavruttasubpoint,
-                                  items: _sewavruttasubpointItems,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _sewavruttasubpoint = value;
-                                      _selectedsewavruttasubpoint = (_sewavruttasubpointItems.firstWhere((item) => item.value == value).child as Text).data!;
-                                    });
-                                  },
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty || value == "") {
-                                      return (Statics.getLabel('mandatoryInformation'));
-                                    }
-                                    return null;
-                                  },
-                                ),
-                              if (_tulnatmakvruttapoint == "sevavrutta")
-                                SizedBox(
-                                  height: 15,
-                                ),
+                                if (_bhougolikkaryastithisubpoint == 'sthan' && _tulnatmakvruttapoint == "bahugolik")
+                                  Text(Statics.getLabel('Type'), style: TextStyle(color: Theme.of(context).primaryColor)),
+                                if (_bhougolikkaryastithisubpoint == 'sthan' && _tulnatmakvruttapoint == "bahugolik")
+                                  DropdownButtonFormField<String>(
+                                    decoration: InputDecoration(labelText: Statics.getLabel('Type')),
+                                    isExpanded: true,
+                                    value: _sthansubpoint == "" ? null : _sthansubpoint,
+                                    items: _sthansubpointItems,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _sthansubpoint = value;
+                                        _selectedsthansubpoint = (_sthansubpointItems.firstWhere((item) => item.value == value).child as Text).data!;
+                                      });
+                                    },
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty || value == "") {
+                                        return (Statics.getLabel('mandatoryInformation'));
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                if (_bhougolikkaryastithisubpoint == 'sthan' && _tulnatmakvruttapoint == "bahugolik")
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                // ================================================= Tulnatmak Bindu ==> bahugolik => sevavrutta  =======================================================================================================================================================================================================================================================================================
 
-// ================================================= Tulnatmak Bindu ==> bahugolik => purna  =======================================================================================================================================================================================================================================================================================
+                                if (_tulnatmakvruttapoint == "sevavrutta") Text(Statics.getLabel('Type'), style: TextStyle(color: Theme.of(context).primaryColor)),
+                                if (_tulnatmakvruttapoint == "sevavrutta")
+                                  DropdownButtonFormField<String>(
+                                    decoration: InputDecoration(labelText: Statics.getLabel('Type')),
+                                    isExpanded: true,
+                                    value: _sewavruttasubpoint == "" ? null : _sewavruttasubpoint,
+                                    items: _sewavruttasubpointItems,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _sewavruttasubpoint = value;
+                                        _selectedsewavruttasubpoint = (_sewavruttasubpointItems.firstWhere((item) => item.value == value).child as Text).data!;
+                                      });
+                                    },
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty || value == "") {
+                                        return (Statics.getLabel('mandatoryInformation'));
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                if (_tulnatmakvruttapoint == "sevavrutta")
+                                  SizedBox(
+                                    height: 15,
+                                  ),
 
-                              if (_tulnatmakvruttapoint == "purna") Text(Statics.getLabel('Type'), style: TextStyle(color: Theme.of(context).primaryColor)),
-                              if (_tulnatmakvruttapoint == "purna")
-                                DropdownButtonFormField<String>(
-                                  decoration: InputDecoration(labelText: Statics.getLabel('Type')),
-                                  isExpanded: true,
-                                  value: _purnasubpoint == "" ? null : _purnasubpoint,
-                                  items: _purnasubpointItems,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _purnasubpoint = value;
-                                      _selectedpurnasubpoint = (_purnasubpointItems.firstWhere((item) => item.value == value).child as Text).data!;
-                                    });
-                                  },
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty || value == "") {
-                                      return (Statics.getLabel('mandatoryInformation'));
-                                    }
-                                    return null;
-                                  },
-                                ),
-                              if (_tulnatmakvruttapoint == "purna")
-                                SizedBox(
-                                  height: 15,
-                                ),
-// ================================================= Tulnatmak Bindu ==> bahugolik => karyastiti  =======================================================================================================================================================================================================================================================================================
+                                // ================================================= Tulnatmak Bindu ==> bahugolik => purna  =======================================================================================================================================================================================================================================================================================
 
-                              if (_tulnatmakvruttapoint == "karyastiti") Text(Statics.getLabel('Type'), style: TextStyle(color: Theme.of(context).primaryColor)),
-                              if (_tulnatmakvruttapoint == "karyastiti")
-                                DropdownButtonFormField<String>(
-                                  decoration: InputDecoration(labelText: Statics.getLabel('Type')),
-                                  isExpanded: true,
-                                  value: _karyastithisubpoint == "" ? null : _karyastithisubpoint,
-                                  items: _karyastithisubpointItems,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _karyastithisubpoint = value;
-                                      _selectedkaryastithisubpoint = (_karyastithisubpointItems.firstWhere((item) => item.value == value).child as Text).data!;
-                                      _selectedsaptahikmilansubpoint = '';
-                                      _selectedvayogatsubpoint = '';
-                                      _saptahikmilansubpoint = "";
-                                      _selectvayogatsubpoint = "";
-                                    });
-                                  },
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty || value == "") {
-                                      return (Statics.getLabel('mandatoryInformation'));
-                                    }
-                                    return null;
-                                  },
-                                ),
-                              if (_tulnatmakvruttapoint == "karyastiti")
-                                SizedBox(
-                                  height: 15,
-                                ),
+                                if (_tulnatmakvruttapoint == "purna") Text(Statics.getLabel('Type'), style: TextStyle(color: Theme.of(context).primaryColor)),
+                                if (_tulnatmakvruttapoint == "purna")
+                                  DropdownButtonFormField<String>(
+                                    decoration: InputDecoration(labelText: Statics.getLabel('Type')),
+                                    isExpanded: true,
+                                    value: _purnasubpoint == "" ? null : _purnasubpoint,
+                                    items: _purnasubpointItems,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _purnasubpoint = value;
+                                        _selectedpurnasubpoint = (_purnasubpointItems.firstWhere((item) => item.value == value).child as Text).data!;
+                                      });
+                                    },
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty || value == "") {
+                                        return (Statics.getLabel('mandatoryInformation'));
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                if (_tulnatmakvruttapoint == "purna")
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                // ================================================= Tulnatmak Bindu ==> bahugolik => karyastiti  =======================================================================================================================================================================================================================================================================================
 
-// ================================================= Tulnatmak Bindu ==> bahugolik => karyastiti || toliyukta || baithak karnarya => Saptahik Milan  =======================================================================================================================================================================================================================================================================================
+                                if (_tulnatmakvruttapoint == "karyastiti") Text(Statics.getLabel('Type'), style: TextStyle(color: Theme.of(context).primaryColor)),
+                                if (_tulnatmakvruttapoint == "karyastiti")
+                                  DropdownButtonFormField<String>(
+                                    decoration: InputDecoration(labelText: Statics.getLabel('Type')),
+                                    isExpanded: true,
+                                    value: _karyastithisubpoint == "" ? null : _karyastithisubpoint,
+                                    items: _karyastithisubpointItems,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _karyastithisubpoint = value;
+                                        _selectedkaryastithisubpoint = (_karyastithisubpointItems.firstWhere((item) => item.value == value).child as Text).data!;
+                                        _selectedsaptahikmilansubpoint = '';
+                                        _selectedvayogatsubpoint = '';
+                                        _saptahikmilansubpoint = "";
+                                        _selectvayogatsubpoint = "";
+                                      });
+                                    },
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty || value == "") {
+                                        return (Statics.getLabel('mandatoryInformation'));
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                if (_tulnatmakvruttapoint == "karyastiti")
+                                  SizedBox(
+                                    height: 15,
+                                  ),
 
-                              if (_tulnatmakvruttapoint == "toliyukt") Text(Statics.getLabel('Type'), style: TextStyle(color: Theme.of(context).primaryColor)),
-                              if (_tulnatmakvruttapoint == "toliyukt")
-                                DropdownButtonFormField<String>(
-                                  decoration: InputDecoration(labelText: Statics.getLabel('Type')),
-                                  isExpanded: true,
-                                  value: _toliyuktasubpoint == "" ? null : _toliyuktasubpoint,
-                                  items: _toliyuktasubpointItems,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _toliyuktasubpoint = value;
-                                      _selectedtoliyuktasubpoint = (_toliyuktasubpointItems.firstWhere((item) => item.value == value).child as Text).data!;
-                                      _selectedsaptahikmilansubpoint = '';
-                                      _selectedvayogatsubpoint = '';
-                                      _saptahikmilansubpoint = "";
-                                      _selectvayogatsubpoint = "";
-                                    });
-                                  },
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty || value == "") {
-                                      return (Statics.getLabel('mandatoryInformation'));
-                                    }
-                                    return null;
-                                  },
-                                ),
-                              if (_tulnatmakvruttapoint == "toliyukt")
-                                SizedBox(
-                                  height: 15,
-                                ),
+                                // ================================================= Tulnatmak Bindu ==> bahugolik => karyastiti || toliyukta || baithak karnarya => Saptahik Milan  =======================================================================================================================================================================================================================================================================================
 
-// ================================================= Tulnatmak Bindu ==> bahugolik => karyastiti || toliyukta || baithak karnarya => Saptahik Milan  =======================================================================================================================================================================================================================================================================================
+                                if (_tulnatmakvruttapoint == "toliyukt") Text(Statics.getLabel('Type'), style: TextStyle(color: Theme.of(context).primaryColor)),
+                                if (_tulnatmakvruttapoint == "toliyukt")
+                                  DropdownButtonFormField<String>(
+                                    decoration: InputDecoration(labelText: Statics.getLabel('Type')),
+                                    isExpanded: true,
+                                    value: _toliyuktasubpoint == "" ? null : _toliyuktasubpoint,
+                                    items: _toliyuktasubpointItems,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _toliyuktasubpoint = value;
+                                        _selectedtoliyuktasubpoint = (_toliyuktasubpointItems.firstWhere((item) => item.value == value).child as Text).data!;
+                                        _selectedsaptahikmilansubpoint = '';
+                                        _selectedvayogatsubpoint = '';
+                                        _saptahikmilansubpoint = "";
+                                        _selectvayogatsubpoint = "";
+                                      });
+                                    },
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty || value == "") {
+                                        return (Statics.getLabel('mandatoryInformation'));
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                if (_tulnatmakvruttapoint == "toliyukt")
+                                  SizedBox(
+                                    height: 15,
+                                  ),
 
-                              if (_tulnatmakvruttapoint == "baithakkarnarya") Text(Statics.getLabel('Type'), style: TextStyle(color: Theme.of(context).primaryColor)),
-                              if (_tulnatmakvruttapoint == "baithakkarnarya")
-                                DropdownButtonFormField<String>(
-                                  decoration: InputDecoration(labelText: Statics.getLabel('Type')),
-                                  isExpanded: true,
-                                  value: _baithakkarnaryasubpoint == "" ? null : _baithakkarnaryasubpoint,
-                                  items: _baithakkarnaryasubpointItems,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _baithakkarnaryasubpoint = value;
-                                      _selectedbaithakkarnaryasubpoint = (_baithakkarnaryasubpointItems.firstWhere((item) => item.value == value).child as Text).data!;
-                                      _selectedsaptahikmilansubpoint = '';
-                                      _selectedvayogatsubpoint = '';
-                                      _saptahikmilansubpoint = "";
-                                      _selectvayogatsubpoint = "";
-                                    });
-                                  },
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty || value == "") {
-                                      return (Statics.getLabel('mandatoryInformation'));
-                                    }
-                                    return null;
-                                  },
-                                ),
-                              if (_tulnatmakvruttapoint == "baithakkarnarya")
-                                SizedBox(
-                                  height: 15,
-                                ),
-// ================================================= Tulnatmak Bindu ==> bahugolik => karyastiti || toliyukta || palakyukta => Saptahik Milan  =======================================================================================================================================================================================================================================================================================
+                                // ================================================= Tulnatmak Bindu ==> bahugolik => karyastiti || toliyukta || baithak karnarya => Saptahik Milan  =======================================================================================================================================================================================================================================================================================
 
-                              if (_tulnatmakvruttapoint == "palakyukta") Text(Statics.getLabel('Type'), style: TextStyle(color: Theme.of(context).primaryColor)),
-                              if (_tulnatmakvruttapoint == "palakyukta")
-                                DropdownButtonFormField<String>(
-                                  decoration: InputDecoration(labelText: Statics.getLabel('Type')),
-                                  isExpanded: true,
-                                  value: _palakyuktasubpoint == "" ? null : _palakyuktasubpoint,
-                                  items: _palakyuktasubpointItems,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _palakyuktasubpoint = value;
-                                      _selectedbaithakkarnaryasubpoint = (_palakyuktasubpointItems.firstWhere((item) => item.value == value).child as Text).data!;
-                                      _selectedsaptahikmilansubpoint = '';
-                                      _selectedvayogatsubpoint = '';
-                                      _saptahikmilansubpoint = "";
-                                      _selectvayogatsubpoint = "";
-                                    });
-                                  },
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty || value == "") {
-                                      return (Statics.getLabel('mandatoryInformation'));
-                                    }
-                                    return null;
-                                  },
-                                ),
-                              if (_tulnatmakvruttapoint == "palakyukta")
-                                SizedBox(
-                                  height: 15,
-                                ),
-// ================================================= Tulnatmak Bindu ==> bahugolik => karyastiti || toliyukta || varshikotsav karnarya => Saptahik Milan  =======================================================================================================================================================================================================================================================================================
-                              if (_tulnatmakvruttapoint == "varshikotsavkarnarya") Text(Statics.getLabel('Type'), style: TextStyle(color: Theme.of(context).primaryColor)),
-                              if (_tulnatmakvruttapoint == "varshikotsavkarnarya")
-                                DropdownButtonFormField<String>(
-                                  decoration: InputDecoration(labelText: Statics.getLabel('Type')),
-                                  isExpanded: true,
-                                  value: _varshikotsavkarnaryasubpoint == "" ? null : _varshikotsavkarnaryasubpoint,
-                                  items: _varshikotsavkarnaryasubpointItems,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _varshikotsavkarnaryasubpoint = value;
-                                      _selectedbaithakkarnaryasubpoint = (_varshikotsavkarnaryasubpointItems.firstWhere((item) => item.value == value).child as Text).data!;
-                                      _selectedsaptahikmilansubpoint = '';
-                                      _selectedvayogatsubpoint = '';
-                                      _saptahikmilansubpoint = "";
-                                      _selectvayogatsubpoint = "";
-                                    });
-                                  },
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty || value == "") {
-                                      return (Statics.getLabel('mandatoryInformation'));
-                                    }
-                                    return null;
-                                  },
-                                ),
-                              if (_tulnatmakvruttapoint == "varshikotsavkarnarya")
-                                SizedBox(
-                                  height: 15,
-                                ),
-// ================================================= Tulnatmak Bindu ==> bahugolik => karyastiti || toliyukta || baithak karnarya => Saptahik Milan  =======================================================================================================================================================================================================================================================================================
+                                if (_tulnatmakvruttapoint == "baithakkarnarya") Text(Statics.getLabel('Type'), style: TextStyle(color: Theme.of(context).primaryColor)),
+                                if (_tulnatmakvruttapoint == "baithakkarnarya")
+                                  DropdownButtonFormField<String>(
+                                    decoration: InputDecoration(labelText: Statics.getLabel('Type')),
+                                    isExpanded: true,
+                                    value: _baithakkarnaryasubpoint == "" ? null : _baithakkarnaryasubpoint,
+                                    items: _baithakkarnaryasubpointItems,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _baithakkarnaryasubpoint = value;
+                                        _selectedbaithakkarnaryasubpoint = (_baithakkarnaryasubpointItems.firstWhere((item) => item.value == value).child as Text).data!;
+                                        _selectedsaptahikmilansubpoint = '';
+                                        _selectedvayogatsubpoint = '';
+                                        _saptahikmilansubpoint = "";
+                                        _selectvayogatsubpoint = "";
+                                      });
+                                    },
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty || value == "") {
+                                        return (Statics.getLabel('mandatoryInformation'));
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                if (_tulnatmakvruttapoint == "baithakkarnarya")
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                // ================================================= Tulnatmak Bindu ==> bahugolik => karyastiti || toliyukta || palakyukta => Saptahik Milan  =======================================================================================================================================================================================================================================================================================
 
-                              // if(_karyastithisubpoint == "saptahikmilan" || _toliyuktasubpoint == "saptahikmilan"|| _baithakkarnaryasubpoint == "saptahikmilan")
-                              //   Text(Statics.getLabel('Type')
-                              //       ,style: TextStyle(color:Theme.of(context).primaryColor )),
-                              // if(_karyastithisubpoint == "saptahikmilan" || _toliyuktasubpoint == "saptahikmilan"|| _baithakkarnaryasubpoint == "saptahikmilan")
-                              //   DropdownButtonFormField<String>(
-                              //     decoration: InputDecoration(labelText: Statics.getLabel('Type')),
-                              //     isExpanded: true,
-                              //     value: _saptahikmilansubpoint == "" ? null : _saptahikmilansubpoint,
-                              //     items: _saptahikmilansubpointItems,
-                              //     onChanged: (value) {
-                              //       setState(() {
-                              //         _saptahikmilansubpoint = value;
-                              //         _selectedsaptahikmilansubpoint =(_saptahikmilansubpointItems.firstWhere((item) => item.value == value).child as Text).data!;
-                              //
-                              //       });
-                              //     },
-                              //     validator: (value) {
-                              //       if (value == null || value.isEmpty|| value == "" ) {
-                              //         return (Statics.getLabel('mandatoryInformation'));
-                              //       }
-                              //       return null;
-                              //     },
-                              //   ),
-                              // if(_karyastithisubpoint == "saptahikmilan" || _toliyuktasubpoint == "saptahikmilan"|| _baithakkarnaryasubpoint == "saptahikmilan")
-                              //   SizedBox(height: 15,),
-                              if (_karyastithisubpoint == "saptahikmilan" || _toliyuktasubpoint == "saptahikmilan")
-                                Text(Statics.getLabel('Type'), style: TextStyle(color: Theme.of(context).primaryColor)),
+                                if (_tulnatmakvruttapoint == "palakyukta") Text(Statics.getLabel('Type'), style: TextStyle(color: Theme.of(context).primaryColor)),
+                                if (_tulnatmakvruttapoint == "palakyukta")
+                                  DropdownButtonFormField<String>(
+                                    decoration: InputDecoration(labelText: Statics.getLabel('Type')),
+                                    isExpanded: true,
+                                    value: _palakyuktasubpoint == "" ? null : _palakyuktasubpoint,
+                                    items: _palakyuktasubpointItems,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _palakyuktasubpoint = value;
+                                        _selectedbaithakkarnaryasubpoint = (_palakyuktasubpointItems.firstWhere((item) => item.value == value).child as Text).data!;
+                                        _selectedsaptahikmilansubpoint = '';
+                                        _selectedvayogatsubpoint = '';
+                                        _saptahikmilansubpoint = "";
+                                        _selectvayogatsubpoint = "";
+                                      });
+                                    },
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty || value == "") {
+                                        return (Statics.getLabel('mandatoryInformation'));
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                if (_tulnatmakvruttapoint == "palakyukta")
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                // ================================================= Tulnatmak Bindu ==> bahugolik => karyastiti || toliyukta || varshikotsav karnarya => Saptahik Milan  =======================================================================================================================================================================================================================================================================================
+                                if (_tulnatmakvruttapoint == "varshikotsavkarnarya") Text(Statics.getLabel('Type'), style: TextStyle(color: Theme.of(context).primaryColor)),
+                                if (_tulnatmakvruttapoint == "varshikotsavkarnarya")
+                                  DropdownButtonFormField<String>(
+                                    decoration: InputDecoration(labelText: Statics.getLabel('Type')),
+                                    isExpanded: true,
+                                    value: _varshikotsavkarnaryasubpoint == "" ? null : _varshikotsavkarnaryasubpoint,
+                                    items: _varshikotsavkarnaryasubpointItems,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _varshikotsavkarnaryasubpoint = value;
+                                        _selectedbaithakkarnaryasubpoint = (_varshikotsavkarnaryasubpointItems.firstWhere((item) => item.value == value).child as Text).data!;
+                                        _selectedsaptahikmilansubpoint = '';
+                                        _selectedvayogatsubpoint = '';
+                                        _saptahikmilansubpoint = "";
+                                        _selectvayogatsubpoint = "";
+                                      });
+                                    },
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty || value == "") {
+                                        return (Statics.getLabel('mandatoryInformation'));
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                if (_tulnatmakvruttapoint == "varshikotsavkarnarya")
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                // ================================================= Tulnatmak Bindu ==> bahugolik => karyastiti || toliyukta || baithak karnarya => Saptahik Milan  =======================================================================================================================================================================================================================================================================================
 
-                              if (_karyastithisubpoint == "saptahikmilan" || _toliyuktasubpoint == "saptahikmilan")
-                                DropdownButtonFormField<String>(
-                                  decoration: InputDecoration(labelText: Statics.getLabel('Type')),
-                                  isExpanded: true,
-                                  value: _saptahikmilansubpoint == "" ? null : _saptahikmilansubpoint,
-                                  items: _saptahikmilansubpointItems,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _saptahikmilansubpoint = value;
-                                      _selectedsaptahikmilansubpoint = (_saptahikmilansubpointItems.firstWhere((item) => item.value == value).child as Text).data!;
-                                    });
-                                  },
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty || value == "") {
-                                      return Statics.getLabel('mandatoryInformation');
-                                    }
-                                    return null;
-                                  },
-                                ),
-                              if (_karyastithisubpoint == "saptahikmilan" || _toliyuktasubpoint == "saptahikmilan")
-                                SizedBox(
-                                  height: 15,
-                                ),
-// ============= Tulnatmak Bindu ==> bahugolik => karyastiti || toliyukta || baithak karnarya =>  vayogat =======================================================================================================================================================================================================================================================================================
-//
-//
-//                             // if(_tulnatmakvruttapoint == "karyastiti" ||_tulnatmakvruttapoint == "toliyukt"||_tulnatmakvruttapoint == "baithakkarnarya"  && _karyastithisubpoint != "masikmilan"  ||  _karyastithisubpoint != "sanghmandali")
-//                             if(_tulnatmakvruttapoint == "toliyukt"||_tulnatmakvruttapoint == "baithakkarnarya")
-//                             Text( Statics.getLabel('Vayogat')
-//                                   ,style: TextStyle(color:Theme.of(context).primaryColor )),
-//                             // if(_tulnatmakvruttapoint == "karyastiti" ||_tulnatmakvruttapoint == "toliyukt"||_tulnatmakvruttapoint == "baithakkarnarya"  && _karyastithisubpoint != "masikmilan"  ||  _karyastithisubpoint != "sanghmandali")
-//                             if(_tulnatmakvruttapoint == "toliyukt"||_tulnatmakvruttapoint == "baithakkarnarya")
-//                               DropdownButtonFormField<String>(
-//                                 decoration: InputDecoration(labelText: Statics.getLabel('Vayogat')),
-//                                 isExpanded: true,
-//                                 value: _selectvayogatsubpoint == "" ? null : _selectvayogatsubpoint,
-//                                 items: _selectvayogatsubpointItems,
-//                                 onChanged: (value) {
-//                                   print(value);
-//                                   setState(() {
-//                                     _selectvayogatsubpoint = value;
-//                                     _selectedvayogatsubpoint =(_selectvayogatsubpointItems.firstWhere((item) => item.value == value).child as Text).data!;
-//                                   });
-//                                 },
-//                                 validator: (value) {
-//                                   if (value == null || value.isEmpty|| value == "" ) {
-//                                     return (Statics.getLabel('mandatoryInformation'));
-//                                   }
-//                                   return null;
-//                                 },
-//                               ),
-//                             // if(_tulnatmakvruttapoint == "karyastiti" ||_tulnatmakvruttapoint == "toliyukt"||_tulnatmakvruttapoint == "baithakkarnarya"  && _karyastithisubpoint != "masikmilan"  ||  _karyastithisubpoint != "sanghmandali")
-//                             if(_tulnatmakvruttapoint == "toliyukt"||_tulnatmakvruttapoint == "baithakkarnarya")
-//                               SizedBox(height: 15,),
-//
-// // ============= Tulnatmak Bindu ==> bahugolik => karyastiti => sangha mandali / masik milan =>  vayogat =======================================================================================================================================================================================================================================================================================
-//
-//                             if(_tulnatmakvruttapoint == "karyastiti" && _karyastithisubpoint == "masikmilan"  ||  _karyastithisubpoint == "sanghmandali" )
-//                               Text( Statics.getLabel('Vayogat')
-//                                   ,style: TextStyle(color:Theme.of(context).primaryColor )),
-//                             if(_tulnatmakvruttapoint == "karyastiti" && _karyastithisubpoint == "masikmilan"  ||  _karyastithisubpoint == "sanghmandali" )
-//                               DropdownButtonFormField<String>(
-//                                 decoration: InputDecoration(labelText: Statics.getLabel('Vayogat')),
-//                                 isExpanded: true,
-//                                 value: _vayogatSanghamandaliSaptahikMilan == "" ? null : _vayogatSanghamandaliSaptahikMilan,
-//                                 items: _vayogatSanghamandaliSaptahikMilanItems,
-//                                 onChanged: (value) {
-//                                   print(value);
-//                                   setState(() {
-//                                     _vayogatSanghamandaliSaptahikMilan = value;
-//                                     // _vayogatSanghamandaliSaptahikMilan =(_vayogatSanghamandaliSaptahikMilanItems.firstWhere((item) => item.value == value).child as Text).data!;
-//
-//                                   });
-//                                 },
-//                                 validator: (value) {
-//                                   if (value == null || value.isEmpty|| value == "" ) {
-//                                     return (Statics.getLabel('mandatoryInformation'));
-//                                   }
-//                                   return null;
-//                                 },
-//                               ),
-//                             if(_tulnatmakvruttapoint == "karyastiti" && _karyastithisubpoint == "masikmilan"  ||  _karyastithisubpoint == "sanghmandali" )
-//                               SizedBox(height: 15,),
-//
+                                // if(_karyastithisubpoint == "saptahikmilan" || _toliyuktasubpoint == "saptahikmilan"|| _baithakkarnaryasubpoint == "saptahikmilan")
+                                //   Text(Statics.getLabel('Type')
+                                //       ,style: TextStyle(color:Theme.of(context).primaryColor )),
+                                // if(_karyastithisubpoint == "saptahikmilan" || _toliyuktasubpoint == "saptahikmilan"|| _baithakkarnaryasubpoint == "saptahikmilan")
+                                //   DropdownButtonFormField<String>(
+                                //     decoration: InputDecoration(labelText: Statics.getLabel('Type')),
+                                //     isExpanded: true,
+                                //     value: _saptahikmilansubpoint == "" ? null : _saptahikmilansubpoint,
+                                //     items: _saptahikmilansubpointItems,
+                                //     onChanged: (value) {
+                                //       setState(() {
+                                //         _saptahikmilansubpoint = value;
+                                //         _selectedsaptahikmilansubpoint =(_saptahikmilansubpointItems.firstWhere((item) => item.value == value).child as Text).data!;
+                                //
+                                //       });
+                                //     },
+                                //     validator: (value) {
+                                //       if (value == null || value.isEmpty|| value == "" ) {
+                                //         return (Statics.getLabel('mandatoryInformation'));
+                                //       }
+                                //       return null;
+                                //     },
+                                //   ),
+                                // if(_karyastithisubpoint == "saptahikmilan" || _toliyuktasubpoint == "saptahikmilan"|| _baithakkarnaryasubpoint == "saptahikmilan")
+                                //   SizedBox(height: 15,),
+                                if (_karyastithisubpoint == "saptahikmilan" || _toliyuktasubpoint == "saptahikmilan")
+                                  Text(Statics.getLabel('Type'), style: TextStyle(color: Theme.of(context).primaryColor)),
 
-                              if (_tulnatmakvruttapoint == "karyastiti" ||
-                                  _tulnatmakvruttapoint == "toliyukt" ||
-                                  _tulnatmakvruttapoint == "baithakkarnarya" ||
-                                  _tulnatmakvruttapoint == "palakyukta" ||
-                                  _tulnatmakvruttapoint == "varshikotsavkarnarya")
-                                Text(
-                                  Statics.getLabel('Vayogat'),
-                                  style: TextStyle(color: Theme.of(context).primaryColor),
-                                ),
-                              // if(_tulnatmakvruttapoint == "karyastiti" ||_tulnatmakvruttapoint == "toliyukt"||_tulnatmakvruttapoint == "baithakkarnarya")
-                              if (_tulnatmakvruttapoint == "karyastiti" ||
-                                  _tulnatmakvruttapoint == "toliyukt" ||
-                                  _tulnatmakvruttapoint == "baithakkarnarya" ||
-                                  _tulnatmakvruttapoint == "palakyukta" ||
-                                  _tulnatmakvruttapoint == "varshikotsavkarnarya")
-                                DropdownButtonFormField<String>(
-                                  decoration: InputDecoration(labelText: Statics.getLabel('Vayogat')),
-                                  isExpanded: true,
-                                  value: _selectvayogatsubpoint == "" ? null : _selectvayogatsubpoint,
-                                  items: (_tulnatmakvruttapoint == "karyastiti" && (_karyastithisubpoint == "masikmilan" || _karyastithisubpoint == "sanghmandali")) ? _vayogatItems1 : _vayogatItems2,
-                                  onChanged: (value) {
-                                    print(value);
-                                    setState(() {
-                                      _selectvayogatsubpoint = value;
-                                      _selectedvayogatsubpoint = (_tulnatmakvruttapoint == "karyastiti" && (_karyastithisubpoint == "masikmilan" || _karyastithisubpoint == "sanghmandali"))
-                                          ? (_vayogatItems1.firstWhere((item) => item.value == value).child as Text).data!
-                                          : (_vayogatItems2.firstWhere((item) => item.value == value).child as Text).data!;
-                                    });
-                                  },
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty || value == "") {
-                                      return Statics.getLabel('mandatoryInformation');
-                                    }
-                                    return null;
-                                  },
-                                ),
-                              // if(_tulnatmakvruttapoint == "karyastiti" ||_tulnatmakvruttapoint == "toliyukt"||_tulnatmakvruttapoint == "baithakkarnarya")
-                              if (_tulnatmakvruttapoint == "karyastiti" ||
-                                  _tulnatmakvruttapoint == "toliyukt" ||
-                                  _tulnatmakvruttapoint == "baithakkarnarya" ||
-                                  _tulnatmakvruttapoint == "palakyukta" ||
-                                  _tulnatmakvruttapoint == "varshikotsavkarnarya")
-                                SizedBox(height: 15),
-                            ],
+                                if (_karyastithisubpoint == "saptahikmilan" || _toliyuktasubpoint == "saptahikmilan")
+                                  DropdownButtonFormField<String>(
+                                    decoration: InputDecoration(labelText: Statics.getLabel('Type')),
+                                    isExpanded: true,
+                                    value: _saptahikmilansubpoint == "" ? null : _saptahikmilansubpoint,
+                                    items: _saptahikmilansubpointItems,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _saptahikmilansubpoint = value;
+                                        _selectedsaptahikmilansubpoint = (_saptahikmilansubpointItems.firstWhere((item) => item.value == value).child as Text).data!;
+                                      });
+                                    },
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty || value == "") {
+                                        return Statics.getLabel('mandatoryInformation');
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                if (_karyastithisubpoint == "saptahikmilan" || _toliyuktasubpoint == "saptahikmilan")
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                // ============= Tulnatmak Bindu ==> bahugolik => karyastiti || toliyukta || baithak karnarya =>  vayogat =======================================================================================================================================================================================================================================================================================
+                                //
+                                //
+                                //                             // if(_tulnatmakvruttapoint == "karyastiti" ||_tulnatmakvruttapoint == "toliyukt"||_tulnatmakvruttapoint == "baithakkarnarya"  && _karyastithisubpoint != "masikmilan"  ||  _karyastithisubpoint != "sanghmandali")
+                                //                             if(_tulnatmakvruttapoint == "toliyukt"||_tulnatmakvruttapoint == "baithakkarnarya")
+                                //                             Text( Statics.getLabel('Vayogat')
+                                //                                   ,style: TextStyle(color:Theme.of(context).primaryColor )),
+                                //                             // if(_tulnatmakvruttapoint == "karyastiti" ||_tulnatmakvruttapoint == "toliyukt"||_tulnatmakvruttapoint == "baithakkarnarya"  && _karyastithisubpoint != "masikmilan"  ||  _karyastithisubpoint != "sanghmandali")
+                                //                             if(_tulnatmakvruttapoint == "toliyukt"||_tulnatmakvruttapoint == "baithakkarnarya")
+                                //                               DropdownButtonFormField<String>(
+                                //                                 decoration: InputDecoration(labelText: Statics.getLabel('Vayogat')),
+                                //                                 isExpanded: true,
+                                //                                 value: _selectvayogatsubpoint == "" ? null : _selectvayogatsubpoint,
+                                //                                 items: _selectvayogatsubpointItems,
+                                //                                 onChanged: (value) {
+                                //                                   print(value);
+                                //                                   setState(() {
+                                //                                     _selectvayogatsubpoint = value;
+                                //                                     _selectedvayogatsubpoint =(_selectvayogatsubpointItems.firstWhere((item) => item.value == value).child as Text).data!;
+                                //                                   });
+                                //                                 },
+                                //                                 validator: (value) {
+                                //                                   if (value == null || value.isEmpty|| value == "" ) {
+                                //                                     return (Statics.getLabel('mandatoryInformation'));
+                                //                                   }
+                                //                                   return null;
+                                //                                 },
+                                //                               ),
+                                //                             // if(_tulnatmakvruttapoint == "karyastiti" ||_tulnatmakvruttapoint == "toliyukt"||_tulnatmakvruttapoint == "baithakkarnarya"  && _karyastithisubpoint != "masikmilan"  ||  _karyastithisubpoint != "sanghmandali")
+                                //                             if(_tulnatmakvruttapoint == "toliyukt"||_tulnatmakvruttapoint == "baithakkarnarya")
+                                //                               SizedBox(height: 15,),
+                                //
+                                // // ============= Tulnatmak Bindu ==> bahugolik => karyastiti => sangha mandali / masik milan =>  vayogat =======================================================================================================================================================================================================================================================================================
+                                //
+                                //                             if(_tulnatmakvruttapoint == "karyastiti" && _karyastithisubpoint == "masikmilan"  ||  _karyastithisubpoint == "sanghmandali" )
+                                //                               Text( Statics.getLabel('Vayogat')
+                                //                                   ,style: TextStyle(color:Theme.of(context).primaryColor )),
+                                //                             if(_tulnatmakvruttapoint == "karyastiti" && _karyastithisubpoint == "masikmilan"  ||  _karyastithisubpoint == "sanghmandali" )
+                                //                               DropdownButtonFormField<String>(
+                                //                                 decoration: InputDecoration(labelText: Statics.getLabel('Vayogat')),
+                                //                                 isExpanded: true,
+                                //                                 value: _vayogatSanghamandaliSaptahikMilan == "" ? null : _vayogatSanghamandaliSaptahikMilan,
+                                //                                 items: _vayogatSanghamandaliSaptahikMilanItems,
+                                //                                 onChanged: (value) {
+                                //                                   print(value);
+                                //                                   setState(() {
+                                //                                     _vayogatSanghamandaliSaptahikMilan = value;
+                                //                                     // _vayogatSanghamandaliSaptahikMilan =(_vayogatSanghamandaliSaptahikMilanItems.firstWhere((item) => item.value == value).child as Text).data!;
+                                //
+                                //                                   });
+                                //                                 },
+                                //                                 validator: (value) {
+                                //                                   if (value == null || value.isEmpty|| value == "" ) {
+                                //                                     return (Statics.getLabel('mandatoryInformation'));
+                                //                                   }
+                                //                                   return null;
+                                //                                 },
+                                //                               ),
+                                //                             if(_tulnatmakvruttapoint == "karyastiti" && _karyastithisubpoint == "masikmilan"  ||  _karyastithisubpoint == "sanghmandali" )
+                                //                               SizedBox(height: 15,),
+                                //
+
+                                if (_tulnatmakvruttapoint == "karyastiti" ||
+                                    _tulnatmakvruttapoint == "toliyukt" ||
+                                    _tulnatmakvruttapoint == "baithakkarnarya" ||
+                                    _tulnatmakvruttapoint == "palakyukta" ||
+                                    _tulnatmakvruttapoint == "varshikotsavkarnarya")
+                                  Text(
+                                    Statics.getLabel('Vayogat'),
+                                    style: TextStyle(color: Theme.of(context).primaryColor),
+                                  ),
+                                // if(_tulnatmakvruttapoint == "karyastiti" ||_tulnatmakvruttapoint == "toliyukt"||_tulnatmakvruttapoint == "baithakkarnarya")
+                                if (_tulnatmakvruttapoint == "karyastiti" ||
+                                    _tulnatmakvruttapoint == "toliyukt" ||
+                                    _tulnatmakvruttapoint == "baithakkarnarya" ||
+                                    _tulnatmakvruttapoint == "palakyukta" ||
+                                    _tulnatmakvruttapoint == "varshikotsavkarnarya")
+                                  DropdownButtonFormField<String>(
+                                    decoration: InputDecoration(labelText: Statics.getLabel('Vayogat')),
+                                    isExpanded: true,
+                                    value: _selectvayogatsubpoint == "" ? null : _selectvayogatsubpoint,
+                                    items:
+                                        (_tulnatmakvruttapoint == "karyastiti" && (_karyastithisubpoint == "masikmilan" || _karyastithisubpoint == "sanghmandali")) ? _vayogatItems1 : _vayogatItems2,
+                                    onChanged: (value) {
+                                      print(value);
+                                      setState(() {
+                                        _selectvayogatsubpoint = value;
+                                        _selectedvayogatsubpoint = (_tulnatmakvruttapoint == "karyastiti" && (_karyastithisubpoint == "masikmilan" || _karyastithisubpoint == "sanghmandali"))
+                                            ? (_vayogatItems1.firstWhere((item) => item.value == value).child as Text).data!
+                                            : (_vayogatItems2.firstWhere((item) => item.value == value).child as Text).data!;
+                                      });
+                                    },
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty || value == "") {
+                                        return Statics.getLabel('mandatoryInformation');
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                // if(_tulnatmakvruttapoint == "karyastiti" ||_tulnatmakvruttapoint == "toliyukt"||_tulnatmakvruttapoint == "baithakkarnarya")
+                                if (_tulnatmakvruttapoint == "karyastiti" ||
+                                    _tulnatmakvruttapoint == "toliyukt" ||
+                                    _tulnatmakvruttapoint == "baithakkarnarya" ||
+                                    _tulnatmakvruttapoint == "palakyukta" ||
+                                    _tulnatmakvruttapoint == "varshikotsavkarnarya")
+                                  SizedBox(height: 15),
+                              ],
+                            ),
                           ),
-                        ),
-                        isExpanded: _isExpanded,
-                      ),
-                    ],
-                  ),
-                  Container(
-                    margin: EdgeInsets.all(20),
-                    child: Column(
-                      children: [
-                        Wrap(
-                          children: [
-                            MaterialButton(
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 15,
-                                vertical: 8,
-                              ),
-                              color: Theme.of(context).primaryColor,
-                              textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
-                              onPressed: () async {
-                                final ctrl = context.read<GeoHierarchyController>();
-                                if (_completeFormKey.currentState?.validate() ?? false) {
-                                  await _search(ctrl.deepestSelectedGeoUnitId);
-
-                                  final trail = ctrl.hierarchyNameTrail;
-                                  _selectedNagarAndBaithak =
-                                      (trail.vibhaagName ?? "--") + ' | ' + (trail.bhaagName ?? "--") + ' | ' + (trail.nagarName ?? "--") + ' | ' + (trail.upnagarName ?? "--") + ' | ';
-                                }
-                              },
-                              child: Text(
-                                Statics.getLabel('Search'),
-                                style: TextStyle(fontSize: 25),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            MaterialButton(
-                                onPressed: () {
-                                  setState(() {
-                                    _baithakTypeValue1 = _baithakTypeValue2 = _baithakTypeValue3 = _selectedNagarAndBaithak1 = _selectedNagarAndBaithak2 = _selectedNagarAndBaithak3 = '';
-                                    _ekatritVrutta = null;
-                                    _isSearching = false;
-                                    _selectedBaithak1 = '';
-                                    _selectedBaithak2 = '';
-                                    _selectedBaithak3 = '';
-                                    _tulnatmakvruttapoint = '';
-                                    _bhougolikkaryastithisubpoint = '';
-                                    _mahAnyEkunManBasGram = '';
-                                    _selectedmahAnyEkunManBasGram = "";
-                                    _talukasubpoint = '';
-                                    _selectedtalukasubpoint;
-                                    _sthansubpoint = '';
-                                    _selectedsthansubpoint = "";
-                                    _sewavruttasubpoint = '';
-                                    _selectedsewavruttasubpoint = '';
-                                    _purnasubpoint = '';
-                                    _selectedpurnasubpoint = '';
-                                    _karyastithisubpoint = '';
-                                    _selectvayogatsubpoint = '';
-                                    ;
-                                    _baithakkarnaryasubpoint = '';
-                                    _toliyuktasubpoint = '';
-                                    _saptahikmilansubpoint = '';
-                                    _karyastithisubpoint = '';
-                                    _selectedkaryastithisubpoint = '';
-                                    _selectedtoliyuktasubpoint = '';
-                                    _selectedbaithakkarnaryasubpoint = '';
-                                    _selectvayogatsubpoint = '';
-                                    _selectedsaptahikmilansubpoint = '';
-                                    _selectedvayogatsubpoint = '';
-                                    _varshikotsavkarnaryasubpoint = '';
-                                    _varshikotsavkarnaryasubpoint = '';
-                                    _selectedNagarAndBaithak = '';
-                                    tulnatmakBaithakResponse = null;
-                                  });
-                                  populateDropdown();
-                                  context.read<GeoHierarchyController>().loadHierarchyForUser();
-                                },
-                                child: Text(Statics.getLabel('clear'))),
-                          ],
+                          isExpanded: _isExpanded,
                         ),
                       ],
                     ),
-                  ),
-                  RepaintBoundary(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Text(_selectedNagarAndBaithak, style: TextStyle(fontSize: 16)),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        if (tulnatmakBaithakResponse != null)
+                    Container(
+                      margin: EdgeInsets.all(20),
+                      child: Column(
+                        children: [
                           Wrap(
-                            alignment: WrapAlignment.center,
-                            spacing: 8.0,
                             children: [
-                              Text(
-                                _selectedcomparativevruttapoint,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
+                              MaterialButton(
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 15,
+                                  vertical: 8,
                                 ),
-                              ),
-                              if (_selectedbhougolikkaryastithisubpoint != "")
-                                Text(
-                                  "| ${_selectedbhougolikkaryastithisubpoint}",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              if (_selectedmahAnyEkunManBasGram != "")
-                                Text(
-                                  "| ${_selectedmahAnyEkunManBasGram}",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              if (_selectedtalukasubpoint != "")
-                                Text(
-                                  "| ${_selectedtalukasubpoint}",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              if (_selectedsthansubpoint != "")
-                                Text(
-                                  "| ${_selectedsthansubpoint}",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              if (_selectedsewavruttasubpoint != "")
-                                Text(
-                                  "| ${_selectedsewavruttasubpoint}",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              if (_selectedpurnasubpoint != "")
-                                Text(
-                                  "| ${_selectedpurnasubpoint}",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              if (_selectedkaryastithisubpoint != "")
-                                Text(
-                                  "| ${_selectedkaryastithisubpoint}",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              if (_selectedtoliyuktasubpoint != "")
-                                Text(
-                                  "| ${_selectedtoliyuktasubpoint}",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              if (_selectedbaithakkarnaryasubpoint != "")
-                                Text(
-                                  "| ${_selectedbaithakkarnaryasubpoint}",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              if (_selectedsaptahikmilansubpoint != "")
-                                Text(
-                                  "- ${_selectedsaptahikmilansubpoint}",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              if (_selectedvayogatsubpoint != "")
-                                Text(
-                                  "| ${_selectedvayogatsubpoint}",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                            ],
-                          ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        if (tulnatmakBaithakResponse != null)
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "बैठक क्रमांक १  :- ",
-                                style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
-                              ),
-                              Expanded(
+                                color: Theme.of(context).primaryColor,
+                                textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+                                onPressed: () async {
+                                  if (_completeFormKey.currentState?.validate() ?? false) {
+                                    await _search(controller.deepestSelectedGeoUnitId);
+
+                                    final trail = controller.hierarchyNameTrail;
+                                    _selectedNagarAndBaithak =
+                                        (trail.vibhaagName ?? "--") + ' | ' + (trail.bhaagName ?? "--") + ' | ' + (trail.nagarName ?? "--") + ' | ' + (trail.upnagarName ?? "--") + ' | ';
+                                  }
+                                },
                                 child: Text(
-                                  "${_baithakTypeValue1Name}  ( ${tulnatmakBaithakResponse?.baithak1a == -1 ? 0 : tulnatmakBaithakResponse?.baithak1a} )",
-                                  style: TextStyle(color: Colors.black),
-                                  maxLines: 2,
+                                  Statics.getLabel('Search'),
+                                  style: TextStyle(fontSize: 25),
                                 ),
                               ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              MaterialButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _baithakTypeValue1 = _baithakTypeValue2 = _baithakTypeValue3 = _selectedNagarAndBaithak1 = _selectedNagarAndBaithak2 = _selectedNagarAndBaithak3 = '';
+                                      _ekatritVrutta = null;
+                                      _isSearching = false;
+                                      _selectedBaithak1 = '';
+                                      _selectedBaithak2 = '';
+                                      _selectedBaithak3 = '';
+                                      _tulnatmakvruttapoint = '';
+                                      _bhougolikkaryastithisubpoint = '';
+                                      _mahAnyEkunManBasGram = '';
+                                      _selectedmahAnyEkunManBasGram = "";
+                                      _talukasubpoint = '';
+                                      _selectedtalukasubpoint;
+                                      _sthansubpoint = '';
+                                      _selectedsthansubpoint = "";
+                                      _sewavruttasubpoint = '';
+                                      _selectedsewavruttasubpoint = '';
+                                      _purnasubpoint = '';
+                                      _selectedpurnasubpoint = '';
+                                      _karyastithisubpoint = '';
+                                      _selectvayogatsubpoint = '';
+                                      ;
+                                      _baithakkarnaryasubpoint = '';
+                                      _toliyuktasubpoint = '';
+                                      _saptahikmilansubpoint = '';
+                                      _karyastithisubpoint = '';
+                                      _selectedkaryastithisubpoint = '';
+                                      _selectedtoliyuktasubpoint = '';
+                                      _selectedbaithakkarnaryasubpoint = '';
+                                      _selectvayogatsubpoint = '';
+                                      _selectedsaptahikmilansubpoint = '';
+                                      _selectedvayogatsubpoint = '';
+                                      _varshikotsavkarnaryasubpoint = '';
+                                      _varshikotsavkarnaryasubpoint = '';
+                                      _selectedNagarAndBaithak = '';
+                                      tulnatmakBaithakResponse = null;
+                                    });
+                                    populateDropdown();
+                                    controller.loadHierarchyForUser();
+                                  },
+                                  child: Text(Statics.getLabel('clear'))),
                             ],
                           ),
-                        if (tulnatmakBaithakResponse != null)
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "बैठक क्रमांक २  :- ",
-                                style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
-                              ),
-                              Expanded(
-                                child: Text(
-                                  "${_baithakTypeValue2Name}  ( ${tulnatmakBaithakResponse?.baithak2a == -1 ? 0 : tulnatmakBaithakResponse?.baithak2a} )",
-                                  style: TextStyle(color: Colors.black),
-                                  maxLines: 2,
-                                ),
-                              ),
-                            ],
+                        ],
+                      ),
+                    ),
+                    RepaintBoundary(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 20,
                           ),
-                        if (tulnatmakBaithakResponse != null)
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "बैठक क्रमांक ३  :- ",
-                                style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
-                              ),
-                              Expanded(
-                                child: Text(
-                                  "${_baithakTypeValue3Name}  ( ${tulnatmakBaithakResponse?.baithak3a == -1 ? 0 : tulnatmakBaithakResponse?.baithak3a} )",
-                                  style: TextStyle(color: Colors.black),
-                                  maxLines: 2,
-                                ),
-                              ),
-                            ],
+                          Text(_selectedNagarAndBaithak, style: TextStyle(fontSize: 16)),
+                          SizedBox(
+                            height: 20,
                           ),
-                        if (tulnatmakBaithakResponse != null)
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "संकल्प                  :- ",
-                                style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
-                              ),
-                              Expanded(
-                                child: Text(
-                                  "${tulnatmakBaithakResponse?.baithak3b == -1 ? "लागू नाही" : tulnatmakBaithakResponse?.baithak3b}",
-                                  style: TextStyle(color: Colors.black),
-                                  maxLines: 2,
-                                ),
-                              ),
-                            ],
-                          ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Column(
+                          if (tulnatmakBaithakResponse != null)
+                            Wrap(
+                              alignment: WrapAlignment.center,
+                              spacing: 8.0,
                               children: [
                                 Text(
-                                  "वर्तमान",
-                                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+                                  _selectedcomparativevruttapoint,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
                                 ),
-                                Row(
-                                  children: [
-                                    Container(width: 20, height: 20, color: Colors.deepOrange),
-                                    SizedBox(
-                                      width: 10,
+                                if (_selectedbhougolikkaryastithisubpoint != "")
+                                  Text(
+                                    "| ${_selectedbhougolikkaryastithisubpoint}",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
                                     ),
-                                    Container(width: 20, height: 20, color: Colors.blue),
-                                    SizedBox(
-                                      width: 10,
+                                  ),
+                                if (_selectedmahAnyEkunManBasGram != "")
+                                  Text(
+                                    "| ${_selectedmahAnyEkunManBasGram}",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
                                     ),
-                                    Container(width: 20, height: 20, color: Colors.lime),
-                                  ],
-                                )
+                                  ),
+                                if (_selectedtalukasubpoint != "")
+                                  Text(
+                                    "| ${_selectedtalukasubpoint}",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                if (_selectedsthansubpoint != "")
+                                  Text(
+                                    "| ${_selectedsthansubpoint}",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                if (_selectedsewavruttasubpoint != "")
+                                  Text(
+                                    "| ${_selectedsewavruttasubpoint}",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                if (_selectedpurnasubpoint != "")
+                                  Text(
+                                    "| ${_selectedpurnasubpoint}",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                if (_selectedkaryastithisubpoint != "")
+                                  Text(
+                                    "| ${_selectedkaryastithisubpoint}",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                if (_selectedtoliyuktasubpoint != "")
+                                  Text(
+                                    "| ${_selectedtoliyuktasubpoint}",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                if (_selectedbaithakkarnaryasubpoint != "")
+                                  Text(
+                                    "| ${_selectedbaithakkarnaryasubpoint}",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                if (_selectedsaptahikmilansubpoint != "")
+                                  Text(
+                                    "- ${_selectedsaptahikmilansubpoint}",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                if (_selectedvayogatsubpoint != "")
+                                  Text(
+                                    "| ${_selectedvayogatsubpoint}",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
                               ],
                             ),
-                            Column(
+                          SizedBox(
+                            height: 20,
+                          ),
+                          if (tulnatmakBaithakResponse != null)
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "संकल्प",
+                                  "बैठक क्रमांक १  :- ",
                                   style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
                                 ),
-                                Row(
-                                  children: [
-                                    Container(width: 20, height: 20, color: Colors.purpleAccent),
-                                    // SizedBox(width: 10,),
-                                    // Container(width: 20,height: 20,color: Colors.indigoAccent),
-                                    // SizedBox(width: 10,),
-                                    // Container(width: 20,height: 20,color: Colors.amberAccent),
-                                  ],
-                                )
+                                Expanded(
+                                  child: Text(
+                                    "${_baithakTypeValue1Name}  ( ${tulnatmakBaithakResponse?.baithak1a == -1 ? 0 : tulnatmakBaithakResponse?.baithak1a} )",
+                                    style: TextStyle(color: Colors.black),
+                                    maxLines: 2,
+                                  ),
+                                ),
                               ],
                             ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 30,
-                        ),
-                        if (_isSearching) CircularProgressIndicator(),
-                        if (_isSearching == false)
-                          tulnatmakBaithakResponse?.baithak1a != -1 && tulnatmakBaithakResponse?.baithak2a != -1 && tulnatmakBaithakResponse?.baithak3a != -1 && tulnatmakBaithakResponse != null
-                              ? Row(
-                                  children: [
-                                    Flexible(
-                                      flex: 1,
-                                      child: Transform.rotate(
-                                        angle: -3.14159 / 2,
-                                        child: Container(
-                                          color: Colors.white,
-                                          child: FittedBox(
-                                            fit: BoxFit.none,
-                                            child: Wrap(
-                                              alignment: WrapAlignment.center,
-                                              spacing: 8.0,
-                                              children: [
-                                                Text(
-                                                  _selectedcomparativevruttapoint,
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.black,
-                                                  ),
-                                                ),
-                                                if (_selectedbhougolikkaryastithisubpoint != "")
+                          if (tulnatmakBaithakResponse != null)
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "बैठक क्रमांक २  :- ",
+                                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    "${_baithakTypeValue2Name}  ( ${tulnatmakBaithakResponse?.baithak2a == -1 ? 0 : tulnatmakBaithakResponse?.baithak2a} )",
+                                    style: TextStyle(color: Colors.black),
+                                    maxLines: 2,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          if (tulnatmakBaithakResponse != null)
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "बैठक क्रमांक ३  :- ",
+                                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    "${_baithakTypeValue3Name}  ( ${tulnatmakBaithakResponse?.baithak3a == -1 ? 0 : tulnatmakBaithakResponse?.baithak3a} )",
+                                    style: TextStyle(color: Colors.black),
+                                    maxLines: 2,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          if (tulnatmakBaithakResponse != null)
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "संकल्प                  :- ",
+                                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    "${tulnatmakBaithakResponse?.baithak3b == -1 ? "लागू नाही" : tulnatmakBaithakResponse?.baithak3b}",
+                                    style: TextStyle(color: Colors.black),
+                                    maxLines: 2,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Column(
+                                children: [
+                                  Text(
+                                    "वर्तमान",
+                                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Container(width: 20, height: 20, color: Colors.deepOrange),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Container(width: 20, height: 20, color: Colors.blue),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Container(width: 20, height: 20, color: Colors.lime),
+                                    ],
+                                  )
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  Text(
+                                    "संकल्प",
+                                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Container(width: 20, height: 20, color: Colors.purpleAccent),
+                                      // SizedBox(width: 10,),
+                                      // Container(width: 20,height: 20,color: Colors.indigoAccent),
+                                      // SizedBox(width: 10,),
+                                      // Container(width: 20,height: 20,color: Colors.amberAccent),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 30,
+                          ),
+                          if (_isSearching) CircularProgressIndicator(),
+                          if (_isSearching == false)
+                            tulnatmakBaithakResponse?.baithak1a != -1 && tulnatmakBaithakResponse?.baithak2a != -1 && tulnatmakBaithakResponse?.baithak3a != -1 && tulnatmakBaithakResponse != null
+                                ? Row(
+                                    children: [
+                                      Flexible(
+                                        flex: 1,
+                                        child: Transform.rotate(
+                                          angle: -3.14159 / 2,
+                                          child: Container(
+                                            color: Colors.white,
+                                            child: FittedBox(
+                                              fit: BoxFit.none,
+                                              child: Wrap(
+                                                alignment: WrapAlignment.center,
+                                                spacing: 8.0,
+                                                children: [
                                                   Text(
-                                                    "| ${_selectedbhougolikkaryastithisubpoint}",
+                                                    _selectedcomparativevruttapoint,
                                                     style: TextStyle(
                                                       fontSize: 16,
                                                       fontWeight: FontWeight.bold,
                                                       color: Colors.black,
                                                     ),
                                                   ),
-                                                if (_selectedmahAnyEkunManBasGram != "")
-                                                  Text(
-                                                    "| ${_selectedmahAnyEkunManBasGram}",
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight: FontWeight.bold,
-                                                      color: Colors.black,
+                                                  if (_selectedbhougolikkaryastithisubpoint != "")
+                                                    Text(
+                                                      "| ${_selectedbhougolikkaryastithisubpoint}",
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.bold,
+                                                        color: Colors.black,
+                                                      ),
                                                     ),
-                                                  ),
-                                                if (_selectedtalukasubpoint != "")
-                                                  Text(
-                                                    "| ${_selectedtalukasubpoint}",
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight: FontWeight.bold,
-                                                      color: Colors.black,
+                                                  if (_selectedmahAnyEkunManBasGram != "")
+                                                    Text(
+                                                      "| ${_selectedmahAnyEkunManBasGram}",
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.bold,
+                                                        color: Colors.black,
+                                                      ),
                                                     ),
-                                                  ),
-                                                if (_selectedsthansubpoint != "")
-                                                  Text(
-                                                    "| ${_selectedsthansubpoint}",
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight: FontWeight.bold,
-                                                      color: Colors.black,
+                                                  if (_selectedtalukasubpoint != "")
+                                                    Text(
+                                                      "| ${_selectedtalukasubpoint}",
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.bold,
+                                                        color: Colors.black,
+                                                      ),
                                                     ),
-                                                  ),
-                                                if (_selectedsewavruttasubpoint != "")
-                                                  Text(
-                                                    "| ${_selectedsewavruttasubpoint}",
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight: FontWeight.bold,
-                                                      color: Colors.black,
+                                                  if (_selectedsthansubpoint != "")
+                                                    Text(
+                                                      "| ${_selectedsthansubpoint}",
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.bold,
+                                                        color: Colors.black,
+                                                      ),
                                                     ),
-                                                  ),
-                                                if (_selectedpurnasubpoint != "")
-                                                  Text(
-                                                    "| ${_selectedpurnasubpoint}",
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight: FontWeight.bold,
-                                                      color: Colors.black,
+                                                  if (_selectedsewavruttasubpoint != "")
+                                                    Text(
+                                                      "| ${_selectedsewavruttasubpoint}",
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.bold,
+                                                        color: Colors.black,
+                                                      ),
                                                     ),
-                                                  ),
-                                                if (_selectedkaryastithisubpoint != "")
-                                                  Text(
-                                                    "| ${_selectedkaryastithisubpoint}",
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight: FontWeight.bold,
-                                                      color: Colors.black,
+                                                  if (_selectedpurnasubpoint != "")
+                                                    Text(
+                                                      "| ${_selectedpurnasubpoint}",
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.bold,
+                                                        color: Colors.black,
+                                                      ),
                                                     ),
-                                                  ),
-                                                if (_selectedtoliyuktasubpoint != "")
-                                                  Text(
-                                                    "| ${_selectedtoliyuktasubpoint}",
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight: FontWeight.bold,
-                                                      color: Colors.black,
+                                                  if (_selectedkaryastithisubpoint != "")
+                                                    Text(
+                                                      "| ${_selectedkaryastithisubpoint}",
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.bold,
+                                                        color: Colors.black,
+                                                      ),
                                                     ),
-                                                  ),
-                                                if (_selectedbaithakkarnaryasubpoint != "")
-                                                  Text(
-                                                    "| ${_selectedbaithakkarnaryasubpoint}",
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight: FontWeight.bold,
-                                                      color: Colors.black,
+                                                  if (_selectedtoliyuktasubpoint != "")
+                                                    Text(
+                                                      "| ${_selectedtoliyuktasubpoint}",
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.bold,
+                                                        color: Colors.black,
+                                                      ),
                                                     ),
-                                                  ),
-                                                if (_selectedsaptahikmilansubpoint != "")
-                                                  Text(
-                                                    "- ${_selectedsaptahikmilansubpoint}",
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight: FontWeight.bold,
-                                                      color: Colors.black,
+                                                  if (_selectedbaithakkarnaryasubpoint != "")
+                                                    Text(
+                                                      "| ${_selectedbaithakkarnaryasubpoint}",
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.bold,
+                                                        color: Colors.black,
+                                                      ),
                                                     ),
-                                                  ),
-                                                if (_selectedvayogatsubpoint != "")
-                                                  Text(
-                                                    "| ${_selectedvayogatsubpoint}",
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight: FontWeight.bold,
-                                                      color: Colors.black,
+                                                  if (_selectedsaptahikmilansubpoint != "")
+                                                    Text(
+                                                      "- ${_selectedsaptahikmilansubpoint}",
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.bold,
+                                                        color: Colors.black,
+                                                      ),
                                                     ),
-                                                  ),
-                                              ],
+                                                  if (_selectedvayogatsubpoint != "")
+                                                    Text(
+                                                      "| ${_selectedvayogatsubpoint}",
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.bold,
+                                                        color: Colors.black,
+                                                      ),
+                                                    ),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    Flexible(
-                                      flex: 9,
-                                      child: Container(
-                                        decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-                                        height: MediaQuery.of(context).size.height * 0.5,
-                                        width: MediaQuery.of(context).size.width * 1.8,
-                                        child: BarChartSample(
-                                          tulnatmakBaithakResponse: tulnatmakBaithakResponse!,
-                                          sankapBar: _sankalpBar,
+                                      Flexible(
+                                        flex: 9,
+                                        child: Container(
+                                          decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+                                          height: MediaQuery.of(context).size.height * 0.5,
+                                          width: MediaQuery.of(context).size.width * 1.8,
+                                          child: BarChartSample(
+                                            tulnatmakBaithakResponse: tulnatmakBaithakResponse!,
+                                            sankapBar: _sankalpBar,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                )
-                              : Text(Statics.getLabel('noDataFoundTryAnotherSearch')),
-                        SizedBox(
-                          height: 30,
-                        ),
-                      ],
+                                    ],
+                                  )
+                                : Text(Statics.getLabel('noDataFoundTryAnotherSearch')),
+                          SizedBox(
+                            height: 30,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            )),
+                  ],
+                ),
+              )),
+        ),
       ),
     );
   }

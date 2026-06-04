@@ -24,6 +24,8 @@ class VastiSarvekshanScreen extends StatefulWidget {
 }
 
 class _VastiSarvekshanScreenState extends State<VastiSarvekshanScreen> {
+  final controller = createGeoController();
+
   bool _isExpanded = true;
   bool _searched = false;
   bool fromVasti = false;
@@ -57,8 +59,6 @@ class _VastiSarvekshanScreenState extends State<VastiSarvekshanScreen> {
   Future<void> initData() async {
     final dm = await MyAppGlobals.getLevelLDB();
 
-    final controller = context.read<GeoHierarchyController>();
-
     await controller.initialize(dm, fetchMode: fromVasti ? GeoHierarchyFetchMode.vastiOnly : GeoHierarchyFetchMode.mandalOnly);
 
     setState(() {});
@@ -75,13 +75,12 @@ class _VastiSarvekshanScreenState extends State<VastiSarvekshanScreen> {
   //////////////////////////////////////////////////////////////////////////////////////
 
   getReportDataFun() async {
-    final _controller = context.read<GeoHierarchyController>();
     setState(() {
       data = null;
       // _isLoading = true;
     });
     Map<String, dynamic> formData = {
-      "GeoUnitID": int.tryParse(_controller.deepestSelectedGeoUnitId ?? "0") ?? 0,
+      "GeoUnitID": int.tryParse(controller.deepestSelectedGeoUnitId ?? "0") ?? 0,
       "type": selectedType,
       "AppUserID": int.tryParse(Statics.userDetails['userID']) ?? null,
     };
@@ -247,205 +246,209 @@ class _VastiSarvekshanScreenState extends State<VastiSarvekshanScreen> {
   }
 
   Widget vastiMandalDropdown() {
-    return Consumer<GeoHierarchyController>(builder: (_, ctrl, __) {
-      return Column(
-        children: [
-          Container(
-            // margin: EdgeInsets.symmetric(horizontal: 20),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              border: Border.all(width: 0.7, color: Colors.grey.shade700),
-            ),
-            margin: EdgeInsets.only(left: 16, right: 16, top: 24),
-            child: ExpansionPanelList(
-              elevation: 0,
-              expandedHeaderPadding: EdgeInsets.zero,
-              expansionCallback: (int index, bool isExpanded) {
-                setState(() {
-                  _isExpanded = isExpanded;
-                });
-              },
-              children: [
-                ExpansionPanel(
-                  backgroundColor: Colors.transparent,
-                  headerBuilder: (BuildContext context, bool isExpanded) {
-                    return ListTile(
-                      title: Text(
-                        "${Statics.getLabel('selectVastiMandal')}",
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                      ),
-                    );
-                  },
-                  body: Container(
-                    margin: EdgeInsets.all(10),
-                    child: Column(
-                      children: [
-                        GeoDropdownWidget(
-                          level: GeoLevel.Mahaanagar,
-                          title: 'Mahaanagar',
-                          controller: ctrl,
-                          fetchMode: fromVasti ? GeoHierarchyFetchMode.vastiOnly : GeoHierarchyFetchMode.mandalOnly,
-                          onChanged: (p0) => setState(() => _searched = false),
-                        ),
-
-                        // if (ctrl.hasItems(GeoLevel.vibhaag))
-                        GeoDropdownWidget(
-                          level: GeoLevel.Vibhaag,
-                          title: 'Vibhaag',
-                          controller: ctrl,
-                          fetchMode: fromVasti ? GeoHierarchyFetchMode.vastiOnly : GeoHierarchyFetchMode.mandalOnly,
-                          onChanged: (p0) => setState(() => _searched = false),
-                        ),
-
-                        if (ctrl.hasItems(GeoLevel.Bhaag))
-                          GeoDropdownWidget(
-                            level: GeoLevel.Bhaag,
-                            title: 'Bhaag',
-                            controller: ctrl,
-                            fetchMode: fromVasti ? GeoHierarchyFetchMode.vastiOnly : GeoHierarchyFetchMode.mandalOnly,
-                            onChanged: (p0) => setState(() => _searched = false),
-                          ),
-
-                        if (ctrl.hasItems(GeoLevel.Nagar))
-                          GeoDropdownWidget(
-                            level: GeoLevel.Nagar,
-                            title: 'Nagar',
-                            controller: ctrl,
-                            fetchMode: fromVasti ? GeoHierarchyFetchMode.vastiOnly : GeoHierarchyFetchMode.mandalOnly,
-                            onChanged: (p0) => setState(() => _searched = false),
-                          ),
-
-                        /// CONDITIONAL
-
-                        if (ctrl.hasItems(GeoLevel.upnagarUpkhanda))
-                          GeoDropdownWidget(
-                            level: GeoLevel.upnagarUpkhanda,
-                            title: 'upnagarUpkhanda',
-                            controller: ctrl,
-                            fetchMode: fromVasti ? GeoHierarchyFetchMode.vastiOnly : GeoHierarchyFetchMode.mandalOnly,
-                            onChanged: (p0) => setState(() => _searched = false),
-                          ),
-
-                        if (ctrl.hasItems(GeoLevel.Mandal))
-                          GeoDropdownWidget(
-                            level: GeoLevel.Mandal,
-                            title: 'Mandal',
-                            controller: ctrl,
-                            onChanged: (p0) => setState(() => _searched = false),
-                          ),
-
-                        if (ctrl.hasItems(GeoLevel.Graam))
-                          GeoDropdownWidget(
-                            level: GeoLevel.Graam,
-                            title: 'Graam',
-                            controller: ctrl,
-                            onChanged: (p0) => setState(() => _searched = false),
-                          ),
-
-                        if (ctrl.hasItems(GeoLevel.Vasti))
-                          GeoDropdownWidget(
-                            level: GeoLevel.Vasti,
-                            title: 'Vasti',
-                            controller: ctrl,
-                            onChanged: (p0) => setState(() => _searched = false),
-                          ),
-                        SizedBox(height: 15),
-                        _buildDropdownField(
-                          label: Statics.getLabel('SelectFrequency'),
-                          value: selectedType,
-                          items: typeList
-                              .map((v) => DropdownMenuItem(
-                                    value: v.toString(),
-                                    child: Text(Statics.getLabel(v)),
-                                  ))
-                              .toList(),
-                          onChanged: (value) => setState(() {
-                            selectedType = value;
-                            _searched = false;
-                          }),
-                          isDisabled: false,
-                        ),
-                        SizedBox(height: 15),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            // if ( selectedType != null)
-                            MaterialButton(
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 35,
-                                vertical: 5,
-                              ),
-                              color: Theme.of(context).primaryColor,
-                              textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
-                              onPressed: () async {
-                                if (selectedType == null) {
-                                  Statics.showToast("please select type");
-                                  return;
-                                }
-                                setState(() {});
-
-                                await getReportDataFun();
-
-                                setState(() {
-                                  selectedList = getSelectedList();
-                                  _searched = true;
-                                  _isExpanded = false;
-                                });
-                              },
-                              child: Text(
-                                "${Statics.getLabel('search')}",
-                                style: TextStyle(fontSize: 16),
-                              ),
-                            ),
-                            MaterialButton(
-                                onPressed: () async {
-                                  setState(() {
-                                    _searched = false;
-                                    selectedType = null;
-                                  });
-                                  ctrl.loadHierarchyForUser();
-                                },
-                                child: Text(Statics.getLabel('clear'))),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  isExpanded: _isExpanded,
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 18),
-          if (_searched)
+    return ChangeNotifierProvider.value(
+      value: controller,
+      child: Consumer<GeoHierarchyController>(builder: (_, ctrl, __) {
+        return Column(
+          children: [
             Container(
-              height: 40,
-              margin: EdgeInsets.symmetric(horizontal: 16),
-              width: double.infinity,
+              // margin: EdgeInsets.symmetric(horizontal: 20),
               decoration: BoxDecoration(
-                border: Border.all(color: Colors.purpleAccent, width: 1),
-                borderRadius: BorderRadius.all(Radius.circular(15)),
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(width: 0.7, color: Colors.grey.shade700),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
+              margin: EdgeInsets.only(left: 16, right: 16, top: 24),
+              child: ExpansionPanelList(
+                elevation: 0,
+                expandedHeaderPadding: EdgeInsets.zero,
+                expansionCallback: (int index, bool isExpanded) {
+                  setState(() {
+                    _isExpanded = isExpanded;
+                  });
+                },
                 children: [
-                  Text(
-                    "${Statics.getLabel(ctrl.deepestSelectedLevelName ?? "praant")}",
-                    style: TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.bold, fontSize: 16),
-                  ),
-                  if (ctrl.deepestSelectedGeoUnitName != null && ctrl.deepestSelectedGeoUnitName != "")
-                    Text(
-                      "   ->   ${ctrl.deepestSelectedGeoUnitName}",
-                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 17),
+                  ExpansionPanel(
+                    backgroundColor: Colors.transparent,
+                    headerBuilder: (BuildContext context, bool isExpanded) {
+                      return ListTile(
+                        title: Text(
+                          "${Statics.getLabel('selectVastiMandal')}",
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
+                      );
+                    },
+                    body: Container(
+                      margin: EdgeInsets.all(10),
+                      child: Column(
+                        children: [
+                          if (fromVasti)
+                            GeoDropdownWidget(
+                              level: GeoLevel.Mahaanagar,
+                              title: 'Mahaanagar',
+                              controller: ctrl,
+                              fetchMode: fromVasti ? GeoHierarchyFetchMode.vastiOnly : GeoHierarchyFetchMode.mandalOnly,
+                              onChanged: (p0) => setState(() => _searched = false),
+                            ),
+
+                          // if (ctrl.hasItems(GeoLevel.vibhaag))
+                          GeoDropdownWidget(
+                            level: GeoLevel.Vibhaag,
+                            title: 'Vibhaag',
+                            controller: ctrl,
+                            fetchMode: fromVasti ? GeoHierarchyFetchMode.vastiOnly : GeoHierarchyFetchMode.mandalOnly,
+                            onChanged: (p0) => setState(() => _searched = false),
+                          ),
+
+                          if (ctrl.hasItems(GeoLevel.Bhaag))
+                            GeoDropdownWidget(
+                              level: GeoLevel.Bhaag,
+                              title: 'Bhaag',
+                              controller: ctrl,
+                              fetchMode: fromVasti ? GeoHierarchyFetchMode.vastiOnly : GeoHierarchyFetchMode.mandalOnly,
+                              onChanged: (p0) => setState(() => _searched = false),
+                            ),
+
+                          if (ctrl.hasItems(GeoLevel.Nagar))
+                            GeoDropdownWidget(
+                              level: GeoLevel.Nagar,
+                              title: 'Nagar',
+                              controller: ctrl,
+                              fetchMode: fromVasti ? GeoHierarchyFetchMode.vastiOnly : GeoHierarchyFetchMode.mandalOnly,
+                              onChanged: (p0) => setState(() => _searched = false),
+                            ),
+
+                          /// CONDITIONAL
+
+                          if (ctrl.hasItems(GeoLevel.upnagarUpkhanda))
+                            GeoDropdownWidget(
+                              level: GeoLevel.upnagarUpkhanda,
+                              title: 'upnagarUpkhanda',
+                              controller: ctrl,
+                              fetchMode: fromVasti ? GeoHierarchyFetchMode.vastiOnly : GeoHierarchyFetchMode.mandalOnly,
+                              onChanged: (p0) => setState(() => _searched = false),
+                            ),
+
+                          if (ctrl.hasItems(GeoLevel.Mandal))
+                            GeoDropdownWidget(
+                              level: GeoLevel.Mandal,
+                              title: 'Mandal',
+                              controller: ctrl,
+                              onChanged: (p0) => setState(() => _searched = false),
+                            ),
+
+                          if (ctrl.hasItems(GeoLevel.Graam))
+                            GeoDropdownWidget(
+                              level: GeoLevel.Graam,
+                              title: 'Graam',
+                              controller: ctrl,
+                              onChanged: (p0) => setState(() => _searched = false),
+                            ),
+
+                          if (ctrl.hasItems(GeoLevel.Vasti))
+                            GeoDropdownWidget(
+                              level: GeoLevel.Vasti,
+                              title: 'Vasti',
+                              controller: ctrl,
+                              onChanged: (p0) => setState(() => _searched = false),
+                            ),
+                          SizedBox(height: 15),
+                          _buildDropdownField(
+                            label: Statics.getLabel('SelectFrequency'),
+                            value: selectedType,
+                            items: typeList
+                                .map((v) => DropdownMenuItem(
+                                      value: v.toString(),
+                                      child: Text(Statics.getLabel(v)),
+                                    ))
+                                .toList(),
+                            onChanged: (value) => setState(() {
+                              selectedType = value;
+                              _searched = false;
+                            }),
+                            isDisabled: false,
+                          ),
+                          SizedBox(height: 15),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              // if ( selectedType != null)
+                              MaterialButton(
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 35,
+                                  vertical: 5,
+                                ),
+                                color: Theme.of(context).primaryColor,
+                                textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+                                onPressed: () async {
+                                  if (selectedType == null) {
+                                    Statics.showToast("please select type");
+                                    return;
+                                  }
+                                  setState(() {});
+
+                                  await getReportDataFun();
+
+                                  setState(() {
+                                    selectedList = getSelectedList();
+                                    _searched = true;
+                                    _isExpanded = false;
+                                  });
+                                },
+                                child: Text(
+                                  "${Statics.getLabel('search')}",
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ),
+                              MaterialButton(
+                                  onPressed: () async {
+                                    setState(() {
+                                      _searched = false;
+                                      selectedType = null;
+                                    });
+                                    ctrl.loadHierarchyForUser();
+                                  },
+                                  child: Text(Statics.getLabel('clear'))),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
+                    isExpanded: _isExpanded,
+                  ),
                 ],
               ),
             ),
-        ],
-      );
-    });
+            SizedBox(height: 18),
+            if (_searched)
+              Container(
+                height: 40,
+                margin: EdgeInsets.symmetric(horizontal: 16),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.purpleAccent, width: 1),
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "${Statics.getLabel(ctrl.deepestSelectedLevelName ?? "praant")}",
+                      style: TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    if (ctrl.deepestSelectedGeoUnitName != null && ctrl.deepestSelectedGeoUnitName != "")
+                      Text(
+                        "   ->   ${ctrl.deepestSelectedGeoUnitName}",
+                        style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 17),
+                      ),
+                  ],
+                ),
+              ),
+          ],
+        );
+      }),
+    );
   }
 
   Widget _buildDropdownField({

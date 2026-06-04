@@ -27,6 +27,7 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
     super.dispose();
   }
 
+  @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) => initData());

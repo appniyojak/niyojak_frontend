@@ -434,8 +434,8 @@ class _SearchSwayamsevakTransferState extends State<SearchSwayamsevakTransfer> {
 
     if (date != null) {
       if (_toDate != null) {
-        if (_toDate!.year < date.year || _toDate!.month < date.month || _toDate!.day < date.day) {
-          Statics.showToast("From date should be less than To Date");
+        if (_toDate!.isBefore(date!)) {
+          Statics.showToast(Statics.getLabel("fromDateValidation"));
           return;
         }
       }
@@ -455,8 +455,8 @@ class _SearchSwayamsevakTransferState extends State<SearchSwayamsevakTransfer> {
 
     if (date != null) {
       if (_fromDate != null) {
-        if (date.year < _fromDate!.year || date.month < _fromDate!.month || date.day < _fromDate!.day) {
-          Statics.showToast("From date should be less than To Date");
+        if (date!.isBefore(_fromDate!)) {
+          Statics.showToast(Statics.getLabel("toDateValidation"));
           return;
         }
       }

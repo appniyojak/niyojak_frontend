@@ -36,6 +36,8 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> with Automati
 
   final List<bool> _expanded = List.generate(3, (_) => true);
 
+  final controller = createGeoController();
+
   @override
   void initState() {
     super.initState();
@@ -45,8 +47,6 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> with Automati
 
   Future<void> initData() async {
     final dm = await MyAppGlobals.getLevelLDB();
-
-    final controller = context.read<GeoHierarchyController>();
 
     await controller.initialize(dm);
 
@@ -1101,162 +1101,165 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> with Automati
   }
 
   Widget _buildExpansionPanel() {
-    return Consumer<GeoHierarchyController>(builder: (_, ctrl, __) {
-      return Column(
-        children: [
-          Container(
-            // width: MediaQuery.of(context).size.width * 0.9,
-            // margin: EdgeInsets.symmetric(horizontal: 20),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              border: Border.all(width: 0.7, color: Colors.grey.shade700),
-            ),
-            child: ExpansionPanelList(
-              elevation: 0,
-              expandedHeaderPadding: EdgeInsets.zero,
-              expansionCallback: (int index, bool isExpanded) {
-                setState(() {
-                  _isExpanded = isExpanded;
-                });
-              },
-              children: [
-                ExpansionPanel(
-                  backgroundColor: Colors.transparent,
-                  headerBuilder: (BuildContext context, bool isExpanded) {
-                    return ListTile(
-                      title: Text(
-                        "${Statics.getLabel('vastiGramNivda')}",
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                      ),
-                    );
-                  },
-                  body: Container(
-                    margin: EdgeInsets.all(10),
-                    child: Column(
-                      children: [
-                        GeoDropdownWidget(
-                          level: GeoLevel.Mahaanagar,
-                          title: 'Mahaanagar',
-                          controller: ctrl,
-                          onChanged: (v) => setState(() => _searched = false),
-                        ),
-
-                        // if (ctrl.hasItems(GeoLevel.vibhaag))
-                        GeoDropdownWidget(
-                          level: GeoLevel.Vibhaag,
-                          title: 'Vibhaag',
-                          controller: ctrl,
-                          onChanged: (v) => setState(() => _searched = false),
-                        ),
-
-                        if (ctrl.hasItems(GeoLevel.Bhaag))
-                          GeoDropdownWidget(
-                            level: GeoLevel.Bhaag,
-                            title: 'Bhaag',
-                            controller: ctrl,
-                            onChanged: (v) => setState(() => _searched = false),
-                          ),
-
-                        if (ctrl.hasItems(GeoLevel.Nagar))
-                          GeoDropdownWidget(
-                            level: GeoLevel.Nagar,
-                            title: 'Nagar',
-                            controller: ctrl,
-                            onChanged: (v) => setState(() => _searched = false),
-                          ),
-
-                        /// CONDITIONAL
-
-                        if (ctrl.hasItems(GeoLevel.upnagarUpkhanda))
-                          GeoDropdownWidget(
-                            level: GeoLevel.upnagarUpkhanda,
-                            title: 'upnagarUpkhanda',
-                            controller: ctrl,
-                            onChanged: (v) => setState(() => _searched = false),
-                          ),
-
-                        if (ctrl.hasItems(GeoLevel.Mandal))
-                          GeoDropdownWidget(
-                            level: GeoLevel.Mandal,
-                            title: 'Mandal',
-                            controller: ctrl,
-                            onChanged: (v) => setState(() => _searched = false),
-                          ),
-
-                        ////////////////////////////////////////
-                        /// CONDITIONAL
-
-                        if (ctrl.hasItems(GeoLevel.Vasti))
-                          GeoDropdownWidget(
-                            level: GeoLevel.Vasti,
-                            title: 'Vasti',
-                            controller: ctrl,
-                            onChanged: (v) => setState(() => _searched = false),
-                          ),
-                        SizedBox(height: 21),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            // if ((_linkedgraamValue != "" && _linkedgraamValue != null) || (_linkedvastiValue != "" && _linkedvastiValue != null))
-                            MaterialButton(
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 35,
-                                vertical: 5,
-                              ),
-                              color: Theme.of(context).primaryColor,
-                              textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
-                              onPressed: () => getReportDataFun(ctrl.deepestSelectedGeoUnitId),
-                              child: Text(
-                                "${Statics.getLabel('search')}",
-                                style: TextStyle(fontSize: 16),
-                              ),
-                            ),
-                            MaterialButton(
-                                onPressed: () async {
-                                  setState(() {
-                                    _searched = false;
-                                  });
-                                  ctrl.loadHierarchyForUser();
-                                },
-                                child: Text(Statics.getLabel('clear'))),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  isExpanded: _isExpanded,
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 20),
-          if (_searched)
+    return ChangeNotifierProvider.value(
+      value: controller,
+      child: Consumer<GeoHierarchyController>(builder: (_, ctrl, __) {
+        return Column(
+          children: [
             Container(
-              height: 40,
-              width: double.infinity,
+              // width: MediaQuery.of(context).size.width * 0.9,
+              // margin: EdgeInsets.symmetric(horizontal: 20),
               decoration: BoxDecoration(
-                border: Border.all(color: Colors.purpleAccent, width: 1),
-                borderRadius: BorderRadius.all(Radius.circular(15)),
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(width: 0.7, color: Colors.grey.shade700),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
+              child: ExpansionPanelList(
+                elevation: 0,
+                expandedHeaderPadding: EdgeInsets.zero,
+                expansionCallback: (int index, bool isExpanded) {
+                  setState(() {
+                    _isExpanded = isExpanded;
+                  });
+                },
                 children: [
-                  Text(
-                    "${Statics.getLabel(ctrl.deepestSelectedLevelName ?? "praant")}",
-                    style: TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.bold, fontSize: 16),
-                  ),
-                  if (ctrl.deepestSelectedGeoUnitName != null && ctrl.deepestSelectedGeoUnitName!.isNotEmpty)
-                    Text(
-                      "  ->   ${ctrl.deepestSelectedGeoUnitName}",
-                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 17),
+                  ExpansionPanel(
+                    backgroundColor: Colors.transparent,
+                    headerBuilder: (BuildContext context, bool isExpanded) {
+                      return ListTile(
+                        title: Text(
+                          "${Statics.getLabel('vastiGramNivda')}",
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
+                      );
+                    },
+                    body: Container(
+                      margin: EdgeInsets.all(10),
+                      child: Column(
+                        children: [
+                          GeoDropdownWidget(
+                            level: GeoLevel.Mahaanagar,
+                            title: 'Mahaanagar',
+                            controller: ctrl,
+                            onChanged: (v) => setState(() => _searched = false),
+                          ),
+
+                          // if (ctrl.hasItems(GeoLevel.vibhaag))
+                          GeoDropdownWidget(
+                            level: GeoLevel.Vibhaag,
+                            title: 'Vibhaag',
+                            controller: ctrl,
+                            onChanged: (v) => setState(() => _searched = false),
+                          ),
+
+                          if (ctrl.hasItems(GeoLevel.Bhaag))
+                            GeoDropdownWidget(
+                              level: GeoLevel.Bhaag,
+                              title: 'Bhaag',
+                              controller: ctrl,
+                              onChanged: (v) => setState(() => _searched = false),
+                            ),
+
+                          if (ctrl.hasItems(GeoLevel.Nagar))
+                            GeoDropdownWidget(
+                              level: GeoLevel.Nagar,
+                              title: 'Nagar',
+                              controller: ctrl,
+                              onChanged: (v) => setState(() => _searched = false),
+                            ),
+
+                          /// CONDITIONAL
+
+                          if (ctrl.hasItems(GeoLevel.upnagarUpkhanda))
+                            GeoDropdownWidget(
+                              level: GeoLevel.upnagarUpkhanda,
+                              title: 'upnagarUpkhanda',
+                              controller: ctrl,
+                              onChanged: (v) => setState(() => _searched = false),
+                            ),
+
+                          if (ctrl.hasItems(GeoLevel.Mandal))
+                            GeoDropdownWidget(
+                              level: GeoLevel.Mandal,
+                              title: 'Mandal',
+                              controller: ctrl,
+                              onChanged: (v) => setState(() => _searched = false),
+                            ),
+
+                          ////////////////////////////////////////
+                          /// CONDITIONAL
+
+                          if (ctrl.hasItems(GeoLevel.Vasti))
+                            GeoDropdownWidget(
+                              level: GeoLevel.Vasti,
+                              title: 'Vasti',
+                              controller: ctrl,
+                              onChanged: (v) => setState(() => _searched = false),
+                            ),
+                          SizedBox(height: 21),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              // if ((_linkedgraamValue != "" && _linkedgraamValue != null) || (_linkedvastiValue != "" && _linkedvastiValue != null))
+                              MaterialButton(
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 35,
+                                  vertical: 5,
+                                ),
+                                color: Theme.of(context).primaryColor,
+                                textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+                                onPressed: () => getReportDataFun(ctrl.deepestSelectedGeoUnitId),
+                                child: Text(
+                                  "${Statics.getLabel('search')}",
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ),
+                              MaterialButton(
+                                  onPressed: () async {
+                                    setState(() {
+                                      _searched = false;
+                                    });
+                                    ctrl.loadHierarchyForUser();
+                                  },
+                                  child: Text(Statics.getLabel('clear'))),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
+                    isExpanded: _isExpanded,
+                  ),
                 ],
               ),
             ),
-        ],
-      );
-    });
+            SizedBox(height: 20),
+            if (_searched)
+              Container(
+                height: 40,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.purpleAccent, width: 1),
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "${Statics.getLabel(ctrl.deepestSelectedLevelName ?? "praant")}",
+                      style: TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    if (ctrl.deepestSelectedGeoUnitName != null && ctrl.deepestSelectedGeoUnitName!.isNotEmpty)
+                      Text(
+                        "  ->   ${ctrl.deepestSelectedGeoUnitName}",
+                        style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 17),
+                      ),
+                  ],
+                ),
+              ),
+          ],
+        );
+      }),
+    );
   }
 }

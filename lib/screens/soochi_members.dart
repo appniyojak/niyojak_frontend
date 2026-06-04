@@ -5,12 +5,13 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
+
+import '../helpers/static_data.dart' as Statics;
+import '../providers/bals.dart';
 import '../providers/swayamsevak_provider.dart';
 import '../widgets/legend.dart';
 import '../widgets/member_card.dart';
-import '../providers/bals.dart';
-import '../helpers/static_data.dart' as Statics;
-import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 class SoochiMembers extends StatefulWidget {
   static const String routeName = '/soochi-members-screen';
@@ -40,6 +41,7 @@ class _SoochiMembersState extends State<SoochiMembers> {
   bool _isfetingData = false;
   bool _isSelectAll = false;
 
+  @override
   void initState() {
     super.initState();
     populateChoice();

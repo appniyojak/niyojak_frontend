@@ -6707,7 +6707,7 @@ Future<String?> addNewShaakhaaVistarData(BuildContext context, Map<String, dynam
   if (connected == false) {
     return null;
   }
-  showLoaderDialog(context);
+  // showLoaderDialog(context);
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
@@ -6723,6 +6723,7 @@ Future<String?> addNewShaakhaaVistarData(BuildContext context, Map<String, dynam
       log("ShaakhaaVistarReportRespModel >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
 
       if (data["Status"] == "409") {
+        Statics.showErrorDialog(context, Statics.getLabel('dataAlreadyExists'));
         return null;
       }
 
@@ -6736,7 +6737,7 @@ Future<String?> addNewShaakhaaVistarData(BuildContext context, Map<String, dynam
     print("Exception: $e");
     return null;
   } finally {
-    Navigator.of(context, rootNavigator: true).pop();
+    // Navigator.of(context, rootNavigator: true).pop();
   }
 }
 

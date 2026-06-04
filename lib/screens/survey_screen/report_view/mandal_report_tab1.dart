@@ -2135,13 +2135,13 @@ class _MandalSurveyReportViewScreen1State extends State<MandalSurveyReportViewSc
                     child: Column(
                       spacing: 10,
                       children: [
-                        GeoDropdownWidget(
-                          level: GeoLevel.Mahaanagar,
-                          title: 'Mahaanagar',
-                          controller: ctrl,
-                          fetchMode: GeoHierarchyFetchMode.mandalOnly,
-                          onChanged: (v) => setState(() => isVastiSearch = false),
-                        ),
+                        // GeoDropdownWidget(
+                        //   level: GeoLevel.Mahaanagar,
+                        //   title: 'Mahaanagar',
+                        //   controller: ctrl,
+                        //   fetchMode: GeoHierarchyFetchMode.mandalOnly,
+                        //   onChanged: (v) => setState(() => isVastiSearch = false),
+                        // ),
 
                         // if (ctrl.hasItems(GeoLevel.vibhaag))
                         GeoDropdownWidget(

@@ -68,8 +68,8 @@ class _SearchEventState extends State<SearchEvent> with SingleTickerProviderStat
         lastDate: DateTime((_fromDate == null ? DateTime.now().year : _fromDate!.year) + 80));
 
     if (_toDate != null) {
-      if (_toDate!.year < date!.year || _toDate!.month < date.month || _toDate!.day < date.day) {
-        Statics.showToast("From date should be less than To Date");
+      if (_toDate!.isBefore(date!)) {
+        Statics.showToast(Statics.getLabel("fromDateValidation"));
         return;
       }
     }
@@ -87,8 +87,8 @@ class _SearchEventState extends State<SearchEvent> with SingleTickerProviderStat
         lastDate: DateTime((_toDate == null ? DateTime.now().year : _toDate!.year) + 80));
 
     if (_fromDate != null) {
-      if (date!.year < _fromDate!.year || date!.month < _fromDate!.month || date!.day < _fromDate!.day) {
-        Statics.showToast("From date should be less than To Date");
+      if (date!.isBefore(_fromDate!)) {
+        Statics.showToast(Statics.getLabel("toDateValidation"));
         return;
       }
     }

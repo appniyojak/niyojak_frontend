@@ -28,6 +28,7 @@ class SwayamsevakTransferDetailState extends State<SwayamsevakTransferDetails> {
   List<GeoUnitMasterBAL>? _bhaagList;
   List<GeoUnitMasterBAL>? _shaharList;
   List<GeoUnitMasterBAL>? _nagarList;
+  List<GeoUnitMasterBAL>? _upnagarList;
   List<GeoUnitMasterBAL>? _mandalList;
   List<GeoUnitMasterBAL>? _graamList;
   List<GeoUnitMasterBAL>? _vastiList;
@@ -44,6 +45,7 @@ class SwayamsevakTransferDetailState extends State<SwayamsevakTransferDetails> {
   String? _bhaagValue = "";
   String? _shaharValue = "";
   String? _nagarValue = "";
+  String? _upnagarValue = "";
   String? _mandalValue = "";
   String? _graamValue = "";
   String? _vastiValue = "";
@@ -70,10 +72,10 @@ class SwayamsevakTransferDetailState extends State<SwayamsevakTransferDetails> {
   }
 
   void populateShaharDropdown(String? bhaagIDStr) async {
-    _shaharValue = null;
+    _upnagarValue = _shaharValue = null;
     _vastiValue = null;
     _shaharList = null;
-    _vastiList = null;
+    _upnagarList = _vastiList = null;
     var shDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['ShaharLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
     setState(() {
       _shaharList = (shDD.length > 0 ? shDD : null);
@@ -81,11 +83,11 @@ class SwayamsevakTransferDetailState extends State<SwayamsevakTransferDetails> {
   }
 
   void populateNagarDropdown(String? bhaagIDStr, String? shaharIDStr) async {
-    _nagarValue = null;
+    _upnagarValue = _nagarValue = null;
     _mandalValue = null;
     _graamValue = null;
     _vastiValue = null;
-    _nagarList = _mandalList = _graamList = _vastiList = null;
+    _upnagarList = _nagarList = _mandalList = _graamList = _vastiList = null;
     if (shaharIDStr != null) {
       var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), shaharIDStr, 'Shahar', '');
       setState(() {
@@ -99,10 +101,28 @@ class SwayamsevakTransferDetailState extends State<SwayamsevakTransferDetails> {
     }
   }
 
-  void populateMandalDropdown(String nagarIDStr) async {
+  populateUpnagarDropdown(String? nagarIDStr) async {
+    _upnagarValue = _mandalValue = _graamValue = _vastiValue = null;
+    _upnagarList = _mandalList = _graamList = _vastiList = null;
+    var mnDD;
+
+    mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['UpaNagarLevelID'].toString(), nagarIDStr!, 'Nagar', '');
+
+    setState(() {
+      _upnagarList = (mnDD.length > 0 ? mnDD : null);
+      //_linkedupnagarValue = (userparentUpanagarid ?? userGeoUnitId).toString();
+    });
+  }
+
+  void populateMandalDropdown(bool haveParentUp, String nagarIDStr) async {
     _mandalValue = _graamValue = null;
     _mandalList = _graamList = null;
-    var mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MandalLevelID'].toString(), nagarIDStr, 'Nagar', '');
+    var mnDD;
+    if (haveParentUp) {
+      mnDD = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['MandalLevelID'].toString(), nagarIDStr!, "Upnagar", '');
+    } else {
+      mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MandalLevelID'].toString(), nagarIDStr, 'Nagar', '');
+    }
     setState(() {
       _mandalList = (mnDD.length > 0 ? mnDD : null);
     });
@@ -116,9 +136,16 @@ class SwayamsevakTransferDetailState extends State<SwayamsevakTransferDetails> {
     });
   }
 
-  void populateVastiDropdown(String nagarIDStr) async {
+  void populateVastiDropdown(bool haveParentUp, String nagarIDStr) async {
     _vastiValue = null;
-    var vsDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr, 'Nagar', '');
+    var vsDD;
+    if (haveParentUp) {
+      print("i am in parents upnagar vasti");
+      vsDD = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, "Upnagar", '');
+      // print("${mnDD}");
+    } else {
+      vsDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, "Nagar", '');
+    }
     setState(() {
       _vastiList = (vsDD.length > 0 ? vsDD : null);
     });
@@ -140,8 +167,8 @@ class SwayamsevakTransferDetailState extends State<SwayamsevakTransferDetails> {
 
       _nagarValue = geoUnitDets.parentNagarID == null ? null : geoUnitDets.parentNagarID.toString();
       if (_nagarValue != null) {
-        populateMandalDropdown(_nagarValue!);
-        populateVastiDropdown(_nagarValue!);
+        populateMandalDropdown(false, _nagarValue!);
+        populateVastiDropdown(false, _nagarValue!);
       }
 
       _mandalValue = geoUnitDets.parentMandalID == null ? null : geoUnitDets.parentMandalID.toString();
@@ -318,9 +345,10 @@ class SwayamsevakTransferDetailState extends State<SwayamsevakTransferDetails> {
                                     onChanged: (value) {
                                       setState(() {
                                         _bhaagValue = value;
-                                        populateShaharDropdown(value!);
-                                        populateNagarDropdown(value, null);
+                                        _upnagarValue = _upnagarList = null;
                                       });
+                                      populateShaharDropdown(value!);
+                                      populateNagarDropdown(value, null);
                                     },
                                     validator: (value) {
                                       if ((value == null || value.isEmpty)) {
@@ -341,8 +369,8 @@ class SwayamsevakTransferDetailState extends State<SwayamsevakTransferDetails> {
                                     onChanged: (value) {
                                       setState(() {
                                         _shaharValue = value;
-                                        populateNagarDropdown(null, value);
                                       });
+                                      populateNagarDropdown(null, value);
                                     },
                                     // validator: (value) {
                                     //   if ((value == null || value.isEmpty)) {
@@ -364,9 +392,10 @@ class SwayamsevakTransferDetailState extends State<SwayamsevakTransferDetails> {
                                     onChanged: (value) {
                                       setState(() {
                                         _nagarValue = value;
-                                        populateMandalDropdown(value!);
-                                        populateVastiDropdown(value);
                                       });
+                                      populateUpnagarDropdown(value);
+                                      populateMandalDropdown(false, value!);
+                                      populateVastiDropdown(false, value);
                                     },
                                     // validator: (value) {
                                     //   if ((value == null || value.isEmpty)) {
@@ -379,6 +408,30 @@ class SwayamsevakTransferDetailState extends State<SwayamsevakTransferDetails> {
                                   SizedBox(
                                     height: 10,
                                   ),
+                                if (_upnagarList != null && _upnagarList!.length > 0)
+                                  DropdownButtonFormField(
+                                    decoration: InputDecoration(labelText: Statics.getLabel('upnagarUpkhanda')),
+                                    isExpanded: true,
+                                    value: _upnagarValue == "" ? null : _upnagarValue,
+                                    items: _upnagarList!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _upnagarValue = value;
+                                      });
+                                      populateMandalDropdown(true, value!);
+                                      populateVastiDropdown(true, value);
+                                    },
+                                    // validator: (value) {
+                                    //   if ((value == null || value.isEmpty)) {
+                                    //     return Statics.getLabel('SelectNagarValidationMessage');
+                                    //   }
+                                    //   return null;
+                                    // },
+                                  ),
+                                if (_upnagarList != null && _upnagarList!.length > 0)
+                                  SizedBox(
+                                    height: 10,
+                                  ),
                                 if (_mandalList != null && _mandalList!.length > 0)
                                   DropdownButtonFormField(
                                     decoration: InputDecoration(labelText: Statics.getLabel('Mandal')),
@@ -388,8 +441,8 @@ class SwayamsevakTransferDetailState extends State<SwayamsevakTransferDetails> {
                                     onChanged: (value) {
                                       setState(() {
                                         _mandalValue = value;
-                                        populateGraamDropdown(value!);
                                       });
+                                      populateGraamDropdown(value!);
                                     },
                                     // validator: (value) {
                                     //   if ((value == null || value.isEmpty)) {

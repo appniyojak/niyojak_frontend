@@ -33,6 +33,9 @@ class _SewaVastiDetailsState extends State<SewaVastiDetails> {
 
   List<NecessitiesBAL> _necessities = [];
 
+  final controller = createGeoController();
+
+  @override
   void initState() {
     super.initState();
     // populateBhaagDropdown();
@@ -76,8 +79,6 @@ class _SewaVastiDetailsState extends State<SewaVastiDetails> {
   Future<void> initData() async {
     final dm = await MyAppGlobals.getLevelLDB();
 
-    final controller = context.read<GeoHierarchyController>();
-
     await controller.initialize(dm);
 
     setState(() {});
@@ -117,8 +118,12 @@ class _SewaVastiDetailsState extends State<SewaVastiDetails> {
       data = SewaVastiList.fromJson(dataList[0]);
     }
 
+    sDetails = data;
+
+    final trail = await controller.getTrailFromGeoUnitId((data?.graamID ?? data?.vastiID).toString());
+
+    if (trail != null) await controller.setHierarchyFromTrail(trail: trail);
     setState(() {
-      sDetails = data;
       if (sDetails == null) {
         _isfetingData = false;
         return;
@@ -185,7 +190,6 @@ class _SewaVastiDetailsState extends State<SewaVastiDetails> {
   }
 
   saveSwDetails() async {
-    final controller = context.read<GeoHierarchyController>();
     var necessitiesIDs = '';
 
     for (var data in _necessities) {
@@ -338,69 +342,72 @@ class _SewaVastiDetailsState extends State<SewaVastiDetails> {
   }
 
   Widget dropdownSection() {
-    return Consumer<GeoHierarchyController>(builder: (_, ctrl, __) {
-      return Container(
-        margin: EdgeInsets.all(10),
-        child: Column(
-          children: [
-            GeoDropdownWidget(
-              level: GeoLevel.Mahaanagar,
-              title: 'Mahaanagar',
-              controller: ctrl,
-            ),
-
-            // if (ctrl.hasItems(GeoLevel.vibhaag))
-            GeoDropdownWidget(
-              level: GeoLevel.Vibhaag,
-              title: 'Vibhaag',
-              controller: ctrl,
-            ),
-
-            if (ctrl.hasItems(GeoLevel.Bhaag))
+    return ChangeNotifierProvider.value(
+      value: controller,
+      child: Consumer<GeoHierarchyController>(builder: (_, ctrl, __) {
+        return Container(
+          margin: EdgeInsets.all(10),
+          child: Column(
+            children: [
               GeoDropdownWidget(
-                level: GeoLevel.Bhaag,
-                title: 'Bhaag',
+                level: GeoLevel.Mahaanagar,
+                title: 'Mahaanagar',
                 controller: ctrl,
               ),
 
-            if (ctrl.hasItems(GeoLevel.Nagar))
+              // if (ctrl.hasItems(GeoLevel.vibhaag))
               GeoDropdownWidget(
-                level: GeoLevel.Nagar,
-                title: 'Nagar',
+                level: GeoLevel.Vibhaag,
+                title: 'Vibhaag',
                 controller: ctrl,
               ),
 
-            if (ctrl.hasItems(GeoLevel.upnagarUpkhanda))
-              GeoDropdownWidget(
-                level: GeoLevel.upnagarUpkhanda,
-                title: 'upnagarUpkhanda',
-                controller: ctrl,
-              ),
+              if (ctrl.hasItems(GeoLevel.Bhaag))
+                GeoDropdownWidget(
+                  level: GeoLevel.Bhaag,
+                  title: 'Bhaag',
+                  controller: ctrl,
+                ),
 
-            if (ctrl.hasItems(GeoLevel.Mandal))
-              GeoDropdownWidget(
-                level: GeoLevel.Mandal,
-                title: 'Mandal',
-                controller: ctrl,
-              ),
+              if (ctrl.hasItems(GeoLevel.Nagar))
+                GeoDropdownWidget(
+                  level: GeoLevel.Nagar,
+                  title: 'Nagar',
+                  controller: ctrl,
+                ),
 
-            if (ctrl.hasItems(GeoLevel.Graam))
-              GeoDropdownWidget(
-                level: GeoLevel.Graam,
-                title: 'Graam',
-                controller: ctrl,
-              ),
+              if (ctrl.hasItems(GeoLevel.upnagarUpkhanda))
+                GeoDropdownWidget(
+                  level: GeoLevel.upnagarUpkhanda,
+                  title: 'upnagarUpkhanda',
+                  controller: ctrl,
+                ),
 
-            if (ctrl.hasItems(GeoLevel.Vasti))
-              GeoDropdownWidget(
-                level: GeoLevel.Vasti,
-                title: 'Vasti',
-                controller: ctrl,
-              ),
-            SizedBox(height: 12),
-          ],
-        ),
-      );
-    });
+              if (ctrl.hasItems(GeoLevel.Mandal))
+                GeoDropdownWidget(
+                  level: GeoLevel.Mandal,
+                  title: 'Mandal',
+                  controller: ctrl,
+                ),
+
+              if (ctrl.hasItems(GeoLevel.Graam))
+                GeoDropdownWidget(
+                  level: GeoLevel.Graam,
+                  title: 'Graam',
+                  controller: ctrl,
+                ),
+
+              if (ctrl.hasItems(GeoLevel.Vasti))
+                GeoDropdownWidget(
+                  level: GeoLevel.Vasti,
+                  title: 'Vasti',
+                  controller: ctrl,
+                ),
+              SizedBox(height: 12),
+            ],
+          ),
+        );
+      }),
+    );
   }
 }

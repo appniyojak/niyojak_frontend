@@ -44,6 +44,8 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
   List<ShaakhaaList> _newShaakhaaList = [];
   List<Statics.cLatLong> _latLng = [];
 
+  final controller = createGeoController();
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -82,8 +84,6 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
   Future<void> initData() async {
     final dm = await MyAppGlobals.getLevelLDB();
 
-    final controller = context.read<GeoHierarchyController>();
-
     await controller.initialize(dm);
 
     await populateDropdown();
@@ -121,8 +121,8 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
     // _shaakhaaList = _getshaakhaaList(
     //     geoUnitID, _searchController.text, frequencyVal, vayogatVal);
 
-    final _isNotSankalpitList = _list.where((e) => e.isSankalpit == false);
-    final _isSankalpitList = _list.where((e) => e.isSankalpit == true);
+    final _isNotSankalpitList = _list.where((e) => e.isSankalpit == false && e.isnew != 1);
+    final _isSankalpitList = _list.where((e) => e.isSankalpit == true && e.isnew != 1);
     final _isNewSankalpitList = _list.where((e) => e.isnew == 1);
 
     _shaakhaaList = _isNotSankalpitList.toList();
@@ -289,161 +289,164 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
   }
 
   Widget _dropdownSection() {
-    return Consumer<GeoHierarchyController>(builder: (_, ctrl, __) {
-      return Column(
-        children: [
-          ExpansionPanelList(
-            expansionCallback: (int index, bool isExpanded) {
-              setState(() {
-                _isExpanded = isExpanded;
-              });
-            },
-            children: [
-              if ((int.parse(Statics.userDetails['LevelID']) > 1))
-                // &&
-                // !(Statics.userDetails['DaayitvaName'] == 'Mukhya Shikshak' ||
-                //     Statics.userDetails['DaayitvaName'] == 'मुख्य शिक्षक' ||
-                //     Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' ||
-                //     Statics.userDetails['DaayitvaName'] == 'कार्यवाह'))
-                ExpansionPanel(
-                  headerBuilder: (BuildContext context, bool isExpanded) {
-                    return ListTile(
-                      title: Text(Statics.getLabel('Filters')),
-                    );
-                  },
-                  body: Container(
-                    margin: EdgeInsets.all(20),
-                    child: Column(
-                      children: [
-                        GeoDropdownWidget(
-                          level: GeoLevel.Mahaanagar,
-                          title: 'Mahaanagar',
-                          controller: ctrl,
-                          onChanged: (v) => setState(() => _searched = false),
-                        ),
-
-                        // if (ctrl.hasItems(GeoLevel.vibhaag))
-                        GeoDropdownWidget(
-                          level: GeoLevel.Vibhaag,
-                          title: 'Vibhaag',
-                          controller: ctrl,
-                          onChanged: (v) => setState(() => _searched = false),
-                        ),
-
-                        if (ctrl.hasItems(GeoLevel.Bhaag))
+    return ChangeNotifierProvider.value(
+      value: controller,
+      child: Consumer<GeoHierarchyController>(builder: (_, ctrl, __) {
+        return Column(
+          children: [
+            ExpansionPanelList(
+              expansionCallback: (int index, bool isExpanded) {
+                setState(() {
+                  _isExpanded = isExpanded;
+                });
+              },
+              children: [
+                if ((int.parse(Statics.userDetails['LevelID']) > 1))
+                  // &&
+                  // !(Statics.userDetails['DaayitvaName'] == 'Mukhya Shikshak' ||
+                  //     Statics.userDetails['DaayitvaName'] == 'मुख्य शिक्षक' ||
+                  //     Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' ||
+                  //     Statics.userDetails['DaayitvaName'] == 'कार्यवाह'))
+                  ExpansionPanel(
+                    headerBuilder: (BuildContext context, bool isExpanded) {
+                      return ListTile(
+                        title: Text(Statics.getLabel('Filters')),
+                      );
+                    },
+                    body: Container(
+                      margin: EdgeInsets.all(20),
+                      child: Column(
+                        children: [
                           GeoDropdownWidget(
-                            level: GeoLevel.Bhaag,
-                            title: 'Bhaag',
+                            level: GeoLevel.Mahaanagar,
+                            title: 'Mahaanagar',
                             controller: ctrl,
                             onChanged: (v) => setState(() => _searched = false),
                           ),
 
-                        if (ctrl.hasItems(GeoLevel.Nagar))
+                          // if (ctrl.hasItems(GeoLevel.vibhaag))
                           GeoDropdownWidget(
-                            level: GeoLevel.Nagar,
-                            title: 'Nagar',
+                            level: GeoLevel.Vibhaag,
+                            title: 'Vibhaag',
                             controller: ctrl,
                             onChanged: (v) => setState(() => _searched = false),
                           ),
 
-                        /// CONDITIONAL
-                        if (ctrl.hasItems(GeoLevel.upnagarUpkhanda))
-                          GeoDropdownWidget(
-                            level: GeoLevel.upnagarUpkhanda,
-                            title: 'upnagarUpkhanda',
-                            controller: ctrl,
-                            onChanged: (v) => setState(() => _searched = false),
-                          ),
+                          if (ctrl.hasItems(GeoLevel.Bhaag))
+                            GeoDropdownWidget(
+                              level: GeoLevel.Bhaag,
+                              title: 'Bhaag',
+                              controller: ctrl,
+                              onChanged: (v) => setState(() => _searched = false),
+                            ),
 
-                        if (ctrl.hasItems(GeoLevel.Mandal))
-                          GeoDropdownWidget(
-                            level: GeoLevel.Mandal,
-                            title: 'Mandal',
-                            controller: ctrl,
-                            onChanged: (v) => setState(() => _searched = false),
-                          ),
+                          if (ctrl.hasItems(GeoLevel.Nagar))
+                            GeoDropdownWidget(
+                              level: GeoLevel.Nagar,
+                              title: 'Nagar',
+                              controller: ctrl,
+                              onChanged: (v) => setState(() => _searched = false),
+                            ),
 
-                        if (ctrl.hasItems(GeoLevel.Graam))
-                          GeoDropdownWidget(
-                            level: GeoLevel.Graam,
-                            title: 'Graam',
-                            controller: ctrl,
-                            onChanged: (v) => setState(() => _searched = false),
-                          ),
+                          /// CONDITIONAL
+                          if (ctrl.hasItems(GeoLevel.upnagarUpkhanda))
+                            GeoDropdownWidget(
+                              level: GeoLevel.upnagarUpkhanda,
+                              title: 'upnagarUpkhanda',
+                              controller: ctrl,
+                              onChanged: (v) => setState(() => _searched = false),
+                            ),
 
-                        if (ctrl.hasItems(GeoLevel.Vasti))
-                          GeoDropdownWidget(
-                            level: GeoLevel.Vasti,
-                            title: 'Vasti',
-                            controller: ctrl,
-                            onChanged: (v) => setState(() => _searched = false),
-                          ),
-                        SizedBox(height: 12),
-                        /*if (_vayogat != null)
-                            DropdownButtonFormField(
-                              decoration: InputDecoration(labelText: Statics.getLabel('Vayogat')),
-                              isExpanded: true,
-                              value: _vayogatValue == "" ? null : _vayogatValue,
-                              items: _vayogat!.map((bg) => DropdownMenuItem(value: bg.staticID.toString(), child: Text(bg.codeForDisplay!))).toList(),
-                              onChanged: (value) {
-                                setState(() {
-                                  _vayogatValue = value;
-                                });
-                              },
-                            ),*/
-                        SizedBox(height: 21),
-                      ],
+                          if (ctrl.hasItems(GeoLevel.Mandal))
+                            GeoDropdownWidget(
+                              level: GeoLevel.Mandal,
+                              title: 'Mandal',
+                              controller: ctrl,
+                              onChanged: (v) => setState(() => _searched = false),
+                            ),
+
+                          if (ctrl.hasItems(GeoLevel.Graam))
+                            GeoDropdownWidget(
+                              level: GeoLevel.Graam,
+                              title: 'Graam',
+                              controller: ctrl,
+                              onChanged: (v) => setState(() => _searched = false),
+                            ),
+
+                          if (ctrl.hasItems(GeoLevel.Vasti))
+                            GeoDropdownWidget(
+                              level: GeoLevel.Vasti,
+                              title: 'Vasti',
+                              controller: ctrl,
+                              onChanged: (v) => setState(() => _searched = false),
+                            ),
+                          SizedBox(height: 12),
+                          /*if (_vayogat != null)
+                              DropdownButtonFormField(
+                                decoration: InputDecoration(labelText: Statics.getLabel('Vayogat')),
+                                isExpanded: true,
+                                value: _vayogatValue == "" ? null : _vayogatValue,
+                                items: _vayogat!.map((bg) => DropdownMenuItem(value: bg.staticID.toString(), child: Text(bg.codeForDisplay!))).toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    _vayogatValue = value;
+                                  });
+                                },
+                              ),*/
+                          SizedBox(height: 21),
+                        ],
+                      ),
                     ),
+                    isExpanded: _isExpanded,
                   ),
-                  isExpanded: _isExpanded,
-                ),
-            ],
-          ),
-          if ((int.parse(Statics.userDetails['LevelID']) > 1))
-            Container(
-              margin: EdgeInsets.all(20),
-              child: _isSearching == true
-                  ? CircularProgressIndicator()
-                  : Wrap(
-                      spacing: 10,
-                      children: [
-                        MaterialButton(
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 15,
-                            vertical: 8,
-                          ),
-                          color: Theme.of(context).primaryColor,
-                          textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
-                          onPressed: () {
-                            _search(ctrl.deepestSelectedGeoUnitId, context);
-                          },
-                          child: Text(
-                            Statics.getLabel('Search'),
-                            style: TextStyle(fontSize: 18),
-                          ),
-                        ),
-                        MaterialButton(
-                            onPressed: () {
-                              print("clear button pressed");
-                              setState(() {
-                                _searchController.text = "";
-                                _isSearching = _searched = false;
-                              });
-                              // _frequencyValue = null;
-                              _vayogatValue = null;
-                              // _shaakhaaList = _getshaakhaaList(-1, "get nothing", null, null);
-                              _isExpanded = false;
-                              _shaakhaaList = [];
-                              populateDropdown();
-                              ctrl.loadHierarchyForUser();
-                            },
-                            child: Text(Statics.getLabel('clear'))),
-                      ],
-                    ),
+              ],
             ),
-        ],
-      );
-    });
+            if ((int.parse(Statics.userDetails['LevelID']) > 1))
+              Container(
+                margin: EdgeInsets.all(20),
+                child: _isSearching == true
+                    ? CircularProgressIndicator()
+                    : Wrap(
+                        spacing: 10,
+                        children: [
+                          MaterialButton(
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 15,
+                              vertical: 8,
+                            ),
+                            color: Theme.of(context).primaryColor,
+                            textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+                            onPressed: () {
+                              _search(ctrl.deepestSelectedGeoUnitId, context);
+                            },
+                            child: Text(
+                              Statics.getLabel('Search'),
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ),
+                          MaterialButton(
+                              onPressed: () {
+                                print("clear button pressed");
+                                setState(() {
+                                  _searchController.text = "";
+                                  _isSearching = _searched = false;
+                                });
+                                // _frequencyValue = null;
+                                _vayogatValue = null;
+                                // _shaakhaaList = _getshaakhaaList(-1, "get nothing", null, null);
+                                _isExpanded = false;
+                                _shaakhaaList = [];
+                                populateDropdown();
+                                ctrl.loadHierarchyForUser();
+                              },
+                              child: Text(Statics.getLabel('clear'))),
+                        ],
+                      ),
+              ),
+          ],
+        );
+      }),
+    );
   }
 }

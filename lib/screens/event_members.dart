@@ -39,6 +39,7 @@ class _EventMembersState extends State<EventMembers> {
   var _isLoading = false;
   var _isFirstCall = true;
 
+  @override
   void initState() {
     super.initState();
     populateChoice();

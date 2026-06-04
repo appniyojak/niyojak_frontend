@@ -39,6 +39,8 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
   Future<List<dynamic>>? _shaakhaaList;
   List<Statics.cLatLong> _latLng = [];
 
+  final controller = createGeoController();
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -75,8 +77,6 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
 
   Future<void> initData() async {
     final dm = await MyAppGlobals.getLevelLDB();
-
-    final controller = context.read<GeoHierarchyController>();
 
     await controller.initialize(dm);
 
@@ -163,7 +163,6 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
   }
 
   Future<void> _search(String strType, var ctx) async {
-    final _controller = context.read<GeoHierarchyController>();
     setState(() {
       _isSearching = true;
     });
@@ -172,7 +171,7 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
     int? vayogatVal = _vayogatValue == null || _vayogatValue == "" ? null : int.parse(_vayogatValue!);
 
     if (strType == "Search") {
-      _shaakhaaList = _getshaakhaaList(int.parse(_controller.deepestSelectedGeoUnitId ?? "0"), _searchController.text, frequencyVal, vayogatVal);
+      _shaakhaaList = _getshaakhaaList(int.parse(controller.deepestSelectedGeoUnitId ?? "0"), _searchController.text, frequencyVal, vayogatVal);
       setState(() {
         // _shaakhaaList = _getshaakhaaList(
         //     geoUnitID, _searchController.text, frequencyVal, vayogatVal);
@@ -181,7 +180,7 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
         print(_shaakhaaList);
       });
     } else {
-      var dataList = await _getshaakhaaList(int.parse(_controller.deepestSelectedGeoUnitId ?? "0"), _searchController.text, frequencyVal, vayogatVal);
+      var dataList = await _getshaakhaaList(int.parse(controller.deepestSelectedGeoUnitId ?? "0"), _searchController.text, frequencyVal, vayogatVal);
       print("dataList $dataList");
       if (dataList.isEmpty) {
         Statics.showErrorDialog(context, Statics.getLabel("noDataFoundTryAnotherSearch"));
@@ -199,7 +198,6 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
   }
 
   void _getCsv() async {
-    final _controller = context.read<GeoHierarchyController>();
     // setState(() {
     //   _isfetingData = true;
     // });
@@ -536,241 +534,244 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
   }
 
   Widget dropDownSection() {
-    return Consumer<GeoHierarchyController>(builder: (_, ctrl, __) {
-      return Column(
-        children: [
-          ExpansionPanelList(
-            expansionCallback: (int index, bool isExpanded) {
-              setState(() {
-                _isExpanded = isExpanded;
-              });
-            },
-            children: [
-              if ((int.parse(Statics.userDetails['LevelID']) > 1))
-                // &&
-                // !(Statics.userDetails['DaayitvaName'] == 'Mukhya Shikshak' ||
-                //     Statics.userDetails['DaayitvaName'] == 'मुख्य शिक्षक' ||
-                //     Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' ||
-                //     Statics.userDetails['DaayitvaName'] == 'कार्यवाह'))
-                ExpansionPanel(
-                  headerBuilder: (BuildContext context, bool isExpanded) {
-                    return ListTile(
-                      title: Text(Statics.getLabel('Filters')),
-                    );
-                  },
-                  body: Container(
-                    margin: EdgeInsets.all(20),
-                    child: Column(
-                      children: [
-                        GeoDropdownWidget(
-                          level: GeoLevel.Mahaanagar,
-                          title: 'Mahaanagar',
-                          controller: ctrl,
-                          validator: (v) {
-                            if (v == null || v!.isEmpty) return (Statics.getLabel('GeoUnitValidationMessage'));
-                            return null;
-                          },
-                        ),
-                        if (ctrl.hasItems(GeoLevel.Vibhaag))
+    return ChangeNotifierProvider.value(
+      value: controller,
+      child: Consumer<GeoHierarchyController>(builder: (_, ctrl, __) {
+        return Column(
+          children: [
+            ExpansionPanelList(
+              expansionCallback: (int index, bool isExpanded) {
+                setState(() {
+                  _isExpanded = isExpanded;
+                });
+              },
+              children: [
+                if ((int.parse(Statics.userDetails['LevelID']) > 1))
+                  // &&
+                  // !(Statics.userDetails['DaayitvaName'] == 'Mukhya Shikshak' ||
+                  //     Statics.userDetails['DaayitvaName'] == 'मुख्य शिक्षक' ||
+                  //     Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' ||
+                  //     Statics.userDetails['DaayitvaName'] == 'कार्यवाह'))
+                  ExpansionPanel(
+                    headerBuilder: (BuildContext context, bool isExpanded) {
+                      return ListTile(
+                        title: Text(Statics.getLabel('Filters')),
+                      );
+                    },
+                    body: Container(
+                      margin: EdgeInsets.all(20),
+                      child: Column(
+                        children: [
                           GeoDropdownWidget(
-                            level: GeoLevel.Vibhaag,
-                            title: 'Vibhaag',
+                            level: GeoLevel.Mahaanagar,
+                            title: 'Mahaanagar',
                             controller: ctrl,
                             validator: (v) {
                               if (v == null || v!.isEmpty) return (Statics.getLabel('GeoUnitValidationMessage'));
                               return null;
                             },
                           ),
-                        if (ctrl.hasItems(GeoLevel.Bhaag))
-                          GeoDropdownWidget(
-                            level: GeoLevel.Bhaag,
-                            title: 'Bhaag',
-                            controller: ctrl,
-                            validator: (v) {
-                              if (v == null || v!.isEmpty) return (Statics.getLabel('SelectBhaagValidationMessage'));
-                              return null;
-                            },
-                          ),
+                          if (ctrl.hasItems(GeoLevel.Vibhaag))
+                            GeoDropdownWidget(
+                              level: GeoLevel.Vibhaag,
+                              title: 'Vibhaag',
+                              controller: ctrl,
+                              validator: (v) {
+                                if (v == null || v!.isEmpty) return (Statics.getLabel('GeoUnitValidationMessage'));
+                                return null;
+                              },
+                            ),
+                          if (ctrl.hasItems(GeoLevel.Bhaag))
+                            GeoDropdownWidget(
+                              level: GeoLevel.Bhaag,
+                              title: 'Bhaag',
+                              controller: ctrl,
+                              validator: (v) {
+                                if (v == null || v!.isEmpty) return (Statics.getLabel('SelectBhaagValidationMessage'));
+                                return null;
+                              },
+                            ),
 
-                        if (ctrl.hasItems(GeoLevel.Nagar))
-                          GeoDropdownWidget(
-                            level: GeoLevel.Nagar,
-                            title: 'Nagar',
-                            controller: ctrl,
-                            validator: (v) {
-                              if (v == null || v!.isEmpty) return (Statics.getLabel('SelectNagarValidationMessage'));
-                              return null;
-                            },
-                          ),
+                          if (ctrl.hasItems(GeoLevel.Nagar))
+                            GeoDropdownWidget(
+                              level: GeoLevel.Nagar,
+                              title: 'Nagar',
+                              controller: ctrl,
+                              validator: (v) {
+                                if (v == null || v!.isEmpty) return (Statics.getLabel('SelectNagarValidationMessage'));
+                                return null;
+                              },
+                            ),
 
-                        /// CONDITIONAL
-                        if (ctrl.hasItems(GeoLevel.upnagarUpkhanda))
-                          GeoDropdownWidget(
-                            level: GeoLevel.upnagarUpkhanda,
-                            title: 'upnagarUpkhanda',
-                            controller: ctrl,
-                          ),
+                          /// CONDITIONAL
+                          if (ctrl.hasItems(GeoLevel.upnagarUpkhanda))
+                            GeoDropdownWidget(
+                              level: GeoLevel.upnagarUpkhanda,
+                              title: 'upnagarUpkhanda',
+                              controller: ctrl,
+                            ),
 
-                        if (ctrl.hasItems(GeoLevel.Mandal))
-                          GeoDropdownWidget(
-                            level: GeoLevel.Mandal,
-                            title: 'Mandal',
-                            controller: ctrl,
-                            validator: (v) {
-                              if (v == null || v!.isEmpty) return (Statics.getLabel('SelectMandalValidationMessage'));
-                              return null;
-                            },
-                          ),
+                          if (ctrl.hasItems(GeoLevel.Mandal))
+                            GeoDropdownWidget(
+                              level: GeoLevel.Mandal,
+                              title: 'Mandal',
+                              controller: ctrl,
+                              validator: (v) {
+                                if (v == null || v!.isEmpty) return (Statics.getLabel('SelectMandalValidationMessage'));
+                                return null;
+                              },
+                            ),
 
-                        if (ctrl.hasItems(GeoLevel.Graam))
-                          GeoDropdownWidget(
-                            level: GeoLevel.Graam,
-                            title: 'Graam',
-                            controller: ctrl,
-                            validator: (v) {
-                              if (v == null || v!.isEmpty) return (Statics.getLabel('SelectGraamValidationMessage'));
-                              return null;
-                            },
-                          ),
+                          if (ctrl.hasItems(GeoLevel.Graam))
+                            GeoDropdownWidget(
+                              level: GeoLevel.Graam,
+                              title: 'Graam',
+                              controller: ctrl,
+                              validator: (v) {
+                                if (v == null || v!.isEmpty) return (Statics.getLabel('SelectGraamValidationMessage'));
+                                return null;
+                              },
+                            ),
 
-                        if (ctrl.hasItems(GeoLevel.Vasti))
-                          GeoDropdownWidget(
-                            level: GeoLevel.Vasti,
-                            title: 'Vasti',
-                            controller: ctrl,
-                            validator: (v) {
-                              if (v == null || v!.isEmpty) return (Statics.getLabel('VastiValidationMessage'));
-                              return null;
-                            },
-                          ),
+                          if (ctrl.hasItems(GeoLevel.Vasti))
+                            GeoDropdownWidget(
+                              level: GeoLevel.Vasti,
+                              title: 'Vasti',
+                              controller: ctrl,
+                              validator: (v) {
+                                if (v == null || v!.isEmpty) return (Statics.getLabel('VastiValidationMessage'));
+                                return null;
+                              },
+                            ),
 
-                        //======================================================================================================================
-                        if (_frequency != null)
-                          DropdownButtonFormField<StaticMasterBAL>(
-                            decoration: InputDecoration(labelText: Statics.getLabel('SelectFrequency')),
-                            isExpanded: true,
-                            value: _frequencyValue == null
-                                ? null
-                                : _frequency == null
-                                    ? null
-                                    : _frequency![_frequency!.indexWhere((p) => p.staticID.toString() == _frequencyValue.toString())],
-                            items: _frequency!.map((bg) => DropdownMenuItem(value: bg, child: Text(bg.codeForDisplay!))).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                _frequencyValue = value!.staticID.toString();
-                              });
-                            },
+                          //======================================================================================================================
+                          if (_frequency != null)
+                            DropdownButtonFormField<StaticMasterBAL>(
+                              decoration: InputDecoration(labelText: Statics.getLabel('SelectFrequency')),
+                              isExpanded: true,
+                              value: _frequencyValue == null
+                                  ? null
+                                  : _frequency == null
+                                      ? null
+                                      : _frequency![_frequency!.indexWhere((p) => p.staticID.toString() == _frequencyValue.toString())],
+                              items: _frequency!.map((bg) => DropdownMenuItem(value: bg, child: Text(bg.codeForDisplay!))).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  _frequencyValue = value!.staticID.toString();
+                                });
+                              },
+                            ),
+                          SizedBox(
+                            height: 10,
                           ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        if (_vayogat != null)
-                          DropdownButtonFormField(
-                            decoration: InputDecoration(labelText: Statics.getLabel('Vayogat')),
-                            isExpanded: true,
-                            value: _vayogatValue == "" ? null : _vayogatValue,
-                            items: _vayogat!.map((bg) => DropdownMenuItem(value: bg.staticID.toString(), child: Text(bg.codeForDisplay!))).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                _vayogatValue = value;
-                              });
-                            },
+                          if (_vayogat != null)
+                            DropdownButtonFormField(
+                              decoration: InputDecoration(labelText: Statics.getLabel('Vayogat')),
+                              isExpanded: true,
+                              value: _vayogatValue == "" ? null : _vayogatValue,
+                              items: _vayogat!.map((bg) => DropdownMenuItem(value: bg.staticID.toString(), child: Text(bg.codeForDisplay!))).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  _vayogatValue = value;
+                                });
+                              },
+                            ),
+                          SizedBox(
+                            height: 10,
                           ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
+                    isExpanded: _isExpanded,
                   ),
-                  isExpanded: _isExpanded,
-                ),
-            ],
-          ),
-          if ((int.parse(Statics.userDetails['LevelID']) > 1))
-            // &&
-            //   !(Statics.userDetails['DaayitvaName'] == 'Mukhya Shikshak' ||
-            //       Statics.userDetails['DaayitvaName'] == 'मुख्य शिक्षक' ||
-            //       Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' ||
-            //       Statics.userDetails['DaayitvaName'] == 'कार्यवाह'))
-            Container(
-              margin: EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  if (_isSearching == true)
-                    CircularProgressIndicator()
-                  else
-                    Wrap(
-                      children: [
-                        MaterialButton(
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 15,
-                            vertical: 8,
-                          ),
-                          color: Theme.of(context).primaryColor,
-                          textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
-                          onPressed: () {
-                            _search("Search", context);
-                          },
-                          child: Text(
-                            Statics.getLabel('Search'),
-                            style: TextStyle(fontSize: 25),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        // Text(
-                        //     "${Statics.userDetails['LevelID']} ---${Statics.userDetails['LevelName']} --- $geoUnitIDnew"),
-                        MaterialButton(
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 15,
-                            vertical: 8,
-                          ),
-                          color: Theme.of(context).primaryColor,
-                          textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
-                          onPressed: () {
-                            _search("ViewLocation", context);
-                          },
-                          child: Wrap(
-                            children: [
-                              Icon(
-                                Icons.location_pin,
-                                color: Theme.of(context).primaryTextTheme.labelMedium?.color,
-                              ),
-                              Text(
-                                Statics.getLabel("MapView"),
-                                style: TextStyle(fontSize: 20),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                      ],
-                    ),
-                  MaterialButton(
-                      onPressed: () {
-                        print("clear button pressed");
-                        setState(() {
-                          _searchController.text = "";
-                          _isSearching = false;
-                        });
-                        _frequencyValue = null;
-                        _vayogatValue = null;
-                        // _shaakhaaList = _getshaakhaaList(-1, "get nothing", null, null);
-                        _shaakhaaList = Future.value([]);
-                        populateDropdown();
-                        ctrl.loadHierarchyForUser();
-                      },
-                      child: Text(Statics.getLabel('clear'))),
-                ],
-              ),
+              ],
             ),
-        ],
-      );
-    });
+            if ((int.parse(Statics.userDetails['LevelID']) > 1))
+              // &&
+              //   !(Statics.userDetails['DaayitvaName'] == 'Mukhya Shikshak' ||
+              //       Statics.userDetails['DaayitvaName'] == 'मुख्य शिक्षक' ||
+              //       Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' ||
+              //       Statics.userDetails['DaayitvaName'] == 'कार्यवाह'))
+              Container(
+                margin: EdgeInsets.all(20),
+                child: Column(
+                  children: [
+                    if (_isSearching == true)
+                      CircularProgressIndicator()
+                    else
+                      Wrap(
+                        children: [
+                          MaterialButton(
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 15,
+                              vertical: 8,
+                            ),
+                            color: Theme.of(context).primaryColor,
+                            textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+                            onPressed: () {
+                              _search("Search", context);
+                            },
+                            child: Text(
+                              Statics.getLabel('Search'),
+                              style: TextStyle(fontSize: 25),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          // Text(
+                          //     "${Statics.userDetails['LevelID']} ---${Statics.userDetails['LevelName']} --- $geoUnitIDnew"),
+                          MaterialButton(
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 15,
+                              vertical: 8,
+                            ),
+                            color: Theme.of(context).primaryColor,
+                            textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+                            onPressed: () {
+                              _search("ViewLocation", context);
+                            },
+                            child: Wrap(
+                              children: [
+                                Icon(
+                                  Icons.location_pin,
+                                  color: Theme.of(context).primaryTextTheme.labelMedium?.color,
+                                ),
+                                Text(
+                                  Statics.getLabel("MapView"),
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                        ],
+                      ),
+                    MaterialButton(
+                        onPressed: () {
+                          print("clear button pressed");
+                          setState(() {
+                            _searchController.text = "";
+                            _isSearching = false;
+                          });
+                          _frequencyValue = null;
+                          _vayogatValue = null;
+                          // _shaakhaaList = _getshaakhaaList(-1, "get nothing", null, null);
+                          _shaakhaaList = Future.value([]);
+                          populateDropdown();
+                          ctrl.loadHierarchyForUser();
+                        },
+                        child: Text(Statics.getLabel('clear'))),
+                  ],
+                ),
+              ),
+          ],
+        );
+      }),
+    );
   }
 }

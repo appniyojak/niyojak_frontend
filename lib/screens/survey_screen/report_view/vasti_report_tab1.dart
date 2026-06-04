@@ -55,6 +55,15 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
     setState(() {
       isVastiSearch = false;
       _isExpanded = false;
+      data = null;
+      nagarVastisarvekshanReportwithnamedata = [];
+      sajjanList = [];
+      anyaPrabhaviLok = [];
+      vasahatSamparkStithiData = [];
+      jagran = [];
+      gatividhi = [];
+      purviShakhaHoti = [];
+      purviSptahikMilanHote = [];
     });
     populateDropdown();
   }
