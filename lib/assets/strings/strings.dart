@@ -904,6 +904,7 @@ Map<String, String> resEnglish = {
   'NoDaayitva': 'No Daayitva',
   'Pravaasi': 'Pravaasi',
   'IsSankalpit': 'Is Sankalpit',
+  'sankalpit': 'Sankalpit',
   'SankalpAadhaar': 'Sankalp Aadhaar',
   'SankalpAadhaarShakhaa': 'Shakhaa Sankalp Aadhaar',
   'SankalpAadhaarSaptahikMilan': 'Saptahik Milan Sankalp Aadhaar',
@@ -2020,11 +2021,30 @@ Map<String, String> resEnglish = {
   'shakhaMilantitle3': "Current Tarun Vyavasaayi Shaakha/ Milan",
   'shakhaMilantitle4': "New Sankalpit Tarun Vyavasaayi Shaakha/ Milan",
 
-  'newAdmission': "New Admission",
-  'new': "New",
-
   ////////////////////////////////////// Shakhaa Saptah Vistar //////////////////////////////////////
   'searchShakhaa': 'Search Shakhaa',
+
+  'newAdmission': "New Admission",
+  'admission': "Admission",
+  'new': "New",
+  'daily': "Daily",
+  'weekly': "Weekly",
+  'comparison': "Comparison",
+  'dailyShakhaaTulna': "Daily Branch Comparison",
+  'weeklyShakhaaTulna': "Weekly Branch Comparison",
+  'totalShakhaaSampann': "Total Shaakhaas Conducted",
+  'thisWeekTotalShakhaa': "Total Shaakhaas This Week",
+  'currentWeekShakhaa': "Current Week Shaakhaas",
+  'previousWeekShakhaa': "Previous Week Shaakhaas",
+  'todayTotalShakhaa': "Total Shaakhaas Today",
+  'todaysShakhaa': "Today's Shaakhaas",
+  'yesterdaysShakhaa': "Yesterday's Shaakhaas",
+  'today': "Today",
+  'yesterdays': "Yesterday",
+  'thisWeek': "This Week",
+  'lastWeek': "Last Week",
+  'todayVsYesterday': "(Today vs Yesterday)",
+  'thisVsLastWeek': "(This Week vs Last Week)",
 };
 
 ///1,584
@@ -2943,6 +2963,7 @@ Map<String, String> resMarathi = {
   'NoDaayitva': 'कोणतेही दायित्व नाही',
   'Pravaasi': 'प्रवासी',
   'IsSankalpit': 'संकल्पित?',
+  'sankalpit': 'संकल्पित',
   'SankalpAadhaar': 'संकल्पाचा आधार',
   'SankalpAadhaarShakhaa': 'शाखा संकल्पाचा आधार',
   'SankalpAadhaarSaptahikMilan': 'साप्ताहिक मिलन संकल्पाचा आधार',
@@ -4059,11 +4080,30 @@ Map<String, String> resMarathi = {
   'shakhaMilantitle3': "वर्तमान तरुण व्यवसायी शाखा / मिलन",
   'shakhaMilantitle4': "नवीन संकल्पित तरुण व्यवसायी शाखा / मिलन",
 
-  'newAdmission': "नवीन भरती",
-  'new': "नवीन",
-
   ////////////////////////////////////// Shakhaa Saptah Vistar //////////////////////////////////////
   'searchShakhaa': 'शाखा शोधा',
+
+  'newAdmission': "नवीन भरती",
+  'admission': "भरती",
+  'new': "नवीन",
+  'daily': "दैनिक",
+  'weekly': "साप्ताहिक",
+  'comparison': "तुलना",
+  'dailyShakhaaTulna': "दैनिक शाखा तुलना",
+  'weeklyShakhaaTulna': "साप्ताहिक शाखा तुलना",
+  'totalShakhaaSampann': "एकूण शाखा संपन्न",
+  'thisWeekTotalShakhaa': "या आठवड्यातील एकूण शाखा",
+  'currentWeekShakhaa': "या आठवड्यातील शाखा",
+  'previousWeekShakhaa': "मागील आठवड्यातील शाखा",
+  'todayTotalShakhaa': "आजच्या एकूण शाखा",
+  'todaysShakhaa': "आजच्या शाखा",
+  'yesterdaysShakhaa': "कालच्या शाखा",
+  'today': "आज",
+  'yesterdays': "काल",
+  'thisWeek': "हा आठवडा",
+  'lastWeek': "मागील आठवडा",
+  'todayVsYesterday': "(आज विरुद्ध काल)",
+  'thisVsLastWeek': "(हा आठवडा विरुद्ध मागील आठवडा)",
 };
 
 ///1,583
@@ -4980,6 +5020,7 @@ Map<String, String> resHindi = {
   'NoDaayitva': 'कोई दायित्व नही?',
   'Pravaasi': 'प्रवासी',
   'IsSankalpit': 'संकल्पित?',
+  'sankalpit': 'संकल्पित',
   'SankalpAadhaar': 'संकल्प का आधार',
   'SankalpAadhaarShakhaa': 'शाखा संकल्प का आधार',
   'SankalpAadhaarSaptahikMilan': 'साप्ताहिक मिलन संकल्प का आधार',
@@ -6097,9 +6138,28 @@ Map<String, String> resHindi = {
   'shakhaMilantitle3': "वर्तमान तरुण व्यवसायी शाखा / मिलन",
   'shakhaMilantitle4': "नया संकल्पित तरुण व्यवसायी शाखा / मिलन",
 
-  'newAdmission': "नयी भरती",
-  'new': "नयी",
-
   ////////////////////////////////////// Shakhaa Saptah Vistar //////////////////////////////////////
   'searchShakhaa': 'शाखा खोजें',
+
+  'newAdmission': "नयी भरती",
+  'admission': "भरती",
+  'new': "नयी",
+  'daily': "दैनिक",
+  'weekly': "साप्ताहिक",
+  'comparison': "तुलना",
+  'dailyShakhaaTulna': "दैनिक शाखा तुलना",
+  'weeklyShakhaaTulna': "साप्ताहिक शाखा तुलना",
+  'totalShakhaaSampann': "कुल शाखा संकल्प",
+  'thisWeekTotalShakhaa': "सप्ताह की कुल शाखा",
+  'currentWeekShakhaa': "इस सप्ताह की शाखा",
+  'previousWeekShakhaa': "पिछले सप्ताह की शाखा",
+  'todayTotalShakhaa': "आज की कुल शाखा",
+  'todaysShakhaa': "आज की शाखा",
+  'yesterdaysShakhaa': "पिछले दिन (कल) की शाखा",
+  'today': "आज",
+  'yesterdays': "कल",
+  'thisWeek': "इस सप्ताह",
+  'lastWeek': "पिछले सप्ताह",
+  'todayVsYesterday': "(आज VS कल)",
+  'thisVsLastWeek': "(इस VS पिछले सप्ताह)",
 };

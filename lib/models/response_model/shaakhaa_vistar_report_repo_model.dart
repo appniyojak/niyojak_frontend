@@ -32,6 +32,11 @@ class ShaakhaaVistaarReport {
   int? lastWeekTotalCnt;
   int? lastWeekNewTotalCnt;
   int? mid;
+  int? previousWeekShakhaa;
+  int? thisWeekShakhaa;
+  int? todayShakhaa;
+  int? totalshakhaa;
+  int? yesterdayShakhaa;
 
   ShaakhaaVistaarReport(
       {this.todayTotalCnt,
@@ -42,7 +47,12 @@ class ShaakhaaVistaarReport {
       this.thisWeekNewTotalCnt,
       this.lastWeekTotalCnt,
       this.lastWeekNewTotalCnt,
-      this.mid});
+      this.mid,
+      this.previousWeekShakhaa,
+      this.thisWeekShakhaa,
+      this.todayShakhaa,
+      this.totalshakhaa,
+      this.yesterdayShakhaa});
 
   ShaakhaaVistaarReport.fromJson(Map<String, dynamic> json) {
     todayTotalCnt = json['TodayTotalCnt'];
@@ -54,6 +64,11 @@ class ShaakhaaVistaarReport {
     lastWeekTotalCnt = json['LastWeekTotalCnt'];
     lastWeekNewTotalCnt = json['LastWeekNewTotalCnt'];
     mid = json['Mid'];
+    previousWeekShakhaa = json['PreviousWeekShakhaa'];
+    thisWeekShakhaa = json['ThisWeekShakhaa'];
+    todayShakhaa = json['TodayShakhaa'];
+    totalshakhaa = json['Totalshakhaa'];
+    yesterdayShakhaa = json['YesterdayShakhaa'];
   }
 
   Map<String, dynamic> toJson() {
@@ -67,6 +82,11 @@ class ShaakhaaVistaarReport {
     data['LastWeekTotalCnt'] = this.lastWeekTotalCnt;
     data['LastWeekNewTotalCnt'] = this.lastWeekNewTotalCnt;
     data['Mid'] = this.mid;
+    data['PreviousWeekShakhaa'] = this.previousWeekShakhaa;
+    data['ThisWeekShakhaa'] = this.thisWeekShakhaa;
+    data['TodayShakhaa'] = this.todayShakhaa;
+    data['Totalshakhaa'] = this.totalshakhaa;
+    data['YesterdayShakhaa'] = this.yesterdayShakhaa;
     return data;
   }
 }

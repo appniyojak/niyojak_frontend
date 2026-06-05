@@ -95,6 +95,7 @@ class _MandalSurveyReportViewScreen3State extends State<MandalSurveyReportViewSc
       isVastiSearch = false;
       _isExpanded = false;
       vastiSurveyReportModel = null;
+      data = null;
     });
     populateDropdown();
   }
@@ -224,7 +225,7 @@ class _MandalSurveyReportViewScreen3State extends State<MandalSurveyReportViewSc
                     commonExpansionTile(
                       title: 'SewaPrakalpa',
                       children: [
-                        if (data != null && data!.vastisarSewaPrakalpa != null)
+                        if (data != null && data?.vastisarSewaPrakalpa != null)
                           Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey.shade300),
@@ -269,7 +270,7 @@ class _MandalSurveyReportViewScreen3State extends State<MandalSurveyReportViewSc
                     commonExpansionTile(
                       title: 'anyaVividhKshetra',
                       children: [
-                        if (data != null && data!.vastisarvividhKshetaCheKam != null)
+                        if (data != null && data?.vastisarvividhKshetaCheKam != null)
                           Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey.shade300),
@@ -306,7 +307,7 @@ class _MandalSurveyReportViewScreen3State extends State<MandalSurveyReportViewSc
                     commonExpansionTile(
                       title: 'satsangKendra',
                       children: [
-                        if (data != null && data!.vastisarvividhSampradhaySatsangKendra != null)
+                        if (data != null && data?.vastisarvividhSampradhaySatsangKendra != null)
                           Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey.shade300),
@@ -345,7 +346,7 @@ class _MandalSurveyReportViewScreen3State extends State<MandalSurveyReportViewSc
                     commonExpansionTile(
                       title: 'mumbaikarMandal',
                       children: [
-                        if (data != null && data!.vastisargavatilMumbaikar != null)
+                        if (data != null && data?.vastisargavatilMumbaikar != null)
                           Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey.shade300),
@@ -419,64 +420,66 @@ class _MandalSurveyReportViewScreen3State extends State<MandalSurveyReportViewSc
                     ),
                     commonExpansionTile(
                       title: 'KaaryakartaaCountByLevel',
-                      children: [
-                        TwoColumnRow(
-                          txtString: Statics.getLabel('Shaakhaa'),
-                          value: data?.dailyShaakhaaKaaryakartaaCount.toString(),
-                          txtString2: Statics.getLabel('SaaptaahikLabelShort'),
-                          value2: data?.saaptaahikMilanKaaryakartaaCount.toString(),
-                          fontsize: 15,
-                        ),
-                        TwoColumnRow(
-                          txtString: Statics.getLabel('MilanMandali'),
-                          value: data?.maasikMilanKaaryakartaaCount.toString(),
-                          txtString2: Statics.getLabel('VastiKaaryakartaaCount'),
-                          value2: data?.vastiKaaryakartaaCount.toString(),
-                          fontsize: 15,
-                        ),
-                        TwoColumnRow(
-                          txtString: Statics.getLabel('GraamKaaryakartaaCount'),
-                          value: data?.graamKaaryakartaaCount.toString(),
-                          txtString2: Statics.getLabel('MandalKaaryakartaaCount'),
-                          value2: data?.mandalKaaryakartaaCount.toString(),
-                          fontsize: 15,
-                        ),
-                        TwoColumnRow(
-                          txtString: Statics.getLabel('NagarKaaryakartaaCount'),
-                          value: data?.nagarKaaryakartaaCount.toString(),
-                          txtString2: Statics.getLabel('ShaharKaaryakartaaCount'),
-                          value2: data?.shaharKaaryakartaaCount.toString(),
-                          fontsize: 15,
-                        ),
-                        TwoColumnRow(
-                          txtString: Statics.getLabel('BhaagKaaryakartaaCount'),
-                          value: data?.bhaagKaaryakartaaCount.toString(),
-                          txtString2: Statics.getLabel('VibhaagKaaryakartaaCount'),
-                          value2: data?.vibhaagKaaryakartaaCount.toString(),
-                          fontsize: 15,
-                        ),
-                        TwoColumnRow(
-                          txtString: Statics.getLabel('MahaanagarKaaryakartaaCount'),
-                          value: data?.mahaanagarKaaryakartaaCount.toString(),
-                          txtString2: Statics.getLabel('PraantKaaryakartaaCount'),
-                          value2: data?.praantKaaryakartaaCount.toString(),
-                          fontsize: 15,
-                        ),
-                        TwoColumnRow(
-                          txtString: Statics.getLabel('KshetraKaaryakartaaCount'),
-                          value: data?.kshetraKaaryakartaaCount.toString(),
-                          txtString2: Statics.getLabel('AkhilBhaaratiyaKaaryakartaaCount'),
-                          value2: data?.akhilBhaaratiyaKaaryakartaaCount.toString(),
-                          fontsize: 15,
-                        ),
-                        TwoColumnRow(
-                          txtString: Statics.getLabel('PravaaseeKaaryakartaaCount'),
-                          value: data?.pravaaseeKaaryakartaaCount.toString(),
-                          txtString2: Statics.getLabel('TotalKaaryakartaaCount'),
-                          value2: data?.totalKaaryakartaaCount.toString(),
-                          fontsize: 15,
-                        ),
-                      ],
+                      children: data == null
+                          ? [SizedBox()]
+                          : [
+                              TwoColumnRow(
+                                txtString: Statics.getLabel('Shaakhaa'),
+                                value: data?.dailyShaakhaaKaaryakartaaCount.toString(),
+                                txtString2: Statics.getLabel('SaaptaahikLabelShort'),
+                                value2: data?.saaptaahikMilanKaaryakartaaCount.toString(),
+                                fontsize: 15,
+                              ),
+                              TwoColumnRow(
+                                txtString: Statics.getLabel('MilanMandali'),
+                                value: data?.maasikMilanKaaryakartaaCount.toString(),
+                                txtString2: Statics.getLabel('VastiKaaryakartaaCount'),
+                                value2: data?.vastiKaaryakartaaCount.toString(),
+                                fontsize: 15,
+                              ),
+                              TwoColumnRow(
+                                txtString: Statics.getLabel('GraamKaaryakartaaCount'),
+                                value: data?.graamKaaryakartaaCount.toString(),
+                                txtString2: Statics.getLabel('MandalKaaryakartaaCount'),
+                                value2: data?.mandalKaaryakartaaCount.toString(),
+                                fontsize: 15,
+                              ),
+                              TwoColumnRow(
+                                txtString: Statics.getLabel('NagarKaaryakartaaCount'),
+                                value: data?.nagarKaaryakartaaCount.toString(),
+                                txtString2: Statics.getLabel('ShaharKaaryakartaaCount'),
+                                value2: data?.shaharKaaryakartaaCount.toString(),
+                                fontsize: 15,
+                              ),
+                              TwoColumnRow(
+                                txtString: Statics.getLabel('BhaagKaaryakartaaCount'),
+                                value: data?.bhaagKaaryakartaaCount.toString(),
+                                txtString2: Statics.getLabel('VibhaagKaaryakartaaCount'),
+                                value2: data?.vibhaagKaaryakartaaCount.toString(),
+                                fontsize: 15,
+                              ),
+                              TwoColumnRow(
+                                txtString: Statics.getLabel('MahaanagarKaaryakartaaCount'),
+                                value: data?.mahaanagarKaaryakartaaCount.toString(),
+                                txtString2: Statics.getLabel('PraantKaaryakartaaCount'),
+                                value2: data?.praantKaaryakartaaCount.toString(),
+                                fontsize: 15,
+                              ),
+                              TwoColumnRow(
+                                txtString: Statics.getLabel('KshetraKaaryakartaaCount'),
+                                value: data?.kshetraKaaryakartaaCount.toString(),
+                                txtString2: Statics.getLabel('AkhilBhaaratiyaKaaryakartaaCount'),
+                                value2: data?.akhilBhaaratiyaKaaryakartaaCount.toString(),
+                                fontsize: 15,
+                              ),
+                              TwoColumnRow(
+                                txtString: Statics.getLabel('PravaaseeKaaryakartaaCount'),
+                                value: data?.pravaaseeKaaryakartaaCount.toString(),
+                                txtString2: Statics.getLabel('TotalKaaryakartaaCount'),
+                                value2: data?.totalKaaryakartaaCount.toString(),
+                                fontsize: 15,
+                              ),
+                            ],
                     ),
                     commonExpansionTile(
                       title: 'GatividhiAayaamSansthaaKaaryakartaaCount',

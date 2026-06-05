@@ -36,6 +36,7 @@ import '../models/response_model/sadbhav_baithak_vrutta_resp_model.dart';
 import '../models/response_model/sankalit_data_names_model.dart';
 import '../models/response_model/search_abhiyaan_karyakarta_model.dart';
 import '../models/response_model/shaakhaa_vistaar_vrutta_resp_model.dart';
+import '../models/response_model/shaakhaa_vistar_detail_resp_model.dart';
 import '../models/response_model/shaakhaa_vistar_list_resp_model.dart';
 import '../models/response_model/shaakhaa_vistar_report_repo_model.dart';
 import '../models/response_model/taluka_mandal_model.dart';
@@ -284,6 +285,7 @@ const String urlYuvaSangamReport = baseUrlAPI + '/yuvasangamreport';
 
 const String urlGetShaakhaaVistarList = baseUrlAPI + '/GetvistarShaakhaasForAppGrid';
 const String urlSaveShakhaaVistar = baseUrlAPI + '/saveshakhaavistar';
+const String urlGetShaakhaaVistarById = baseUrlAPI + '/getskhaavistarbyid';
 const String urlGetShaakhaaVistarVrutta = baseUrlAPI + '/GetVistarShaakhaaVruttaListForApp';
 const String urlSaveShaakhaaVistarVrutta = baseUrlAPI + '/SaveVistarShaakhaaVrutta';
 const String urlShaakhaaVistarReport = baseUrlAPI + '/GetVistarShaakhaaVruttaReport';
@@ -6689,6 +6691,41 @@ Future<String?> saveShaakhaaSaptahVruttaData(BuildContext context, Map<String, d
       log("ShaakhaaVistarReportRespModel >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
 
       return data["Status"]; // ✅ return karna zaroori hai
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return null; // ✅ error case
+    }
+  } catch (e) {
+    // Navigator.of(context, rootNavigator: true).pop();
+    print("Exception: $e");
+    return null;
+  } finally {
+    Navigator.of(context, rootNavigator: true).pop();
+  }
+}
+
+Future<ShakhaaVistarDetail?> getShaakhaaSaptahByIdData(BuildContext context, String? pkId) async {
+  bool? connected = await isInternetConnected();
+  if (connected == false) {
+    return null;
+  }
+  showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  print("req >>>>>>>>>>>> ${jsonEncode({"ShaakhaaID": pkId})}");
+  log(urlGetShaakhaaVistarById);
+  try {
+    var response = await http.post(Uri.parse(urlGetShaakhaaVistarById), headers: jHeaders, body: jsonEncode({"ShaakhaaID": pkId}));
+
+    // Navigator.of(context, rootNavigator: true).pop();
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+
+      ShaakhaaVistarDetailRespModel model = ShaakhaaVistarDetailRespModel.fromJson(data);
+      log("getShaakhaaSaptahByIdData >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+
+      return model.obj; // ✅ return karna zaroori hai
     } else {
       print("Error: ${response.statusCode} - ${response.body}");
       return null; // ✅ error case

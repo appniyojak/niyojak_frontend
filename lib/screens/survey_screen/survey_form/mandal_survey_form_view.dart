@@ -1106,6 +1106,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                             ),
                             InkWell(
                               onTap: () {
+                                if (selectedvadiGharLoksankhyaIndex == null) return;
                                 showVadiGharLoksankhyaPopup(context, onDataChanged: () {
                                   setState(() {});
                                 }, editIndex: selectedvadiGharLoksankhyaIndex);
@@ -1118,6 +1119,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                             ),
                             InkWell(
                               onTap: () async {
+                                if (selectedvadiGharLoksankhyaIndex == null) return;
                                 final shouldDelete = await showDialog<bool>(
                                   context: context,
                                   builder: (context) => AlertDialog(
@@ -1495,6 +1497,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                               ),
                               InkWell(
                                 onTap: () {
+                                  if (selectedKuthalaVarshiIdIndex == null) return;
                                   showKuthalaVarshiPopup(context, onDataChanged: () => setState(() {}), editIndex: selectedKuthalaVarshiIdIndex);
                                 },
                                 child: Icon(Icons.edit, color: Colors.blue, size: 20),
@@ -1504,6 +1507,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                               ),
                               InkWell(
                                 onTap: () async {
+                                  if (selectedKuthalaVarshiIdIndex == null) return;
                                   final shouldDelete = await showDialog<bool>(
                                     context: context,
                                     builder: (context) => AlertDialog(
@@ -1752,6 +1756,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                       ),
                       InkWell(
                         onTap: () {
+                          if (selectedSewaprakalpaRowIndex == null) return;
                           showSewaPrakalpaPopup(context, onDataChanged: () {
                             setState(() {});
                           }, editIndex: selectedSewaprakalpaRowIndex);
@@ -1764,6 +1769,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                       ),
                       InkWell(
                         onTap: () async {
+                          if (selectedSewaprakalpaRowIndex == null) return;
                           final shouldDelete = await showDialog<bool>(
                             context: context,
                             builder: (context) => AlertDialog(
@@ -2028,6 +2034,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                         ),
                         InkWell(
                           onTap: () {
+                            if (selectedVastisarVividhKshetracheIndex == null) return;
                             showVividhKshetraCheKamePopup(context, onDataChanged: () {
                               setState(() {});
                             }, editIndex: selectedVastisarVividhKshetracheIndex);
@@ -2040,6 +2047,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                         ),
                         InkWell(
                           onTap: () async {
+                            if (selectedVastisarVividhKshetracheIndex == null) return;
                             final shouldDelete = await showDialog<bool>(
                               context: context,
                               builder: (context) => AlertDialog(
@@ -2291,6 +2299,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                       ),
                       InkWell(
                         onTap: () {
+                          if (selectedVastisarVividhadhyatmitStsangKendraIndex == null) return;
                           showVividhadhyatmitStsangKendraPopup(context, onDataChanged: () {
                             setState(() {});
                           }, editIndex: selectedVastisarVividhadhyatmitStsangKendraIndex);
@@ -2303,6 +2312,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                       ),
                       InkWell(
                         onTap: () async {
+                          if (selectedVastisarVividhadhyatmitStsangKendraIndex == null) return;
                           final shouldDelete = await showDialog<bool>(
                             context: context,
                             builder: (context) => AlertDialog(
@@ -2562,6 +2572,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                         ),
                         InkWell(
                           onTap: () {
+                            if (selectedGavatilMumbaikarIndex == null) return;
                             showGavatilMumbaikarPopup(context, onDataChanged: () {
                               setState(() {});
                             }, editIndex: selectedGavatilMumbaikarIndex);
@@ -2574,6 +2585,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                         ),
                         InkWell(
                           onTap: () async {
+                            if (selectedGavatilMumbaikarIndex == null) return;
                             final shouldDelete = await showDialog<bool>(
                               context: context,
                               builder: (context) => AlertDialog(
@@ -2823,6 +2835,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                                   ),
                                   InkWell(
                                     onTap: () {
+                                      if (selectedReligionIdRowIndex == null) return;
                                       showReligionPopup(context, editIndex: selectedReligionIdRowIndex, onDataChanged: () {
                                         setState(() {});
                                       });
@@ -2834,6 +2847,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                                   ),
                                   InkWell(
                                     onTap: () async {
+                                      if (selectedReligionIdRowIndex == null) return;
                                       final shouldDelete = await showDialog<bool>(
                                         context: context,
                                         builder: (context) => AlertDialog(
@@ -3105,6 +3119,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                         ),
                         InkWell(
                           onTap: () {
+                            if (selectedUpasnaSthalRowIndex == null) return;
                             showUpasnaSthalPopup(context, editIndex: selectedUpasnaSthalRowIndex, onDataChanged: () {
                               setState(() {});
                             });
@@ -3116,6 +3131,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                         ),
                         InkWell(
                           onTap: () async {
+                            if (selectedUpasnaSthalRowIndex == null) return;
                             final shouldDelete = await showDialog<bool>(
                               context: context,
                               builder: (context) => AlertDialog(
@@ -3394,6 +3410,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                             ),
                             InkWell(
                               onTap: () async {
+                                if (selectedAbhiyaanKaryakartaIdIndex == null) return;
                                 if (abhiyaanKaryakartaList[selectedAbhiyaanKaryakartaIdIndex!].isdefault == 1) {
                                   await showDialog<bool>(
                                     context: context,
@@ -3711,6 +3728,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                       ),
                       InkWell(
                         onTap: () {
+                          if (selectedsajjanShaktiRowIndex == null) return;
                           showSajjanShaktiPopup(context, editIndex: selectedsajjanShaktiRowIndex, onDataChanged: () {
                             setState(() {});
                           });
@@ -3722,6 +3740,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                       ),
                       InkWell(
                         onTap: () async {
+                          if (selectedsajjanShaktiRowIndex == null) return;
                           final shouldDelete = await showDialog<bool>(
                             context: context,
                             builder: (context) => AlertDialog(
@@ -3977,6 +3996,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                       ),
                       InkWell(
                         onTap: () {
+                          if (selectedanyaPrabhaviLokRowIndex == null) return;
                           showAnyaPrabhaviPopup(context, onDataChanged: () {
                             setState(() {});
                           }, editIndex: selectedanyaPrabhaviLokRowIndex);
@@ -3988,6 +4008,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                       ),
                       InkWell(
                         onTap: () async {
+                          if (selectedanyaPrabhaviLokRowIndex == null) return;
                           final shouldDelete = await showDialog<bool>(
                             context: context,
                             builder: (context) => AlertDialog(
@@ -4237,6 +4258,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                       ),
                       InkWell(
                         onTap: () {
+                          if (selectedSanIdIndex == null) return;
                           showVastitSajarHonareSanPopup(context, editIndex: selectedSanIdIndex, onDataChanged: () {
                             setState(() {});
                           });
@@ -4248,6 +4270,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                       ),
                       InkWell(
                         onTap: () async {
+                          if (selectedSanIdIndex == null) return;
                           final shouldDelete = await showDialog<bool>(
                             context: context,
                             builder: (context) => AlertDialog(
@@ -4504,6 +4527,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                       ),
                       InkWell(
                         onTap: () {
+                          if (selectedSamajikKaryakramIdIndex == null) return;
                           showVastitSajarHonareSamajikKaryakramPopup(context, editIndex: selectedSamajikKaryakramIdIndex, onDataChanged: () {
                             setState(() {});
                           });
@@ -4515,6 +4539,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                       ),
                       InkWell(
                         onTap: () async {
+                          if (selectedSamajikKaryakramIdIndex == null) return;
                           final shouldDelete = await showDialog<bool>(
                             context: context,
                             builder: (context) => AlertDialog(
@@ -9108,6 +9133,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                               ),
                               InkWell(
                                 onTap: () {
+                                  if (selectedDurjanShaktiIdIndex == null) return;
                                   showDurjanShaktiPopup(context, editIndex: selectedDurjanShaktiIdIndex, onDataChanged: () {
                                     setState(() {});
                                   });
@@ -9119,6 +9145,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                               ),
                               InkWell(
                                 onTap: () async {
+                                  if (selectedDurjanShaktiIdIndex == null) return;
                                   final shouldDelete = await showDialog<bool>(
                                     context: context,
                                     builder: (context) => AlertDialog(

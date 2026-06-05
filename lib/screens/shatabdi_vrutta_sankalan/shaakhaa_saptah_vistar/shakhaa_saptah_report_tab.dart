@@ -135,20 +135,20 @@ class _ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Au
 
     // Add / edit rows here to show more attendance categories
     _dailyPresent = [
-      AttendanceData(label: 'उपस्थिति', today: (report?.todayTotalCnt ?? 0).toDouble(), yesterday: (report?.yesterdayTotalCnt ?? 0).toDouble()),
-      // AttendanceData(label: 'उपस्थिति', today: 145, yesterday: 110),
+      AttendanceData(label: Statics.getLabel('upastithi'), today: (report?.todayTotalCnt ?? 0).toDouble(), yesterday: (report?.yesterdayTotalCnt ?? 0).toDouble()),
+      // AttendanceData(label: Statics.getLabel('upastithi'), today: 145, yesterday: 110),
     ];
     _dailyNew = [
-      AttendanceData(label: 'भरती', today: (report?.todayNewTotalCnt ?? 0).toDouble(), yesterday: (report?.yesterdayNewTotalCnt ?? 0).toDouble()),
-      // AttendanceData(label: 'भरती', today: 145, yesterday: 110),
+      AttendanceData(label: Statics.getLabel('admission'), today: (report?.todayNewTotalCnt ?? 0).toDouble(), yesterday: (report?.yesterdayNewTotalCnt ?? 0).toDouble()),
+      // AttendanceData(label: Statics.getLabel(key)('admission'), today: 145, yesterday: 110),
     ];
     _weeklyPresent = [
-      AttendanceData(label: 'उपस्थिति', today: (report?.thisWeekTotalCnt ?? 0).toDouble(), yesterday: (report?.lastWeekTotalCnt ?? 0).toDouble()),
-      // AttendanceData(label: 'उपस्थिति', today: 145, yesterday: 110),
+      AttendanceData(label: Statics.getLabel('upastithi'), today: (report?.thisWeekTotalCnt ?? 0).toDouble(), yesterday: (report?.lastWeekTotalCnt ?? 0).toDouble()),
+      // AttendanceData(label: Statics.getLabel('upastithi'), today: 145, yesterday: 110),
     ];
     _weeklyNew = [
-      AttendanceData(label: 'भरती', today: (report?.thisWeekNewTotalCnt ?? 0).toDouble(), yesterday: (report?.lastWeekNewTotalCnt ?? 0).toDouble()),
-      // AttendanceData(label: 'भरती', today: 145, yesterday: 110),
+      AttendanceData(label: Statics.getLabel('admission'), today: (report?.thisWeekNewTotalCnt ?? 0).toDouble(), yesterday: (report?.lastWeekNewTotalCnt ?? 0).toDouble()),
+      // AttendanceData(label: Statics.getLabel(key)('admission'), today: 145, yesterday: 110),
     ];
     setState(() {});
   }
@@ -180,10 +180,10 @@ class _ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Au
                 _typeResultTab(),
                 _buildHeader(),
                 if (_selectedshaakhaa == null)
-                  isDailySelected ? DailyTab() : WeeklyTab()
+                  isDailySelected ? DailyTab(report: report!) : WeeklyTab(report: report!)
                 else ...[
-                  _attendanceCard(title: "कुल उपस्थिति", data: isDailySelected ? _dailyPresent : _weeklyPresent, isDaily: isDailySelected),
-                  _attendanceCard(title: "कुल नई भरती", data: isDailySelected ? _dailyNew : _weeklyNew, isDaily: isDailySelected)
+                  _attendanceCard(title: "${Statics.getLabel('Total')} ${Statics.getLabel('upastithi')}", data: isDailySelected ? _dailyPresent : _weeklyPresent, isDaily: isDailySelected),
+                  _attendanceCard(title: "${Statics.getLabel('Total')} ${Statics.getLabel('newAdmission')}", data: isDailySelected ? _dailyNew : _weeklyNew, isDaily: isDailySelected)
                 ]
               ]
           ],
@@ -197,7 +197,7 @@ class _ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Au
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '${!isDailySelected ? "साप्ताहिक" : "दैनिक"} तुलना',
+          '${!isDailySelected ? Statics.getLabel("weekly") : Statics.getLabel("daily")} ${Statics.getLabel("comparison")}',
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.w700,
@@ -206,7 +206,7 @@ class _ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Au
         ),
         SizedBox(height: 2),
         Text(
-          !isDailySelected ? '(इस VS पिछले सप्ताह)' : '(आज VS कल)',
+          Statics.getLabel(!isDailySelected ? 'thisVsLastWeek' : 'todayVsYesterday'),
           style: TextStyle(fontSize: 13, color: Color(0xFF888888)),
         ),
       ],
@@ -277,9 +277,9 @@ class _ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Au
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _LegendDot(color: color ?? Color(0xFFB0BEC5), label: !isDailySelected ? 'पिछले सप्ताह' : 'कल', bold: false),
+              _LegendDot(color: color ?? Color(0xFFB0BEC5), label: Statics.getLabel(!isDailySelected ? 'lastWeek' : 'yesterdays'), bold: false),
               SizedBox(width: 24),
-              _LegendDot(color: color ?? Color(0xFF1565C0), label: !isDailySelected ? 'इस सप्ताह' : 'आज', bold: true),
+              _LegendDot(color: color ?? Color(0xFF1565C0), label: Statics.getLabel(!isDailySelected ? 'thisWeek' : 'today'), bold: true),
             ],
           ),
         ],
@@ -590,7 +590,7 @@ class _ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Au
                   child: Container(
                     alignment: Alignment.center,
                     padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4),
-                    child: Text("दैनिक", style: TextStyle(color: isDailySelected ? Colors.white : Colors.black)),
+                    child: Text(Statics.getLabel("daily"), style: TextStyle(color: isDailySelected ? Colors.white : Colors.black)),
                   ),
                 ),
               ),
@@ -600,7 +600,7 @@ class _ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Au
                   child: Container(
                     alignment: Alignment.center,
                     padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4),
-                    child: Text("साप्ताहिक", style: TextStyle(color: isDailySelected ? Colors.black : Colors.white)),
+                    child: Text(Statics.getLabel("weekly"), style: TextStyle(color: isDailySelected ? Colors.black : Colors.white)),
                   ),
                 ),
               ),
@@ -630,6 +630,27 @@ class _HorizontalBarChartState extends State<_HorizontalBarChart> {
   int? _touchedGroupIndex;
   int? _touchedRodIndex;
 
+  // 1. DYNAMIC INTERVAL CALCULATOR: Chooses a clean step size to prevent label overlap
+  double get _calculatedInterval {
+    double maxVal = 0;
+    for (var d in widget.data) {
+      if (d.today > maxVal) maxVal = d.today;
+      if (d.yesterday > maxVal) maxVal = d.yesterday;
+    }
+    if (maxVal == 0) return 40.0;
+
+    // Aim for roughly 4 to 5 interval splits across the axis
+    double rawInterval = maxVal / 4;
+
+    if (rawInterval <= 15) return 20.0;
+    if (rawInterval <= 30) return 40.0;
+    if (rawInterval <= 60) return 50.0;
+    if (rawInterval <= 120) return 100.0;
+    if (rawInterval <= 300) return 250.0;
+    if (rawInterval <= 600) return 500.0;
+    return (rawInterval / 500).ceil() * 500.0; // Fallback for massive values (1000, 1500, etc.)
+  }
+
   // Compute maximum bound dynamically to align grid lines uniformly
   double get _calculatedMaxX {
     if (widget.data.isEmpty) return 150.0;
@@ -638,7 +659,8 @@ class _HorizontalBarChartState extends State<_HorizontalBarChart> {
       if (d.today > maxVal) maxVal = d.today;
       if (d.yesterday > maxVal) maxVal = d.yesterday;
     }
-    return maxVal < 50 ? 100 : ((maxVal / 50).ceil() * 50).toDouble();
+    final interval = _calculatedInterval;
+    return ((maxVal / interval).ceil() * interval).toDouble();
   }
 
   List<BarChartGroupData> _buildGroups() {
@@ -716,7 +738,14 @@ class _HorizontalBarChartState extends State<_HorizontalBarChart> {
   }*/
 
   Widget _leftTitleWidget(double value, TitleMeta meta) {
-    if (value % 40 != 0) return const SizedBox.shrink();
+    final interval = _calculatedInterval;
+
+// Safety check for floating-point modulo precision
+    final remainder = value % interval;
+    if (remainder > 0.01 && (interval - remainder) > 0.01) {
+      return const SizedBox.shrink();
+    }
+
     return Padding(
       padding: const EdgeInsets.only(right: 4),
       child: RotatedBox(
@@ -750,6 +779,7 @@ class _HorizontalBarChartState extends State<_HorizontalBarChart> {
 
   @override
   Widget build(BuildContext context) {
+    final dynamicInterval = _calculatedInterval;
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -767,7 +797,7 @@ class _HorizontalBarChartState extends State<_HorizontalBarChart> {
               show: true,
               drawVerticalLine: true,
               drawHorizontalLine: false,
-              verticalInterval: 40,
+              verticalInterval: dynamicInterval,
               getDrawingVerticalLine: (_) => const FlLine(
                 color: Color(0xFFEEEEEE),
                 strokeWidth: 1,
@@ -778,14 +808,14 @@ class _HorizontalBarChartState extends State<_HorizontalBarChart> {
                 sideTitles: SideTitles(
                   showTitles: true,
                   reservedSize: 40,
-                  interval: 40,
+                  interval: dynamicInterval,
                   getTitlesWidget: _leftTitleWidget,
                 ),
               ),
               bottomTitles: AxisTitles(
                 sideTitles: SideTitles(
                   showTitles: true,
-                  reservedSize: 52,
+                  reservedSize: 58,
                   getTitlesWidget: _bottomTitleWidget,
                 ),
               ),
@@ -880,7 +910,7 @@ class _HorizontalBarChartState extends State<_HorizontalBarChart> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          '${widget.data[_touchedGroupIndex!].label} \n\t ${_touchedRodIndex == 0 ? (widget.isDaily ? "कल" : "पिछले सप्ताह") : (widget.isDaily ? "आज" : "इस सप्ताह")} -> ${_touchedRodIndex == 0 ? widget.data[_touchedGroupIndex!].yesterday : widget.data[_touchedGroupIndex!].today}',
+                          '${widget.data[_touchedGroupIndex!].label} \n\t ${Statics.getLabel(_touchedRodIndex == 0 ? (widget.isDaily ? "yesterdays" : "lastWeek") : (widget.isDaily ? "today" : "thisWeek"))} -> ${_touchedRodIndex == 0 ? widget.data[_touchedGroupIndex!].yesterday : widget.data[_touchedGroupIndex!].today}',
                           style: TextStyle(
                             color: Colors.grey.shade800,
                             fontSize: 13,
@@ -943,10 +973,18 @@ class _LegendDot extends StatelessWidget {
 // DAILY TAB
 // ─────────────────────────────────────────────
 class DailyTab extends StatelessWidget {
-  const DailyTab({super.key});
+  final ShaakhaaVistaarReport report;
+
+  const DailyTab({super.key, required this.report});
 
   @override
   Widget build(BuildContext context) {
+    final total = report.totalshakhaa ?? 0;
+    final previous = report.yesterdayShakhaa ?? 0;
+    final current = report.todayShakhaa ?? 0;
+
+    final percentageChange = previous == 0 ? 0.0 : ((current - previous) / previous) * 100;
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -954,27 +992,27 @@ class DailyTab extends StatelessWidget {
         children: [
           // Card 1: कुल शाखा संकल्प
           _StatCard(
-            label: 'कुल शाखा संकल्प',
-            value: '1,200',
+            label: Statics.getLabel('totalShakhaaSampann'),
+            value: total.toString(),
             showBadge: false,
           ),
           const SizedBox(height: 12),
           // Card 2: आज की कुल शाखा
           _StatCard(
-            label: 'आज की कुल शाखा',
-            value: '1,050',
+            label: Statics.getLabel('todayTotalShakhaa'),
+            value: current.toString(),
             showBadge: true,
-            badgeText: '7.1%',
-            badgePositive: true,
+            badgeText: '${percentageChange.abs().toStringAsFixed(1)}',
+            badgePositive: percentageChange >= 0,
           ),
           const SizedBox(height: 12),
           // Comparison Card
           _ComparisonCard(
-            title: 'दैनिक शाखा तुलना',
-            rows: const [
-              _BarRow(label: 'कुल शाखा संकल्प', value: 1200, maxValue: 1200, color: Color(0xFF1E90FF)),
-              _BarRow(label: 'पिछले दिन (कल) की शाखा', value: 980, maxValue: 1200, color: Color(0xFFFF8C00)),
-              _BarRow(label: 'आज की शाखा', value: 1050, maxValue: 1200, color: Color(0xFFFF8C00)),
+            title: Statics.getLabel('dailyShakhaaTulna'),
+            rows: [
+              _BarRow(label: Statics.getLabel('totalShakhaaSampann'), value: total.toDouble(), maxValue: total.toDouble(), color: Color(0xFF1E90FF)),
+              _BarRow(label: Statics.getLabel('yesterdaysShakhaa'), value: previous.toDouble(), maxValue: total.toDouble(), color: Color(0xFFFF8C00)),
+              _BarRow(label: Statics.getLabel('todaysShakhaa'), value: current.toDouble(), maxValue: total.toDouble(), color: Color(0xFFFF8C00)),
             ],
           ),
         ],
@@ -987,16 +1025,24 @@ class DailyTab extends StatelessWidget {
 // WEEKLY TAB
 // ─────────────────────────────────────────────
 class WeeklyTab extends StatelessWidget {
-  const WeeklyTab({super.key});
+  final ShaakhaaVistaarReport report;
+
+  const WeeklyTab({super.key, required this.report});
 
   @override
   Widget build(BuildContext context) {
+    final total = report.totalshakhaa ?? 0;
+    final previous = report.previousWeekShakhaa ?? 0;
+    final current = report.thisWeekShakhaa ?? 0;
+
+    final percentageChange = previous == 0 ? 0.0 : ((current - previous) / previous) * 100;
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Section title
+          /*// Section title
           const Text(
             'शाखा विवरण',
             style: TextStyle(
@@ -1004,39 +1050,39 @@ class WeeklyTab extends StatelessWidget {
               fontWeight: FontWeight.w700,
               color: Colors.black,
             ),
-          ),
+          ),*/
           const SizedBox(height: 12),
 
           // Card 1: कुल शाखा संकल्प
           _StatCard(
-            label: 'कुल शाखा संकल्प',
-            value: '8,000',
+            label: Statics.getLabel('totalShakhaaSampann'),
+            value: total.toString(),
             showBadge: false,
           ),
           const SizedBox(height: 12),
 
           // Card 2: सप्ताह की कुल शाखा
           _StatCard(
-            label: 'सप्ताह की कुल शाखा',
-            value: '7,500',
+            label: Statics.getLabel('thisWeekTotalShakhaa'),
+            value: current.toString(),
             showBadge: true,
-            badgeText: '4.2%',
-            badgePositive: true,
+            badgeText: '${percentageChange.abs().toStringAsFixed(1)}',
+            badgePositive: percentageChange >= 0,
           ),
           const SizedBox(height: 12),
 
           // Comparison Card (Shakha)
           _ComparisonCard(
-            title: 'साप्ताहिक शाखा तुलना',
-            rows: const [
-              _BarRow(label: 'कुल शाखा संकल्प', value: 8000, maxValue: 8000, color: Color(0xFF1E90FF)),
-              _BarRow(label: 'पिछले सप्ताह की शाखा', value: 7200, maxValue: 8000, color: Color(0xFFFF8C00)),
-              _BarRow(label: 'इस सप्ताह की शाखा', value: 7500, maxValue: 8000, color: Color(0xFFFF8C00)),
+            title: Statics.getLabel('weeklyShakhaaTulna'),
+            rows: [
+              _BarRow(label: Statics.getLabel('totalShakhaaSampann'), value: total.toDouble(), maxValue: total.toDouble(), color: Color(0xFF1E90FF)),
+              _BarRow(label: Statics.getLabel('previousWeekShakhaa'), value: previous.toDouble(), maxValue: total.toDouble(), color: Color(0xFFFF8C00)),
+              _BarRow(label: Statics.getLabel('currentWeekShakhaa'), value: current.toDouble(), maxValue: total.toDouble(), color: Color(0xFFFF8C00)),
             ],
           ),
           const SizedBox(height: 24),
 
-          // Section title: मिलन विवरण
+          /*// Section title: मिलन विवरण
           const Text(
             'साप्ताहिक मिलन विवरण',
             style: TextStyle(
@@ -1073,7 +1119,7 @@ class WeeklyTab extends StatelessWidget {
               _BarRow(label: 'पिछले सप्ताह के मिलन', value: 2900, maxValue: 3000, color: Color(0xFFFF8C00)),
               _BarRow(label: 'इस सप्ताह के मिलन', value: 2800, maxValue: 3000, color: Color(0xFFFF8C00)),
             ],
-          ),
+          ),*/
           const SizedBox(height: 16),
         ],
       ),

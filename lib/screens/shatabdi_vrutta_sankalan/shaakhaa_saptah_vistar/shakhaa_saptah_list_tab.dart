@@ -159,10 +159,10 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
           padding: EdgeInsets.all(20.0),
           child: Column(
             children: <Widget>[
-              Text(
+              /*Text(
                 Statics.getLabel('searchShaakhaaScreenBanner'),
                 style: TextStyle(fontSize: 20),
-              ),
+              ),*/
               SizedBox(height: 10),
 
               ///
@@ -180,7 +180,7 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
                   )),
                   Tab(
                       child: Text(
-                    Statics.getLabel("Consolidated"),
+                    Statics.getLabel("sankalpit"),
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 15),
                   )),
@@ -215,7 +215,9 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
                                                     shaakhaa: _shaakhaaList?[index],
                                                     viewType: "EditVrutta",
                                                   ))),
-                                      icon: Icon(Icons.edit)));
+                                      icon: Column(
+                                        children: [Icon(Icons.edit), Text(Statics.getLabel("Vrutta"))],
+                                      )));
                             },
                           ),
                     (_sankalpitShaakhaaList.isEmpty)
@@ -240,7 +242,9 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
                                                     shaakhaa: _sankalpitShaakhaaList[index],
                                                     viewType: "EditVrutta",
                                                   ))),
-                                      icon: Icon(Icons.edit)));
+                                      icon: Column(
+                                        children: [Icon(Icons.edit), Text(Statics.getLabel("Vrutta"))],
+                                      )));
                             },
                           ),
                     Scaffold(
@@ -262,19 +266,50 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
                               separatorBuilder: (context, index) => SizedBox(height: 8),
                               itemCount: _newShaakhaaList.length ?? 0,
                               itemBuilder: (context, index) {
-                                return ShaakhaaCard(_newShaakhaaList[index].toJson(), false, _search,
-                                    IsNew: true,
-                                    traillingIcon: IconButton(
-                                        onPressed: () => Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) => ShakhaaSaptahFormScreen(
-                                                      shaakhaa: _newShaakhaaList[index],
-                                                      viewType: "EditVrutta",
-                                                    ))),
-                                        icon: Column(
-                                          children: [Icon(Icons.edit), Text(Statics.getLabel("Vrutta"))],
-                                        )));
+                                return ShaakhaaCard(
+                                  _newShaakhaaList[index].toJson(), false, _search,
+                                  IsNew: true,
+                                  traillingIcon: PopupMenuButton(
+                                      itemBuilder: (context) => [
+                                            PopupMenuItem(
+                                                onTap: () => Navigator.pushNamed(context, AddNewShaakhaaVistaarScreen.routeName, arguments: _newShaakhaaList[index].pkid),
+                                                child: ListTile(
+                                                  // tileColor: Colors.white,
+                                                  leading: Icon(
+                                                    Icons.edit,
+                                                    color: Colors.purple,
+                                                  ),
+                                                  title: Text(Statics.getLabel("EditMenu")),
+                                                )),
+                                            PopupMenuItem(
+                                                onTap: () => Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) => ShakhaaSaptahFormScreen(
+                                                              shaakhaa: _newShaakhaaList[index],
+                                                              viewType: "EditVrutta",
+                                                            ))),
+                                                child: ListTile(
+                                                  // tileColor: Colors.white,
+                                                  leading: Icon(
+                                                    Icons.edit_calendar,
+                                                    color: Colors.purple,
+                                                  ),
+                                                  title: Text(Statics.getLabel("Vrutta")),
+                                                )),
+                                          ]),
+                                  // traillingIcon: IconButton(
+                                  //     onPressed: () => Navigator.push(
+                                  //         context,
+                                  //         MaterialPageRoute(
+                                  //             builder: (context) => ShakhaaSaptahFormScreen(
+                                  //                   shaakhaa: _newShaakhaaList[index],
+                                  //                   viewType: "EditVrutta",
+                                  //                 ))),
+                                  //     icon: Column(
+                                  //       children: [Icon(Icons.edit), Text(Statics.getLabel("Vrutta"))],
+                                  //     )),
+                                );
                               },
                             ),
                     ),

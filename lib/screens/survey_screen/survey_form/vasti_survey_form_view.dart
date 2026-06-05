@@ -1748,6 +1748,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                               ),
                               InkWell(
                                 onTap: () {
+                                  if (selectedKuthalaVarshiIdIndex == null) {
+                                    return;
+                                  }
                                   showKuthalaVarshiPopup(context, onDataChanged: () => setState(() {}), editIndex: selectedKuthalaVarshiIdIndex);
                                 },
                                 child: Icon(Icons.edit, color: Colors.blue, size: 20),
@@ -1757,6 +1760,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                               ),
                               InkWell(
                                 onTap: () async {
+                                  if (selectedKuthalaVarshiIdIndex == null) {
+                                    return;
+                                  }
                                   final shouldDelete = await showDialog<bool>(
                                     context: context,
                                     builder: (context) => AlertDialog(
@@ -2048,6 +2054,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                       ),
                       InkWell(
                         onTap: () {
+                          if (selectedJagranShreniStithiRowIndex == null) {
+                            return;
+                          }
                           showJagranShreniPopup(context, onDataChanged: () {
                             setState(() {});
                           }, editIndex: selectedJagranShreniStithiRowIndex);
@@ -2060,6 +2069,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                       ),
                       InkWell(
                         onTap: () async {
+                          if (selectedJagranShreniStithiRowIndex == null) {
+                            return;
+                          }
                           final shouldDelete = await showDialog<bool>(
                             context: context,
                             builder: (context) => AlertDialog(
@@ -2329,6 +2341,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                       ),
                       InkWell(
                         onTap: () {
+                          if (selectedGatividhiKaryaStithiRowIndex == null) return;
                           showGatividhiPopup(context, onDataChanged: () {
                             setState(() {});
                           }, editIndex: selectedGatividhiKaryaStithiRowIndex);
@@ -2340,6 +2353,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                       ),
                       InkWell(
                         onTap: () async {
+                          if (selectedGatividhiKaryaStithiRowIndex == null) return;
                           final shouldDelete = await showDialog<bool>(
                             context: context,
                             builder: (context) => AlertDialog(
@@ -2638,6 +2652,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                         ),
                         InkWell(
                           onTap: () {
+                            if (selectedvsahatPrakarIdRowIndex == null) return;
                             showVsahatTypePopup(context, onDataChanged: () {
                               setState(() {});
                             }, editIndex: selectedvsahatPrakarIdRowIndex);
@@ -2649,6 +2664,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                         ),
                         InkWell(
                           onTap: () async {
+                            if (selectedvsahatPrakarIdRowIndex == null) return;
                             final shouldDelete = await showDialog<bool>(
                               context: context,
                               builder: (context) => AlertDialog(
@@ -2901,6 +2917,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                   ),
                                   InkWell(
                                     onTap: () {
+                                      if (selectedVividhBhashaBolnarerIdRowIndex == null) return;
                                       showVividhBhashaBolnarePopup(context, editIndex: selectedVividhBhashaBolnarerIdRowIndex, onDataChanged: () {
                                         setState(() {});
                                       });
@@ -2912,6 +2929,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                   ),
                                   InkWell(
                                     onTap: () async {
+                                      if (selectedVividhBhashaBolnarerIdRowIndex == null) return;
                                       final shouldDelete = await showDialog<bool>(
                                         context: context,
                                         builder: (context) => AlertDialog(
@@ -3165,6 +3183,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                   ),
                                   InkWell(
                                     onTap: () {
+                                      if (selectedKontyaPraantacheIdRowIndex == null) return;
                                       showKontyaPraantachePopup(context, editIndex: selectedKontyaPraantacheIdRowIndex, onDataChanged: () {
                                         setState(() {});
                                       });
@@ -3176,6 +3195,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                   ),
                                   InkWell(
                                     onTap: () async {
+                                      if (selectedKontyaPraantacheIdRowIndex == null) return;
                                       final shouldDelete = await showDialog<bool>(
                                         context: context,
                                         builder: (context) => AlertDialog(
@@ -3427,6 +3447,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                   ),
                                   InkWell(
                                     onTap: () {
+                                      if (selectedReligionIdRowIndex == null) return;
                                       showReligionPopup(context, editIndex: selectedReligionIdRowIndex, onDataChanged: () {
                                         setState(() {});
                                       });
@@ -3438,6 +3459,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                   ),
                                   InkWell(
                                     onTap: () async {
+                                      if (selectedReligionIdRowIndex == null) return;
                                       final shouldDelete = await showDialog<bool>(
                                         context: context,
                                         builder: (context) => AlertDialog(
@@ -3687,6 +3709,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                         ),
                         InkWell(
                           onTap: () {
+                            if (selectedUpasnaSthalRowIndex == null) return;
                             showUpasnaSthalPopup(context, editIndex: selectedUpasnaSthalRowIndex, onDataChanged: () {
                               setState(() {});
                             });
@@ -3698,6 +3721,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                         ),
                         InkWell(
                           onTap: () async {
+                            if (selectedUpasnaSthalRowIndex == null) return;
                             final shouldDelete = await showDialog<bool>(
                               context: context,
                               builder: (context) => AlertDialog(
@@ -3973,6 +3997,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             ),
                             InkWell(
                               onTap: () async {
+                                if (selectedAbhiyaanKaryakartaIdIndex == null) return;
                                 if (abhiyaanKaryakartaList[selectedAbhiyaanKaryakartaIdIndex!].isdefault == 1) {
                                   await showDialog<bool>(
                                     context: context,
@@ -4290,6 +4315,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                       ),
                       InkWell(
                         onTap: () {
+                          if (selectedsajjanShaktiRowIndex == null) return;
                           showSajjanShaktiPopup(context, editIndex: selectedsajjanShaktiRowIndex, onDataChanged: () {
                             setState(() {});
                           });
@@ -4301,6 +4327,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                       ),
                       InkWell(
                         onTap: () async {
+                          if (selectedsajjanShaktiRowIndex == null) return;
                           final shouldDelete = await showDialog<bool>(
                             context: context,
                             builder: (context) => AlertDialog(
@@ -4555,6 +4582,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                       ),
                       InkWell(
                         onTap: () {
+                          if (selectedanyaPrabhaviLokRowIndex == null) return;
                           showAnyaPrabhaviPopup(context, onDataChanged: () {
                             setState(() {});
                           }, editIndex: selectedanyaPrabhaviLokRowIndex);
@@ -4566,6 +4594,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                       ),
                       InkWell(
                         onTap: () async {
+                          if (selectedanyaPrabhaviLokRowIndex == null) return;
                           final shouldDelete = await showDialog<bool>(
                             context: context,
                             builder: (context) => AlertDialog(
@@ -4815,6 +4844,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                       ),
                       InkWell(
                         onTap: () {
+                          if (selectedSanIdIndex == null) return;
                           showVastitSajarHonareSanPopup(context, editIndex: selectedSanIdIndex, onDataChanged: () {
                             setState(() {});
                           });
@@ -4826,6 +4856,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                       ),
                       InkWell(
                         onTap: () async {
+                          if (selectedSanIdIndex == null) return;
                           final shouldDelete = await showDialog<bool>(
                             context: context,
                             builder: (context) => AlertDialog(
@@ -5080,6 +5111,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                       ),
                       InkWell(
                         onTap: () {
+                          if (selectedSamajikKaryakramIdIndex == null) return;
                           showVastitSajarHonareSamajikKaryakramPopup(context, editIndex: selectedSamajikKaryakramIdIndex, onDataChanged: () {
                             setState(() {});
                           });
@@ -5091,6 +5123,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                       ),
                       InkWell(
                         onTap: () async {
+                          if (selectedSamajikKaryakramIdIndex == null) return;
                           final shouldDelete = await showDialog<bool>(
                             context: context,
                             builder: (context) => AlertDialog(
@@ -8945,6 +8978,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                       ),
                       InkWell(
                         onTap: () {
+                          if (selectedVastitBalopasanaKendraIdIndex == null) return;
                           showVastitBalopasanaKendraPopup(context, editIndex: selectedVastitBalopasanaKendraIdIndex, onDataChanged: () {
                             setState(() {});
                           });
@@ -8956,6 +8990,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                       ),
                       InkWell(
                         onTap: () async {
+                          if (selectedVastitBalopasanaKendraIdIndex == null) return;
                           final shouldDelete = await showDialog<bool>(
                             context: context,
                             builder: (context) => AlertDialog(
@@ -9188,6 +9223,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                         ),
                         InkWell(
                           onTap: () {
+                            if (selectedMotheVyasayikKendraIdIndex == null) return;
                             showMotheVyavsayikKendraPopup(context, editIndex: selectedMotheVyasayikKendraIdIndex, onDataChanged: () {
                               setState(() {});
                             });
@@ -9199,6 +9235,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                         ),
                         InkWell(
                           onTap: () async {
+                            if (selectedMotheVyasayikKendraIdIndex == null) return;
                             final shouldDelete = await showDialog<bool>(
                               context: context,
                               builder: (context) => AlertDialog(
@@ -9430,6 +9467,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                         ),
                         InkWell(
                           onTap: () {
+                            if (selectednirmandhinMothePrakalpaIdIndex == null) return;
                             showNirmaandhinMothePopup(context, editIndex: selectednirmandhinMothePrakalpaIdIndex, onDataChanged: () {
                               setState(() {});
                             });
@@ -9441,6 +9479,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                         ),
                         InkWell(
                           onTap: () async {
+                            if (selectednirmandhinMothePrakalpaIdIndex == null) return;
                             final shouldDelete = await showDialog<bool>(
                               context: context,
                               builder: (context) => AlertDialog(
@@ -9672,6 +9711,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                         ),
                         InkWell(
                           onTap: () {
+                            if (selectedmotheRugnalayIdIndex == null) return;
                             showMotheRugnalayPopup(context, editIndex: selectedmotheRugnalayIdIndex, onDataChanged: () {
                               setState(() {});
                             });
@@ -9683,6 +9723,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                         ),
                         InkWell(
                           onTap: () async {
+                            if (selectedmotheRugnalayIdIndex == null) return;
                             final shouldDelete = await showDialog<bool>(
                               context: context,
                               builder: (context) => AlertDialog(
@@ -9968,6 +10009,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             ),
                             InkWell(
                               onTap: () {
+                                if (selectedShaikshanikSansthaIdIndex == null) return;
                                 showShaikshanikSansthaPopup(
                                   context,
                                   editIndex: selectedShaikshanikSansthaIdIndex,
@@ -9983,6 +10025,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             ),
                             InkWell(
                               onTap: () async {
+                                if (selectedShaikshanikSansthaIdIndex == null) return;
                                 final shouldDelete = await showDialog<bool>(
                                   context: context,
                                   builder: (context) => AlertDialog(
@@ -10220,6 +10263,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             ),
                             InkWell(
                               onTap: () {
+                                if (selectedMaidanUdyanIdIndex == null) return;
                                 showMaidanUdyanPopup(context, editIndex: selectedMaidanUdyanIdIndex, onDataChanged: () {
                                   setState(() {});
                                 });
@@ -10231,6 +10275,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             ),
                             InkWell(
                               onTap: () async {
+                                if (selectedMaidanUdyanIdIndex == null) return;
                                 final shouldDelete = await showDialog<bool>(
                                   context: context,
                                   builder: (context) => AlertDialog(
@@ -10497,6 +10542,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             ),
                             InkWell(
                               onTap: () {
+                                if (selectedjahirKaryakramIdIndex == null) return;
                                 showjahirKaryakramPopup(context, editIndex: selectedjahirKaryakramIdIndex, onDataChanged: () {
                                   setState(() {});
                                 });
@@ -10508,6 +10554,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             ),
                             InkWell(
                               onTap: () async {
+                                if (selectedjahirKaryakramIdIndex == null) return;
                                 final shouldDelete = await showDialog<bool>(
                                   context: context,
                                   builder: (context) => AlertDialog(
@@ -13218,6 +13265,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             ),
                             InkWell(
                               onTap: () {
+                                if (selectedVastiPrashnaGarjaIdIndex == null) return;
                                 showVastiPrashnaGarjaPopup(context, editIndex: selectedVastiPrashnaGarjaIdIndex, onDataChanged: () {
                                   setState(() {});
                                 });
@@ -13229,6 +13277,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             ),
                             InkWell(
                               onTap: () async {
+                                if (selectedVastiPrashnaGarjaIdIndex == null) return;
                                 final shouldDelete = await showDialog<bool>(
                                   context: context,
                                   builder: (context) => AlertDialog(
@@ -13468,6 +13517,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             ),
                             InkWell(
                               onTap: () {
+                                if (selectedDharmikNetrutvaIdIndex == null) return;
                                 showDharmikNetrutvaPopup(context, editIndex: selectedDharmikNetrutvaIdIndex, onDataChanged: () {
                                   setState(() {});
                                 });
@@ -13479,6 +13529,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             ),
                             InkWell(
                               onTap: () async {
+                                if (selectedDharmikNetrutvaIdIndex == null) return;
                                 final shouldDelete = await showDialog<bool>(
                                   context: context,
                                   builder: (context) => AlertDialog(
@@ -13746,6 +13797,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                               ),
                               InkWell(
                                 onTap: () {
+                                  if (selectedDurjanShaktiIdIndex == null) return;
                                   showDurjanShaktiPopup(context, editIndex: selectedDurjanShaktiIdIndex, onDataChanged: () {
                                     setState(() {});
                                   });
@@ -13757,6 +13809,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                               ),
                               InkWell(
                                 onTap: () async {
+                                  if (selectedDurjanShaktiIdIndex == null) return;
                                   final shouldDelete = await showDialog<bool>(
                                     context: context,
                                     builder: (context) => AlertDialog(

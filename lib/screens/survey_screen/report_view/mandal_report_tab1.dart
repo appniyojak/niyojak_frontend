@@ -61,6 +61,17 @@ class _MandalSurveyReportViewScreen1State extends State<MandalSurveyReportViewSc
       isVastiSearch = false;
       _isExpanded = false;
       talukaMandalSampurnaModel = null;
+      talukaMandalSampurnaModel = null;
+      data = null;
+      talukaaSamajikKaryakram = null;
+      talukamandalSana = null;
+      talukamandalUpasanaSthal = null;
+      talukamandalvividhSampradhaySatsangKendra = null;
+      talukaMandalReligion = null;
+      vyavasaayeeCategory = null;
+      sajjanList = [];
+      durjanshakati = [];
+      sewaPrakalpa = [];
     });
     populateDropdown();
   }
@@ -220,22 +231,22 @@ class _MandalSurveyReportViewScreen1State extends State<MandalSurveyReportViewSc
     talukaMandalSampurnaModel = await Statics.vastisarvekshanAllReportDataForMandal(context, Statics.userDetails["userID"], selectedGeoUnitId, selctedLevel);
     log("talukaMandalSampurnaModel ${jsonEncode(talukaMandalSampurnaModel)}");
 
-    if (talukaMandalSampurnaModel == null || (talukaMandalSampurnaModel!.talukamandalsarvekshanReportwithname == null || talukaMandalSampurnaModel!.talukamandalsarvekshanReportwithname!.isEmpty)) {
+    if (talukaMandalSampurnaModel == null || (talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithname == null || talukaMandalSampurnaModel!.talukamandalsarvekshanReportwithname!.isEmpty)) {
       Statics.showToast("${Statics.getLabel('NoDataFound')}");
       return;
     }
 
     setState(() {
-      data = talukaMandalSampurnaModel!.talukamandalsarvekshanReportwithname ?? [];
-      talukaaSamajikKaryakram = talukaMandalSampurnaModel!.talukamandalSamajikkaryakram ?? [];
-      talukamandalSana = talukaMandalSampurnaModel!.talukamandalmahatvacesana ?? [];
-      talukamandalUpasanaSthal = talukaMandalSampurnaModel!.talukamandalupaasana ?? [];
-      talukaMandalReligion = talukaMandalSampurnaModel!.talukamandalReligion ?? [];
-      vyavasaayeeCategory = talukaMandalSampurnaModel!.talukamandalListSwayamsevakCountByVyavasaayeeCategory ?? [];
-      sajjanList = talukaMandalSampurnaModel!.talukamandalsajjanshakkati ?? [];
-      durjanshakati = talukaMandalSampurnaModel!.talukamandaldurjanshakkati ?? [];
-      sewaPrakalpa = talukaMandalSampurnaModel!.talukamandalSewaPrakalpa ?? [];
-      talukamandalvividhSampradhaySatsangKendra = talukaMandalSampurnaModel!.talukamandalvividhSampradhaySatsangKendra ?? [];
+      data = talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithname ?? [];
+      talukaaSamajikKaryakram = talukaMandalSampurnaModel?.talukamandalSamajikkaryakram ?? [];
+      talukamandalSana = talukaMandalSampurnaModel?.talukamandalmahatvacesana ?? [];
+      talukamandalUpasanaSthal = talukaMandalSampurnaModel?.talukamandalupaasana ?? [];
+      talukaMandalReligion = talukaMandalSampurnaModel?.talukamandalReligion ?? [];
+      vyavasaayeeCategory = talukaMandalSampurnaModel?.talukamandalListSwayamsevakCountByVyavasaayeeCategory ?? [];
+      sajjanList = talukaMandalSampurnaModel?.talukamandalsajjanshakkati ?? [];
+      durjanshakati = talukaMandalSampurnaModel?.talukamandaldurjanshakkati ?? [];
+      sewaPrakalpa = talukaMandalSampurnaModel?.talukamandalSewaPrakalpa ?? [];
+      talukamandalvividhSampradhaySatsangKendra = talukaMandalSampurnaModel?.talukamandalvividhSampradhaySatsangKendra ?? [];
     });
   }
 
@@ -856,10 +867,10 @@ class _MandalSurveyReportViewScreen1State extends State<MandalSurveyReportViewSc
                                 rows: [
                                   DataRow(
                                     cells: [
-                                      DataCell(Center(child: Text(talukaMandalSampurnaModel!.talukamandalvividhKshetaCheKam!.karyasankhya.toString()))),
-                                      DataCell(Center(child: Text(talukaMandalSampurnaModel!.talukamandalvividhKshetaCheKam!.mandalCount.toString()))),
-                                      DataCell(Center(child: Text(talukaMandalSampurnaModel!.talukamandalvividhKshetaCheKam!.gramCount.toString()))),
-                                      DataCell(Center(child: Text(talukaMandalSampurnaModel!.talukamandalvividhKshetaCheKam!.sankhya.toString()))),
+                                      DataCell(Center(child: Text((talukaMandalSampurnaModel?.talukamandalvividhKshetaCheKam?.karyasankhya ?? "--").toString()))),
+                                      DataCell(Center(child: Text((talukaMandalSampurnaModel?.talukamandalvividhKshetaCheKam?.mandalCount ?? "--").toString()))),
+                                      DataCell(Center(child: Text((talukaMandalSampurnaModel?.talukamandalvividhKshetaCheKam?.gramCount ?? "--").toString()))),
+                                      DataCell(Center(child: Text((talukaMandalSampurnaModel?.talukamandalvividhKshetaCheKam?.sankhya ?? "--").toString()))),
                                     ],
                                   ),
                                 ],
@@ -1005,9 +1016,9 @@ class _MandalSurveyReportViewScreen1State extends State<MandalSurveyReportViewSc
                                 rows: [
                                   DataRow(
                                     cells: [
-                                      DataCell(Center(child: Text(talukaMandalSampurnaModel!.talukamandalMumbaikar!.sankhya.toString()))),
-                                      DataCell(Center(child: Text(talukaMandalSampurnaModel!.talukamandalMumbaikar!.gramCount.toString()))),
-                                      DataCell(Center(child: Text(talukaMandalSampurnaModel!.talukamandalMumbaikar!.mandalCount.toString()))),
+                                      DataCell(Center(child: Text((talukaMandalSampurnaModel?.talukamandalMumbaikar?.sankhya ?? '--').toString()))),
+                                      DataCell(Center(child: Text((talukaMandalSampurnaModel?.talukamandalMumbaikar?.gramCount ?? '--').toString()))),
+                                      DataCell(Center(child: Text((talukaMandalSampurnaModel?.talukamandalMumbaikar?.mandalCount ?? '--').toString()))),
                                     ],
                                   ),
                                 ],
@@ -1050,64 +1061,66 @@ class _MandalSurveyReportViewScreen1State extends State<MandalSurveyReportViewSc
                     ),
                     commonExpansionTile(
                       title: 'KaaryakartaaCountByLevel',
-                      children: [
-                        TwoColumnRow(
-                          txtString: Statics.getLabel('Shaakhaa'),
-                          value: talukaMandalSampurnaModel?.loksankhyaformandal?.dailyShaakhaaKaaryakartaaCount.toString(),
-                          txtString2: Statics.getLabel('SaaptaahikLabelShort'),
-                          value2: talukaMandalSampurnaModel?.loksankhyaformandal?.saaptaahikMilanKaaryakartaaCount.toString(),
-                          fontsize: 15,
-                        ),
-                        TwoColumnRow(
-                          txtString: Statics.getLabel('MilanMandali'),
-                          value: talukaMandalSampurnaModel?.loksankhyaformandal?.maasikMilanKaaryakartaaCount.toString(),
-                          txtString2: Statics.getLabel('VastiKaaryakartaaCount'),
-                          value2: talukaMandalSampurnaModel?.loksankhyaformandal?.vastiKaaryakartaaCount.toString(),
-                          fontsize: 15,
-                        ),
-                        TwoColumnRow(
-                          txtString: Statics.getLabel('GraamKaaryakartaaCount'),
-                          value: talukaMandalSampurnaModel?.loksankhyaformandal?.graamKaaryakartaaCount.toString(),
-                          txtString2: Statics.getLabel('MandalKaaryakartaaCount'),
-                          value2: talukaMandalSampurnaModel?.loksankhyaformandal?.mandalKaaryakartaaCount.toString(),
-                          fontsize: 15,
-                        ),
-                        TwoColumnRow(
-                          txtString: Statics.getLabel('NagarKaaryakartaaCount'),
-                          value: talukaMandalSampurnaModel?.loksankhyaformandal?.nagarKaaryakartaaCount.toString(),
-                          txtString2: Statics.getLabel('ShaharKaaryakartaaCount'),
-                          value2: talukaMandalSampurnaModel?.loksankhyaformandal?.shaharKaaryakartaaCount.toString(),
-                          fontsize: 15,
-                        ),
-                        TwoColumnRow(
-                          txtString: Statics.getLabel('BhaagKaaryakartaaCount'),
-                          value: talukaMandalSampurnaModel?.loksankhyaformandal?.bhaagKaaryakartaaCount.toString(),
-                          txtString2: Statics.getLabel('VibhaagKaaryakartaaCount'),
-                          value2: talukaMandalSampurnaModel?.loksankhyaformandal?.vibhaagKaaryakartaaCount.toString(),
-                          fontsize: 15,
-                        ),
-                        TwoColumnRow(
-                          txtString: Statics.getLabel('MahaanagarKaaryakartaaCount'),
-                          value: talukaMandalSampurnaModel?.loksankhyaformandal?.mahaanagarKaaryakartaaCount.toString(),
-                          txtString2: Statics.getLabel('PraantKaaryakartaaCount'),
-                          value2: talukaMandalSampurnaModel?.loksankhyaformandal?.praantKaaryakartaaCount.toString(),
-                          fontsize: 15,
-                        ),
-                        TwoColumnRow(
-                          txtString: Statics.getLabel('KshetraKaaryakartaaCount'),
-                          value: talukaMandalSampurnaModel?.loksankhyaformandal?.kshetraKaaryakartaaCount.toString(),
-                          txtString2: Statics.getLabel('AkhilBhaaratiyaKaaryakartaaCount'),
-                          value2: talukaMandalSampurnaModel?.loksankhyaformandal?.akhilBhaaratiyaKaaryakartaaCount.toString(),
-                          fontsize: 15,
-                        ),
-                        TwoColumnRow(
-                          txtString: Statics.getLabel('PravaaseeKaaryakartaaCount'),
-                          value: talukaMandalSampurnaModel?.loksankhyaformandal?.pravaaseeKaaryakartaaCount.toString(),
-                          txtString2: Statics.getLabel('TotalKaaryakartaaCount'),
-                          value2: talukaMandalSampurnaModel?.loksankhyaformandal?.totalKaaryakartaaCount.toString(),
-                          fontsize: 15,
-                        ),
-                      ],
+                      children: talukaMandalSampurnaModel == null
+                          ? [SizedBox()]
+                          : [
+                              TwoColumnRow(
+                                txtString: Statics.getLabel('Shaakhaa'),
+                                value: talukaMandalSampurnaModel?.loksankhyaformandal?.dailyShaakhaaKaaryakartaaCount.toString(),
+                                txtString2: Statics.getLabel('SaaptaahikLabelShort'),
+                                value2: talukaMandalSampurnaModel?.loksankhyaformandal?.saaptaahikMilanKaaryakartaaCount.toString(),
+                                fontsize: 15,
+                              ),
+                              TwoColumnRow(
+                                txtString: Statics.getLabel('MilanMandali'),
+                                value: talukaMandalSampurnaModel?.loksankhyaformandal?.maasikMilanKaaryakartaaCount.toString(),
+                                txtString2: Statics.getLabel('VastiKaaryakartaaCount'),
+                                value2: talukaMandalSampurnaModel?.loksankhyaformandal?.vastiKaaryakartaaCount.toString(),
+                                fontsize: 15,
+                              ),
+                              TwoColumnRow(
+                                txtString: Statics.getLabel('GraamKaaryakartaaCount'),
+                                value: talukaMandalSampurnaModel?.loksankhyaformandal?.graamKaaryakartaaCount.toString(),
+                                txtString2: Statics.getLabel('MandalKaaryakartaaCount'),
+                                value2: talukaMandalSampurnaModel?.loksankhyaformandal?.mandalKaaryakartaaCount.toString(),
+                                fontsize: 15,
+                              ),
+                              TwoColumnRow(
+                                txtString: Statics.getLabel('NagarKaaryakartaaCount'),
+                                value: talukaMandalSampurnaModel?.loksankhyaformandal?.nagarKaaryakartaaCount.toString(),
+                                txtString2: Statics.getLabel('ShaharKaaryakartaaCount'),
+                                value2: talukaMandalSampurnaModel?.loksankhyaformandal?.shaharKaaryakartaaCount.toString(),
+                                fontsize: 15,
+                              ),
+                              TwoColumnRow(
+                                txtString: Statics.getLabel('BhaagKaaryakartaaCount'),
+                                value: talukaMandalSampurnaModel?.loksankhyaformandal?.bhaagKaaryakartaaCount.toString(),
+                                txtString2: Statics.getLabel('VibhaagKaaryakartaaCount'),
+                                value2: talukaMandalSampurnaModel?.loksankhyaformandal?.vibhaagKaaryakartaaCount.toString(),
+                                fontsize: 15,
+                              ),
+                              TwoColumnRow(
+                                txtString: Statics.getLabel('MahaanagarKaaryakartaaCount'),
+                                value: talukaMandalSampurnaModel?.loksankhyaformandal?.mahaanagarKaaryakartaaCount.toString(),
+                                txtString2: Statics.getLabel('PraantKaaryakartaaCount'),
+                                value2: talukaMandalSampurnaModel?.loksankhyaformandal?.praantKaaryakartaaCount.toString(),
+                                fontsize: 15,
+                              ),
+                              TwoColumnRow(
+                                txtString: Statics.getLabel('KshetraKaaryakartaaCount'),
+                                value: talukaMandalSampurnaModel?.loksankhyaformandal?.kshetraKaaryakartaaCount.toString(),
+                                txtString2: Statics.getLabel('AkhilBhaaratiyaKaaryakartaaCount'),
+                                value2: talukaMandalSampurnaModel?.loksankhyaformandal?.akhilBhaaratiyaKaaryakartaaCount.toString(),
+                                fontsize: 15,
+                              ),
+                              TwoColumnRow(
+                                txtString: Statics.getLabel('PravaaseeKaaryakartaaCount'),
+                                value: talukaMandalSampurnaModel?.loksankhyaformandal?.pravaaseeKaaryakartaaCount.toString(),
+                                txtString2: Statics.getLabel('TotalKaaryakartaaCount'),
+                                value2: talukaMandalSampurnaModel?.loksankhyaformandal?.totalKaaryakartaaCount.toString(),
+                                fontsize: 15,
+                              ),
+                            ],
                     ),
                     commonExpansionTile(
                       title: 'GatividhiAayaamSansthaaKaaryakartaaCount',
@@ -2071,9 +2084,9 @@ class _MandalSurveyReportViewScreen1State extends State<MandalSurveyReportViewSc
                                     rows: [
                                       DataRow(
                                         cells: [
-                                          DataCell(Center(child: Text(talukaMandalSampurnaModel!.talukamandalHinduvirayadi!.sankhya.toString()))),
-                                          DataCell(Center(child: Text(talukaMandalSampurnaModel!.talukamandalHinduvirayadi!.gramCount.toString()))),
-                                          DataCell(Center(child: Text(talukaMandalSampurnaModel!.talukamandalHinduvirayadi!.mandalCount.toString()))),
+                                          DataCell(Center(child: Text((talukaMandalSampurnaModel?.talukamandalHinduvirayadi?.sankhya ?? "--").toString()))),
+                                          DataCell(Center(child: Text((talukaMandalSampurnaModel?.talukamandalHinduvirayadi?.gramCount ?? "--").toString()))),
+                                          DataCell(Center(child: Text((talukaMandalSampurnaModel?.talukamandalHinduvirayadi?.mandalCount ?? "--").toString()))),
                                         ],
                                       ),
                                     ],

@@ -66,7 +66,7 @@ class _SwayamsevakTransferCardState extends State<SwayamsevakTransferCard> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.swTransferItem["StatusCode"] == "Initiated"
+    return widget.swTransferItem["StatusID"] == 218
         ? Card(
             margin: EdgeInsets.all(5),
             elevation: 5,
@@ -144,7 +144,7 @@ class _SwayamsevakTransferCardState extends State<SwayamsevakTransferCard> {
                         Text('${Statics.getLabel("isFrom")}:' + widget.swTransferItem["SourceBhaagName"]),
                         Text(', ${Statics.getLabel("toPlace")}:' + widget.swTransferItem["DestinationBhaagName"]),
                         Text(', ${Statics.getLabel("initiatedOnDate")}:' + widget.swTransferItem["TransferInitiatedDateStr"]),
-                        Text(', ${Statics.getLabel("transferStatus")}:' + widget.swTransferItem["StatusCode"].toString()),
+                        Text(', ${Statics.getLabel("transferStatus")}:' + widget.swTransferItem["StatusCode"]),
                       ],
                     ),
                   SizedBox(
