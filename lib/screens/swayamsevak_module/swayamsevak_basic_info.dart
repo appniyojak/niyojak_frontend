@@ -336,7 +336,7 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
         context: context,
         initialDate: _birthDate == null ? DateTime.now() : _birthDate!,
         firstDate: DateTime((_birthDate == null ? DateTime.now().year : _birthDate!.year) - 80),
-        lastDate: DateTime((_birthDate == null ? DateTime.now().year : _birthDate!.year) + 80));
+        lastDate: DateTime.now());
 
     if (date != null) {
       if (mounted)

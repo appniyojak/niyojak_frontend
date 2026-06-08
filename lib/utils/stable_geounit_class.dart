@@ -475,13 +475,13 @@ class GeoHierarchyController extends ChangeNotifier {
       );
       // if (_isRestrictedAt(8)) return;
 
-      if (shouldLoadLevel(GeoLevel.Nagar)) {
-        await _loadAndSetLevel(
-          level: GeoLevel.Nagar,
-          trailValue: selection.nagar,
-          fetchMode: fetchMode,
-        );
-      }
+      // if (shouldLoadLevel(GeoLevel.Nagar)) {
+      await _loadAndSetLevel(
+        level: GeoLevel.Nagar,
+        trailValue: selection.nagar,
+        fetchMode: fetchMode,
+      );
+      // }
       // if (_isRestrictedAt(7)) return;
 
       /// UPNAGAR
@@ -501,44 +501,44 @@ class GeoHierarchyController extends ChangeNotifier {
           items: state.items[GeoLevel.upnagarUpkhanda] ?? [],
           selectedId: resolvedId,
         );
-        if (shouldLoadLevel(GeoLevel.upnagarUpkhanda)) {
-          setSelectedValue(
-            level: GeoLevel.upnagarUpkhanda,
-            id: resolvedId,
-            name: resolvedName,
-          );
-          // if (_isRestrictedAt(6)) return;
-        }
+        // if (shouldLoadLevel(GeoLevel.upnagarUpkhanda)) {
+        setSelectedValue(
+          level: GeoLevel.upnagarUpkhanda,
+          id: resolvedId,
+          name: resolvedName,
+        );
+        // if (_isRestrictedAt(6)) return;
+        // }
       }
 
       /// MANDAL
 
-      if (shouldLoadLevel(GeoLevel.Mandal)) {
-        await _loadAndSetLevel(
-          level: GeoLevel.Mandal,
-          trailValue: selection.mandal,
-        );
-      }
+      // if (shouldLoadLevel(GeoLevel.Mandal)) {
+      await _loadAndSetLevel(
+        level: GeoLevel.Mandal,
+        trailValue: selection.mandal,
+      );
+      // }
       // if (_isRestrictedAt(6) || _isRestrictedAt(13)) return;
 
       /// GRAAM
 
-      if (shouldLoadLevel(GeoLevel.Graam)) {
-        await _loadAndSetLevel(
-          level: GeoLevel.Graam,
-          trailValue: selection.graam,
-        );
-      }
+      // if (shouldLoadLevel(GeoLevel.Graam)) {
+      await _loadAndSetLevel(
+        level: GeoLevel.Graam,
+        trailValue: selection.graam,
+      );
+      // }
       // if (_isRestrictedAt(4)) return;
 
       /// VASTI
 
-      if (shouldLoadLevel(GeoLevel.Vasti)) {
-        await _loadAndSetLevel(
-          level: GeoLevel.Vasti,
-          trailValue: selection.vasti,
-        );
-      }
+      // if (shouldLoadLevel(GeoLevel.Vasti)) {
+      await _loadAndSetLevel(
+        level: GeoLevel.Vasti,
+        trailValue: selection.vasti,
+      );
+      // }
       // if (_isRestrictedAt(2)) return;
 
       /// SHAKHAA
@@ -848,6 +848,23 @@ class GeoHierarchyController extends ChangeNotifier {
     }
 
     return state.selectedValues[level];
+  }
+
+  GeoUnitMasterBAL? get deepestSelectedGeoUnitBAL {
+    final level = deepestSelectedLevel;
+
+    if (level == null) {
+      return null;
+    }
+
+    final selectedId = state.selectedValues[level];
+
+    final item = state.items[level]?.firstWhere(
+      (e) => e.geoUnitID.toString() == selectedId,
+      // orElse: () => GeoUnitMasterBAL(),
+    );
+
+    return item;
   }
 
   String? get deepestSelectedGeoUnitName {

@@ -74,7 +74,7 @@ class _EventDetailsState extends State<EventDetails> {
 
     final controller = context.read<GeoHierarchyController>();
 
-    await controller.initialize(dm, fetchMode: GeoHierarchyFetchMode.mandalOnly);
+    await controller.initialize(dm);
 
     populateDropdown();
     setState(() {});

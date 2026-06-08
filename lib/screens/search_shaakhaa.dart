@@ -36,7 +36,7 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
 
   bool _isExpanded = false;
 
-  Future<List<dynamic>>? _shaakhaaList;
+  List<dynamic>? _shaakhaaList;
   List<Statics.cLatLong> _latLng = [];
 
   final controller = createGeoController();
@@ -56,6 +56,15 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) => initData());
+  }
+
+  Future<void> initData() async {
+    final dm = await MyAppGlobals.getLevelLDB();
+
+    await controller.initialize(dm);
+
+    setState(() {});
+    await populateDropdown();
 
     print("_shaakhaaList_shaakhaaList  --->>> $_shaakhaaList");
 
@@ -71,17 +80,9 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
       //       Statics.userDetails['DaayitvaName'] == 'कार्यवाह')) {
       print("jfhdjkfh asjkhjkfhd sjkahjkhk f shkjshfk f");
     } else {
-      _shaakhaaList = _getshaakhaaList(-1, "get nothing", null, null);
+      _shaakhaaList = await _getshaakhaaList(-1, "get nothing", null, null);
     }
-  }
-
-  Future<void> initData() async {
-    final dm = await MyAppGlobals.getLevelLDB();
-
-    await controller.initialize(dm);
-
     setState(() {});
-    await populateDropdown();
   }
 
   Future<void> populateDropdown({bool fromClear = false}) async {
@@ -171,7 +172,7 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
     int? vayogatVal = _vayogatValue == null || _vayogatValue == "" ? null : int.parse(_vayogatValue!);
 
     if (strType == "Search") {
-      _shaakhaaList = _getshaakhaaList(int.parse(controller.deepestSelectedGeoUnitId ?? "0"), _searchController.text, frequencyVal, vayogatVal);
+      _shaakhaaList = await _getshaakhaaList(int.parse(controller.deepestSelectedGeoUnitId ?? "0"), _searchController.text, frequencyVal, vayogatVal);
       setState(() {
         // _shaakhaaList = _getshaakhaaList(
         //     geoUnitID, _searchController.text, frequencyVal, vayogatVal);
@@ -494,8 +495,23 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
                   dropDownSection(),
 
                   ///
-
-                  FutureBuilder<List<dynamic>>(
+                  SizedBox(
+                    height: MediaQuery.sizeOf(context).height * 0.7,
+                    child: _shaakhaaList == null || (_shaakhaaList?.isEmpty == true)
+                        ? Center(
+                            child: Text(Statics.getLabel("noDataFoundTryAnotherSearch")),
+                          )
+                        : ListView.separated(
+                            shrinkWrap: true,
+                            // physics: NeverScrollableScrollPhysics(),
+                            separatorBuilder: (context, index) => SizedBox(height: 8),
+                            itemCount: _shaakhaaList?.length ?? 0,
+                            itemBuilder: (context, index) {
+                              return ShaakhaaCard(_shaakhaaList?[index], false, _search);
+                            },
+                          ),
+                  )
+                  /*FutureBuilder<List<dynamic>>(
                     future: _shaakhaaList,
                     builder: (ctx, dataSnapshot) {
                       if (dataSnapshot.connectionState != ConnectionState.done) {
@@ -511,7 +527,7 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
                             )
                           : Center(child: Text(Statics.getLabel('noDataFoundTryAnotherSearch')));
                     },
-                  ),
+                  ),*/
                 ],
               ),
             ),
@@ -761,7 +777,7 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
                           _frequencyValue = null;
                           _vayogatValue = null;
                           // _shaakhaaList = _getshaakhaaList(-1, "get nothing", null, null);
-                          _shaakhaaList = Future.value([]);
+                          _shaakhaaList = [];
                           populateDropdown();
                           ctrl.loadHierarchyForUser();
                         },

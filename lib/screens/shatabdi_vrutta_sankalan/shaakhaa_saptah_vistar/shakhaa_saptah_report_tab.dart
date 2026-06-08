@@ -91,6 +91,10 @@ class _ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Au
     if ([2, 3].contains(controller.ctrlUserLevelId)) {
       populatelinkedShaakhaDropdown(controller.deepestSelectedGeoUnitId ?? "0", controller.ctrlUserLevelId == 3);
     }
+    if (controller.ctrlUserLevelId == 1) {
+      _selectedshaakhaa = controller.deepestSelectedGeoUnitBAL;
+      getReportDataFun(controller.deepestSelectedGeoUnitId);
+    }
   }
 
   populatelinkedShaakhaDropdown(String iDStr, bool isGraam) async {

@@ -977,7 +977,7 @@ class _SearchAnnualBaithakVruttaState extends State<SearchAnnualBaithakVrutta> {
                       textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                       onPressed: () {
                         print("_baithakTypeValue ==> $_baithakTypeValue");
-                        if (_baithakTypeValue != '') {
+                        if (_baithakTypeValue != null && _baithakTypeValue != '') {
                           _search();
                         } else {
                           Statics.showMessageDialog(context, Statics.getLabel('baithakTypeNotSelected'));

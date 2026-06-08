@@ -303,8 +303,8 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
       "matruskatiCount": _matrushaktiCtrl.text.trim() == "" ? null : int.parse(_matrushaktiCtrl.text),
       "newmatruskatiCount": _newmatrushaktiCtrl.text.trim() == "" ? null : int.parse(_newmatrushaktiCtrl.text),
       "AbhyaagatCount": _abhyaagatCtrl.text.trim() == "" ? null : int.parse(_abhyaagatCtrl.text),
-      "PravasiKaryakartaCount": _pravasiKaryakartaCountCtrl.text.trim() == "" ? null : int.parse(_pravasiKaryakartaCountCtrl.text),
-      "AnyaPravasiKaryakartaCount": _anyaPravasiKaryakartaCountCtrl.text.trim() == "" ? null : int.parse(_anyaPravasiKaryakartaCountCtrl.text),
+      "PravasiKaryakartaCount": _pravasiKaryakartaCountCtrl.text.trim() == "" ? null : int.tryParse(_pravasiKaryakartaCountCtrl.text) ?? 0,
+      "AnyaPravasiKaryakartaCount": _anyaPravasiKaryakartaCountCtrl.text.trim() == "" ? null : int.tryParse(_anyaPravasiKaryakartaCountCtrl.text) ?? 0,
       // "IsMandatoryShaaririk": _isMandatoryShaaririk,
       // "IsMandatoryBouddhik": _isMandatoryBouddhik,
       "IsDoneDeepBreathing": vayogatCode == "Proudh Vyavasaayee" ? _isDoneDeepBreathing : null,
@@ -561,27 +561,27 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                       },
                     ),
                     SizedBox(height: 10),
-                    TextFormField(
-                      textInputAction: TextInputAction.next,
-                      controller: _pravasiKaryakartaCountCtrl,
-                      decoration: InputDecoration(labelText: Statics.getLabel('PravasiKaryakartaCount')),
-                      keyboardType: TextInputType.number,
-                      onSaved: (value) {
-                        vrutta!.abhyaagatCount = value == "" ? null : int.parse(value!);
-                      },
-                    ),
-                    SizedBox(height: 10),
-                    TextFormField(
-                      textInputAction: TextInputAction.next,
-                      controller: _anyaPravasiKaryakartaCountCtrl,
-                      decoration: InputDecoration(labelText: Statics.getLabel('AnyaPravasiKaryakartaCount')),
-                      keyboardType: TextInputType.number,
-                      onSaved: (value) {
-                        vrutta!.abhyaagatCount = value == "" ? null : int.parse(value!);
-                      },
-                    ),
-                    SizedBox(height: 10),
                     if (_frequency.isNotEmpty && _frequency.firstWhere((e) => e.staticID == frequencyId).code != "Monthly") ...[
+                      TextFormField(
+                        textInputAction: TextInputAction.next,
+                        controller: _pravasiKaryakartaCountCtrl,
+                        decoration: InputDecoration(labelText: Statics.getLabel('PravasiKaryakartaCount')),
+                        keyboardType: TextInputType.number,
+                        onSaved: (value) {
+                          vrutta!.abhyaagatCount = value == "" ? null : int.parse(value!);
+                        },
+                      ),
+                      SizedBox(height: 10),
+                      TextFormField(
+                        textInputAction: TextInputAction.next,
+                        controller: _anyaPravasiKaryakartaCountCtrl,
+                        decoration: InputDecoration(labelText: Statics.getLabel('AnyaPravasiKaryakartaCount')),
+                        keyboardType: TextInputType.number,
+                        onSaved: (value) {
+                          vrutta!.abhyaagatCount = value == "" ? null : int.parse(value!);
+                        },
+                      ),
+                      SizedBox(height: 10),
                       if (vayogatCode == "Proudh Vyavasaayee")
                         Column(
                           children: [
