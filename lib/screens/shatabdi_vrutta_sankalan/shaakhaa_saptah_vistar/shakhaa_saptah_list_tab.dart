@@ -174,7 +174,7 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
                 TabBar(labelColor: Colors.purple, unselectedLabelColor: Colors.grey, tabs: [
                   Tab(
                       child: Text(
-                    Statics.getLabel("Shaakhaa"),
+                    Statics.getLabel("vartamaan"),
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 15),
                   )),
@@ -186,7 +186,7 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
                   )),
                   Tab(
                       child: Text(
-                    Statics.getLabel("new"),
+                    Statics.getLabel("vistarShaakhaa"),
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 15),
                   )),
@@ -249,7 +249,7 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
                           ),
                     Scaffold(
                       floatingActionButton: FloatingActionButton(
-                        onPressed: () => Navigator.pushNamed(context, AddNewShaakhaaVistaarScreen.routeName),
+                        onPressed: () => Navigator.pushNamed(context, AddNewShaakhaaVistaarScreen.routeName, arguments: controller.deepestSelectedGeoUnitId),
                         child: Icon(Icons.add, color: Colors.blueAccent.shade700),
                       ),
                       body: (_newShaakhaaList.isEmpty)

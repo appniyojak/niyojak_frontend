@@ -28,16 +28,20 @@ class AttendanceData {
 //  Page
 // ─────────────────────────────────────────────
 class ShakhaaSaptahReportTab extends StatefulWidget {
-  const ShakhaaSaptahReportTab({super.key});
+  final Function(int id, bool fromYes, String viewType) onIdTap;
+
+  const ShakhaaSaptahReportTab({super.key, required this.onIdTap});
 
   @override
-  State<ShakhaaSaptahReportTab> createState() => _ShakhaaSaptahReportTabState();
+  State<ShakhaaSaptahReportTab> createState() => ShakhaaSaptahReportTabState();
 }
 
-class _ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with AutomaticKeepAliveClientMixin {
+class ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with AutomaticKeepAliveClientMixin {
 // This override is what tells Flutter to keep the state alive.
   @override
   bool get wantKeepAlive => true;
+
+  final controller = createGeoController();
 
   // bool isShakhaaSelected = true;
   bool isDailySelected = true;
@@ -51,7 +55,7 @@ class _ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Au
   List<AttendanceData> _weeklyNew = [];
 
   List<GeoUnitMasterBAL>? _linkedshaakhaa;
-  GeoUnitMasterBAL? _selectedshaakhaa;
+  GeoUnitMasterBAL? selectedshaakhaa;
 
   // _getData(bool isShakhaa, {bool isStart = false}) async {
   //   // await _setData();
@@ -80,8 +84,6 @@ class _ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Au
   initData() async {
     final dm = await MyAppGlobals.getLevelLDB();
 
-    final controller = context.read<GeoHierarchyController>();
-
     await controller.initialize(dm);
 
     // isShakhaaSelected = (controller.ctrlUserLevelId == 1);
@@ -92,13 +94,13 @@ class _ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Au
       populatelinkedShaakhaDropdown(controller.deepestSelectedGeoUnitId ?? "0", controller.ctrlUserLevelId == 3);
     }
     if (controller.ctrlUserLevelId == 1) {
-      _selectedshaakhaa = controller.deepestSelectedGeoUnitBAL;
+      selectedshaakhaa = controller.deepestSelectedGeoUnitBAL;
       getReportDataFun(controller.deepestSelectedGeoUnitId);
     }
   }
 
   populatelinkedShaakhaDropdown(String iDStr, bool isGraam) async {
-    _selectedshaakhaa = null;
+    selectedshaakhaa = null;
     _searched = false;
     report = null;
     setState(() {});
@@ -124,7 +126,7 @@ class _ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Au
     Map<String, dynamic> formData = {
       "Geounitid": selectedGeoUnitId == null ? null : int.tryParse(selectedGeoUnitId.toString()),
       "appuserid": int.tryParse(Statics.userDetails['userID']) ?? null,
-      "isnew": _selectedshaakhaa?.isnew ?? 0,
+      "isnew": selectedshaakhaa?.isnew ?? 0,
     };
 
     // String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
@@ -183,7 +185,7 @@ class _ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Au
               else ...[
                 _typeResultTab(),
                 _buildHeader(),
-                if (_selectedshaakhaa == null)
+                if (selectedshaakhaa == null)
                   isDailySelected ? DailyTab(report: report!) : WeeklyTab(report: report!)
                 else ...[
                   _attendanceCard(title: "${Statics.getLabel('Total')} ${Statics.getLabel('upastithi')}", data: isDailySelected ? _dailyPresent : _weeklyPresent, isDaily: isDailySelected),
@@ -211,7 +213,7 @@ class _ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Au
         SizedBox(height: 2),
         Text(
           Statics.getLabel(!isDailySelected ? 'thisVsLastWeek' : 'todayVsYesterday'),
-          style: TextStyle(fontSize: 13, color: Color(0xFF888888)),
+          style: TextStyle(fontSize: 13, color: Color(0xFFE68449)),
         ),
       ],
     );
@@ -272,7 +274,7 @@ class _ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Au
           SizedBox(
             height: chartHeight,
             width: MediaQuery.sizeOf(context).width,
-            child: _HorizontalBarChart(data: data, shaakhaaId: report?.mid, isDaily: isDaily, selectedshaakhaa: _selectedshaakhaa),
+            child: _HorizontalBarChart(data: data, shaakhaaId: report?.mid, isDaily: isDaily, selectedshaakhaa: selectedshaakhaa, onIdTap: widget.onIdTap),
           ),
 
           const SizedBox(height: 16),
@@ -281,7 +283,7 @@ class _ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Au
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _LegendDot(color: color ?? Color(0xFFB0BEC5), label: Statics.getLabel(!isDailySelected ? 'lastWeek' : 'yesterdays'), bold: false),
+              _LegendDot(color: color ?? Color(0xFFE68449), label: Statics.getLabel(!isDailySelected ? 'lastWeek' : 'yesterdays'), bold: false),
               SizedBox(width: 24),
               _LegendDot(color: color ?? Color(0xFF1565C0), label: Statics.getLabel(!isDailySelected ? 'thisWeek' : 'today'), bold: true),
             ],
@@ -292,143 +294,185 @@ class _ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Au
   }
 
   Widget vastiGraamDropdown() {
-    return Consumer<GeoHierarchyController>(builder: (_, ctrl, __) {
-      return ExpansionPanelList(
-        expansionCallback: (int index, bool isExpanded) {
-          setState(() {
-            _isExpanded = isExpanded;
-          });
-        },
-        children: [
-          ExpansionPanel(
-            isExpanded: _isExpanded,
-            headerBuilder: (BuildContext context, bool isExpanded) {
-              return ListTile(
-                title: Text(Statics.getLabel('Filters')),
-              );
-            },
-            body: Container(
-              margin: EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  GeoDropdownWidget(
-                    level: GeoLevel.Mahaanagar,
-                    title: 'Mahaanagar',
-                    controller: ctrl,
-                    onChanged: (p0) => setState(() {
-                      _searched = false;
-                      _linkedshaakhaa = _selectedshaakhaa = null;
-                    }),
-                  ),
-
-                  // if (ctrl.hasItems(GeoLevel.vibhaag))
-                  GeoDropdownWidget(
-                    level: GeoLevel.Vibhaag,
-                    title: 'Vibhaag',
-                    controller: ctrl,
-                    onChanged: (p0) => setState(() {
-                      _searched = false;
-                      _linkedshaakhaa = _selectedshaakhaa = null;
-                    }),
-                  ),
-
-                  if (ctrl.hasItems(GeoLevel.Bhaag))
+    return ChangeNotifierProvider.value(
+      value: controller,
+      child: Consumer<GeoHierarchyController>(builder: (_, ctrl, __) {
+        return ExpansionPanelList(
+          expansionCallback: (int index, bool isExpanded) {
+            setState(() {
+              _isExpanded = isExpanded;
+            });
+          },
+          children: [
+            ExpansionPanel(
+              isExpanded: _isExpanded,
+              headerBuilder: (BuildContext context, bool isExpanded) {
+                return ListTile(
+                  title: Text(Statics.getLabel('Filters')),
+                );
+              },
+              body: Container(
+                margin: EdgeInsets.all(20),
+                child: Column(
+                  children: [
                     GeoDropdownWidget(
-                      level: GeoLevel.Bhaag,
-                      title: 'Bhaag',
+                      level: GeoLevel.Mahaanagar,
+                      title: 'Mahaanagar',
                       controller: ctrl,
                       onChanged: (p0) => setState(() {
                         _searched = false;
-                        _linkedshaakhaa = _selectedshaakhaa = null;
+                        _linkedshaakhaa = selectedshaakhaa = null;
                       }),
                     ),
 
-                  if (ctrl.hasItems(GeoLevel.Nagar))
+                    // if (ctrl.hasItems(GeoLevel.vibhaag))
                     GeoDropdownWidget(
-                      level: GeoLevel.Nagar,
-                      title: 'Nagar',
+                      level: GeoLevel.Vibhaag,
+                      title: 'Vibhaag',
                       controller: ctrl,
                       onChanged: (p0) => setState(() {
                         _searched = false;
-                        _linkedshaakhaa = _selectedshaakhaa = null;
+                        _linkedshaakhaa = selectedshaakhaa = null;
                       }),
                     ),
 
-                  ////////////////////////////////////////
-                  /// CONDITIONAL
+                    if (ctrl.hasItems(GeoLevel.Bhaag))
+                      GeoDropdownWidget(
+                        level: GeoLevel.Bhaag,
+                        title: 'Bhaag',
+                        controller: ctrl,
+                        onChanged: (p0) => setState(() {
+                          _searched = false;
+                          _linkedshaakhaa = selectedshaakhaa = null;
+                        }),
+                      ),
 
-                  if (ctrl.hasItems(GeoLevel.upnagarUpkhanda))
-                    GeoDropdownWidget(
-                      level: GeoLevel.upnagarUpkhanda,
-                      title: 'upnagarUpkhanda',
-                      controller: ctrl,
-                      onChanged: (p0) => setState(() {
-                        _searched = false;
-                        _linkedshaakhaa = _selectedshaakhaa = null;
-                      }),
-                    ),
+                    if (ctrl.hasItems(GeoLevel.Nagar))
+                      GeoDropdownWidget(
+                        level: GeoLevel.Nagar,
+                        title: 'Nagar',
+                        controller: ctrl,
+                        onChanged: (p0) => setState(() {
+                          _searched = false;
+                          _linkedshaakhaa = selectedshaakhaa = null;
+                        }),
+                      ),
 
-                  ////////////////////////////////////////
+                    ////////////////////////////////////////
+                    /// CONDITIONAL
 
-                  if (ctrl.hasItems(GeoLevel.Mandal))
-                    GeoDropdownWidget(
-                      level: GeoLevel.Mandal,
-                      title: 'Mandal',
-                      controller: ctrl,
-                      onChanged: (p0) => setState(() {
-                        _searched = false;
-                        _linkedshaakhaa = _selectedshaakhaa = null;
-                      }),
-                    ),
+                    if (ctrl.hasItems(GeoLevel.upnagarUpkhanda))
+                      GeoDropdownWidget(
+                        level: GeoLevel.upnagarUpkhanda,
+                        title: 'upnagarUpkhanda',
+                        controller: ctrl,
+                        onChanged: (p0) => setState(() {
+                          _searched = false;
+                          _linkedshaakhaa = selectedshaakhaa = null;
+                        }),
+                      ),
 
-                  if (ctrl.hasItems(GeoLevel.Graam))
-                    GeoDropdownWidget(
-                      level: GeoLevel.Graam,
-                      title: 'Graam',
-                      controller: ctrl,
-                      onChanged: (p0) => populatelinkedShaakhaDropdown(p0, true),
-                    ),
+                    ////////////////////////////////////////
 
-                  if (ctrl.hasItems(GeoLevel.Vasti))
-                    GeoDropdownWidget(
-                      level: GeoLevel.Vasti,
-                      title: 'Vasti',
-                      controller: ctrl,
-                      onChanged: (p0) => populatelinkedShaakhaDropdown(p0, false),
-                    ),
+                    if (ctrl.hasItems(GeoLevel.Mandal))
+                      GeoDropdownWidget(
+                        level: GeoLevel.Mandal,
+                        title: 'Mandal',
+                        controller: ctrl,
+                        onChanged: (p0) => setState(() {
+                          _searched = false;
+                          _linkedshaakhaa = selectedshaakhaa = null;
+                        }),
+                      ),
 
-                  if (ctrl.ctrlUserLevelId == 1 && ctrl.hasItems(GeoLevel.Shaakhaa))
-                    GeoDropdownWidget(
-                      level: GeoLevel.Shaakhaa,
-                      title: 'Shaakhaa',
-                      controller: ctrl,
-                    ),
-                  if (ctrl.ctrlUserLevelId != 1 && _linkedshaakhaa != null && _linkedshaakhaa!.isNotEmpty)
-                    DropdownButtonFormField<GeoUnitMasterBAL>(
-                      decoration: InputDecoration(labelText: Statics.getLabel("Shaakhaa")),
-                      isExpanded: true,
-                      value: _selectedshaakhaa,
-                      items: _linkedshaakhaa!
-                          .map((bg) => DropdownMenuItem(
-                                value: bg,
-                                child: Text(
-                                  bg.geoUnitName.toString(),
-                                  style: TextStyle(color: bg.isnew == 1 ? Colors.blue : Colors.black),
-                                ),
-                              ))
-                          .toList(),
-                      onChanged: (value) => setState(() {
-                        _searched = false;
-                        _selectedshaakhaa = value;
-                      }),
-                    ),
+                    if (ctrl.hasItems(GeoLevel.Graam))
+                      GeoDropdownWidget(
+                        level: GeoLevel.Graam,
+                        title: 'Graam',
+                        controller: ctrl,
+                        onChanged: (p0) => populatelinkedShaakhaDropdown(p0, true),
+                      ),
 
-                  SizedBox(height: 12),
-                  /*if (isShakhaaSelected)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        if (ctrl.deepestSelectedLevelId == 1)
+                    if (ctrl.hasItems(GeoLevel.Vasti))
+                      GeoDropdownWidget(
+                        level: GeoLevel.Vasti,
+                        title: 'Vasti',
+                        controller: ctrl,
+                        onChanged: (p0) => populatelinkedShaakhaDropdown(p0, false),
+                      ),
+
+                    if (ctrl.ctrlUserLevelId == 1 && ctrl.hasItems(GeoLevel.Shaakhaa))
+                      GeoDropdownWidget(
+                        level: GeoLevel.Shaakhaa,
+                        title: 'Shaakhaa',
+                        controller: ctrl,
+                      ),
+                    if (ctrl.ctrlUserLevelId != 1 && _linkedshaakhaa != null && _linkedshaakhaa!.isNotEmpty)
+                      DropdownButtonFormField<GeoUnitMasterBAL>(
+                        decoration: InputDecoration(labelText: Statics.getLabel("Shaakhaa")),
+                        isExpanded: true,
+                        value: selectedshaakhaa,
+                        items: _linkedshaakhaa!
+                            .map((bg) => DropdownMenuItem(
+                                  value: bg,
+                                  child: Text(
+                                    bg.geoUnitName.toString(),
+                                    style: TextStyle(color: bg.isnew == 1 ? Colors.blue : Colors.black),
+                                  ),
+                                ))
+                            .toList(),
+                        onChanged: (value) => setState(() {
+                          _searched = false;
+                          selectedshaakhaa = value;
+                        }),
+                      ),
+
+                    SizedBox(height: 12),
+                    /*if (isShakhaaSelected)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          if (ctrl.deepestSelectedLevelId == 1)
+                            MaterialButton(
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 15,
+                                vertical: 8,
+                              ),
+                              color: Theme.of(context).primaryColor,
+                              textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+                              onPressed: () {
+                                final trail = ctrl.hierarchyTrail;
+
+                                print(trail.toJson());
+                                print(ctrl.deepestSelectedLevelId);
+                                setState(() {
+                                  _searched = true;
+                                });
+                                // _search("Search", context);
+                              },
+                              child: Text(
+                                Statics.getLabel('Search'),
+                                style: TextStyle(fontSize: 25),
+                              ),
+                            ),
+                          MaterialButton(
+                              onPressed: () {
+                                print("clear button pressed");
+
+                                setState(() {
+                                  _searched = false;
+                                });
+                                ctrl.loadHierarchyForUser();
+                              },
+                              child: Text(Statics.getLabel('clear'))),
+                        ],
+                      )
+                    else*/
+                    if ((context.read<GeoHierarchyController>().ctrlUserLevelId ?? 0) > 1)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
                           MaterialButton(
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                             padding: EdgeInsets.symmetric(
@@ -438,80 +482,41 @@ class _ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Au
                             color: Theme.of(context).primaryColor,
                             textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                             onPressed: () {
-                              final trail = ctrl.hierarchyTrail;
-
-                              print(trail.toJson());
-                              print(ctrl.deepestSelectedLevelId);
+                              // final trail = ctrl.hierarchyTrail;
+                              //
+                              // print(trail.toJson());
+                              // print(ctrl.deepestSelectedLevelId);
                               setState(() {
                                 _searched = true;
                               });
-                              // _search("Search", context);
+                              getReportDataFun(selectedshaakhaa?.geoUnitID ?? ctrl.deepestSelectedGeoUnitId);
                             },
                             child: Text(
                               Statics.getLabel('Search'),
                               style: TextStyle(fontSize: 25),
                             ),
                           ),
-                        MaterialButton(
-                            onPressed: () {
-                              print("clear button pressed");
+                          MaterialButton(
+                              onPressed: () {
+                                print("clear button pressed");
 
-                              setState(() {
-                                _searched = false;
-                              });
-                              ctrl.loadHierarchyForUser();
-                            },
-                            child: Text(Statics.getLabel('clear'))),
-                      ],
-                    )
-                  else*/
-                  if ((context.read<GeoHierarchyController>().ctrlUserLevelId ?? 0) > 1)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        MaterialButton(
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 15,
-                            vertical: 8,
-                          ),
-                          color: Theme.of(context).primaryColor,
-                          textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
-                          onPressed: () {
-                            // final trail = ctrl.hierarchyTrail;
-                            //
-                            // print(trail.toJson());
-                            // print(ctrl.deepestSelectedLevelId);
-                            setState(() {
-                              _searched = true;
-                            });
-                            getReportDataFun(_selectedshaakhaa?.geoUnitID ?? ctrl.deepestSelectedGeoUnitId);
-                          },
-                          child: Text(
-                            Statics.getLabel('Search'),
-                            style: TextStyle(fontSize: 25),
-                          ),
-                        ),
-                        MaterialButton(
-                            onPressed: () {
-                              print("clear button pressed");
-
-                              setState(() {
-                                _searched = false;
-                                _linkedshaakhaa = _selectedshaakhaa = null;
-                              });
-                              ctrl.loadHierarchyForUser();
-                            },
-                            child: Text(Statics.getLabel('clear'))),
-                      ],
-                    )
-                ],
+                                setState(() {
+                                  _searched = false;
+                                  _linkedshaakhaa = selectedshaakhaa = null;
+                                });
+                                ctrl.loadHierarchyForUser();
+                              },
+                              child: Text(Statics.getLabel('clear'))),
+                        ],
+                      )
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
-      );
-    });
+          ],
+        );
+      }),
+    );
   }
 
   /*Widget _typeTab() {
@@ -621,8 +626,9 @@ class _HorizontalBarChart extends StatefulWidget {
   final int? shaakhaaId;
   final bool isDaily;
   final GeoUnitMasterBAL? selectedshaakhaa;
+  final Function(int id, bool fromYes, String viewType) onIdTap;
 
-  const _HorizontalBarChart({required this.data, required this.shaakhaaId, required this.isDaily, this.selectedshaakhaa});
+  const _HorizontalBarChart({required this.data, required this.shaakhaaId, required this.isDaily, this.selectedshaakhaa, required this.onIdTap});
 
   @override
   State<_HorizontalBarChart> createState() => _HorizontalBarChartState();
@@ -663,6 +669,11 @@ class _HorizontalBarChartState extends State<_HorizontalBarChart> {
       if (d.today > maxVal) maxVal = d.today;
       if (d.yesterday > maxVal) maxVal = d.yesterday;
     }
+
+    // FIX: If the maximum value is 0, return a default max limit (e.g., 40.0).
+    // This gives the grey background track an actual length to stretch across.
+    if (maxVal == 0) return 40.0;
+
     final interval = _calculatedInterval;
     return ((maxVal / interval).ceil() * interval).toDouble();
   }
@@ -683,7 +694,7 @@ class _HorizontalBarChartState extends State<_HorizontalBarChart> {
             width: 18,
             borderRadius: BorderRadius.circular(4),
             rodStackItems: [
-              BarChartRodStackItem(0, d.yesterday, const Color(0xFFB0BEC5)), // Filled value segment
+              BarChartRodStackItem(0, d.yesterday, const Color(0xFFE68449)), // Filled value segment
               BarChartRodStackItem(d.yesterday, maxLimit, const Color(0xFFF0F0F0)), // Empty background segment
             ],
           ),
@@ -756,7 +767,7 @@ class _HorizontalBarChartState extends State<_HorizontalBarChart> {
         quarterTurns: 3,
         child: Text(
           value.toInt().toString(),
-          style: const TextStyle(fontSize: 11, color: Color(0xFF999999)),
+          style: const TextStyle(fontSize: 11, color: Color(0xFFE68449), fontWeight: FontWeight.w600),
         ),
       ),
     );
@@ -773,8 +784,8 @@ class _HorizontalBarChartState extends State<_HorizontalBarChart> {
           widget.data[idx].label,
           style: const TextStyle(
             fontSize: 12,
-            color: Color(0xFF666666),
-            fontWeight: FontWeight.w500,
+            color: Color(0xFFE68449),
+            fontWeight: FontWeight.w600,
           ),
         ),
       ),
@@ -888,6 +899,12 @@ class _HorizontalBarChartState extends State<_HorizontalBarChart> {
                           // Optional: Hide container after pressing edit
                           setState(() => _tapPosition = null);
 
+                          if (userLevelId == 1) {
+                            widget.onIdTap(widget.shaakhaaId ?? 0, _touchedRodIndex == 0, "EditVrutta");
+                            setState(() {});
+                            return;
+                          }
+
                           Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -965,7 +982,7 @@ class _LegendDot extends StatelessWidget {
           style: TextStyle(
             fontSize: 13,
             fontWeight: bold ? FontWeight.w700 : FontWeight.w400,
-            color: bold ? Color(0xFF1565C0) : const Color(0xFF888888),
+            color: bold ? Color(0xFF1565C0) : const Color(0xFFE68449),
           ),
         ),
       ],

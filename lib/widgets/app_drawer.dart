@@ -524,61 +524,7 @@ class _AppDrawerState extends State<AppDrawer> {
             //     Navigator.of(context).pushReplacementNamed(SearchJoinRss.routeName);
             //   },
             // ),
-            if (!((Statics.userDetails['LevelName'] == 'Shaakhaa' || Statics.userDetails["LevelName"] == "शाखा") &&
-                    (Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' || Statics.userDetails["DaayitvaName"] == "कार्यवाह")) &&
-                (((Statics.userDetails["LevelName"] == "Praant" ||
-                        Statics.userDetails["LevelName"] == "प्रांत" ||
-                        Statics.userDetails["LevelName"] == "Mahaanagar" ||
-                        Statics.userDetails["LevelName"] == "महानगर" ||
-                        Statics.userDetails["LevelName"] == "Vibhaag" ||
-                        Statics.userDetails["LevelName"] == "विभाग" ||
-                        Statics.userDetails["LevelName"] == "Bhaag" ||
-                        Statics.userDetails["LevelName"] == "भाग/जिला" ||
-                        Statics.userDetails["LevelName"] == "भाग/जिल्हा" ||
-                        Statics.userDetails["LevelName"] == "Shahar" ||
-                        Statics.userDetails["LevelName"] == "शहर" ||
-                        Statics.userDetails['LevelName'] == 'Nagar/Taalukaa' ||
-                        Statics.userDetails['LevelName'] == 'Nagar' ||
-                        Statics.userDetails["LevelName"] == "नगर/तालुका")
-                    // &&
-                    //     (Statics.userDetails["DaayitvaName"] == "Praudh Vyavsayee Pramukh" ||
-                    //         Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी प्रमुख" ||
-                    //         Statics.userDetails["DaayitvaName"] == "Tarun Vyavsayee Sah Pramukh" ||
-                    //         Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी सह प्रमुख" ||
-                    //         Statics.userDetails["DaayitvaName"] == "Praudh Vyavsayee Sah Pramukh" ||
-                    //         Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी सह प्रमुख" ||
-                    //         Statics.userDetails["DaayitvaName"] == "Bal Vidyarthi Sah Pramukh" ||
-                    //         Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी सह प्रमुख" ||
-                    //         Statics.userDetails["DaayitvaName"] == "Mahavidyaleen Vidyarthi Sah Pramukh" ||
-                    //         Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन विद्यार्थी सह प्रमुख" ||
-                    //         Statics.userDetails["DaayitvaName"] == "App Sanyojak" ||
-                    //         Statics.userDetails["DaayitvaName"] == "एप संयोजक" ||
-                    //         Statics.userDetails["DaayitvaName"] == "Join RSS Sanyojak" ||
-                    //         Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. संयोजक" ||
-                    //         Statics.userDetails["DaayitvaName"] == "Join RSS Pramukh" ||
-                    //         Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. प्रमुख" ||
-                    //         Statics.userDetails["DaayitvaName"] == "Baal Vidyaarthi Pramukh" ||
-                    //         Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी प्रमुख" ||
-                    //         Statics.userDetails["DaayitvaName"] == "Vyavasaayee Pramukh" ||
-                    //         Statics.userDetails["DaayitvaName"] == "व्यवसायी प्रमुख" ||
-                    //         Statics.userDetails["DaayitvaName"] == "Vyavasaayee Saha-Pramukh" ||
-                    //         Statics.userDetails["DaayitvaName"] == "व्यवसायी सह प्रमुख" ||
-                    //         Statics.userDetails["DaayitvaName"] == "Tarun Vyavsayee Pramukh" ||
-                    //         Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी प्रमुख" ||
-                    //         Statics.userDetails["DaayitvaName"] == "Kaaryavaah" ||
-                    //         Statics.userDetails["DaayitvaName"] == "कार्यवाह" ||
-                    //         Statics.userDetails["DaayitvaName"] == "karyalay sachiv" ||
-                    //         Statics.userDetails["DaayitvaName"] == "कार्यालय सचिव" ||
-                    //         Statics.userDetails["DaayitvaName"] == "Saha-Kaaryavaah" ||
-                    //         Statics.userDetails["DaayitvaName"] == "सह कार्यवाह")
-                    ) ||
-                    (Statics.userDetails["DaayitvaName"] == "Baal Vidyaarthi Pramukh" ||
-                        Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी प्रमुख" ||
-                        Statics.userDetails["DaayitvaName"] == "Prachaarak" ||
-                        Statics.userDetails["DaayitvaName"] == "प्रचारक" ||
-                        Statics.userDetails["DaayitvaName"] == "Saha-Prachaarak" ||
-                        Statics.userDetails["DaayitvaName"] == "सह प्रचारक")))
-              Divider(),
+            if (int.parse(Statics.userDetails["LevelID"]) >= 4) Divider(),
             if (int.parse(Statics.userDetails["LevelID"]) >= 4
                 // &&
                 // (Statics.userDetails["DaayitvaName"] == "Join RSS Sanyojak" ||
@@ -735,19 +681,20 @@ class _AppDrawerState extends State<AppDrawer> {
                   Navigator.of(context).pushNamed(AnnualBaithakEkatritVrutta.routeName);
                 },
               ),
-            if (Statics.levelId > 3) Divider(),
-            ListTile(
-              dense: true,
-              leading: Icon(FontAwesomeIcons.university),
-              title: Text(
-                Statics.getLabel('searchShaakhaaScreenLabel'),
-                style: TextStyle(fontSize: 18),
+            if (Statics.levelId != 1) Divider(),
+            if (Statics.levelId != 1)
+              ListTile(
+                dense: true,
+                leading: Icon(FontAwesomeIcons.university),
+                title: Text(
+                  Statics.getLabel('searchShaakhaaScreenLabel'),
+                  style: TextStyle(fontSize: 18),
+                ),
+                onTap: () {
+                  Navigator.of(context).pushReplacementNamed(SearchShaakhaaScreen.routeName);
+                },
               ),
-              onTap: () {
-                Navigator.of(context).pushReplacementNamed(SearchShaakhaaScreen.routeName);
-              },
-            ),
-            Divider(),
+            if (Statics.levelId > 3) Divider(),
             // if (shouldShowListTileforGeounitCHange(Statics.userDetails['LevelName'], Statics.userDetails["DaayitvaName"]) == true)
             //   ListTile(
             //     dense: true,
@@ -1000,7 +947,7 @@ class _AppDrawerState extends State<AppDrawer> {
                         Statics.userDetails['DaayitvaName'] == 'सह प्रचारक' ||
                         Statics.userDetails["DaayitvaName"] == "Kaaryavaah" ||
                         Statics.userDetails["DaayitvaName"] == "कार्यवाह")))*/
-            if (Statics.levelId > 3) Divider(),
+            Divider(),
             if (!((Statics.userDetails['LevelName'] == 'Shaakhaa' || Statics.userDetails["LevelName"] == "शाखा") &&
                 (Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' || Statics.userDetails["DaayitvaName"] == "कार्यवाह")))
               ListTile(

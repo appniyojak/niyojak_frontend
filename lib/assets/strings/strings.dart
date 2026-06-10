@@ -2023,7 +2023,7 @@ Map<String, String> resEnglish = {
 
   ////////////////////////////////////// Shakhaa Saptah Vistar //////////////////////////////////////
   'searchShakhaa': 'Search Shakhaa',
-
+  'vistarShaakhaa': 'Vistar Saptah Sankalp',
   'newAdmission': "New Admission",
   'admission': "Admission",
   'new': "New",
@@ -2043,7 +2043,7 @@ Map<String, String> resEnglish = {
   'yesterdays': "Yesterday",
   'thisWeek': "This Week",
   'lastWeek': "Last Week",
-  'todayVsYesterday': "(Today vs Yesterday)",
+  'todayVsYesterday': "(Yesterday vs Today)",
   'thisVsLastWeek': "(This Week vs Last Week)",
 };
 
@@ -4082,7 +4082,7 @@ Map<String, String> resMarathi = {
 
   ////////////////////////////////////// Shakhaa Saptah Vistar //////////////////////////////////////
   'searchShakhaa': 'शाखा शोधा',
-
+  'vistarShaakhaa': 'विस्तार सप्ताह संकल्प',
   'newAdmission': "नवीन भरती",
   'admission': "भरती",
   'new': "नवीन",
@@ -4102,7 +4102,7 @@ Map<String, String> resMarathi = {
   'yesterdays': "काल",
   'thisWeek': "हा आठवडा",
   'lastWeek': "मागील आठवडा",
-  'todayVsYesterday': "(आज विरुद्ध काल)",
+  'todayVsYesterday': "(काल विरुद्ध आज)",
   'thisVsLastWeek': "(हा आठवडा विरुद्ध मागील आठवडा)",
 };
 
@@ -6140,7 +6140,7 @@ Map<String, String> resHindi = {
 
   ////////////////////////////////////// Shakhaa Saptah Vistar //////////////////////////////////////
   'searchShakhaa': 'शाखा खोजें',
-
+  'vistarShaakhaa': 'विस्तार सप्ताह संकल्प',
   'newAdmission': "नयी भरती",
   'admission': "भरती",
   'new': "नयी",
@@ -6160,6 +6160,6 @@ Map<String, String> resHindi = {
   'yesterdays': "कल",
   'thisWeek': "इस सप्ताह",
   'lastWeek': "पिछले सप्ताह",
-  'todayVsYesterday': "(आज VS कल)",
-  'thisVsLastWeek': "(इस VS पिछले सप्ताह)",
+  'todayVsYesterday': "(कल बनाम आज)",
+  'thisVsLastWeek': "(इस बनाम पिछले सप्ताह)",
 };

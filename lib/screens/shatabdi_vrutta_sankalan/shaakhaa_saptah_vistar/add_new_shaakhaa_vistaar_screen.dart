@@ -40,8 +40,9 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
   // SankalpAadhaarEnum _sankalpAadhaarEnum2 = SankalpAadhaarEnum.Kaaryakartaa;
   // SankalpAadhaarEnum _sankalpAadhaarEnum3 = SankalpAadhaarEnum.Kaaryakartaa;
   int? _sankalpAadhaarSwayamsevakID, _sankalpAadhaarShaakhaaID;
-  var _sankalpCompletionMonthCtrl = TextEditingController();
-  var _sankalpCompletionYearCtrl = TextEditingController();
+
+  // var _sankalpCompletionMonthCtrl = TextEditingController();
+  // var _sankalpCompletionYearCtrl = TextEditingController();
   var _sankalpAadhaarSwayamsevakCtrl = TextEditingController();
   var _sankalpAadhaarShaakhaaCtrl = TextEditingController();
   String _sankalpAadhaarSwayamsevakValue = "";
@@ -73,7 +74,7 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
 
   ShakhaaVistarDetail? shaakhaa;
 
-  String? _frequencyValue;
+  // String? _frequencyValue;
   String? _vayogatValue;
   String? _statusValue;
 
@@ -99,15 +100,22 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    pkidPassed = ModalRoute.of(context)!.settings.arguments as int?;
+    // pkidPassed = ModalRoute.of(context)!.settings.arguments as int?;
   }
 
   Future<void> initData() async {
+    final args = ModalRoute.of(context)?.settings.arguments as String?;
+
     final dm = await MyAppGlobals.getLevelLDB();
 
     final controller = context.read<GeoHierarchyController>();
 
-    await controller.initialize(dm);
+    if (args != null && args.isNotEmpty) {
+      final trail = await controller.getTrailFromGeoUnitId(args);
+      if (trail != null) await controller.setHierarchyFromTrail(trail: trail);
+    } else {
+      await controller.initialize(dm);
+    }
 
     setState(() {});
     await populateDropdown();
@@ -125,8 +133,8 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
     _remarkCtrl.dispose();
     _shaakhaanameCtrl.dispose();
     _otherOptionalVishayCtrl.dispose();
-    _sankalpCompletionMonthCtrl.dispose();
-    _sankalpCompletionYearCtrl.dispose();
+    // _sankalpCompletionMonthCtrl.dispose();
+    // _sankalpCompletionYearCtrl.dispose();
     _sankalpAadhaarShaakhaaCtrl.dispose();
     _sankalpAadhaarSwayamsevakCtrl.dispose();
   }
@@ -171,7 +179,7 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
         setState(() {
           _shaakhaanameCtrl.text = shaakhaa!.shaakhaaName.toString();
 
-          _frequencyValue = shaakhaa!.frequencyID == null ? null : shaakhaa!.frequencyID.toString();
+          // _frequencyValue = shaakhaa!.frequencyID == null ? null : shaakhaa!.frequencyID.toString();
 
           _dayofWeekValue = shaakhaa!.daysOfWeek == null ? null : shaakhaa!.daysOfWeek.toString();
 
@@ -214,8 +222,8 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
           _sankalpAadhaarShaakhaaID = shaakhaa!.sankalpAadhaarShaakhaaID;
           _sankalpAadhaarShaakhaaValue = (shaakhaa!.sankalpAadhaarShaakhaaID == null ? '' : shaakhaa!.sankalpAadhaarShaakhaaName.toString());
           _sankalpAadhaarShaakhaaCtrl.text = (shaakhaa!.sankalpAadhaarShaakhaaID == null ? "" : shaakhaa!.shaakhaaNameDevNaagari!);
-          _sankalpCompletionMonthCtrl.text = (shaakhaa!.sankalpCompletionMonth == null ? "" : shaakhaa!.sankalpCompletionMonth.toString());
-          _sankalpCompletionYearCtrl.text = (shaakhaa!.sankalpCompletionYear == null ? "" : shaakhaa!.sankalpCompletionYear.toString());
+          // _sankalpCompletionMonthCtrl.text = (shaakhaa!.sankalpCompletionMonth == null ? "" : shaakhaa!.sankalpCompletionMonth.toString());
+          // _sankalpCompletionYearCtrl.text = (shaakhaa!.sankalpCompletionYear == null ? "" : shaakhaa!.sankalpCompletionYear.toString());
           _hasToli = shaakhaa!.hasToli == true ? true : false;
           _hasPaalak = shaakhaa!.hasPaalak == true ? true : false;
           _sharirikVishayValue = shaakhaa!.optionalShaaririkVishayID == null ? null : shaakhaa!.optionalShaaririkVishayID.toString();
@@ -263,14 +271,14 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
     if (_isFri == true) _dayOfWeek = _dayOfWeek + "5,";
     if (_isSat == true) _dayOfWeek = _dayOfWeek + "6,";
 
-    if (_isSankalpit == false) {
-      if (_frequency![_frequency!.indexWhere((p) => p.staticID.toString() == _frequencyValue.toString())].code == "Weekly") if (_dayOfWeek != "")
-        shaakhaa!.daysOfWeek = _dayOfWeek.substring(0, _dayOfWeek.length - 1);
-      else {
-        Statics.showToast(Statics.getLabel('DayOfWeekValidationMessage'));
-        return;
-      }
-    }
+    // if (_isSankalpit == false) {
+    //   if (_frequency![_frequency!.indexWhere((p) => p.staticID.toString() == _frequencyValue.toString())].code == "Weekly") if (_dayOfWeek != "")
+    //     shaakhaa!.daysOfWeek = _dayOfWeek.substring(0, _dayOfWeek.length - 1);
+    //   else {
+    //     Statics.showToast(Statics.getLabel('DayOfWeekValidationMessage'));
+    //     return;
+    //   }
+    // }
 
     var inputData = {
       "PraantID": 1,
@@ -283,30 +291,32 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
       "ParentGraamID": int.tryParse(context.read<GeoHierarchyController>().hierarchyTrail.graamId ?? ""),
       "ParentVastiID": int.tryParse(context.read<GeoHierarchyController>().hierarchyTrail.vastiId ?? ""),
       "ShaakhaaID": 0,
-      "ShaakhaaName": shaakhaa!.shaakhaaName,
-      "ShaakhaaNameDevNaagari": shaakhaa!.shaakhaaNameDevNaagari,
-      "FrequencyID": shaakhaa!.frequencyID,
+      "ShaakhaaName": _shaakhaanameCtrl.text,
+      "ShaakhaaNameDevNaagari": _shaakhaanameCtrl.text,
+      "FrequencyID": 36,
       "DaysOfWeek": shaakhaa?.daysOfWeek ?? '',
       "DayOfMonth": shaakhaa?.dayOfMonth ?? '',
-      "VayogatID": shaakhaa!.vayogatID == null ? null : shaakhaa!.vayogatID,
-      "Location": shaakhaa!.location,
+      "VayogatID": int.tryParse(_vayogatValue ?? ""),
+      "Location": shaakhaa?.location,
       //"Timing": shaakhaa!.timing,
-      "StartTimeStr": (_fromTime != null
+      /*"StartTimeStr": (_fromTime != null
           ? DateFormat("hh:mm").format(new DateFormat("yyyy-MM-dd hh:mm").parse("2021-02-01 " + _fromTime!.hour.toString() + ":" + _fromTime!.minute.toString())) +
               (_fromTime!.period == DayPeriod.am ? " AM" : " PM")
           : null),
       "EndTimeStr": (_toTime != null
           ? DateFormat("hh:mm").format(new DateFormat("yyyy-MM-dd hh:mm").parse("2021-02-01 " + _toTime!.hour.toString() + ":" + _toTime!.minute.toString())) +
               (_toTime!.period == DayPeriod.am ? " AM" : " PM")
-          : null),
+          : null),*/
+      "StartTimeStr": "",
+      "EndTimeStr": "",
       "Remark": shaakhaa?.remark ?? "",
       "IsSankalpit": _isSankalpit == true ? true : false,
 //========================= OLD REQ PARAM =============================================================================================================================================================================
       "SankalpAadhaar": (_isSankalpit ? _sankalpAadhaarEnum.toString().split('.').last : null),
-      "SankalpAadhaarSwayamsevakID": (_isSankalpit ? shaakhaa!.sankalpAadhaarSwayamsevakID : null),
-      "SankalpAadhaarShaakhaaID": (_isSankalpit ? shaakhaa!.sankalpAadhaarShaakhaaID : null),
-      "SankalpCompletionMonth": (_isSankalpit ? shaakhaa!.sankalpCompletionMonth : null),
-      "SankalpCompletionYear": (_isSankalpit ? shaakhaa!.sankalpCompletionYear : null),
+      "SankalpAadhaarSwayamsevakID": (_isSankalpit ? shaakhaa?.sankalpAadhaarSwayamsevakID : null),
+      "SankalpAadhaarShaakhaaID": (_isSankalpit ? shaakhaa?.sankalpAadhaarShaakhaaID : null),
+      "SankalpCompletionMonth": (_isSankalpit ? shaakhaa?.sankalpCompletionMonth : null),
+      "SankalpCompletionYear": (_isSankalpit ? shaakhaa?.sankalpCompletionYear : null),
 
       "HasToli": _hasToli == true ? true : false,
       "HasPaalak": _hasPaalak == true ? true : false,
@@ -363,7 +373,7 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
     }
     print("_submit 3");
 
-    _formKey.currentState!.save();
+    _formKey.currentState?.save();
     setState(() {
       _isLoading = true;
     });
@@ -422,7 +432,7 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
                         return null;
                       },
                       onSaved: (value) {
-                        shaakhaa!.shaakhaaName = value;
+                        shaakhaa?.shaakhaaName = value;
                       },
                     ),
                     SizedBox(
@@ -526,9 +536,9 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
                         },
                         onSaved: (value) {
                           if (value != null && value.isNotEmpty)
-                            shaakhaa!.vayogatID = int.parse(value);
+                            shaakhaa?.vayogatID = int.parse(value);
                           else
-                            shaakhaa!.vayogatID = null;
+                            shaakhaa?.vayogatID = null;
                         },
                       ),
                     SizedBox(
@@ -621,7 +631,7 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
                                     onSelected: (suggestion) {
                                       this._sankalpAadhaarSwayamsevakCtrl.text = suggestion["FullName"];
                                       _sankalpAadhaarSwayamsevakValue = suggestion["SwayamsevakID"].toString();
-                                      shaakhaa!.sankalpAadhaarSwayamsevakID = int.parse(suggestion["SwayamsevakID"].toString());
+                                      shaakhaa?.sankalpAadhaarSwayamsevakID = int.parse(suggestion["SwayamsevakID"].toString());
 
                                       print("_sankalpAadhaarSwayamsevakValue:- ${_sankalpAadhaarSwayamsevakValue}  --- ");
                                     },
@@ -710,7 +720,7 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
                                     onSelected: (suggestion) {
                                       this._sankalpAadhaarShaakhaaCtrl.text = suggestion["GeoUnitName"];
                                       _sankalpAadhaarShaakhaaValue = suggestion["ShaakhaaID"].toString();
-                                      shaakhaa!.sankalpAadhaarShaakhaaID = int.parse(suggestion["ShaakhaaID"].toString());
+                                      shaakhaa?.sankalpAadhaarShaakhaaID = int.parse(suggestion["ShaakhaaID"].toString());
                                       print("_sankalpAadhaarShaakhaaValue:--${_sankalpAadhaarShaakhaaValue}");
                                     },
                                     // onSaved: (value) {
@@ -740,7 +750,7 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
                               ],
                             ),
                           SizedBox(height: 15),
-                          Text(Statics.getLabel('SankalpTimeLine'), style: TextStyle(decoration: TextDecoration.underline)),
+                          /*Text(Statics.getLabel('SankalpTimeLine'), style: TextStyle(decoration: TextDecoration.underline)),
                           TextFormField(
                             textInputAction: TextInputAction.next,
                             controller: _sankalpCompletionMonthCtrl,
@@ -768,10 +778,10 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
                             onSaved: (value) {
                               shaakhaa!.sankalpCompletionYear = int.parse(value!);
                             },
-                          ),
+                          ),*/
                         ],
                       ),
-                    if (_frequency != null)
+                    /*if (_frequency != null)
                       DropdownButtonFormField<StaticMasterBAL>(
                         decoration: InputDecoration(labelText: Statics.getLabel('SelectFrequency')),
                         isExpanded: true,
@@ -794,7 +804,7 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
                         onSaved: (value) {
                           shaakhaa?.frequencyID = value?.staticID;
                         },
-                      ),
+                      ),*/
                     SizedBox(
                       height: 10,
                     ),
@@ -1473,7 +1483,7 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
                     //                         height: 10,
                     //                       ),
                     // ================================================================== NEW LOGIC END  ==================================================================
-                    if (_frequencyValue != null && _frequency != null && _isSankalpit == false)
+                    /*if (_frequencyValue != null && _frequency != null && _isSankalpit == false)
                       if (_frequency![_frequency!.indexWhere((p) => p.staticID.toString() == _frequencyValue.toString())].code == "Monthly")
                         Column(
                           children: [
@@ -1621,7 +1631,7 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
                               height: 10,
                             ),
                           ],
-                        ),
+                        ),*/
                     if (_isSankalpit == false)
                       TextFormField(
                         textInputAction: TextInputAction.next,
@@ -1633,7 +1643,7 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
                           return null;
                         },
                         onSaved: (value) {
-                          shaakhaa!.location = value;
+                          shaakhaa?.location = value;
                         },
                       ),
                     if (_isSankalpit == false)
@@ -1698,7 +1708,7 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
                       SizedBox(
                         height: 10,
                       ),
-                    if (_isSankalpit == false && _frequencyValue != "36")
+                    /*if (_isSankalpit == false && _frequencyValue != "36")
                       CheckboxListTile(
                         contentPadding: EdgeInsets.symmetric(horizontal: 0),
                         controlAffinity: ListTileControlAffinity.leading,
@@ -1715,8 +1725,8 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
                     if (_isSankalpit == false && _frequencyValue != "36")
                       SizedBox(
                         height: 10,
-                      ),
-                    if (_vayogat != null && _isSankalpit == false)
+                      ),*/
+                    /*if (_vayogat != null && _isSankalpit == false)
                       if (!((_vayogat!.where((e) => e.staticID.toString() == _vayogatValue && e.code == 'Baal').isNotEmpty) &&
                           (_frequency!.where((e) => e.staticID.toString() == _frequencyValue && e.code == 'Monthly').isNotEmpty)))
                         Column(
@@ -1802,7 +1812,7 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
                         onSaved: (value) {
                           shaakhaa!.remark = value;
                         },
-                      ),
+                      ),*/
                     if (_isSankalpit == false)
                       SizedBox(
                         height: 10,

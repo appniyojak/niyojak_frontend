@@ -1793,8 +1793,7 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
                           height: 10,
                         ),
                       if (_vayogat != null && _isSankalpit == false)
-                        if (!((_vayogat!.where((e) => e.staticID.toString() == _vayogatValue && e.code == 'Baal').isNotEmpty) &&
-                            (_frequency!.where((e) => e.staticID.toString() == _frequencyValue && e.code == 'Monthly').isNotEmpty)))
+                        if (!(_frequency!.where((e) => e.staticID.toString() == _frequencyValue && e.code == 'Monthly').isNotEmpty))
                           Column(
                             children: [
                               CheckboxListTile(

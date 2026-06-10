@@ -7,6 +7,7 @@ import '../../../helpers/static_data.dart' as Statics;
 import '../../../models/response_model/dropdown_level_responsemodel.dart';
 import '../../../utils/globals.dart';
 import '../../../widgets/app_drawer.dart';
+import 'shakhaa_saptah_form_screen.dart';
 import 'shakhaa_saptah_list_tab.dart';
 import 'shakhaa_saptah_report_tab.dart';
 
@@ -22,7 +23,9 @@ class ShakhaSaptahMainTab extends StatefulWidget {
 class _ShakhaSaptahMainTabState extends State<ShakhaSaptahMainTab> with SingleTickerProviderStateMixin {
   TabController? _tabController;
 
-  String? selectedId;
+  int selectedId = 0;
+  bool _fromYest = false;
+  String _viewType = "EditVrutta";
 
   bool _isSearching = false;
 
@@ -38,6 +41,7 @@ class _ShakhaSaptahMainTabState extends State<ShakhaSaptahMainTab> with SingleTi
   getInitialData() async {
     DropDownModel dm = await MyAppGlobals.getLevelLDB();
 
+    if (dm.levelID == 1) selectedId = dm.geoUnitID ?? 0;
     setState(() {
       userLevelId = dm.levelID;
       userGeoUnitId = dm.geoUnitID;
@@ -46,14 +50,18 @@ class _ShakhaSaptahMainTabState extends State<ShakhaSaptahMainTab> with SingleTi
     log("initState _HinduSanmelanMainTabState runnn >>>>>>>>>>>>>> $userLevelId");
   }
 
-  void onIdSelected(String id) {
+  void onIdSelected(int id, bool fromYes, String viewType) {
     setState(() {
       selectedId = id;
+      _fromYest = fromYes;
+      _viewType = viewType;
     });
 
     // switch to first tab
-    _tabController?.animateTo(0);
+    _tabController?.animateTo(1);
   }
+
+  final GlobalKey<ShakhaaSaptahReportTabState> _reportTabKey = GlobalKey<ShakhaaSaptahReportTabState>();
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +78,12 @@ class _ShakhaSaptahMainTabState extends State<ShakhaSaptahMainTab> with SingleTi
             controller: _tabController,
             indicatorColor: Colors.white,
             physics: NeverScrollableScrollPhysics(),
+            onTap: (index) {
+              if (index == 0 && userLevelId == 1) {
+                // This safely calls the refresh method inside your tab
+                _reportTabKey.currentState?.getReportDataFun(_reportTabKey.currentState?.selectedshaakhaa?.geoUnitID ?? _reportTabKey.currentState?.controller.deepestSelectedGeoUnitId);
+              }
+            },
             tabs: <Widget>[
               Tab(
                 child: Row(
@@ -95,7 +109,7 @@ class _ShakhaSaptahMainTabState extends State<ShakhaSaptahMainTab> with SingleTi
                       size: 18,
                     ),
                     Text(
-                      "${Statics.getLabel('searchShakhaa')}",
+                      "${Statics.getLabel('fillVrutta')}",
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 15),
                     ),
@@ -112,8 +126,10 @@ class _ShakhaSaptahMainTabState extends State<ShakhaSaptahMainTab> with SingleTi
             controller: _tabController,
             physics: NeverScrollableScrollPhysics(),
             children: <Widget>[
-              ShakhaaSaptahReportTab(),
-              ShakhaaSaptahListTab(),
+              ShakhaaSaptahReportTab(key: _reportTabKey, onIdTap: onIdSelected),
+              userLevelId == 1
+                  ? ShakhaaSaptahFormScreen(key: ValueKey('$selectedId-$_fromYest-$_viewType'), showAppBar: false, shaakhaaId: selectedId, fromYesterday: _fromYest, viewType: _viewType)
+                  : ShakhaaSaptahListTab(),
             ],
           ),
         ),

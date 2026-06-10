@@ -17,8 +17,9 @@ class ShakhaaSaptahFormScreen extends StatefulWidget {
   final int? shaakhaaId;
   final bool fromYesterday;
   final String? viewType;
+  final bool showAppBar;
 
-  const ShakhaaSaptahFormScreen({this.shaakhaa, this.shaakhaaId, this.fromYesterday = false, this.viewType, super.key});
+  const ShakhaaSaptahFormScreen({this.shaakhaa, this.shaakhaaId, this.fromYesterday = false, this.showAppBar = true, this.viewType, super.key});
 
   @override
   State<ShakhaaSaptahFormScreen> createState() => _ShakhaaSaptahFormScreenState();
@@ -84,12 +85,15 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
   @override
   void initState() {
     super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) => initData());
+
     // int vruttaID = widget.shaakhaa == null ? 0 : widget.shaakhaa?.pkid ?? 0;
-    int shaakhaaID = widget.shaakhaa == null ? (widget.shaakhaaId ?? 0) : widget.shaakhaa?.shaakhaaID ?? widget.shaakhaaId ?? 0;
-    _vruttaDateCntrl.text = DateFormat("dd-MMM-yyyy").format(widget.fromYesterday ? DateTime.now().subtract(const Duration(days: 1)) : DateTime.now());
-    populateShaakhaVayogat(shaakhaaID.toString());
-    // if (vruttaID > 0) {
-    getSwDetails();
+    // int shaakhaaID = widget.shaakhaa == null ? (widget.shaakhaaId ?? 0) : widget.shaakhaa?.shaakhaaID ?? widget.shaakhaaId ?? 0;
+    // _vruttaDateCntrl.text = DateFormat("dd-MMM-yyyy").format(widget.fromYesterday ? DateTime.now().subtract(const Duration(days: 1)) : DateTime.now());
+    // populateShaakhaVayogat(shaakhaaID.toString());
+    // // if (vruttaID > 0) {
+    // getSwDetails();
     // } else {
     //   if (!mounted) return;
     //   setState(() {
@@ -98,7 +102,32 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
     // }
   }
 
-  void populateShaakhaVayogat(shaakhaaID) async {
+  // ◄ ADD THIS METHOD
+  @override
+  void didUpdateWidget(covariant ShakhaaSaptahFormScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    // Check if the ID or parameters actually changed
+    if (oldWidget.shaakhaaId != widget.shaakhaaId || oldWidget.fromYesterday != widget.fromYesterday || oldWidget.viewType != widget.viewType) {
+      // If they changed, re-fetch your data or reset your controllers!
+      setState(() {
+        initData();
+      });
+    }
+  }
+
+  initData() async {
+    // int vruttaID = widget.shaakhaa == null ? 0 : widget.shaakhaa?.pkid ?? 0;
+    print("widget.fromYesterday >>>>>>>>>>>> ${widget.fromYesterday}");
+    int shaakhaaID = widget.shaakhaa == null ? (widget.shaakhaaId ?? 0) : widget.shaakhaa?.shaakhaaID ?? widget.shaakhaaId ?? 0;
+    _vruttaDateCntrl.text = DateFormat("dd-MMM-yyyy").format(widget.fromYesterday ? DateTime.now().subtract(const Duration(days: 1)) : DateTime.now());
+    await populateShaakhaVayogat(shaakhaaID.toString());
+    // if (vruttaID > 0) {
+    await getSwDetails();
+    setState(() {});
+  }
+
+  populateShaakhaVayogat(shaakhaaID) async {
     // var data = await Statics.getShaakhaaByID(shaakhaaID);
     var data2 = await Statics.getStaticLDB('ShaakhaaVayogat');
     var data3 = await Statics.getStaticLDB('ShaakhaaFrequency');
@@ -120,7 +149,7 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
     // _boudhikDaysList.forEach((e) => print("e >>>>>>>>>>>>>>>>>>>> ${e?.toJson()}"));
   }
 
-  void getSwDetails() async {
+  getSwDetails() async {
     setState(() {
       _isFetchingData = true;
     });
@@ -222,6 +251,7 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
       // Invalid!
       return;
     }
+    FocusScope.of(context).unfocus();
     _formKey.currentState!.save();
     setState(() {
       _isLoading = true;
@@ -305,7 +335,7 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
     setState(() {});
     if (data == "Success") {
       Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
-      Navigator.of(context).pop();
+      if (userLevelId != 1) Navigator.of(context).pop();
     } else {
       Statics.showToast(Statics.getLabel('unableToSaveData'));
     }
@@ -314,12 +344,14 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          Statics.getLabel('Vrutta'),
-          style: TextStyle(fontSize: 24),
-        ),
-      ),
+      appBar: widget.showAppBar
+          ? AppBar(
+              title: Text(
+                Statics.getLabel('Vrutta'),
+                style: TextStyle(fontSize: 24),
+              ),
+            )
+          : null,
       body: ModalProgressHUD(
           child: SingleChildScrollView(
             child: Container(
