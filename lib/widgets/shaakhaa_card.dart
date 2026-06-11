@@ -20,10 +20,11 @@ class ShaakhaaCard extends StatelessWidget {
   final IsNew;
   var onSaveDetails;
   final Widget? traillingIcon;
+  final bool showOther;
 
   List<Statics.MenuItem>? menuItem;
 
-  ShaakhaaCard(this.shaakhaaItem, this.IsSankalpit, this.onSaveDetails, {this.IsNew, this.traillingIcon}) {
+  ShaakhaaCard(this.shaakhaaItem, this.IsSankalpit, this.onSaveDetails, {this.IsNew, this.traillingIcon, this.showOther = true}) {
     menuItem = [
       if (((Statics.userDetails['LevelName'] == 'Praant' ||
               Statics.userDetails['LevelName'] == 'Mahaanagar' ||
@@ -382,21 +383,23 @@ class ShaakhaaCard extends StatelessWidget {
                     SizedBox(
                       width: (0.05 * Statics.getDeviceSize(context).width),
                     ),
-                    Text(shaakhaaItem["FrequencyCode"].toString()),
-                    SizedBox(
-                      width: (0.05 * Statics.getDeviceSize(context).width),
-                    ),
-                    if (shaakhaaItem["FrequencyID"].toString() == Statics.shaakhaaFrequencyWeekly.toString())
-                      Text(shaakhaaItem["DayNamesOfWeek"].toString())
-                    else if (shaakhaaItem["FrequencyCode"].toString() == "Monthly")
-                      Text(shaakhaaItem["DayOfMonth"].toString()),
-                    SizedBox(
-                      width: (0.05 * Statics.getDeviceSize(context).width),
-                    ),
-                    Text(shaakhaaItem["StartTimeStr"].toString() + (shaakhaaItem["StartTimeStr"].toString().isEmpty ? "" : "-") + shaakhaaItem["EndTimeStr"].toString()),
-                    SizedBox(
-                      width: (0.05 * Statics.getDeviceSize(context).width),
-                    ),
+                    if (showOther) ...[
+                      Text(shaakhaaItem["FrequencyCode"].toString()),
+                      SizedBox(
+                        width: (0.05 * Statics.getDeviceSize(context).width),
+                      ),
+                      if (shaakhaaItem["FrequencyID"].toString() == Statics.shaakhaaFrequencyWeekly.toString())
+                        Text(shaakhaaItem["DayNamesOfWeek"].toString())
+                      else if (shaakhaaItem["FrequencyCode"].toString() == "Monthly")
+                        Text(shaakhaaItem["DayOfMonth"].toString()),
+                      SizedBox(
+                        width: (0.05 * Statics.getDeviceSize(context).width),
+                      ),
+                      Text(shaakhaaItem["StartTimeStr"].toString() + (shaakhaaItem["StartTimeStr"].toString().isEmpty ? "" : "-") + shaakhaaItem["EndTimeStr"].toString()),
+                      SizedBox(
+                        width: (0.05 * Statics.getDeviceSize(context).width),
+                      ),
+                    ]
                   ],
                 ),
               ],

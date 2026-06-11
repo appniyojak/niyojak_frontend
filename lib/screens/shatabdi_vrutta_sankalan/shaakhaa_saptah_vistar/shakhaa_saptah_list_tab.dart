@@ -176,19 +176,22 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
                       child: Text(
                     Statics.getLabel("vartamaan"),
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 15),
+                    style: TextStyle(fontSize: 13.5),
                   )),
                   Tab(
                       child: Text(
                     Statics.getLabel("sankalpit"),
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 15),
+                    style: TextStyle(fontSize: 13.5),
                   )),
                   Tab(
                       child: Text(
                     Statics.getLabel("vistarShaakhaa"),
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 15),
+                    softWrap: true,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 13.5),
                   )),
                 ]),
                 Flexible(
@@ -207,6 +210,7 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
                             itemCount: _shaakhaaList?.length ?? 0,
                             itemBuilder: (context, index) {
                               return ShaakhaaCard(_shaakhaaList?[index].toJson(), false, _search,
+                                  showOther: false,
                                   traillingIcon: IconButton(
                                       onPressed: () => Navigator.push(
                                           context,
@@ -234,6 +238,7 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
                             itemCount: _sankalpitShaakhaaList.length ?? 0,
                             itemBuilder: (context, index) {
                               return ShaakhaaCard(_sankalpitShaakhaaList[index].toJson(), _sankalpitShaakhaaList[index].isSankalpit, _search,
+                                  showOther: false,
                                   traillingIcon: IconButton(
                                       onPressed: () => Navigator.push(
                                           context,
@@ -269,6 +274,7 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
                                 return ShaakhaaCard(
                                   _newShaakhaaList[index].toJson(), false, _search,
                                   IsNew: true,
+                                  showOther: false,
                                   traillingIcon: PopupMenuButton(
                                       itemBuilder: (context) => [
                                             PopupMenuItem(

@@ -1,4 +1,3 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -7,22 +6,9 @@ import '../../../models/response_model/shaakhaa_vistar_report_repo_model.dart';
 import '../../../providers/bals.dart';
 import '../../../utils/globals.dart';
 import '../../../utils/stable_geounit_class.dart';
+import '../../../widgets/horizontal_graph_bar_widget.dart';
+import '../../../widgets/reusable_tab_cards.dart';
 import 'shakhaa_saptah_form_screen.dart';
-
-// ─────────────────────────────────────────────
-//  Data model
-// ─────────────────────────────────────────────
-class AttendanceData {
-  final String label; // Y-axis category label
-  final double today;
-  final double yesterday;
-
-  const AttendanceData({
-    required this.label,
-    required this.today,
-    required this.yesterday,
-  });
-}
 
 // ─────────────────────────────────────────────
 //  Page
@@ -95,8 +81,8 @@ class ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Aut
     }
     if (controller.ctrlUserLevelId == 1) {
       selectedshaakhaa = controller.deepestSelectedGeoUnitBAL;
-      getReportDataFun(controller.deepestSelectedGeoUnitId);
     }
+    getReportDataFun(controller.deepestSelectedGeoUnitId);
   }
 
   populatelinkedShaakhaDropdown(String iDStr, bool isGraam) async {
@@ -186,7 +172,17 @@ class ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Aut
                 _typeResultTab(),
                 _buildHeader(),
                 if (selectedshaakhaa == null)
-                  isDailySelected ? DailyTab(report: report!) : WeeklyTab(report: report!)
+                  isDailySelected
+                      ? ReusableBarTabCard(
+                          todayShakhaa: report?.todayShakhaa,
+                          totalshakhaa: report?.totalshakhaa,
+                          yesterdayShakhaa: report?.yesterdayShakhaa,
+                        )
+                      : ReusableBarTabCard(
+                          todayShakhaa: report?.thisWeekShakhaa,
+                          totalshakhaa: report?.totalshakhaa,
+                          yesterdayShakhaa: report?.previousWeekShakhaa,
+                        )
                 else ...[
                   _attendanceCard(title: "${Statics.getLabel('Total')} ${Statics.getLabel('upastithi')}", data: isDailySelected ? _dailyPresent : _weeklyPresent, isDaily: isDailySelected),
                   _attendanceCard(title: "${Statics.getLabel('Total')} ${Statics.getLabel('newAdmission')}", data: isDailySelected ? _dailyNew : _weeklyNew, isDaily: isDailySelected)
@@ -274,7 +270,38 @@ class ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Aut
           SizedBox(
             height: chartHeight,
             width: MediaQuery.sizeOf(context).width,
-            child: _HorizontalBarChart(data: data, shaakhaaId: report?.mid, isDaily: isDaily, selectedshaakhaa: selectedshaakhaa, onIdTap: widget.onIdTap),
+            child: HorizontalBarChart(
+              data: data,
+              showEditIcon: selectedshaakhaa != null && isDaily, // Replaces hardcoded icon logic
+
+              // 1. Customize the Text dynamically
+              tooltipTextBuilder: (selectedData, isYesterday) {
+                String timeLabel = Statics.getLabel(isYesterday ? (isDaily ? "yesterdays" : "lastWeek") : (isDaily ? "today" : "thisWeek"));
+
+                double val = isYesterday ? selectedData.yesterday : selectedData.today;
+                return '${selectedData.label} \n\t $timeLabel -> $val';
+              },
+
+              // 2. Customize the Tap Action dynamically
+              onTooltipTap: (selectedData, isYesterday) {
+                if (userLevelId == 1) {
+                  widget.onIdTap(report?.mid ?? 0, isYesterday, "EditVrutta");
+                  setState(() {});
+                  return;
+                }
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ShakhaaSaptahFormScreen(
+                      shaakhaaId: report?.mid,
+                      fromYesterday: isYesterday,
+                      viewType: "EditVrutta",
+                    ),
+                  ),
+                );
+              },
+            ),
           ),
 
           const SizedBox(height: 16),
@@ -283,9 +310,9 @@ class ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Aut
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _LegendDot(color: color ?? Color(0xFFE68449), label: Statics.getLabel(!isDailySelected ? 'lastWeek' : 'yesterdays'), bold: false),
+              LegendDot(color: color ?? Color(0xFFE68449), label: Statics.getLabel(!isDailySelected ? 'lastWeek' : 'yesterdays'), bold: false),
               SizedBox(width: 24),
-              _LegendDot(color: color ?? Color(0xFF1565C0), label: Statics.getLabel(!isDailySelected ? 'thisWeek' : 'today'), bold: true),
+              LegendDot(color: color ?? Color(0xFF1565C0), label: Statics.getLabel(!isDailySelected ? 'thisWeek' : 'today'), bold: true),
             ],
           ),
         ],
@@ -617,790 +644,6 @@ class ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Aut
           ),
         ],
       ),
-    );
-  }
-}
-
-class _HorizontalBarChart extends StatefulWidget {
-  final List<AttendanceData> data;
-  final int? shaakhaaId;
-  final bool isDaily;
-  final GeoUnitMasterBAL? selectedshaakhaa;
-  final Function(int id, bool fromYes, String viewType) onIdTap;
-
-  const _HorizontalBarChart({required this.data, required this.shaakhaaId, required this.isDaily, this.selectedshaakhaa, required this.onIdTap});
-
-  @override
-  State<_HorizontalBarChart> createState() => _HorizontalBarChartState();
-}
-
-class _HorizontalBarChartState extends State<_HorizontalBarChart> {
-  // State variables to hold the tap position and selected bar data
-  Offset? _tapPosition;
-  int? _touchedGroupIndex;
-  int? _touchedRodIndex;
-
-  // 1. DYNAMIC INTERVAL CALCULATOR: Chooses a clean step size to prevent label overlap
-  double get _calculatedInterval {
-    double maxVal = 0;
-    for (var d in widget.data) {
-      if (d.today > maxVal) maxVal = d.today;
-      if (d.yesterday > maxVal) maxVal = d.yesterday;
-    }
-    if (maxVal == 0) return 40.0;
-
-    // Aim for roughly 4 to 5 interval splits across the axis
-    double rawInterval = maxVal / 4;
-
-    if (rawInterval <= 15) return 20.0;
-    if (rawInterval <= 30) return 40.0;
-    if (rawInterval <= 60) return 50.0;
-    if (rawInterval <= 120) return 100.0;
-    if (rawInterval <= 300) return 250.0;
-    if (rawInterval <= 600) return 500.0;
-    return (rawInterval / 500).ceil() * 500.0; // Fallback for massive values (1000, 1500, etc.)
-  }
-
-  // Compute maximum bound dynamically to align grid lines uniformly
-  double get _calculatedMaxX {
-    if (widget.data.isEmpty) return 150.0;
-    double maxVal = 0;
-    for (var d in widget.data) {
-      if (d.today > maxVal) maxVal = d.today;
-      if (d.yesterday > maxVal) maxVal = d.yesterday;
-    }
-
-    // FIX: If the maximum value is 0, return a default max limit (e.g., 40.0).
-    // This gives the grey background track an actual length to stretch across.
-    if (maxVal == 0) return 40.0;
-
-    final interval = _calculatedInterval;
-    return ((maxVal / interval).ceil() * interval).toDouble();
-  }
-
-  List<BarChartGroupData> _buildGroups() {
-    final maxLimit = _calculatedMaxX;
-
-    return List.generate(widget.data.length, (i) {
-      final d = widget.data[i];
-      return BarChartGroupData(
-        x: i,
-        groupVertically: false,
-        barsSpace: 6,
-        barRods: [
-          // 1. Yesterday / Previous Week Track
-          BarChartRodData(
-            toY: maxLimit, // ◄ Stretches the touch hit-box to full length
-            width: 18,
-            borderRadius: BorderRadius.circular(4),
-            rodStackItems: [
-              BarChartRodStackItem(0, d.yesterday, const Color(0xFFE68449)), // Filled value segment
-              BarChartRodStackItem(d.yesterday, maxLimit, const Color(0xFFF0F0F0)), // Empty background segment
-            ],
-          ),
-          // 2. Today / Current Week Track
-          BarChartRodData(
-            toY: maxLimit, // ◄ Stretches the touch hit-box to full length
-            width: 18,
-            borderRadius: BorderRadius.circular(4),
-            rodStackItems: [
-              BarChartRodStackItem(0, d.today, const Color(0xFF1565C0)), // Filled value segment
-              BarChartRodStackItem(d.today, maxLimit, const Color(0xFFF0F0F0)), // Empty background segment
-            ],
-          ),
-        ],
-      );
-    });
-  }
-
-  /*List<BarChartGroupData> _buildGroups() {
-    final maxLimit = _calculatedMaxX;
-
-    return List.generate(widget.data.length, (i) {
-      final d = widget.data[i];
-      return BarChartGroupData(
-        x: i,
-        groupVertically: false,
-        barsSpace: 6,
-        barRods: [
-          // Yesterday (gray)
-          BarChartRodData(
-            toY: d.yesterday,
-            color: const Color(0xFFB0BEC5),
-            width: 18,
-            borderRadius: BorderRadius.circular(4),
-            backDrawRodData: BackgroundBarChartRodData(
-              show: true,
-              toY: (d.yesterday > d.today ? d.yesterday : d.today) + 100,
-              color: const Color(0xFFF0F0F0),
-            ),
-          ),
-          // Today (blue)
-          BarChartRodData(
-            toY: d.today,
-            color: const Color(0xFF1565C0),
-            width: 18,
-            borderRadius: BorderRadius.circular(4),
-            backDrawRodData: BackgroundBarChartRodData(
-              show: true,
-              toY: (d.yesterday > d.today ? d.yesterday : d.today) + 100,
-              color: const Color(0xFFF0F0F0),
-            ),
-          ),
-        ],
-      );
-    });
-  }*/
-
-  Widget _leftTitleWidget(double value, TitleMeta meta) {
-    final interval = _calculatedInterval;
-
-// Safety check for floating-point modulo precision
-    final remainder = value % interval;
-    if (remainder > 0.01 && (interval - remainder) > 0.01) {
-      return const SizedBox.shrink();
-    }
-
-    return Padding(
-      padding: const EdgeInsets.only(right: 4),
-      child: RotatedBox(
-        quarterTurns: 3,
-        child: Text(
-          value.toInt().toString(),
-          style: const TextStyle(fontSize: 11, color: Color(0xFFE68449), fontWeight: FontWeight.w600),
-        ),
-      ),
-    );
-  }
-
-  Widget _bottomTitleWidget(double value, TitleMeta meta) {
-    final idx = value.toInt();
-    if (idx < 0 || idx >= widget.data.length) return const SizedBox.shrink();
-    return Padding(
-      padding: const EdgeInsets.only(top: 6),
-      child: RotatedBox(
-        quarterTurns: 3,
-        child: Text(
-          widget.data[idx].label,
-          style: const TextStyle(
-            fontSize: 12,
-            color: Color(0xFFE68449),
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final dynamicInterval = _calculatedInterval;
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        // 1. The Chart
-        BarChart(
-          BarChartData(
-            rotationQuarterTurns: 1,
-            maxY: _calculatedMaxX,
-            // maxY: (widget.data[0].yesterday > widget.data[0].today ? widget.data[0].yesterday : widget.data[0].today) + 100,
-            minY: 0,
-            groupsSpace: 20,
-            barGroups: _buildGroups(),
-            borderData: FlBorderData(show: false),
-            gridData: FlGridData(
-              show: true,
-              drawVerticalLine: true,
-              drawHorizontalLine: false,
-              verticalInterval: dynamicInterval,
-              getDrawingVerticalLine: (_) => const FlLine(
-                color: Color(0xFFEEEEEE),
-                strokeWidth: 1,
-              ),
-            ),
-            titlesData: FlTitlesData(
-              leftTitles: AxisTitles(
-                sideTitles: SideTitles(
-                  showTitles: true,
-                  reservedSize: 40,
-                  interval: dynamicInterval,
-                  getTitlesWidget: _leftTitleWidget,
-                ),
-              ),
-              bottomTitles: AxisTitles(
-                sideTitles: SideTitles(
-                  showTitles: true,
-                  reservedSize: 58,
-                  getTitlesWidget: _bottomTitleWidget,
-                ),
-              ),
-              rightTitles: const AxisTitles(
-                sideTitles: SideTitles(showTitles: false),
-              ),
-              topTitles: const AxisTitles(
-                sideTitles: SideTitles(showTitles: false),
-              ),
-            ),
-
-            // 2. Updated Touch Data
-            barTouchData: BarTouchData(
-              enabled: true,
-              handleBuiltInTouches: false, // Disables standard hover tooltips
-              touchCallback: (FlTouchEvent event, barTouchResponse) {
-                // Only act when the user taps down/up on the screen
-                if (event is FlTapUpEvent) {
-                  // If the user tapped empty space inside the chart, clear the popup
-                  if (barTouchResponse == null || barTouchResponse.spot == null) {
-                    if (_tapPosition != null) {
-                      setState(() {
-                        _tapPosition = null;
-                        _touchedGroupIndex = null;
-                        _touchedRodIndex = null;
-                      });
-                    }
-                    return;
-                  }
-
-                  // If the user tapped a bar, record the coordinates and index
-                  setState(() {
-                    _tapPosition = event.localPosition;
-                    _touchedGroupIndex = barTouchResponse.spot!.touchedBarGroupIndex;
-                    _touchedRodIndex = barTouchResponse.spot!.touchedRodDataIndex;
-                  });
-                }
-              },
-            ),
-          ),
-          duration: const Duration(milliseconds: 800),
-          curve: Curves.easeOutCubic,
-        ),
-
-        // 3. Floating Edit Button Container
-        if (_tapPosition != null)
-          Positioned(
-            top: _tapPosition!.dx + 40,
-            right: _tapPosition!.dy - 90,
-            // FractionalTranslation shifts the container so it centers itself
-            // above the exact tap point rather than starting from the top-left corner
-            child: FractionalTranslation(
-              translation: const Offset(-0.5, -1.2),
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(8),
-                  onTap: (widget.selectedshaakhaa == null)
-                      ? null
-                      : () {
-                          // TODO: Execute your edit logic here
-                          final selectedData = widget.data[_touchedGroupIndex!];
-                          final day = _touchedRodIndex == 0 ? 'Yesterday' : 'Today';
-                          print('Edit tapped for ${selectedData.label} - $day');
-
-                          // Optional: Hide container after pressing edit
-                          setState(() => _tapPosition = null);
-
-                          if (userLevelId == 1) {
-                            widget.onIdTap(widget.shaakhaaId ?? 0, _touchedRodIndex == 0, "EditVrutta");
-                            setState(() {});
-                            return;
-                          }
-
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ShakhaaSaptahFormScreen(
-                                        shaakhaaId: widget.shaakhaaId,
-                                        fromYesterday: _touchedRodIndex == 0,
-                                        viewType: "EditVrutta",
-                                      )));
-                        },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFA9A9ED), // Matches your old tooltip color
-                      borderRadius: BorderRadius.circular(8),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.black26,
-                          blurRadius: 6,
-                          offset: Offset(0, 3),
-                        )
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          '${widget.data[_touchedGroupIndex!].label} \n\t ${Statics.getLabel(_touchedRodIndex == 0 ? (widget.isDaily ? "yesterdays" : "lastWeek") : (widget.isDaily ? "today" : "thisWeek"))} -> ${_touchedRodIndex == 0 ? widget.data[_touchedGroupIndex!].yesterday : widget.data[_touchedGroupIndex!].today}',
-                          style: TextStyle(
-                            color: Colors.grey.shade800,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        SizedBox(width: 8),
-                        if ((widget.selectedshaakhaa != null) && widget.isDaily) Icon(Icons.edit, size: 16, color: Colors.grey.shade900),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-      ],
-    );
-  }
-}
-
-// ─────────────────────────────────────────────
-//  Legend dot
-// ─────────────────────────────────────────────
-class _LegendDot extends StatelessWidget {
-  final Color color;
-  final String label;
-  final bool bold;
-
-  const _LegendDot({
-    required this.color,
-    required this.label,
-    required this.bold,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: 10,
-          height: 10,
-          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-        ),
-        const SizedBox(width: 6),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 13,
-            fontWeight: bold ? FontWeight.w700 : FontWeight.w400,
-            color: bold ? Color(0xFF1565C0) : const Color(0xFFE68449),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-// ─────────────────────────────────────────────
-// DAILY TAB
-// ─────────────────────────────────────────────
-class DailyTab extends StatelessWidget {
-  final ShaakhaaVistaarReport report;
-
-  const DailyTab({super.key, required this.report});
-
-  @override
-  Widget build(BuildContext context) {
-    final total = report.totalshakhaa ?? 0;
-    final previous = report.yesterdayShakhaa ?? 0;
-    final current = report.todayShakhaa ?? 0;
-
-    final percentageChange = previous == 0 ? 0.0 : ((current - previous) / previous) * 100;
-
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Card 1: कुल शाखा संकल्प
-          _StatCard(
-            label: Statics.getLabel('totalShakhaaSampann'),
-            value: total.toString(),
-            showBadge: false,
-          ),
-          const SizedBox(height: 12),
-          // Card 2: आज की कुल शाखा
-          _StatCard(
-            label: Statics.getLabel('todayTotalShakhaa'),
-            value: current.toString(),
-            showBadge: true,
-            badgeText: '${percentageChange.abs().toStringAsFixed(1)}',
-            badgePositive: percentageChange >= 0,
-          ),
-          const SizedBox(height: 12),
-          // Comparison Card
-          _ComparisonCard(
-            title: Statics.getLabel('dailyShakhaaTulna'),
-            rows: [
-              _BarRow(label: Statics.getLabel('totalShakhaaSampann'), value: total.toDouble(), maxValue: total.toDouble(), color: Color(0xFF1E90FF)),
-              _BarRow(label: Statics.getLabel('yesterdaysShakhaa'), value: previous.toDouble(), maxValue: total.toDouble(), color: Color(0xFFFF8C00)),
-              _BarRow(label: Statics.getLabel('todaysShakhaa'), value: current.toDouble(), maxValue: total.toDouble(), color: Color(0xFFFF8C00)),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ─────────────────────────────────────────────
-// WEEKLY TAB
-// ─────────────────────────────────────────────
-class WeeklyTab extends StatelessWidget {
-  final ShaakhaaVistaarReport report;
-
-  const WeeklyTab({super.key, required this.report});
-
-  @override
-  Widget build(BuildContext context) {
-    final total = report.totalshakhaa ?? 0;
-    final previous = report.previousWeekShakhaa ?? 0;
-    final current = report.thisWeekShakhaa ?? 0;
-
-    final percentageChange = previous == 0 ? 0.0 : ((current - previous) / previous) * 100;
-
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          /*// Section title
-          const Text(
-            'शाखा विवरण',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-              color: Colors.black,
-            ),
-          ),*/
-          const SizedBox(height: 12),
-
-          // Card 1: कुल शाखा संकल्प
-          _StatCard(
-            label: Statics.getLabel('totalShakhaaSampann'),
-            value: total.toString(),
-            showBadge: false,
-          ),
-          const SizedBox(height: 12),
-
-          // Card 2: सप्ताह की कुल शाखा
-          _StatCard(
-            label: Statics.getLabel('thisWeekTotalShakhaa'),
-            value: current.toString(),
-            showBadge: true,
-            badgeText: '${percentageChange.abs().toStringAsFixed(1)}',
-            badgePositive: percentageChange >= 0,
-          ),
-          const SizedBox(height: 12),
-
-          // Comparison Card (Shakha)
-          _ComparisonCard(
-            title: Statics.getLabel('weeklyShakhaaTulna'),
-            rows: [
-              _BarRow(label: Statics.getLabel('totalShakhaaSampann'), value: total.toDouble(), maxValue: total.toDouble(), color: Color(0xFF1E90FF)),
-              _BarRow(label: Statics.getLabel('previousWeekShakhaa'), value: previous.toDouble(), maxValue: total.toDouble(), color: Color(0xFFFF8C00)),
-              _BarRow(label: Statics.getLabel('currentWeekShakhaa'), value: current.toDouble(), maxValue: total.toDouble(), color: Color(0xFFFF8C00)),
-            ],
-          ),
-          const SizedBox(height: 24),
-
-          /*// Section title: मिलन विवरण
-          const Text(
-            'साप्ताहिक मिलन विवरण',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-              color: Colors.black,
-            ),
-          ),
-          const SizedBox(height: 12),
-
-          // Card 3: कुल मिलन संकल्प
-          _StatCard(
-            label: 'कुल मिलन संकल्प',
-            value: '3,000',
-            showBadge: false,
-          ),
-          const SizedBox(height: 12),
-
-          // Card 4: सप्ताह के कुल मिलन
-          _StatCard(
-            label: 'सप्ताह के कुल मिलन',
-            value: '2,800',
-            showBadge: true,
-            badgeText: '3.4%',
-            badgePositive: false,
-          ),
-          const SizedBox(height: 12),
-
-          // Comparison Card (Milan)
-          _ComparisonCard(
-            title: 'साप्ताहिक मिलन तुलना',
-            rows: const [
-              _BarRow(label: 'कुल मिलन संकल्प', value: 3000, maxValue: 3000, color: Color(0xFF1E90FF)),
-              _BarRow(label: 'पिछले सप्ताह के मिलन', value: 2900, maxValue: 3000, color: Color(0xFFFF8C00)),
-              _BarRow(label: 'इस सप्ताह के मिलन', value: 2800, maxValue: 3000, color: Color(0xFFFF8C00)),
-            ],
-          ),*/
-          const SizedBox(height: 16),
-        ],
-      ),
-    );
-  }
-}
-
-// ─────────────────────────────────────────────
-// REUSABLE WIDGETS
-// ─────────────────────────────────────────────
-
-class _StatCard extends StatelessWidget {
-  final String label;
-  final String value;
-  final bool showBadge;
-  final String? badgeText;
-  final bool badgePositive;
-
-  const _StatCard({
-    required this.label,
-    required this.value,
-    required this.showBadge,
-    this.badgeText,
-    this.badgePositive = true,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 6,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 13,
-              color: Color(0xFF8E8E93),
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                value,
-                style: const TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.black,
-                  letterSpacing: -0.5,
-                ),
-              ),
-              if (showBadge && badgeText != null)
-                _PercentBadge(
-                  text: badgeText!,
-                  isPositive: badgePositive,
-                ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _PercentBadge extends StatelessWidget {
-  final String text;
-  final bool isPositive;
-
-  const _PercentBadge({required this.text, required this.isPositive});
-
-  @override
-  Widget build(BuildContext context) {
-    final color = isPositive ? const Color(0xFF34C759) : const Color(0xFFFF3B30);
-    final icon = isPositive ? '↑' : '↓';
-
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(
-          isPositive ? Icons.trending_up : Icons.trending_down,
-          color: color,
-          size: 16,
-        ),
-        const SizedBox(width: 2),
-        Text(
-          '$text%',
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: color,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-// Data class for bar rows
-class _BarRow {
-  final String label;
-  final double value;
-  final double maxValue;
-  final Color color;
-
-  const _BarRow({
-    required this.label,
-    required this.value,
-    required this.maxValue,
-    required this.color,
-  });
-}
-
-class _ComparisonCard extends StatelessWidget {
-  final String title;
-  final List<_BarRow> rows;
-
-  const _ComparisonCard({
-    required this.title,
-    required this.rows,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 6,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Title with icon
-          Row(
-            children: [
-              const Icon(
-                Icons.show_chart,
-                size: 16,
-                color: Color(0xFF8E8E93),
-              ),
-              const SizedBox(width: 6),
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF3A3A3C),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          // Bar rows
-          ...rows.map((row) => Padding(
-                padding: const EdgeInsets.only(bottom: 14),
-                child: _BarRowWidget(row: row),
-              )),
-        ],
-      ),
-    );
-  }
-}
-
-class _BarRowWidget extends StatelessWidget {
-  final _BarRow row;
-
-  const _BarRowWidget({super.key, required this.row});
-
-  String _formatValue(double v) {
-    if (v >= 1000) {
-      return v.toInt().toString().replaceAllMapped(
-            RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-            (m) => '${m[1]},',
-          );
-    }
-    return v.toInt().toString();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final fraction = row.value / row.maxValue;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Label + value
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              row.label,
-              style: const TextStyle(
-                fontSize: 12,
-                color: Color(0xFF3A3A3C),
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            Text(
-              _formatValue(row.value),
-              style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF3A3A3C),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 6),
-        // Progress bar
-        LayoutBuilder(
-          builder: (context, constraints) {
-            return Stack(
-              children: [
-                // Background track
-                Container(
-                  height: 8,
-                  width: constraints.maxWidth,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFE5E5EA),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                ),
-                // Filled bar
-                Container(
-                  height: 8,
-                  width: constraints.maxWidth * fraction,
-                  decoration: BoxDecoration(
-                    color: row.color,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                ),
-              ],
-            );
-          },
-        ),
-      ],
     );
   }
 }

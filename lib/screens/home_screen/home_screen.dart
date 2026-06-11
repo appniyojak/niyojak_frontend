@@ -27,6 +27,8 @@ import '../../utils/cust_painters.dart';
 import '../../utils/globals.dart';
 import '../../utils/stable_geounit_class.dart';
 import '../../widgets/app_drawer.dart';
+import '../../widgets/horizontal_graph_bar_widget.dart';
+import '../../widgets/reusable_tab_cards.dart';
 import '../../widgets/scrollable_data_table.dart';
 import '../../widgets/single_column_row.dart';
 import '../../widgets/two_column_row.dart';
@@ -77,6 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _isTgSearching = false;
 
   // ─── Panel expansion ───────────────────────────────────────────────────────
+  bool isDailySelected = false;
   bool _isSwExpanded = false;
   bool _isGeounitExpanded = false;
   bool _isNagarTableExpanded = false;
@@ -884,7 +887,33 @@ class _HomeScreenState extends State<HomeScreen> {
   // ── 5. Yesterday praant table ─────────────────────────────────────────────
   Widget _buildYesterdayPraantTable(List data) {
     if (data.isEmpty) return _buildNoData();
-    return ScrollableDataTable(
+    return Column(
+      children: [
+        _typeResultTab(),
+        _buildHeader(),
+        // if (userLevelId != 1)
+        isDailySelected
+            ? ReusableBarTabCard(
+                totalshakhaa: 1124,
+                todayShakhaa: 359,
+                yesterdayShakhaa: 254,
+              )
+            : ReusableBarTabCard(
+                totalshakhaa: 1124,
+                todayShakhaa: 648,
+                yesterdayShakhaa: 526,
+                mainLabel: "",
+                totalLabel: "",
+                lastLabel: "",
+                currentLabel: "",
+              )
+        // else ...[
+        //   _attendanceCard(title: "${Statics.getLabel('Total')} ${Statics.getLabel('upastithi')}", data: isDailySelected ? _dailyPresent : _weeklyPresent, isDaily: isDailySelected),
+        //   _attendanceCard(title: "${Statics.getLabel('Total')} ${Statics.getLabel('newAdmission')}", data: isDailySelected ? _dailyNew : _weeklyNew, isDaily: isDailySelected)
+        // ]
+      ],
+    );
+    /*return ScrollableDataTable(
       headers: [
         Statics.getLabel('Vayogat'),
         Statics.getLabel('Shaakhaa'),
@@ -902,6 +931,164 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         );
       }).toList(),
+    );*/
+  }
+
+  Widget _buildHeader() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '${!isDailySelected ? Statics.getLabel("weekly") : Statics.getLabel("daily")} ${Statics.getLabel("comparison")}',
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w700,
+            color: Color(0xFF1A1A2E),
+          ),
+        ),
+        SizedBox(height: 2),
+        Text(
+          Statics.getLabel(!isDailySelected ? 'thisVsLastWeek' : 'todayVsYesterday'),
+          style: TextStyle(fontSize: 13, color: Color(0xFFE68449)),
+        ),
+      ],
+    );
+  }
+
+  Widget _typeResultTab() {
+    return AnimatedContainer(
+      margin: EdgeInsets.symmetric(horizontal: 6),
+      duration: Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+      width: MediaQuery.sizeOf(context).width,
+      height: 40,
+      decoration: BoxDecoration(color: Colors.grey.shade100, borderRadius: BorderRadius.circular(12)),
+      child: Stack(
+        children: [
+          AnimatedPositioned(
+            duration: Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+            left: !isDailySelected ? (MediaQuery.sizeOf(context).width * 0.427) : 8,
+            child: Container(
+              width: (MediaQuery.sizeOf(context).width * 0.47 - 12),
+              height: 36,
+              decoration: BoxDecoration(color: Colors.purple, borderRadius: BorderRadius.circular(12)),
+            ),
+          ),
+          Row(
+            // mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Expanded(
+                child: InkWell(
+                  onTap: () => setState(() => isDailySelected = true),
+                  // onTap: () => _getResultData(true),
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4),
+                    child: Text(Statics.getLabel("daily"), style: TextStyle(color: isDailySelected ? Colors.white : Colors.black)),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: InkWell(
+                  onTap: () => setState(() => isDailySelected = false),
+                  // onTap: () => _getResultData(false),
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4),
+                    child: Text(Statics.getLabel("weekly"), style: TextStyle(color: isDailySelected ? Colors.black : Colors.white)),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _attendanceCard({
+    required String title,
+    required List<AttendanceData> data,
+    bool isDaily = false,
+    Color? color,
+  }) {
+    // Chart height scales with number of categories
+    final double chartHeight = data.length * 120.0 + 60.0;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.07),
+            blurRadius: 14,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // ── Card header ──────────────────────────
+          Row(
+            children: [
+              Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFE8F0FE),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(Icons.groups_outlined, color: Color(0xFF1565C0), size: 20),
+              ),
+              const SizedBox(width: 10),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF1A1A2E),
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 24),
+
+          // ── Horizontal bar chart ─────────────────
+          SizedBox(
+            height: chartHeight,
+            width: MediaQuery.sizeOf(context).width,
+            child: HorizontalBarChart(
+              data: data,
+              showEditIcon: false,
+
+              // 1. Customize the Text dynamically
+              tooltipTextBuilder: (selectedData, isYesterday) {
+                String timeLabel = Statics.getLabel(isYesterday ? (isDaily ? "yesterdays" : "lastWeek") : (isDaily ? "today" : "thisWeek"));
+
+                double val = isYesterday ? selectedData.yesterday : selectedData.today;
+                return '${selectedData.label} \n\t $timeLabel -> $val';
+              },
+            ),
+          ),
+
+          const SizedBox(height: 16),
+
+          // ── Legend ───────────────────────────────
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              LegendDot(color: color ?? Color(0xFFE68449), label: Statics.getLabel(!isDailySelected ? 'lastWeek' : 'yesterdays'), bold: false),
+              SizedBox(width: 24),
+              LegendDot(color: color ?? Color(0xFF1565C0), label: Statics.getLabel(!isDailySelected ? 'thisWeek' : 'today'), bold: true),
+            ],
+          ),
+        ],
+      ),
     );
   }
 

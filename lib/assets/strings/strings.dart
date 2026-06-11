@@ -4091,7 +4091,7 @@ Map<String, String> resMarathi = {
   'comparison': "तुलना",
   'dailyShakhaaTulna': "दैनिक शाखा तुलना",
   'weeklyShakhaaTulna': "साप्ताहिक शाखा तुलना",
-  'totalShakhaaSampann': "एकूण शाखा संपन्न",
+  'totalShakhaaSampann': "एकूण शाखा संकल्प",
   'thisWeekTotalShakhaa': "या आठवड्यातील एकूण शाखा",
   'currentWeekShakhaa': "या आठवड्यातील शाखा",
   'previousWeekShakhaa': "मागील आठवड्यातील शाखा",

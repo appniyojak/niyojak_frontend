@@ -981,15 +981,16 @@ class GeoHierarchyController extends ChangeNotifier {
         id: trail.vibhaagId,
         name: selectedItem?.geoUnitName,
       );
-    }
 
-    /// BHAAG
-    if (trail.bhaagId != null && trail.bhaagId!.isNotEmpty) {
+      ///LOADING NEXT DROPDOWN
       await loadLevel(
         GeoLevel.Bhaag,
         fetchMode: fetchMode,
       );
+    }
 
+    /// BHAAG
+    if (trail.bhaagId != null && trail.bhaagId!.isNotEmpty) {
       final selectedItem = state.items[GeoLevel.Bhaag]?.firstWhere(
         (e) => e.geoUnitID.toString() == trail.bhaagId,
       );
@@ -999,15 +1000,16 @@ class GeoHierarchyController extends ChangeNotifier {
         id: trail.bhaagId,
         name: selectedItem?.geoUnitName,
       );
-    }
 
-    /// NAGAR
-    if (trail.nagarId != null && trail.nagarId!.isNotEmpty) {
+      ///LOADING NEXT DROPDOWN
       await loadLevel(
         GeoLevel.Nagar,
         fetchMode: fetchMode,
       );
+    }
 
+    /// NAGAR
+    if (trail.nagarId != null && trail.nagarId!.isNotEmpty) {
       final selectedItem = state.items[GeoLevel.Nagar]?.firstWhere(
         (e) => e.geoUnitID.toString() == trail.nagarId,
       );
@@ -1017,15 +1019,24 @@ class GeoHierarchyController extends ChangeNotifier {
         id: trail.nagarId,
         name: selectedItem?.geoUnitName,
       );
-    }
 
-    /// UPNAGAR
-    if (trail.upnagarId != null && trail.upnagarId!.isNotEmpty) {
+      ///LOADING NEXT DROPDOWN
       await loadLevel(
         GeoLevel.upnagarUpkhanda,
         fetchMode: fetchMode,
       );
+      await loadLevel(
+        GeoLevel.Mandal,
+        fetchMode: fetchMode,
+      );
+      await loadLevel(
+        GeoLevel.Vasti,
+        fetchMode: fetchMode,
+      );
+    }
 
+    /// UPNAGAR
+    if (trail.upnagarId != null && trail.upnagarId!.isNotEmpty) {
       final selectedItem = state.items[GeoLevel.upnagarUpkhanda]?.firstWhere(
         (e) => e.geoUnitID.toString() == trail.upnagarId,
       );
@@ -1035,15 +1046,20 @@ class GeoHierarchyController extends ChangeNotifier {
         id: trail.upnagarId,
         name: selectedItem?.geoUnitName,
       );
-    }
 
-    /// MANDAL
-    if (trail.mandalId != null && trail.mandalId!.isNotEmpty) {
+      ///LOADING NEXT DROPDOWN
       await loadLevel(
         GeoLevel.Mandal,
         fetchMode: fetchMode,
       );
+      await loadLevel(
+        GeoLevel.Vasti,
+        fetchMode: fetchMode,
+      );
+    }
 
+    /// MANDAL
+    if (trail.mandalId != null && trail.mandalId!.isNotEmpty) {
       final selectedItem = state.items[GeoLevel.Mandal]?.firstWhere(
         (e) => e.geoUnitID.toString() == trail.mandalId,
       );
@@ -1053,15 +1069,16 @@ class GeoHierarchyController extends ChangeNotifier {
         id: trail.mandalId,
         name: selectedItem?.geoUnitName,
       );
-    }
 
-    /// GRAAM
-    if (trail.graamId != null && trail.graamId!.isNotEmpty) {
+      ///LOADING NEXT DROPDOWN
       await loadLevel(
         GeoLevel.Graam,
         fetchMode: fetchMode,
       );
+    }
 
+    /// GRAAM
+    if (trail.graamId != null && trail.graamId!.isNotEmpty) {
       final selectedItem = state.items[GeoLevel.Graam]?.firstWhere(
         (e) => e.geoUnitID.toString() == trail.graamId,
       );
@@ -1071,15 +1088,16 @@ class GeoHierarchyController extends ChangeNotifier {
         id: trail.graamId,
         name: selectedItem?.geoUnitName,
       );
+
+      ///LOADING NEXT DROPDOWN
+      await loadLevel(
+        GeoLevel.Shaakhaa,
+        fetchMode: fetchMode,
+      );
     }
 
     /// VASTI
     if (trail.vastiId != null && trail.vastiId!.isNotEmpty) {
-      await loadLevel(
-        GeoLevel.Vasti,
-        fetchMode: fetchMode,
-      );
-
       final selectedItem = state.items[GeoLevel.Vasti]?.firstWhere(
         (e) => e.geoUnitID.toString() == trail.vastiId,
       );
@@ -1089,15 +1107,16 @@ class GeoHierarchyController extends ChangeNotifier {
         id: trail.vastiId,
         name: selectedItem?.geoUnitName,
       );
-    }
 
-    /// SHAAKHAA
-    if (trail.shakhaaId != null && trail.shakhaaId!.isNotEmpty) {
+      ///LOADING NEXT DROPDOWN
       await loadLevel(
         GeoLevel.Shaakhaa,
         fetchMode: fetchMode,
       );
+    }
 
+    /// SHAAKHAA
+    if (trail.shakhaaId != null && trail.shakhaaId!.isNotEmpty) {
       final selectedItem = state.items[GeoLevel.Shaakhaa]?.firstWhere(
         (e) => e.geoUnitID.toString() == trail.shakhaaId,
       );
