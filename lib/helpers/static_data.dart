@@ -39,6 +39,7 @@ import '../models/response_model/shaakhaa_vistaar_vrutta_resp_model.dart';
 import '../models/response_model/shaakhaa_vistar_detail_resp_model.dart';
 import '../models/response_model/shaakhaa_vistar_list_resp_model.dart';
 import '../models/response_model/shaakhaa_vistar_report_repo_model.dart';
+import '../models/response_model/shaakhaa_vrutta_report_home_resp_model.dart';
 import '../models/response_model/taluka_mandal_model.dart';
 import '../models/response_model/upkhanda_upnagar_report_data_model.dart';
 import '../models/response_model/vasti_sarvekshan_dropdown_model.dart';
@@ -158,6 +159,7 @@ const String urlGetJoinRSSDataForApp = baseUrlAPI + '/GetJoinRSSDataForApp';
 const String urlDeleteJoinRSSForApp = baseUrlAPI + '/DeleteJoinRSSForApp';
 const String urlRefreshHomeScreenForApp = baseUrlAPI + '/RefreshHomeScreenForApp';
 const String urlUpkhandupnagarreport = baseUrlAPI + '/upkhandupnagarreport';
+const String urlYestardayShaakhaaVruttaHome = baseUrlAPI + '/yestardayShaakhaaVrutta';
 const String urlUpkhandupnagarreportforexcel = baseUrlAPI + '/upkhandupnagarreportforexcel';
 const String urlVastisarvekshanReport = baseUrlAPI + '/VastisarvekshanReport';
 const String urlNagarVastisarvekshanReport = baseUrlAPI + '/NagarVastisarvekshanReport';
@@ -2250,6 +2252,31 @@ Future<UpnagarUpkhandaReportModel?> upkhandUpnagarReportData({required String us
     var responseBody = json.decode(response.body);
     final respData = UpnagarUpkhandaReportModel.fromJson(responseBody);
     log("Print the body for urlUpkhandupnagarreport >>>>>>>>>>>>>>>>> $responseBody");
+    if (respData.status == "Success") {
+      return respData;
+    }
+    return null;
+  }
+  return null;
+}
+
+Future<ShaakhaaVruttaReportHomeRespModel?> yestardayShaakhaaVruttaHomeReportData({required int userID, required int? targetGeoUnitID}) async {
+  bool? connected = await isInternetConnected();
+  if (connected == false) {
+    return null;
+  }
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  log("API >>>>>>>>>>>>>> $urlYestardayShaakhaaVruttaHome");
+
+  print(json.encode({"AppUserID": userID, "TargetGeoUnitID": targetGeoUnitID}));
+
+  var response = await http.post(Uri.parse(urlYestardayShaakhaaVruttaHome), headers: jHeaders, body: json.encode({"AppUserID": userID, "TargetGeoUnitID": targetGeoUnitID}));
+
+  if (response.statusCode == 200) {
+    var responseBody = json.decode(response.body);
+    final respData = ShaakhaaVruttaReportHomeRespModel.fromJson(responseBody);
+    log("Print the body for urlYestardayShaakhaaVruttaHome >>>>>>>>>>>>>>>>> ${response.body}");
     if (respData.status == "Success") {
       return respData;
     }

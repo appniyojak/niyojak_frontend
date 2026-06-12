@@ -406,7 +406,7 @@ class _VastiSarvekshanScreenState extends State<VastiSarvekshanScreen> {
                                       _searched = false;
                                       selectedType = null;
                                     });
-                                    ctrl.loadHierarchyForUser();
+                                    ctrl.loadHierarchyForUser(fetchMode: fromVasti ? GeoHierarchyFetchMode.vastiOnly : GeoHierarchyFetchMode.mandalOnly);
                                   },
                                   child: Text(Statics.getLabel('clear'))),
                             ],

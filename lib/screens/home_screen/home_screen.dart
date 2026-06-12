@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ import 'package:syncfusion_flutter_xlsio/xlsio.dart' as xls;
 
 import '../../helpers/static_data.dart' as Statics;
 import '../../models/response_model/notification_list_model.dart';
+import '../../models/response_model/shaakhaa_vrutta_report_home_resp_model.dart';
 import '../../models/response_model/upkhanda_upnagar_report_data_model.dart';
 import '../../providers/bals.dart';
 import '../../providers/login.dart';
@@ -55,6 +57,10 @@ import '../survey_screen/survey_form/vasti_survey_form_view.dart';
 import '../survey_screen/vasti_reports_tabs.dart';
 import '../swayamsevak_module/swayamsevak_search.dart';
 
+enum OtherLevelSelection { daily, weekly, monthly, yearly }
+
+enum ShaakhaaLevelSelection { daily, weekly, monthly, tmonthly }
+
 class HomeScreen extends StatefulWidget {
   static const String routeName = '/home-screen';
 
@@ -79,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _isTgSearching = false;
 
   // ─── Panel expansion ───────────────────────────────────────────────────────
-  bool isDailySelected = false;
+  // bool isDailySelected = false;
   bool _isSwExpanded = false;
   bool _isGeounitExpanded = false;
   bool _isNagarTableExpanded = false;
@@ -144,6 +150,12 @@ class _HomeScreenState extends State<HomeScreen> {
   NotificationListModel? notificationListdata;
   List<UpkhandaDataList> upkhandaDataList = [];
   UpnagarUpkhandaReportModel? bhougolikReportForExcel;
+  int activeTabIndex = 0; // Tracks which tab is selected
+  dynamic currentTabData; // Holds the currently active model (e.g., Shaobj, TotalAndNewModel)
+  List<String> tabs = [];
+  String? shaakhaausertype;
+  Shaakhadata? shaakhaLevelData;
+  Otherdata? otherLevelData;
   AbhiyanSwayamsevakdata? initialData;
 
   // ─── Dropdown data – set 2 (Bhaugolik rachana panel) ──────────────────────
@@ -223,9 +235,13 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _initScreen();
-    WidgetsBinding.instance.addPostFrameCallback((_) => initData());
-    WidgetsBinding.instance.addPostFrameCallback((_) => _getReleaseNotes());
+    WidgetsBinding.instance.addPostFrameCallback((_) => callAllData());
+  }
+
+  callAllData() async {
+    initData();
+    await _initScreen();
+    _getReleaseNotes();
   }
 
   Future<void> initData() async {
@@ -244,14 +260,17 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  void _initScreen() {
+  _initScreen() async {
     _getInitialData();
     _populateChoices();
     _populateDropdownSet2();
     _getGeoUnitID();
-    _fetchMyDashboardData();
-    _getUpkhandUpnagarReport("0", "praant");
-    _fetchNotificationData();
+    await Future.wait([
+      _fetchMyDashboardData(),
+      _getUpkhandUpnagarReport("0", "praant"),
+      _fetchNotificationData(),
+      _getShaakhaaVruttaReport(),
+    ]);
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -274,6 +293,128 @@ class _HomeScreenState extends State<HomeScreen> {
     await _checkLoginDate();
     if (data != null) initialData = AbhiyanSwayamsevakdata.fromJson(jsonDecode(data));
     setState(() {});
+  }
+
+  Future<void> _getShaakhaaVruttaReport() async {
+    shaakhaLevelData = otherLevelData = shaakhaausertype = null;
+    tabs = [];
+    setState(() => _isMySearching = true);
+    final data = await Statics.yestardayShaakhaaVruttaHomeReportData(
+      userID: int.tryParse(Statics.userDetails["userID"] ?? "0") ?? 0,
+      targetGeoUnitID: null,
+    );
+    setState(() {
+      _isMySearching = false;
+    });
+    if (data != null) {
+      shaakhaLevelData = data.shaakhadata;
+      otherLevelData = data.otherdata;
+      shaakhaausertype = data.usertype;
+      tabs = getTabTitles(data);
+    }
+    setState(() {});
+    onTabTapped(0);
+    setState(() {});
+  }
+
+  /// Call this function inside your TabBar's onTap or custom Tab onTap
+  void onTabTapped(int index) {
+    setState(() {
+      activeTabIndex = index;
+      // This auto-resolves the exact model type you need to show
+      currentTabData = getDataForTab(index);
+    });
+  }
+
+  /// 1. Returns whether to use Shaakhadata or Otherdata view
+  bool get isShaakhaDataView => userLevelId == 1;
+
+  /// 2. Returns the dynamic list of tab titles based on your conditions
+  List<String> getTabTitles(ShaakhaaVruttaReportHomeRespModel response) {
+    if (!isShaakhaDataView) {
+      // Condition: userLevelId != 1 -> Use Otherdata (4 Tabs)
+      return [Statics.getLabel('daily'), Statics.getLabel('weekly'), Statics.getLabel('monthly'), Statics.getLabel('yearly')];
+    } else {
+      // Condition: userLevelId == 1 -> Use Shaakhadata (Depends on usertype)
+      switch (response.usertype?.toLowerCase()) {
+        case 'daily':
+          return [Statics.getLabel('daily'), Statics.getLabel('weekly')];
+        case 'week':
+          return [Statics.getLabel('weekly'), Statics.getLabel('monthly')];
+        case 'month':
+          return [Statics.getLabel('monthly'), Statics.getLabel('quarterly')];
+        default:
+          return [];
+      }
+    }
+  }
+
+  String getThisSelectedLabel() {
+    switch (shaakhaausertype?.toLowerCase()) {
+      case 'daily':
+        return activeTabIndex == 0 ? Statics.getLabel('today') : Statics.getLabel('thisWeek');
+
+      case 'week':
+        return activeTabIndex == 0 ? Statics.getLabel('thisWeek') : Statics.getLabel('thisMonth');
+
+      case 'month':
+        return activeTabIndex == 0 ? Statics.getLabel('thisMonth') : Statics.getLabel('thisTMonth');
+
+      default:
+        return '';
+    }
+  }
+
+  String getLastSelectedLabel() {
+    switch (shaakhaausertype?.toLowerCase()) {
+      case 'daily':
+        return activeTabIndex == 0 ? Statics.getLabel('yesterdays') : Statics.getLabel('lastWeek');
+
+      case 'week':
+        return activeTabIndex == 0 ? Statics.getLabel('lastWeek') : Statics.getLabel('lastMonth');
+
+      case 'month':
+        return activeTabIndex == 0 ? Statics.getLabel('lastMonth') : Statics.getLabel('lastTMonth');
+
+      default:
+        return '';
+    }
+  }
+
+  /// 3. Returns the exact data object based on the selected tab index
+  dynamic getDataForTab(int index) {
+    if (!isShaakhaDataView) {
+      // --- OTHER DATA CASES ---
+      final other = otherLevelData;
+      switch (index) {
+        case 0:
+          return other?.shaobj; // Daily object
+        case 1:
+          return other?.weekobj; // Weekly object
+        case 2:
+          return other?.monthobj; // Monthly object
+        case 3:
+          return other?.yearobj; // Yearly object
+        default:
+          return null;
+      }
+    } else {
+      // --- SHAAKHA DATA CASES ---
+      final shaakha = shaakhaLevelData;
+      final usertype = shaakhaausertype?.toLowerCase();
+
+      if (usertype == 'daily') {
+        if (index == 0) return shaakha?.daily;
+        if (index == 1) return shaakha?.weekly;
+      } else if (usertype == 'week') {
+        if (index == 0) return shaakha?.weekly;
+        if (index == 1) return shaakha?.monthly;
+      } else if (usertype == 'month') {
+        if (index == 0) return shaakha?.monthly;
+        if (index == 1) return shaakha?.tmonthly;
+      }
+      return null;
+    }
   }
 
   Future<void> _getUpkhandUpnagarReport(String? targetGeoUnitID, String levelName) async {
@@ -581,12 +722,13 @@ class _HomeScreenState extends State<HomeScreen> {
         break;
       case "ResfreshDashboard":
         setState(() => _isSearching = true);
-        final data = await Statics.refreshDashboardData(Statics.userDetails["userID"], geoUnitID);
+        await _initScreen();
+        /*final data = await Statics.refreshDashboardData(Statics.userDetails["userID"], geoUnitID);
         if (data == "Successfull") {
           await Statics.getNotificationDataList(Statics.userDetails["userID"]);
           Statics.populateDashboardDetailsMap();
           Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
-        }
+        }*/
         setState(() => _isSearching = false);
         break;
     }
@@ -720,9 +862,9 @@ class _HomeScreenState extends State<HomeScreen> {
   // ═══════════════════════════════════════════════════════════════════════════
 
   /// Standard "no data" placeholder.
-  Widget _buildNoData() => Padding(
+  Widget _buildNoData({String? label}) => Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
-        child: Text(Statics.getLabel('NoDataFound'), style: const TextStyle(fontWeight: FontWeight.normal)),
+        child: Text(Statics.getLabel(label ?? 'NoDataFound'), style: const TextStyle(fontWeight: FontWeight.normal)),
       );
 
   /// Background colour for a total/summary row.
@@ -885,32 +1027,73 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // ── 5. Yesterday praant table ─────────────────────────────────────────────
-  Widget _buildYesterdayPraantTable(List data) {
-    if (data.isEmpty) return _buildNoData();
+  Widget _buildYesterdayPraantTable() {
     return Column(
+      spacing: 12,
       children: [
-        _typeResultTab(),
-        _buildHeader(),
-        // if (userLevelId != 1)
-        isDailySelected
-            ? ReusableBarTabCard(
-                totalshakhaa: 1124,
-                todayShakhaa: 359,
-                yesterdayShakhaa: 254,
-              )
-            : ReusableBarTabCard(
-                totalshakhaa: 1124,
-                todayShakhaa: 648,
-                yesterdayShakhaa: 526,
-                mainLabel: "",
-                totalLabel: "",
-                lastLabel: "",
-                currentLabel: "",
-              )
-        // else ...[
-        //   _attendanceCard(title: "${Statics.getLabel('Total')} ${Statics.getLabel('upastithi')}", data: isDailySelected ? _dailyPresent : _weeklyPresent, isDaily: isDailySelected),
-        //   _attendanceCard(title: "${Statics.getLabel('Total')} ${Statics.getLabel('newAdmission')}", data: isDailySelected ? _dailyNew : _weeklyNew, isDaily: isDailySelected)
-        // ]
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center, // Centers the tabs nicely
+          children: List.generate(tabs.length, (index) {
+            final isSelected = activeTabIndex == index;
+
+            return GestureDetector(
+              onTap: () => onTabTapped(index),
+              child: Container(
+                // 1. Spacing between the individual tab pills
+                margin: const EdgeInsets.symmetric(horizontal: 4),
+                // 2. ClipRRect creates the smooth pill shape for the glass
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(24),
+                  // 3. BackdropFilter for the blur effect
+                  child: BackdropFilter(
+                    // We only blur the active tab to save GPU performance
+                    filter: ImageFilter.blur(
+                      sigmaX: isSelected ? 15.0 : 0.0,
+                      sigmaY: isSelected ? 15.0 : 0.0,
+                    ),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(24),
+                        // The glass edge highlight (only visible when selected)
+                        border: Border.all(
+                          color: isSelected ? Colors.white.withOpacity(0.4) : Colors.transparent,
+                          width: 1.0,
+                        ),
+                        // The frosted orange hint gradient
+                        gradient: isSelected
+                            ? LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [
+                                  Colors.white.withOpacity(0.4), // Frosted top
+                                  Colors.purple.withOpacity(0.1), // Clear middle
+                                  Colors.deepPurple.withOpacity(0.37), // Orange hint
+                                  Colors.deepPurple.withOpacity(0.7), // Orange hint
+                                ],
+                                stops: const [0.0, 0.3, 0.6, 1.0],
+                              )
+                            : null,
+                        // Inactive tabs get a barely-there white wash instead of a gradient
+                        color: isSelected ? null : Colors.white.withOpacity(0.05),
+                      ),
+                      child: Text(
+                        tabs[index],
+                        style: TextStyle(
+                          // I replaced the red text to better match the new aesthetic
+                          color: isSelected ? Colors.black87 : const Color(0xFF8E8E93),
+                          fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                          letterSpacing: -0.3,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          }),
+        ),
+        buildDataBody(),
       ],
     );
     /*return ScrollableDataTable(
@@ -934,83 +1117,240 @@ class _HomeScreenState extends State<HomeScreen> {
     );*/
   }
 
-  Widget _buildHeader() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '${!isDailySelected ? Statics.getLabel("weekly") : Statics.getLabel("daily")} ${Statics.getLabel("comparison")}',
-          style: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.w700,
-            color: Color(0xFF1A1A2E),
-          ),
-        ),
-        SizedBox(height: 2),
-        Text(
-          Statics.getLabel(!isDailySelected ? 'thisVsLastWeek' : 'todayVsYesterday'),
-          style: TextStyle(fontSize: 13, color: Color(0xFFE68449)),
-        ),
-      ],
-    );
-  }
-
-  Widget _typeResultTab() {
-    return AnimatedContainer(
-      margin: EdgeInsets.symmetric(horizontal: 6),
-      duration: Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-      width: MediaQuery.sizeOf(context).width,
-      height: 40,
-      decoration: BoxDecoration(color: Colors.grey.shade100, borderRadius: BorderRadius.circular(12)),
-      child: Stack(
+  Widget buildDataBody() {
+    if (currentTabData == null) return _buildNoData();
+    // If userLevelId == 1, data will be TotalAndNewModel
+    if (currentTabData is TotalAndNewModel) {
+      final data = currentTabData as TotalAndNewModel;
+      return Column(
+        spacing: 8,
         children: [
-          AnimatedPositioned(
-            duration: Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-            left: !isDailySelected ? (MediaQuery.sizeOf(context).width * 0.427) : 8,
-            child: Container(
-              width: (MediaQuery.sizeOf(context).width * 0.47 - 12),
-              height: 36,
-              decoration: BoxDecoration(color: Colors.purple, borderRadius: BorderRadius.circular(12)),
+          _attendanceCard(title: "${Statics.getLabel('Total')} ${Statics.getLabel('upastithi')}", thisLabel: getThisSelectedLabel(), previousLabel: getLastSelectedLabel(), data: [
+            AttendanceData(label: Statics.getLabel('upastithi'), today: (data.todayCount ?? 0).toDouble(), yesterday: (data.yesterdayCount ?? 0).toDouble()),
+          ]),
+          _attendanceCard(title: "${Statics.getLabel('Total')} ${Statics.getLabel('newAdmission')}", thisLabel: getThisSelectedLabel(), previousLabel: getLastSelectedLabel(), data: [
+            AttendanceData(label: Statics.getLabel('admission'), today: (data.todayNewCount ?? 0).toDouble(), yesterday: (data.yesterdayNewCount ?? 0).toDouble()),
+          ]),
+        ],
+      );
+    }
+
+    // If userLevelId != 1, data will be specific to the tab type
+    if (currentTabData is Shaobj) {
+      final data = currentTabData as Shaobj;
+      return ReusableBarTabCard(
+        inRow: true,
+        isHighlighted: true,
+        totalshakhaa: data.shaakhaaCount,
+        todayShakhaa: data.todayShaakhaaCount,
+        yesterdayShakhaa: data.yesterdayShaakhaaCount,
+      );
+    }
+
+    if (currentTabData is Weekobj) {
+      final data = currentTabData as Weekobj;
+      return Column(
+        spacing: 8,
+        children: [
+          ReusableBarTabCard(
+            inRow: true,
+            isHighlighted: true,
+            totalshakhaa: data.shaakhaaCount,
+            todayShakhaa: data.thisWeekShaakhaaCount,
+            yesterdayShakhaa: data.lastWeekShaakhaaCount,
+          ),
+          ReusableBarTabCard(
+            inRow: true,
+            isHighlighted: true,
+            totalshakhaa: data.shaapthahikCount,
+            todayShakhaa: data.thisWeekShaapthahikCount,
+            yesterdayShakhaa: data.lastWeekShaapthahikCount,
+            mainLabel: Statics.getLabel('weeklyShakhaaTulna'),
+            currentLabel: Statics.getLabel("currentWeekShakhaa"),
+            lastLabel: Statics.getLabel('previousWeekShakhaa'),
+            totalLabel: Statics.getLabel("totalShakhaaSampann"),
+          )
+        ],
+      );
+    }
+
+    if (currentTabData is Monthobj) {
+      final data = currentTabData as Monthobj;
+      final percentageChange = (data.prevofprevMonthCount ?? 0) == 0 ? 0.0 : (((data.prevMonthCount ?? 0) - (data.prevofprevMonthCount ?? 0)) / (data.prevofprevMonthCount ?? 0)) * 100;
+      return Column(
+        spacing: 8,
+        children: [
+          ReusableBarTabCard(
+            inRow: true,
+            isHighlighted: true,
+            totalshakhaa: data.shaakhaaCount,
+            todayShakhaa: data.thisMonthShaakhaaCount,
+            yesterdayShakhaa: data.lastMonthShaakhaaCount,
+          ),
+          ReusableBarTabCard(
+            inRow: true,
+            isHighlighted: true,
+            totalshakhaa: data.shaapthahikCount,
+            todayShakhaa: data.thisMonthShaapthahikCount,
+            yesterdayShakhaa: data.lastMonthShaapthahikCount,
+            mainLabel: Statics.getLabel('shaapthahikCount'),
+            currentLabel: Statics.getLabel("thisMonthShaapthahikCount"),
+            lastLabel: Statics.getLabel('lastMonthShaapthahikCount'),
+            totalLabel: Statics.getLabel("totalshaapthahikCount"),
+          ),
+          ReusableBarTabCard(
+            inRow: true,
+            isHighlighted: true,
+            totalshakhaa: data.mandaliCount,
+            todayShakhaa: data.thisMonthMandaliCount,
+            yesterdayShakhaa: data.lastMonthMandaliCount,
+            mainLabel: Statics.getLabel('shaakhaamandaliCount'),
+            currentLabel: Statics.getLabel("thisMonthMandaliCount"),
+            lastLabel: Statics.getLabel('lastMonthMandaliCount'),
+            totalLabel: Statics.getLabel("totalshaakhaamandaliCount"),
+          ),
+          ReusableBarTabCard(
+            inRow: true,
+            isHighlighted: true,
+            totalshakhaa: data.masikCount,
+            todayShakhaa: data.thisMonthMasikCount,
+            yesterdayShakhaa: data.lastMonthMasikCount,
+            mainLabel: Statics.getLabel('masikCount'),
+            currentLabel: Statics.getLabel("thisMonthMasikCount"),
+            lastLabel: Statics.getLabel('lastMonthMasikCount'),
+            totalLabel: Statics.getLabel("totalmasikCount"),
+          ),
+
+          // Section title
+          Text(
+            Statics.getLabel("masikShaakhaa"),
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+              color: Colors.black,
             ),
           ),
           Row(
-            // mainAxisAlignment: MainAxisAlignment.spaceAround,
+            spacing: 12,
             children: [
               Expanded(
-                child: InkWell(
-                  onTap: () => setState(() => isDailySelected = true),
-                  // onTap: () => _getResultData(true),
-                  child: Container(
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4),
-                    child: Text(Statics.getLabel("daily"), style: TextStyle(color: isDailySelected ? Colors.white : Colors.black)),
-                  ),
+                child: StatCard(
+                  label: Statics.getLabel('prevofprevMonthCount'),
+                  value: (data.prevofprevMonthCount ?? 0).toString(),
+                  showBadge: false,
+                  isHighlighted: true,
                 ),
               ),
+              // Card 2: आज की कुल शाखा
               Expanded(
-                child: InkWell(
-                  onTap: () => setState(() => isDailySelected = false),
-                  // onTap: () => _getResultData(false),
-                  child: Container(
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4),
-                    child: Text(Statics.getLabel("weekly"), style: TextStyle(color: isDailySelected ? Colors.black : Colors.white)),
-                  ),
+                child: StatCard(
+                  label: Statics.getLabel('prevMonthCount'),
+                  value: (data.prevMonthCount ?? 0).toString(),
+                  showBadge: true,
+                  badgeText: '${percentageChange.abs().toStringAsFixed(1)}',
+                  badgePositive: percentageChange >= 0,
+                  isHighlighted: true,
                 ),
               ),
             ],
-          ),
+          )
         ],
-      ),
-    );
+      );
+    }
+
+    if (currentTabData is Yearobj) {
+      final data = currentTabData as Yearobj;
+      final percentageChange = (data.prevYearCount ?? 0) == 0 ? 0.0 : (((data.thisYearCount ?? 0) - (data.prevYearCount ?? 0)) / (data.prevYearCount ?? 0)) * 100;
+
+      return Column(
+        spacing: 8,
+        children: [
+          ReusableBarTabCard(
+            inRow: true,
+            isHighlighted: true,
+            totalshakhaa: data.shaakhaaCount,
+            todayShakhaa: data.thisYearShaakhaaCount,
+            yesterdayShakhaa: data.lastYearShaakhaaCount,
+          ),
+          ReusableBarTabCard(
+            inRow: true,
+            isHighlighted: true,
+            totalshakhaa: data.shaapthahikCount,
+            todayShakhaa: data.thisYearShaapthahikCount,
+            yesterdayShakhaa: data.lastYearShaapthahikCount,
+            mainLabel: Statics.getLabel('shaapthahikCount'),
+            currentLabel: Statics.getLabel("thisYearShaapthahikCount"),
+            lastLabel: Statics.getLabel('lastYearShaapthahikCount'),
+            totalLabel: Statics.getLabel("totalYearshaapthahikCount"),
+          ),
+          ReusableBarTabCard(
+            inRow: true,
+            isHighlighted: true,
+            totalshakhaa: data.mandaliCount,
+            todayShakhaa: data.thisYearMandaliCount,
+            yesterdayShakhaa: data.lastYearMandaliCount,
+            mainLabel: Statics.getLabel('shaakhaamandaliCount'),
+            currentLabel: Statics.getLabel("thisYearMandaliCount"),
+            lastLabel: Statics.getLabel('lastYearMandaliCount'),
+            totalLabel: Statics.getLabel("totalYearshaakhaamandaliCount"),
+          ),
+          ReusableBarTabCard(
+            inRow: true,
+            isHighlighted: true,
+            totalshakhaa: data.masikCount,
+            todayShakhaa: data.thisYearMasikCount,
+            yesterdayShakhaa: data.lastYearMasikCount,
+            mainLabel: Statics.getLabel('masikCount'),
+            currentLabel: Statics.getLabel("thisYearMasikCount"),
+            lastLabel: Statics.getLabel('lastYearMasikCount'),
+            totalLabel: Statics.getLabel("totalYearmasikCount"),
+          ),
+
+          // Section title
+          Text(
+            Statics.getLabel("yearlyShaakhaa"),
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+              color: Colors.black,
+            ),
+          ),
+          Row(
+            spacing: 12,
+            children: [
+              Expanded(
+                child: StatCard(
+                  label: Statics.getLabel('prevYearCount'),
+                  value: (data.prevYearCount ?? 0).toString(),
+                  showBadge: false,
+                  isHighlighted: true,
+                ),
+              ),
+              // Card 2: आज की कुल शाखा
+              Expanded(
+                child: StatCard(
+                  label: Statics.getLabel('thisYearCount'),
+                  value: (data.thisYearCount ?? 0).toString(),
+                  showBadge: true,
+                  badgeText: '${percentageChange.abs().toStringAsFixed(1)}',
+                  badgePositive: percentageChange >= 0,
+                  isHighlighted: true,
+                ),
+              ),
+            ],
+          )
+        ],
+      );
+    }
+
+    return _buildNoData();
   }
 
   Widget _attendanceCard({
     required String title,
+    required String previousLabel,
+    required String thisLabel,
     required List<AttendanceData> data,
-    bool isDaily = false,
     Color? color,
   }) {
     // Chart height scales with number of categories
@@ -1068,7 +1408,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
               // 1. Customize the Text dynamically
               tooltipTextBuilder: (selectedData, isYesterday) {
-                String timeLabel = Statics.getLabel(isYesterday ? (isDaily ? "yesterdays" : "lastWeek") : (isDaily ? "today" : "thisWeek"));
+                String timeLabel = Statics.getLabel(isYesterday ? previousLabel : thisLabel, returnKey: true);
 
                 double val = isYesterday ? selectedData.yesterday : selectedData.today;
                 return '${selectedData.label} \n\t $timeLabel -> $val';
@@ -1082,9 +1422,9 @@ class _HomeScreenState extends State<HomeScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              LegendDot(color: color ?? Color(0xFFE68449), label: Statics.getLabel(!isDailySelected ? 'lastWeek' : 'yesterdays'), bold: false),
+              LegendDot(color: color ?? Color(0xFFE68449), label: Statics.getLabel(previousLabel, returnKey: true), bold: false),
               SizedBox(width: 24),
-              LegendDot(color: color ?? Color(0xFF1565C0), label: Statics.getLabel(!isDailySelected ? 'thisWeek' : 'today'), bold: true),
+              LegendDot(color: color ?? Color(0xFF1565C0), label: Statics.getLabel(thisLabel, returnKey: true), bold: true),
             ],
           ),
         ],
@@ -1736,7 +2076,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
               // ── Yesterday Praant ───────────────────────────────────────────
               Legend(legendString: "YesterdayPraantData", fontsize: 18),
-              _isMySearching ? const CircularProgressIndicator() : _buildYesterdayPraantTable(Statics.lstYesterdayPraantData),
+              _isMySearching ? const CircularProgressIndicator() : _buildYesterdayPraantTable(),
               const SizedBox(height: 15),
 
               // ── My Geo Unit details (expansion) ───────────────────────────

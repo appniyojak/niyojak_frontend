@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
@@ -81,7 +82,7 @@ class _SearchRamJanmaBhoomiNidhiSankalanState extends State<SearchRamJanmaBhoomi
     bool isConnected = await Statics.isInternetConnected();
     if (isConnected) {
       String strInput = json.encode({"GeoUnitID": geoUnitID == null ? -1 : geoUnitID, "ParticipantOrVisheshVyakti": strType, "SearchString": searchString});
-      print("strInput:----  $strInput");
+      log("strInput:----  $strInput");
       return Statics.getNidhiSankalanVruttaForApp(strInput);
     } else {
       Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));

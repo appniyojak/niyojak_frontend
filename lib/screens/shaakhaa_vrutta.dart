@@ -427,57 +427,46 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.all(20),
-          width: Statics.getDeviceSize(context).width,
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: <Widget>[
-                Legend(legendString: 'VruttaDetails', extraString: shaakhaaName, fontsize: 18),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  height: Statics.getDeviceSize(context).height * (_headerRow != null ? 0.80 : 0.07),
-                  width: Statics.getDeviceSize(context).width,
-                  child: _isFetchingData == true
-                      ? Column(
-                          children: [CircularProgressIndicator()],
+      body: Container(
+        padding: EdgeInsets.all(20),
+        width: Statics.getDeviceSize(context).width,
+        child: Column(
+          children: <Widget>[
+            Legend(legendString: 'VruttaDetails', extraString: shaakhaaName, fontsize: 18),
+            SizedBox(height: 10),
+            Expanded(
+              child: _isFetchingData == true
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : _headerRow != null
+                      ? HorizontalDataTable(
+                          leftHandSideColumnWidth: 100,
+                          rightHandSideColumnWidth: ((vayogatCode == 'Proudh Vyavasaayee' || vayogatCode == "Baal") ? 1800 : 1950),
+                          isFixedHeader: true,
+                          headerWidgets: _headerRow,
+                          leftSideItemBuilder: _shaakhaaVruttaFirstColumn,
+                          rightSideItemBuilder: _shaakhaaVruttaOtherColumns,
+                          itemCount: (lstShaakhaaVrutta == null ? 0 : lstShaakhaaVrutta.length),
+                          rowSeparatorWidget: const Divider(
+                            color: Colors.black54,
+                            height: 1.0,
+                            thickness: 0.0,
+                          ),
+                          leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
+                          rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
                         )
-                      : _headerRow != null
-                          ? HorizontalDataTable(
-                              leftHandSideColumnWidth: 100,
-                              rightHandSideColumnWidth: ((vayogatCode == 'Proudh Vyavasaayee' || vayogatCode == "Baal") ? 1800 : 1950),
-                              isFixedHeader: true,
-                              headerWidgets: _headerRow,
-                              leftSideItemBuilder: _shaakhaaVruttaFirstColumn,
-                              rightSideItemBuilder: _shaakhaaVruttaOtherColumns,
-                              itemCount: (lstShaakhaaVrutta == null ? 0 : lstShaakhaaVrutta.length),
-                              rowSeparatorWidget: const Divider(
-                                color: Colors.black54,
-                                height: 1.0,
-                                thickness: 0.0,
-                              ),
-                              leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
-                              rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
-                            )
-                          : Column(
-                              children: [
-                                Text(
-                                  Statics.getLabel('NoDataFound'),
-                                  style: TextStyle(fontWeight: FontWeight.normal),
-                                ),
-                              ],
-                            ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-              ],
+                      : Center(
+                          child: Text(
+                            Statics.getLabel('NoDataFound'),
+                            style: TextStyle(fontWeight: FontWeight.normal),
+                          ),
+                        ),
             ),
-          ),
+            SizedBox(
+              height: 10,
+            ),
+          ],
         ),
       ),
     );

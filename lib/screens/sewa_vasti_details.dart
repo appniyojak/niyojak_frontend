@@ -120,7 +120,7 @@ class _SewaVastiDetailsState extends State<SewaVastiDetails> {
 
     sDetails = data;
 
-    final trail = await controller.getTrailFromGeoUnitId((data?.graamID ?? data?.vastiID).toString());
+    final trail = await controller.getTrailFromGeoUnitId((data?.graamID ?? data?.vastiID ?? data?.mandalID ?? data?.nagarID ?? data?.bhaagID ?? data?.vibhaagID).toString());
 
     if (trail != null) await controller.setHierarchyFromTrail(trail: trail);
     setState(() {
@@ -129,11 +129,11 @@ class _SewaVastiDetailsState extends State<SewaVastiDetails> {
         return;
       }
 
-      _sewaVastiNameCntrl.text = sDetails!.sewaVastiName ?? "";
+      _sewaVastiNameCntrl.text = sDetails?.sewaVastiName ?? "";
 
       // Primary dropdown values
-      _population.text = sDetails!.population?.toString() ?? "";
-      _remarkCntrl.text = sDetails!.remark ?? "";
+      _population.text = sDetails?.population?.toString() ?? "";
+      _remarkCntrl.text = sDetails?.remark ?? "";
 
       // Populate dropdowns
 

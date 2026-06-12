@@ -1,6 +1,8 @@
 // ─────────────────────────────────────────────
 // DAILY TAB
 // ─────────────────────────────────────────────
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 import '../helpers/static_data.dart' as Statics;
@@ -9,8 +11,11 @@ class ReusableBarTabCard extends StatelessWidget {
   // final ShaakhaaVistaarReport report;
   final int? totalshakhaa, yesterdayShakhaa, todayShakhaa;
   final String? mainLabel, totalLabel, lastLabel, currentLabel;
+  final bool inRow;
+  final bool isHighlighted;
 
-  const ReusableBarTabCard({super.key, this.totalshakhaa, this.yesterdayShakhaa, this.todayShakhaa, this.mainLabel, this.totalLabel, this.lastLabel, this.currentLabel});
+  const ReusableBarTabCard(
+      {super.key, this.totalshakhaa, this.yesterdayShakhaa, this.todayShakhaa, this.mainLabel, this.totalLabel, this.lastLabel, this.currentLabel, this.inRow = false, this.isHighlighted = false});
 
   @override
   Widget build(BuildContext context) {
@@ -26,28 +31,55 @@ class ReusableBarTabCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Card 1: कुल शाखा संकल्प
-          _StatCard(
-            label: totalLabel ?? Statics.getLabel('totalShakhaaSampann'),
-            value: total.toString(),
-            showBadge: false,
-          ),
-          const SizedBox(height: 12),
-          // Card 2: आज की कुल शाखा
-          _StatCard(
-            label: currentLabel ?? Statics.getLabel('todayTotalShakhaa'),
-            value: current.toString(),
-            showBadge: true,
-            badgeText: '${percentageChange.abs().toStringAsFixed(1)}',
-            badgePositive: percentageChange >= 0,
-          ),
+          if (inRow)
+            Row(
+              spacing: 12,
+              children: [
+                Expanded(
+                  child: StatCard(
+                    label: totalLabel ?? Statics.getLabel('totalShakhaaSampann'),
+                    value: total.toString(),
+                    showBadge: false,
+                    isHighlighted: isHighlighted,
+                  ),
+                ),
+                // Card 2: आज की कुल शाखा
+                Expanded(
+                  child: StatCard(
+                    label: currentLabel ?? Statics.getLabel('todayTotalShakhaa'),
+                    value: current.toString(),
+                    showBadge: true,
+                    badgeText: '${percentageChange.abs().toStringAsFixed(1)}',
+                    badgePositive: percentageChange >= 0,
+                    isHighlighted: isHighlighted,
+                  ),
+                ),
+              ],
+            )
+          else ...[
+            StatCard(
+              label: totalLabel ?? Statics.getLabel('totalShakhaaSampann'),
+              value: total.toString(),
+              showBadge: false,
+            ),
+            const SizedBox(height: 12),
+            // Card 2: आज की कुल शाखा
+            StatCard(
+              label: currentLabel ?? Statics.getLabel('todayTotalShakhaa'),
+              value: current.toString(),
+              showBadge: true,
+              badgeText: '${percentageChange.abs().toStringAsFixed(1)}',
+              badgePositive: percentageChange >= 0,
+            ),
+          ],
           const SizedBox(height: 12),
           // Comparison Card
-          _ComparisonCard(
+          ComparisonCard(
             title: mainLabel ?? Statics.getLabel('dailyShakhaaTulna'),
             rows: [
-              _BarRow(label: totalLabel ?? Statics.getLabel('totalShakhaaSampann'), value: total.toDouble(), maxValue: total.toDouble(), color: Color(0xFF1E90FF)),
-              _BarRow(label: lastLabel ?? Statics.getLabel('yesterdaysShakhaa'), value: previous.toDouble(), maxValue: total.toDouble(), color: Color(0xFFFF8C00)),
-              _BarRow(label: currentLabel ?? Statics.getLabel('todaysShakhaa'), value: current.toDouble(), maxValue: total.toDouble(), color: Color(0xFF00B533)),
+              BarRow(label: totalLabel ?? Statics.getLabel('totalShakhaaSampann'), value: total.toDouble(), maxValue: total.toDouble(), color: Color(0xFF1E90FF)),
+              BarRow(label: lastLabel ?? Statics.getLabel('yesterdaysShakhaa'), value: previous.toDouble(), maxValue: total.toDouble(), color: Color(0xFFFF8C00)),
+              BarRow(label: currentLabel ?? Statics.getLabel('todaysShakhaa'), value: current.toDouble(), maxValue: total.toDouble(), color: Color(0xFF00B533)),
             ],
           ),
         ],
@@ -166,70 +198,106 @@ class WeeklyTab extends StatelessWidget {
 // REUSABLE WIDGETS
 // ─────────────────────────────────────────────
 
-class _StatCard extends StatelessWidget {
+class StatCard extends StatelessWidget {
   final String label;
   final String value;
   final bool showBadge;
   final String? badgeText;
   final bool badgePositive;
+  final bool isHighlighted;
 
-  const _StatCard({
+  const StatCard({
     required this.label,
     required this.value,
     required this.showBadge,
     this.badgeText,
     this.badgePositive = true,
+    this.isHighlighted = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      // 1. Outer container handles the shadow
       decoration: BoxDecoration(
-        color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 6,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        boxShadow: !isHighlighted
+            ? []
+            : [
+                BoxShadow(
+                  color: Colors.orange.withOpacity(0.08), // Slight orange tint to the shadow
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                ),
+              ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 13,
-              color: Color(0xFF8E8E93),
-              fontWeight: FontWeight.w400,
+      // 2. ClipRRect ensures the blur doesn't bleed outside the rounded corners
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        // 3. BackdropFilter applies the frosted glass blur to whatever is behind it
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 15.0, sigmaY: 15.0),
+          // 4. Inner container handles the gradient, border, and content
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              // The distinctive Apple "glass edge reflection"
+              border: Border.all(
+                color: Colors.white.withOpacity(0.4),
+                width: 1.0,
+              ),
+              // The frosted white to orange hint gradient
+              gradient: !isHighlighted
+                  ? null
+                  : LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Colors.white.withOpacity(0.4), // Lighter top-left
+                        Colors.white.withOpacity(0.1), // Transparent middle
+                        Colors.deepOrange.withOpacity(0.15), // Orange hint bottom-right
+                      ],
+                      stops: const [0.0, 0.6, 1.0],
+                    ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    color: Color(0xFF8E8E93), // Works well on light glass
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      value,
+                      style: const TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black, // Dark text for contrast
+                        letterSpacing: -0.5,
+                      ),
+                    ),
+                    if (showBadge && badgeText != null)
+                      _PercentBadge(
+                        text: badgeText!,
+                        isPositive: badgePositive,
+                      ),
+                  ],
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 4),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                value,
-                style: const TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.black,
-                  letterSpacing: -0.5,
-                ),
-              ),
-              if (showBadge && badgeText != null)
-                _PercentBadge(
-                  text: badgeText!,
-                  isPositive: badgePositive,
-                ),
-            ],
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -269,13 +337,13 @@ class _PercentBadge extends StatelessWidget {
 }
 
 // Data class for bar rows
-class _BarRow {
+class BarRow {
   final String label;
   final double value;
   final double maxValue;
   final Color color;
 
-  const _BarRow({
+  const BarRow({
     required this.label,
     required this.value,
     required this.maxValue,
@@ -283,11 +351,11 @@ class _BarRow {
   });
 }
 
-class _ComparisonCard extends StatelessWidget {
+class ComparisonCard extends StatelessWidget {
   final String title;
-  final List<_BarRow> rows;
+  final List<BarRow> rows;
 
-  const _ComparisonCard({
+  const ComparisonCard({
     required this.title,
     required this.rows,
   });
@@ -343,7 +411,7 @@ class _ComparisonCard extends StatelessWidget {
 }
 
 class _BarRowWidget extends StatelessWidget {
-  final _BarRow row;
+  final BarRow row;
 
   const _BarRowWidget({super.key, required this.row});
 
