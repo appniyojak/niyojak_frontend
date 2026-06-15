@@ -507,7 +507,7 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
                             separatorBuilder: (context, index) => SizedBox(height: 8),
                             itemCount: _shaakhaaList?.length ?? 0,
                             itemBuilder: (context, index) {
-                              return ShaakhaaCard(_shaakhaaList?[index], false, _search);
+                              return ShaakhaaCard(_shaakhaaList?[index], _shaakhaaList?[index]["IsSankalpit"], _search);
                             },
                           ),
                   )

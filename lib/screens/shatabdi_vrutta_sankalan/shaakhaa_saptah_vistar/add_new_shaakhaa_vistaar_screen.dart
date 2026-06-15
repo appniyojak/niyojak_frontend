@@ -30,6 +30,9 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
   final GlobalKey<FormState> _formKey = GlobalKey();
   var _isLoading = false;
   bool _isfetchingData = false;
+  Map<String, dynamic>? args;
+
+  final controller = createGeoController();
 
   int? pkidPassed;
 
@@ -94,24 +97,23 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) => initData());
-    if (!mounted) return;
+    // if (!mounted) return;
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // pkidPassed = ModalRoute.of(context)!.settings.arguments as int?;
+    args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+
+    pkidPassed = int.tryParse((args?["pkid"] ?? 0).toString());
+    log("LOG >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ${args} $pkidPassed");
   }
 
   Future<void> initData() async {
-    final args = ModalRoute.of(context)?.settings.arguments as String?;
-
     final dm = await MyAppGlobals.getLevelLDB();
 
-    final controller = context.read<GeoHierarchyController>();
-
-    if (args != null && args.isNotEmpty) {
-      final trail = await controller.getTrailFromGeoUnitId(args);
+    if (args != null) {
+      final trail = await controller.getTrailFromGeoUnitId((args?["geoid"] ?? 0).toString());
       if (trail != null) await controller.setHierarchyFromTrail(trail: trail);
     } else {
       await controller.initialize(dm);
@@ -155,7 +157,7 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
   }
 
   void getShaakhaaDetails() async {
-    print("Shakha IDDD :-  {${pkidPassed}}");
+    log("Shakha IDDD :-  $pkidPassed");
 
     if (pkidPassed == null) return;
 
@@ -171,13 +173,11 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
       if (!mounted) return;
       shaakhaa = data;
       if (shaakhaa != null) {
-        final controller = context.read<GeoHierarchyController>();
-
         final trail = await controller.getTrailFromGeoUnitId((shaakhaa?.parentGraamID ?? shaakhaa?.parentVastiID).toString());
 
         if (trail != null) await controller.setHierarchyFromTrail(trail: trail);
         setState(() {
-          _shaakhaanameCtrl.text = shaakhaa!.shaakhaaName.toString();
+          _shaakhaanameCtrl.text = (shaakhaa?.shaakhaaName ?? "").toString();
 
           // _frequencyValue = shaakhaa!.frequencyID == null ? null : shaakhaa!.frequencyID.toString();
 
@@ -210,24 +210,24 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
 
           _toTimeCntrl.text = shaakhaa!.endTimeStr == null ? "" : shaakhaa!.endTimeStr!;
 
-          _vayogatValue = shaakhaa!.vayogatID == null ? null : shaakhaa!.vayogatID.toString();
+          _vayogatValue = (shaakhaa?.vayogatID == null || shaakhaa?.vayogatID == 0) ? null : (shaakhaa?.vayogatID ?? "").toString();
 
           _remarkCtrl.text = shaakhaa!.remark.toString();
 
-          _isSankalpit = shaakhaa!.isSankalpit == true ? true : false;
+          _isSankalpit = shaakhaa?.isSankalpit ?? true;
           _sankalpAadhaarEnum = (shaakhaa!.sankalpAadhaar == 'Shaakhaa' ? SankalpAadhaarEnum.Shaakhaa : SankalpAadhaarEnum.Kaaryakartaa);
           _sankalpAadhaarSwayamsevakID = shaakhaa!.sankalpAadhaarSwayamsevakID;
           _sankalpAadhaarSwayamsevakValue = (shaakhaa!.sankalpAadhaarSwayamsevakID == null ? '' : shaakhaa!.sankalpAadhaarSwayamsevakID.toString());
           _sankalpAadhaarSwayamsevakCtrl.text = (shaakhaa!.sankalpAadhaarSwayamsevakID == null ? "" : shaakhaa!.sankalpAadhaarSwayamsevakName!);
           _sankalpAadhaarShaakhaaID = shaakhaa!.sankalpAadhaarShaakhaaID;
-          _sankalpAadhaarShaakhaaValue = (shaakhaa!.sankalpAadhaarShaakhaaID == null ? '' : shaakhaa!.sankalpAadhaarShaakhaaName.toString());
-          _sankalpAadhaarShaakhaaCtrl.text = (shaakhaa!.sankalpAadhaarShaakhaaID == null ? "" : shaakhaa!.shaakhaaNameDevNaagari!);
+          _sankalpAadhaarShaakhaaValue = (shaakhaa!.sankalpAadhaarShaakhaaID == null ? '' : (shaakhaa?.sankalpAadhaarShaakhaaName ?? ""));
+          _sankalpAadhaarShaakhaaCtrl.text = (shaakhaa!.sankalpAadhaarShaakhaaID == null ? "" : (shaakhaa?.sankalpAadhaarShaakhaaName ?? ""));
           // _sankalpCompletionMonthCtrl.text = (shaakhaa!.sankalpCompletionMonth == null ? "" : shaakhaa!.sankalpCompletionMonth.toString());
           // _sankalpCompletionYearCtrl.text = (shaakhaa!.sankalpCompletionYear == null ? "" : shaakhaa!.sankalpCompletionYear.toString());
           _hasToli = shaakhaa!.hasToli == true ? true : false;
           _hasPaalak = shaakhaa!.hasPaalak == true ? true : false;
           _sharirikVishayValue = shaakhaa!.optionalShaaririkVishayID == null ? null : shaakhaa!.optionalShaaririkVishayID.toString();
-          _otherOptionalVishayCtrl.text = (shaakhaa!.otherOptionalVishay!);
+          _otherOptionalVishayCtrl.text = (shaakhaa!.otherOptionalVishay ?? "");
         });
       }
     }
@@ -240,7 +240,7 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
     if (pattern.length <= 2) return [];
     var swList = SwayamsevakProvider().getSwayamsevaks(json.encode({
       'AppUserID': Statics.userDetails["userID"],
-      'GeoUnitID': context.read<GeoHierarchyController>().hierarchyTrail.bhaagId,
+      'GeoUnitID': controller.hierarchyTrail.bhaagId,
       "SearchCriteria": pattern.isEmpty ? "" : pattern,
     }));
     for (var i in await swList) {
@@ -254,7 +254,7 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
     if (pattern.length <= 2) return [];
     var shList = Statics.getShaakhaaList(json.encode({
       'AppUserID': Statics.userDetails["userID"],
-      'GeoUnitID': context.read<GeoHierarchyController>().hierarchyTrail.bhaagId,
+      'GeoUnitID': controller.hierarchyTrail.bhaagId,
       "ShaakhaaName": pattern.isEmpty ? null : pattern,
     }));
     return shList;
@@ -283,13 +283,13 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
     var inputData = {
       "PraantID": 1,
       "PkId": pkidPassed ?? 0,
-      "ParentBhaagID": int.tryParse(context.read<GeoHierarchyController>().hierarchyTrail.bhaagId ?? ""),
+      "ParentBhaagID": int.tryParse(controller.hierarchyTrail.bhaagId ?? ""),
       "ParentShaharID": null,
       //_shaharValue == null || _shaharValue!.isEmpty ? null : _shaharValue,
-      "ParentNagarID": int.tryParse(context.read<GeoHierarchyController>().hierarchyTrail.nagarId ?? ""),
-      "ParentMandalID": int.tryParse(context.read<GeoHierarchyController>().hierarchyTrail.mandalId ?? ""),
-      "ParentGraamID": int.tryParse(context.read<GeoHierarchyController>().hierarchyTrail.graamId ?? ""),
-      "ParentVastiID": int.tryParse(context.read<GeoHierarchyController>().hierarchyTrail.vastiId ?? ""),
+      "ParentNagarID": int.tryParse(controller.hierarchyTrail.nagarId ?? ""),
+      "ParentMandalID": int.tryParse(controller.hierarchyTrail.mandalId ?? ""),
+      "ParentGraamID": int.tryParse(controller.hierarchyTrail.graamId ?? ""),
+      "ParentVastiID": int.tryParse(controller.hierarchyTrail.vastiId ?? ""),
       "ShaakhaaID": 0,
       "ShaakhaaName": _shaakhaanameCtrl.text,
       "ShaakhaaNameDevNaagari": _shaakhaanameCtrl.text,
@@ -439,85 +439,88 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
                       height: 10,
                     ),
 
-                    Consumer<GeoHierarchyController>(builder: (_, ctrl, __) {
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          if (ctrl.hasItems(GeoLevel.Vibhaag))
-                            GeoDropdownWidget(
-                              level: GeoLevel.Vibhaag,
-                              title: 'Vibhaag',
-                              controller: ctrl,
-                              validator: (v) {
-                                if (v == null || v!.isEmpty) return (Statics.getLabel('GeoUnitValidationMessage'));
-                                return null;
-                              },
-                            ),
-                          if (ctrl.hasItems(GeoLevel.Bhaag))
-                            GeoDropdownWidget(
-                              level: GeoLevel.Bhaag,
-                              title: 'Bhaag',
-                              controller: ctrl,
-                              validator: (v) {
-                                if (v == null || v!.isEmpty) return (Statics.getLabel('SelectBhaagValidationMessage'));
-                                return null;
-                              },
-                            ),
+                    ChangeNotifierProvider.value(
+                      value: controller,
+                      child: Consumer<GeoHierarchyController>(builder: (_, ctrl, __) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (ctrl.hasItems(GeoLevel.Vibhaag))
+                              GeoDropdownWidget(
+                                level: GeoLevel.Vibhaag,
+                                title: 'Vibhaag',
+                                controller: ctrl,
+                                validator: (v) {
+                                  if (v == null || v!.isEmpty) return (Statics.getLabel('GeoUnitValidationMessage'));
+                                  return null;
+                                },
+                              ),
+                            if (ctrl.hasItems(GeoLevel.Bhaag))
+                              GeoDropdownWidget(
+                                level: GeoLevel.Bhaag,
+                                title: 'Bhaag',
+                                controller: ctrl,
+                                validator: (v) {
+                                  if (v == null || v!.isEmpty) return (Statics.getLabel('SelectBhaagValidationMessage'));
+                                  return null;
+                                },
+                              ),
 
-                          if (ctrl.hasItems(GeoLevel.Nagar))
-                            GeoDropdownWidget(
-                              level: GeoLevel.Nagar,
-                              title: 'Nagar',
-                              controller: ctrl,
-                              validator: (v) {
-                                if (v == null || v!.isEmpty) return (Statics.getLabel('SelectNagarValidationMessage'));
-                                return null;
-                              },
-                            ),
+                            if (ctrl.hasItems(GeoLevel.Nagar))
+                              GeoDropdownWidget(
+                                level: GeoLevel.Nagar,
+                                title: 'Nagar',
+                                controller: ctrl,
+                                validator: (v) {
+                                  if (v == null || v!.isEmpty) return (Statics.getLabel('SelectNagarValidationMessage'));
+                                  return null;
+                                },
+                              ),
 
-                          /// CONDITIONAL
-                          if (ctrl.hasItems(GeoLevel.upnagarUpkhanda))
-                            GeoDropdownWidget(
-                              level: GeoLevel.upnagarUpkhanda,
-                              title: 'upnagarUpkhanda',
-                              controller: ctrl,
-                            ),
+                            /// CONDITIONAL
+                            if (ctrl.hasItems(GeoLevel.upnagarUpkhanda))
+                              GeoDropdownWidget(
+                                level: GeoLevel.upnagarUpkhanda,
+                                title: 'upnagarUpkhanda',
+                                controller: ctrl,
+                              ),
 
-                          if (ctrl.hasItems(GeoLevel.Mandal))
-                            GeoDropdownWidget(
-                              level: GeoLevel.Mandal,
-                              title: 'Mandal',
-                              controller: ctrl,
-                              validator: (v) {
-                                if (v == null || v!.isEmpty) return (Statics.getLabel('SelectMandalValidationMessage'));
-                                return null;
-                              },
-                            ),
+                            if (ctrl.hasItems(GeoLevel.Mandal))
+                              GeoDropdownWidget(
+                                level: GeoLevel.Mandal,
+                                title: 'Mandal',
+                                controller: ctrl,
+                                validator: (v) {
+                                  if (v == null || v!.isEmpty) return (Statics.getLabel('SelectMandalValidationMessage'));
+                                  return null;
+                                },
+                              ),
 
-                          if (ctrl.hasItems(GeoLevel.Graam))
-                            GeoDropdownWidget(
-                              level: GeoLevel.Graam,
-                              title: 'Graam',
-                              controller: ctrl,
-                              validator: (v) {
-                                if (v == null || v!.isEmpty) return (Statics.getLabel('SelectGraamValidationMessage'));
-                                return null;
-                              },
-                            ),
+                            if (ctrl.hasItems(GeoLevel.Graam))
+                              GeoDropdownWidget(
+                                level: GeoLevel.Graam,
+                                title: 'Graam',
+                                controller: ctrl,
+                                validator: (v) {
+                                  if (v == null || v!.isEmpty) return (Statics.getLabel('SelectGraamValidationMessage'));
+                                  return null;
+                                },
+                              ),
 
-                          if (ctrl.hasItems(GeoLevel.Vasti))
-                            GeoDropdownWidget(
-                              level: GeoLevel.Vasti,
-                              title: 'Vasti',
-                              controller: ctrl,
-                              validator: (v) {
-                                if (v == null || v!.isEmpty) return (Statics.getLabel('VastiValidationMessage'));
-                                return null;
-                              },
-                            ),
-                        ],
-                      );
-                    }),
+                            if (ctrl.hasItems(GeoLevel.Vasti))
+                              GeoDropdownWidget(
+                                level: GeoLevel.Vasti,
+                                title: 'Vasti',
+                                controller: ctrl,
+                                validator: (v) {
+                                  if (v == null || v!.isEmpty) return (Statics.getLabel('VastiValidationMessage'));
+                                  return null;
+                                },
+                              ),
+                          ],
+                        );
+                      }),
+                    ),
                     if (_vayogat != null)
                       DropdownButtonFormField(
                         decoration: InputDecoration(labelText: Statics.getLabel('Vayogat')),

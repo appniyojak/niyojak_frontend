@@ -182,6 +182,11 @@ class ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Aut
                           todayShakhaa: report?.thisWeekShakhaa,
                           totalshakhaa: report?.totalshakhaa,
                           yesterdayShakhaa: report?.previousWeekShakhaa,
+                          mainLabel: Statics.getLabel("shakhaaTulna"),
+                          currentTotalLabel: Statics.getLabel("thisWeekTotalShakhaa"),
+                          currentLabel: Statics.getLabel("currentWeekShakhaa"),
+                          lastLabel: Statics.getLabel('previousWeekShakhaa'),
+                          totalLabel: Statics.getLabel("totalShakhaaSampann"),
                         )
                 else ...[
                   _attendanceCard(title: "${Statics.getLabel('Total')} ${Statics.getLabel('upastithi')}", data: isDailySelected ? _dailyPresent : _weeklyPresent, isDaily: isDailySelected),

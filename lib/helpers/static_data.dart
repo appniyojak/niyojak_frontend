@@ -2556,11 +2556,13 @@ Future<Notes?> getVersionReleaseNotes() async {
 
   if (response.statusCode == 200) {
     final responseData = json.decode(response.body);
-    log(responseData);
+    // log(responseData);
 
     ReleaseNotesRespModel model = ReleaseNotesRespModel.fromJson(responseData);
 
     if (model.status == "200" || model.status == "Success") {
+      // log("AHSVc havhc ha schvahscv ajhb sJKCBkj ABScjkbaj c >>>>>>>>>>>>> ${jsonEncode(responseData)}");
+
       return model.notes;
     }
     return null;

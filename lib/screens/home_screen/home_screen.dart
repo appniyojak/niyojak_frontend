@@ -271,6 +271,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _fetchNotificationData(),
       _getShaakhaaVruttaReport(),
     ]);
+    setState(() {});
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -1031,72 +1032,78 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       spacing: 12,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center, // Centers the tabs nicely
-          children: List.generate(tabs.length, (index) {
-            final isSelected = activeTabIndex == index;
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+          decoration: BoxDecoration(color: Colors.grey.shade100, borderRadius: BorderRadius.circular(28)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Centers the tabs nicely
+            children: List.generate(tabs.length, (index) {
+              final isSelected = activeTabIndex == index;
 
-            return GestureDetector(
-              onTap: () => onTabTapped(index),
-              child: Container(
-                // 1. Spacing between the individual tab pills
-                margin: const EdgeInsets.symmetric(horizontal: 4),
-                // 2. ClipRRect creates the smooth pill shape for the glass
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(24),
-                  // 3. BackdropFilter for the blur effect
-                  child: BackdropFilter(
-                    // We only blur the active tab to save GPU performance
-                    filter: ImageFilter.blur(
-                      sigmaX: isSelected ? 15.0 : 0.0,
-                      sigmaY: isSelected ? 15.0 : 0.0,
-                    ),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(24),
-                        // The glass edge highlight (only visible when selected)
-                        border: Border.all(
-                          color: isSelected ? Colors.white.withOpacity(0.4) : Colors.transparent,
-                          width: 1.0,
-                        ),
-                        // The frosted orange hint gradient
-                        gradient: isSelected
-                            ? LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: [
-                                  Colors.white.withOpacity(0.4), // Frosted top
-                                  Colors.purple.withOpacity(0.1), // Clear middle
-                                  Colors.deepPurple.withOpacity(0.37), // Orange hint
-                                  Colors.deepPurple.withOpacity(0.7), // Orange hint
-                                ],
-                                stops: const [0.0, 0.3, 0.6, 1.0],
-                              )
-                            : null,
-                        // Inactive tabs get a barely-there white wash instead of a gradient
-                        color: isSelected ? null : Colors.white.withOpacity(0.05),
+              return GestureDetector(
+                onTap: () => onTabTapped(index),
+                child: Container(
+                  // 1. Spacing between the individual tab pills
+                  margin: const EdgeInsets.symmetric(horizontal: 4),
+                  // 2. ClipRRect creates the smooth pill shape for the glass
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(24),
+                    // 3. BackdropFilter for the blur effect
+                    child: BackdropFilter(
+                      // We only blur the active tab to save GPU performance
+                      filter: ImageFilter.blur(
+                        sigmaX: isSelected ? 15.0 : 0.0,
+                        sigmaY: isSelected ? 15.0 : 0.0,
                       ),
-                      child: Text(
-                        tabs[index],
-                        style: TextStyle(
-                          // I replaced the red text to better match the new aesthetic
-                          color: isSelected ? Colors.black87 : const Color(0xFF8E8E93),
-                          fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                          letterSpacing: -0.3,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(24),
+                          // The glass edge highlight (only visible when selected)
+                          border: Border.all(
+                            color: isSelected ? Colors.white.withOpacity(0.4) : Colors.transparent,
+                            width: 1.0,
+                          ),
+                          // The frosted orange hint gradient
+                          gradient: isSelected
+                              ? LinearGradient(
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: [
+                                    Colors.white.withOpacity(0.4), // Frosted top
+                                    Colors.purple.withOpacity(0.1), // Clear middle
+                                    Colors.deepPurple.withOpacity(0.37), // Orange hint
+                                    Colors.deepPurple.withOpacity(0.7), // Orange hint
+                                  ],
+                                  stops: const [0.0, 0.3, 0.6, 1.0],
+                                )
+                              : null,
+                          // Inactive tabs get a barely-there white wash instead of a gradient
+                          color: isSelected ? null : Colors.white.withOpacity(0.05),
+                        ),
+                        child: Text(
+                          tabs[index],
+                          style: TextStyle(
+                            // I replaced the red text to better match the new aesthetic
+                            color: isSelected ? Colors.black : Colors.grey.shade700,
+                            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            );
-          }),
+              );
+            }),
+          ),
         ),
         buildDataBody(),
       ],
     );
-    /*return ScrollableDataTable(
+    /*
+    final data = Statics.lstYesterdayPraantData;
+    if (data.isEmpty) return _buildNoData();
+    return ScrollableDataTable(
       headers: [
         Statics.getLabel('Vayogat'),
         Statics.getLabel('Shaakhaa'),
@@ -1144,6 +1151,7 @@ class _HomeScreenState extends State<HomeScreen> {
         totalshakhaa: data.shaakhaaCount,
         todayShakhaa: data.todayShaakhaaCount,
         yesterdayShakhaa: data.yesterdayShaakhaaCount,
+        mainLabel: Statics.getLabel("shakhaaTulna"),
       );
     }
 
@@ -1158,6 +1166,10 @@ class _HomeScreenState extends State<HomeScreen> {
             totalshakhaa: data.shaakhaaCount,
             todayShakhaa: data.thisWeekShaakhaaCount,
             yesterdayShakhaa: data.lastWeekShaakhaaCount,
+            mainLabel: Statics.getLabel("shakhaaTulna"),
+            currentLabel: Statics.getLabel("currentWeekShakhaa"),
+            lastLabel: Statics.getLabel("previousWeekShakhaa"),
+            currentTotalLabel: Statics.getLabel("thisWeekTotalShakhaa"),
           ),
           ReusableBarTabCard(
             inRow: true,
@@ -1166,9 +1178,9 @@ class _HomeScreenState extends State<HomeScreen> {
             todayShakhaa: data.thisWeekShaapthahikCount,
             yesterdayShakhaa: data.lastWeekShaapthahikCount,
             mainLabel: Statics.getLabel('weeklyShakhaaTulna'),
-            currentLabel: Statics.getLabel("currentWeekShakhaa"),
-            lastLabel: Statics.getLabel('previousWeekShakhaa'),
-            totalLabel: Statics.getLabel("totalShakhaaSampann"),
+            currentLabel: Statics.getLabel("currentWeekMilan"),
+            lastLabel: Statics.getLabel('previousWeekMilan'),
+            totalLabel: Statics.getLabel("totalMilanSampann"),
           )
         ],
       );
@@ -1186,6 +1198,18 @@ class _HomeScreenState extends State<HomeScreen> {
             totalshakhaa: data.shaakhaaCount,
             todayShakhaa: data.thisMonthShaakhaaCount,
             yesterdayShakhaa: data.lastMonthShaakhaaCount,
+            mainLabel: Statics.getLabel("shakhaaTulna"),
+            currentLabel: Statics.getLabel("thisMonthCount"),
+            lastLabel: Statics.getLabel("prevMonthCount"),
+            currentTotalLabel: Statics.getLabel("todayShaakhaaMonthCount"),
+            rows: [
+              BarRow(
+                  label: Statics.getLabel('prevofprevmonthshakhaMASIK'),
+                  value: (data.prevofprevmonthshakha ?? 0).toDouble(),
+                  maxValue: (data.shaapthahikCount ?? 0).toDouble(),
+                  color: Color(0xFFFF8C00)),
+              BarRow(label: Statics.getLabel('prevmonthshakhaMASIK'), value: (data.prevmonthshakha ?? 0).toDouble(), maxValue: (data.shaapthahikCount ?? 0).toDouble(), color: Color(0xFFFF8C00)),
+            ],
           ),
           ReusableBarTabCard(
             inRow: true,
@@ -1193,10 +1217,18 @@ class _HomeScreenState extends State<HomeScreen> {
             totalshakhaa: data.shaapthahikCount,
             todayShakhaa: data.thisMonthShaapthahikCount,
             yesterdayShakhaa: data.lastMonthShaapthahikCount,
-            mainLabel: Statics.getLabel('shaapthahikCount'),
+            mainLabel: Statics.getLabel('weeklyShakhaaTulna'),
             currentLabel: Statics.getLabel("thisMonthShaapthahikCount"),
             lastLabel: Statics.getLabel('lastMonthShaapthahikCount'),
             totalLabel: Statics.getLabel("totalshaapthahikCount"),
+            rows: [
+              BarRow(
+                  label: Statics.getLabel('prevofprevmonthshakhaMASIK'),
+                  value: (data.prevofprevmonthmilan ?? 0).toDouble(),
+                  maxValue: (data.shaapthahikCount ?? 0).toDouble(),
+                  color: Color(0xFFFF8C00)),
+              BarRow(label: Statics.getLabel('prevmonthshakhaMASIK'), value: (data.prevmonthmilan ?? 0).toDouble(), maxValue: (data.shaapthahikCount ?? 0).toDouble(), color: Color(0xFFFF8C00)),
+            ],
           ),
           ReusableBarTabCard(
             inRow: true,
@@ -1208,6 +1240,14 @@ class _HomeScreenState extends State<HomeScreen> {
             currentLabel: Statics.getLabel("thisMonthMandaliCount"),
             lastLabel: Statics.getLabel('lastMonthMandaliCount'),
             totalLabel: Statics.getLabel("totalshaakhaamandaliCount"),
+            rows: [
+              BarRow(
+                  label: Statics.getLabel('prevofprevmonthshakhaMASIK'),
+                  value: (data.prevofprevmonthsanga ?? 0).toDouble(),
+                  maxValue: (data.shaapthahikCount ?? 0).toDouble(),
+                  color: Color(0xFFFF8C00)),
+              BarRow(label: Statics.getLabel('prevmonthshakhaMASIK'), value: (data.prevmonthsanga ?? 0).toDouble(), maxValue: (data.shaapthahikCount ?? 0).toDouble(), color: Color(0xFFFF8C00)),
+            ],
           ),
           ReusableBarTabCard(
             inRow: true,
@@ -1219,9 +1259,17 @@ class _HomeScreenState extends State<HomeScreen> {
             currentLabel: Statics.getLabel("thisMonthMasikCount"),
             lastLabel: Statics.getLabel('lastMonthMasikCount'),
             totalLabel: Statics.getLabel("totalmasikCount"),
+            rows: [
+              BarRow(
+                  label: Statics.getLabel('prevofprevmonthshakhaMASIK'),
+                  value: (data.prevofprevmonthmaansik ?? 0).toDouble(),
+                  maxValue: (data.shaapthahikCount ?? 0).toDouble(),
+                  color: Color(0xFFFF8C00)),
+              BarRow(label: Statics.getLabel('prevmonthshakhaMASIK'), value: (data.prevmonthmaansik ?? 0).toDouble(), maxValue: (data.shaapthahikCount ?? 0).toDouble(), color: Color(0xFFFF8C00)),
+            ],
           ),
 
-          // Section title
+          /*// Section title
           Text(
             Statics.getLabel("masikShaakhaa"),
             style: TextStyle(
@@ -1253,7 +1301,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ],
-          )
+          )*/
         ],
       );
     }
@@ -1271,6 +1319,18 @@ class _HomeScreenState extends State<HomeScreen> {
             totalshakhaa: data.shaakhaaCount,
             todayShakhaa: data.thisYearShaakhaaCount,
             yesterdayShakhaa: data.lastYearShaakhaaCount,
+            mainLabel: Statics.getLabel("shakhaaTulna"),
+            currentLabel: Statics.getLabel("thisYearCount"),
+            lastLabel: Statics.getLabel("prevYearCount"),
+            currentTotalLabel: Statics.getLabel("thisYearTotalCount"),
+            rows: [
+              BarRow(
+                  label: Statics.getLabel('prevofprevmonthshakhaMASIK'),
+                  value: (data.prevofprevyearshakha ?? 0).toDouble(),
+                  maxValue: (data.shaapthahikCount ?? 0).toDouble(),
+                  color: Color(0xFFFF8C00)),
+              BarRow(label: Statics.getLabel('prevmonthshakhaMASIK'), value: (data.prevyearshakha ?? 0).toDouble(), maxValue: (data.shaapthahikCount ?? 0).toDouble(), color: Color(0xFFFF8C00)),
+            ],
           ),
           ReusableBarTabCard(
             inRow: true,
@@ -1278,10 +1338,18 @@ class _HomeScreenState extends State<HomeScreen> {
             totalshakhaa: data.shaapthahikCount,
             todayShakhaa: data.thisYearShaapthahikCount,
             yesterdayShakhaa: data.lastYearShaapthahikCount,
-            mainLabel: Statics.getLabel('shaapthahikCount'),
+            mainLabel: Statics.getLabel('weeklyShakhaaTulna'),
             currentLabel: Statics.getLabel("thisYearShaapthahikCount"),
             lastLabel: Statics.getLabel('lastYearShaapthahikCount'),
             totalLabel: Statics.getLabel("totalYearshaapthahikCount"),
+            rows: [
+              BarRow(
+                  label: Statics.getLabel('prevofprevmonthshakhaMASIK'),
+                  value: (data.prevofprevyearmilan ?? 0).toDouble(),
+                  maxValue: (data.shaapthahikCount ?? 0).toDouble(),
+                  color: Color(0xFFFF8C00)),
+              BarRow(label: Statics.getLabel('prevmonthshakhaMASIK'), value: (data.prevyearmilan ?? 0).toDouble(), maxValue: (data.shaapthahikCount ?? 0).toDouble(), color: Color(0xFFFF8C00)),
+            ],
           ),
           ReusableBarTabCard(
             inRow: true,
@@ -1293,6 +1361,14 @@ class _HomeScreenState extends State<HomeScreen> {
             currentLabel: Statics.getLabel("thisYearMandaliCount"),
             lastLabel: Statics.getLabel('lastYearMandaliCount'),
             totalLabel: Statics.getLabel("totalYearshaakhaamandaliCount"),
+            rows: [
+              BarRow(
+                  label: Statics.getLabel('prevofprevmonthshakhaMASIK'),
+                  value: (data.prevofprevyearsanga ?? 0).toDouble(),
+                  maxValue: (data.shaapthahikCount ?? 0).toDouble(),
+                  color: Color(0xFFFF8C00)),
+              BarRow(label: Statics.getLabel('prevmonthshakhaMASIK'), value: (data.prevyearsanga ?? 0).toDouble(), maxValue: (data.shaapthahikCount ?? 0).toDouble(), color: Color(0xFFFF8C00)),
+            ],
           ),
           ReusableBarTabCard(
             inRow: true,
@@ -1304,9 +1380,17 @@ class _HomeScreenState extends State<HomeScreen> {
             currentLabel: Statics.getLabel("thisYearMasikCount"),
             lastLabel: Statics.getLabel('lastYearMasikCount'),
             totalLabel: Statics.getLabel("totalYearmasikCount"),
+            rows: [
+              BarRow(
+                  label: Statics.getLabel('prevofprevmonthshakhaMASIK'),
+                  value: (data.prevofprevyearmaansik ?? 0).toDouble(),
+                  maxValue: (data.shaapthahikCount ?? 0).toDouble(),
+                  color: Color(0xFFFF8C00)),
+              BarRow(label: Statics.getLabel('prevmonthshakhaMASIK'), value: (data.prevyearmaansik ?? 0).toDouble(), maxValue: (data.shaapthahikCount ?? 0).toDouble(), color: Color(0xFFFF8C00)),
+            ],
           ),
 
-          // Section title
+          /*// Section title
           Text(
             Statics.getLabel("yearlyShaakhaa"),
             style: TextStyle(
@@ -1338,7 +1422,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ],
-          )
+          )*/
         ],
       );
     }
@@ -2075,7 +2159,7 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 20),
 
               // ── Yesterday Praant ───────────────────────────────────────────
-              Legend(legendString: "YesterdayPraantData", fontsize: 18),
+              Legend(legendString: "MyGeoVruttaData", fontsize: 18),
               _isMySearching ? const CircularProgressIndicator() : _buildYesterdayPraantTable(),
               const SizedBox(height: 15),
 
@@ -2083,13 +2167,17 @@ class _HomeScreenState extends State<HomeScreen> {
               _myGeoUnitPanel(),
               const SizedBox(height: 10),
 
-              // ── Target Geo Unit details (expansion) ───────────────────────
-              _targetGeoUnitPanel(),
-              const SizedBox(height: 15),
+              if (userLevelId != 1) ...[
+                // ── Target Geo Unit details (expansion) ───────────────────────
+                _targetGeoUnitPanel(),
+                const SizedBox(height: 15),
 
-              // ── Bhaugolik rachana (expansion) ─────────────────────────────
-              _bhaugolikRachanaPanel(),
-              const SizedBox(height: 15),
+                if ((userLevelId ?? 0) > 8) ...[
+                  // ── Bhaugolik rachana (expansion) ─────────────────────────────
+                  _bhaugolikRachanaPanel(),
+                  const SizedBox(height: 15),
+                ],
+              ],
             ],
           ),
         ),
@@ -2218,15 +2306,17 @@ class _HomeScreenState extends State<HomeScreen> {
         maasikEQ1: myMaasikEQ1,
       ),
       const SizedBox(height: 15),
-      Legend(legendString: "SankalpTable", fontsize: 18),
-      _buildSadyasthitiTable(Statics.lstdashboardSadyaSthitiData),
-      const SizedBox(height: 15),
-      Legend(legendString: "NewSankalpTable", fontsize: 18),
-      _buildSankalpByAadhaarTable(Statics.lstSankalpByAadhaarData),
-      const SizedBox(height: 15),
-      Legend(legendString: "BhaugolikVistaar", fontsize: 18),
-      _buildBhaugolikTable(Statics.lstBhaugolikVistaar),
-      const SizedBox(height: 15),
+      if (userLevelId != 1) ...[
+        Legend(legendString: "SankalpTable", fontsize: 18),
+        _buildSadyasthitiTable(Statics.lstdashboardSadyaSthitiData),
+        const SizedBox(height: 15),
+        Legend(legendString: "NewSankalpTable", fontsize: 18),
+        _buildSankalpByAadhaarTable(Statics.lstSankalpByAadhaarData),
+        const SizedBox(height: 15),
+        Legend(legendString: "BhaugolikVistaar", fontsize: 18),
+        _buildBhaugolikTable(Statics.lstBhaugolikVistaar),
+        const SizedBox(height: 15),
+      ],
       Legend(legendString: "SwayamsevakCount", fontsize: 18),
       SingleColumnRow(txtString: Statics.getLabel('TotalKaaryakartaaCount'), value: myTotalSwayamsevakCount, fontsize: 15),
       SingleColumnRow(txtString: Statics.getLabel('PratidnyitCount'), value: myPratidnyitCount, fontsize: 15),

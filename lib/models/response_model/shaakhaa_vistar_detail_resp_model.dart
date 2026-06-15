@@ -100,7 +100,7 @@ class ShakhaaVistarDetail {
     parentGraamID = json['ParentGraamID'];
     parentVastiID = json['ParentVastiID'];
     shaakhaaID = json['ShaakhaaID'];
-    shaakhaaName = json['ShaakhaaName'];
+    shaakhaaName = json['ShaakhaaName'] ?? json['GeoUnitName'];
     shaakhaaNameDevNaagari = json['ShaakhaaNameDevNaagari'];
     frequencyID = json['FrequencyID'];
     daysOfWeek = json['DaysOfWeek'];

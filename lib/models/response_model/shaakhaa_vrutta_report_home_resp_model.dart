@@ -189,22 +189,39 @@ class Monthobj {
   int? lastMonthMasikCount;
   int? prevofprevMonthCount;
   int? prevMonthCount;
+  int? prevmonthshakha;
+  int? prevmonthmilan;
+  int? prevmonthsanga;
+  int? prevmonthmaansik;
+  int? prevofprevmonthshakha;
+  int? prevofprevmonthmilan;
+  int? prevofprevmonthsanga;
+  int? prevofprevmonthmaansik;
 
-  Monthobj(
-      {this.shaakhaaCount,
-      this.thisMonthShaakhaaCount,
-      this.lastMonthShaakhaaCount,
-      this.shaapthahikCount,
-      this.thisMonthShaapthahikCount,
-      this.lastMonthShaapthahikCount,
-      this.mandaliCount,
-      this.thisMonthMandaliCount,
-      this.lastMonthMandaliCount,
-      this.masikCount,
-      this.thisMonthMasikCount,
-      this.lastMonthMasikCount,
-      this.prevofprevMonthCount,
-      this.prevMonthCount});
+  Monthobj({
+    this.shaakhaaCount,
+    this.thisMonthShaakhaaCount,
+    this.lastMonthShaakhaaCount,
+    this.shaapthahikCount,
+    this.thisMonthShaapthahikCount,
+    this.lastMonthShaapthahikCount,
+    this.mandaliCount,
+    this.thisMonthMandaliCount,
+    this.lastMonthMandaliCount,
+    this.masikCount,
+    this.thisMonthMasikCount,
+    this.lastMonthMasikCount,
+    this.prevofprevMonthCount,
+    this.prevMonthCount,
+    this.prevmonthshakha,
+    this.prevmonthmilan,
+    this.prevmonthsanga,
+    this.prevmonthmaansik,
+    this.prevofprevmonthshakha,
+    this.prevofprevmonthmilan,
+    this.prevofprevmonthsanga,
+    this.prevofprevmonthmaansik,
+  });
 
   Monthobj.fromJson(Map<String, dynamic> json) {
     shaakhaaCount = json['ShaakhaaCount'];
@@ -221,6 +238,14 @@ class Monthobj {
     lastMonthMasikCount = json['LastMonthMasikCount'];
     prevofprevMonthCount = json['PrevofprevMonthCount'];
     prevMonthCount = json['prevMonthCount'];
+    prevmonthshakha = json['prevmonthshakha'];
+    prevmonthmilan = json['prevmonthmilan'];
+    prevmonthsanga = json['prevmonthsanga'];
+    prevmonthmaansik = json['prevmonthmaansik'];
+    prevofprevmonthshakha = json['prevofprevmonthshakha'];
+    prevofprevmonthmilan = json['prevofprevmonthmilan'];
+    prevofprevmonthsanga = json['prevofprevmonthsanga'];
+    prevofprevmonthmaansik = json['prevofprevmonthmaansik'];
   }
 
   Map<String, dynamic> toJson() {
@@ -239,6 +264,14 @@ class Monthobj {
     data['LastMonthMasikCount'] = this.lastMonthMasikCount;
     data['PrevofprevMonthCount'] = this.prevofprevMonthCount;
     data['prevMonthCount'] = this.prevMonthCount;
+    data['prevmonthshakha'] = this.prevmonthshakha;
+    data['prevmonthmilan'] = this.prevmonthmilan;
+    data['prevmonthsanga'] = this.prevmonthsanga;
+    data['prevmonthmaansik'] = this.prevmonthmaansik;
+    data['prevofprevmonthshakha'] = this.prevofprevmonthshakha;
+    data['prevofprevmonthmilan'] = this.prevofprevmonthmilan;
+    data['prevofprevmonthsanga'] = this.prevofprevmonthsanga;
+    data['prevofprevmonthmaansik'] = this.prevofprevmonthmaansik;
     return data;
   }
 }
@@ -258,22 +291,39 @@ class Yearobj {
   int? lastYearMasikCount;
   int? prevYearCount;
   int? thisYearCount;
+  int? prevyearshakha;
+  int? prevyearmilan;
+  int? prevyearsanga;
+  int? prevyearmaansik;
+  int? prevofprevyearshakha;
+  int? prevofprevyearmilan;
+  int? prevofprevyearsanga;
+  int? prevofprevyearmaansik;
 
-  Yearobj(
-      {this.shaakhaaCount,
-      this.thisYearShaakhaaCount,
-      this.lastYearShaakhaaCount,
-      this.shaapthahikCount,
-      this.thisYearShaapthahikCount,
-      this.lastYearShaapthahikCount,
-      this.mandaliCount,
-      this.thisYearMandaliCount,
-      this.lastYearMandaliCount,
-      this.masikCount,
-      this.thisYearMasikCount,
-      this.lastYearMasikCount,
-      this.prevYearCount,
-      this.thisYearCount});
+  Yearobj({
+    this.shaakhaaCount,
+    this.thisYearShaakhaaCount,
+    this.lastYearShaakhaaCount,
+    this.shaapthahikCount,
+    this.thisYearShaapthahikCount,
+    this.lastYearShaapthahikCount,
+    this.mandaliCount,
+    this.thisYearMandaliCount,
+    this.lastYearMandaliCount,
+    this.masikCount,
+    this.thisYearMasikCount,
+    this.lastYearMasikCount,
+    this.prevYearCount,
+    this.thisYearCount,
+    this.prevyearshakha,
+    this.prevyearmilan,
+    this.prevyearsanga,
+    this.prevyearmaansik,
+    this.prevofprevyearshakha,
+    this.prevofprevyearmilan,
+    this.prevofprevyearsanga,
+    this.prevofprevyearmaansik,
+  });
 
   Yearobj.fromJson(Map<String, dynamic> json) {
     shaakhaaCount = json['ShaakhaaCount'];
@@ -290,6 +340,14 @@ class Yearobj {
     lastYearMasikCount = json['LastYearMasikCount'];
     prevYearCount = json['PrevYearCount'];
     thisYearCount = json['ThisYearCount'];
+    prevyearshakha = json['prevyearshakha'];
+    prevyearmilan = json['prevyearmilan'];
+    prevyearsanga = json['prevyearsanga'];
+    prevyearmaansik = json['prevyearmaansik'];
+    prevofprevyearshakha = json['prevofprevyearshakha'];
+    prevofprevyearmilan = json['prevofprevyearmilan'];
+    prevofprevyearsanga = json['prevofprevyearsanga'];
+    prevofprevyearmaansik = json['prevofprevyearmaansik'];
   }
 
   Map<String, dynamic> toJson() {
@@ -308,6 +366,14 @@ class Yearobj {
     data['LastYearMasikCount'] = this.lastYearMasikCount;
     data['PrevYearCount'] = this.prevYearCount;
     data['ThisYearCount'] = this.thisYearCount;
+    data['prevyearshakha'] = this.prevyearshakha;
+    data['prevyearmilan'] = this.prevyearmilan;
+    data['prevyearsanga'] = this.prevyearsanga;
+    data['prevyearmaansik'] = this.prevyearmaansik;
+    data['prevofprevyearshakha'] = this.prevofprevyearshakha;
+    data['prevofprevyearmilan'] = this.prevofprevyearmilan;
+    data['prevofprevyearsanga'] = this.prevofprevyearsanga;
+    data['prevofprevyearmaansik'] = this.prevofprevyearmaansik;
     return data;
   }
 }

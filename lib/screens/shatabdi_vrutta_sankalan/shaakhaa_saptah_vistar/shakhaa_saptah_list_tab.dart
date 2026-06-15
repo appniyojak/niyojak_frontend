@@ -196,6 +196,7 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
                 ]),
                 Flexible(
                   child: TabBarView(children: [
+                    ///1
                     _shaakhaaList == null || (_shaakhaaList?.isEmpty == true)
                         ? SizedBox(
                             height: 120,
@@ -224,6 +225,8 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
                                       )));
                             },
                           ),
+
+                    ///2
                     (_sankalpitShaakhaaList.isEmpty)
                         ? SizedBox(
                             height: 120,
@@ -252,9 +255,11 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
                                       )));
                             },
                           ),
+
+                    ///3
                     Scaffold(
                       floatingActionButton: FloatingActionButton(
-                        onPressed: () => Navigator.pushNamed(context, AddNewShaakhaaVistaarScreen.routeName, arguments: controller.deepestSelectedGeoUnitId),
+                        onPressed: () => Navigator.pushNamed(context, AddNewShaakhaaVistaarScreen.routeName, arguments: {"geoid": controller.deepestSelectedGeoUnitId}),
                         child: Icon(Icons.add, color: Colors.blueAccent.shade700),
                       ),
                       body: (_newShaakhaaList.isEmpty)
@@ -278,7 +283,8 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
                                   traillingIcon: PopupMenuButton(
                                       itemBuilder: (context) => [
                                             PopupMenuItem(
-                                                onTap: () => Navigator.pushNamed(context, AddNewShaakhaaVistaarScreen.routeName, arguments: _newShaakhaaList[index].pkid),
+                                                onTap: () => Navigator.of(context).pushNamed(AddNewShaakhaaVistaarScreen.routeName,
+                                                    arguments: {"pkid": _newShaakhaaList[index].pkid, "geoid": _newShaakhaaList[index].parentVastiID ?? _newShaakhaaList[index].parentGraamID}),
                                                 child: ListTile(
                                                   // tileColor: Colors.white,
                                                   leading: Icon(

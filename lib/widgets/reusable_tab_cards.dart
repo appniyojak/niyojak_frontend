@@ -10,20 +10,32 @@ import '../helpers/static_data.dart' as Statics;
 class ReusableBarTabCard extends StatelessWidget {
   // final ShaakhaaVistaarReport report;
   final int? totalshakhaa, yesterdayShakhaa, todayShakhaa;
-  final String? mainLabel, totalLabel, lastLabel, currentLabel;
+  final String? mainLabel, totalLabel, lastLabel, currentLabel, currentTotalLabel;
   final bool inRow;
   final bool isHighlighted;
+  final List<BarRow>? rows;
 
   const ReusableBarTabCard(
-      {super.key, this.totalshakhaa, this.yesterdayShakhaa, this.todayShakhaa, this.mainLabel, this.totalLabel, this.lastLabel, this.currentLabel, this.inRow = false, this.isHighlighted = false});
+      {super.key,
+      this.totalshakhaa,
+      this.yesterdayShakhaa,
+      this.todayShakhaa,
+      this.mainLabel,
+      this.totalLabel,
+      this.lastLabel,
+      this.currentLabel,
+      this.currentTotalLabel,
+      this.rows,
+      this.inRow = false,
+      this.isHighlighted = false});
 
   @override
   Widget build(BuildContext context) {
     final total = totalshakhaa ?? 0;
-    final previous = yesterdayShakhaa ?? 0;
-    final current = todayShakhaa ?? 0;
+    final previous = (yesterdayShakhaa ?? 0);
+    final current = (todayShakhaa ?? 0);
 
-    final percentageChange = previous == 0 ? 0.0 : ((current - previous) / previous) * 100;
+    final percentageChange = previous == 0 ? ((current - 1) / 1) * 100 : ((current - previous) / previous) * 100;
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
@@ -46,7 +58,7 @@ class ReusableBarTabCard extends StatelessWidget {
                 // Card 2: आज की कुल शाखा
                 Expanded(
                   child: StatCard(
-                    label: currentLabel ?? Statics.getLabel('todayTotalShakhaa'),
+                    label: currentTotalLabel ?? currentLabel ?? Statics.getLabel('todayTotalShakhaa'),
                     value: current.toString(),
                     showBadge: true,
                     badgeText: '${percentageChange.abs().toStringAsFixed(1)}',
@@ -65,7 +77,7 @@ class ReusableBarTabCard extends StatelessWidget {
             const SizedBox(height: 12),
             // Card 2: आज की कुल शाखा
             StatCard(
-              label: currentLabel ?? Statics.getLabel('todayTotalShakhaa'),
+              label: currentTotalLabel ?? currentLabel ?? Statics.getLabel('todayTotalShakhaa'),
               value: current.toString(),
               showBadge: true,
               badgeText: '${percentageChange.abs().toStringAsFixed(1)}',
@@ -77,10 +89,11 @@ class ReusableBarTabCard extends StatelessWidget {
           ComparisonCard(
             title: mainLabel ?? Statics.getLabel('dailyShakhaaTulna'),
             rows: [
-              BarRow(label: totalLabel ?? Statics.getLabel('totalShakhaaSampann'), value: total.toDouble(), maxValue: total.toDouble(), color: Color(0xFF1E90FF)),
-              BarRow(label: lastLabel ?? Statics.getLabel('yesterdaysShakhaa'), value: previous.toDouble(), maxValue: total.toDouble(), color: Color(0xFFFF8C00)),
-              BarRow(label: currentLabel ?? Statics.getLabel('todaysShakhaa'), value: current.toDouble(), maxValue: total.toDouble(), color: Color(0xFF00B533)),
-            ],
+                  BarRow(label: totalLabel ?? Statics.getLabel('totalShakhaaSampann'), value: total.toDouble(), maxValue: total.toDouble(), color: Color(0xFF1E90FF)),
+                  BarRow(label: lastLabel ?? Statics.getLabel('yesterdaysShakhaa'), value: previous.toDouble(), maxValue: total.toDouble(), color: Color(0xFFFF8C00)),
+                  BarRow(label: currentLabel ?? Statics.getLabel('todaysShakhaa'), value: current.toDouble(), maxValue: total.toDouble(), color: Color(0xFF00B533)),
+                ] +
+                (rows ?? []),
           ),
         ],
       ),
@@ -427,7 +440,7 @@ class _BarRowWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fraction = row.value / row.maxValue;
+    final fraction = row.maxValue == 0 ? 0.0 : row.value / row.maxValue;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
