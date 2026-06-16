@@ -31,8 +31,6 @@ class _SearchRamJanmaBhoomiNidhiSankalanState extends State<SearchRamJanmaBhoomi
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
-    _sankalanList = _getSankalanVruttaList(-1, "", "get nothing");
   }
 
   @override
@@ -53,6 +51,8 @@ class _SearchRamJanmaBhoomiNidhiSankalanState extends State<SearchRamJanmaBhoomi
     final controller = context.read<GeoHierarchyController>();
 
     await controller.initialize(dm);
+
+    _sankalanList = _getSankalanVruttaList(-1, "", "get nothing");
 
     setState(() {});
   }

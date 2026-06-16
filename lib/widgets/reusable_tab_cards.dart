@@ -281,9 +281,9 @@ class StatCard extends StatelessWidget {
                 Text(
                   label,
                   style: const TextStyle(
-                    fontSize: 13,
+                    fontSize: 12.5,
                     color: Color(0xFF8E8E93), // Works well on light glass
-                    fontWeight: FontWeight.w400,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -447,20 +447,25 @@ class _BarRowWidget extends StatelessWidget {
       children: [
         // Label + value
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          spacing: 8,
           children: [
-            Text(
-              row.label,
-              style: const TextStyle(
-                fontSize: 12,
-                color: Color(0xFF3A3A3C),
-                fontWeight: FontWeight.w400,
+            Expanded(
+              child: Text(
+                row.label,
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: Color(0xFF3A3A3C),
+                  fontWeight: FontWeight.w400,
+                ),
               ),
             ),
             Text(
               _formatValue(row.value),
               style: const TextStyle(
-                fontSize: 12,
+                fontSize: 12.5,
                 fontWeight: FontWeight.w600,
                 color: Color(0xFF3A3A3C),
               ),

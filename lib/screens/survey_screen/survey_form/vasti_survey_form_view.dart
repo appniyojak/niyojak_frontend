@@ -357,6 +357,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
   // }
 
   void _handleTabSelection() {
+    if (mounted) setState(() {}); // Rebuilds to update the PopScope's allowed status
+
     if (_tabController.index == 1 && !_isStep1Completed!) {
       showPopupForNaviagtetoOtherPage(context, Statics.getLabel('basicInfo'), Statics.getLabel('OtherInfo'));
       _tabController.index = 0;
@@ -384,6 +386,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
 
   @override
   void dispose() {
+    _tabController?.removeListener(_handleTabSelection);
     _tabController.dispose();
     // maleController.dispose();
     // femaleController.dispose();
@@ -395,39 +398,56 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: AppDrawer(),
-      appBar: AppBar(
-        title: Text(
-          Statics.getLabel('vastiSurvey'),
-          style: TextStyle(fontSize: 24),
-        ),
-        bottom: TabBar(
-          controller: _tabController,
-          labelColor: Colors.white,
-          unselectedLabelColor: Colors.white70,
-          indicator: UnderlineTabIndicator(
-            borderSide: BorderSide(width: 5.0, color: Colors.white),
-            insets: EdgeInsets.symmetric(horizontal: 16.0),
+    // 2. Determine if the system back button is allowed to close/pop the screen.
+    // It should pop normally if it's a single screen OR if the user is already on the first tab (index 0).
+    final bool canPopScreen = _tabController?.index == 0;
+
+    return PopScope(
+      canPop: canPopScreen,
+      onPopInvokedWithResult: (didPop, result) {
+        // If the system already handled the pop (canPop was true), do nothing.
+        if (didPop) return;
+
+        // If canPop was false, it means we are on the multi-tab layout and on the second tab (index 1).
+        // Move back to the first tab instead of exiting.
+        if (_tabController?.index == 1 || _tabController?.index == 2) {
+          _tabController?.animateTo(0);
+        }
+      },
+      child: Scaffold(
+        drawer: AppDrawer(),
+        appBar: AppBar(
+          title: Text(
+            Statics.getLabel('vastiSurvey'),
+            style: TextStyle(fontSize: 24),
           ),
-          indicatorSize: TabBarIndicatorSize.tab,
-          tabs: [
-            Tab(text: Statics.getLabel('basicInfo')),
-            Tab(text: Statics.getLabel('otherInfo')),
-            Tab(text: Statics.getLabel('detailedInfo')),
-          ],
+          bottom: TabBar(
+            controller: _tabController,
+            labelColor: Colors.white,
+            unselectedLabelColor: Colors.white70,
+            indicator: UnderlineTabIndicator(
+              borderSide: BorderSide(width: 5.0, color: Colors.white),
+              insets: EdgeInsets.symmetric(horizontal: 16.0),
+            ),
+            indicatorSize: TabBarIndicatorSize.tab,
+            tabs: [
+              Tab(text: Statics.getLabel('basicInfo')),
+              Tab(text: Statics.getLabel('otherInfo')),
+              Tab(text: Statics.getLabel('detailedInfo')),
+            ],
+          ),
         ),
-      ),
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        child: TabBarView(
-          physics: NeverScrollableScrollPhysics(),
-          controller: _tabController,
-          children: [
-            _buildStep1(),
-            _buildStep2(),
-            _buildStep3(),
-          ],
+        body: Container(
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          child: TabBarView(
+            physics: NeverScrollableScrollPhysics(),
+            controller: _tabController,
+            children: [
+              _buildStep1(),
+              _buildStep2(),
+              _buildStep3(),
+            ],
+          ),
         ),
       ),
     );

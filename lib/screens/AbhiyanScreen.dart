@@ -20,7 +20,6 @@ import '../models/response_model/dropdown_level_responsemodel.dart';
 import '../utils/globals.dart';
 import 'AbhiyanAddSwayamsevak.dart';
 import 'VisheshVyaktShodhScreen.dart';
-import 'home_screen/home_screen.dart';
 
 class AbhiyanScreen extends StatefulWidget {
   static const routeName = '/abhiyan-screen';
@@ -395,6 +394,7 @@ class _AbhiyanScreenState extends State<AbhiyanScreen> with SingleTickerProvider
   void initState() {
     super.initState();
     _tabController = new TabController(length: 2, vsync: this);
+    _tabController?.addListener(_handleTabChange);
     populateChoice();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) => initData());
   }
@@ -572,11 +572,6 @@ class _AbhiyanScreenState extends State<AbhiyanScreen> with SingleTickerProvider
     });
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   void onMenuSelected(MenuChoices choice) async {
     print(choice.menuType);
     if (choice.menuType == "AddGruha") {
@@ -593,11 +588,34 @@ class _AbhiyanScreenState extends State<AbhiyanScreen> with SingleTickerProvider
   late Size size = MediaQuery.of(context).size;
 
   @override
+  void dispose() {
+    _tabController?.removeListener(_handleTabChange);
+    super.dispose();
+  }
+
+  void _handleTabChange() {
+    if (mounted) {
+      setState(() {}); // Rebuilds to update the PopScope's allowed status
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        Navigator.popAndPushNamed(context, HomeScreen.routeName);
-        return true;
+    // 2. Determine if the system back button is allowed to close/pop the screen.
+    // It should pop normally if it's a single screen OR if the user is already on the first tab (index 0).
+    final bool canPopScreen = _tabController?.index == 0;
+
+    return PopScope(
+      canPop: canPopScreen,
+      onPopInvokedWithResult: (didPop, result) {
+        // If the system already handled the pop (canPop was true), do nothing.
+        if (didPop) return;
+
+        // If canPop was false, it means we are on the multi-tab layout and on the second tab (index 1).
+        // Move back to the first tab instead of exiting.
+        if (_tabController?.index == 1 || _tabController?.index == 2) {
+          _tabController?.animateTo(0);
+        }
       },
       child: GestureDetector(
         onTap: () {

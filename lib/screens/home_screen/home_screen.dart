@@ -154,6 +154,10 @@ class _HomeScreenState extends State<HomeScreen> {
   dynamic currentTabData; // Holds the currently active model (e.g., Shaobj, TotalAndNewModel)
   List<String> tabs = [];
   String? shaakhaausertype;
+  String? prevofPrevMonthName;
+  String? prevMonthName;
+  String? prevYearName;
+  String? thisYearName;
   Shaakhadata? shaakhaLevelData;
   Otherdata? otherLevelData;
   AbhiyanSwayamsevakdata? initialData;
@@ -297,7 +301,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _getShaakhaaVruttaReport() async {
-    shaakhaLevelData = otherLevelData = shaakhaausertype = null;
+    shaakhaLevelData = otherLevelData = shaakhaausertype = prevofPrevMonthName = prevMonthName = null;
     tabs = [];
     setState(() => _isMySearching = true);
     final data = await Statics.yestardayShaakhaaVruttaHomeReportData(
@@ -311,6 +315,10 @@ class _HomeScreenState extends State<HomeScreen> {
       shaakhaLevelData = data.shaakhadata;
       otherLevelData = data.otherdata;
       shaakhaausertype = data.usertype;
+      prevofPrevMonthName = data.prevofPrevMonthName;
+      prevMonthName = data.prevMonthName;
+      prevYearName = data.prevYearName;
+      thisYearName = data.thisYearName;
       tabs = getTabTitles(data);
     }
     setState(() {});
@@ -1199,16 +1207,20 @@ class _HomeScreenState extends State<HomeScreen> {
             todayShakhaa: data.thisMonthShaakhaaCount,
             yesterdayShakhaa: data.lastMonthShaakhaaCount,
             mainLabel: Statics.getLabel("shakhaaTulna"),
-            currentLabel: Statics.getLabel("thisMonthCount"),
-            lastLabel: Statics.getLabel("prevMonthCount"),
+            currentLabel: "${Statics.getLabel("thisMonthCount")} ${Statics.getLabel("onBasisOfNityaVrutta")}",
+            lastLabel: "${Statics.getLabel("prevMonthCount")} ${Statics.getLabel("onBasisOfNityaVrutta")}",
             currentTotalLabel: Statics.getLabel("todayShaakhaaMonthCount"),
             rows: [
               BarRow(
-                  label: Statics.getLabel('prevofprevmonthshakhaMASIK'),
+                  label: "$prevofPrevMonthName ${Statics.getLabel('fromMonthShaakha')}",
                   value: (data.prevofprevmonthshakha ?? 0).toDouble(),
                   maxValue: (data.shaapthahikCount ?? 0).toDouble(),
-                  color: Color(0xFFFF8C00)),
-              BarRow(label: Statics.getLabel('prevmonthshakhaMASIK'), value: (data.prevmonthshakha ?? 0).toDouble(), maxValue: (data.shaapthahikCount ?? 0).toDouble(), color: Color(0xFFFF8C00)),
+                  color: Color(0xFFB08BE8)),
+              BarRow(
+                  label: "$prevMonthName ${Statics.getLabel('fromMonthShaakha')}",
+                  value: (data.prevmonthshakha ?? 0).toDouble(),
+                  maxValue: (data.shaapthahikCount ?? 0).toDouble(),
+                  color: Color(0xFFE67171)),
             ],
           ),
           ReusableBarTabCard(
@@ -1218,16 +1230,21 @@ class _HomeScreenState extends State<HomeScreen> {
             todayShakhaa: data.thisMonthShaapthahikCount,
             yesterdayShakhaa: data.lastMonthShaapthahikCount,
             mainLabel: Statics.getLabel('weeklyShakhaaTulna'),
-            currentLabel: Statics.getLabel("thisMonthShaapthahikCount"),
-            lastLabel: Statics.getLabel('lastMonthShaapthahikCount'),
-            totalLabel: Statics.getLabel("totalshaapthahikCount"),
+            currentLabel: "${Statics.getLabel("thisMonthShaapthahikCount")} ${Statics.getLabel("onBasisOfNityaVrutta")}",
+            lastLabel: "${Statics.getLabel('lastMonthShaapthahikCount')} ${Statics.getLabel("onBasisOfNityaVrutta")}",
+            totalLabel: Statics.getLabel("totalMilanSampann"),
+            currentTotalLabel: Statics.getLabel("thisMonthTotalShaapthahikCount"),
             rows: [
               BarRow(
-                  label: Statics.getLabel('prevofprevmonthshakhaMASIK'),
+                  label: "$prevofPrevMonthName ${Statics.getLabel('fromMonthSaptahik')}",
                   value: (data.prevofprevmonthmilan ?? 0).toDouble(),
                   maxValue: (data.shaapthahikCount ?? 0).toDouble(),
-                  color: Color(0xFFFF8C00)),
-              BarRow(label: Statics.getLabel('prevmonthshakhaMASIK'), value: (data.prevmonthmilan ?? 0).toDouble(), maxValue: (data.shaapthahikCount ?? 0).toDouble(), color: Color(0xFFFF8C00)),
+                  color: Color(0xFFB08BE8)),
+              BarRow(
+                  label: "$prevMonthName ${Statics.getLabel('fromMonthSaptahik')}",
+                  value: (data.prevmonthmilan ?? 0).toDouble(),
+                  maxValue: (data.shaapthahikCount ?? 0).toDouble(),
+                  color: Color(0xFFE67171)),
             ],
           ),
           ReusableBarTabCard(
@@ -1237,16 +1254,21 @@ class _HomeScreenState extends State<HomeScreen> {
             todayShakhaa: data.thisMonthMandaliCount,
             yesterdayShakhaa: data.lastMonthMandaliCount,
             mainLabel: Statics.getLabel('shaakhaamandaliCount'),
-            currentLabel: Statics.getLabel("thisMonthMandaliCount"),
-            lastLabel: Statics.getLabel('lastMonthMandaliCount'),
+            currentLabel: "${Statics.getLabel("thisMonthMandaliCount")} ${Statics.getLabel("onBasisOfNityaVrutta")}",
+            lastLabel: "${Statics.getLabel('lastMonthMandaliCount')} ${Statics.getLabel("onBasisOfNityaVrutta")}",
             totalLabel: Statics.getLabel("totalshaakhaamandaliCount"),
+            currentTotalLabel: Statics.getLabel("thisMonthTotalMandaliCount"),
             rows: [
               BarRow(
-                  label: Statics.getLabel('prevofprevmonthshakhaMASIK'),
+                  label: "$prevofPrevMonthName ${Statics.getLabel('fromMonthSangha')}",
                   value: (data.prevofprevmonthsanga ?? 0).toDouble(),
                   maxValue: (data.shaapthahikCount ?? 0).toDouble(),
-                  color: Color(0xFFFF8C00)),
-              BarRow(label: Statics.getLabel('prevmonthshakhaMASIK'), value: (data.prevmonthsanga ?? 0).toDouble(), maxValue: (data.shaapthahikCount ?? 0).toDouble(), color: Color(0xFFFF8C00)),
+                  color: Color(0xFFB08BE8)),
+              BarRow(
+                  label: "$prevMonthName ${Statics.getLabel('fromMonthSangha')}",
+                  value: (data.prevmonthsanga ?? 0).toDouble(),
+                  maxValue: (data.shaapthahikCount ?? 0).toDouble(),
+                  color: Color(0xFFE67171)),
             ],
           ),
           ReusableBarTabCard(
@@ -1256,16 +1278,21 @@ class _HomeScreenState extends State<HomeScreen> {
             todayShakhaa: data.thisMonthMasikCount,
             yesterdayShakhaa: data.lastMonthMasikCount,
             mainLabel: Statics.getLabel('masikCount'),
-            currentLabel: Statics.getLabel("thisMonthMasikCount"),
-            lastLabel: Statics.getLabel('lastMonthMasikCount'),
+            currentLabel: "${Statics.getLabel("thisMonthMasikCount")} ${Statics.getLabel("onBasisOfNityaVrutta")}",
+            lastLabel: "${Statics.getLabel('lastMonthMasikCount')} ${Statics.getLabel("onBasisOfNityaVrutta")}",
             totalLabel: Statics.getLabel("totalmasikCount"),
+            currentTotalLabel: Statics.getLabel("thisMonthTotalMasikCount"),
             rows: [
               BarRow(
-                  label: Statics.getLabel('prevofprevmonthshakhaMASIK'),
+                  label: "$prevofPrevMonthName ${Statics.getLabel('fromMonthMasik')}",
                   value: (data.prevofprevmonthmaansik ?? 0).toDouble(),
                   maxValue: (data.shaapthahikCount ?? 0).toDouble(),
-                  color: Color(0xFFFF8C00)),
-              BarRow(label: Statics.getLabel('prevmonthshakhaMASIK'), value: (data.prevmonthmaansik ?? 0).toDouble(), maxValue: (data.shaapthahikCount ?? 0).toDouble(), color: Color(0xFFFF8C00)),
+                  color: Color(0xFFB08BE8)),
+              BarRow(
+                  label: "$prevMonthName ${Statics.getLabel('fromMonthMasik')}",
+                  value: (data.prevmonthmaansik ?? 0).toDouble(),
+                  maxValue: (data.shaapthahikCount ?? 0).toDouble(),
+                  color: Color(0xFFE67171)),
             ],
           ),
 
@@ -1320,16 +1347,20 @@ class _HomeScreenState extends State<HomeScreen> {
             todayShakhaa: data.thisYearShaakhaaCount,
             yesterdayShakhaa: data.lastYearShaakhaaCount,
             mainLabel: Statics.getLabel("shakhaaTulna"),
-            currentLabel: Statics.getLabel("thisYearCount"),
-            lastLabel: Statics.getLabel("prevYearCount"),
+            currentLabel: "${Statics.getLabel("thisYearCount")} ${Statics.getLabel("onBasisOfNityaVrutta")}",
+            lastLabel: "${Statics.getLabel("prevYearCount")} ${Statics.getLabel("onBasisOfNityaVrutta")}",
             currentTotalLabel: Statics.getLabel("thisYearTotalCount"),
             rows: [
               BarRow(
-                  label: Statics.getLabel('prevofprevmonthshakhaMASIK'),
+                  label: "$prevYearName ${Statics.getLabel("YearsShaakhaaCount")} ${Statics.getLabel("onBasisOfMasikVrutta")}",
                   value: (data.prevofprevyearshakha ?? 0).toDouble(),
                   maxValue: (data.shaapthahikCount ?? 0).toDouble(),
-                  color: Color(0xFFFF8C00)),
-              BarRow(label: Statics.getLabel('prevmonthshakhaMASIK'), value: (data.prevyearshakha ?? 0).toDouble(), maxValue: (data.shaapthahikCount ?? 0).toDouble(), color: Color(0xFFFF8C00)),
+                  color: Color(0xFFB08BE8)),
+              BarRow(
+                  label: "$thisYearName ${Statics.getLabel("YearsShaakhaaCount")} ${Statics.getLabel("onBasisOfMasikVrutta")}",
+                  value: (data.prevyearshakha ?? 0).toDouble(),
+                  maxValue: (data.shaapthahikCount ?? 0).toDouble(),
+                  color: Color(0xFFE67171)),
             ],
           ),
           ReusableBarTabCard(
@@ -1339,16 +1370,21 @@ class _HomeScreenState extends State<HomeScreen> {
             todayShakhaa: data.thisYearShaapthahikCount,
             yesterdayShakhaa: data.lastYearShaapthahikCount,
             mainLabel: Statics.getLabel('weeklyShakhaaTulna'),
-            currentLabel: Statics.getLabel("thisYearShaapthahikCount"),
-            lastLabel: Statics.getLabel('lastYearShaapthahikCount'),
+            currentLabel: "${Statics.getLabel("thisYearShaapthahikCount")} ${Statics.getLabel("onBasisOfNityaVrutta")}",
+            lastLabel: "${Statics.getLabel('lastYearShaapthahikCount')} ${Statics.getLabel("onBasisOfNityaVrutta")}",
             totalLabel: Statics.getLabel("totalYearshaapthahikCount"),
+            currentTotalLabel: Statics.getLabel("thisYearTotalShaapthahikCount"),
             rows: [
               BarRow(
-                  label: Statics.getLabel('prevofprevmonthshakhaMASIK'),
+                  label: "$prevYearName ${Statics.getLabel("YearsSaptikCount")} ${Statics.getLabel("onBasisOfMasikVrutta")}",
                   value: (data.prevofprevyearmilan ?? 0).toDouble(),
                   maxValue: (data.shaapthahikCount ?? 0).toDouble(),
-                  color: Color(0xFFFF8C00)),
-              BarRow(label: Statics.getLabel('prevmonthshakhaMASIK'), value: (data.prevyearmilan ?? 0).toDouble(), maxValue: (data.shaapthahikCount ?? 0).toDouble(), color: Color(0xFFFF8C00)),
+                  color: Color(0xFFB08BE8)),
+              BarRow(
+                  label: "$thisYearName ${Statics.getLabel('YearsSaptikCount')} ${Statics.getLabel("onBasisOfMasikVrutta")}",
+                  value: (data.prevyearmilan ?? 0).toDouble(),
+                  maxValue: (data.shaapthahikCount ?? 0).toDouble(),
+                  color: Color(0xFFE67171)),
             ],
           ),
           ReusableBarTabCard(
@@ -1358,16 +1394,21 @@ class _HomeScreenState extends State<HomeScreen> {
             todayShakhaa: data.thisYearMandaliCount,
             yesterdayShakhaa: data.lastYearMandaliCount,
             mainLabel: Statics.getLabel('shaakhaamandaliCount'),
-            currentLabel: Statics.getLabel("thisYearMandaliCount"),
-            lastLabel: Statics.getLabel('lastYearMandaliCount'),
+            currentLabel: "${Statics.getLabel("thisYearMandaliCount")} ${Statics.getLabel("onBasisOfNityaVrutta")}",
+            lastLabel: "${Statics.getLabel('lastYearMandaliCount')} ${Statics.getLabel("onBasisOfNityaVrutta")}",
             totalLabel: Statics.getLabel("totalYearshaakhaamandaliCount"),
+            currentTotalLabel: Statics.getLabel("thisYearTotalMandaliCount"),
             rows: [
               BarRow(
-                  label: Statics.getLabel('prevofprevmonthshakhaMASIK'),
+                  label: "$prevYearName ${Statics.getLabel("YearsSanghaCount")} ${Statics.getLabel("onBasisOfMasikVrutta")}",
                   value: (data.prevofprevyearsanga ?? 0).toDouble(),
                   maxValue: (data.shaapthahikCount ?? 0).toDouble(),
-                  color: Color(0xFFFF8C00)),
-              BarRow(label: Statics.getLabel('prevmonthshakhaMASIK'), value: (data.prevyearsanga ?? 0).toDouble(), maxValue: (data.shaapthahikCount ?? 0).toDouble(), color: Color(0xFFFF8C00)),
+                  color: Color(0xFFB08BE8)),
+              BarRow(
+                  label: "$thisYearName ${Statics.getLabel('YearsSanghaCount')} ${Statics.getLabel("onBasisOfMasikVrutta")}",
+                  value: (data.prevyearsanga ?? 0).toDouble(),
+                  maxValue: (data.shaapthahikCount ?? 0).toDouble(),
+                  color: Color(0xFFE67171)),
             ],
           ),
           ReusableBarTabCard(
@@ -1377,16 +1418,21 @@ class _HomeScreenState extends State<HomeScreen> {
             todayShakhaa: data.thisYearMasikCount,
             yesterdayShakhaa: data.lastYearMasikCount,
             mainLabel: Statics.getLabel('masikCount'),
-            currentLabel: Statics.getLabel("thisYearMasikCount"),
-            lastLabel: Statics.getLabel('lastYearMasikCount'),
+            currentLabel: "${Statics.getLabel("thisYearMasikCount")} ${Statics.getLabel("onBasisOfNityaVrutta")}",
+            lastLabel: "${Statics.getLabel('lastYearMasikCount')} ${Statics.getLabel("onBasisOfNityaVrutta")}",
             totalLabel: Statics.getLabel("totalYearmasikCount"),
+            currentTotalLabel: Statics.getLabel("thisYearTotalMasikCount"),
             rows: [
               BarRow(
-                  label: Statics.getLabel('prevofprevmonthshakhaMASIK'),
+                  label: "$prevYearName ${Statics.getLabel("YearsMasikCount")} ${Statics.getLabel("onBasisOfMasikVrutta")}",
                   value: (data.prevofprevyearmaansik ?? 0).toDouble(),
                   maxValue: (data.shaapthahikCount ?? 0).toDouble(),
-                  color: Color(0xFFFF8C00)),
-              BarRow(label: Statics.getLabel('prevmonthshakhaMASIK'), value: (data.prevyearmaansik ?? 0).toDouble(), maxValue: (data.shaapthahikCount ?? 0).toDouble(), color: Color(0xFFFF8C00)),
+                  color: Color(0xFFB08BE8)),
+              BarRow(
+                  label: "$thisYearName ${Statics.getLabel('YearsMasikCount')} ${Statics.getLabel("onBasisOfMasikVrutta")}",
+                  value: (data.prevyearmaansik ?? 0).toDouble(),
+                  maxValue: (data.shaapthahikCount ?? 0).toDouble(),
+                  color: Color(0xFFE67171)),
             ],
           ),
 

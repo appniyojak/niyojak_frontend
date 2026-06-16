@@ -259,7 +259,9 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
                     ///3
                     Scaffold(
                       floatingActionButton: FloatingActionButton(
-                        onPressed: () => Navigator.pushNamed(context, AddNewShaakhaaVistaarScreen.routeName, arguments: {"geoid": controller.deepestSelectedGeoUnitId}),
+                        onPressed: () => Navigator.pushNamed(context, AddNewShaakhaaVistaarScreen.routeName, arguments: {"geoid": controller.deepestSelectedGeoUnitId}).then((value) {
+                          if (value == true) _search(controller.deepestSelectedGeoUnitId, context);
+                        }),
                         child: Icon(Icons.add, color: Colors.blueAccent.shade700),
                       ),
                       body: (_newShaakhaaList.isEmpty)
@@ -283,8 +285,12 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
                                   traillingIcon: PopupMenuButton(
                                       itemBuilder: (context) => [
                                             PopupMenuItem(
-                                                onTap: () => Navigator.of(context).pushNamed(AddNewShaakhaaVistaarScreen.routeName,
-                                                    arguments: {"pkid": _newShaakhaaList[index].pkid, "geoid": _newShaakhaaList[index].parentVastiID ?? _newShaakhaaList[index].parentGraamID}),
+                                                onTap: () => Navigator.of(context).pushNamed(AddNewShaakhaaVistaarScreen.routeName, arguments: {
+                                                      "pkid": _newShaakhaaList[index].pkid,
+                                                      "geoid": _newShaakhaaList[index].parentVastiID ?? _newShaakhaaList[index].parentGraamID
+                                                    }).then((value) {
+                                                      if (value == true) _search(controller.deepestSelectedGeoUnitId, context);
+                                                    }),
                                                 child: ListTile(
                                                   // tileColor: Colors.white,
                                                   leading: Icon(

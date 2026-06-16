@@ -35,6 +35,7 @@ class _ShakhaSaptahMainTabState extends State<ShakhaSaptahMainTab> with SingleTi
     getInitialData();
     _tabController = new TabController(length: 2, vsync: this);
     // WidgetsBinding.instance.addPostFrameCallback((t) => getInitialData());
+    _tabController?.addListener(_handleTabChange);
     super.initState();
   }
 
@@ -64,73 +65,102 @@ class _ShakhaSaptahMainTabState extends State<ShakhaSaptahMainTab> with SingleTi
   final GlobalKey<ShakhaaSaptahReportTabState> _reportTabKey = GlobalKey<ShakhaaSaptahReportTabState>();
 
   @override
+  void dispose() {
+    _tabController?.removeListener(_handleTabChange);
+    super.dispose();
+  }
+
+  void _handleTabChange() {
+    if (mounted) {
+      setState(() {}); // Rebuilds to update the PopScope's allowed status
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      onTap: () => FocusScope.of(context).unfocus(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "${Statics.getLabel('shakhaVistaar')}",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
-          ),
-          bottom: TabBar(
-            controller: _tabController,
-            indicatorColor: Colors.white,
-            physics: NeverScrollableScrollPhysics(),
-            onTap: (index) {
-              if (index == 0 && userLevelId == 1) {
-                // This safely calls the refresh method inside your tab
-                _reportTabKey.currentState?.getReportDataFun(_reportTabKey.currentState?.selectedshaakhaa?.geoUnitID ?? _reportTabKey.currentState?.controller.deepestSelectedGeoUnitId);
-              }
-            },
-            tabs: <Widget>[
-              Tab(
-                child: Row(
-                  spacing: 16,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.people),
-                    Text(
-                      "${Statics.getLabel('Reportonly')}",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 15),
-                    ),
-                  ],
+    // 2. Determine if the system back button is allowed to close/pop the screen.
+    // It should pop normally if it's a single screen OR if the user is already on the first tab (index 0).
+    final bool canPopScreen = _tabController?.index == 0;
+
+    return PopScope(
+      canPop: canPopScreen,
+      onPopInvokedWithResult: (didPop, result) {
+        // If the system already handled the pop (canPop was true), do nothing.
+        if (didPop) return;
+
+        // If canPop was false, it means we are on the multi-tab layout and on the second tab (index 1).
+        // Move back to the first tab instead of exiting.
+        if (_tabController?.index == 1) {
+          _tabController?.animateTo(0);
+        }
+      },
+      child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(
+              "${Statics.getLabel('shakhaVistaar')}",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+            ),
+            bottom: TabBar(
+              controller: _tabController,
+              indicatorColor: Colors.white,
+              physics: NeverScrollableScrollPhysics(),
+              onTap: (index) {
+                if (index == 0 && userLevelId == 1) {
+                  // This safely calls the refresh method inside your tab
+                  _reportTabKey.currentState?.getReportDataFun(_reportTabKey.currentState?.selectedshaakhaa?.geoUnitID ?? _reportTabKey.currentState?.controller.deepestSelectedGeoUnitId);
+                }
+              },
+              tabs: <Widget>[
+                Tab(
+                  child: Row(
+                    spacing: 16,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.people),
+                      Text(
+                        "${Statics.getLabel('Reportonly')}",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Tab(
-                child: Row(
-                  spacing: 16,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.search,
-                      size: 18,
-                    ),
-                    Text(
-                      "${Statics.getLabel('fillVrutta')}",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 15),
-                    ),
-                  ],
+                Tab(
+                  child: Row(
+                    spacing: 16,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.search,
+                        size: 18,
+                      ),
+                      Text(
+                        "${Statics.getLabel('fillVrutta')}",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        drawer: AppDrawer(),
-        body: ModalProgressHUD(
-          inAsyncCall: _isSearching,
-          child: TabBarView(
-            controller: _tabController,
-            physics: NeverScrollableScrollPhysics(),
-            children: <Widget>[
-              ShakhaaSaptahReportTab(key: _reportTabKey, onIdTap: onIdSelected),
-              userLevelId == 1
-                  ? ShakhaaSaptahFormScreen(key: ValueKey('$selectedId-$_fromYest-$_viewType'), showAppBar: false, shaakhaaId: selectedId, fromYesterday: _fromYest, viewType: _viewType)
-                  : ShakhaaSaptahListTab(),
-            ],
+          drawer: AppDrawer(),
+          body: ModalProgressHUD(
+            inAsyncCall: _isSearching,
+            child: TabBarView(
+              controller: _tabController,
+              physics: NeverScrollableScrollPhysics(),
+              children: <Widget>[
+                ShakhaaSaptahReportTab(key: _reportTabKey, onIdTap: onIdSelected),
+                userLevelId == 1
+                    ? ShakhaaSaptahFormScreen(key: ValueKey('$selectedId-$_fromYest-$_viewType'), showAppBar: false, shaakhaaId: selectedId, fromYesterday: _fromYest, viewType: _viewType)
+                    : ShakhaaSaptahListTab(),
+              ],
+            ),
           ),
         ),
       ),

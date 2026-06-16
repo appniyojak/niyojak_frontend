@@ -75,6 +75,7 @@ class _GruhAbhiyaanMainTabScreenState extends State<GruhAbhiyaanMainTabScreen> w
     // getInitialData();
     _tabController = new TabController(length: 2, vsync: this);
     log("initState GruhAbhiyaanMainTabScreen runnn >>>>>>>>>>>>>> ");
+    _tabController?.addListener(_handleTabChange);
     WidgetsBinding.instance.addPostFrameCallback((t) => getAbhiyaanGeoUnitsFun());
     super.initState();
   }
@@ -121,92 +122,116 @@ class _GruhAbhiyaanMainTabScreenState extends State<GruhAbhiyaanMainTabScreen> w
 
   @override
   void dispose() {
-    super.dispose();
+    _tabController?.removeListener(_handleTabChange);
     _isUpdated = false;
+    super.dispose();
   }
 
   late Size size = MediaQuery.of(context).size;
 
+  void _handleTabChange() {
+    if (mounted) {
+      setState(() {}); // Rebuilds to update the PopScope's allowed status
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      onTap: () => FocusScope.of(context).unfocus(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "${Statics.getLabel('gruhSamparkAbhiyan')} ${Statics.getLabel('Vrutta')} (${Statics.getLabel('shatabdiVarsha')})",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
-          ),
-          bottom:
-              // (Statics.abhiyaanUserDetails["isEmpty"] && int.parse(Statics.userDetails["LevelID"].toString()) < 6)
-              //     ? null
-              //     : new
-              TabBar(
-            controller: _tabController,
-            indicatorColor: Colors.white,
-            onTap: (v) {
-              _levelValue = "";
-              _geoUnitsValue = "";
-              setState(() {});
-              Future.delayed(Duration(milliseconds: 800), () {
+    // 2. Determine if the system back button is allowed to close/pop the screen.
+    // It should pop normally if it's a single screen OR if the user is already on the first tab (index 0).
+    final bool canPopScreen = _tabController?.index == 0;
+
+    return PopScope(
+      canPop: canPopScreen,
+      onPopInvokedWithResult: (didPop, result) {
+        // If the system already handled the pop (canPop was true), do nothing.
+        if (didPop) return;
+
+        // If canPop was false, it means we are on the multi-tab layout and on the second tab (index 1).
+        // Move back to the first tab instead of exiting.
+        if (_tabController?.index == 1) {
+          _tabController?.animateTo(0);
+        }
+      },
+      child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(
+              "${Statics.getLabel('gruhSamparkAbhiyan')} ${Statics.getLabel('Vrutta')} (${Statics.getLabel('shatabdiVarsha')})",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+            ),
+            bottom:
+                // (Statics.abhiyaanUserDetails["isEmpty"] && int.parse(Statics.userDetails["LevelID"].toString()) < 6)
+                //     ? null
+                //     : new
+                TabBar(
+              controller: _tabController,
+              indicatorColor: Colors.white,
+              onTap: (v) {
+                _levelValue = "";
+                _geoUnitsValue = "";
                 setState(() {});
-              });
-            },
-            physics: NeverScrollableScrollPhysics(),
-            tabs: <Widget>[
-              Tab(
-                child: Row(
-                  spacing: 16,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      FontAwesomeIcons.fileArrowUp,
-                      size: 18,
-                    ),
-                    Text(
-                      "${Statics.getLabel('addGruhaSampark')}",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 15),
-                    ),
-                  ],
+                Future.delayed(Duration(milliseconds: 800), () {
+                  setState(() {});
+                });
+              },
+              physics: NeverScrollableScrollPhysics(),
+              tabs: <Widget>[
+                Tab(
+                  child: Row(
+                    spacing: 16,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        FontAwesomeIcons.fileArrowUp,
+                        size: 18,
+                      ),
+                      Text(
+                        "${Statics.getLabel('addGruhaSampark')}",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Tab(
-                child: Row(
-                  spacing: 16,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.people),
-                    Text(
-                      "${Statics.getLabel('Reportonly')}",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 15),
-                    ),
-                  ],
+                Tab(
+                  child: Row(
+                    spacing: 16,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.people),
+                      Text(
+                        "${Statics.getLabel('Reportonly')}",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        drawer: (Statics.userDetails['userID'] == "0" || Statics.userDetails['userID'] == null || Statics.userDetails['LevelID'] == "null" || Statics.userDetails['userID'].toString().isEmpty)
-            ? AppAbhiyanDrawer()
-            : AppDrawer(),
-        body: ModalProgressHUD(
-          inAsyncCall: _isSearching,
-          child:
-              // (Statics.abhiyaanUserDetails["isEmpty"] && int.parse(Statics.userDetails["LevelID"].toString()) < 6)
-              //     ? GruhSamparkaReportTab(
-              //         initialData: initialData,
-              //       )
-              //     :
-              TabBarView(
-            controller: _tabController,
-            physics: NeverScrollableScrollPhysics(),
-            children: <Widget>[
-              GruhVruttaTab(initialData: initialData, isUpdated: _isUpdated),
-              GruhSamparkaReportTab(initialData: initialData),
-            ],
+          drawer: (Statics.userDetails['userID'] == "0" || Statics.userDetails['userID'] == null || Statics.userDetails['LevelID'] == "null" || Statics.userDetails['userID'].toString().isEmpty)
+              ? AppAbhiyanDrawer()
+              : AppDrawer(),
+          body: ModalProgressHUD(
+            inAsyncCall: _isSearching,
+            child:
+                // (Statics.abhiyaanUserDetails["isEmpty"] && int.parse(Statics.userDetails["LevelID"].toString()) < 6)
+                //     ? GruhSamparkaReportTab(
+                //         initialData: initialData,
+                //       )
+                //     :
+                TabBarView(
+              controller: _tabController,
+              physics: NeverScrollableScrollPhysics(),
+              children: <Widget>[
+                GruhVruttaTab(initialData: initialData, isUpdated: _isUpdated),
+                GruhSamparkaReportTab(initialData: initialData),
+              ],
+            ),
           ),
         ),
       ),

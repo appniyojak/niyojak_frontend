@@ -8,7 +8,6 @@ import '../screens/edit_event.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/event_card.dart';
 import '../widgets/legend.dart';
-import 'home_screen/home_screen.dart';
 
 class SearchEvent extends StatefulWidget {
   static const routeName = '/search-event-screen';
@@ -33,14 +32,16 @@ class _SearchEventState extends State<SearchEvent> with SingleTickerProviderStat
   void initState() {
     super.initState();
     _tabController = new TabController(length: 2, vsync: this);
+    _tabController?.addListener(_handleTabChange);
   }
 
   @override
   void dispose() {
-    super.dispose();
+    _tabController?.removeListener(_handleTabChange);
     _searchController.dispose();
     _fromDateCntrl.dispose();
     _toDateCntrl.dispose();
+    super.dispose();
   }
 
   // @override
@@ -118,12 +119,29 @@ class _SearchEventState extends State<SearchEvent> with SingleTickerProviderStat
     });
   }
 
+  void _handleTabChange() {
+    if (mounted) {
+      setState(() {}); // Rebuilds to update the PopScope's allowed status
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        Navigator.popAndPushNamed(context, HomeScreen.routeName);
-        return true;
+    // 2. Determine if the system back button is allowed to close/pop the screen.
+    // It should pop normally if it's a single screen OR if the user is already on the first tab (index 0).
+    final bool canPopScreen = _tabController?.index == 0;
+
+    return PopScope(
+      canPop: canPopScreen,
+      onPopInvokedWithResult: (didPop, result) {
+        // If the system already handled the pop (canPop was true), do nothing.
+        if (didPop) return;
+
+        // If canPop was false, it means we are on the multi-tab layout and on the second tab (index 1).
+        // Move back to the first tab instead of exiting.
+        if (_tabController?.index == 1 || _tabController?.index == 2) {
+          _tabController?.animateTo(0);
+        }
       },
       child: Scaffold(
         appBar: AppBar(

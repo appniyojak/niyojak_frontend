@@ -6793,7 +6793,7 @@ Future<String?> addNewShaakhaaVistarData(BuildContext context, Map<String, dynam
         return null;
       }
 
-      return data["Message"]; // ✅ return karna zaroori hai
+      return data["Status"]; // ✅ return karna zaroori hai
     } else {
       print("Error: ${response.statusCode} - ${response.body}");
       return null; // ✅ error case

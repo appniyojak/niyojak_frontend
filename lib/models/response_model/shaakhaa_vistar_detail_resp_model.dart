@@ -34,6 +34,11 @@ class ShakhaaVistarDetail {
   int? shaakhaaID;
   String? shaakhaaName;
   String? shaakhaaNameDevNaagari;
+  String? aadhar1;
+  String? aadhar2;
+  String? aadhar3;
+  String? aadhar4;
+  String? aadhar5;
   int? frequencyID;
   String? daysOfWeek;
   String? dayOfMonth;
@@ -68,6 +73,11 @@ class ShakhaaVistarDetail {
       this.shaakhaaID,
       this.shaakhaaName,
       this.shaakhaaNameDevNaagari,
+      this.aadhar1,
+      this.aadhar2,
+      this.aadhar3,
+      this.aadhar4,
+      this.aadhar5,
       this.frequencyID,
       this.daysOfWeek,
       this.dayOfMonth,
@@ -102,6 +112,11 @@ class ShakhaaVistarDetail {
     shaakhaaID = json['ShaakhaaID'];
     shaakhaaName = json['ShaakhaaName'] ?? json['GeoUnitName'];
     shaakhaaNameDevNaagari = json['ShaakhaaNameDevNaagari'];
+    aadhar1 = json['aadhar1'];
+    aadhar2 = json['aadhar2'];
+    aadhar3 = json['aadhar3'];
+    aadhar4 = json['aadhar4'];
+    aadhar5 = json['aadhar5'];
     frequencyID = json['FrequencyID'];
     daysOfWeek = json['DaysOfWeek'];
     dayOfMonth = json['DayOfMonth'];
@@ -138,6 +153,11 @@ class ShakhaaVistarDetail {
     data['ShaakhaaID'] = this.shaakhaaID;
     data['ShaakhaaName'] = this.shaakhaaName;
     data['ShaakhaaNameDevNaagari'] = this.shaakhaaNameDevNaagari;
+    data['aadhar1'] = this.aadhar1;
+    data['aadhar2'] = this.aadhar2;
+    data['aadhar3'] = this.aadhar3;
+    data['aadhar4'] = this.aadhar4;
+    data['aadhar5'] = this.aadhar5;
     data['FrequencyID'] = this.frequencyID;
     data['DaysOfWeek'] = this.daysOfWeek;
     data['DayOfMonth'] = this.dayOfMonth;
