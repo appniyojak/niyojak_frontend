@@ -79,7 +79,7 @@ class _MandalSurveyReportViewScreen1State extends State<MandalSurveyReportViewSc
   void showPopupList(BuildContext context, String vastiStepStartedNames) {
     if (vastiStepStartedNames.trim().isEmpty) {
       Fluttertoast.showToast(
-        msg: "${Statics.getLabel('vastiNotAvailable')}",
+        msg: "${Statics.getLabel('graamNotAvailable')}",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         backgroundColor: Colors.black87,
@@ -92,7 +92,7 @@ class _MandalSurveyReportViewScreen1State extends State<MandalSurveyReportViewSc
 
     if (namesList.isEmpty || namesList.first.isEmpty) {
       Fluttertoast.showToast(
-        msg: "${Statics.getLabel('vastiNotAvailable')}",
+        msg: "${Statics.getLabel('graamNotAvailable')}",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         backgroundColor: Colors.black87,
@@ -120,7 +120,7 @@ class _MandalSurveyReportViewScreen1State extends State<MandalSurveyReportViewSc
                   Icon(Icons.list_alt, color: Colors.purpleAccent),
                   SizedBox(width: 10),
                   Text(
-                    "${Statics.getLabel('vastiYaadi')}",
+                    "${Statics.getLabel('graamYaadi')}",
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,

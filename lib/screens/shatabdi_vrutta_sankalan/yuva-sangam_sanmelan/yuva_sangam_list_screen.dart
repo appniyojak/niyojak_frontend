@@ -78,6 +78,7 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
   }
 
   Future<void> initData() async {
+    _selectedKaryakramLevelId = null;
     DropDownModel dm = await MyAppGlobals.getLevelLDB();
 
     await controller.initialize(dm);
@@ -699,7 +700,6 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
                       setState(() => _selectedKaryakramLevelId = int.tryParse(value.toString()));
                       nagarList = [];
                       // print("baithakId >>>>>>>>>>>>>>>> ${baithakId}");
-                      controller.loadHierarchyForUser();
                       await getKendraListData();
                     },
                     isDisabled: false,

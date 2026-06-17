@@ -221,6 +221,7 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
                                                     viewType: "EditVrutta",
                                                   ))),
                                       icon: Column(
+                                        mainAxisSize: MainAxisSize.min,
                                         children: [Icon(Icons.edit), Text(Statics.getLabel("Vrutta"))],
                                       )));
                             },

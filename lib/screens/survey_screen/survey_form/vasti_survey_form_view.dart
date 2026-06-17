@@ -1672,6 +1672,11 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                                 selectedKuthalaVarshiIdIndex = index;
                                                 print(" selectedKuthalaVarshiIdIndex Data :- $data");
                                               });
+                                            } else {
+                                              setState(() {
+                                                selectedKuthalaVarshiIdIndex = null;
+                                                print(" selectedKuthalaVarshiIdIndex Data :- $data");
+                                              });
                                             }
                                           },
                                           cells: [
@@ -1980,6 +1985,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                 setState(() {
                                   selectedJagranShreniStithiRowIndex = index;
                                 });
+                              } else {
+                                setState(() {
+                                  selectedJagranShreniStithiRowIndex = null;
+                                });
                               }
                             },
                             cells: [
@@ -2258,6 +2267,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                               if (selected != null && selected) {
                                 setState(() {
                                   selectedGatividhiKaryaStithiRowIndex = index;
+                                });
+                              } else {
+                                setState(() {
+                                  selectedGatividhiKaryaStithiRowIndex = null;
                                 });
                               }
                             },
@@ -2562,6 +2575,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                   setState(() {
                                     selectedvsahatPrakarIdRowIndex = index;
                                   });
+                                } else {
+                                  setState(() {
+                                    selectedvsahatPrakarIdRowIndex = null;
+                                  });
                                 }
                               },
                               cells: [
@@ -2856,6 +2873,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                                 setState(() {
                                                   selectedVividhBhashaBolnarerIdRowIndex = index;
                                                 });
+                                              } else {
+                                                setState(() {
+                                                  selectedVividhBhashaBolnarerIdRowIndex = null;
+                                                });
                                               }
                                             },
                                             cells: [
@@ -3121,6 +3142,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                               if (selected != null && selected) {
                                                 setState(() {
                                                   selectedKontyaPraantacheIdRowIndex = index;
+                                                });
+                                              } else {
+                                                setState(() {
+                                                  selectedKontyaPraantacheIdRowIndex = null;
                                                 });
                                               }
                                             },
@@ -3388,6 +3413,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                                 setState(() {
                                                   selectedReligionIdRowIndex = index;
                                                 });
+                                              } else {
+                                                setState(() {
+                                                  selectedReligionIdRowIndex = null;
+                                                });
                                               }
                                             },
                                             cells: [
@@ -3646,6 +3675,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                     if (selected != null && selected) {
                                       setState(() {
                                         selectedUpasnaSthalRowIndex = index;
+                                      });
+                                    } else {
+                                      setState(() {
+                                        selectedUpasnaSthalRowIndex = null;
                                       });
                                     }
                                   },
@@ -3909,6 +3942,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                         if (selected != null && selected) {
                                           setState(() {
                                             selectedAbhiyaanKaryakartaIdIndex = index;
+                                          });
+                                        } else {
+                                          setState(() {
+                                            selectedAbhiyaanKaryakartaIdIndex = null;
                                           });
                                         }
                                       },
@@ -4230,6 +4267,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                   setState(() {
                                     selectedsajjanShaktiRowIndex = index;
                                   });
+                                } else {
+                                  setState(() {
+                                    selectedsajjanShaktiRowIndex = null;
+                                  });
                                 }
                               },
                               cells: [
@@ -4510,6 +4551,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                   setState(() {
                                     selectedanyaPrabhaviLokRowIndex = index;
                                   });
+                                } else {
+                                  setState(() {
+                                    selectedanyaPrabhaviLokRowIndex = null;
+                                  });
                                 }
                               },
                               cells: [
@@ -4779,6 +4824,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                     setState(() {
                                       selectedSanIdIndex = index;
                                     });
+                                  } else {
+                                    setState(() {
+                                      selectedSanIdIndex = null;
+                                    });
                                   }
                                 },
                                 cells: [
@@ -5047,6 +5096,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                   if (selected != null && selected) {
                                     setState(() {
                                       selectedSamajikKaryakramIdIndex = index;
+                                    });
+                                  } else {
+                                    setState(() {
+                                      selectedSamajikKaryakramIdIndex = null;
                                     });
                                   }
                                 },
@@ -8917,6 +8970,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                     setState(() {
                                       selectedVastitBalopasanaKendraIdIndex = index;
                                     });
+                                  } else {
+                                    setState(() {
+                                      selectedVastitBalopasanaKendraIdIndex = null;
+                                    });
                                   }
                                 },
                                 cells: [
@@ -9165,6 +9222,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                       setState(() {
                                         selectedMotheVyasayikKendraIdIndex = index;
                                       });
+                                    } else {
+                                      setState(() {
+                                        selectedMotheVyasayikKendraIdIndex = null;
+                                      });
                                     }
                                   },
                                   cells: [
@@ -9409,6 +9470,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                       setState(() {
                                         selectednirmandhinMothePrakalpaIdIndex = index;
                                       });
+                                    } else {
+                                      setState(() {
+                                        selectednirmandhinMothePrakalpaIdIndex = null;
+                                      });
                                     }
                                   },
                                   cells: [
@@ -9652,6 +9717,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                     if (selected != null && selected) {
                                       setState(() {
                                         selectedmotheRugnalayIdIndex = index;
+                                      });
+                                    } else {
+                                      setState(() {
+                                        selectedmotheRugnalayIdIndex = null;
                                       });
                                     }
                                   },
@@ -9946,6 +10015,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                           setState(() {
                                             selectedShaikshanikSansthaIdIndex = index;
                                           });
+                                        } else {
+                                          setState(() {
+                                            selectedShaikshanikSansthaIdIndex = null;
+                                          });
                                         }
                                       },
                                       cells: [
@@ -10205,6 +10278,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                         if (selected != null && selected) {
                                           setState(() {
                                             selectedMaidanUdyanIdIndex = index;
+                                          });
+                                        } else {
+                                          setState(() {
+                                            selectedMaidanUdyanIdIndex = null;
                                           });
                                         }
                                       },
@@ -10467,6 +10544,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                         if (selected != null && selected) {
                                           setState(() {
                                             selectedjahirKaryakramIdIndex = index;
+                                          });
+                                        } else {
+                                          setState(() {
+                                            selectedjahirKaryakramIdIndex = null;
                                           });
                                         }
                                       },
@@ -11344,6 +11425,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
       selectedMahavidyalayinPrakarIdEdit = data.prakaarid;
       selectedMahavidyalayinPrakarName = data.selectedDropdownValueName3;
 
+      print("data.prakaarid  >>>>>>>>>>>>> ${data.prakaarid}");
+
       selectedShaikshanikSansthaId = data.shaikshaniksansthaan;
       selectedShaikshanikSansthaIdEdit = data.shaikshaniksansthaan;
       selectedShaikshanikSansthaName = data.selectedDropdownValueName;
@@ -11623,7 +11706,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                     isactive: isActiveSchool,
                     vastiid: int.parse(context.read<GeoHierarchyController>().deepestSelectedGeoUnitId ?? "0"),
                     selectedDropdownValueName: selectedShaikshanikSansthaName,
-                    prakaarid: selectedShalaPrakarId ?? selectedMahavidyalayinPrakarId,
+                    prakaarid: selectedShaikshanikSansthaId == 315 ? (selectedShalaPrakarId ?? selectedMahavidyalayinPrakarId) : (selectedMahavidyalayinPrakarId ?? selectedShalaPrakarId),
                     selectedDropdownValueName3: selectedShalaPrakarName ?? selectedMahavidyalayinPrakarName,
                     selectedDropdownValueName2: selectedSansthaChalakPrakarName,
                     selectedDropdownValueName1: selectedShikshanacheMadhyamName,
@@ -13208,6 +13291,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                         setState(() {
                                           selectedVastiPrashnaGarjaIdIndex = index;
                                         });
+                                      } else {
+                                        setState(() {
+                                          selectedVastiPrashnaGarjaIdIndex = null;
+                                        });
                                       }
                                     },
                                     cells: [
@@ -13457,6 +13544,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                         if (selected != null && selected) {
                                           setState(() {
                                             selectedDharmikNetrutvaIdIndex = index;
+                                          });
+                                        } else {
+                                          setState(() {
+                                            selectedDharmikNetrutvaIdIndex = null;
                                           });
                                         }
                                       },
@@ -13734,6 +13825,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                             setState(() {
                                               selectedDurjanShaktiIdIndex = index;
                                             });
+                                          } else {
+                                            setState(() {
+                                              selectedDurjanShaktiIdIndex = null;
+                                            });
                                           }
                                         },
                                         cells: [
@@ -13989,6 +14084,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                         if (selected != null && selected) {
                                           setState(() {
                                             selectedHinduVeerYadiIdIndex = index;
+                                          });
+                                        } else {
+                                          setState(() {
+                                            selectedHinduVeerYadiIdIndex = null;
                                           });
                                         }
                                       },

@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:niyojak_prod/screens/shaakhaa_toli.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../helpers/static_data.dart' as Statics;
 import '../screens/edit_shaakhaa.dart';
 import '../screens/maps_display.dart';
 import '../screens/shaakhaa_sewa_vasti_link.dart';
+import '../screens/shaakhaa_toli.dart';
 import '../screens/shaakhaa_vrutta.dart';
-import '../widgets/shaakhaa_pat.dart';
+import 'shaakhaa_pat.dart';
 
 class ShaakhaaCard extends StatelessWidget {
   final shaakhaaItem;
@@ -309,101 +309,96 @@ class ShaakhaaCard extends StatelessWidget {
       color: IsNew == true ? Colors.lightBlue.shade100 : (IsSankalpit == true ? Colors.amber : null),
       margin: EdgeInsets.all(5),
       elevation: 5,
-      child: ListTile(
-        title: Text(shaakhaaItem["GeoUnitName"]),
-        trailing: Container(
-          height: 50,
-          width: 0.1 * Statics.getDeviceSize(context).width,
-          child: Stack(
-            children: [
-              Positioned(
-                right: 0.0,
-                top: 0.0,
-                child: traillingIcon ??
-                    PopupMenuButton(
-                      onSelected: (value) {
-                        if (value == 'ShaakhaaPat')
-                          Navigator.of(context).pushNamed(ShaakhaaPat.routeName, arguments: Statics.ScreenArguments(shaakhaaItem["ShaakhaaID"], value));
-                        else if (value == 'Vrutta')
-                          Navigator.of(context).pushNamed(ShaakhaaVrutta.routeName, arguments: Statics.ScreenArguments(shaakhaaItem["ShaakhaaID"], value));
-                        else if (value == 'ViewLocation') {
-                          if (shaakhaaItem["ShaakhaaLatitude"] != null && shaakhaaItem["ShaakhaaLatitude"].toString() != "") {
-                            _latLng.add(Statics.cLatLong(shaakhaaItem["ShaakhaaID"], shaakhaaItem["GeoUnitName"].toString(), shaakhaaItem["FrequencyCode"].toString(),
-                                LatLng(shaakhaaItem["ShaakhaaLatitude"], shaakhaaItem["ShaakhaaLongitude"])));
-                            Navigator.of(context).pushNamed(MapDisplay.routeName, arguments: _latLng);
-                          } else {
-                            Statics.showMessageDialog(context, "Co-Ordinates Not present");
-                          }
-                        } else if (value == 'SewaVasti') {
-                          Navigator.of(context).pushNamed(ShaakhaaSevaVastiLink.routeName, arguments: Statics.ScreenArguments(shaakhaaItem["ShaakhaaID"], shaakhaaItem["GeoUnitName"].toString()));
-                        } else if (value == 'Delete') {
-                          _deleteShaakhaa(context, shaakhaaItem["ShaakhaaID"].toString());
-                        } else if (value == 'RecordLocation') {
-                          _recordLocation(context);
-                        } else if (value == 'ShaakhaaToli') {
-                          Navigator.of(context).pushNamed(ShaakhaaToli.routeName, arguments: Statics.ScreenArguments(shaakhaaItem["ShaakhaaID"], shaakhaaItem["GeoUnitName"].toString()));
-                        } else
-                          Navigator.of(context).pushNamed(EditShaakhaaScreen.routeName, arguments: Statics.ScreenArguments(shaakhaaItem["ShaakhaaID"], value));
-                      },
-                      icon: Icon(
-                        FontAwesomeIcons.ellipsisV,
-                        color: Colors.grey,
-                      ),
-                      itemBuilder: (BuildContext context) {
-                        return menuItem!.map((Statics.MenuItem menuItem) {
-                          return PopupMenuItem(
-                            //value: menuItem.menuVal,
-                            value: menuItem.menuKey,
-                            child: ListTile(
-                              leading: Icon(
-                                menuItem.iconVal,
-                                color: Colors.purple,
-                              ),
-                              title: Text(menuItem.menuVal),
-                            ),
-                          );
-                        }).toList();
-                      },
-                    ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start, // Aligns items to the top
+          children: [
+            // 1. The Title and Subtitle section wrapped in Expanded.
+            // This tells Flutter: "Take up ALL remaining space dynamically, but do NOT exceed the screen."
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Title
+                  Text(
+                    shaakhaaItem["GeoUnitName"],
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  ),
+                  const SizedBox(height: 5),
+
+                  // Subtitle (Your Wrap widget)
+                  Wrap(
+                    spacing: 10, // Replaces your hardcoded SizedBoxes! Much cleaner.
+                    runSpacing: 4, // Space between lines if it drops to a new line
+                    children: [
+                      Text(shaakhaaItem["VayogatCode"].toString(), style: ListTileThemeData().subtitleTextStyle),
+                      if (showOther) ...[
+                        Text(shaakhaaItem["FrequencyCode"].toString(), style: ListTileThemeData().subtitleTextStyle),
+                        if (shaakhaaItem["FrequencyID"].toString() == Statics.shaakhaaFrequencyWeekly.toString())
+                          Text(shaakhaaItem["DayNamesOfWeek"].toString(), style: ListTileThemeData().subtitleTextStyle)
+                        else if (shaakhaaItem["FrequencyCode"].toString() == "Monthly")
+                          Text(shaakhaaItem["DayOfMonth"].toString(), style: ListTileThemeData().subtitleTextStyle),
+                        Text("${shaakhaaItem["StartTimeStr"]}${shaakhaaItem["StartTimeStr"].toString().isEmpty ? "" : "-"}${shaakhaaItem["EndTimeStr"]}", style: ListTileThemeData().subtitleTextStyle),
+                      ]
+                    ],
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+
+            const SizedBox(width: 12), // Dynamic buffer between text and trailing icon
+
+            // 2. The Trailing Section
+            // Because the text above is wrapped in Expanded, this will take
+            // exactly the minimum space it needs at the very edge of the screen.
+            traillingIcon ??
+                PopupMenuButton(
+                  onSelected: (value) {
+                    if (value == 'ShaakhaaPat')
+                      Navigator.of(context).pushNamed(ShaakhaaPat.routeName, arguments: Statics.ScreenArguments(shaakhaaItem["ShaakhaaID"], value));
+                    else if (value == 'Vrutta')
+                      Navigator.of(context).pushNamed(ShaakhaaVrutta.routeName, arguments: Statics.ScreenArguments(shaakhaaItem["ShaakhaaID"], value));
+                    else if (value == 'ViewLocation') {
+                      if (shaakhaaItem["ShaakhaaLatitude"] != null && shaakhaaItem["ShaakhaaLatitude"].toString() != "") {
+                        _latLng.add(Statics.cLatLong(shaakhaaItem["ShaakhaaID"], shaakhaaItem["GeoUnitName"].toString(), shaakhaaItem["FrequencyCode"].toString(),
+                            LatLng(shaakhaaItem["ShaakhaaLatitude"], shaakhaaItem["ShaakhaaLongitude"])));
+                        Navigator.of(context).pushNamed(MapDisplay.routeName, arguments: _latLng);
+                      } else {
+                        Statics.showMessageDialog(context, "Co-Ordinates Not present");
+                      }
+                    } else if (value == 'SewaVasti') {
+                      Navigator.of(context).pushNamed(ShaakhaaSevaVastiLink.routeName, arguments: Statics.ScreenArguments(shaakhaaItem["ShaakhaaID"], shaakhaaItem["GeoUnitName"].toString()));
+                    } else if (value == 'Delete') {
+                      _deleteShaakhaa(context, shaakhaaItem["ShaakhaaID"].toString());
+                    } else if (value == 'RecordLocation') {
+                      _recordLocation(context);
+                    } else if (value == 'ShaakhaaToli') {
+                      Navigator.of(context).pushNamed(ShaakhaaToli.routeName, arguments: Statics.ScreenArguments(shaakhaaItem["ShaakhaaID"], shaakhaaItem["GeoUnitName"].toString()));
+                    } else
+                      Navigator.of(context).pushNamed(EditShaakhaaScreen.routeName, arguments: Statics.ScreenArguments(shaakhaaItem["ShaakhaaID"], value));
+                  },
+                  icon: const Icon(
+                    FontAwesomeIcons.ellipsisV,
+                    color: Colors.grey,
+                  ),
+                  itemBuilder: (BuildContext context) {
+                    return menuItem!.map((Statics.MenuItem menuItem) {
+                      return PopupMenuItem(
+                        value: menuItem.menuKey,
+                        child: ListTile(
+                          leading: Icon(
+                            menuItem.iconVal,
+                            color: Colors.purple,
+                          ),
+                          title: Text(menuItem.menuVal),
+                        ),
+                      );
+                    }).toList();
+                  },
+                ),
+          ],
         ),
-        subtitle: Container(
-            width: double.infinity,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 5,
-                ),
-                Wrap(
-                  children: [
-                    Text(shaakhaaItem["VayogatCode"].toString()),
-                    SizedBox(
-                      width: (0.05 * Statics.getDeviceSize(context).width),
-                    ),
-                    if (showOther) ...[
-                      Text(shaakhaaItem["FrequencyCode"].toString()),
-                      SizedBox(
-                        width: (0.05 * Statics.getDeviceSize(context).width),
-                      ),
-                      if (shaakhaaItem["FrequencyID"].toString() == Statics.shaakhaaFrequencyWeekly.toString())
-                        Text(shaakhaaItem["DayNamesOfWeek"].toString())
-                      else if (shaakhaaItem["FrequencyCode"].toString() == "Monthly")
-                        Text(shaakhaaItem["DayOfMonth"].toString()),
-                      SizedBox(
-                        width: (0.05 * Statics.getDeviceSize(context).width),
-                      ),
-                      Text(shaakhaaItem["StartTimeStr"].toString() + (shaakhaaItem["StartTimeStr"].toString().isEmpty ? "" : "-") + shaakhaaItem["EndTimeStr"].toString()),
-                      SizedBox(
-                        width: (0.05 * Statics.getDeviceSize(context).width),
-                      ),
-                    ]
-                  ],
-                ),
-              ],
-            )),
       ),
     );
   }

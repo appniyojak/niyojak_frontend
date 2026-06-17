@@ -248,7 +248,8 @@ class NiyojakAppState extends State<NiyojakApp> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    ///TODO: MAKE LANDSCAPE
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => SadbhavProvider()),

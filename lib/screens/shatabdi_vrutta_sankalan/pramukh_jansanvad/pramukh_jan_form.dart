@@ -70,6 +70,7 @@ class _PramukhJansanvadFormTabState extends State<PramukhJansanvadFormTab> with 
   }
 
   Future<void> initData() async {
+    _selectedKaryakramLevelId = null;
     DropDownModel dm = await MyAppGlobals.getLevelLDB();
 
     await controller.initialize(dm);
@@ -363,7 +364,6 @@ class _PramukhJansanvadFormTabState extends State<PramukhJansanvadFormTab> with 
                       // dateController.clear();
                       setState(() => _selectedKaryakramLevelId = int.tryParse(value.toString()));
                       nagarList = [];
-                      controller.loadHierarchyForUser();
                       // print("baithakId >>>>>>>>>>>>>>>> ${baithakId}");
                       await getKendraListData();
                     },

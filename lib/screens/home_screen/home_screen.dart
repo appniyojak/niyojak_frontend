@@ -1041,68 +1041,69 @@ class _HomeScreenState extends State<HomeScreen> {
       spacing: 12,
       children: [
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-          decoration: BoxDecoration(color: Colors.grey.shade100, borderRadius: BorderRadius.circular(28)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Centers the tabs nicely
-            children: List.generate(tabs.length, (index) {
-              final isSelected = activeTabIndex == index;
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+          decoration: BoxDecoration(
+            color: Colors.grey.shade100,
+            borderRadius: BorderRadius.circular(28),
+          ),
+          // 1. Wrap the Row in a SingleChildScrollView
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal, // 2. Enable horizontal scrolling
+            physics: const BouncingScrollPhysics(), // Gives it a nice native bounce effect
+            child: Row(
+              // Removed mainAxisAlignment: spaceEvenly since the scrollable width is infinite
+              children: List.generate(tabs.length, (index) {
+                final isSelected = activeTabIndex == index;
 
-              return GestureDetector(
-                onTap: () => onTabTapped(index),
-                child: Container(
-                  // 1. Spacing between the individual tab pills
-                  margin: const EdgeInsets.symmetric(horizontal: 4),
-                  // 2. ClipRRect creates the smooth pill shape for the glass
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(24),
-                    // 3. BackdropFilter for the blur effect
-                    child: BackdropFilter(
-                      // We only blur the active tab to save GPU performance
-                      filter: ImageFilter.blur(
-                        sigmaX: isSelected ? 15.0 : 0.0,
-                        sigmaY: isSelected ? 15.0 : 0.0,
-                      ),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(24),
-                          // The glass edge highlight (only visible when selected)
-                          border: Border.all(
-                            color: isSelected ? Colors.white.withOpacity(0.4) : Colors.transparent,
-                            width: 1.0,
-                          ),
-                          // The frosted orange hint gradient
-                          gradient: isSelected
-                              ? LinearGradient(
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                  colors: [
-                                    Colors.white.withOpacity(0.4), // Frosted top
-                                    Colors.purple.withOpacity(0.1), // Clear middle
-                                    Colors.deepPurple.withOpacity(0.37), // Orange hint
-                                    Colors.deepPurple.withOpacity(0.7), // Orange hint
-                                  ],
-                                  stops: const [0.0, 0.3, 0.6, 1.0],
-                                )
-                              : null,
-                          // Inactive tabs get a barely-there white wash instead of a gradient
-                          color: isSelected ? null : Colors.white.withOpacity(0.05),
+                return GestureDetector(
+                  onTap: () => onTabTapped(index),
+                  child: Container(
+                    // The margin here handles the spacing between tabs nicely
+                    margin: const EdgeInsets.symmetric(horizontal: 4),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(24),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(
+                          sigmaX: isSelected ? 15.0 : 0.0,
+                          sigmaY: isSelected ? 15.0 : 0.0,
                         ),
-                        child: Text(
-                          tabs[index],
-                          style: TextStyle(
-                            // I replaced the red text to better match the new aesthetic
-                            color: isSelected ? Colors.black : Colors.grey.shade700,
-                            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(24),
+                            border: Border.all(
+                              color: isSelected ? Colors.white.withOpacity(0.4) : Colors.transparent,
+                              width: 1.0,
+                            ),
+                            gradient: isSelected
+                                ? LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    colors: [
+                                      Colors.white.withOpacity(0.4),
+                                      Colors.purple.withOpacity(0.1),
+                                      Colors.deepPurple.withOpacity(0.37),
+                                      Colors.deepPurple.withOpacity(0.7),
+                                    ],
+                                    stops: const [0.0, 0.3, 0.6, 1.0],
+                                  )
+                                : null,
+                            color: isSelected ? null : Colors.white.withOpacity(0.05),
+                          ),
+                          child: Text(
+                            tabs[index],
+                            style: TextStyle(
+                              color: isSelected ? Colors.black : Colors.grey.shade700,
+                              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              );
-            }),
+                );
+              }),
+            ),
           ),
         ),
         buildDataBody(),

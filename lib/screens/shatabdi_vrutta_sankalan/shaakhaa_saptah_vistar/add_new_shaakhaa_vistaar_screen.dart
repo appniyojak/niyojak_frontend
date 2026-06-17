@@ -33,6 +33,7 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
   final controller = createGeoController();
 
   int? pkidPassed;
+  int? geoidPassed;
 
   bool _isSankalpit = true;
   SankalpAadhaarEnum _sankalpAadhaarEnum = SankalpAadhaarEnum.Kaaryakartaa;
@@ -104,14 +105,15 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
     args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
 
     pkidPassed = int.tryParse((args?["pkid"] ?? 0).toString());
-    log("LOG >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ${args} $pkidPassed");
+    geoidPassed = int.tryParse((args?["geoid"] ?? 0).toString());
+    log("LOG >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> $args");
   }
 
   Future<void> initData() async {
     final dm = await MyAppGlobals.getLevelLDB();
 
-    if (args != null && args?["geoid"] != null) {
-      final trail = await controller.getTrailFromGeoUnitId((args?["geoid"] ?? 0).toString());
+    if (args != null && geoidPassed != null) {
+      final trail = await controller.getTrailFromGeoUnitId((geoidPassed ?? 0).toString());
       if (trail != null) await controller.setHierarchyFromTrail(trail: trail);
     } else {
       await controller.initialize(dm);
@@ -174,6 +176,20 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
       // Re-trigger state build to update the "Add More" button's enabled/disabled visual state
       setState(() {});
     }
+  }
+
+  void _removeField(int index) {
+    setState(() {
+      // 1. Dispose to prevent memory leaks
+      _aadharControllers[index].dispose();
+
+      // 2. Remove the controller from the list
+      _aadharControllers.removeAt(index);
+
+      // Note: If you maintain any other lists corresponding to this index
+      // (e.g., FocusNodes, or a list of saved string values),
+      // make sure to remove the item at this index from those lists as well.
+    });
   }
 
   // Checks both emptiness AND duplicates to control the "Add More" button
@@ -573,6 +589,7 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
                                 level: GeoLevel.Vibhaag,
                                 title: 'Vibhaag',
                                 controller: ctrl,
+                                isDisabled: (userLevelId ?? 0) < 5,
                                 validator: (v) {
                                   if (v == null || v!.isEmpty) return (Statics.getLabel('GeoUnitValidationMessage'));
                                   return null;
@@ -583,6 +600,7 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
                                 level: GeoLevel.Bhaag,
                                 title: 'Bhaag',
                                 controller: ctrl,
+                                isDisabled: (userLevelId ?? 0) < 5,
                                 validator: (v) {
                                   if (v == null || v!.isEmpty) return (Statics.getLabel('SelectBhaagValidationMessage'));
                                   return null;
@@ -594,6 +612,7 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
                                 level: GeoLevel.Nagar,
                                 title: 'Nagar',
                                 controller: ctrl,
+                                isDisabled: (userLevelId ?? 0) < 5,
                                 validator: (v) {
                                   if (v == null || v!.isEmpty) return (Statics.getLabel('SelectNagarValidationMessage'));
                                   return null;
@@ -606,6 +625,7 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
                                 level: GeoLevel.upnagarUpkhanda,
                                 title: 'upnagarUpkhanda',
                                 controller: ctrl,
+                                isDisabled: (userLevelId ?? 0) < 5,
                               ),
 
                             if (ctrl.hasItems(GeoLevel.Mandal))
@@ -613,6 +633,7 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
                                 level: GeoLevel.Mandal,
                                 title: 'Mandal',
                                 controller: ctrl,
+                                isDisabled: (userLevelId ?? 0) < 5,
                                 validator: (v) {
                                   if (v == null || v!.isEmpty) return (Statics.getLabel('SelectMandalValidationMessage'));
                                   return null;
@@ -624,6 +645,7 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
                                 level: GeoLevel.Graam,
                                 title: 'Graam',
                                 controller: ctrl,
+                                isDisabled: userLevelId == 3,
                                 validator: (v) {
                                   if (v == null || v!.isEmpty) return (Statics.getLabel('SelectGraamValidationMessage'));
                                   return null;
@@ -635,6 +657,7 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
                                 level: GeoLevel.Vasti,
                                 title: 'Vasti',
                                 controller: ctrl,
+                                isDisabled: userLevelId == 2,
                                 validator: (v) {
                                   if (v == null || v!.isEmpty) return (Statics.getLabel('VastiValidationMessage'));
                                   return null;
@@ -711,7 +734,7 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
                     SizedBox(height: 12),
                     ListView.builder(
                       shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       itemCount: _aadharControllers.length,
                       itemBuilder: (context, index) {
                         return Padding(
@@ -732,7 +755,18 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
                               ),
                               const SizedBox(width: 10),
 
-                              // Show "Add More" button ONLY on the last item and if count < 5
+                              // 1. Cancel Button (Show ONLY on newly added fields, i.e., index > 0)
+                              if (index > 0)
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: IconButton(
+                                    icon: const Icon(Icons.cancel_outlined, color: Colors.red),
+                                    tooltip: "Remove",
+                                    onPressed: () => _removeField(index), // Logic provided below
+                                  ),
+                                ),
+
+                              // 2. "Add More" button ONLY on the last item and if count < 5
                               if (index == _aadharControllers.length - 1 && _aadharControllers.length < 5)
                                 ElevatedButton.icon(
                                   onPressed: _areAllFieldsValid() ? _addNewField : null,
@@ -742,8 +776,8 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
                                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
                                   ),
                                 )
-                              else
-                                // Empty placeholder to keep alignment consistent when button is hidden
+                              else if (index == 0)
+                                // Empty placeholder to keep alignment consistent for the first item
                                 const SizedBox(width: 21),
                             ],
                           ),

@@ -70,6 +70,7 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> with 
   }
 
   Future<void> initData() async {
+    _selectedKaryakramLevelId = null;
     DropDownModel dm = await MyAppGlobals.getLevelLDB();
 
     await controller.initialize(dm);
@@ -363,7 +364,6 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> with 
                       setState(() => _selectedKaryakramLevelId = int.tryParse(value.toString()));
                       nagarList = [];
                       // print("baithakId >>>>>>>>>>>>>>>> ${baithakId}");
-                      controller.loadHierarchyForUser();
                       await getKendraListData();
                     },
                     isDisabled: false,

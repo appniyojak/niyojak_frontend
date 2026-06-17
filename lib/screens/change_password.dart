@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../widgets/app_drawer.dart';
 
 import '../helpers/static_data.dart' as Statics;
+import '../widgets/app_drawer.dart';
 import 'home_screen/home_screen.dart';
 
 class ChangePassword extends StatefulWidget {
@@ -41,6 +41,8 @@ class _ChangePasswordState extends State<ChangePassword> {
         print(" _submit() --  (_oldPassword  $_oldPassword, _newPassword  $_newPassword)");
         var message = await Statics.updatePassword(_oldPassword, _newPassword);
         if (message == "Please enter correct password") {
+          Statics.showToast(message);
+        } else if (message == "Incorrect Old Password") {
           Statics.showToast(message);
         } else {
           Statics.showToast(message);

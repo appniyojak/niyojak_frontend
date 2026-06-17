@@ -41,7 +41,7 @@ class _ShaakhaaPatState extends State<ShaakhaaPat> {
     theId = args!.itemID;
     viewType = args!.viewType;
 
-    _swList = _getSwList(theId.toString());
+    _swList = _getSwList(theId.toString()) ?? Future.value([]);
   }
 
   void populateChoice() {

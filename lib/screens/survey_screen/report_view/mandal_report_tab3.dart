@@ -690,7 +690,7 @@ class _MandalSurveyReportViewScreen3State extends State<MandalSurveyReportViewSc
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                "${Statics.getLabel('vastiCount')}",
+                                                "${Statics.getLabel('GraamCount')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(fontWeight: FontWeight.bold),
                                               ),

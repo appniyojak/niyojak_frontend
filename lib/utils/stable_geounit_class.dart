@@ -1158,6 +1158,7 @@ class GeoDropdownWidget extends StatelessWidget {
   final void Function(dynamic)? onChanged;
   final void Function(dynamic)? onSaved;
   final GeoHierarchyFetchMode fetchMode;
+  final bool? isDisabled;
 
   const GeoDropdownWidget({
     super.key,
@@ -1167,6 +1168,7 @@ class GeoDropdownWidget extends StatelessWidget {
     this.validator,
     this.onSaved,
     this.onChanged,
+    this.isDisabled,
     this.fetchMode = GeoHierarchyFetchMode.all,
   });
 
@@ -1175,7 +1177,7 @@ class GeoDropdownWidget extends StatelessWidget {
     final items = controller.getItems(level);
 
     return buildDropdownField(
-      isDisabled: controller.isLevelLocked(level),
+      isDisabled: isDisabled ?? controller.isLevelLocked(level),
       value: controller.getSelectedValue(level),
       label: Statics.getLabel(title, returnKey: true),
       items: items.map((e) {

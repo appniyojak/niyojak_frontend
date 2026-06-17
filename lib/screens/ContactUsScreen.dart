@@ -93,7 +93,7 @@ class _ContactUsState extends State<ContactUs> {
                   onTap: _fileIsLoading
                       ? null
                       : () {
-                          _pickAndCompressImage(ImageSource.gallery);
+                          _pickAndCompressImage(ImageSource.gallery).then((val) => setState(() => _fileIsLoading = false));
                           // print("clicked");
                         },
                   child: _fileIsLoading
