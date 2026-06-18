@@ -363,15 +363,13 @@ class LogIn {
 
       print("logOut Done");
       // Clear mobile cache
+      // Safely clear directories by iterating through contents
       final cacheDir = await getTemporaryDirectory();
-      if (cacheDir.existsSync()) {
-        cacheDir.deleteSync(recursive: true);
-      }
-      // Clear mobile app storage
+      await _clearDirectoryContents(cacheDir);
+
       final appDir = await getApplicationSupportDirectory();
-      if (appDir.existsSync()) {
-        appDir.deleteSync(recursive: true);
-      }
+      await _clearDirectoryContents(appDir);
+
       Statics.levelId = 0;
       Statics.userDetails = {
         'userID': '',
@@ -405,6 +403,21 @@ class LogIn {
       // await pref.setString("appVer", Statics.packageInfo['versionNumber']);
     } catch (e) {
       print("Error during logOut: $e");
+    }
+  }
+
+  /// Helper function to safely delete contents without deleting the root folder
+  Future<void> _clearDirectoryContents(Directory dir) async {
+    if (dir.existsSync()) {
+      try {
+        final List<FileSystemEntity> items = dir.listSync();
+        for (final FileSystemEntity item in items) {
+          // Delete each file/sub-directory individually
+          item.deleteSync(recursive: true);
+        }
+      } catch (e) {
+        print("Failed to clear directory ${dir.path}: $e");
+      }
     }
   }
 

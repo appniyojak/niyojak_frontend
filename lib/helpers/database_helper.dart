@@ -1179,15 +1179,22 @@ class DatabaseHelper {
   }
 
   static Future<void> dropCompleteDB() async {
-    // Get the path to your database
     String dbPath = await getDatabasesPath();
     String path = '$dbPath/$_dbName';
 
-    // Delete the database file
-    await _database?.close();
+    // 1. Ensure the database is closed safely
+    if (_database != null && _database!.isOpen) {
+      await _database!.close();
+    }
+
+    // 2. Nullify the reference so no background processes can use it
+    _database = null;
+
+    // 3. Delete the file
     await deleteDatabase(path);
     print('Database deleted successfully!');
 
+    // 4. Re-initialize
     _database = await initDatabase();
   }
 }
