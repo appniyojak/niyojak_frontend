@@ -179,6 +179,7 @@ const String urlGetEventVruttaListForApp = baseUrlAPI + '/GetEventVruttaListForA
 const String urlSaveEventVruttaForApp = baseUrlAPI + '/SaveEventVruttaForApp';
 const String urlDeleteEventVruttaForApp = baseUrlAPI + '/DeleteEventVruttaForApp';
 const String urlGetShaakhaaVruttaListForApp = baseUrlAPI + '/GetShaakhaaVruttaListForApp';
+const String urlGetShaakhaaVruttabydate = baseUrlAPI + '/GetShaakhaaVruttabydate';
 const String urlSaveShaakhaaVruttaForApp = baseUrlAPI + '/SaveShaakhaaVruttaForApp';
 const String urlGetgeounitNamebyid = baseUrlAPI + '/GetgeounitNamebyid';
 const String getupnagarmandaldataagainstnagar = baseUrlAPI + '/getupnagarmandaldataagainstnagar';
@@ -4383,6 +4384,29 @@ Future<List<dynamic>> getShaakhaaVruttaListForApp(var shaakhaaID, var shaakhaaVr
   // }
 
   return responseBody['ShaakhaaVruttaList'];
+}
+
+Future<List<dynamic>> getShaakhaaVruttaDetailsByDateForApp(var shaakhaaID, var vruttadate) async {
+  bool? connected = await isInternetConnected();
+  if (connected == false) {
+    return [];
+  }
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+  log(urlGetShaakhaaVruttabydate);
+  log("getShaakhaaVruttaDetailsByDateForApp inputJson -> ${json.encode({"ShaakhaaID": shaakhaaID, "Vruttadate": vruttadate})}");
+
+  var response = await http.post(Uri.parse(urlGetShaakhaaVruttabydate), headers: jHeaders, body: json.encode({"shaakhaaID": shaakhaaID, "Vruttadate": vruttadate}));
+  log("getShaakhaaVruttaDetailsByDateForApp response.body -> ${response.body}");
+  var responseBody = json.decode(response.body);
+
+  // lstShaakhaaVrutta= [];
+  // if (responseBody.length > 0) {
+  //   for (var data in responseBody['ShaakhaaVruttaList']) {
+  //     lstShaakhaaVrutta.add(ShaakhaaVruttaBAL.fromMap(data));
+  //   }
+  // }
+
+  return [responseBody['ShaakhaaVruttaList']];
 }
 
 Future<String> saveShaakhaaVruttaForApp(String inputJson) async {

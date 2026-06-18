@@ -159,7 +159,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
     // _boudhikDaysList.forEach((e) => print("e >>>>>>>>>>>>>>>>>>>> ${e?.toJson()}"));
   }
 
-  void getSwDetails(var theId) async {
+  void getSwDetails(var theId, {String? dateSelected}) async {
     setState(() {
       _isFetchingData = true;
     });
@@ -168,7 +168,9 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
     if (!isConnected) {
       Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));
     } else {
-      dataList = await Statics.getShaakhaaVruttaListForApp(null, theId);
+      dataList = dateSelected != null
+          ? await Statics.getShaakhaaVruttaDetailsByDateForApp(int.tryParse(widget.shaakhaaID == null ? "0" : widget.shaakhaaID.toString()) ?? 0, dateSelected)
+          : await Statics.getShaakhaaVruttaListForApp(null, theId);
       if (dataList != null && dataList.isNotEmpty) {
         var data = ShaakhaaVruttaBAL.fromMap(dataList[0]);
         if (!mounted) return;
@@ -250,6 +252,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
         _vruttaDate = date;
         _vruttaDateCntrl.text = DateFormat('dd-MMM-yyyy').format(date);
       });
+      getSwDetails(null, dateSelected: DateFormat('MM/dd/yyyy').format(date));
     }
   }
 

@@ -2165,15 +2165,6 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               _userHeader(),
-              if (userLevelId == 1) ...[
-                const SizedBox(height: 24),
-                _cardTile(
-                  Statics.getLabel('searchShaakhaaScreenLabel'),
-                  () => Navigator.of(context).pushNamed(SearchShaakhaaScreen.routeName),
-                  makeHighlight: true,
-                ),
-                const SizedBox(height: 18),
-              ],
               const SizedBox(height: 30),
               shatabdiVrutaCard(),
               const SizedBox(height: 27),
@@ -2204,6 +2195,16 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               _userHeader(),
               const SizedBox(height: 20),
+
+              if (userLevelId == 1) ...[
+                const SizedBox(height: 24),
+                _cardTile(
+                  Statics.getLabel('searchShaakhaaScreenLabel'),
+                  () => Navigator.of(context).pushNamed(SearchShaakhaaScreen.routeName),
+                  makeHighlight: true,
+                ),
+                const SizedBox(height: 18),
+              ],
 
               // ── Yesterday Praant ───────────────────────────────────────────
               Legend(legendString: "MyGeoVruttaData", fontsize: 18),
