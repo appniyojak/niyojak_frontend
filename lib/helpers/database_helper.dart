@@ -1197,4 +1197,51 @@ class DatabaseHelper {
     // 4. Re-initialize
     _database = await initDatabase();
   }
+
+  static Future<void> forcePurgeDatabase() async {
+    final db = await initDatabase();
+
+    try {
+      // 1. Turn off foreign keys to prevent iOS from blocking deletes
+      await db.execute('PRAGMA foreign_keys = OFF;');
+
+      // 2. Get all user tables
+      final List<Map<String, dynamic>> tables = await db.rawQuery(
+          "SELECT name FROM sqlite_master WHERE type='table'"
+      );
+
+      // 3. Check if the sqlite_sequence table even exists
+      final List<Map<String, dynamic>> seqCheck = await db.rawQuery(
+          "SELECT name FROM sqlite_master WHERE type='table' AND name='sqlite_sequence'"
+      );
+      final bool hasSequenceTable = seqCheck.isNotEmpty;
+
+      // 4. Clear every single table
+      for (var table in tables) {
+        final String tableName = table['name'];
+
+        if (tableName != 'sqlite_sequence' && tableName != 'android_metadata') {
+          // Force delete all rows
+          await db.rawDelete('DELETE FROM $tableName');
+
+          // Only clear sequence if the table actually exists
+          if (hasSequenceTable) {
+            await db.rawDelete("DELETE FROM sqlite_sequence WHERE name = ?", [tableName]);
+          }
+
+          print('Successfully cleared table: $tableName');
+        }
+      }
+
+      // 5. Force a VACUUM to purge the iOS Write-Ahead Log (WAL) and rebuild the file
+      await db.execute('VACUUM;');
+
+      // 6. Turn foreign keys back on
+      await db.execute('PRAGMA foreign_keys = ON;');
+
+      print('Database completely purged and vacuumed on iOS!');
+    } catch (e) {
+      print('Error while forcing database purge: $e');
+    }
+  }
 }

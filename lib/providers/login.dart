@@ -360,6 +360,7 @@ class LogIn {
       // print("clearData called");
 
       await DatabaseHelper.dropCompleteDB();
+      if(Platform.isIOS)await DatabaseHelper.forcePurgeDatabase();
 
       print("logOut Done");
       // Clear mobile cache
