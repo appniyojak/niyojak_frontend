@@ -85,64 +85,34 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
   @override
   void initState() {
     super.initState();
-    int vruttaID = int.tryParse(widget.vruttaID == null ? "0" : widget.vruttaID) ?? 0;
-    int shaakhaaID = int.tryParse(widget.shaakhaaID == null ? "0" : widget.shaakhaaID.toString()) ?? 0;
-    populateShaakhaVayogat(shaakhaaID.toString());
-    if (vruttaID > 0) {
-      getSwDetails(widget.vruttaID);
-    } else {
-      if (!mounted) return;
-      setState(() {
-        vrutta = new ShaakhaaVruttaBAL(
-          vruttaID,
-          1,
-          shaakhaaID,
-          "",
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          "",
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
-          null,
-          null,
-          false,
-          null,
-        );
-      });
-    }
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) => initData());
   }
 
-  void populateShaakhaVayogat(shaakhaaID) async {
-    var data = await Statics.getShaakhaaByID(shaakhaaID);
-    var data2 = await Statics.getStaticLDB('ShaakhaaVayogat');
-    var data3 = await Statics.getStaticLDB('ShaakhaaFrequency');
-    _boudhikDaysList = await Statics.getStaticLDB('boudhikDaysList');
-    _sewaDaysList = await Statics.getStaticLDB('sewaDaysList');
+  initData() async {
+    int vruttaID = int.tryParse(widget.vruttaID == null ? "0" : widget.vruttaID) ?? 0;
+    int shaakhaaID = int.tryParse(widget.shaakhaaID == null ? "0" : widget.shaakhaaID.toString()) ?? 0;
+    await populateShaakhaVayogat(shaakhaaID.toString());
+    _vruttaDateCntrl.text = DateFormat('dd-MMM-yyyy').format(DateTime.now());
+    _vruttaDate = DateFormat('yyyy/MM/dd').parse(DateFormat('yyyy/MM/dd').format(DateTime.now()));
+    getSwDetails(vruttaID, dateSelected: vruttaID == 0 ? DateFormat('dd/MM/yyyy').format(DateTime.now()) : null);
+  }
+
+  Future<void> populateShaakhaVayogat(shaakhaaID) async {
+    // 1. Group all your futures into a single list
+    final results = await Future.wait([
+      Statics.getShaakhaaByID(shaakhaaID), // index 0
+      Statics.getStaticLDB('ShaakhaaVayogat'), // index 1
+      Statics.getStaticLDB('ShaakhaaFrequency'), // index 2
+      Statics.getStaticLDB('boudhikDaysList'), // index 3
+      Statics.getStaticLDB('sewaDaysList'), // index 4
+    ]);
+
+// 2. Assign the results back to your variables based on their index
+    var data = results[0];
+    var data2 = results[1];
+    var data3 = results[2];
+    _boudhikDaysList = results[3];
+    _sewaDaysList = results[4];
     if (data != null) {
       var code = data2[data2.indexWhere((e) => e.staticID == data.vayogatID)].code;
       var freq = data.frequencyID;
@@ -177,8 +147,12 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
         setState(() {
           vrutta = data;
           if (vrutta != null) {
-            _vruttaDate = ((vrutta!.vruttaDate != null && vrutta!.vruttaDate != "") ? DateFormat("yyyy/MM/dd").parse(vrutta!.vruttaDate!) : null);
-            _vruttaDateCntrl.text = ((vrutta!.vruttaDate != null && vrutta!.vruttaDate != "") ? DateFormat('dd-MMM-yyyy').format(_vruttaDate!) : '');
+            final formattedDate = dateSelected != null ? DateFormat('dd/MM/yyyy').parse(dateSelected) : null;
+            final hasVruttaDate = vrutta?.vruttaDate?.isNotEmpty ?? false;
+
+            _vruttaDate = hasVruttaDate ? DateFormat('yyyy/MM/dd').parse(vrutta!.vruttaDate!) : formattedDate;
+            _vruttaDateCntrl.text = _vruttaDate != null ? DateFormat('dd-MMM-yyyy').format(_vruttaDate!) : '';
+
             _shishuCtrl.text = vrutta!.shishuCount == null ? "" : vrutta!.shishuCount.toString();
             _newshishuCtrl.text = vrutta!.newshishuCount == null ? "" : vrutta!.newshishuCount.toString();
             _baalCtrl.text = vrutta!.baalVidyaarthiCount == null ? "" : vrutta!.baalVidyaarthiCount.toString();
@@ -252,7 +226,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
         _vruttaDate = date;
         _vruttaDateCntrl.text = DateFormat('dd-MMM-yyyy').format(date);
       });
-      getSwDetails(null, dateSelected: DateFormat('MM/dd/yyyy').format(date));
+      getSwDetails(null, dateSelected: DateFormat('dd/MM/yyyy').format(date));
     }
   }
 

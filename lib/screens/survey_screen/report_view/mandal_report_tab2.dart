@@ -2142,7 +2142,7 @@ class _MandalSurveyReportViewScreen2State extends State<MandalSurveyReportViewSc
                                   isVastiSearch = true;
                                   _isExpanded = false;
                                 });
-                                getMyDetailsColumnsAndRows(ctrl.deepestSelectedGeoUnitId, ctrl.deepestSelectedLevelName);
+                                getMyDetailsColumnsAndRows(ctrl.deepestSelectedGeoUnitId, ctrl.deepestSelectedLevelName ?? "praant");
                               },
                               child: Text("${Statics.getLabel('Filters')}", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                             ),

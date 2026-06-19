@@ -4395,7 +4395,7 @@ Future<List<dynamic>> getShaakhaaVruttaDetailsByDateForApp(var shaakhaaID, var v
   log(urlGetShaakhaaVruttabydate);
   log("getShaakhaaVruttaDetailsByDateForApp inputJson -> ${json.encode({"ShaakhaaID": shaakhaaID, "Vruttadate": vruttadate})}");
 
-  var response = await http.post(Uri.parse(urlGetShaakhaaVruttabydate), headers: jHeaders, body: json.encode({"shaakhaaID": shaakhaaID, "Vruttadate": vruttadate}));
+  var response = await http.post(Uri.parse(urlGetShaakhaaVruttabydate), headers: jHeaders, body: json.encode({"ShaakhaaID": shaakhaaID, "Vruttadate": vruttadate}));
   log("getShaakhaaVruttaDetailsByDateForApp response.body -> ${response.body}");
   var responseBody = json.decode(response.body);
 

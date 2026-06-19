@@ -314,7 +314,7 @@ class _NirikshanAnnualBaithakVruttaState extends State<NirikshanAnnualBaithakVru
                                         ' | ' +
                                         (trail.upnagarName ?? "--") +
                                         ' | ';
-                                    await _search(ctrl.deepestSelectedLevelName, ctrl.deepestSelectedGeoUnitId);
+                                    await _search(ctrl.deepestSelectedLevelName ?? "praant", ctrl.deepestSelectedGeoUnitId);
                                   } else {
                                     Statics.showMessageDialog(context, Statics.getLabel('baithakTypeNotSelected'));
                                   }

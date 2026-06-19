@@ -235,7 +235,7 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
       "fromage": int.parse(_fromAgeController.text == '' ? '0' : _fromAgeController.text),
       "toage": int.parse(_toAgeController.text == '' ? '0' : _toAgeController.text),
       "isgender": isGender,
-      "type": _controller.deepestSelectedLevelName,
+      "type": _controller.deepestSelectedLevelName ?? "praant",
     });
     print("Join RSS search Request :-- $strInput");
     try {

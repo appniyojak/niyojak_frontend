@@ -6,10 +6,23 @@ class ShaakhaaVruttaReportHomeRespModel {
   String? prevMonthName;
   String? prevYearName;
   String? thisYearName;
+  String? laststarttoendname;
+  String? thisstartoendname;
   Shaakhadata? shaakhadata;
   Otherdata? otherdata;
 
-  ShaakhaaVruttaReportHomeRespModel({this.status, this.message, this.usertype, this.shaakhadata, this.otherdata, this.prevofPrevMonthName, this.prevMonthName, this.prevYearName, this.thisYearName});
+  ShaakhaaVruttaReportHomeRespModel(
+      {this.status,
+      this.message,
+      this.usertype,
+      this.shaakhadata,
+      this.otherdata,
+      this.prevofPrevMonthName,
+      this.prevMonthName,
+      this.prevYearName,
+      this.thisYearName,
+      this.laststarttoendname,
+      this.thisstartoendname});
 
   ShaakhaaVruttaReportHomeRespModel.fromJson(Map<String, dynamic> json) {
     status = json['Status'];
@@ -19,6 +32,8 @@ class ShaakhaaVruttaReportHomeRespModel {
     prevMonthName = json['PrevMonthName'];
     prevYearName = json['PrevYearName'];
     thisYearName = json['ThisYearName'];
+    laststarttoendname = json['laststarttoendname'];
+    thisstartoendname = json['thisstartoendname'];
     shaakhadata = json['shaakhadata'] != null ? new Shaakhadata.fromJson(json['shaakhadata']) : null;
     otherdata = json['otherdata'] != null ? new Otherdata.fromJson(json['otherdata']) : null;
   }
@@ -32,6 +47,8 @@ class ShaakhaaVruttaReportHomeRespModel {
     data['PrevMonthName'] = this.prevMonthName;
     data['PrevYearName'] = this.prevYearName;
     data['ThisYearName'] = this.thisYearName;
+    data['laststarttoendname'] = this.laststarttoendname;
+    data['thisstartoendname'] = this.thisstartoendname;
     if (this.shaakhadata != null) {
       data['shaakhadata'] = this.shaakhadata!.toJson();
     }

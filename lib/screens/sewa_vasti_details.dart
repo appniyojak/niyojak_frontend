@@ -208,7 +208,7 @@ class _SewaVastiDetailsState extends State<SewaVastiDetails> {
       "Population": sDetails!.population,
       "NecessarySewaTypeIDs": necessitiesIDs == "" ? null : necessitiesIDs,
       "Remark": sDetails!.remark,
-      "type": controller.deepestSelectedLevelName,
+      "type": controller.deepestSelectedLevelName ?? "praant",
       "geounitid": int.tryParse(controller.deepestSelectedGeoUnitId ?? ""),
       "ModifiedBy": Statics.userDetails["userID"].toString()
     });

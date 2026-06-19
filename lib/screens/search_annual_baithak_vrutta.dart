@@ -482,7 +482,7 @@ class _SearchAnnualBaithakVruttaState extends State<SearchAnnualBaithakVrutta> {
         nagarVrutta = await _getNagarVrutta(ctrl.deepestSelectedGeoUnitId, _baithakType!);
 
         ///
-        _lstShaakhaaVrutta = await _getShaakhaaVrutta(ctrl.deepestSelectedGeoUnitId, ctrl.deepestSelectedLevelName, _baithakType);
+        _lstShaakhaaVrutta = await _getShaakhaaVrutta(ctrl.deepestSelectedGeoUnitId, ctrl.deepestSelectedLevelName ?? "praant", _baithakType);
 
         ///
 

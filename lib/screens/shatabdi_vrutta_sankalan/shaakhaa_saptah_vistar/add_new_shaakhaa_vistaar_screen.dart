@@ -589,7 +589,7 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
                                 level: GeoLevel.Vibhaag,
                                 title: 'Vibhaag',
                                 controller: ctrl,
-                                isDisabled: (userLevelId ?? 0) < 5,
+                                isDisabled: (userLevelId ?? 0) < 8 || userLevelId == 13,
                                 validator: (v) {
                                   if (v == null || v!.isEmpty) return (Statics.getLabel('GeoUnitValidationMessage'));
                                   return null;
@@ -600,7 +600,7 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
                                 level: GeoLevel.Bhaag,
                                 title: 'Bhaag',
                                 controller: ctrl,
-                                isDisabled: (userLevelId ?? 0) < 5,
+                                isDisabled: (userLevelId ?? 0) < 7 || userLevelId == 13,
                                 validator: (v) {
                                   if (v == null || v!.isEmpty) return (Statics.getLabel('SelectBhaagValidationMessage'));
                                   return null;
@@ -612,7 +612,7 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
                                 level: GeoLevel.Nagar,
                                 title: 'Nagar',
                                 controller: ctrl,
-                                isDisabled: (userLevelId ?? 0) < 5,
+                                isDisabled: (userLevelId ?? 0) < 6 || userLevelId == 13,
                                 validator: (v) {
                                   if (v == null || v!.isEmpty) return (Statics.getLabel('SelectNagarValidationMessage'));
                                   return null;
@@ -625,7 +625,7 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
                                 level: GeoLevel.upnagarUpkhanda,
                                 title: 'upnagarUpkhanda',
                                 controller: ctrl,
-                                isDisabled: (userLevelId ?? 0) < 5,
+                                isDisabled: (userLevelId ?? 0) < 6 || userLevelId == 13,
                               ),
 
                             if (ctrl.hasItems(GeoLevel.Mandal))
@@ -633,7 +633,7 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
                                 level: GeoLevel.Mandal,
                                 title: 'Mandal',
                                 controller: ctrl,
-                                isDisabled: (userLevelId ?? 0) < 5,
+                                isDisabled: (userLevelId ?? 0) < 4,
                                 validator: (v) {
                                   if (v == null || v!.isEmpty) return (Statics.getLabel('SelectMandalValidationMessage'));
                                   return null;

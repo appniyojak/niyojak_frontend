@@ -757,7 +757,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                           isVastiSearch = true;
                                           _isExpanded = false;
                                         });
-                                        getMyDetailsColumnsAndRows(ctrl.deepestSelectedGeoUnitId, ctrl.deepestSelectedLevelName);
+                                        getMyDetailsColumnsAndRows(ctrl.deepestSelectedGeoUnitId, ctrl.deepestSelectedLevelName ?? "praant");
                                         // }else{
                                         //   Statics.showToast(Statics.getLabel('vastiGramValidation'));
                                         // }

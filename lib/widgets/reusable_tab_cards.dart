@@ -34,8 +34,14 @@ class ReusableBarTabCard extends StatelessWidget {
     final total = totalshakhaa ?? 0;
     final previous = (yesterdayShakhaa ?? 0);
     final current = (todayShakhaa ?? 0);
+    final calPrevious = yesterdayShakhaa == 0 ? 1 : (yesterdayShakhaa ?? 1);
+    final calCurrent = todayShakhaa == 0 ? 1 : (todayShakhaa ?? 1);
 
-    final percentageChange = previous == 0 ? ((current - 1) / 1) * 100 : ((current - previous) / previous) * 100;
+    final percentageChange = (current == previous)
+        ? 0
+        : previous == 0
+            ? (((calCurrent + 1) - calPrevious) / calPrevious) * 100
+            : ((current - previous) / previous) * 100;
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),

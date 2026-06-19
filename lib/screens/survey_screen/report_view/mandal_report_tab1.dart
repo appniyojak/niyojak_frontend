@@ -2209,7 +2209,7 @@ class _MandalSurveyReportViewScreen1State extends State<MandalSurveyReportViewSc
                                 isVastiSearch = true;
                                 _isExpanded = false;
                               });
-                              getMyDetailsColumnsAndRows(ctrl.deepestSelectedGeoUnitId, ctrl.deepestSelectedLevelName);
+                              getMyDetailsColumnsAndRows(ctrl.deepestSelectedGeoUnitId, ctrl.deepestSelectedLevelName ?? "praant");
                               // }else{
                               //   Statics.showToast(Statics.getLabel('vastiGramValidation'));
                               // }
