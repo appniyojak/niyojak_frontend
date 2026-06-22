@@ -251,6 +251,7 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
                         level: GeoLevel.Mahaanagar,
                         title: 'Mahaanagar',
                         controller: ctrl,
+                        onChanged: (p0) => setState(() => viewcontainer = false),
                       ),
 
                       // if (ctrl.hasItems(GeoLevel.vibhaag))
@@ -258,6 +259,7 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
                         level: GeoLevel.Vibhaag,
                         title: 'Vibhaag',
                         controller: ctrl,
+                        onChanged: (p0) => setState(() => viewcontainer = false),
                       ),
 
                       if (ctrl.hasItems(GeoLevel.Bhaag))
@@ -265,6 +267,7 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
                           level: GeoLevel.Bhaag,
                           title: 'Bhaag',
                           controller: ctrl,
+                          onChanged: (p0) => setState(() => viewcontainer = false),
                         ),
 
                       if (ctrl.hasItems(GeoLevel.Nagar))
@@ -272,6 +275,7 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
                           level: GeoLevel.Nagar,
                           title: 'Nagar',
                           controller: ctrl,
+                          onChanged: (p0) => setState(() => viewcontainer = false),
                         ),
 
                       if (ctrl.hasItems(GeoLevel.upnagarUpkhanda))
@@ -279,6 +283,7 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
                           level: GeoLevel.upnagarUpkhanda,
                           title: 'upnagarUpkhanda',
                           controller: ctrl,
+                          onChanged: (p0) => setState(() => viewcontainer = false),
                         ),
 
                       if (ctrl.hasItems(GeoLevel.Mandal))
@@ -286,6 +291,7 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
                           level: GeoLevel.Mandal,
                           title: 'Mandal',
                           controller: ctrl,
+                          onChanged: (p0) => setState(() => viewcontainer = false),
                         ),
 
                       if (ctrl.hasItems(GeoLevel.Graam))
@@ -293,6 +299,7 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
                           level: GeoLevel.Graam,
                           title: 'Graam',
                           controller: ctrl,
+                          onChanged: (p0) => setState(() => viewcontainer = false),
                         ),
 
                       if (ctrl.hasItems(GeoLevel.Vasti))
@@ -300,6 +307,7 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
                           level: GeoLevel.Vasti,
                           title: 'Vasti',
                           controller: ctrl,
+                          onChanged: (p0) => setState(() => viewcontainer = false),
                         ),
                       SizedBox(height: 12),
                     ],

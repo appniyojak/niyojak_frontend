@@ -1590,6 +1590,7 @@ class _UpNagarkhandaAddUpdateViewState extends State<UpNagarkhandaAddUpdateView>
                     level: GeoLevel.Mahaanagar,
                     title: 'Mahaanagar',
                     controller: ctrl,
+                    onChanged: (p0) => setState(() => showNavinButton = showupnagarUpkhandaTable = false),
                   ),
 
                   // if (ctrl.hasItems(GeoLevel.vibhaag))
@@ -1597,6 +1598,7 @@ class _UpNagarkhandaAddUpdateViewState extends State<UpNagarkhandaAddUpdateView>
                     level: GeoLevel.Vibhaag,
                     title: 'Vibhaag',
                     controller: ctrl,
+                    onChanged: (p0) => setState(() => showNavinButton = showupnagarUpkhandaTable = false),
                   ),
 
                   if (ctrl.hasItems(GeoLevel.Bhaag))
@@ -1604,6 +1606,7 @@ class _UpNagarkhandaAddUpdateViewState extends State<UpNagarkhandaAddUpdateView>
                       level: GeoLevel.Bhaag,
                       title: 'Bhaag',
                       controller: ctrl,
+                      onChanged: (p0) => setState(() => showNavinButton = showupnagarUpkhandaTable = false),
                     ),
 
                   if (ctrl.hasItems(GeoLevel.Nagar))
@@ -1611,6 +1614,7 @@ class _UpNagarkhandaAddUpdateViewState extends State<UpNagarkhandaAddUpdateView>
                       level: GeoLevel.Nagar,
                       title: 'Nagar',
                       controller: ctrl,
+                      onChanged: (p0) => setState(() => showNavinButton = showupnagarUpkhandaTable = false),
                     ),
                   SizedBox(height: 12),
                   if (ctrl.deepestSelectedLevelId == 6)

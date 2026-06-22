@@ -141,7 +141,7 @@ class AbhiyanSwayamsevakList {
   String? appPassword; // Added parameter
   String? daayityaName;
   String? email;
-  int? geoUnitID; // Updated parameter name
+  String? geoUnitID; // Updated parameter name
   int? isActive; // Added parameter
   int? levelID;
   int? mahanagarId; // Added parameter
