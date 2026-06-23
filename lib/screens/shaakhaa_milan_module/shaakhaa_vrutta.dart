@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:horizontal_data_table/horizontal_data_table.dart';
 import 'package:intl/intl.dart';
 
-import '../helpers/static_data.dart' as Statics;
-import '../providers/bals.dart';
-import '../screens/edit_shaakhaa_vrutta.dart';
-import '../widgets/legend.dart';
+import '../../helpers/static_data.dart' as Statics;
+import '../../providers/bals.dart';
+import '../edit_shaakhaa_vrutta.dart';
+import '../../widgets/legend.dart';
 
 class ShaakhaaVrutta extends StatefulWidget {
   static const String routeName = '/shaakhaa-vrutta-screen';

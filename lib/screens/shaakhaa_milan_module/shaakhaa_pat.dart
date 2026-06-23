@@ -3,10 +3,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
-import '../helpers/static_data.dart' as Statics;
-import '../providers/bals.dart';
-import '../widgets/shaakha_swayamsevak_card.dart';
-import '../widgets/titlebar.dart';
+import '../../helpers/static_data.dart' as Statics;
+import '../../providers/bals.dart';
+import '../../widgets/shaakha_swayamsevak_card.dart';
+import '../../widgets/titlebar.dart';
 
 class ShaakhaaPat extends StatefulWidget {
   static const routeName = '/shaakhaa-pat-screen';

@@ -41,7 +41,7 @@ import '../profile_settings.dart';
 import '../search_event.dart';
 import '../search_join_rss.dart';
 import '../search_rjb_nidhi_sankalan.dart';
-import '../search_shaakhaa.dart';
+import '../shaakhaa_milan_module/search_shaakhaa.dart';
 import '../search_soochi_screen.dart';
 import '../shatabdi_vrutta_sankalan/gruh_sampark_abhiyaan/gruh_abhiyaan_main_tab_screen.dart';
 import '../shatabdi_vrutta_sankalan/hindu_sanmelan/hindu_sanmelan_main_tab.dart';
@@ -156,6 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String? shaakhaausertype;
   String? prevofPrevMonthName;
   String? prevMonthName;
+  String? thisMonthName;
   String? prevYearName;
   String? thisYearName;
   String? laststarttoendname;
@@ -303,7 +304,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _getShaakhaaVruttaReport() async {
-    shaakhaLevelData = otherLevelData = shaakhaausertype = prevofPrevMonthName = prevMonthName = null;
+    shaakhaLevelData = otherLevelData = shaakhaausertype = prevofPrevMonthName = prevMonthName = thisMonthName = null;
     tabs = [];
     setState(() => _isMySearching = true);
     final data = await Statics.yestardayShaakhaaVruttaHomeReportData(
@@ -319,6 +320,7 @@ class _HomeScreenState extends State<HomeScreen> {
       shaakhaausertype = data.usertype;
       prevofPrevMonthName = data.prevofPrevMonthName;
       prevMonthName = data.prevMonthName;
+      thisMonthName = data.thisMonthName;
       prevYearName = data.prevYearName;
       thisYearName = data.thisYearName;
       thisstartoendname = data.thisstartoendname;
@@ -1211,8 +1213,8 @@ class _HomeScreenState extends State<HomeScreen> {
             todayShakhaa: data.thisMonthShaakhaaCount,
             yesterdayShakhaa: data.lastMonthShaakhaaCount,
             mainLabel: Statics.getLabel("shakhaaTulna"),
-            currentLabel: "${Statics.getLabel("thisMonthCount")} ${Statics.getLabel("onBasisOfNityaVrutta")}",
-            lastLabel: "${Statics.getLabel("prevMonthCount")} ${Statics.getLabel("onBasisOfNityaVrutta")}",
+            currentLabel: "$thisMonthName ${Statics.getLabel('fromMonthShaakha')} ${Statics.getLabel("onBasisOfNityaVrutta")}",
+            lastLabel: "$prevMonthName ${Statics.getLabel('fromMonthShaakha')} ${Statics.getLabel("onBasisOfNityaVrutta")}",
             currentTotalLabel: Statics.getLabel("todayShaakhaaMonthCount"),
             rows: [
               BarRow(
@@ -1234,8 +1236,8 @@ class _HomeScreenState extends State<HomeScreen> {
             todayShakhaa: data.thisMonthShaapthahikCount,
             yesterdayShakhaa: data.lastMonthShaapthahikCount,
             mainLabel: Statics.getLabel('weeklyShakhaaTulna'),
-            currentLabel: "${Statics.getLabel("thisMonthShaapthahikCount")} ${Statics.getLabel("onBasisOfNityaVrutta")}",
-            lastLabel: "${Statics.getLabel('lastMonthShaapthahikCount')} ${Statics.getLabel("onBasisOfNityaVrutta")}",
+            currentLabel: "$thisMonthName ${Statics.getLabel("fromMonthSaptahik")} ${Statics.getLabel("onBasisOfNityaVrutta")}",
+            lastLabel: "$prevMonthName ${Statics.getLabel('fromMonthSaptahik')} ${Statics.getLabel("onBasisOfNityaVrutta")}",
             totalLabel: Statics.getLabel("totalMilanSampann"),
             currentTotalLabel: Statics.getLabel("thisMonthTotalShaapthahikCount"),
             rows: [
@@ -1258,8 +1260,8 @@ class _HomeScreenState extends State<HomeScreen> {
             todayShakhaa: data.thisMonthMandaliCount,
             yesterdayShakhaa: data.lastMonthMandaliCount,
             mainLabel: Statics.getLabel('shaakhaamandaliCount'),
-            currentLabel: "${Statics.getLabel("thisMonthMandaliCount")} ${Statics.getLabel("onBasisOfNityaVrutta")}",
-            lastLabel: "${Statics.getLabel('lastMonthMandaliCount')} ${Statics.getLabel("onBasisOfNityaVrutta")}",
+            currentLabel: "$thisMonthName ${Statics.getLabel("fromMonthSangha")} ${Statics.getLabel("onBasisOfNityaVrutta")}",
+            lastLabel: "$prevMonthName ${Statics.getLabel('fromMonthSangha')} ${Statics.getLabel("onBasisOfNityaVrutta")}",
             totalLabel: Statics.getLabel("totalshaakhaamandaliCount"),
             currentTotalLabel: Statics.getLabel("thisMonthTotalMandaliCount"),
             rows: [
@@ -1282,8 +1284,8 @@ class _HomeScreenState extends State<HomeScreen> {
             todayShakhaa: data.thisMonthMasikCount,
             yesterdayShakhaa: data.lastMonthMasikCount,
             mainLabel: Statics.getLabel('masikCount'),
-            currentLabel: "${Statics.getLabel("thisMonthMasikCount")} ${Statics.getLabel("onBasisOfNityaVrutta")}",
-            lastLabel: "${Statics.getLabel('lastMonthMasikCount')} ${Statics.getLabel("onBasisOfNityaVrutta")}",
+            currentLabel: "$thisMonthName ${Statics.getLabel("fromMonthMasik")} ${Statics.getLabel("onBasisOfNityaVrutta")}",
+            lastLabel: "$prevMonthName ${Statics.getLabel('fromMonthMasik')} ${Statics.getLabel("onBasisOfNityaVrutta")}",
             totalLabel: Statics.getLabel("totalmasikCount"),
             currentTotalLabel: Statics.getLabel("thisMonthTotalMasikCount"),
             rows: [

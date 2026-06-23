@@ -7,12 +7,12 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../helpers/static_data.dart' as Statics;
-import '../screens/edit_shaakhaa.dart';
 import '../screens/maps_display.dart';
-import '../screens/shaakhaa_sewa_vasti_link.dart';
-import '../screens/shaakhaa_toli.dart';
-import '../screens/shaakhaa_vrutta.dart';
-import 'shaakhaa_pat.dart';
+import '../screens/shaakhaa_milan_module/edit_shaakhaa.dart';
+import '../screens/shaakhaa_milan_module/shaakhaa_pat.dart';
+import '../screens/shaakhaa_milan_module/shaakhaa_sewa_vasti_link.dart';
+import '../screens/shaakhaa_milan_module/shaakhaa_toli.dart';
+import '../screens/shaakhaa_milan_module/shaakhaa_vrutta.dart';
 
 class ShaakhaaCard extends StatelessWidget {
   final shaakhaaItem;

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import '../screens/shaakhaa_details.dart';
+import 'shaakhaa_details.dart';
 
-import '../helpers/static_data.dart' as Statics;
+import '../../helpers/static_data.dart' as Statics;
 
 class EditShaakhaaScreen extends StatefulWidget {
   static const String routeName = '/edit-shaakhaa-screen';
+
   State<StatefulWidget> createState() {
     return new EditShaakhaaScreenState();
   }

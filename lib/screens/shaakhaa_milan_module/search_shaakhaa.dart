@@ -6,14 +6,14 @@ import 'package:intl/intl.dart';
 import 'package:niyojak_prod/screens/home_screen/home_screen.dart';
 import 'package:provider/provider.dart';
 
-import '../helpers/static_data.dart' as Statics;
-import '../providers/bals.dart';
-import '../screens/edit_shaakhaa.dart';
-import '../screens/maps_display.dart';
-import '../utils/globals.dart';
-import '../utils/stable_geounit_class.dart';
-import '../widgets/app_drawer.dart';
-import '../widgets/shaakhaa_card.dart';
+import '../../helpers/static_data.dart' as Statics;
+import '../../providers/bals.dart';
+import '../../utils/globals.dart';
+import '../../utils/stable_geounit_class.dart';
+import '../../widgets/app_drawer.dart';
+import '../../widgets/shaakhaa_card.dart';
+import '../maps_display.dart';
+import 'edit_shaakhaa.dart';
 
 class SearchShaakhaaScreen extends StatefulWidget {
   static const routeName = '/search-shaakhaa-screen';

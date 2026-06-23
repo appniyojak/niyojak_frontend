@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
-import '../helpers/static_data.dart' as Statics;
-import '../widgets/titlebar.dart';
+import '../../helpers/static_data.dart' as Statics;
+import '../../widgets/titlebar.dart';
 
 class ShaakhaaSevaVastiLink extends StatefulWidget {
   static const routeName = '/shaakhaa-sewa-vasti-screen';

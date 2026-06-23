@@ -12,9 +12,9 @@ import '../screens/annual_baithak_ekatrit_vrutta.dart';
 import '../screens/help_screen.dart';
 import '../screens/home_screen/home_screen.dart';
 import '../screens/search_annual_baithak_vrutta.dart';
-import '../screens/search_shaakhaa.dart';
 import '../screens/search_swayamsevak_transfer.dart';
 import '../screens/sewa_vasti_list.dart';
+import '../screens/shaakhaa_milan_module/search_shaakhaa.dart';
 
 class AppDrawer extends StatefulWidget {
   const AppDrawer({Key? key}) : super(key: key);

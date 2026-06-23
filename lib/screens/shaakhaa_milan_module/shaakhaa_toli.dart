@@ -2,8 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:niyojak_prod/widgets/legend.dart';
-import '../widgets/shaakhaaToli_card.dart';
-import '../helpers/static_data.dart' as Statics;
+
+import '../../helpers/static_data.dart' as Statics;
+import '../../widgets/shaakhaaToli_card.dart';
 
 class ShaakhaaToli extends StatefulWidget {
   static const routeName = '/shaakhaa-toli-screen';

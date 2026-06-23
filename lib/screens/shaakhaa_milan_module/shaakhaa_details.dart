@@ -8,11 +8,11 @@ import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 
-import '../helpers/static_data.dart' as Statics;
-import '../providers/bals.dart';
-import '../providers/swayamsevak_provider.dart';
-import '../utils/globals.dart';
-import '../utils/stable_geounit_class.dart';
+import '../../helpers/static_data.dart' as Statics;
+import '../../providers/bals.dart';
+import '../../providers/swayamsevak_provider.dart';
+import '../../utils/globals.dart';
+import '../../utils/stable_geounit_class.dart';
 
 enum SankalpAadhaarEnum { Kaaryakartaa, Shaakhaa }
 

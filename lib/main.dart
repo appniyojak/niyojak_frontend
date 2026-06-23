@@ -43,7 +43,6 @@ import './screens/edit_daayitva.dart';
 import './screens/edit_event.dart';
 import './screens/edit_join_rss.dart';
 import './screens/edit_sewa_vasti.dart';
-import './screens/edit_shaakhaa.dart';
 import './screens/edit_shaakhaa_vrutta.dart';
 import './screens/edit_soochi.dart';
 import './screens/event_calender.dart';
@@ -57,13 +56,9 @@ import './screens/search_annual_baithak_vrutta.dart';
 import './screens/search_event.dart';
 import './screens/search_join_rss.dart';
 import './screens/search_rjb_nidhi_sankalan.dart';
-import './screens/search_shaakhaa.dart';
 import './screens/search_soochi_screen.dart';
 import './screens/search_swayamsevak_transfer.dart';
 import './screens/sewa_vasti_list.dart';
-import './screens/shaakhaa_sewa_vasti_link.dart';
-import './screens/shaakhaa_toli.dart';
-import './screens/shaakhaa_vrutta.dart';
 import './screens/soochi_members.dart';
 import './screens/soochi_sharing.dart';
 import './screens/splash_screen.dart';
@@ -73,12 +68,18 @@ import './screens/swayamsevak_module/edit_module/edit_swayamsevak_screen.dart';
 import './screens/swayamsevak_module/edit_module/edit_swayamsevak_soochi.dart';
 import './screens/swayamsevak_module/edit_module/edit_swayamsevak_transfer.dart';
 import './screens/swayamsevak_module/swayamsevak_search.dart';
-import './widgets/shaakhaa_pat.dart';
 import 'firebase_options.dart';
 import 'helpers/static_data.dart' as Statics;
 import 'providers/sadbhav_provider.dart';
 import 'screens/forget_password.dart';
 import 'screens/home_screen/home_screen.dart';
+import 'screens/shaakhaa_milan_module/edit_shaakhaa.dart';
+import 'screens/shaakhaa_milan_module/search_shaakhaa.dart';
+import 'screens/shaakhaa_milan_module/shaakha_main_tab_screen.dart';
+import 'screens/shaakhaa_milan_module/shaakhaa_pat.dart';
+import 'screens/shaakhaa_milan_module/shaakhaa_sewa_vasti_link.dart';
+import 'screens/shaakhaa_milan_module/shaakhaa_toli.dart';
+import 'screens/shaakhaa_milan_module/shaakhaa_vrutta.dart';
 import 'screens/shatabdi_vrutta_sankalan/gruh_sampark_abhiyaan/add_abhiyaan_karyakarta_screen.dart';
 import 'screens/shatabdi_vrutta_sankalan/gruh_sampark_abhiyaan/add_abhiyaan_pramukh.dart';
 import 'screens/shatabdi_vrutta_sankalan/gruh_sampark_abhiyaan/gruh_abhiyaan_main_tab_screen.dart';
@@ -307,6 +308,7 @@ class NiyojakAppState extends State<NiyojakApp> {
                 AddGruhaSamparkScreen.routeName: (ctx) => AddGruhaSamparkScreen(),
                 SankalitDataNamesView.routeName: (ctx) => SankalitDataNamesView(),
                 SearchShaakhaaScreen.routeName: (ctx) => SearchShaakhaaScreen(),
+                ShaakhaMainTabScreen.routeName: (ctx) => ShaakhaMainTabScreen(),
                 EditSwayamsevakScreen.routeName: (ctx) => EditSwayamsevakScreen(),
                 EditShaakhaaScreen.routeName: (ctx) => EditShaakhaaScreen(),
                 EditSoochiScreen.routeName: (ctx) => EditSoochiScreen(),

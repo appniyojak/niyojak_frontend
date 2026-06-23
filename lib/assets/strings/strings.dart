@@ -2122,7 +2122,8 @@ Map<String, String> resEnglish = {
   "prevofprevyearmaansik": "Previous to Previous Month (Masik)",
   "prevyearmaansik": "Previous Month (Masik)",
   "addAadharPerson": "Add Aadhaar Karyakarta",
-  "addAadharPersonTip": "If Aadhaar Karyakarta do not have any assigned responsibilities, they should be assigned the responsibility of a Shaakhaa Vistar Sahyogi and be permitted to use the app.",
+  "addAadharPersonTip":
+      "If Aadhaar Karyakarta do not have any assigned responsibilities, they should be assigned the responsibility of a Vasti/Graam Shaakhaa Vistar Sahyogi and be permitted to use the app.",
   "duplicationValidation": "Duplication Detected",
 };
 
@@ -4261,7 +4262,7 @@ Map<String, String> resMarathi = {
   "prevofprevyearmaansik": "मागीलच्या मागील महिना(Masik)",
   "prevyearmaansik": "मागील महिना (Masik)",
   "addAadharPerson": "आधार कार्यकर्ता जोडा",
-  "addAadharPersonTip": "आधार कार्यकर्त्यांकडे जर कुठलीही जवाबदारी नसेल तर त्यांना शाखा विस्तार सहयोगी म्हणून जवाबदारी देऊन एप वापरण्याची परवानगी द्यावी",
+  "addAadharPersonTip": "आधार कार्यकर्त्यांकडे जर कुठलीही जवाबदारी नसेल तर त्यांना वस्ती/ग्राम शाखा विस्तार सहयोगी म्हणून जवाबदारी देऊन एप वापरण्याची परवानगी द्यावी",
   "duplicationValidation": "एकाच नावाची नोंद आधीपासून आढळली आहे.",
 };
 
@@ -6398,6 +6399,6 @@ Map<String, String> resHindi = {
   "prevofprevyearmaansik": "पिछले से पिछले माह (Masik)",
   "prevyearmaansik": "पिछले माह (Masik)",
   "addAadharPerson": "आधार कार्यकर्ता जोड़ें",
-  "addAadharPersonTip": "यदि आधार कार्यकर्ताओं के पास कोई जिम्मेदारी नहीं है, तो उन्हें शाखा विस्तार सहयोगी के रूप में जिम्मेदारी देकर ऐप उपयोग करने की अनुमति दी जानी चाहिए।",
+  "addAadharPersonTip": "यदि आधार कार्यकर्ताओं के पास कोई जिम्मेदारी नहीं है, तो उन्हें बस्ती/ग्राम शाखा विस्तार सहयोगी के रूप में जिम्मेदारी देकर ऐप उपयोग करने की अनुमति दी जानी चाहिए।",
   "duplicationValidation": "समान नाम की प्रविष्टि पहले से मौजूद है।",
 };

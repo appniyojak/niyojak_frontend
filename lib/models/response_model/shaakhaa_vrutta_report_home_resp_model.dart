@@ -4,6 +4,7 @@ class ShaakhaaVruttaReportHomeRespModel {
   String? usertype;
   String? prevofPrevMonthName;
   String? prevMonthName;
+  String? thisMonthName;
   String? prevYearName;
   String? thisYearName;
   String? laststarttoendname;
@@ -19,6 +20,7 @@ class ShaakhaaVruttaReportHomeRespModel {
       this.otherdata,
       this.prevofPrevMonthName,
       this.prevMonthName,
+      this.thisMonthName,
       this.prevYearName,
       this.thisYearName,
       this.laststarttoendname,
@@ -30,6 +32,7 @@ class ShaakhaaVruttaReportHomeRespModel {
     usertype = json['usertype'];
     prevofPrevMonthName = json['PrevofPrevMonthName'];
     prevMonthName = json['PrevMonthName'];
+    thisMonthName = json['ThisMonthName'];
     prevYearName = json['PrevYearName'];
     thisYearName = json['ThisYearName'];
     laststarttoendname = json['laststarttoendname'];
@@ -45,6 +48,7 @@ class ShaakhaaVruttaReportHomeRespModel {
     data['usertype'] = this.usertype;
     data['PrevofPrevMonthName'] = this.prevofPrevMonthName;
     data['PrevMonthName'] = this.prevMonthName;
+    data['ThisMonthName'] = this.thisMonthName;
     data['PrevYearName'] = this.prevYearName;
     data['ThisYearName'] = this.thisYearName;
     data['laststarttoendname'] = this.laststarttoendname;
