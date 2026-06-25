@@ -35,6 +35,7 @@ import '../models/response_model/sadbhav_baithak_resp_model.dart';
 import '../models/response_model/sadbhav_baithak_vrutta_resp_model.dart';
 import '../models/response_model/sankalit_data_names_model.dart';
 import '../models/response_model/search_abhiyaan_karyakarta_model.dart';
+import '../models/response_model/shaakhaa_milan_report_models.dart';
 import '../models/response_model/shaakhaa_vistaar_vrutta_resp_model.dart';
 import '../models/response_model/shaakhaa_vistar_detail_resp_model.dart';
 import '../models/response_model/shaakhaa_vistar_list_resp_model.dart';
@@ -296,6 +297,16 @@ const String urlGeoShaakhaaForReport = baseUrlAPI + '/getshakhaforvistarreport';
 
 const String urlVastiSarvekshanDataDump = baseUrlAPI + '/VastisarVekshanDataDump';
 const String urlGetReleaseNotes = baseUrlAPI + '/getreleasenote';
+
+//Main Shakha/Milan Vrutta Report Apis
+const String urlSVRShaakhaaDaily = baseUrlAPI + '/shakhaavruttareport_shakhaadaily';
+const String urlSVRShaakhaaWeekly = baseUrlAPI + '/shakhaavruttareport_shakhaaweekly';
+const String urlSVRShaakhaaMonthly = baseUrlAPI + '/shakhaavruttareport_shakhaamonthly';
+const String urlSVRShaakhaaMultiMonthly = baseUrlAPI + '/shakhaavruttareport_shakhaamultimonthly';
+const String urlSVRAllDaily = baseUrlAPI + '/shakhaavruttareport_alldaily';
+const String urlSVRAllWeekly = baseUrlAPI + '/shakhaavruttareport_allweekly';
+const String urlSVRAllMonthly = baseUrlAPI + '/shakhaavruttareport_allmonthly';
+const String urlSVRAllMultiMonthly = baseUrlAPI + '/shakhaavruttareport_allmultimonthly';
 
 //////////////////////////////////////////////////////////////////////////////////////////
 const String patchSuffix = '';
@@ -6830,6 +6841,208 @@ Future<String?> addNewShaakhaaVistarData(BuildContext context, Map<String, dynam
     // Navigator.of(context, rootNavigator: true).pop();
   }
 }
+
+//Main Shakha/Milan Vrutta Report Apis
+Future<ShakhaaDailyWeeklyResponse?> fetchShaakhaaDaily(Map<String, dynamic> inputJson) async {
+  bool? connected = await isInternetConnected();
+  if (connected == false) return null;
+
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  log(urlSVRShaakhaaDaily);
+  print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+  try {
+    var response = await http.post(Uri.parse(urlSVRShaakhaaDaily), headers: jHeaders, body: jsonEncode(inputJson));
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      ShakhaaDailyWeeklyResponse model = ShakhaaDailyWeeklyResponse.fromJson(data);
+      log("fetchShaakhaaDaily >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+      return model;
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return null;
+    }
+  } catch (e, stack) {
+    print("Exception: $e \n$stack");
+    return null;
+  } finally {}
+}
+
+Future<ShakhaaDailyWeeklyResponse?> fetchShaakhaaWeekly(Map<String, dynamic> inputJson) async {
+  bool? connected = await isInternetConnected();
+  if (connected == false) return null;
+
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  log(urlSVRShaakhaaWeekly);
+  print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+  try {
+    var response = await http.post(Uri.parse(urlSVRShaakhaaWeekly), headers: jHeaders, body: jsonEncode(inputJson));
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      ShakhaaDailyWeeklyResponse model = ShakhaaDailyWeeklyResponse.fromJson(data);
+      log("fetchShaakhaaWeekly >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+      return model;
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return null;
+    }
+  } catch (e, stack) {
+    print("Exception: $e \n$stack");
+    return null;
+  } finally {}
+}
+
+Future<ShaakhaaMonthlyResponse?> fetchShaakhaaMonthly(Map<String, dynamic> inputJson) async {
+  bool? connected = await isInternetConnected();
+  if (connected == false) return null;
+
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  log(urlSVRShaakhaaMonthly);
+  print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+  try {
+    var response = await http.post(Uri.parse(urlSVRShaakhaaMonthly), headers: jHeaders, body: jsonEncode(inputJson));
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      ShaakhaaMonthlyResponse model = ShaakhaaMonthlyResponse.fromJson(data);
+      log("fetchShaakhaaMonthly >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+      return model;
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return null;
+    }
+  } catch (e, stack) {
+    print("Exception: $e \n$stack");
+    return null;
+  } finally {}
+}
+
+Future<ShaakhaaMultiMonthlyResponse?> fetchShaakhaaMultiMonthly(Map<String, dynamic> inputJson) async {
+  bool? connected = await isInternetConnected();
+  if (connected == false) return null;
+
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  log(urlSVRShaakhaaMultiMonthly);
+  print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+  try {
+    var response = await http.post(Uri.parse(urlSVRShaakhaaMultiMonthly), headers: jHeaders, body: jsonEncode(inputJson));
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      ShaakhaaMultiMonthlyResponse model = ShaakhaaMultiMonthlyResponse.fromJson(data);
+      log("fetchShaakhaaMultiMonthly >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+      return model;
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return null;
+    }
+  } catch (e, stack) {
+    print("Exception: $e \n$stack");
+    return null;
+  } finally {}
+}
+
+Future<AllDailyResponse?> fetchAllDaily(Map<String, dynamic> inputJson) async {
+  bool? connected = await isInternetConnected();
+  if (connected == false) return null;
+
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  log(urlSVRAllDaily);
+  print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+  try {
+    var response = await http.post(Uri.parse(urlSVRAllDaily), headers: jHeaders, body: jsonEncode(inputJson));
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      AllDailyResponse model = AllDailyResponse.fromJson(data);
+      log("fetchAllDaily >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+      return model;
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return null;
+    }
+  } catch (e, stack) {
+    print("Exception: $e \n$stack");
+    return null;
+  } finally {}
+}
+
+Future<AllWeeklyResponse?> fetchAllWeekly(Map<String, dynamic> inputJson) async {
+  bool? connected = await isInternetConnected();
+  if (connected == false) return null;
+
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  log(urlSVRAllWeekly);
+  print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+  try {
+    var response = await http.post(Uri.parse(urlSVRAllWeekly), headers: jHeaders, body: jsonEncode(inputJson));
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      AllWeeklyResponse model = AllWeeklyResponse.fromJson(data);
+      log("fetchAllWeekly >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+      return model;
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return null;
+    }
+  } catch (e, stack) {
+    print("Exception: $e \n$stack");
+    return null;
+  } finally {}
+}
+
+Future<AllMonthlyResponse?> fetchAllMonthly(Map<String, dynamic> inputJson) async {
+  bool? connected = await isInternetConnected();
+  if (connected == false) return null;
+
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  log(urlSVRAllMonthly);
+  print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+  try {
+    var response = await http.post(Uri.parse(urlSVRAllMonthly), headers: jHeaders, body: jsonEncode(inputJson));
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      AllMonthlyResponse model = AllMonthlyResponse.fromJson(data);
+      log("fetchAllMonthly >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+      return model;
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return null;
+    }
+  } catch (e, stack) {
+    print("Exception: $e \n$stack");
+    return null;
+  } finally {}
+}
+
+Future<AllMultiMonthlyResponse?> fetchAllMultiMonthly(Map<String, dynamic> inputJson) async {
+  bool? connected = await isInternetConnected();
+  if (connected == false) return null;
+
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  log(urlSVRAllMultiMonthly);
+  print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+  try {
+    var response = await http.post(Uri.parse(urlSVRAllMultiMonthly), headers: jHeaders, body: jsonEncode(inputJson));
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      AllMultiMonthlyResponse model = AllMultiMonthlyResponse.fromJson(data);
+      log("fetchShaakhaaMultiMonthly >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+      return model;
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return null;
+    }
+  } catch (e, stack) {
+    print("Exception: $e \n$stack");
+    return null;
+  } finally {}
+}
+/////////////////////////////////////////////////////////////////////////////
 
 // Future<List<Bhaitakdata>?> SavePramukhJanVruttaData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
 //   if (showLoader) showLoaderDialog(context);

@@ -1158,6 +1158,7 @@ class GeoDropdownWidget extends StatelessWidget {
   final void Function(dynamic)? onChanged;
   final void Function(dynamic)? onSaved;
   final GeoHierarchyFetchMode fetchMode;
+  final InputDecoration? decoration;
   final bool? isDisabled;
 
   const GeoDropdownWidget({
@@ -1169,6 +1170,7 @@ class GeoDropdownWidget extends StatelessWidget {
     this.onSaved,
     this.onChanged,
     this.isDisabled,
+    this.decoration,
     this.fetchMode = GeoHierarchyFetchMode.all,
   });
 
@@ -1180,6 +1182,7 @@ class GeoDropdownWidget extends StatelessWidget {
       isDisabled: isDisabled ?? controller.isLevelLocked(level),
       value: controller.getSelectedValue(level),
       label: Statics.getLabel(title, returnKey: true),
+      decoration: decoration,
       items: items.map((e) {
         return DropdownMenuItem(
           value: e.geoUnitID.toString(),

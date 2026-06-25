@@ -228,18 +228,51 @@ Widget buildDropdownField({
   required ValueChanged<String?>? onChanged,
   String? Function(dynamic)? validator,
   void Function(dynamic)? onSaved,
+  InputDecoration? decoration,
   bool isDisabled = false,
 }) {
   return IgnorePointer(
     ignoring: isDisabled,
     child: DropdownButtonFormField<String>(
-      decoration: InputDecoration(labelText: label),
+      decoration: decoration ?? InputDecoration(labelText: label),
       isExpanded: true,
       value: (value == null || value.isEmpty) ? null : value,
       items: items,
       onChanged: onChanged,
       validator: validator,
       onSaved: onSaved,
+    ),
+  );
+}
+
+/// Returns a styled [InputDecoration] matching the HTML .select-wrap style.
+InputDecoration styledDropdownDecoration(String label, {bool showLabel = true}) {
+  return InputDecoration(
+    labelText: showLabel ? label : null,
+    hintText: showLabel ? null : label,
+    hintStyle: TextStyle(fontSize: 11, color: Colors.black),
+    labelStyle: const TextStyle(
+      fontSize: 12,
+      fontWeight: FontWeight.w600,
+      color: Colors.black,
+      // letterSpacing: 0.3,
+    ),
+    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: BorderSide(color: Colors.grey.shade600, width: 1.5),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: BorderSide(color: Colors.grey.shade300, width: 1.27),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: const BorderSide(color: Colors.purple, width: 2),
+    ),
+    disabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: BorderSide(color: Colors.grey.shade600, width: 1.5),
     ),
   );
 }
