@@ -408,3 +408,23 @@ class AllMultiMonthlyResponse {
         sapthahiknewcount: (json['sapthahiknewcount'] as List<dynamic>? ?? []).map((e) => TotalCountShaakhaa.fromJson(e)).toList(),
       );
 }
+
+// ─── Karyakram Top 10 ─────────────────────────────────────────────────────────
+
+class KaryakramResponse {
+  final String status;
+  final String message;
+  final List<TotalCountShaakhaa> mdata;
+
+  const KaryakramResponse({
+    required this.status,
+    required this.message,
+    required this.mdata,
+  });
+
+  factory KaryakramResponse.fromJson(Map<String, dynamic> json) => KaryakramResponse(
+        status: json['Status'] ?? '',
+        message: json['Message'] ?? '',
+        mdata: (json['mdata'] as List<dynamic>? ?? []).map((e) => TotalCountShaakhaa.fromJson(e)).toList(),
+      );
+}

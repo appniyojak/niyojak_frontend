@@ -36,6 +36,7 @@ import '../models/response_model/sadbhav_baithak_vrutta_resp_model.dart';
 import '../models/response_model/sankalit_data_names_model.dart';
 import '../models/response_model/search_abhiyaan_karyakarta_model.dart';
 import '../models/response_model/shaakhaa_milan_report_models.dart';
+import '../models/response_model/shaakhaa_milan_tulnatmak_model.dart';
 import '../models/response_model/shaakhaa_vistaar_vrutta_resp_model.dart';
 import '../models/response_model/shaakhaa_vistar_detail_resp_model.dart';
 import '../models/response_model/shaakhaa_vistar_list_resp_model.dart';
@@ -307,6 +308,8 @@ const String urlSVRAllDaily = baseUrlAPI + '/shakhaavruttareport_alldaily';
 const String urlSVRAllWeekly = baseUrlAPI + '/shakhaavruttareport_allweekly';
 const String urlSVRAllMonthly = baseUrlAPI + '/shakhaavruttareport_allmonthly';
 const String urlSVRAllMultiMonthly = baseUrlAPI + '/shakhaavruttareport_allmultimonthly';
+const String urlSVRKaryakramRanking = baseUrlAPI + '/shakhaavruttareport_karyakram';
+const String urlSVRTulnatmak = baseUrlAPI + '/shakhaavruttareport_tulnatmak';
 
 //////////////////////////////////////////////////////////////////////////////////////////
 const String patchSuffix = '';
@@ -7032,6 +7035,56 @@ Future<AllMultiMonthlyResponse?> fetchAllMultiMonthly(Map<String, dynamic> input
       final Map<String, dynamic> data = jsonDecode(response.body);
       AllMultiMonthlyResponse model = AllMultiMonthlyResponse.fromJson(data);
       log("fetchShaakhaaMultiMonthly >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+      return model;
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return null;
+    }
+  } catch (e, stack) {
+    print("Exception: $e \n$stack");
+    return null;
+  } finally {}
+}
+
+Future<KaryakramResponse?> fetchKaryakram(Map<String, dynamic> inputJson) async {
+  bool? connected = await isInternetConnected();
+  if (connected == false) return null;
+
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  log(urlSVRKaryakramRanking);
+  print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+  try {
+    var response = await http.post(Uri.parse(urlSVRKaryakramRanking), headers: jHeaders, body: jsonEncode(inputJson));
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      KaryakramResponse model = KaryakramResponse.fromJson(data);
+      log("fetchKaryakram >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+      return model;
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return null;
+    }
+  } catch (e, stack) {
+    print("Exception: $e \n$stack");
+    return null;
+  } finally {}
+}
+
+Future<TulnatmakResponse?> fetchTulnatmak(Map<String, dynamic> inputJson) async {
+  bool? connected = await isInternetConnected();
+  if (connected == false) return null;
+
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  log(urlSVRTulnatmak);
+  print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+  try {
+    var response = await http.post(Uri.parse(urlSVRTulnatmak), headers: jHeaders, body: jsonEncode(inputJson));
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      TulnatmakResponse model = TulnatmakResponse.fromJson(data);
+      log("fetchTulnatmak >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
       return model;
     } else {
       print("Error: ${response.statusCode} - ${response.body}");

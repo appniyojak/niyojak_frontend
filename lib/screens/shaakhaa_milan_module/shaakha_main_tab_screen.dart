@@ -10,6 +10,7 @@ import '../../utils/globals.dart';
 import '../../widgets/app_drawer.dart';
 import 'search_shaakhaa.dart';
 import 'shaakhaa_report_tab.dart';
+import 'shaakhaa_tulnatmak_report_tab.dart';
 
 class ShaakhaMainTabScreen extends StatefulWidget {
   static const routeName = '/shaakhaa-main-screen';
@@ -30,7 +31,7 @@ class _ShaakhaMainTabScreenState extends State<ShaakhaMainTabScreen> with Single
     super.initState();
     print("initState");
     getInitialData();
-    _tabController = new TabController(length: 2, vsync: this);
+    _tabController = new TabController(length: 3, vsync: this);
     log("initState _PramukhJansanvadMainTabState runnn >>>>>>>>>>>>>> ");
     _tabController?.addListener(_handleTabChange);
     // WidgetsBinding.instance.addPostFrameCallback((t) => getAbhiyaanGeoUnitsFun());
@@ -76,7 +77,7 @@ class _ShaakhaMainTabScreenState extends State<ShaakhaMainTabScreen> with Single
 
         // If canPop was false, it means we are on the multi-tab layout and on the second tab (index 1).
         // Move back to the first tab instead of exiting.
-        if (_tabController?.index == 1) {
+        if (_tabController?.index == 1 || _tabController?.index == 2) {
           _tabController?.animateTo(0);
         }
       },
@@ -125,6 +126,20 @@ class _ShaakhaMainTabScreenState extends State<ShaakhaMainTabScreen> with Single
                     ],
                   ),
                 ),
+                Tab(
+                  child: Row(
+                    spacing: 16,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.balance_rounded),
+                      Text(
+                        "${Statics.getLabel('tulnamtmakonly')}",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
@@ -137,6 +152,7 @@ class _ShaakhaMainTabScreenState extends State<ShaakhaMainTabScreen> with Single
               children: <Widget>[
                 SearchShaakhaaScreen(),
                 ShaakhaaReportTabScreen(),
+                ShaakhaaTulnatmakReportTab(),
               ],
             ),
           ),

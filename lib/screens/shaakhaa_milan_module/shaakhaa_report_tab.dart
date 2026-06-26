@@ -1,3 +1,6 @@
+import 'dart:core';
+
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -6,12 +9,13 @@ import '../../models/response_model/shaakhaa_milan_report_models.dart';
 import '../../providers/bals.dart';
 import '../../utils/globals.dart';
 import '../../utils/stable_geounit_class.dart';
+import 'report_widgets/custom_app_dropdowns.dart';
 
 // ─── Data Models ─────────────────────────────────────────────────────────────
 
 enum DurationTypes { daily, weekly, monthly, quarterly, halfYearly, yearly }
 
-extension Duration on DurationTypes {
+extension Durations on DurationTypes {
   String get name {
     switch (this) {
       case DurationTypes.daily:
@@ -129,25 +133,33 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
 
   // ── All-level daily (levelId != 1) ────────────────────────────────────────────
   bool _isAllLevel = false;
-  String _allTotalPresent = '';
+  int _allTotalPresent = 0;
   List<BreakdownItem> _allPresentBreakdown = [];
 
 // TODO: card 2 average needs shaakhaa count from API — flagged for backend
   String _allAvgPresent = '--';
   List<BreakdownItem> _allAvgBreakdown = [];
-  String _allNewPresent = '';
+  int _allNewPresent = 0;
   List<BreakdownItem> _allNewBreakdown = [];
   List<ActivityData> _allAData = [];
 
   // ── Add alongside existing all-level vars ─────────────────────────────────────
   List<ActivityChartData> _allActivityChartData = [];
 
+  // ── Top 10 count lists (all-level, non-daily only) ────────────────────────────
+  List<TotalCountShaakhaa> _shaakhatotalcount = [];
+  List<TotalCountShaakhaa> _shaakhanewcount = [];
+  List<TotalCountShaakhaa> _sapthahiktotalcount = [];
+  List<TotalCountShaakhaa> _sapthahiknewcount = [];
+
 // ── Add helper (call from every all-level fetch branch) ──────────────────────
   void _mapAllLevelPData(List<PresentList> pData) {
-    _allTotalPresent = pData.fold<int>(0, (s, p) => s + p.totalpresent).toString();
-    _allPresentBreakdown = pData.map((p) => BreakdownItem(p.vagogatname, p.totalpresent.toString())).toList();
-    _allNewPresent = pData.fold<int>(0, (s, p) => s + p.totalnewpresent).toString();
-    _allNewBreakdown = pData.map((p) => BreakdownItem(p.vagogatname, p.totalnewpresent.toString())).toList();
+    // _allTotalPresent = pData.fold<int>(0, (s, p) => s + p.totalpresent);
+    _allTotalPresent = pData.firstWhere((e) => e.vagogatname == "ekun").totalpresent;
+    _allPresentBreakdown = pData.where((e) => e.vagogatname != "ekun").toList().map((p) => BreakdownItem(p.vagogatname, p.totalpresent.toString())).toList();
+    // _allNewPresent = pData.fold<int>(0, (s, p) => s + p.totalnewpresent);
+    _allNewPresent = pData.firstWhere((e) => e.vagogatname == "ekun").totalnewpresent;
+    _allNewBreakdown = pData.where((e) => e.vagogatname != "ekun").toList().map((p) => BreakdownItem(p.vagogatname, p.totalnewpresent.toString())).toList();
     _allAvgPresent = '--'; // TODO: backend to supply shaakhaa count for avg
     _allAvgBreakdown = [];
   }
@@ -273,21 +285,8 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
               setState(() => _isSearched = false);
               return;
             }
-            final _list = res.pData;
             setState(() {
-              // Card 1 — total attendance (sum across vayogats)
-              _allTotalPresent = res.pData.firstWhere((e) => e.vagogatname == "ekun").totalpresent.toString();
-              _allPresentBreakdown = _list.where((e) => e.vagogatname != "ekun").toList().map((p) => BreakdownItem(p.vagogatname, p.totalpresent.toString())).toList();
-
-              // Card 2 — average per shaakhaa
-              // TODO: backend needs to return shaakhaa count or pre-computed avg
-              _allAvgPresent = '--';
-              _allAvgBreakdown = [];
-
-              // Card 3 — new enrollment (sum across vayogats)
-              _allNewPresent = res.pData.firstWhere((e) => e.vagogatname == "ekun").totalnewpresent.toString();
-              _allNewBreakdown = _list.where((e) => e.vagogatname != "ekun").toList().map((p) => BreakdownItem(p.vagogatname, p.totalnewpresent.toString())).toList();
-
+              _mapAllLevelPData(res.pData);
               // Programme bars
               _allAData = res.aData;
 
@@ -335,6 +334,10 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
               _mapAllLevelPData(res.pData);
               _activities = [];
               _programmeBars = [];
+              _shaakhatotalcount = res.shaakhatotalcount;
+              _shaakhanewcount = res.shaakhanewcount;
+              _sapthahiktotalcount = res.sapthahiktotalcount;
+              _sapthahiknewcount = res.sapthahiknewcount;
               // Group by Activity → one ActivityChartData per activity
               final grouped = <String, List<AllWeeklyActivity>>{};
               for (final e in res.aData) grouped.putIfAbsent(e.activity, () => []).add(e);
@@ -414,6 +417,10 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
               _mapAllLevelPData(res.pData);
               _activities = [];
               _programmeBars = [];
+              _shaakhatotalcount = res.shaakhatotalcount;
+              _shaakhanewcount = res.shaakhanewcount;
+              _sapthahiktotalcount = res.sapthahiktotalcount;
+              _sapthahiknewcount = res.sapthahiknewcount;
               final grouped = <String, List<AllMonthlyActivity>>{};
               for (final e in res.aData) grouped.putIfAbsent(e.activity, () => []).add(e);
               _allActivityChartData = grouped.entries
@@ -482,6 +489,10 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
               _mapAllLevelPData(res.pData);
               _activities = [];
               _programmeBars = [];
+              _shaakhatotalcount = res.shaakhatotalcount;
+              _shaakhanewcount = res.shaakhanewcount;
+              _sapthahiktotalcount = res.sapthahiktotalcount;
+              _sapthahiknewcount = res.sapthahiknewcount;
               _allActivityChartData = res.aData
                   .map((e) => ActivityChartData(
                         activityKey: e.activity,
@@ -544,22 +555,23 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: _isAllLevel
                       ? Column(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             Row(
+                              spacing: 8,
                               children: [
                                 Expanded(
                                   child: _StatCard(
                                     label: card1Label,
-                                    value: _allTotalPresent,
+                                    value: _allTotalPresent.toString(),
                                     icon: Icons.people_outline,
                                     iconColor: const Color(0xFF6366F1),
                                     iconBg: const Color(0xFFEDE9FE),
-                                    showBreakdown: _allPresentBreakdown.isNotEmpty,
+                                    showBreakdown: _allPresentBreakdown.isNotEmpty && _selectedVayogat.staticID == 0,
                                     breakdown: _allPresentBreakdown,
                                   ),
                                 ),
-                                const SizedBox(width: 10),
-                                Expanded(
+                                /*Expanded(
                                   child: _StatCard(
                                     label: 'आज की सरासरी संख्या',
                                     value: _allAvgPresent,
@@ -569,22 +581,23 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                                     showBreakdown: false,
                                     breakdown: const [],
                                   ),
-                                ),
+                                ),*/
                               ],
                             ),
                             const SizedBox(height: 10),
                             _StatCard(
                               label: card2Label,
-                              value: _allNewPresent,
+                              value: _allNewPresent.toString(),
                               icon: Icons.person_add_alt_1_outlined,
                               iconColor: const Color(0xFF10B981),
                               iconBg: const Color(0xFFD1FAE5),
-                              showBreakdown: _allNewBreakdown.isNotEmpty,
+                              showBreakdown: _allNewBreakdown.isNotEmpty && _selectedVayogat.staticID == 0,
                               breakdown: _allNewBreakdown,
                             ),
                           ],
                         )
                       : Row(
+                          spacing: 8,
                           children: [
                             Expanded(
                               child: _StatCard(
@@ -597,7 +610,6 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                                 breakdown: _card1Breakdown,
                               ),
                             ),
-                            const SizedBox(width: 10),
                             Expanded(
                               child: _StatCard(
                                 label: card2Label,
@@ -620,7 +632,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                   if (_isAllLevel) _AllLevelProgrammeBarsSection(aData: _allAData) else _DailyChecklistWidget(activities: _activities),
                 ] else ...[
                   if (_isAllLevel)
-                    _AllLevelChartSection(
+                    AllLevelChartSection(
                       activityCharts: _allActivityChartData,
                       kalavadha: _kalavadha,
                     )
@@ -628,6 +640,18 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                     _ProgrammeBarsSection(bars: _programmeBars, kalavadha: _kalavadha),
                 ],
 
+                // ── Top 10 — only when all-level + non-daily ──────────────
+                if (_isAllLevel && _kalavadha != DurationTypes.daily)
+                  _Top10ShaakhaaSection(
+                    shaakhatotalcount: _shaakhatotalcount,
+                    shaakhanewcount: _shaakhanewcount,
+                    sapthahiktotalcount: _sapthahiktotalcount,
+                    sapthahiknewcount: _sapthahiknewcount,
+                    activityKeys: _allActivityChartData.map((e) => e.activityKey).toList(),
+                    geoUnitId: int.tryParse(controller.deepestSelectedGeoUnitId ?? "0") ?? 0,
+                    vayogat: _selectedVayogat.staticID ?? 0,
+                    days: _kalavadha.pkValues,
+                  ),
                 const SizedBox(height: 20),
               ]
             ],
@@ -672,6 +696,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                             title: 'Mahaanagar',
                             controller: ctrl,
                             decoration: styledDropdownDecoration(Statics.getLabel("Mahaanagar")),
+                            onChanged: (p0) => _fetchReport(),
                           ),
 
                           GeoDropdownWidget(
@@ -679,6 +704,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                             title: 'Vibhaag',
                             controller: ctrl,
                             decoration: styledDropdownDecoration(Statics.getLabel("Vibhaag")),
+                            onChanged: (p0) => _fetchReport(),
                           ),
 
                           if (ctrl.hasItems(GeoLevel.Bhaag))
@@ -687,6 +713,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                               title: 'Bhaag',
                               controller: ctrl,
                               decoration: styledDropdownDecoration(Statics.getLabel("Bhaag")),
+                              onChanged: (p0) => _fetchReport(),
                             ),
 
                           if (ctrl.hasItems(GeoLevel.Nagar))
@@ -695,6 +722,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                               title: 'Nagar',
                               controller: ctrl,
                               decoration: styledDropdownDecoration(Statics.getLabel("Nagar")),
+                              onChanged: (p0) => _fetchReport(),
                             ),
 
                           if (ctrl.hasItems(GeoLevel.upnagarUpkhanda))
@@ -703,6 +731,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                               title: 'upnagarUpkhanda',
                               controller: ctrl,
                               decoration: styledDropdownDecoration(Statics.getLabel("upnagarUpkhanda")),
+                              onChanged: (p0) => _fetchReport(),
                             ),
 
                           if (ctrl.hasItems(GeoLevel.Mandal))
@@ -711,6 +740,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                               title: 'Mandal',
                               controller: ctrl,
                               decoration: styledDropdownDecoration(Statics.getLabel("Mandal")),
+                              onChanged: (p0) => _fetchReport(),
                             ),
 
                           if (ctrl.hasItems(GeoLevel.Graam))
@@ -719,6 +749,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                               title: 'Graam',
                               controller: ctrl,
                               decoration: styledDropdownDecoration(Statics.getLabel("Graam")),
+                              onChanged: (p0) => _fetchReport(),
                             ),
 
                           if (ctrl.hasItems(GeoLevel.Vasti))
@@ -727,6 +758,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                               title: 'Vasti',
                               controller: ctrl,
                               decoration: styledDropdownDecoration(Statics.getLabel("Vasti")),
+                              onChanged: (p0) => _fetchReport(),
                             ),
 
                           if (ctrl.hasItems(GeoLevel.Shaakhaa))
@@ -751,7 +783,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     _FilterLabel('२. कालावधी'),
-                                    _AppDropdown<DurationTypes>(
+                                    AppDropdown<DurationTypes>(
                                       value: _kalavadha,
                                       items: DurationTypes.values,
                                       itemLabel: (v) => v.name,
@@ -772,7 +804,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       _FilterLabel('३. ${Statics.getLabel("Vayogat")}'),
-                                      _AppDropdown<StaticMasterBAL>(
+                                      AppDropdown<StaticMasterBAL>(
                                         value: _selectedVayogat,
                                         items: _vayogatOptions,
                                         // Use staticID-based equality so the sentinel
@@ -824,7 +856,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                             ),
                             const SizedBox(height: 2),
                             Text(
-                              '${_kalavadha.name} + ${_selectedVayogat.codeForDisplay ?? ""}',
+                              '${_kalavadha.name} ${ctrl.deepestSelectedLevelId != 1 ? "+ ${_selectedVayogat.codeForDisplay ?? ""}" : ""}',
                               style: const TextStyle(
                                 fontSize: 11,
                                 color: Color(0xFF3B82F6),
@@ -862,95 +894,6 @@ class _FilterLabel extends StatelessWidget {
           fontWeight: FontWeight.w400,
         ),
       );
-}
-
-// ─── Generic Dropdown ─────────────────────────────────────────────────────────
-//
-// Two modes:
-//   1. Pass [child] to wrap a custom widget (e.g. GeoDropdownWidget) in the
-//      shared border/padding container — value/items/itemLabel are ignored.
-//   2. Pass [value], [items], [itemLabel], [onChanged] (and optionally
-//      [itemKey] for non-primitive T) to render a standard DropdownButton.
-
-class _AppDropdown<T> extends StatelessWidget {
-  final T? value;
-  final List<T>? items;
-  final String Function(T)? itemLabel;
-
-  /// Optional key extractor used for value matching when T doesn't implement
-  /// value equality (e.g. StaticMasterBAL). When provided, the selected item
-  /// is located by comparing itemKey(item) == itemKey(value).
-  final String Function(T)? itemKey;
-
-  final ValueChanged<T?>? onChanged;
-  final Widget? child;
-
-  const _AppDropdown({
-    this.value,
-    this.items,
-    this.itemLabel,
-    this.itemKey,
-    this.onChanged,
-    this.child,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 3),
-      padding: const EdgeInsets.symmetric(horizontal: 14),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: const Color(0xFFE5E5EA), width: 1.2),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: child ?? _buildDropdown(),
-      ),
-    );
-  }
-
-  Widget _buildDropdown() {
-    assert(items != null && itemLabel != null && onChanged != null, '_AppDropdown requires items, itemLabel, and onChanged when child is null.');
-
-    // When itemKey is provided, resolve the matched item from the list so that
-    // Flutter's DropdownButton value-equality check always finds a match even
-    // when T is a class without operator==.
-    T? resolvedValue;
-    if (value != null && itemKey != null) {
-      final key = itemKey!(value as T);
-      resolvedValue = items!.cast<T?>().firstWhere(
-            (e) => e != null && itemKey!(e) == key,
-            orElse: () => null,
-          );
-    } else {
-      resolvedValue = value;
-    }
-
-    return DropdownButton<T>(
-      value: resolvedValue,
-      isExpanded: true,
-      icon: const Icon(
-        Icons.keyboard_arrow_down_rounded,
-        color: Color(0xFFFF6B00),
-        size: 22,
-      ),
-      style: const TextStyle(
-        fontSize: 14,
-        color: Color(0xFF1C1C1E),
-        fontWeight: FontWeight.w500,
-      ),
-      items: items!
-          .map(
-            (e) => DropdownMenuItem<T>(
-              value: e,
-              child: Text(itemLabel!(e)),
-            ),
-          )
-          .toList(),
-      onChanged: onChanged,
-    );
-  }
 }
 
 // ─── Stat Card ────────────────────────────────────────────────────────────────
@@ -1043,6 +986,7 @@ class _StatCard extends StatelessWidget {
             // Each breakdown item is its own rounded tile
             Row(
               children: breakdown
+                  .toList()
                   .map(
                     (b) => Expanded(
                       child: Container(
@@ -1154,7 +1098,7 @@ class _ChecklistRow extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            activity.name,
+            Statics.getLabel(activity.name),
             style: const TextStyle(
               fontSize: 14,
               color: Color(0xFF1C1C1E),
@@ -1564,17 +1508,21 @@ class ActivityChartData {
 
 // ─── All-Level Chart Section ──────────────────────────────────────────────────
 
-class _AllLevelChartSection extends StatefulWidget {
+class AllLevelChartSection extends StatefulWidget {
   final List<ActivityChartData> activityCharts;
   final DurationTypes kalavadha;
 
-  const _AllLevelChartSection({required this.activityCharts, required this.kalavadha});
+  const AllLevelChartSection({
+    super.key,
+    required this.activityCharts,
+    required this.kalavadha,
+  });
 
   @override
-  State<_AllLevelChartSection> createState() => _AllLevelChartSectionState();
+  State<AllLevelChartSection> createState() => _AllLevelChartSectionState();
 }
 
-class _AllLevelChartSectionState extends State<_AllLevelChartSection> {
+class _AllLevelChartSectionState extends State<AllLevelChartSection> {
   bool _showAll = false;
 
   String get _sectionTitle {
@@ -1604,13 +1552,15 @@ class _AllLevelChartSectionState extends State<_AllLevelChartSection> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header
+          // ── Section header ───────────────────────────────────
           Container(
             width: double.infinity,
             padding: const EdgeInsets.fromLTRB(16, 14, 16, 10),
             decoration: const BoxDecoration(
               color: Color(0xFFFFFBF5),
-              border: Border(bottom: BorderSide(color: Color(0xFFFFF3E0), width: 1)),
+              border: Border(
+                bottom: BorderSide(color: Color(0xFFFFF3E0), width: 1),
+              ),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1622,7 +1572,11 @@ class _AllLevelChartSectionState extends State<_AllLevelChartSection> {
                     Expanded(
                       child: Text(
                         _sectionTitle,
-                        style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: Color(0xFF1C1C1E)),
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xFF1C1C1E),
+                        ),
                       ),
                     ),
                   ],
@@ -1636,10 +1590,10 @@ class _AllLevelChartSectionState extends State<_AllLevelChartSection> {
             ),
           ),
 
-          // Activity charts
-          ...visible.map((ac) => _ActivityChartCard(chartData: ac)),
+          // ── Activity charts ──────────────────────────────────
+          ...visible.map((ac) => _ActivityChartCard(chartData: ac, kalavadha: widget.kalavadha)),
 
-          // Show all button (shows total count, hidden once expanded)
+          // ── Show-all / bottom padding ────────────────────────
           if (!_showAll && total > 3)
             GestureDetector(
               onTap: () => setState(() => _showAll = true),
@@ -1654,7 +1608,11 @@ class _AllLevelChartSectionState extends State<_AllLevelChartSection> {
                 child: Text(
                   'अन्य सभी $total कार्यक्रम देखें',
                   textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFFFF6B00)),
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFFFF6B00),
+                  ),
                 ),
               ),
             )
@@ -1670,164 +1628,740 @@ class _AllLevelChartSectionState extends State<_AllLevelChartSection> {
 
 class _ActivityChartCard extends StatefulWidget {
   final ActivityChartData chartData;
+  final DurationTypes kalavadha;
 
-  const _ActivityChartCard({required this.chartData});
+  const _ActivityChartCard({required this.chartData, required this.kalavadha});
 
   @override
   State<_ActivityChartCard> createState() => _ActivityChartCardState();
 }
 
 class _ActivityChartCardState extends State<_ActivityChartCard> {
-  int? _tappedIndex;
+  int _tappedIndex = -1;
 
-  static const double _tooltipH = 52.0;
-  static const double _maxBarH = 120.0;
-  static const double _xLabelH = 24.0;
-  static const double _barWidth = 36.0;
-  static const double _barGap = 12.0;
-  static const double _yAxisW = 34.0;
+  // ── Layout constants ──────────────────────────────────────────────────────
+
+  /// Height of the bar-drawing area only (no titles).
+  static const double _barAreaHeight = 160.0;
+
+  /// Space fl_chart reserves at the top for our tooltip widget.
+  static const double _tooltipReservedH = 62.0;
+
+  /// Space fl_chart reserves at the bottom for x-axis labels.
+  static const double _xLabelReservedH = 32.0;
+
+  /// Total canvas height = tooltip space + bars + x-labels.
+  static const double _totalChartH = _tooltipReservedH + _barAreaHeight + _xLabelReservedH;
+
+  String? get _sectionTitle {
+    switch (widget.kalavadha) {
+      case DurationTypes.monthly:
+        return Statics.getLabel("weekOnly");
+      case DurationTypes.quarterly:
+        return Statics.getLabel("monthOnly");
+      case DurationTypes.halfYearly:
+        return Statics.getLabel("monthOnly");
+      case DurationTypes.yearly:
+        return Statics.getLabel("monthOnly");
+      default:
+        return null;
+    }
+  }
+
+  // ── Helpers ───────────────────────────────────────────────────────────────
+
+  int _niceMax(int rawMax) {
+    if (rawMax <= 0) return 10;
+    const steps = [1, 2, 5, 10, 20, 25, 50, 100, 200, 250, 500, 1000];
+    final magnitude = rawMax <= 10 ? 1 : (rawMax <= 100 ? 10 : 100);
+    for (final s in steps) {
+      final candidate = (rawMax / (s * magnitude)).ceil() * s * magnitude;
+      if (candidate >= rawMax) return candidate;
+    }
+    return rawMax;
+  }
+
+  // ── Build ─────────────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
     final bars = widget.chartData.bars;
     if (bars.isEmpty) return const SizedBox.shrink();
 
-    final maxVal = bars.map((b) => b.value).fold(0, (a, b) => a > b ? a : b);
-    final effectiveMax = maxVal == 0 ? 1 : maxVal;
-
-    // 4 evenly-spaced Y-axis labels from bottom (0) to top (max)
-    final step = effectiveMax / 3;
-    final yLabels = [effectiveMax, (step * 2).round(), step.round(), 0];
+    final rawMax = bars.map((b) => b.value).fold(0, (a, b) => a > b ? a : b);
+    final maxY = _niceMax(rawMax).toDouble();
+    final yInterval = maxY / 3;
 
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 8),
       decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: Color(0xFFF2F2F7), width: 1)),
+        border: Border(
+          bottom: BorderSide(color: Color(0xFFF2F2F7), width: 1),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          // Activity title
+          // ── Activity title ──────────────────────────────────
           Text(
             Statics.getLabel(widget.chartData.activityKey),
-            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF1C1C1E)),
+            style: const TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFF1C1C1E),
+            ),
           ),
           const SizedBox(height: 10),
 
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Y-axis labels — padded top by _tooltipH so labels align with bar tops
-              // padded bottom by _xLabelH so labels only span the bar area
-              SizedBox(
-                width: _yAxisW,
-                height: _tooltipH + _maxBarH + _xLabelH,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: _tooltipH, bottom: _xLabelH),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: yLabels
-                        .map((v) => Text(
-                              '$v',
-                              style: TextStyle(fontSize: 9, color: Colors.grey.shade500),
-                            ))
-                        .toList(),
+          // ── Y-axis labels + chart — no scrolling ───────────
+          // Both sit in a fixed-height SizedBox so the inner
+          // Column(spaceBetween) always has a bounded parent.
+          SizedBox(
+            height: _totalChartH,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // ── Y-axis labels (pinned left) ──────────────
+                SizedBox(
+                  width: 30,
+                  height: _totalChartH,
+                  child: Padding(
+                    // Push labels down past the tooltip reservation so
+                    // they align with the actual bar-drawing area.
+                    padding: const EdgeInsets.only(
+                      top: _tooltipReservedH,
+                      bottom: _xLabelReservedH,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [maxY, maxY * 2 / 3, maxY / 3, 0.0]
+                          .map(
+                            (v) => Text(
+                              v.toInt().toString(),
+                              style: TextStyle(
+                                fontSize: 9,
+                                color: Colors.grey.shade500,
+                              ),
+                            ),
+                          )
+                          .toList(),
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 4),
 
-              // Bars — horizontally scrollable when many
-              Expanded(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  physics: bars.length > 5 ? const BouncingScrollPhysics() : const NeverScrollableScrollPhysics(),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: bars.asMap().entries.map((entry) {
-                      final i = entry.key;
-                      final bar = entry.value;
-                      final isTapped = _tappedIndex == i;
-                      final barH = (_maxBarH * (bar.value / effectiveMax)).clamp(4.0, _maxBarH);
+                const SizedBox(width: 4),
 
-                      return GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: () => setState(() => _tappedIndex = isTapped ? null : i),
-                        child: SizedBox(
-                          width: _barWidth + _barGap,
-                          height: _tooltipH + _maxBarH + _xLabelH,
-                          child: Column(
-                            children: [
-                              // ── Tooltip reserved space ───────────────────
-                              SizedBox(
-                                height: _tooltipH,
-                                child: isTapped
-                                    ? Align(
-                                        alignment: Alignment.bottomCenter,
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.circular(6),
-                                            border: Border.all(color: const Color(0xFFFFE0B2), width: 1),
-                                            boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
-                                          ),
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(bar.tooltipTitle, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: Color(0xFFE65100))),
-                                              Text('branches : ${bar.value}', style: const TextStyle(fontSize: 10, color: Color(0xFF6366F1))),
-                                            ],
-                                          ),
-                                        ),
-                                      )
-                                    : null,
-                              ),
-
-                              // ── Bar (grows from bottom of this area) ─────
-                              SizedBox(
-                                height: _maxBarH,
-                                child: Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: Container(
-                                    width: _barWidth,
-                                    height: barH,
-                                    decoration: BoxDecoration(
-                                      color: isTapped ? const Color(0xFFFFF3E0) : const Color(0xFFFF6B00),
-                                      borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
-                                      border: isTapped ? Border.all(color: const Color(0xFFFF6B00), width: 1.5) : null,
-                                    ),
-                                  ),
-                                ),
-                              ),
-
-                              // ── X label ──────────────────────────────────
-                              SizedBox(
-                                height: _xLabelH,
-                                width: _barWidth + _barGap,
-                                child: Center(
-                                  child: Text(
-                                    bar.xLabel,
-                                    textAlign: TextAlign.center,
-                                    maxLines: 2,
-                                    style: TextStyle(fontSize: 9, color: Colors.grey.shade600, height: 1.2),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    }).toList(),
+                // ── BarChart fills remaining width exactly ────
+                // Expanded gives fl_chart a tight bounded width.
+                // spaceAround distributes up to 12 bars evenly
+                // across the full device width — no scroll needed.
+                Expanded(
+                  child: SizedBox(
+                    height: _totalChartH,
+                    child: BarChart(
+                      _buildChartData(bars: bars, maxY: maxY, yInterval: yInterval, bottomTitle: _sectionTitle, kalavadha: widget.kalavadha),
+                      swapAnimationDuration: const Duration(milliseconds: 200),
+                      swapAnimationCurve: Curves.easeOut,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
     );
+  }
+
+  // ── Chart data builder ─────────────────────────────────────────────────────
+
+  BarChartData _buildChartData({
+    required List<ChartBarData> bars,
+    required double maxY,
+    required double yInterval,
+    required String? bottomTitle,
+    required DurationTypes? kalavadha,
+  }) {
+    /// Visual rod width handed to fl_chart.
+    double _barRodWidth = widget.kalavadha == DurationTypes.yearly ? 21.0 : 28;
+
+    return BarChartData(
+      maxY: maxY,
+      minY: 0,
+
+      // ── Touch / tap ────────────────────────────────────────
+      barTouchData: BarTouchData(
+        enabled: true,
+        // Disable fl_chart's built-in floating tooltip entirely;
+        // we render our custom tooltip inside topTitles instead.
+        touchTooltipData: BarTouchTooltipData(
+          getTooltipColor: (_) => Colors.transparent,
+          tooltipPadding: EdgeInsets.zero,
+          tooltipMargin: 0,
+          getTooltipItem: (_, __, ___, ____) => null,
+        ),
+        touchCallback: (event, response) {
+          if (event is FlTapUpEvent) {
+            final tappedIdx = response?.spot?.touchedBarGroupIndex ?? -1;
+            setState(() {
+              _tappedIndex = _tappedIndex == tappedIdx ? -1 : tappedIdx;
+            });
+          }
+        },
+      ),
+
+      // ── Grid ───────────────────────────────────────────────
+      gridData: FlGridData(
+        show: true,
+        drawVerticalLine: false,
+        horizontalInterval: yInterval,
+        getDrawingHorizontalLine: (_) => const FlLine(
+          color: Color(0xFFE5E5EA),
+          strokeWidth: 1,
+          dashArray: [4, 4],
+        ),
+      ),
+
+      // ── Border — bottom axis line only ─────────────────────
+      borderData: FlBorderData(
+        show: true,
+        border: const Border(
+          bottom: BorderSide(color: Color(0xFFE5E5EA), width: 1),
+        ),
+      ),
+
+      // ── Titles ─────────────────────────────────────────────
+      titlesData: FlTitlesData(
+        show: true,
+        leftTitles: const AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+        rightTitles: const AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+
+        // Top title slot is used exclusively to render our custom tooltip.
+        topTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            reservedSize: _tooltipReservedH,
+            getTitlesWidget: (x, _) {
+              final idx = x.toInt();
+              if (idx != _tappedIndex || idx < 0 || idx >= bars.length) {
+                return const SizedBox.shrink();
+              }
+              final bar = bars[idx];
+              return Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 5,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(6),
+                    border: Border.all(
+                      color: const Color(0xFFFFE0B2),
+                      width: 1,
+                    ),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 4,
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        kalavadha == DurationTypes.monthly ? bar.tooltipTitle : bar.tooltipTitle.replaceFirst("-", "-\n"),
+                        style: const TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFFE65100),
+                        ),
+                      ),
+                      Text(
+                        '${Statics.getLabel("Shaakhaa")} : ${bar.value}',
+                        style: const TextStyle(
+                          fontSize: 10,
+                          color: Color(0xFF6366F1),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+
+        // Bottom titles = x-axis labels.
+        bottomTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            reservedSize: _xLabelReservedH,
+            getTitlesWidget: (x, _) {
+              final idx = x.toInt();
+              if (idx < 0 || idx >= bars.length) {
+                return const SizedBox.shrink();
+              }
+              return Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Text(
+                  bottomTitle != null ? "$bottomTitle ${idx + 1}" : bars[idx].xLabel,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 9,
+                    color: Colors.grey.shade600,
+                    height: 1.2,
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+
+      // ── Bar groups ─────────────────────────────────────────
+      barGroups: bars.asMap().entries.map((entry) {
+        final i = entry.key;
+        final bar = entry.value;
+        final isTapped = _tappedIndex == i;
+
+        return BarChartGroupData(
+          x: i,
+          barsSpace: 0,
+          barRods: [
+            BarChartRodData(
+              toY: bar.value.toDouble(),
+              width: _barRodWidth,
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(4),
+              ),
+              color: isTapped ? const Color(0xFFFFF3E0) : const Color(0xFFFF6B00),
+              borderSide: isTapped
+                  ? const BorderSide(
+                      color: Color(0xFFFF6B00),
+                      width: 1.5,
+                    )
+                  : BorderSide.none,
+            ),
+          ],
+        );
+      }).toList(),
+
+      // groupsSpace drives the horizontal gap between bar groups.
+      // Together with _barRodWidth this gives each group _barGroupWidth px.
+      // groupsSpace: _barGroupWidth - _barRodWidth,
+      // groupsSpace: 12,
+      alignment: BarChartAlignment.spaceAround,
+    );
+  }
+}
+// ─── Top 10 Enums ─────────────────────────────────────────────────────────────
+
+enum _Top10Tab { shaakhaa, saptahikMilan }
+
+enum _Top10Filter { upasthiti, naveen, kaaryakram }
+
+// ─── Top 10 Section ───────────────────────────────────────────────────────────
+
+// ─── Top 10 Section ───────────────────────────────────────────────────────────
+
+// Fixed kname list — order matches screenshot dropdown
+const List<MapEntry<String, String>> _kKaryakramItems = [
+  MapEntry('IsDoneUrdhvapad', 'Minimum5minutesUrdhvapad'),
+  MapEntry('IsDoneDandaPrahaar', 'Minimum1minuteDandaPrahaar'),
+  MapEntry('IsDoneSaanghikGeet', 'SaanghikGeet'),
+  MapEntry('IsDoneAmrutaVachan', 'AmrutaVachan'),
+  MapEntry('IsDoneSubhaashit', 'Subhaashit'),
+  MapEntry('IsDoneDeepBreathing', 'Minimum5minutesDeepBreathing'),
+  MapEntry('IsDoneSooryaNamaskaar', 'Minimum5minutesSooryaNamaskaar'),
+  MapEntry('IsDoneSanchalanAbhyaas', 'Minimum5minutesSanchalanAbhyaas'),
+  MapEntry('IsDoneBoodhKatha', 'BoodhKathaOnceWeek'),
+  MapEntry('IsDoneBoudhikDays', 'BoudhikDays'),
+  MapEntry('IsDoneSewaDays', 'SewaDays'),
+  MapEntry('IsOptionalShaaririk', 'ConductedOptionalShaaririkVishay'),
+  MapEntry('IsOptionalOther', 'ConductedOtherOptionalKaaryakram'),
+];
+
+class _Top10ShaakhaaSection extends StatefulWidget {
+  final List<TotalCountShaakhaa> shaakhatotalcount;
+  final List<TotalCountShaakhaa> shaakhanewcount;
+  final List<TotalCountShaakhaa> sapthahiktotalcount;
+  final List<TotalCountShaakhaa> sapthahiknewcount;
+  final List<String> activityKeys;
+  final int geoUnitId;
+  final int vayogat;
+  final int days;
+
+  const _Top10ShaakhaaSection({
+    required this.shaakhatotalcount,
+    required this.shaakhanewcount,
+    required this.sapthahiktotalcount,
+    required this.sapthahiknewcount,
+    required this.activityKeys,
+    required this.geoUnitId,
+    required this.vayogat,
+    required this.days,
+  });
+
+  @override
+  State<_Top10ShaakhaaSection> createState() => _Top10ShaakhaaSectionState();
+}
+
+class _Top10ShaakhaaSectionState extends State<_Top10ShaakhaaSection> {
+  _Top10Tab _tab = _Top10Tab.shaakhaa;
+  _Top10Filter _filter = _Top10Filter.upasthiti;
+
+  // Karyakram state
+  String _selectedKname = _kKaryakramItems.first.key;
+  bool _kLoading = false;
+  List<TotalCountShaakhaa> _karyakramList = [];
+
+  // Resolve list for upasthiti / naveen filters
+  List<TotalCountShaakhaa> get _activeList {
+    if (_tab == _Top10Tab.shaakhaa) {
+      return _filter == _Top10Filter.upasthiti ? widget.shaakhatotalcount : widget.shaakhanewcount;
+    } else {
+      return _filter == _Top10Filter.upasthiti ? widget.sapthahiktotalcount : widget.sapthahiknewcount;
+    }
+  }
+
+  // Called whenever tab/kname changes while on कार्यक्रम filter
+  Future<void> _fetchKaryakram() async {
+    if (!mounted) return;
+    setState(() {
+      _kLoading = true;
+      _karyakramList = [];
+    });
+
+    try {
+      final req = {
+        "AppUserID": int.tryParse(Statics.userDetails["userID"] ?? "5693") ?? "5693",
+        "Geounitid": widget.geoUnitId,
+        "vayogat": widget.vayogat,
+        "days": widget.days,
+        "isshakha": _tab == _Top10Tab.shaakhaa ? 1 : 0,
+        "kname": _selectedKname,
+      };
+
+      final res = await Statics.fetchKaryakram(req);
+      if (!mounted) return;
+      if (res != null && res.status == 'Success') {
+        setState(() => _karyakramList = res.mdata.take(10).toList());
+      }
+    } catch (e) {
+      debugPrint('Karyakram fetch error: $e');
+    } finally {
+      if (mounted) setState(() => _kLoading = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final showKaryakram = _filter == _Top10Filter.kaaryakram;
+    final top10 = showKaryakram ? _karyakramList : _activeList.take(10).toList();
+
+    return Container(
+      margin: const EdgeInsets.only(top: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFFFFF3E0), width: 1.5),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // ── Header ────────────────────────────────────────────────────────
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 14, 16, 12),
+            child: Row(
+              children: const [
+                Icon(Icons.emoji_events_rounded, color: Color(0xFFFF6B00), size: 20),
+                SizedBox(width: 6),
+                Icon(Icons.star_rounded, color: Color(0xFFFFBF00), size: 16),
+                SizedBox(width: 6),
+                Text(
+                  'शीर्ष 10 उत्कृष्ट शाखा',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF1C1C1E),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // ── Tab row ───────────────────────────────────────────────────────
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Row(
+              children: [
+                Expanded(child: _buildTab('शाखा', _Top10Tab.shaakhaa)),
+                const SizedBox(width: 8),
+                Expanded(child: _buildTab('साप्ताहिक मिलन', _Top10Tab.saptahikMilan)),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 12),
+
+          // ── Filter chips ──────────────────────────────────────────────────
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Row(
+              children: [
+                _buildChip('उपस्थिति', _Top10Filter.upasthiti),
+                const SizedBox(width: 8),
+                _buildChip('नवीन भरती', _Top10Filter.naveen),
+                const SizedBox(width: 8),
+                _buildChip('कार्यक्रम', _Top10Filter.kaaryakram),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 12),
+
+          // ── Karyakram activity dropdown ───────────────────────────────────
+          if (showKaryakram) ...[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'रैंकिंग के लिए विशिष्ट कार्यक्रम चुनें:',
+                    style: TextStyle(fontSize: 11, color: Color(0xFF8E8E93)),
+                  ),
+                  const SizedBox(height: 6),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 14),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: const Color(0xFFE5E5EA), width: 1.2),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        value: _selectedKname,
+                        isExpanded: true,
+                        icon: const Icon(
+                          Icons.keyboard_arrow_down_rounded,
+                          color: Color(0xFFFF6B00),
+                          size: 22,
+                        ),
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFF1C1C1E),
+                          fontWeight: FontWeight.w500,
+                        ),
+                        items: _kKaryakramItems
+                            .map((e) => DropdownMenuItem(
+                                  value: e.key,
+                                  child: Text(Statics.getLabel(e.value, returnKey: true)),
+                                ))
+                            .toList(),
+                        onChanged: (v) {
+                          if (v != null) {
+                            setState(() => _selectedKname = v);
+                            _fetchKaryakram();
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 12),
+          ],
+
+          const Divider(height: 1, color: Color(0xFFF2F2F7)),
+
+          // ── List / loader / empty ─────────────────────────────────────────
+          if (showKaryakram && _kLoading)
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 28),
+              child: Center(
+                child: CircularProgressIndicator(color: Color(0xFFFF6B00)),
+              ),
+            )
+          else if (top10.isEmpty)
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 28),
+              child: Center(
+                child: Text(
+                  'कोई डेटा उपलब्ध नहीं',
+                  style: TextStyle(fontSize: 13, color: Color(0xFF8E8E93)),
+                ),
+              ),
+            )
+          else
+            ...top10.asMap().entries.map(
+                  (e) => _RankRow(rank: e.key + 1, item: e.value),
+                ),
+
+          const SizedBox(height: 8),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTab(String label, _Top10Tab tab) {
+    final sel = _tab == tab;
+    return GestureDetector(
+      onTap: () {
+        setState(() => _tab = tab);
+        // Re-fetch if already on कार्यक्रम filter
+        if (_filter == _Top10Filter.kaaryakram) _fetchKaryakram();
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        decoration: BoxDecoration(
+          color: sel ? const Color(0xFFFF6B00) : Colors.transparent,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: sel ? const Color(0xFFFF6B00) : const Color(0xFFE5E5EA),
+            width: 1.2,
+          ),
+        ),
+        child: Text(
+          label,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w600,
+            color: sel ? Colors.white : const Color(0xFF8E8E93),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildChip(String label, _Top10Filter filter) {
+    final sel = _filter == filter;
+    return GestureDetector(
+      onTap: () {
+        setState(() => _filter = filter);
+        // Trigger fetch when switching TO कार्यक्रम
+        if (filter == _Top10Filter.kaaryakram && _karyakramList.isEmpty) {
+          _fetchKaryakram();
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+        decoration: BoxDecoration(
+          color: sel ? const Color(0xFFE65100) : const Color(0xFFF2F2F7),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            color: sel ? Colors.white : const Color(0xFF6B6B6B),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ─── Rank Row ─────────────────────────────────────────────────────────────────
+
+class _RankRow extends StatelessWidget {
+  final int rank;
+  final TotalCountShaakhaa item;
+
+  const _RankRow({required this.rank, required this.item});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+      decoration: const BoxDecoration(
+        border: Border(bottom: BorderSide(color: Color(0xFFF2F2F7), width: 1)),
+      ),
+      child: Row(
+        children: [
+          // ── Rank indicator ───────────────────────────────────────────────
+          SizedBox(width: 30, child: _rankWidget()),
+
+          const SizedBox(width: 12),
+
+          // ── Branch info ──────────────────────────────────────────────────
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  item.shaakhaname,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF1C1C1E),
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  item.trailname.isNotEmpty ? item.trailname : 'कुल आधार',
+                  style: TextStyle(fontSize: 11, color: Colors.grey.shade500),
+                ),
+              ],
+            ),
+          ),
+
+          // ── Score chip ───────────────────────────────────────────────────
+          Container(
+            constraints: const BoxConstraints(minWidth: 44),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            decoration: BoxDecoration(
+              color: const Color(0xFFFFF3E0),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              '${item.totalpresent}',
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+                color: Color(0xFFE65100),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _rankWidget() {
+    switch (rank) {
+      case 1:
+        return const Icon(Icons.emoji_events_rounded, color: Color(0xFFFFBF00), size: 28);
+      case 2:
+        return const Icon(Icons.emoji_events_rounded, color: Color(0xFFADB5BD), size: 26);
+      case 3:
+        return const Icon(Icons.emoji_events_rounded, color: Color(0xFFCD7F32), size: 24);
+      default:
+        return Center(
+          child: Text(
+            '$rank',
+            style: const TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w700,
+              color: Color(0xFF8E8E93),
+            ),
+          ),
+        );
+    }
   }
 }
