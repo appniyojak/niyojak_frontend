@@ -1,3 +1,4 @@
+/*
 Map<String, String> resEnglish = {
   'particularPerson': 'particular Person',
 
@@ -737,7 +738,8 @@ Map<String, String> resEnglish = {
   'Aayaam': 'Aayaam',
   'Abhiyaan': 'Abhiyaan',
 
-  /* Join RSS */
+   //Join RSS
+
   'EditDetails': 'Edit Details',
   'searchJoinRSSScreenLabel': 'Join RSS',
   'createNotification': 'Create Notification',
@@ -2093,7 +2095,8 @@ Map<String, String> resMarathi = {
   'Aayaam': 'आयाम',
   'Abhiyaan': 'अभियान',
 
-  /* Join RSS */
+  //Join RSS
+
   'EditDetails': 'तपशील संपादित करा',
   'searchJoinRSSScreenLabel': 'जॉईन आरएसएस',
   'createNotification': 'सूचना',
@@ -3461,7 +3464,8 @@ Map<String, String> resHindi = {
   'Aayaam': 'आयाम',
   'Abhiyaan': 'अभियान',
 
-  /* Join RSS */
+ //Join RSS
+
   'EditDetails': 'विवरण संपादित करें',
   'searchJoinRSSScreenLabel': 'जॉईन आरएसएस',
   'createNotification': 'सूचना',
@@ -4090,3 +4094,4 @@ Map<String, String> resHindi = {
   'date': 'तारीख',
   'addVishishtVyakti': 'विशिष्ट व्यक्ति को जोड़ें',
 };
+*/

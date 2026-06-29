@@ -123,6 +123,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
 
   bool _isLoading = false;
   bool _isSearched = false;
+  bool _isCleared = false;
   bool _isExpanded = true;
   String _card1Value = '';
   String _card2Value = '';
@@ -169,34 +170,34 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
   String get card1Label {
     switch (_kalavadha) {
       case DurationTypes.daily:
-        return 'आज की उपस्थिति';
+        return Statics.getLabel('todaystotalupastithi');
       case DurationTypes.weekly:
-        return 'सरासरी उपस्थिति (साप्ताहिक)';
+        return Statics.getLabel('weeklytotalupastithi');
       case DurationTypes.monthly:
-        return 'सरासरी उपस्थिति (मासिक)';
+        return Statics.getLabel('monthlytotalupastithi');
       case DurationTypes.quarterly:
-        return 'सरासरी उपस्थिति (त्रैमासिक)';
+        return Statics.getLabel('quarterlytotalupastithi');
       case DurationTypes.halfYearly:
-        return 'सरासरी उपस्थिति (अर्धवार्षिक)';
+        return Statics.getLabel('halfyearlytotalupastithi');
       case DurationTypes.yearly:
-        return 'सरासरी उपस्थिति (वार्षिक)';
+        return Statics.getLabel('yearlytotalupastithi');
     }
   }
 
   String get card2Label {
     switch (_kalavadha) {
       case DurationTypes.daily:
-        return 'आज की नवीन भरती';
+        return Statics.getLabel("todaysNewupastithi");
       case DurationTypes.weekly:
-        return 'नवीन भरती (साप्ताहिक)';
+        return Statics.getLabel("weeklyNewupastithi");
       case DurationTypes.monthly:
-        return 'नवीन भरती (मासिक)';
+        return Statics.getLabel("monthlyNewupastithi");
       case DurationTypes.quarterly:
-        return 'नवीन भरती (त्रैमासिक)';
+        return Statics.getLabel("quarterlyNewupastithi");
       case DurationTypes.halfYearly:
-        return 'नवीन भरती (अर्धवार्षिक)';
+        return Statics.getLabel("halfyearlyNewupastithi");
       case DurationTypes.yearly:
-        return 'नवीन भरती (वार्षिक)';
+        return Statics.getLabel("yearlyNewupastithi");
     }
   }
 
@@ -236,20 +237,21 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
   }
 
   Future<void> _fetchReport() async {
-    final ctrl = controller;
-    final geoUnitId = int.tryParse(ctrl.deepestSelectedGeoUnitId ?? "0") ?? 0;
+    _isCleared = true;
+    setState(() => _isSearched = false);
+    final geoUnitId = int.tryParse(controller.deepestSelectedGeoUnitId ?? "0") ?? 0;
 
     final req = {
       "AppUserID": int.tryParse(Statics.userDetails["userID"] ?? "5693") ?? "5693",
       "Geounitid": geoUnitId,
-      "vayogat": ctrl.deepestSelectedLevelId != 1 ? _selectedVayogat.staticID : 0,
+      "vayogat": controller.deepestSelectedLevelId != 1 ? _selectedVayogat.staticID : 0,
       "days": _kalavadha.pkValues,
     };
 
     if (!mounted) return;
     _isExpanded = false;
     setState(() => _isLoading = _isSearched = true);
-    final isAll = ctrl.deepestSelectedLevelId != 1;
+    final isAll = controller.deepestSelectedLevelId != 1;
     setState(() => _isAllLevel = isAll);
 
     try {
@@ -261,7 +263,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
             if (!mounted) return;
             if (res == null) {
               Statics.showToast(Statics.getLabel('NoDataFound'));
-              setState(() => _isSearched = false);
+              setState(() => _isSearched = _isCleared = false);
               return;
             }
             setState(() {
@@ -282,7 +284,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
             if (!mounted) return;
             if (res == null) {
               Statics.showToast(Statics.getLabel('NoDataFound'));
-              setState(() => _isSearched = false);
+              setState(() => _isSearched = _isCleared = false);
               return;
             }
             setState(() {
@@ -302,7 +304,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
             if (!mounted) return;
             if (res == null) {
               Statics.showToast(Statics.getLabel('NoDataFound'));
-              setState(() => _isSearched = false);
+              setState(() => _isSearched = _isCleared = false);
               return;
             }
             setState(() {
@@ -327,7 +329,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
             if (!mounted) return;
             if (res == null) {
               Statics.showToast(Statics.getLabel('NoDataFound'));
-              setState(() => _isSearched = false);
+              setState(() => _isSearched = _isCleared = false);
               return;
             }
             setState(() {
@@ -346,9 +348,9 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                         activityKey: e.key,
                         bars: e.value
                             .map((w) => ChartBarData(
-                                  xLabel: 'दिन ${w.timesDone}',
+                                  xLabel: '${Statics.getLabel("daysonly")} ${w.timesDone}',
                                   value: w.shaakhaCount,
-                                  tooltipTitle: 'दिन ${w.timesDone}',
+                                  tooltipTitle: '${Statics.getLabel("daysonly")} ${w.timesDone}',
                                 ))
                             .toList(),
                       ))
@@ -363,7 +365,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
             if (!mounted) return;
             if (res == null) {
               Statics.showToast(Statics.getLabel('NoDataFound'));
-              setState(() => _isSearched = false);
+              setState(() => _isSearched = _isCleared = false);
               return;
             }
             setState(() {
@@ -381,23 +383,23 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                   percent: pct,
                   subPeriods: [
                     SubPeriod(
-                      e.week1Range.isNotEmpty ? e.week1Range : 'सप्ताह १',
-                      '${e.week1} दिन',
+                      e.week1Range.isNotEmpty ? e.week1Range : '${Statics.getLabel("weekOnly")} १',
+                      '${e.week1} ${Statics.getLabel("daysonly")}',
                       (double.tryParse(e.week1Percent) ?? 0).toStringAsFixed(2),
                     ),
                     SubPeriod(
-                      e.week2Range.isNotEmpty ? e.week2Range : 'सप्ताह २',
-                      '${e.week2} दिन',
+                      e.week2Range.isNotEmpty ? e.week2Range : '${Statics.getLabel("weekOnly")} २',
+                      '${e.week2} ${Statics.getLabel("daysonly")}',
                       (double.tryParse(e.week2Percent) ?? 0).toStringAsFixed(2),
                     ),
                     SubPeriod(
-                      e.week3Range.isNotEmpty ? e.week3Range : 'सप्ताह ३',
-                      '${e.week3} दिन',
+                      e.week3Range.isNotEmpty ? e.week3Range : '${Statics.getLabel("weekOnly")} ३',
+                      '${e.week3} ${Statics.getLabel("daysonly")}',
                       (double.tryParse(e.week3Percent) ?? 0).toStringAsFixed(2),
                     ),
                     SubPeriod(
-                      e.week4Range.isNotEmpty ? e.week4Range : 'सप्ताह ४',
-                      '${e.week4} दिन',
+                      e.week4Range.isNotEmpty ? e.week4Range : '${Statics.getLabel("weekOnly")} ४',
+                      '${e.week4} ${Statics.getLabel("daysonly")}',
                       (double.tryParse(e.week4Percent) ?? 0).toStringAsFixed(2),
                     ),
                   ],
@@ -410,7 +412,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
             if (!mounted) return;
             if (res == null) {
               Statics.showToast(Statics.getLabel('NoDataFound'));
-              setState(() => _isSearched = false);
+              setState(() => _isSearched = _isCleared = false);
               return;
             }
             setState(() {
@@ -447,7 +449,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
             if (!mounted) return;
             if (res == null) {
               Statics.showToast(Statics.getLabel('NoDataFound'));
-              setState(() => _isSearched = false);
+              setState(() => _isSearched = _isCleared = false);
               return;
             }
             setState(() {
@@ -468,8 +470,8 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                   percent: avgPct,
                   subPeriods: e.months
                       .map((m) => SubPeriod(
-                            m.range.isNotEmpty ? m.range : 'माह ${m.monthNo}',
-                            '${m.value} दिन',
+                            m.range.isNotEmpty ? m.range : '${Statics.getLabel("monthOnly")} ${m.monthNo}',
+                            '${m.value} ${Statics.getLabel("daysonly")}',
                             m.percentage.toStringAsFixed(2),
                           ))
                       .toList(),
@@ -482,7 +484,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
             if (!mounted) return;
             if (res == null) {
               Statics.showToast(Statics.getLabel('NoDataFound'));
-              setState(() => _isSearched = false);
+              setState(() => _isSearched = _isCleared = false);
               return;
             }
             setState(() {
@@ -498,9 +500,9 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                         activityKey: e.activity,
                         bars: e.months
                             .map((m) => ChartBarData(
-                                  xLabel: m.range.isNotEmpty ? m.range : 'माह ${m.monthNo}',
+                                  xLabel: m.range.isNotEmpty ? m.range : '${Statics.getLabel("monthOnly")} ${m.monthNo}',
                                   value: m.value,
-                                  tooltipTitle: m.range.isNotEmpty ? m.range : 'माह ${m.monthNo}',
+                                  tooltipTitle: m.range.isNotEmpty ? m.range : '${Statics.getLabel("monthOnly")} ${m.monthNo}',
                                 ))
                             .toList(),
                       ))
@@ -517,7 +519,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
       print("Exception: $e \n$stack");
       return null;
     } finally {
-      if (mounted) setState(() => _isLoading = false);
+      if (mounted) setState(() => _isLoading = _isCleared = false);
     }
   }
 
@@ -547,6 +549,8 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                     child: CircularProgressIndicator(color: Color(0xFFFF6B00)),
                   )),
                 )
+              else if (_isCleared)
+                SizedBox(height: 170)
               else if (!_isSearched)
                 SizedBox(height: 170, child: Center(child: Text(Statics.getLabel('noDataFoundTryAnotherSearch'))))
               else ...[
@@ -696,7 +700,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                             title: 'Mahaanagar',
                             controller: ctrl,
                             decoration: styledDropdownDecoration(Statics.getLabel("Mahaanagar")),
-                            onChanged: (p0) => _fetchReport(),
+                            onChanged: (p0) => setState(() => _isCleared = true),
                           ),
 
                           GeoDropdownWidget(
@@ -704,7 +708,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                             title: 'Vibhaag',
                             controller: ctrl,
                             decoration: styledDropdownDecoration(Statics.getLabel("Vibhaag")),
-                            onChanged: (p0) => _fetchReport(),
+                            onChanged: (p0) => setState(() => _isCleared = true),
                           ),
 
                           if (ctrl.hasItems(GeoLevel.Bhaag))
@@ -713,7 +717,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                               title: 'Bhaag',
                               controller: ctrl,
                               decoration: styledDropdownDecoration(Statics.getLabel("Bhaag")),
-                              onChanged: (p0) => _fetchReport(),
+                              onChanged: (p0) => setState(() => _isCleared = true),
                             ),
 
                           if (ctrl.hasItems(GeoLevel.Nagar))
@@ -722,7 +726,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                               title: 'Nagar',
                               controller: ctrl,
                               decoration: styledDropdownDecoration(Statics.getLabel("Nagar")),
-                              onChanged: (p0) => _fetchReport(),
+                              onChanged: (p0) => setState(() => _isCleared = true),
                             ),
 
                           if (ctrl.hasItems(GeoLevel.upnagarUpkhanda))
@@ -731,7 +735,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                               title: 'upnagarUpkhanda',
                               controller: ctrl,
                               decoration: styledDropdownDecoration(Statics.getLabel("upnagarUpkhanda")),
-                              onChanged: (p0) => _fetchReport(),
+                              onChanged: (p0) => setState(() => _isCleared = true),
                             ),
 
                           if (ctrl.hasItems(GeoLevel.Mandal))
@@ -740,7 +744,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                               title: 'Mandal',
                               controller: ctrl,
                               decoration: styledDropdownDecoration(Statics.getLabel("Mandal")),
-                              onChanged: (p0) => _fetchReport(),
+                              onChanged: (p0) => setState(() => _isCleared = true),
                             ),
 
                           if (ctrl.hasItems(GeoLevel.Graam))
@@ -749,7 +753,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                               title: 'Graam',
                               controller: ctrl,
                               decoration: styledDropdownDecoration(Statics.getLabel("Graam")),
-                              onChanged: (p0) => _fetchReport(),
+                              onChanged: (p0) => setState(() => _isCleared = true),
                             ),
 
                           if (ctrl.hasItems(GeoLevel.Vasti))
@@ -823,6 +827,40 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                                 ),
                             ],
                           ),
+
+                          // ── Kalavadhi + Vayogat row ──────────────────
+                          if (ctrl.deepestSelectedLevelId != 1)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              spacing: 12,
+                              children: [
+                                // Kalavadhi dropdown
+                                MaterialButton(
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 15,
+                                    vertical: 8,
+                                  ),
+                                  color: Theme.of(context).primaryColor,
+                                  textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+                                  onPressed: _fetchReport,
+                                  child: Text(
+                                    Statics.getLabel('Search'),
+                                    style: TextStyle(fontSize: 25),
+                                  ),
+                                ),
+
+                                // Vayogat dropdown — populated from DB with Total prepended
+                                MaterialButton(
+                                    onPressed: () {
+                                      print("clear button pressed");
+                                      _isCleared = true;
+                                      setState(() => _isSearched = false);
+                                      ctrl.loadHierarchyForUser();
+                                    },
+                                    child: Text(Statics.getLabel('clear')))
+                              ],
+                            ),
                         ],
                       ),
                     ),
@@ -1178,7 +1216,7 @@ class _ProgrammeBarCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
-                  '${Statics.getLabel("Total")}: ${bar.totalDays} दिन (${bar.percent.toStringAsFixed(2)}%)',
+                  '${Statics.getLabel("Total")}: ${bar.totalDays} ${Statics.getLabel("daysonly")} (${bar.percent.toStringAsFixed(2)}%)',
                   style: const TextStyle(
                     fontSize: 11.5,
                     fontWeight: FontWeight.w600,
@@ -1528,17 +1566,17 @@ class _AllLevelChartSectionState extends State<AllLevelChartSection> {
   String get _sectionTitle {
     switch (widget.kalavadha) {
       case DurationTypes.weekly:
-        return 'साप्ताहिक के अनुसार कार्यक्रम करने वाली शाखाएँ';
+        return "${Statics.getLabel("reportBarGraphTitle")} ${Statics.getLabel("weekly")}";
       case DurationTypes.monthly:
-        return 'मासिक के अनुसार कार्यक्रम करने वाली शाखाएँ';
+        return "${Statics.getLabel("reportBarGraphTitle")} ${Statics.getLabel("monthly")}";
       case DurationTypes.quarterly:
-        return 'त्रैमासिक के अनुसार कार्यक्रम करने वाली शाखाएँ';
+        return "${Statics.getLabel("reportBarGraphTitle")} ${Statics.getLabel("quarterly")}";
       case DurationTypes.halfYearly:
-        return 'अर्धवार्षिक के अनुसार कार्यक्रम करने वाली शाखाएँ';
+        return "${Statics.getLabel("reportBarGraphTitle")} ${Statics.getLabel("halfyearly")}";
       case DurationTypes.yearly:
-        return 'वार्षिक के अनुसार कार्यक्रम करने वाली शाखाएँ';
+        return "${Statics.getLabel("reportBarGraphTitle")} ${Statics.getLabel("yearly")}";
       default:
-        return 'कार्यक्रम करने वाली शाखाएँ';
+        return Statics.getLabel("reportBarGraphTitle");
     }
   }
 
@@ -1582,8 +1620,8 @@ class _AllLevelChartSectionState extends State<AllLevelChartSection> {
                   ],
                 ),
                 const SizedBox(height: 3),
-                const Text(
-                  'प्रत्येक गतिविधि का सप्ताह/माह के अनुसार बार ग्राफ',
+                Text(
+                  Statics.getLabel('reportBarGraphSubtitle'),
                   style: TextStyle(fontSize: 11, color: Color(0xFF8E8E93)),
                 ),
               ],
@@ -1971,8 +2009,6 @@ class _ActivityChartCardState extends State<_ActivityChartCard> {
 enum _Top10Tab { shaakhaa, saptahikMilan }
 
 enum _Top10Filter { upasthiti, naveen, kaaryakram }
-
-// ─── Top 10 Section ───────────────────────────────────────────────────────────
 
 // ─── Top 10 Section ───────────────────────────────────────────────────────────
 
