@@ -797,6 +797,7 @@ Map<String, String> resEnglish = {
   'ProudhaCountRange': '(40+)',
 
   'PravasiKaryakartaCount': 'Count of Pravasi Karyakarta in Shakhaa Pat',
+  'PravasiKaryakartaCount2': 'Count of Pravasi Karyakarta in Shakhaa',
   'AnyaPravasiKaryakartaCount': 'Anya Pravasi Karyakarta Count',
 
   'AbhyaagatCount': 'Abhyaagat Sankhyaa',
@@ -2119,6 +2120,12 @@ Map<String, String> resEnglish = {
   'thisVsLastWeek': "(This Week vs Last Week)",
   "onBasisOfNityaVrutta": "(Based on the Daily vrutta)",
   "onBasisOfMasikVrutta": "(Based on the Masik vrutta)",
+  "moreThan15": "Occurred 15 or more times",
+  "lessThan15": "Occurred more than 1 but less than 15 times",
+  "moreThan3": "Occurred 3 or more times",
+  "lessThan3": "Occurred more than 1 but less than 3 times",
+  "lessThan15Tip": "The number in brackets indicates the count of Shakhas held for more than 1 day but fewer than 15 time.",
+  "lessThan3Tip": "The number in brackets indicates the count of Shakhas held for more than 1 day but fewer than 3 time.",
   "fromMonthShaakha": "Month Shaakha",
   "fromMonthSaptahik": "Month Saptahik Milan",
   "fromMonthSangha": "Month Sangha Mandali",
@@ -2958,6 +2965,7 @@ Map<String, String> resMarathi = {
   'ProudhaCountRange': '(४०+)',
 
   'PravasiKaryakartaCount': 'शाखा पटावर असलेल्या प्रवासी कार्यकर्त्यांची संख्या',
+  'PravasiKaryakartaCount2': 'शाखेवर उपस्थित प्रवासी कार्यकर्त्यांची संख्या',
   'AnyaPravasiKaryakartaCount': 'अन्य प्रवासी कार्यकर्त्यांची संख्या',
 
   'AbhyaagatCount': 'अभ्यागत संख्या',
@@ -4281,6 +4289,12 @@ Map<String, String> resMarathi = {
   'thisVsLastWeek': "(हा आठवडा विरुद्ध मागील आठवडा)",
   "onBasisOfNityaVrutta": "(नित्य वृत्ताच्या आधारे)",
   "onBasisOfMasikVrutta": "(मासिक वृत्ताच्या आधारे)",
+  "moreThan15": "१५ किंवा त्यापेक्षा अधिक वेळा लागलेल्या",
+  "lessThan15": "१ पेक्षा जास्त पण १५ पेक्षा कमी वेळा लागलेल्या",
+  "moreThan3": "३ किंवा त्यापेक्षा अधिक वेळा लागलेल्या",
+  "lessThan3": "१ पेक्षा जास्त पण ३ पेक्षा कमी वेळा लागलेल्या",
+  "lessThan15Tip": "कंसातील संख्या १ दिवसांपेक्षा जास्त पण १५ पेक्षा कमी वेळा घेतलेल्या शाखांची संख्या दर्शवते.",
+  "lessThan3Tip": "कंसातील संख्या १ दिवसांपेक्षा जास्त पण ३ पेक्षा कमी वेळा घेतलेल्या शाखांची संख्या दर्शवते.",
   "fromMonthShaakha": "महिन्यातील शाखा",
   "fromMonthSaptahik": "महिन्यातील साप्ताहिक मिलन",
   "fromMonthSangha": "महिन्यातील संघ मंडळी",
@@ -5117,6 +5131,7 @@ Map<String, String> resHindi = {
   'ProudhaCountRange': '(४०+)',
 
   'PravasiKaryakartaCount': 'शाखा के पट पर हैं ऐसे प्रवासी कार्यकर्ताओं की संख्या',
+  'PravasiKaryakartaCount2': 'शाख पर उपस्थित प्रवासी कार्यकर्ताओं की संख्या',
   'AnyaPravasiKaryakartaCount': 'अन्य प्रवासी कार्यकर्ताओं की संख्या',
 
   'AbhyaagatCount': 'अभ्यागत संख्या',
@@ -6440,6 +6455,12 @@ Map<String, String> resHindi = {
   'thisVsLastWeek': "(इस बनाम पिछले सप्ताह)",
   "onBasisOfNityaVrutta": "(नित्य वृत्त के आधार पर)",
   "onBasisOfMasikVrutta": "(मासिक वृत्त के आधार पर)",
+  "moreThan15": "१५ या उससे अधिक बार लगी",
+  "lessThan15": "१ से अधिक लेकिन १५ से कम बार लगी",
+  "moreThan3": "३ या उससे अधिक बार लगी",
+  "lessThan3": "१ से अधिक लेकिन ३ से कम बार लगी",
+  "lessThan15Tip": "कोष्ठक में दी गई संख्या १ दिन से अधिक लेकिन १५ से कम बार लगी शाखाओं की संख्या दर्शाती है।",
+  "lessThan3Tip": "कोष्ठक में दी गई संख्या १ दिन से अधिक लेकिन ३ से कम बार लगी शाखाओं की संख्या दर्शाती है।",
   "fromMonthShaakha": "माह की शाखा",
   "fromMonthSaptahik": "माह के साप्ताहिक मिलन",
   "fromMonthSangha": "माह के संघ मंडळी",

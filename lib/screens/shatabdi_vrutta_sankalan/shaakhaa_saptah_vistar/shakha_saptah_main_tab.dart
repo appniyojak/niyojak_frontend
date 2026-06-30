@@ -111,6 +111,10 @@ class _ShakhaSaptahMainTabState extends State<ShakhaSaptahMainTab> with SingleTi
                 if (index == 0 && userLevelId == 1) {
                   // This safely calls the refresh method inside your tab
                   _reportTabKey.currentState?.getReportDataFun(_reportTabKey.currentState?.selectedshaakhaa?.geoUnitID ?? _reportTabKey.currentState?.controller.deepestSelectedGeoUnitId);
+                } else if (index == 0 && [2, 3].contains(userLevelId)) {
+                  // This safely calls the refresh method inside your tab
+                  _reportTabKey.currentState?.populatelinkedShaakhaDropdown(
+                      (_reportTabKey.currentState?.selectedshaakhaa?.geoUnitID ?? _reportTabKey.currentState?.controller.deepestSelectedGeoUnitId).toString(), userLevelId == 1);
                 }
               },
               tabs: <Widget>[

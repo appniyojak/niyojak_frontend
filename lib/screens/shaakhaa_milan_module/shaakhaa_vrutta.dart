@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 
 import '../../helpers/static_data.dart' as Statics;
 import '../../providers/bals.dart';
-import '../edit_shaakhaa_vrutta.dart';
+import 'edit_shaakhaa_vrutta.dart';
 import '../../widgets/legend.dart';
 
 class ShaakhaaVrutta extends StatefulWidget {
@@ -24,7 +24,8 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
   List<Widget>? _headerRow;
   List<ShaakhaaVruttaBAL> lstShaakhaaVrutta = [];
 
-  var vayogatCode = '', shaakhaaName = '';
+  var vayogatCode = '',
+      shaakhaaName = '';
 
   // List<String> lst1 = ['Bhaag', 'भाग/जिल्हा', 'Nagar', 'नगर/तालुका'];
   List<String> lst2 = [
@@ -117,7 +118,10 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (_isFirstCall == true) {
-      args = ModalRoute.of(context)!.settings.arguments as Statics.ScreenArguments;
+      args = ModalRoute
+          .of(context)!
+          .settings
+          .arguments as Statics.ScreenArguments;
       shaakhaaID = args!.itemID;
       viewType = args!.viewType;
 
@@ -353,7 +357,8 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
     await Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => EditShaakhaaVrutta(
+            builder: (context) =>
+                EditShaakhaaVrutta(
                   shaakhaaID: shaakhaaid.toString(),
                   vruttaID: vruttaID,
                   onSaveDetails: _getVruttaList,
@@ -370,32 +375,33 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
         var inputData = json.encode({"ShaakhaaVruttaID": vruttaID});
         showDialog(
           context: context,
-          builder: (ctx) => AlertDialog(
-            title: Text(Statics.getLabel('AskConfirmation')),
-            content: Text(Statics.getLabel('AreyouSureYouWantToDeleteVrutta')),
-            actions: <Widget>[
-              MaterialButton(
-                child: Text(Statics.getLabel('ConfirmationYes')),
-                onPressed: () async {
-                  var data = await Statics.deleteShaakhaaVrutta(inputData);
-                  if (data == "Shaakhaa Vrutta Deleted Successfully ") {
-                    Statics.showToast(Statics.getLabel('ShaakhaaVruttaDeletedSuccessfully'));
+          builder: (ctx) =>
+              AlertDialog(
+                title: Text(Statics.getLabel('AskConfirmation')),
+                content: Text(Statics.getLabel('AreyouSureYouWantToDeleteVrutta')),
+                actions: <Widget>[
+                  MaterialButton(
+                    child: Text(Statics.getLabel('ConfirmationYes')),
+                    onPressed: () async {
+                      var data = await Statics.deleteShaakhaaVrutta(inputData);
+                      if (data == "Shaakhaa Vrutta Deleted Successfully ") {
+                        Statics.showToast(Statics.getLabel('ShaakhaaVruttaDeletedSuccessfully'));
 
-                    _getVruttaList();
-                  } else
-                    Statics.showToast(Statics.getLabel('CouldnotDeleteVrutta'));
+                        _getVruttaList();
+                      } else
+                        Statics.showToast(Statics.getLabel('CouldnotDeleteVrutta'));
 
-                  Navigator.of(ctx).pop();
-                },
+                      Navigator.of(ctx).pop();
+                    },
+                  ),
+                  MaterialButton(
+                    child: Text(Statics.getLabel('ConfirmationNo')),
+                    onPressed: () {
+                      Navigator.of(ctx).pop();
+                    },
+                  )
+                ],
               ),
-              MaterialButton(
-                child: Text(Statics.getLabel('ConfirmationNo')),
-                onPressed: () {
-                  Navigator.of(ctx).pop();
-                },
-              )
-            ],
-          ),
         );
       }
     } on Exception catch (error) {
@@ -429,7 +435,9 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
       ),
       body: Container(
         padding: EdgeInsets.all(20),
-        width: Statics.getDeviceSize(context).width,
+        width: Statics
+            .getDeviceSize(context)
+            .width,
         child: Column(
           children: <Widget>[
             Legend(legendString: 'VruttaDetails', extraString: shaakhaaName, fontsize: 18),
@@ -437,31 +445,31 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
             Expanded(
               child: _isFetchingData == true
                   ? Center(
-                      child: CircularProgressIndicator(),
-                    )
+                child: CircularProgressIndicator(),
+              )
                   : _headerRow != null
-                      ? HorizontalDataTable(
-                          leftHandSideColumnWidth: 100,
-                          rightHandSideColumnWidth: ((vayogatCode == 'Proudh Vyavasaayee' || vayogatCode == "Baal") ? 1800 : 1950),
-                          isFixedHeader: true,
-                          headerWidgets: _headerRow,
-                          leftSideItemBuilder: _shaakhaaVruttaFirstColumn,
-                          rightSideItemBuilder: _shaakhaaVruttaOtherColumns,
-                          itemCount: (lstShaakhaaVrutta == null ? 0 : lstShaakhaaVrutta.length),
-                          rowSeparatorWidget: const Divider(
-                            color: Colors.black54,
-                            height: 1.0,
-                            thickness: 0.0,
-                          ),
-                          leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
-                          rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
-                        )
-                      : Center(
-                          child: Text(
-                            Statics.getLabel('NoDataFound'),
-                            style: TextStyle(fontWeight: FontWeight.normal),
-                          ),
-                        ),
+                  ? HorizontalDataTable(
+                leftHandSideColumnWidth: 100,
+                rightHandSideColumnWidth: ((vayogatCode == 'Proudh Vyavasaayee' || vayogatCode == "Baal") ? 1800 : 1950),
+                isFixedHeader: true,
+                headerWidgets: _headerRow,
+                leftSideItemBuilder: _shaakhaaVruttaFirstColumn,
+                rightSideItemBuilder: _shaakhaaVruttaOtherColumns,
+                itemCount: (lstShaakhaaVrutta == null ? 0 : lstShaakhaaVrutta.length),
+                rowSeparatorWidget: const Divider(
+                  color: Colors.black54,
+                  height: 1.0,
+                  thickness: 0.0,
+                ),
+                leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
+                rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
+              )
+                  : Center(
+                child: Text(
+                  Statics.getLabel('NoDataFound'),
+                  style: TextStyle(fontWeight: FontWeight.normal),
+                ),
+              ),
             ),
             SizedBox(
               height: 10,

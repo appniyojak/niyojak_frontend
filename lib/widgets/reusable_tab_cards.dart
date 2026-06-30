@@ -4,13 +4,14 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../helpers/static_data.dart' as Statics;
 
 class ReusableBarTabCard extends StatelessWidget {
   // final ShaakhaaVistaarReport report;
   final int? totalshakhaa, yesterdayShakhaa, todayShakhaa;
-  final String? mainLabel, totalLabel, lastLabel, currentLabel, currentTotalLabel;
+  final String? mainLabel, totalLabel, lastLabel, currentLabel, currentTotalLabel, note;
   final bool inRow;
   final bool isHighlighted;
   final List<BarRow>? rows;
@@ -26,6 +27,7 @@ class ReusableBarTabCard extends StatelessWidget {
       this.currentLabel,
       this.currentTotalLabel,
       this.rows,
+      this.note,
       this.inRow = false,
       this.isHighlighted = false});
 
@@ -94,10 +96,35 @@ class ReusableBarTabCard extends StatelessWidget {
           // Comparison Card
           ComparisonCard(
             title: mainLabel ?? Statics.getLabel('dailyShakhaaTulna'),
+            note: note,
             rows: [
-                  BarRow(label: totalLabel ?? Statics.getLabel('totalShakhaaSampann'), value: total.toDouble(), maxValue: total.toDouble(), color: Color(0xFF1E90FF)),
-                  BarRow(label: lastLabel ?? Statics.getLabel('yesterdaysShakhaa'), value: previous.toDouble(), maxValue: total.toDouble(), color: Color(0xFFFF8C00)),
-                  BarRow(label: currentLabel ?? Statics.getLabel('todaysShakhaa'), value: current.toDouble(), maxValue: total.toDouble(), color: Color(0xFF00B533)),
+                  BarRow(
+                    label: totalLabel ?? Statics.getLabel('totalShakhaaSampann'),
+                    maxValue: total.toDouble(),
+                    mainSegment: BarSegment(
+                      label: totalLabel ?? Statics.getLabel('totalShakhaaSampann'),
+                      value: total.toDouble(),
+                      color: const Color(0xFF1E90FF),
+                    ),
+                  ),
+                  BarRow(
+                    label: lastLabel ?? Statics.getLabel('yesterdaysShakhaa'),
+                    maxValue: total.toDouble(),
+                    mainSegment: BarSegment(
+                      label: lastLabel ?? Statics.getLabel('yesterdaysShakhaa'),
+                      value: previous.toDouble(),
+                      color: const Color(0xFFFF8C00),
+                    ),
+                  ),
+                  BarRow(
+                    label: currentLabel ?? Statics.getLabel('todaysShakhaa'),
+                    maxValue: total.toDouble(),
+                    mainSegment: BarSegment(
+                      label: currentLabel ?? Statics.getLabel('todaysShakhaa'),
+                      value: current.toDouble(),
+                      color: const Color(0xFF00B533),
+                    ),
+                  ),
                 ] +
                 (rows ?? []),
           ),
@@ -356,26 +383,50 @@ class _PercentBadge extends StatelessWidget {
 }
 
 // Data class for bar rows
-class BarRow {
+class BarSegment {
   final String label;
   final double value;
-  final double maxValue;
   final Color color;
 
-  const BarRow({
+  const BarSegment({
     required this.label,
     required this.value,
-    required this.maxValue,
     required this.color,
   });
 }
 
+// Data class for bar rows — now supports a main segment + any number of
+// smaller "other" segments, all stacked into one bar.
+class BarRow {
+  final String label;
+  final double maxValue;
+  final BarSegment mainSegment;
+  final List<BarSegment> otherSegments;
+
+  const BarRow({
+    required this.label,
+    required this.maxValue,
+    required this.mainSegment,
+    this.otherSegments = const [],
+  });
+
+  // All segments in display order (main first, then the rest)
+  List<BarSegment> get segments => [mainSegment, ...otherSegments];
+
+  // Sum of every segment's value (e.g. 626 + 27 + 125 + 97 = 875)
+  double get totalValue => segments.fold(0.0, (sum, s) => sum + s.value);
+
+  double get totalValueOfOther => otherSegments.fold(0.0, (sum, s) => sum + s.value);
+}
+
 class ComparisonCard extends StatelessWidget {
   final String title;
+  final String? note;
   final List<BarRow> rows;
 
   const ComparisonCard({
     required this.title,
+    this.note,
     required this.rows,
   });
 
@@ -423,6 +474,26 @@ class ComparisonCard extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 14),
                 child: _BarRowWidget(row: row),
               )),
+
+          const SizedBox(height: 8),
+          if (note != null)
+            Row(
+              spacing: 2,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "* " + Statics.getLabel('Note') + " : ",
+                  style:
+                      TextStyle(fontSize: 10, color: Colors.red.shade700, fontWeight: FontWeight.w600, decoration: TextDecoration.underline, decorationColor: Colors.red, fontStyle: FontStyle.italic),
+                ),
+                Flexible(
+                  child: Text(
+                    note!,
+                    style: TextStyle(fontSize: 10, color: Colors.grey.shade700, fontWeight: FontWeight.w600, fontStyle: FontStyle.italic),
+                  ),
+                ),
+              ],
+            )
         ],
       ),
     );
@@ -435,23 +506,18 @@ class _BarRowWidget extends StatelessWidget {
   const _BarRowWidget({super.key, required this.row});
 
   String _formatValue(double v) {
-    if (v >= 1000) {
-      return v.toInt().toString().replaceAllMapped(
-            RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-            (m) => '${m[1]},',
-          );
-    }
-    return v.toInt().toString();
+    return NumberFormat.decimalPattern('en_IN').format(v.toInt());
   }
 
   @override
   Widget build(BuildContext context) {
-    final fraction = row.maxValue == 0 ? 0.0 : row.value / row.maxValue;
+    final total = row.totalValue;
+    final fraction = row.maxValue == 0 ? 0.0 : total / row.maxValue;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Label + value
+        // Label + total value (e.g. "875")
         Row(
           spacing: 8,
           children: [
@@ -469,7 +535,7 @@ class _BarRowWidget extends StatelessWidget {
               ),
             ),
             Text(
-              _formatValue(row.value),
+              "${_formatValue(row.mainSegment.value)}" + (row.totalValueOfOther == 0 ? "" : " (${_formatValue(row.totalValueOfOther)})"),
               style: const TextStyle(
                 fontSize: 12.5,
                 fontWeight: FontWeight.w600,
@@ -482,24 +548,36 @@ class _BarRowWidget extends StatelessWidget {
         // Progress bar
         LayoutBuilder(
           builder: (context, constraints) {
+            final filledWidth = constraints.maxWidth * fraction;
+
             return Stack(
               children: [
-                // Background track
+                // Background track (represents maxValue, e.g. 1000)
                 Container(
-                  height: 8,
+                  height: 10,
                   width: constraints.maxWidth,
                   decoration: BoxDecoration(
                     color: const Color(0xFFE5E5EA),
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
-                // Filled bar
-                Container(
-                  height: 8,
-                  width: constraints.maxWidth * fraction,
-                  decoration: BoxDecoration(
-                    color: row.color,
-                    borderRadius: BorderRadius.circular(4),
+                // Filled, segmented bar (represents totalValue, e.g. 875)
+                //doing filledWidth - (row.segments.length) because we are having margin on right: 1
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(4),
+                  child: SizedBox(
+                    height: 10,
+                    width: filledWidth,
+                    child: Row(
+                      children: [
+                        for (final segment in row.segments)
+                          _SegmentTapTarget(
+                            // width of this s+egment relative to the filled portion
+                            width: total == 0 ? 0 : (filledWidth - (row.segments.length)) * ((segment.value) / total),
+                            segment: segment,
+                          ),
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -507,6 +585,46 @@ class _BarRowWidget extends StatelessWidget {
           },
         ),
       ],
+    );
+  }
+}
+
+// A single colored slice of the bar. Tapping it reveals its label/value
+// via a tooltip (tooltip is tap-triggered, not hover/long-press).
+class _SegmentTapTarget extends StatelessWidget {
+  final double width;
+  final BarSegment segment;
+
+  const _SegmentTapTarget({
+    required this.width,
+    required this.segment,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (width <= 0) return const SizedBox.shrink();
+
+    return Tooltip(
+      message: '${segment.label}: ${segment.value.toInt()}',
+      triggerMode: TooltipTriggerMode.tap,
+      showDuration: const Duration(seconds: 2),
+      preferBelow: false,
+      decoration: BoxDecoration(
+        color: const Color(0xFF1C1C1E),
+        borderRadius: BorderRadius.circular(6),
+      ),
+      textStyle: const TextStyle(
+        color: Colors.white,
+        fontSize: 11.5,
+        fontWeight: FontWeight.w500,
+      ),
+      child: Container(
+        height: 10,
+        width: width,
+        // tiny gap between segments so they read as distinct slices
+        margin: const EdgeInsets.only(right: 1),
+        color: segment.color,
+      ),
     );
   }
 }

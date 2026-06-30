@@ -43,7 +43,6 @@ import './screens/edit_daayitva.dart';
 import './screens/edit_event.dart';
 import './screens/edit_join_rss.dart';
 import './screens/edit_sewa_vasti.dart';
-import './screens/edit_shaakhaa_vrutta.dart';
 import './screens/edit_soochi.dart';
 import './screens/event_calender.dart';
 import './screens/event_members.dart';
@@ -74,6 +73,7 @@ import 'providers/sadbhav_provider.dart';
 import 'screens/forget_password.dart';
 import 'screens/home_screen/home_screen.dart';
 import 'screens/shaakhaa_milan_module/edit_shaakhaa.dart';
+import 'screens/shaakhaa_milan_module/edit_shaakhaa_vrutta.dart';
 import 'screens/shaakhaa_milan_module/search_shaakhaa.dart';
 import 'screens/shaakhaa_milan_module/shaakha_main_tab_screen.dart';
 import 'screens/shaakhaa_milan_module/shaakhaa_pat.dart';
@@ -392,7 +392,7 @@ class NiyojakAppState extends State<NiyojakApp> {
                 child: Container(
                   decoration: BoxDecoration(borderRadius: const BorderRadius.horizontal(left: Radius.circular(5)), color: Colors.red.withValues(alpha: 0.7)),
                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                  child: Text("Dev - 1.0.25 ", style: const TextStyle(fontSize: 13, color: Colors.white, fontWeight: FontWeight.w600)),
+                  child: Text("Dev - 1.0.27 ", style: const TextStyle(fontSize: 13, color: Colors.white, fontWeight: FontWeight.w600)),
                 ),
               ),
           ],

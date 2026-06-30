@@ -7,12 +7,12 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../helpers/static_data.dart' as Statics;
+import '../screens/shaakhaa_milan_module/edit_shaakhaa_vrutta.dart';
 import '../screens/maps_display.dart';
 import '../screens/shaakhaa_milan_module/edit_shaakhaa.dart';
 import '../screens/shaakhaa_milan_module/shaakhaa_pat.dart';
 import '../screens/shaakhaa_milan_module/shaakhaa_sewa_vasti_link.dart';
 import '../screens/shaakhaa_milan_module/shaakhaa_toli.dart';
-import '../screens/shaakhaa_milan_module/shaakhaa_vrutta.dart';
 
 class ShaakhaaCard extends StatelessWidget {
   final shaakhaaItem;
@@ -26,103 +26,11 @@ class ShaakhaaCard extends StatelessWidget {
 
   ShaakhaaCard(this.shaakhaaItem, this.IsSankalpit, this.onSaveDetails, {this.IsNew, this.traillingIcon, this.showOther = true}) {
     menuItem = [
-      if (((Statics.userDetails['LevelName'] == 'Praant' ||
-              Statics.userDetails['LevelName'] == 'Mahaanagar' ||
-              Statics.userDetails['LevelName'] == 'Bhaag' ||
-              Statics.userDetails['LevelName'] == 'Vibhaag' ||
-              Statics.userDetails['LevelName'] == 'प्रांत' ||
-              Statics.userDetails['LevelName'] == 'महानगर' ||
-              Statics.userDetails['LevelName'] == 'भाग/जिल्हा' ||
-              Statics.userDetails['LevelName'] == 'विभाग' ||
-              Statics.userDetails['LevelName'] == 'Bhaag' ||
-              Statics.userDetails['LevelName'] == 'भाग/जिल्हा' ||
-              Statics.userDetails['LevelName'] == 'Nagar' ||
-              Statics.userDetails['LevelName'] == 'Nagar/Taalukaa' ||
-              Statics.userDetails['LevelName'] == 'नगर/तालुका')
-          // &&
-          // (Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' || Statics.userDetails['DaayitvaName'] == 'कार्यवाह' ||
-          //     Statics.userDetails["DaayitvaName"] == "karyalay sachiv" ||Statics.userDetails["DaayitvaName"] == "कार्यालय सचिव" ||
-          //     Statics.userDetails['DaayitvaName'] == 'Saha-Kaaryavaah' || Statics.userDetails['DaayitvaName'] == 'सह ' ||
-          //     Statics.userDetails['DaayitvaName'] == 'Baal Vidyaarthi Pramukh'   ||
-          //     Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी प्रमुख'   ||
-          //     Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी प्रमुख'  ||
-          //     Statics.userDetails['DaayitvaName'] == 'Mahaavidyaalayeen Vidyaarthi Pramukh'   ||
-          //     Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन प्रमुख'   ||
-          //     Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन प्रमुख'  ||
-          //     Statics.userDetails['DaayitvaName'] == 'Vyavasaayee Pramukh'   ||
-          //     Statics.userDetails['DaayitvaName'] == 'व्यवसायी प्रमुख'   ||
-          //     Statics.userDetails['DaayitvaName'] == 'व्यवसायी प्रमुख'  ||
-          //     Statics.userDetails['DaayitvaName'] == 'Vyavasaayee Saha-Pramukh'   ||
-          //     Statics.userDetails['DaayitvaName'] == 'व्यवसायी सह प्रमुख'   ||
-          //     Statics.userDetails['DaayitvaName'] == 'व्यवसायी सह प्रमुख'  ||
-          //     Statics.userDetails['DaayitvaName'] == 'Tarun Vyavsayee Pramukh' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी प्रमुख' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी प्रमुख' ||
-          //     Statics.userDetails['DaayitvaName'] == 'Praudh Vyavsayee Pramukh' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी प्रमुख' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी प्रमुख' ||
-          //     Statics.userDetails['DaayitvaName'] == 'Tarun Vyavsayee Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी सह प्रमुख' ||
-          //     Statics.userDetails['DaayitvaName'] == 'Praudh Vyavsayee Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी सह प्रमुख' ||
-          //     Statics.userDetails['DaayitvaName'] == 'Bal Vidyarthi Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी सह प्रमुख' ||
-          //     Statics.userDetails['DaayitvaName'] == 'Mahavidyaleen Vidyarthi Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन विद्यार्थी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन विद्यार्थी सह प्रमुख' ||
-          //     Statics.userDetails['DaayitvaName'] == 'App Sanyojak'  || Statics.userDetails['DaayitvaName'] == 'एप संयोजक' ||
-          //     Statics.userDetails['DaayitvaName'] == 'Kaaryaalay Pramukh' || Statics.userDetails['DaayitvaName'] == 'कार्यालय प्रमुख'||
-          //     Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' || Statics.userDetails['DaayitvaName'] == 'कार्यवाह' ||
-          //     Statics.userDetails["DaayitvaName"] == "karyalay sachiv" ||Statics.userDetails["DaayitvaName"] == "कार्यालय सचिव" ||
-          //     Statics.userDetails['DaayitvaName'] == 'सह ' ||
-          //     Statics.userDetails['DaayitvaName'] == 'एप संयोजक' ||
-          //     Statics.userDetails['DaayitvaName'] == 'कार्यालय प्रमुख')
-          ) //  ||
-          //     (Statics.userDetails['LevelName'] == 'Praant' || Statics.userDetails['LevelName'] == 'प्रांत'
-          //         && Statics.userDetails['DaayitvaName'] == 'Baal Vidyaarthi Pramukh'   ||
-          //         Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी प्रमुख'   ||
-          //         Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी प्रमुख'  ||
-          //         Statics.userDetails['DaayitvaName'] == 'Mahaavidyaalayeen Vidyaarthi Pramukh'   ||
-          //         Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन प्रमुख'   ||
-          //         Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन प्रमुख'  ||
-          //         Statics.userDetails['DaayitvaName'] == 'Vyavasaayee Pramukh'   ||
-          //         Statics.userDetails['DaayitvaName'] == 'व्यवसायी प्रमुख'   ||
-          //         Statics.userDetails['DaayitvaName'] == 'व्यवसायी प्रमुख'  ||
-          //         Statics.userDetails['DaayitvaName'] == 'Vyavasaayee Saha-Pramukh'   ||
-          //         Statics.userDetails['DaayitvaName'] == 'व्यवसायी सह प्रमुख'   ||
-          //         Statics.userDetails['DaayitvaName'] == 'व्यवसायी सह प्रमुख'  ||
-          //         Statics.userDetails['DaayitvaName'] == 'Tarun Vyavsayee Pramukh' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी प्रमुख' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी प्रमुख' ||
-          //         Statics.userDetails['DaayitvaName'] == 'Praudh Vyavsayee Pramukh' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी प्रमुख' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी प्रमुख' ||
-          //         Statics.userDetails['DaayitvaName'] == 'Tarun Vyavsayee Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी सह प्रमुख' ||
-          //         Statics.userDetails['DaayitvaName'] == 'Praudh Vyavsayee Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी सह प्रमुख' ||
-          //         Statics.userDetails['DaayitvaName'] == 'Bal Vidyarthi Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी सह प्रमुख' ||
-          //         Statics.userDetails['DaayitvaName'] == 'Mahavidyaleen Vidyarthi Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन विद्यार्थी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन विद्यार्थी सह प्रमुख' ||
-          //         Statics.userDetails['DaayitvaName'] == 'App Sanyojak'  || Statics.userDetails['DaayitvaName'] == 'एप संयोजक' || Statics.userDetails['DaayitvaName'] == 'एप संयोजक') ||
-          //     (Statics.userDetails['DaayitvaName'] == 'Prachaarak' || Statics.userDetails['DaayitvaName'] == 'प्रचारक' ||Statics.userDetails['DaayitvaName'] == 'प्रचारक' || Statics.userDetails['DaayitvaName'] == 'Saha-Prachaarak' || Statics.userDetails['DaayitvaName'] == 'सह प्रचारक'|| Statics.userDetails['DaayitvaName'] == 'सह कार्यवाह')
-          )
+      if ((int.tryParse(Statics.userDetails['LevelID'] ?? "0") ?? 0) >= 6 && (int.tryParse(Statics.userDetails['LevelID'] ?? "0") ?? 0) < 13)
         Statics.MenuItem(Statics.getLabel('EditMenu'), FontAwesomeIcons.edit, 'EditMenu'),
       Statics.MenuItem(Statics.getLabel('ViewMenu'), FontAwesomeIcons.eye, 'ViewMenu'),
       if (IsSankalpit == false) Statics.MenuItem(Statics.getLabel('ShaakhaaPat'), FontAwesomeIcons.building, 'ShaakhaaPat'),
-      // if (IsSankalpit == false &&
-      //     ((int.parse(Statics.userDetails['LevelID'])) >= 6 ||
-      //         (
-      //             Statics.userDetails['LevelName'] == 'Shaakhaa' || Statics.userDetails['LevelName'] == 'शाखा' &&
-      //             (
-      //                 Statics.userDetails['DaayitvaName'] == 'Mukhya Shikshak' || Statics.userDetails['DaayitvaName'] == 'मुख्य शिक्षक' ||
-      //                 Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' || Statics.userDetails['DaayitvaName'] == 'कार्यवाह' ||
-      //                 Statics.userDetails['DaayitvaName'] == 'Milan Pramukh' || Statics.userDetails['DaayitvaName'] == 'मिलन प्रमुख' ||
-      //                 Statics.userDetails['DaayitvaName'] == 'Milan Saha-Pramukh' || Statics.userDetails['DaayitvaName'] == 'मिलन सह प्रमुख')) ||
-      //         (Statics.userDetails['DaayitvaName'] == 'Prachaarak' || Statics.userDetails['DaayitvaName'] == 'प्रचारक' || Statics.userDetails['DaayitvaName'] == 'Saha-Prachaarak' || Statics.userDetails['DaayitvaName'] == 'सह प्रचारक')))
-      if ((int.parse(Statics.userDetails['LevelID']) >= 6) ||
-              (Statics.userDetails['LevelName'] == 'Shaakhaa' || Statics.userDetails['LevelName'] == 'शाखा') &&
-                  (Statics.userDetails['DaayitvaName'] == 'Mukhya Shikshak' ||
-                      Statics.userDetails['DaayitvaName'] == 'मुख्य शिक्षक' ||
-                      Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' ||
-                      Statics.userDetails['DaayitvaName'] == 'कार्यवाह' ||
-                      Statics.userDetails["DaayitvaName"] == "karyalay sachiv" ||
-                      Statics.userDetails["DaayitvaName"] == "कार्यालय सचिव" ||
-                      Statics.userDetails['DaayitvaName'] == 'Milan Pramukh' ||
-                      Statics.userDetails['DaayitvaName'] == 'मिलन प्रमुख' ||
-                      Statics.userDetails['DaayitvaName'] == 'Milan Saha-Pramukh' ||
-                      Statics.userDetails['DaayitvaName'] == 'मिलन सह प्रमुख') ||
-              (Statics.userDetails['DaayitvaName'] == 'Prachaarak' ||
-                  Statics.userDetails['DaayitvaName'] == 'प्रचारक' ||
-                  Statics.userDetails['DaayitvaName'] == 'Saha-Prachaarak' ||
-                  Statics.userDetails['DaayitvaName'] == 'सह प्रचारक') ||
-              (Statics.userDetails['DaayitvaName'] == 'Mukhya Shikshak' || Statics.userDetails['DaayitvaName'] == 'मुख्य शिक्षक') // ✅ Yeh naya condition add kiya hai
-          )
-        if (IsSankalpit == false) Statics.MenuItem(Statics.getLabel('Vrutta'), FontAwesomeIcons.database, 'Vrutta'),
+      if (IsSankalpit == false) Statics.MenuItem(Statics.getLabel('Vrutta'), FontAwesomeIcons.database, 'Vrutta'),
       if (IsSankalpit == false) Statics.MenuItem(Statics.getLabel('ViewLocation'), Icons.location_pin, 'ViewLocation'),
       if (IsSankalpit == false) Statics.MenuItem(Statics.getLabel('RecordLocation'), Icons.location_searching, 'RecordLocation'),
       // if (((Statics.userDetails['LevelName'] == 'Bhaag' ||
@@ -188,24 +96,25 @@ class ShaakhaaCard extends StatelessWidget {
         if (shaakhaaItem["ShaakhaaLatitude"] != null && shaakhaaItem["ShaakhaaLatitude"].toString() != "") {
           showDialog(
             context: context,
-            builder: (ctx) => AlertDialog(
-              title: Text(Statics.getLabel('AskConfirmation')),
-              content: Text(Statics.getLabel('LocationAlreadyExists')),
-              actions: <Widget>[
-                MaterialButton(
-                  child: Text(Statics.getLabel('ConfirmationYes')),
-                  onPressed: () async {
-                    saveLocation(ctx, true);
-                  },
+            builder: (ctx) =>
+                AlertDialog(
+                  title: Text(Statics.getLabel('AskConfirmation')),
+                  content: Text(Statics.getLabel('LocationAlreadyExists')),
+                  actions: <Widget>[
+                    MaterialButton(
+                      child: Text(Statics.getLabel('ConfirmationYes')),
+                      onPressed: () async {
+                        saveLocation(ctx, true);
+                      },
+                    ),
+                    MaterialButton(
+                      child: Text(Statics.getLabel('ConfirmationNo')),
+                      onPressed: () {
+                        Navigator.of(ctx).pop();
+                      },
+                    )
+                  ],
                 ),
-                MaterialButton(
-                  child: Text(Statics.getLabel('ConfirmationNo')),
-                  onPressed: () {
-                    Navigator.of(ctx).pop();
-                  },
-                )
-              ],
-            ),
           );
         } else {
           saveLocation(context, false);
@@ -269,31 +178,32 @@ class ShaakhaaCard extends StatelessWidget {
         var inputData = json.encode({"ShaakhaaID": shaakhaaID, "ModifiedBy": Statics.userDetails["userID"]});
         showDialog(
           context: context,
-          builder: (ctx) => AlertDialog(
-            title: Text(Statics.getLabel('AskConfirmation')),
-            content: Text(Statics.getLabel('AreyouSureYouWantToDeleteShaakhaa')),
-            actions: <Widget>[
-              MaterialButton(
-                child: Text(Statics.getLabel('ConfirmationYes')),
-                onPressed: () async {
-                  var data = await Statics.deleteShaakhaaForApp(inputData);
-                  if (data == "Shaakhaa Deleted Successfully ") {
-                    Statics.showToast(Statics.getLabel('ShaakhaaDeletedSuccessfully'));
-                    onSaveDetails("Search", ctx);
-                  } else
-                    Statics.showToast(Statics.getLabel('CouldnotDeleteShaakhaa'));
+          builder: (ctx) =>
+              AlertDialog(
+                title: Text(Statics.getLabel('AskConfirmation')),
+                content: Text(Statics.getLabel('AreyouSureYouWantToDeleteShaakhaa')),
+                actions: <Widget>[
+                  MaterialButton(
+                    child: Text(Statics.getLabel('ConfirmationYes')),
+                    onPressed: () async {
+                      var data = await Statics.deleteShaakhaaForApp(inputData);
+                      if (data == "Shaakhaa Deleted Successfully ") {
+                        Statics.showToast(Statics.getLabel('ShaakhaaDeletedSuccessfully'));
+                        onSaveDetails("Search", ctx);
+                      } else
+                        Statics.showToast(Statics.getLabel('CouldnotDeleteShaakhaa'));
 
-                  Navigator.of(ctx).pop();
-                },
+                      Navigator.of(ctx).pop();
+                    },
+                  ),
+                  MaterialButton(
+                    child: Text(Statics.getLabel('ConfirmationNo')),
+                    onPressed: () {
+                      Navigator.of(ctx).pop();
+                    },
+                  )
+                ],
               ),
-              MaterialButton(
-                child: Text(Statics.getLabel('ConfirmationNo')),
-                onPressed: () {
-                  Navigator.of(ctx).pop();
-                },
-              )
-            ],
-          ),
         );
       }
     } on Exception catch (error) {
@@ -337,9 +247,12 @@ class ShaakhaaCard extends StatelessWidget {
                         Text(shaakhaaItem["FrequencyCode"].toString(), style: ListTileThemeData().subtitleTextStyle),
                         if (shaakhaaItem["FrequencyID"].toString() == Statics.shaakhaaFrequencyWeekly.toString())
                           Text(shaakhaaItem["DayNamesOfWeek"].toString(), style: ListTileThemeData().subtitleTextStyle)
-                        else if (shaakhaaItem["FrequencyCode"].toString() == "Monthly")
-                          Text(shaakhaaItem["DayOfMonth"].toString(), style: ListTileThemeData().subtitleTextStyle),
-                        Text("${shaakhaaItem["StartTimeStr"]}${shaakhaaItem["StartTimeStr"].toString().isEmpty ? "" : "-"}${shaakhaaItem["EndTimeStr"]}", style: ListTileThemeData().subtitleTextStyle),
+                        else
+                          if (shaakhaaItem["FrequencyCode"].toString() == "Monthly")
+                            Text(shaakhaaItem["DayOfMonth"].toString(), style: ListTileThemeData().subtitleTextStyle),
+                        Text("${shaakhaaItem["StartTimeStr"]}${shaakhaaItem["StartTimeStr"]
+                            .toString()
+                            .isEmpty ? "" : "-"}${shaakhaaItem["EndTimeStr"]}", style: ListTileThemeData().subtitleTextStyle),
                       ]
                     ],
                   ),
@@ -358,7 +271,17 @@ class ShaakhaaCard extends StatelessWidget {
                     if (value == 'ShaakhaaPat')
                       Navigator.of(context).pushNamed(ShaakhaaPat.routeName, arguments: Statics.ScreenArguments(shaakhaaItem["ShaakhaaID"], value));
                     else if (value == 'Vrutta')
-                      Navigator.of(context).pushNamed(ShaakhaaVrutta.routeName, arguments: Statics.ScreenArguments(shaakhaaItem["ShaakhaaID"], value));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  EditShaakhaaVrutta(
+                                    shaakhaaID: shaakhaaItem["ShaakhaaID"].toString(),
+                                    vruttaID: "0",
+                                    onSaveDetails: null,
+                                    viewType: "EditVrutta",
+                                  )));
+                    // Navigator.of(context).pushNamed(ShaakhaaVrutta.routeName, arguments: Statics.ScreenArguments(shaakhaaItem["ShaakhaaID"], value));
                     else if (value == 'ViewLocation') {
                       if (shaakhaaItem["ShaakhaaLatitude"] != null && shaakhaaItem["ShaakhaaLatitude"].toString() != "") {
                         _latLng.add(Statics.cLatLong(shaakhaaItem["ShaakhaaID"], shaakhaaItem["GeoUnitName"].toString(), shaakhaaItem["FrequencyCode"].toString(),

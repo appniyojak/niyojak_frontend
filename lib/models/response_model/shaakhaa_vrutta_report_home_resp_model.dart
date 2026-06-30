@@ -226,10 +226,14 @@ class Monthobj {
   int? prevmonthmilan;
   int? prevmonthsanga;
   int? prevmonthmaansik;
+  int? prevmonthshakhaplusone;
+  int? prevmonthmilanplusone;
   int? prevofprevmonthshakha;
   int? prevofprevmonthmilan;
   int? prevofprevmonthsanga;
   int? prevofprevmonthmaansik;
+  int? prevofprevmonthshakhaplusone;
+  int? prevofprevmonthmilanplusone;
 
   Monthobj({
     this.shaakhaaCount,
@@ -250,10 +254,14 @@ class Monthobj {
     this.prevmonthmilan,
     this.prevmonthsanga,
     this.prevmonthmaansik,
+    this.prevmonthshakhaplusone,
+    this.prevmonthmilanplusone,
     this.prevofprevmonthshakha,
     this.prevofprevmonthmilan,
     this.prevofprevmonthsanga,
     this.prevofprevmonthmaansik,
+    this.prevofprevmonthshakhaplusone,
+    this.prevofprevmonthmilanplusone,
   });
 
   Monthobj.fromJson(Map<String, dynamic> json) {
@@ -275,10 +283,14 @@ class Monthobj {
     prevmonthmilan = json['prevmonthmilan'];
     prevmonthsanga = json['prevmonthsanga'];
     prevmonthmaansik = json['prevmonthmaansik'];
+    prevmonthshakhaplusone = json['prevmonthshakhaplusone'];
+    prevmonthmilanplusone = json['prevmonthmilanplusone'];
     prevofprevmonthshakha = json['prevofprevmonthshakha'];
     prevofprevmonthmilan = json['prevofprevmonthmilan'];
     prevofprevmonthsanga = json['prevofprevmonthsanga'];
     prevofprevmonthmaansik = json['prevofprevmonthmaansik'];
+    prevofprevmonthshakhaplusone = json['prevofprevmonthshakhaplusone'];
+    prevofprevmonthmilanplusone = json['prevofprevmonthmilanplusone'];
   }
 
   Map<String, dynamic> toJson() {
@@ -301,10 +313,14 @@ class Monthobj {
     data['prevmonthmilan'] = this.prevmonthmilan;
     data['prevmonthsanga'] = this.prevmonthsanga;
     data['prevmonthmaansik'] = this.prevmonthmaansik;
+    data['prevmonthshakhaplusone'] = this.prevmonthshakhaplusone;
+    data['prevmonthmilanplusone'] = this.prevmonthmilanplusone;
     data['prevofprevmonthshakha'] = this.prevofprevmonthshakha;
     data['prevofprevmonthmilan'] = this.prevofprevmonthmilan;
     data['prevofprevmonthsanga'] = this.prevofprevmonthsanga;
     data['prevofprevmonthmaansik'] = this.prevofprevmonthmaansik;
+    data['prevofprevmonthshakhaplusone'] = this.prevofprevmonthshakhaplusone;
+    data['prevofprevmonthmilanplusone'] = this.prevofprevmonthmilanplusone;
     return data;
   }
 }
@@ -328,10 +344,14 @@ class Yearobj {
   int? prevyearmilan;
   int? prevyearsanga;
   int? prevyearmaansik;
+  int? prevyearshakhaplusone;
+  int? prevyearmilanplusone;
   int? prevofprevyearshakha;
   int? prevofprevyearmilan;
   int? prevofprevyearsanga;
   int? prevofprevyearmaansik;
+  int? prevofprevyearshakhaplusone;
+  int? prevofprevyearmilanplusone;
 
   Yearobj({
     this.shaakhaaCount,
@@ -352,10 +372,14 @@ class Yearobj {
     this.prevyearmilan,
     this.prevyearsanga,
     this.prevyearmaansik,
+    this.prevyearshakhaplusone,
+    this.prevyearmilanplusone,
     this.prevofprevyearshakha,
     this.prevofprevyearmilan,
     this.prevofprevyearsanga,
     this.prevofprevyearmaansik,
+    this.prevofprevyearshakhaplusone,
+    this.prevofprevyearmilanplusone,
   });
 
   Yearobj.fromJson(Map<String, dynamic> json) {
@@ -377,10 +401,14 @@ class Yearobj {
     prevyearmilan = json['prevyearmilan'];
     prevyearsanga = json['prevyearsanga'];
     prevyearmaansik = json['prevyearmaansik'];
+    prevyearshakhaplusone = json['prevyearshakhaplusone'];
+    prevyearmilanplusone = json['prevyearmilanplusone'];
     prevofprevyearshakha = json['prevofprevyearshakha'];
     prevofprevyearmilan = json['prevofprevyearmilan'];
     prevofprevyearsanga = json['prevofprevyearsanga'];
     prevofprevyearmaansik = json['prevofprevyearmaansik'];
+    prevofprevyearshakhaplusone = json['prevofprevyearshakhaplusone'];
+    prevofprevyearmilanplusone = json['prevofprevyearmilanplusone'];
   }
 
   Map<String, dynamic> toJson() {
@@ -403,10 +431,14 @@ class Yearobj {
     data['prevyearmilan'] = this.prevyearmilan;
     data['prevyearsanga'] = this.prevyearsanga;
     data['prevyearmaansik'] = this.prevyearmaansik;
+    data['prevyearshakhaplusone'] = this.prevyearshakhaplusone;
+    data['prevyearmilanplusone'] = this.prevyearmilanplusone;
     data['prevofprevyearshakha'] = this.prevofprevyearshakha;
     data['prevofprevyearmilan'] = this.prevofprevyearmilan;
     data['prevofprevyearsanga'] = this.prevofprevyearsanga;
     data['prevofprevyearmaansik'] = this.prevofprevyearmaansik;
+    data['prevofprevyearshakhaplusone'] = this.prevofprevyearshakhaplusone;
+    data['prevofprevyearmilanplusone'] = this.prevofprevyearmilanplusone;
     return data;
   }
 }

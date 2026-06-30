@@ -8,9 +8,9 @@ import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
-import '../helpers/static_data.dart' as Statics;
-import '../providers/bals.dart';
-import '../utils/globals.dart';
+import '../../helpers/static_data.dart' as Statics;
+import '../../providers/bals.dart';
+import '../../utils/globals.dart';
 
 class EditShaakhaaVrutta extends StatefulWidget {
   static const String routeName = '/edit-shaakhaa-vrutta-screen';
@@ -527,6 +527,46 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                         ),
                       ])
                     ],
+                    /*SizedBox(height: 14),
+                    Text(
+                      Statics.getLabel('TotalCountLabel'),
+                      style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+                    ),
+                    SizedBox(height: 8),
+                    Row(spacing: 12, children: [
+                      Expanded(
+                        child: numTextField(
+                          readOnly: true,
+                          fillColor: Colors.grey.shade300,
+                          controller: TextEditingController(
+                              text: ((int.tryParse(_shishuCtrl.text) ?? 0) +
+                                  (int.tryParse(_baalCtrl.text) ?? 0) +
+                                  (int.tryParse(_tarunVidhyaarthiCtrl.text) ?? 0) +
+                                  (int.tryParse(_tarunVyavsaayeeCtrl.text) ?? 0) +
+                                  (int.tryParse(_proudhaCtrl.text) ?? 0) +
+                                  (int.tryParse(_matrushaktiCtrl.text) ?? 0))
+                                  .toString()),
+                          labelText: Statics.getLabel('Total'),
+                          onChanged: (value) => setState(() => vrutta!.totalCount = value == "" ? null : int.parse(value!)),
+                        ),
+                      ),
+                      Expanded(
+                        child: numTextField(
+                          readOnly: true,
+                          fillColor: Colors.grey.shade300,
+                          controller: TextEditingController(
+                              text: ((int.tryParse(_newshishuCtrl.text) ?? 0) +
+                                  (int.tryParse(_newbaalCtrl.text) ?? 0) +
+                                  (int.tryParse(_newtarunVidhyaarthiCtrl.text) ?? 0) +
+                                  (int.tryParse(_newtarunVyavsaayeeCtrl.text) ?? 0) +
+                                  (int.tryParse(_newproudhaCtrl.text) ?? 0) +
+                                  (int.tryParse(_newmatrushaktiCtrl.text) ?? 0))
+                                  .toString()),
+                          labelText: Statics.getLabel('TotalNewAddCountLabel'),
+                          onChanged: (value) => setState(() => vrutta!.newtotalCount = value == "" ? null : int.parse(value!)),
+                        ),
+                      ),
+                    ]),*/
                     SizedBox(height: 10),
                     TextFormField(
                       textInputAction: TextInputAction.next,
@@ -542,14 +582,14 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                       TextFormField(
                         textInputAction: TextInputAction.next,
                         controller: _pravasiKaryakartaCountCtrl,
-                        decoration: InputDecoration(labelText: Statics.getLabel('PravasiKaryakartaCount')),
+                        decoration: InputDecoration(labelText: Statics.getLabel('PravasiKaryakartaCount2')),
                         keyboardType: TextInputType.number,
                         onSaved: (value) {
                           vrutta!.abhyaagatCount = value == "" ? null : int.parse(value!);
                         },
                       ),
                       SizedBox(height: 10),
-                      TextFormField(
+                      /*TextFormField(
                         textInputAction: TextInputAction.next,
                         controller: _anyaPravasiKaryakartaCountCtrl,
                         decoration: InputDecoration(labelText: Statics.getLabel('AnyaPravasiKaryakartaCount')),
@@ -558,7 +598,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                           vrutta!.abhyaagatCount = value == "" ? null : int.parse(value!);
                         },
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: 10),*/
                       if (vayogatCode == "Proudh Vyavasaayee")
                         Column(
                           children: [
@@ -978,6 +1018,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
     TextEditingController? expectedController,
     required String labelText,
     void Function(String?)? onSaved,
+    void Function(String?)? onChanged,
     String? Function(String?)? validator,
   }) {
     if (expectedController != null) {
@@ -1016,7 +1057,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
             return newValue;
           }),
       ],
-      onChanged: (value) => setState(() {}),
+      onChanged: onChanged ?? (value) => setState(() {}),
       decoration: InputDecoration(
         labelText: labelText,
         labelStyle: const TextStyle(color: Colors.black, fontSize: 14),

@@ -612,14 +612,14 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
                     TextFormField(
                       textInputAction: TextInputAction.next,
                       controller: _pravasiKaryakartaCountCtrl,
-                      decoration: InputDecoration(labelText: Statics.getLabel('PravasiKaryakartaCount')),
+                      decoration: InputDecoration(labelText: Statics.getLabel('PravasiKaryakartaCount2')),
                       keyboardType: TextInputType.number,
                       onSaved: (value) {
                         vrutta!.abhyaagatCount = value == "" ? null : int.parse(value!);
                       },
                     ),
                     SizedBox(height: 10),
-                    TextFormField(
+                    /*TextFormField(
                       textInputAction: TextInputAction.next,
                       controller: _anyaPravasiKaryakartaCountCtrl,
                       decoration: InputDecoration(labelText: Statics.getLabel('AnyaPravasiKaryakartaCount')),
@@ -628,7 +628,7 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
                         vrutta!.abhyaagatCount = value == "" ? null : int.parse(value!);
                       },
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 10),*/
                     if (_frequency.isNotEmpty && _frequency.firstWhere((e) => e.staticID == frequencyId).code != "Monthly") ...[
                       if (vayogatCode == "Proudh Vyavasaayee")
                         Column(
