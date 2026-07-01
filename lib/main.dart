@@ -77,6 +77,7 @@ import 'screens/shaakhaa_milan_module/edit_shaakhaa_vrutta.dart';
 import 'screens/shaakhaa_milan_module/search_shaakhaa.dart';
 import 'screens/shaakhaa_milan_module/shaakha_main_tab_screen.dart';
 import 'screens/shaakhaa_milan_module/shaakhaa_pat.dart';
+import 'screens/shaakhaa_milan_module/shaakhaa_ranking_screen.dart';
 import 'screens/shaakhaa_milan_module/shaakhaa_sewa_vasti_link.dart';
 import 'screens/shaakhaa_milan_module/shaakhaa_toli.dart';
 import 'screens/shaakhaa_milan_module/shaakhaa_vrutta.dart';
@@ -309,6 +310,7 @@ class NiyojakAppState extends State<NiyojakApp> {
                 SankalitDataNamesView.routeName: (ctx) => SankalitDataNamesView(),
                 SearchShaakhaaScreen.routeName: (ctx) => SearchShaakhaaScreen(),
                 ShaakhaMainTabScreen.routeName: (ctx) => ShaakhaMainTabScreen(),
+                ShaakhaaRankingScreen.routeName: (ctx) => ShaakhaaRankingScreen(),
                 EditSwayamsevakScreen.routeName: (ctx) => EditSwayamsevakScreen(),
                 EditShaakhaaScreen.routeName: (ctx) => EditShaakhaaScreen(),
                 EditSoochiScreen.routeName: (ctx) => EditSoochiScreen(),
@@ -392,7 +394,7 @@ class NiyojakAppState extends State<NiyojakApp> {
                 child: Container(
                   decoration: BoxDecoration(borderRadius: const BorderRadius.horizontal(left: Radius.circular(5)), color: Colors.red.withValues(alpha: 0.7)),
                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                  child: Text("Dev - 1.0.27 ", style: const TextStyle(fontSize: 13, color: Colors.white, fontWeight: FontWeight.w600)),
+                  child: Text("Dev - 1.0.28 ", style: const TextStyle(fontSize: 13, color: Colors.white, fontWeight: FontWeight.w600)),
                 ),
               ),
           ],

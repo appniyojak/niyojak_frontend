@@ -10,6 +10,7 @@ import '../../providers/bals.dart';
 import '../../utils/globals.dart';
 import '../../utils/stable_geounit_class.dart';
 import 'report_widgets/custom_app_dropdowns.dart';
+import 'shaakhaa_ranking_screen.dart';
 
 // ─── Data Models ─────────────────────────────────────────────────────────────
 
@@ -630,6 +631,8 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                 ),
 
                 const SizedBox(height: 10),
+                if (!_isAllLevel) navigateToRanking(),
+                const SizedBox(height: 10),
 
                 // ── Programme / Chart section ────────────────────────────────
                 if (_kalavadha == DurationTypes.daily) ...[
@@ -660,6 +663,95 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
               ]
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget navigateToRanking() {
+    return GestureDetector(
+      onTap: () => Navigator.of(context).pushNamed(ShaakhaaRankingScreen.routeName),
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFFFF6B00), Color(0xFFFF8C00)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(14),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFFFF6B00).withOpacity(0.30),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            // ── Icon block ─────────────────────────────────────────────────
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.20),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Icon(
+                Icons.emoji_events_rounded,
+                color: Colors.white,
+                size: 26,
+              ),
+            ),
+
+            const SizedBox(width: 14),
+
+            // ── Text ───────────────────────────────────────────────────────
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  Text(
+                    'शाखा रैंकिंग',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.white,
+                      letterSpacing: 0.2,
+                    ),
+                  ),
+                  SizedBox(height: 3),
+                  Text(
+                    'अपनी शाखा की स्थिति और आस-पास की प्रतिस्पर्धा देखें',
+                    style: TextStyle(
+                      fontSize: 11.5,
+                      color: Colors.white70,
+                      height: 1.35,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(width: 10),
+
+            // ── Arrow ──────────────────────────────────────────────────────
+            Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.20),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Icon(
+                Icons.arrow_forward_ios_rounded,
+                color: Colors.white,
+                size: 15,
+              ),
+            ),
+          ],
         ),
       ),
     );

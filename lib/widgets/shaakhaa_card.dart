@@ -7,12 +7,12 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../helpers/static_data.dart' as Statics;
-import '../screens/shaakhaa_milan_module/edit_shaakhaa_vrutta.dart';
 import '../screens/maps_display.dart';
 import '../screens/shaakhaa_milan_module/edit_shaakhaa.dart';
 import '../screens/shaakhaa_milan_module/shaakhaa_pat.dart';
 import '../screens/shaakhaa_milan_module/shaakhaa_sewa_vasti_link.dart';
 import '../screens/shaakhaa_milan_module/shaakhaa_toli.dart';
+import '../screens/shaakhaa_milan_module/shaakhaa_vrutta.dart';
 
 class ShaakhaaCard extends StatelessWidget {
   final shaakhaaItem;
@@ -96,25 +96,24 @@ class ShaakhaaCard extends StatelessWidget {
         if (shaakhaaItem["ShaakhaaLatitude"] != null && shaakhaaItem["ShaakhaaLatitude"].toString() != "") {
           showDialog(
             context: context,
-            builder: (ctx) =>
-                AlertDialog(
-                  title: Text(Statics.getLabel('AskConfirmation')),
-                  content: Text(Statics.getLabel('LocationAlreadyExists')),
-                  actions: <Widget>[
-                    MaterialButton(
-                      child: Text(Statics.getLabel('ConfirmationYes')),
-                      onPressed: () async {
-                        saveLocation(ctx, true);
-                      },
-                    ),
-                    MaterialButton(
-                      child: Text(Statics.getLabel('ConfirmationNo')),
-                      onPressed: () {
-                        Navigator.of(ctx).pop();
-                      },
-                    )
-                  ],
+            builder: (ctx) => AlertDialog(
+              title: Text(Statics.getLabel('AskConfirmation')),
+              content: Text(Statics.getLabel('LocationAlreadyExists')),
+              actions: <Widget>[
+                MaterialButton(
+                  child: Text(Statics.getLabel('ConfirmationYes')),
+                  onPressed: () async {
+                    saveLocation(ctx, true);
+                  },
                 ),
+                MaterialButton(
+                  child: Text(Statics.getLabel('ConfirmationNo')),
+                  onPressed: () {
+                    Navigator.of(ctx).pop();
+                  },
+                )
+              ],
+            ),
           );
         } else {
           saveLocation(context, false);
@@ -178,32 +177,31 @@ class ShaakhaaCard extends StatelessWidget {
         var inputData = json.encode({"ShaakhaaID": shaakhaaID, "ModifiedBy": Statics.userDetails["userID"]});
         showDialog(
           context: context,
-          builder: (ctx) =>
-              AlertDialog(
-                title: Text(Statics.getLabel('AskConfirmation')),
-                content: Text(Statics.getLabel('AreyouSureYouWantToDeleteShaakhaa')),
-                actions: <Widget>[
-                  MaterialButton(
-                    child: Text(Statics.getLabel('ConfirmationYes')),
-                    onPressed: () async {
-                      var data = await Statics.deleteShaakhaaForApp(inputData);
-                      if (data == "Shaakhaa Deleted Successfully ") {
-                        Statics.showToast(Statics.getLabel('ShaakhaaDeletedSuccessfully'));
-                        onSaveDetails("Search", ctx);
-                      } else
-                        Statics.showToast(Statics.getLabel('CouldnotDeleteShaakhaa'));
+          builder: (ctx) => AlertDialog(
+            title: Text(Statics.getLabel('AskConfirmation')),
+            content: Text(Statics.getLabel('AreyouSureYouWantToDeleteShaakhaa')),
+            actions: <Widget>[
+              MaterialButton(
+                child: Text(Statics.getLabel('ConfirmationYes')),
+                onPressed: () async {
+                  var data = await Statics.deleteShaakhaaForApp(inputData);
+                  if (data == "Shaakhaa Deleted Successfully ") {
+                    Statics.showToast(Statics.getLabel('ShaakhaaDeletedSuccessfully'));
+                    onSaveDetails("Search", ctx);
+                  } else
+                    Statics.showToast(Statics.getLabel('CouldnotDeleteShaakhaa'));
 
-                      Navigator.of(ctx).pop();
-                    },
-                  ),
-                  MaterialButton(
-                    child: Text(Statics.getLabel('ConfirmationNo')),
-                    onPressed: () {
-                      Navigator.of(ctx).pop();
-                    },
-                  )
-                ],
+                  Navigator.of(ctx).pop();
+                },
               ),
+              MaterialButton(
+                child: Text(Statics.getLabel('ConfirmationNo')),
+                onPressed: () {
+                  Navigator.of(ctx).pop();
+                },
+              )
+            ],
+          ),
         );
       }
     } on Exception catch (error) {
@@ -247,12 +245,9 @@ class ShaakhaaCard extends StatelessWidget {
                         Text(shaakhaaItem["FrequencyCode"].toString(), style: ListTileThemeData().subtitleTextStyle),
                         if (shaakhaaItem["FrequencyID"].toString() == Statics.shaakhaaFrequencyWeekly.toString())
                           Text(shaakhaaItem["DayNamesOfWeek"].toString(), style: ListTileThemeData().subtitleTextStyle)
-                        else
-                          if (shaakhaaItem["FrequencyCode"].toString() == "Monthly")
-                            Text(shaakhaaItem["DayOfMonth"].toString(), style: ListTileThemeData().subtitleTextStyle),
-                        Text("${shaakhaaItem["StartTimeStr"]}${shaakhaaItem["StartTimeStr"]
-                            .toString()
-                            .isEmpty ? "" : "-"}${shaakhaaItem["EndTimeStr"]}", style: ListTileThemeData().subtitleTextStyle),
+                        else if (shaakhaaItem["FrequencyCode"].toString() == "Monthly")
+                          Text(shaakhaaItem["DayOfMonth"].toString(), style: ListTileThemeData().subtitleTextStyle),
+                        Text("${shaakhaaItem["StartTimeStr"]}${shaakhaaItem["StartTimeStr"].toString().isEmpty ? "" : "-"}${shaakhaaItem["EndTimeStr"]}", style: ListTileThemeData().subtitleTextStyle),
                       ]
                     ],
                   ),
@@ -271,7 +266,7 @@ class ShaakhaaCard extends StatelessWidget {
                     if (value == 'ShaakhaaPat')
                       Navigator.of(context).pushNamed(ShaakhaaPat.routeName, arguments: Statics.ScreenArguments(shaakhaaItem["ShaakhaaID"], value));
                     else if (value == 'Vrutta')
-                      Navigator.push(
+                      /*Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
@@ -280,8 +275,8 @@ class ShaakhaaCard extends StatelessWidget {
                                     vruttaID: "0",
                                     onSaveDetails: null,
                                     viewType: "EditVrutta",
-                                  )));
-                    // Navigator.of(context).pushNamed(ShaakhaaVrutta.routeName, arguments: Statics.ScreenArguments(shaakhaaItem["ShaakhaaID"], value));
+                                  )));*/
+                      Navigator.of(context).pushNamed(ShaakhaaVrutta.routeName, arguments: Statics.ScreenArguments(shaakhaaItem["ShaakhaaID"], value));
                     else if (value == 'ViewLocation') {
                       if (shaakhaaItem["ShaakhaaLatitude"] != null && shaakhaaItem["ShaakhaaLatitude"].toString() != "") {
                         _latLng.add(Statics.cLatLong(shaakhaaItem["ShaakhaaID"], shaakhaaItem["GeoUnitName"].toString(), shaakhaaItem["FrequencyCode"].toString(),
