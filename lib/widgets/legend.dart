@@ -6,20 +6,27 @@ class Legend extends StatelessWidget {
   final legendString;
   final extraString;
   final double? fontsize;
+  final void Function()? onPressed;
+  final IconData? icon;
 
-  Legend({Key? key, this.legendString, this.extraString, this.fontsize}) : super(key: key);
+  Legend({Key? key, this.legendString, this.extraString, this.fontsize, this.onPressed, this.icon}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Wrap(
+        Row(
+          // mainAxisAlignment: onPressed == null ? MainAxisAlignment.center : MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              (legendString == null || legendString == "" ? "" : Statics.getLabel(legendString, returnKey: true)),
-              textAlign: TextAlign.left,
-              style: TextStyle(color: Colors.purple, fontSize: fontsize == 0 ? 18 : fontsize, fontWeight: FontWeight.w600),
+            if (onPressed != null) SizedBox(width: 24),
+            Expanded(
+              child: Text(
+                (legendString == null || legendString == "" ? "" : Statics.getLabel(legendString, returnKey: true)),
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.purple, fontSize: fontsize == 0 ? 18 : fontsize, fontWeight: FontWeight.w600),
+              ),
             ),
+            if (onPressed != null) IconButton(onPressed: onPressed, icon: Icon(icon ?? Icons.list_rounded, color: Colors.purple))
           ],
         ),
         Divider(

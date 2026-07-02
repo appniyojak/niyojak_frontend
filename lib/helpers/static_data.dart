@@ -25,6 +25,7 @@ import '../models/response_model/gruh_abhiyaan_report_model.dart';
 import '../models/response_model/gruh_abhiyaan_vrutta_data_model.dart';
 import '../models/response_model/hindu_sanmelan_model.dart';
 import '../models/response_model/hindu_sanmelan_report_model.dart';
+import '../models/response_model/home_screen_names_resp_model.dart';
 import '../models/response_model/mandalVastisarvekshanReportModel.dart';
 import '../models/response_model/nagar_vasti_model.dart';
 import '../models/response_model/nirikshan_baithak_vrutta.dart';
@@ -310,6 +311,8 @@ const String urlSVRAllMonthly = baseUrlAPI + '/shakhaavruttareport_allmonthly';
 const String urlSVRAllMultiMonthly = baseUrlAPI + '/shakhaavruttareport_allmultimonthly';
 const String urlSVRKaryakramRanking = baseUrlAPI + '/shakhaavruttareport_karyakram';
 const String urlSVRTulnatmak = baseUrlAPI + '/shakhaavruttareport_tulnatmak';
+
+const String urlHomeScreenNames = baseUrlAPI + '/RefreshHomeScreenForAppNames';
 
 //////////////////////////////////////////////////////////////////////////////////////////
 const String patchSuffix = '';
@@ -1637,8 +1640,8 @@ Future<dynamic> isCompatibleVersion(String inputJson) async {
 
   var response = await http.post(Uri.parse(urlIsVersionCompatibleForApp), headers: jHeaders, body: inputJson);
 
-  var responseBody = json.decode(response.body);
   print(Uri.parse(urlIsVersionCompatibleForApp));
+  var responseBody = json.decode(response.body);
   // log(responseBody);
   //return responseBody['IsVersionCompatible'];
   return responseBody;
@@ -3987,9 +3990,9 @@ Future<void> deleteUserToken() async {
     }
     Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-    var response = await http.post(Uri.parse(deleteUserDeviceToken), headers: jHeaders, body: json.encode({"swayamsevakid": userDetails["userID"]}));
+    print(deleteUserDeviceToken);
 
-    print(response.request!.url);
+    var response = await http.post(Uri.parse(deleteUserDeviceToken), headers: jHeaders, body: json.encode({"swayamsevakid": userDetails["userID"]}));
 
     print(response.body);
   } catch (e) {
@@ -7094,6 +7097,34 @@ Future<TulnatmakResponse?> fetchTulnatmak(Map<String, dynamic> inputJson) async 
     print("Exception: $e \n$stack");
     return null;
   } finally {}
+}
+
+Future<List<DataDetails>?> refreshHomeScreenNamesData(Map<String, dynamic> inputJson, {BuildContext? context}) async {
+  bool? connected = await isInternetConnected();
+  if (connected == false) return null;
+  if (context != null) showLoaderDialog(context);
+
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  log(urlHomeScreenNames);
+  print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+  try {
+    var response = await http.post(Uri.parse(urlHomeScreenNames), headers: jHeaders, body: jsonEncode(inputJson));
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      HomeScreenNamesRespModel model = HomeScreenNamesRespModel.fromJson(data);
+      log("fetchTulnatmak >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+      return model.data;
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return null;
+    }
+  } catch (e, stack) {
+    print("Exception: $e \n$stack");
+    return null;
+  } finally {
+    if (context != null) Navigator.of(context, rootNavigator: true).pop();
+  }
 }
 /////////////////////////////////////////////////////////////////////////////
 

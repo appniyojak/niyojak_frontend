@@ -227,11 +227,13 @@ class PresentList {
   final int totalpresent;
   final int totalnewpresent;
   final String vagogatname;
+  final String code;
 
   const PresentList({
     required this.totalpresent,
     required this.totalnewpresent,
     required this.vagogatname,
+    required this.code,
   });
 
   factory PresentList.fromJson(Map<String, dynamic> json) {
@@ -239,6 +241,7 @@ class PresentList {
       totalpresent: json['totalpresent'] ?? 0,
       totalnewpresent: json['totalnewpresent'] ?? 0,
       vagogatname: json['vagogatname'] ?? '',
+      code: json['code'] ?? '',
     );
   }
 }

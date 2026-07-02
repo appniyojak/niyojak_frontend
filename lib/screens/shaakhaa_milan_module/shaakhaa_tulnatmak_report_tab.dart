@@ -1,5 +1,15 @@
+import 'dart:developer';
+import 'dart:io';
+import 'dart:ui' as ui;
+
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
 import 'package:provider/provider.dart';
 
 import '../../helpers/static_data.dart' as Statics;
@@ -144,6 +154,10 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
 
   final controller = createGeoController();
 
+  final GlobalKey _globalKey = GlobalKey();
+
+  bool _isExcelDownloading = false;
+
   // Year selector range for the "प्रारंभ वर्ष / अंत वर्ष" dropdowns.
   late final List<int> allYears = List.generate(10, (i) => DateTime.now().year - 9 + i);
 
@@ -247,6 +261,156 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
     _fetchData();
   }
 
+  /////////////////////////////////////////////////////////////////////////
+  Future<void> takeScreenShot({bool doCrop = false}) async {
+    setState(() => _isExcelDownloading = true);
+    try {
+      // 1. Fetch the RenderRepaintBoundary safely
+      final boundary = _globalKey.currentContext?.findRenderObject() as RenderRepaintBoundary?;
+      if (boundary == null) {
+        print("Error: Boundary context not found.");
+        return;
+      }
+      final boundarySize = boundary.size;
+
+      const maxTextureDimension = 16384.0; // Skia/Impeller hard cap
+      const desiredPixelRatio = 3.0;
+
+      // Clamp pixelRatio so neither dimension exceeds the GPU texture limit
+      final maxRatioForHeight = maxTextureDimension / boundarySize.height;
+      final maxRatioForWidth = maxTextureDimension / boundarySize.width;
+      final safePixelRatio = [desiredPixelRatio, maxRatioForHeight, maxRatioForWidth].reduce((a, b) => a < b ? a : b);
+
+      print("Boundary size: $boundarySize, using pixelRatio: $safePixelRatio");
+
+      // 2. Capture the master image context from GPU memory
+      final image = await boundary.toImage(pixelRatio: safePixelRatio);
+      print("Captured image size: ${image.width} x ${image.height}");
+
+      // Extract raw bytes for the full image backup
+      final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+      final pngBytes = byteData!.buffer.asUint8List();
+
+      final directory = await getApplicationDocumentsDirectory();
+      final customDir = Directory('${directory.path}/MyCustomFolder');
+      if (!(await customDir.exists())) {
+        await customDir.create(recursive: true);
+      }
+
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      final imgFile = File('${customDir.path}/screenshot_$timestamp.png');
+      await imgFile.writeAsBytes(pngBytes);
+      print("Screenshot saved to ${imgFile.path}");
+
+      // 3. Setup PDF document layout constraints
+      final pdf = pw.Document();
+      const double pageWidthPt = 595.27; // A4 page width in logical points
+      const double pageHeightPt = 841.89; // A4 page height in logical points
+
+      // 4. Slice the master image safely across separate PDF pages
+      //croppin pagination
+      if (doCrop) {
+        const double targetAspectRatio = pageHeightPt / pageWidthPt;
+
+        final double imgWidthPx = image.width.toDouble();
+        final double imgHeightPx = image.height.toDouble();
+
+        // Map pagination slices entirely based on the image's layout aspect ratio
+        final double sliceHeightPx = imgWidthPx * targetAspectRatio;
+        final int numPages = (imgHeightPx / sliceHeightPx).ceil();
+
+        log("Generating PDF... Total pages calculated: $numPages");
+
+        for (int pageNum = 0; pageNum < numPages; pageNum++) {
+          final double yOffsetPx = pageNum * sliceHeightPx;
+
+          // Handle the bottom remainder crop slice for the last page
+          final double currentSliceHeightPx = (yOffsetPx + sliceHeightPx > imgHeightPx) ? (imgHeightPx - yOffsetPx) : sliceHeightPx;
+
+          // Pass the image object directly (Memory-efficient approach)
+          final Uint8List pageImgBytes = await _cropImage(
+            image,
+            imgWidthPx,
+            currentSliceHeightPx,
+            yOffsetPx,
+            sliceHeightPx,
+          );
+
+          pdf.addPage(
+            pw.Page(
+              pageFormat: PdfPageFormat.a4,
+              margin: pw.EdgeInsets.symmetric(horizontal: 24), // Edge-to-edge flush canvas
+              build: (pw.Context context) {
+                return pw.Center(
+                  child: pw.Image(
+                    pw.MemoryImage(pageImgBytes),
+                    fit: pw.BoxFit.contain,
+                  ),
+                );
+              },
+            ),
+          );
+        }
+      } else {
+        log("Generating PDF... No Crop");
+        // No cropping/pagination — just place the whole image on ONE page
+        final pdfImage = pw.MemoryImage(pngBytes);
+
+        pdf.addPage(
+          pw.Page(
+            pageFormat: PdfPageFormat.a4,
+            margin: pw.EdgeInsets.symmetric(vertical: 18),
+            build: (pw.Context context) {
+              return pw.Center(
+                child: pw.Image(pdfImage, fit: pw.BoxFit.contain),
+              );
+            },
+          ),
+        );
+      }
+
+      // 5. Save and launch the completed PDF document
+      final pdfBytes = await pdf.save();
+      final pdfFile = File('${customDir.path}/screenshot_$timestamp.pdf');
+      await pdfFile.writeAsBytes(pdfBytes);
+
+      print("PDF saved to ${pdfFile.path}");
+      final result = await OpenFilex.open(pdfFile.path);
+      print("Open file result: ${result.message}");
+    } catch (e) {
+      print("Error processing screenshot or PDF extraction: $e");
+    } finally {
+      setState(() => _isExcelDownloading = false);
+    }
+  }
+
+  /// Helper function to crop the ui.Image instantly on canvas.
+  /// Avoids byte-decoding loops to keep RAM footprint low.
+  Future<Uint8List> _cropImage(
+    ui.Image srcImage,
+    double width,
+    double height,
+    double yOffset,
+    double canvasHeight,
+  ) async {
+    final recorder = ui.PictureRecorder();
+    final canvas = Canvas(recorder, Rect.fromLTWH(0, 0, width, canvasHeight));
+
+    final srcRect = Rect.fromLTWH(0, yOffset, width, height);
+    final destRect = Rect.fromLTWH(0, 0, width, height);
+
+    canvas.drawImageRect(srcImage, srcRect, destRect, Paint());
+
+    final picture = recorder.endRecording();
+    final img = await picture.toImage(width.toInt(), canvasHeight.toInt());
+
+    // Convert to PNG
+    final byteData = await img.toByteData(format: ui.ImageByteFormat.png);
+    return byteData!.buffer.asUint8List();
+  }
+
+  /////////////////////////////////////////////////////////////////////////
+
   // ─── Build ──────────────────────────────────────────────────────────────────
 
   @override
@@ -255,6 +419,19 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
 
     return Scaffold(
       backgroundColor: _pageBg,
+      floatingActionButton: response == null
+          ? Offstage()
+          : FloatingActionButton(
+              tooltip: Statics.getLabel("ExportToExcel"),
+              onPressed: takeScreenShot,
+              child: _isExcelDownloading
+                  ? CircularProgressIndicator(
+                      color: Colors.white,
+                      // padding: EdgeInsets.all(8),
+                    )
+                  : Icon(Icons.download_sharp),
+              backgroundColor: Colors.green,
+            ),
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: _fetchData,
@@ -479,136 +656,163 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
     final totalIsNeg = data.totalGrowth.trim().startsWith('-');
     final newIsNeg = data.newGrowth.trim().startsWith('-');
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (isLoading)
-          const Padding(
-            padding: EdgeInsets.only(bottom: 10),
-            child: LinearProgressIndicator(color: _orange, minHeight: 2),
-          ),
+    final _shaakhaacount = data.shaakhaacount.toString();
+    final _milancount = data.milancount.toString();
+    final _mansikcount = data.mansikcount.toString();
+    final _sangacount = data.sangacount.toString();
 
-        // ── KPI Cards ──
-        Row(
+    return RepaintBoundary(
+      key: _globalKey,
+      child: SizedBox(
+        width: MediaQuery.sizeOf(context).width,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              child: _kpiCard(
-                label: "उपस्थिती (YoY)",
-                // labelColor: const Color(0xFF16A34A),
-                // bg: const Color(0xFFF0FDF4),
-                // border: const Color(0xFFBBF7D0),
-                // iconBg: const Color(0xFFDCFCE7),
-                showUp: !totalIsNeg,
-                valueText: data.totalGrowth.isEmpty ? "—" : data.totalGrowth,
-                // valueColor: totalIsNeg ? const Color(0xFFB91C1C) : const Color(0xFF15803D),
+            if (isLoading)
+              const Padding(
+                padding: EdgeInsets.only(bottom: 10),
+                child: LinearProgressIndicator(color: _orange, minHeight: 2),
               ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: _kpiCard(
-                label: "नवीन भरती (YoY)",
-                // labelColor: const Color(0xFFE11D48),
-                // bg: const Color(0xFFFFF1F2),
-                // border: const Color(0xFFFECDD3),
-                // iconBg: const Color(0xFFFFE4E6),
-                showUp: !newIsNeg,
-                valueText: data.newGrowth.isEmpty ? "—" : data.newGrowth,
-                // valueColor: newIsNeg ? const Color(0xFFB91C1C) : const Color(0xFF15803D),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 14),
 
-        // ── Bar Chart: वयोगट अनुसार उपस्थिती ──
-        Container(
-          padding: const EdgeInsets.all(16),
-          decoration: _cardDecoration,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: const [
-                  Icon(Icons.bar_chart, size: 15, color: _orange),
-                  SizedBox(width: 7),
-                  Text(
-                    "आयुगट अनुसार उपस्थिती तुलना",
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFF1F2937)),
+            // ── KPI Cards ──
+            Row(
+              spacing: 12,
+              children: [
+                Expanded(
+                  child: _statCard(Statics.getLabel("shaakhaaCount"), _shaakhaacount),
+                ),
+                Expanded(
+                  child: _statCard(Statics.getLabel("saaptaahikMilanCount"), _milancount),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Row(
+              spacing: 12,
+              children: [
+                Expanded(
+                  child: _statCard(Statics.getLabel("masikMilanCount"), _mansikcount),
+                ),
+                Expanded(
+                  child: _statCard(Statics.getLabel("sanghaCount"), _sangacount),
+                ),
+              ],
+            ),
+            const SizedBox(height: 14),
+            Row(
+              children: [
+                Expanded(
+                  child: _kpiCard(
+                    label: "उपस्थिती (YoY)",
+                    showUp: !totalIsNeg,
+                    valueText: data.totalGrowth.isEmpty ? "—" : data.totalGrowth,
+                    // valueColor: totalIsNeg ? const Color(0xFFB91C1C) : const Color(0xFF15803D),
                   ),
-                ],
-              ),
-              LegendRow(
-                items: [
-                  for (var i = 0; i < barYears.length; i++) MapEntry("${barYears[i]}", _colorAt(i)),
-                ],
-              ),
-              barGroups.isEmpty ? _emptyChartPlaceholder() : SizedBox(height: 270, child: _buildBarChart(vMap, barGroups, barYears)),
-              const SizedBox(height: 14),
-            ],
-          ),
-        ),
-        const SizedBox(height: 14),
-
-        // ── Karyakram continuity (single combined chart) ──
-        Row(
-          children: const [
-            Icon(Icons.show_chart, size: 15, color: _orange),
-            SizedBox(width: 7),
-            Text(
-              "कार्यक्रम निरंतरता ट्रेंड",
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFF1F2937)),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _kpiCard(
+                    label: "नवीन भरती (YoY)",
+                    showUp: !newIsNeg,
+                    valueText: data.newGrowth.isEmpty ? "—" : data.newGrowth,
+                    // valueColor: newIsNeg ? const Color(0xFFB91C1C) : const Color(0xFF15803D),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-        const Padding(
-          padding: EdgeInsets.only(top: 2, bottom: 12),
-          child: Text(
-            "महिन्यानिहाय गतिविधी (वर्षनिहाय तुलना)",
-            style: TextStyle(fontSize: 11, color: _grayText),
-          ),
-        ),
-        if (activitySeries.isEmpty)
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: _cardDecoration,
-            child: _emptyChartPlaceholder(),
-          )
-        else
-          ...activitySeries.map((series) {
-            return Container(
-              margin: const EdgeInsets.only(bottom: 12),
+            const SizedBox(height: 14),
+
+            // ── Bar Chart: वयोगट अनुसार उपस्थिती ──
+            Container(
               padding: const EdgeInsets.all(16),
               decoration: _cardDecoration,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    Statics.getLabel(series.activity, returnKey: true),
-                    style: const TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xFF1F2937),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 2, bottom: 10),
-                    child: Text(
-                      "${series.years.length} ${Statics.getLabel("yearonly")} · ${series.months.length} ${Statics.getLabel("monthOnly")}",
-                      style: const TextStyle(fontSize: 11, color: _grayText),
-                    ),
-                  ),
-                  LegendRow(
-                    isLine: true,
-                    items: [
-                      for (var i = 0; i < series.years.length; i++) MapEntry(series.years[i], _colorAt(i)),
+                  Row(
+                    children: const [
+                      Icon(Icons.bar_chart, size: 15, color: _orange),
+                      SizedBox(width: 7),
+                      Text(
+                        "आयुगट अनुसार उपस्थिती तुलना",
+                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFF1F2937)),
+                      ),
                     ],
                   ),
-                  SizedBox(height: 180, child: _buildActivityLineChart(series)),
+                  LegendRow(
+                    items: [
+                      for (var i = 0; i < barYears.length; i++) MapEntry("${barYears[i]}", _colorAt(i)),
+                    ],
+                  ),
+                  barGroups.isEmpty ? _emptyChartPlaceholder() : SizedBox(height: 270, child: _buildBarChart(vMap, barGroups, barYears)),
+                  const SizedBox(height: 14),
                 ],
               ),
-            );
-          }),
-      ],
+            ),
+            const SizedBox(height: 14),
+
+            // ── Karyakram continuity (single combined chart) ──
+            Row(
+              children: const [
+                Icon(Icons.show_chart, size: 15, color: _orange),
+                SizedBox(width: 7),
+                Text(
+                  "कार्यक्रम निरंतरता ट्रेंड",
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFF1F2937)),
+                ),
+              ],
+            ),
+            const Padding(
+              padding: EdgeInsets.only(top: 2, bottom: 12),
+              child: Text(
+                "महिन्यानिहाय गतिविधी (वर्षनिहाय तुलना)",
+                style: TextStyle(fontSize: 11, color: _grayText),
+              ),
+            ),
+            if (activitySeries.isEmpty)
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: _cardDecoration,
+                child: _emptyChartPlaceholder(),
+              )
+            else
+              ...activitySeries.map((series) {
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  padding: const EdgeInsets.all(16),
+                  decoration: _cardDecoration,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        Statics.getLabel(series.activity, returnKey: true),
+                        style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFF1F2937),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 2, bottom: 10),
+                        child: Text(
+                          "${series.years.length} ${Statics.getLabel("yearonly")} · ${series.months.length} ${Statics.getLabel("monthOnly")}",
+                          style: const TextStyle(fontSize: 11, color: _grayText),
+                        ),
+                      ),
+                      LegendRow(
+                        isLine: true,
+                        items: [
+                          for (var i = 0; i < series.years.length; i++) MapEntry(series.years[i], _colorAt(i)),
+                        ],
+                      ),
+                      SizedBox(height: 180, child: _buildActivityLineChart(series)),
+                    ],
+                  ),
+                );
+              }),
+          ],
+        ),
+      ),
     );
   }
 
@@ -655,6 +859,21 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
           ),
         ),
       ],
+    );
+  }
+
+  Widget _statCard(String key, String value) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(border: Border.all(color: Colors.grey.shade700, width: 0.7), borderRadius: BorderRadius.circular(12)),
+      child: Row(
+        children: [
+          Flexible(child: Text(key, maxLines: 2, softWrap: true, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12.5, color: Colors.black, fontWeight: FontWeight.w500))),
+          Expanded(
+              child: Text(value,
+                  maxLines: 2, softWrap: true, overflow: TextOverflow.ellipsis, textAlign: TextAlign.end, style: TextStyle(fontSize: 15, color: Colors.deepOrange, fontWeight: FontWeight.w900))),
+        ],
+      ),
     );
   }
 

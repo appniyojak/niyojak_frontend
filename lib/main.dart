@@ -1,12 +1,10 @@
-import 'dart:io';
+import 'dart:developer';
 
 import 'package:background_fetch/background_fetch.dart';
-import 'package:firebase_core/firebase_core.dart' show Firebase;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:niyojak_prod/providers/sankalp_screen_provider.dart';
 import 'package:niyojak_prod/screens/AbhiyaanSwayamsevak.dart';
 import 'package:niyojak_prod/screens/AbhiyanAddSwayamsevak.dart';
@@ -35,7 +33,6 @@ import 'package:niyojak_prod/screens/survey_screen/survey_form/vasti_survey_form
 import 'package:niyojak_prod/screens/survey_screen/vasti_reports_tabs.dart';
 import 'package:niyojak_prod/screens/view_vishesh_vyakti_shodh.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import './screens/annual_baithak_ekatrit_vrutta.dart';
 import './screens/change_password.dart';
@@ -105,44 +102,67 @@ import 'screens/shatabdi_vrutta_sankalan/yuva-sangam_sanmelan/yuva_sangam_main_t
 import 'screens/survey_screen/vasti_sarvekshan_screen.dart';
 import 'screens/swayamsevak_module/edit_module/edit_swayamsevak_basic_info.dart';
 import 'screens/swayamsevak_module/swayamsevak_daayitva_edit.dart';
+import 'utils/notification_service.dart';
 import 'utils/stable_geounit_class.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(name: "niyojak-cdd79", options: DefaultFirebaseOptions.currentPlatform);
+
+  // Register as early as possible, before any other async setup — FCM can
+  // deliver a background message while the rest of init() is still running.
+  // `firebaseMessagingBackgroundHandler` lives in notification_service.dart
+  // so there is a single source of truth for background handling.
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  // Owns: permission requests, local-notification channel setup, foreground
+  // display, FCM token issuance/refresh + persistence, and tap-to-route
+  // handling for all three app states (active/background/killed).
+  await PushNotificationService.instance.init();
+
   runApp(NiyojakApp());
 }
 
+@pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(name: "niyojak-cdd79", options: DefaultFirebaseOptions.currentPlatform);
-  print('Handling a background message: ${message.messageId}');
+  debugPrint('[PushNotification] Background message: ${message.messageId}');
 }
 
 class NiyojakApp extends StatefulWidget {
+  const NiyojakApp({super.key});
+
   @override
-  State<StatefulWidget> createState() => NiyojakAppState();
+  State<NiyojakApp> createState() => NiyojakAppState();
 }
 
 class NiyojakAppState extends State<NiyojakApp> {
-  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
-
   @override
   void initState() {
     super.initState();
-    initPlatformState();
-    setupFirebaseMessaging();
+
+    // Orientation is app-wide and doesn't depend on build state — set it
+    // once here instead of on every build().
+    SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight],
+    );
+
+    _configureBackgroundFetch();
   }
 
-  Future<void> initPlatformState() async {
-    try {
-      WidgetsFlutterBinding.ensureInitialized();
-      await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-      print("Firebase initialized successfully");
-    } catch (e) {
-      print("Error initializing Firebase: $e");
-    }
+  @override
+  void dispose() {
+    PushNotificationService.instance.dispose();
+    super.dispose();
+  }
 
+  /// NOTE: This is unrelated to push notifications — it's a periodic
+  /// background-fetch hook. The registered task currently does nothing but
+  /// log and immediately finish. If nothing in the app relies on this
+  /// anymore (push handling is now fully owned by PushNotificationService),
+  /// consider removing the background_fetch dependency entirely.
+  void _configureBackgroundFetch() {
     BackgroundFetch.configure(
       BackgroundFetchConfig(
         minimumFetchInterval: 15,
@@ -155,103 +175,18 @@ class NiyojakAppState extends State<NiyojakApp> {
         requiredNetworkType: NetworkType.NONE,
       ),
       (String taskId) async {
-        print("Background Event: $taskId at ${DateTime.now()}");
+        log('[BackgroundFetch] Event: $taskId at ${DateTime.now()}');
         BackgroundFetch.finish(taskId);
       },
-    ).then((int status) {
-      print('[BackgroundFetch] configure success: $status');
+    ).then((status) {
+      debugPrint('[BackgroundFetch] configure success: $status');
     }).catchError((e) {
-      print('[BackgroundFetch] configure ERROR: $e');
+      debugPrint('[BackgroundFetch] configure ERROR: $e');
     });
-  }
-
-  Future<void> setupFirebaseMessaging() async {
-    FirebaseMessaging messaging = FirebaseMessaging.instance;
-
-    NotificationSettings settings = await messaging.requestPermission();
-    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      print("User granted permission");
-    } else {
-      print("User declined or has not granted permission");
-    }
-
-    try {
-      String? token;
-
-      if (Platform.isAndroid) {
-        token = await messaging.getToken();
-      } else if (Platform.isIOS) {
-        token = await messaging.getAPNSToken();
-      }
-
-      if (token != null) {
-        SharedPreferences pref = await SharedPreferences.getInstance();
-        await pref.setString("deviceToken", token);
-        print("Device Token (${Platform.operatingSystem}): $token");
-      } else {
-        print("Failed to retrieve device token");
-      }
-    } catch (e) {
-      print("Error retrieving device token: $e");
-    }
-
-    // Initialize FlutterLocalNotificationsPlugin
-    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
-    final InitializationSettings initializationSettings = InitializationSettings(android: initializationSettingsAndroid);
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('Foreground message received: ${message.notification?.title}');
-      if (message.notification != null) {
-        _showNotification(message.notification!);
-      }
-    });
-
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
-      print('Notification clicked! ${message}');
-      // if (activity == "join") {
-      //   var joinResponse = await http.post(
-      //     Uri.parse(getJoinRSSGridForAppbyid),
-      //     headers: jHeaders,
-      //     body: json.encode({
-      //       "AppUserID": Statics.userDetails["userID"],
-      //       "JoinRSSID": swjoinRssID,
-      //     }),
-      //   );
-      //
-      //   if (joinResponse.statusCode == 200) {
-      //     print('Join Response: ${joinResponse.body}');
-      //     var joinData = jsonDecode(joinResponse.body);
-      //     JoinRssDetailByIDModel model = JoinRssDetailByIDModel.fromJson(joinData);
-      //
-      //     Navigator.of(context).pushNamed(
-      //       EditJoinRss.routeName,
-      //       arguments: Statics.ScreenArguments(model.listJoinRSS!.first.joinRSSID!, ""),
-      //     );
-      //   } else {
-      //     print('Join request failed with status: ${joinResponse.statusCode}');
-      //   }
-      // }
-    });
-  }
-
-  Future<void> _showNotification(RemoteNotification notification) async {
-    const AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails('channel_id', 'channel_name', channelDescription: 'channel_description', importance: Importance.high, priority: Priority.high, showWhen: false);
-    const NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails);
-    await flutterLocalNotificationsPlugin.show(
-      notification.hashCode,
-      notification.title,
-      notification.body,
-      notificationDetails,
-    );
   }
 
   @override
   Widget build(BuildContext context) {
-    ///TODO: MAKE LANDSCAPE
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => SadbhavProvider()),
@@ -262,6 +197,10 @@ class NiyojakAppState extends State<NiyojakApp> {
         child: Stack(
           children: [
             MaterialApp(
+              // Critical: without this, PushNotificationService can never
+              // resolve a NavigatorState, and every notification-tap route
+              // (active/background/killed) silently no-ops.
+              navigatorKey: PushNotificationService.instance.navigatorKey,
               debugShowCheckedModeBanner: false,
               title: 'Niyojak',
               theme: ThemeData(
@@ -384,7 +323,6 @@ class NiyojakAppState extends State<NiyojakApp> {
                 ShakhaaSaptahFormScreen.routeName: (ctx) => ShakhaaSaptahFormScreen(),
                 AddNewShaakhaaVistaarScreen.routeName: (ctx) => AddNewShaakhaaVistaarScreen(),
                 SearchSankalpScreen.routeName: (ctx) => ChangeNotifierProvider<SankalpScreenProvider>(create: (context) => SankalpScreenProvider(), child: SearchSankalpScreen()),
-                // SearchSankalpScreen.routeName: (ctx) => ChangeNotifierProvider<SankalpScreenProvider>(create: (context) => SankalpScreenProvider(), child: SearchSankalpScreen()),
               },
             ),
             if (Statics.isDevelopment)
@@ -394,7 +332,7 @@ class NiyojakAppState extends State<NiyojakApp> {
                 child: Container(
                   decoration: BoxDecoration(borderRadius: const BorderRadius.horizontal(left: Radius.circular(5)), color: Colors.red.withValues(alpha: 0.7)),
                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                  child: Text("Dev - 1.0.28 ", style: const TextStyle(fontSize: 13, color: Colors.white, fontWeight: FontWeight.w600)),
+                  child: Text("Dev - 1.0.30 ", style: const TextStyle(fontSize: 13, color: Colors.white, fontWeight: FontWeight.w600)),
                 ),
               ),
           ],

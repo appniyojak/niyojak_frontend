@@ -1,3 +1,406 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:http/http.dart' as http;
+import 'package:permission_handler/permission_handler.dart' show openAppSettings;
+
+import '../helpers/static_data.dart' as Statics;
+import '../screens/shaakhaa_milan_module/shaakha_main_tab_screen.dart';
+
+/// -----------------------------------------------------------------------
+
+/// Central service responsible for:
+/// - Requesting notification permissions (Android 13+/iOS)
+/// - Creating notification channels
+/// - Displaying foreground notifications (with optional image)
+/// - Routing the user to the correct screen when a notification is tapped,
+///   based on the `action` key inside [RemoteMessage.data].
+class PushNotificationService with WidgetsBindingObserver {
+  PushNotificationService._internal();
+
+  static final PushNotificationService instance = PushNotificationService._internal();
+
+  /// Provide this from your app so the service can navigate without a
+  /// BuildContext (e.g. `MaterialApp(navigatorKey: PushNotificationService.instance.navigatorKey)`).
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+  static const AndroidNotificationChannel _channel = AndroidNotificationChannel(
+    'important_notifications',
+    'Niyojak',
+    description: 'This channel is used for important notifications.',
+    importance: Importance.high,
+    playSound: true,
+    showBadge: true,
+  );
+
+  final FirebaseMessaging _messaging = FirebaseMessaging.instance;
+  final FlutterLocalNotificationsPlugin _localNotifications = FlutterLocalNotificationsPlugin();
+
+  int _notificationId = 0;
+  bool _initialized = false;
+
+  /// Route we couldn't dispatch yet because the Navigator wasn't attached
+  /// (typically: app launched cold via a notification tap).
+  Map<String, dynamic>? _pendingRouteData;
+  int _pendingRouteRetries = 0;
+  static const int _maxPendingRouteRetries = 15;
+
+  /// True once we've shown/queued a "notifications are off" prompt this
+  /// session, so we don't nag the user on every screen rebuild.
+  bool _permissionPromptShown = false;
+
+  /// Simple bounded dedupe guard against FCM redelivering the same message.
+  final Set<String> _seenMessageIds = <String>{};
+  static const int _maxSeenMessageIds = 100;
+
+  /// Exposed so the app (e.g. a settings screen) can react to permission
+  /// changes reactively without polling the service directly.
+  final ValueNotifier<AuthorizationStatus?> permissionStatus = ValueNotifier(null);
+
+  /// Call once, after `Firebase.initializeApp()` has already run in `main()`.
+  Future<void> init() async {
+    if (_initialized) return;
+
+    WidgetsBinding.instance.addObserver(this);
+
+    await _setupLocalNotifications();
+    await _requestPermissions();
+    // _listenTokenRefresh();
+    _registerMessageHandlers();
+    await _handleTerminatedLaunchMessage();
+
+    _initialized = true;
+  }
+
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    permissionStatus.dispose();
+    _initialized = false;
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Covers the "app was backgrounded, user granted permission in system
+    // settings, then resumed the app" and "navigator became attached after
+    // we tried to route" scenarios.
+    if (state == AppLifecycleState.resumed) {
+      _retryPendingRoute();
+      _refreshPermissionStatus();
+    }
+  }
+
+  // ---------------------------------------------------------------------
+  // Setup
+  // ---------------------------------------------------------------------
+
+  Future<void> _setupLocalNotifications() async {
+    const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const iosInit = DarwinInitializationSettings(
+      requestAlertPermission: false, // handled via FirebaseMessaging.requestPermission
+      requestBadgePermission: false,
+      requestSoundPermission: false,
+    );
+
+    await _localNotifications.initialize(
+      const InitializationSettings(android: androidInit, iOS: iosInit),
+      onDidReceiveNotificationResponse: _onDidReceiveNotificationResponse,
+      onDidReceiveBackgroundNotificationResponse: _onDidReceiveBackgroundNotificationResponseStatic,
+    );
+
+    await _localNotifications.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.createNotificationChannel(_channel);
+
+    // Foreground presentation is controlled per-platform inside
+    // _showForegroundNotification to avoid duplicate banners on iOS.
+  }
+
+  Future<void> _requestPermissions() async {
+    final settings = await _messaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+      provisional: false,
+    );
+
+    permissionStatus.value = settings.authorizationStatus;
+    debugPrint('[PushNotification] Authorization status: ${settings.authorizationStatus}');
+
+    switch (settings.authorizationStatus) {
+      case AuthorizationStatus.authorized:
+        break;
+      case AuthorizationStatus.provisional:
+        // iOS "quiet" delivery: notifications land in Notification Center
+        // silently, no banner/sound/badge until the user upgrades access.
+        // Nothing to prompt for here — this is a valid, user-chosen state.
+        break;
+      case AuthorizationStatus.denied:
+      case AuthorizationStatus.notDetermined:
+        _promptEnableNotifications();
+        break;
+    }
+
+    // Android 13+ (API 33) needs a *separate* runtime permission request —
+    // FirebaseMessaging.requestPermission() alone does not trigger the
+    // Android system dialog.
+    if (Platform.isAndroid) {
+      final granted = await _localNotifications.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.requestNotificationsPermission();
+
+      if (granted == false) {
+        _promptEnableNotifications();
+      }
+    }
+  }
+
+  Future<void> _refreshPermissionStatus() async {
+    final settings = await _messaging.getNotificationSettings();
+    permissionStatus.value = settings.authorizationStatus;
+  }
+
+  /// Shows an in-app rationale dialog with a direct link to system settings.
+  /// We deliberately do NOT re-trigger the native OS permission dialog here
+  /// — both platforms only show that once per install; after a denial, the
+  /// only way back is the Settings app, so that's what we drive the user to.
+  void _promptEnableNotifications() {
+    if (_permissionPromptShown) return;
+
+    final context = navigatorKey.currentContext;
+    if (context == null) {
+      // Navigator not attached yet (e.g. called during cold-start init
+      // before MaterialApp built) — retry after the first frame.
+      WidgetsBinding.instance.addPostFrameCallback((_) => _promptEnableNotifications());
+      return;
+    }
+
+    _permissionPromptShown = true;
+
+    showDialog<void>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(Statics.getLabel("notificationDialogTitle")),
+        content: Text(Statics.getLabel("notificationDialogSubtitle")),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: Text(Statics.getLabel("notNow")),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(dialogContext).pop();
+              openAppSettings();
+            },
+            child: Text(Statics.getLabel("openSettings")),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Current device token — send this to your backend right after login
+  /// (and again whenever it rotates, see [_listenTokenRefresh]).
+  Future<String?> getToken() => _messaging.getToken();
+
+  void _listenTokenRefresh() {
+    _messaging.onTokenRefresh.listen((token) {
+      debugPrint('[PushNotification] Token refreshed: $token');
+      // TODO: send the new token to your backend, replacing the old one.
+      // await api.updateFcmToken(token);
+    });
+  }
+
+  void _registerMessageHandlers() {
+    // App in foreground.
+    FirebaseMessaging.onMessage.listen(_showForegroundNotification);
+
+    // App in background, user taps the notification.
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      _routeFromData(message.data);
+    });
+  }
+
+  /// App was fully terminated and opened via a notification tap.
+  Future<void> _handleTerminatedLaunchMessage() async {
+    final initialMessage = await _messaging.getInitialMessage();
+    if (initialMessage != null) {
+      _routeFromData(initialMessage.data);
+    }
+  }
+
+  // ---------------------------------------------------------------------
+  // Foreground display
+  // ---------------------------------------------------------------------
+
+  Future<void> _showForegroundNotification(RemoteMessage message) async {
+    final notification = message.notification;
+    if (notification == null) return;
+
+    // FCM can redeliver the same message (e.g. flaky connectivity retries).
+    final messageId = message.messageId;
+    if (messageId != null) {
+      if (_seenMessageIds.contains(messageId)) {
+        debugPrint('[PushNotification] Duplicate message ignored: $messageId');
+        return;
+      }
+      _seenMessageIds.add(messageId);
+      if (_seenMessageIds.length > _maxSeenMessageIds) {
+        _seenMessageIds.remove(_seenMessageIds.first);
+      }
+    }
+
+    debugPrint('[PushNotification] Foreground message: ${message.toMap()}');
+    debugPrint('[PushNotification] Foreground message data: ${message.data}');
+    debugPrint('[PushNotification] Foreground message notification: ${message.notification?.toMap()}');
+
+    if (Platform.isIOS) {
+      // Let iOS show its native banner; skip the local-notification duplicate.
+      await _messaging.setForegroundNotificationPresentationOptions(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+      return;
+    }
+
+    final imageUrl = message.data['image'];
+    final bigPicture = (imageUrl != null && imageUrl.toString().isNotEmpty) ? await _downloadAsAndroidBitmap(imageUrl.toString()) : null;
+
+    final androidDetails = AndroidNotificationDetails(
+      _channel.id,
+      _channel.name,
+      channelDescription: _channel.description,
+      importance: Importance.high,
+      priority: Priority.high,
+      playSound: true,
+      largeIcon: bigPicture,
+      styleInformation: bigPicture != null ? BigPictureStyleInformation(bigPicture, largeIcon: bigPicture) : null,
+    );
+
+    await _localNotifications.show(
+      _notificationId++,
+      notification.title,
+      notification.body,
+      NotificationDetails(android: androidDetails),
+      payload: jsonEncode(message.data),
+    );
+  }
+
+  Future<ByteArrayAndroidBitmap?> _downloadAsAndroidBitmap(String url) async {
+    try {
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode != 200) return null;
+      return ByteArrayAndroidBitmap(response.bodyBytes);
+    } catch (e) {
+      debugPrint('[PushNotification] Failed to download image: $e');
+      return null;
+    }
+  }
+
+  // ---------------------------------------------------------------------
+  // Tap handling -> payload parsing
+  // ---------------------------------------------------------------------
+
+  void _onDidReceiveNotificationResponse(NotificationResponse response) {
+    final payload = response.payload;
+    if (payload == null || payload.isEmpty) return;
+
+    try {
+      final data = jsonDecode(payload) as Map<String, dynamic>;
+      _routeFromData(data);
+    } catch (e) {
+      debugPrint('[PushNotification] Failed to parse payload: $e');
+    }
+  }
+
+  /// Must be a top-level or static function (isolate entry point requirement).
+  @pragma('vm:entry-point')
+  static void _onDidReceiveBackgroundNotificationResponseStatic(NotificationResponse response) {
+    debugPrint('[PushNotification] Background tap payload: ${response.payload}');
+    // Avoid navigation here directly; the app is likely not attached to a
+    // Navigator yet. Persist the payload (e.g. SharedPreferences) if you
+    // need to act on it once the app resumes, or rely on getInitialMessage().
+  }
+
+  // ---------------------------------------------------------------------
+  // ⭐ MAIN ROUTING HINT ⭐
+  // ---------------------------------------------------------------------
+  //
+  // This is the single place that decides "where does the user go" based
+  // on the `action` key sent from your backend. Add one case per screen.
+  //
+  // Data payload you're currently receiving looks like:
+  //   { "action": "ShakhaaVrutta", "action_id": "0", ... }
+  //
+  // Keep this method dumb (no business logic) — it should only decide the
+  // route + arguments, then hand off to Navigator. Fetch/validate data
+  // inside the destination screen itself.
+  // ---------------------------------------------------------------------
+  void _routeFromData(Map<String, dynamic> data) {
+    final action = data['action']?.toString();
+    if (action == null || action.isEmpty) {
+      debugPrint('[PushNotification] No action key in payload, ignoring.');
+      return;
+    }
+
+    final navigator = navigatorKey.currentState;
+    if (navigator == null) {
+      // Common on cold start: FCM delivers the launch message before
+      // MaterialApp/Navigator has mounted. Queue it and retry on the next
+      // frame instead of dropping it — this is the "app was killed, user
+      // tapped the notification" scenario and it must not be lost.
+      _pendingRouteData = data;
+      _pendingRouteRetries = 0;
+      WidgetsBinding.instance.addPostFrameCallback((_) => _retryPendingRoute());
+      return;
+    }
+
+    _dispatchRoute(navigator, action, data);
+  }
+
+  void _retryPendingRoute() {
+    final data = _pendingRouteData;
+    if (data == null) return;
+
+    final navigator = navigatorKey.currentState;
+    if (navigator != null) {
+      _pendingRouteData = null;
+      _pendingRouteRetries = 0;
+      _dispatchRoute(navigator, data['action']?.toString() ?? '', data);
+      return;
+    }
+
+    _pendingRouteRetries++;
+    if (_pendingRouteRetries >= _maxPendingRouteRetries) {
+      // Give up after ~15 frames (or app-resume events) rather than
+      // retrying forever if the app never builds a Navigator.
+      debugPrint('[PushNotification] Giving up on pending route after $_pendingRouteRetries attempts.');
+      _pendingRouteData = null;
+      return;
+    }
+    WidgetsBinding.instance.addPostFrameCallback((_) => _retryPendingRoute());
+  }
+
+  void _dispatchRoute(NavigatorState navigator, String action, Map<String, dynamic> data) {
+    switch (action) {
+      case 'ShakhaaVrutta':
+        navigator.pushNamed(ShaakhaMainTabScreen.routeName); //, arguments: data);
+        debugPrint('[PushNotification] Route -> ShakhaaVrutta with data: $data');
+        break;
+
+      case 'subscription':
+        // navigator.pushNamed('/subscription', arguments: data);
+        debugPrint('[PushNotification] Route -> Subscription with data: $data');
+        break;
+
+      // Add further cases here as new `action` values are introduced,
+
+      default:
+        debugPrint('[PushNotification] Unhandled action "$action".');
+    }
+  }
+}
+
+/*
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
@@ -59,7 +462,7 @@ class PushNotificationService {
     // await flutterLocalNotificationsPlugin.cancelAll();
   }
 
-  ///*
+  ///
   ///
   ///
   Future<void> registerLocalNotification(RemoteMessage message) async {
@@ -83,7 +486,7 @@ class PushNotificationService {
         });
   }
 
-  ///*
+  ///
   ///
   ///
   Future<void> showNotification(RemoteMessage message, String channelId) async {
@@ -133,7 +536,7 @@ class PushNotificationService {
     }
   }
 
-  ///*
+  ///
   ///
   ///
   void registerNotification() async {
@@ -186,7 +589,7 @@ class PushNotificationService {
   }
 
 
-  ///*
+  ///
   ///
   /// tap notification when app foreground
   Future selectNotification(String? payload) async {
@@ -199,7 +602,7 @@ class PushNotificationService {
     }
   }
 
-  ///*
+  ///
   ///
   ///
   void tapNotificationAppKilled() {
@@ -218,3 +621,4 @@ class PushNotificationService {
     });
   }
 }
+*/

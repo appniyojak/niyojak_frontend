@@ -3,6 +3,10 @@ class TulnatmakResponse {
   final String message;
   final String totalGrowth;
   final String newGrowth;
+  final int shaakhaacount;
+  final int milancount;
+  final int mansikcount;
+  final int sangacount;
   final List<VGraph> vData;
   final List<HGraph> hData;
 
@@ -11,6 +15,10 @@ class TulnatmakResponse {
     required this.message,
     required this.totalGrowth,
     required this.newGrowth,
+    required this.shaakhaacount,
+    required this.milancount,
+    required this.mansikcount,
+    required this.sangacount,
     required this.vData,
     required this.hData,
   });
@@ -20,6 +28,10 @@ class TulnatmakResponse {
         message: json["Message"] as String? ?? "",
         totalGrowth: json["TotalGrowth"] as String? ?? "",
         newGrowth: json["NewGrowth"] as String? ?? "",
+        shaakhaacount: json["shaakhaacount"] ?? 0,
+        milancount: json["milancount"] ?? 0,
+        mansikcount: json["mansikcount"] ?? 0,
+        sangacount: json["sangacount"] ?? 0,
         vData: (json["vData"] as List<dynamic>? ?? []).map((e) => VGraph.fromJson(e as Map<String, dynamic>)).toList(),
         hData: (json["hData"] as List<dynamic>? ?? []).map((e) => HGraph.fromJson(e as Map<String, dynamic>)).toList(),
       );
