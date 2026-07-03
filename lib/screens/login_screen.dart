@@ -840,6 +840,7 @@ class _LogInCardState extends State<LogInCard> {
       // Invalid form
       return;
     }
+    FocusManager.instance.primaryFocus?.unfocus();
     bool? connected = await isInternetConnected();
     if (connected == false) {
       return;

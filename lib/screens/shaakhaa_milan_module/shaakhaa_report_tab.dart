@@ -128,6 +128,10 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
   bool _isExpanded = true;
   String _card1Value = '';
   String _card2Value = '';
+  int _shaakhaacount = 0;
+  int _milancount = 0;
+  int _mansikcount = 0;
+  int _sangacount = 0;
   List<BreakdownItem> _card1Breakdown = [];
   List<BreakdownItem> _card2Breakdown = [];
   List<ProgrammeActivity> _activities = [];
@@ -272,6 +276,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
               _card2Value = res.totalnewpresent.toString();
               _card1Breakdown = [];
               _card2Breakdown = [];
+
               _activities = res.data.map((e) => ProgrammeActivity(e.activity, e.value == 1)).toList();
               _programmeBars = [];
               // clear all-level state
@@ -292,6 +297,11 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
               _mapAllLevelPData(res.pData);
               // Programme bars
               _allAData = res.aData;
+
+              _shaakhaacount = res.shaakhaacount ?? 0;
+              _milancount = res.milancount ?? 0;
+              _mansikcount = res.mansikcount ?? 0;
+              _sangacount = res.sangacount ?? 0;
 
               // clear shaakhaa-level state
               _activities = [];
@@ -337,6 +347,11 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
               _mapAllLevelPData(res.pData);
               _activities = [];
               _programmeBars = [];
+
+              _shaakhaacount = res.shaakhaacount ?? 0;
+              _milancount = res.milancount ?? 0;
+              _mansikcount = res.mansikcount ?? 0;
+              _sangacount = res.sangacount ?? 0;
               _shaakhatotalcount = res.shaakhatotalcount;
               _shaakhanewcount = res.shaakhanewcount;
               _sapthahiktotalcount = res.sapthahiktotalcount;
@@ -420,6 +435,11 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
               _mapAllLevelPData(res.pData);
               _activities = [];
               _programmeBars = [];
+
+              _shaakhaacount = res.shaakhaacount ?? 0;
+              _milancount = res.milancount ?? 0;
+              _mansikcount = res.mansikcount ?? 0;
+              _sangacount = res.sangacount ?? 0;
               _shaakhatotalcount = res.shaakhatotalcount;
               _shaakhanewcount = res.shaakhanewcount;
               _sapthahiktotalcount = res.sapthahiktotalcount;
@@ -492,6 +512,11 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
               _mapAllLevelPData(res.pData);
               _activities = [];
               _programmeBars = [];
+
+              _shaakhaacount = res.shaakhaacount ?? 0;
+              _milancount = res.milancount ?? 0;
+              _mansikcount = res.mansikcount ?? 0;
+              _sangacount = res.sangacount ?? 0;
               _shaakhatotalcount = res.shaakhatotalcount;
               _shaakhanewcount = res.shaakhanewcount;
               _sapthahiktotalcount = res.sapthahiktotalcount;
@@ -556,6 +581,30 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                 SizedBox(height: 170, child: Center(child: Text(Statics.getLabel('noDataFoundTryAnotherSearch'))))
               else ...[
                 // ── Stat Cards ──────────────────────────────────────────────
+                Row(
+                  spacing: 12,
+                  children: [
+                    Expanded(
+                      child: _statCard(Statics.getLabel("shaakhaaCount"), _shaakhaacount.toString()),
+                    ),
+                    Expanded(
+                      child: _statCard(Statics.getLabel("saaptaahikMilanCount"), _milancount.toString()),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  spacing: 12,
+                  children: [
+                    Expanded(
+                      child: _statCard(Statics.getLabel("masikMilanCount"), _mansikcount.toString()),
+                    ),
+                    Expanded(
+                      child: _statCard(Statics.getLabel("sanghaCount"), _sangacount.toString()),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 14),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: _isAllLevel
@@ -631,7 +680,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                 ),
 
                 const SizedBox(height: 10),
-                if (!_isAllLevel) navigateToRanking(),
+                if (controller.ctrlUserLevelId == 1) navigateToRanking(),
                 const SizedBox(height: 10),
 
                 // ── Programme / Chart section ────────────────────────────────
@@ -846,6 +895,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                               controller: ctrl,
                               decoration: styledDropdownDecoration(Statics.getLabel("Graam")),
                               onChanged: (p0) => setState(() => _isCleared = true),
+                              isSankalpit: true,
                             ),
 
                           if (ctrl.hasItems(GeoLevel.Vasti))
@@ -854,7 +904,8 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                               title: 'Vasti',
                               controller: ctrl,
                               decoration: styledDropdownDecoration(Statics.getLabel("Vasti")),
-                              onChanged: (p0) => _fetchReport(),
+                              onChanged: (p0) => setState(() => _isCleared = true),
+                              isSankalpit: true,
                             ),
 
                           if (ctrl.hasItems(GeoLevel.Shaakhaa))
@@ -878,7 +929,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                                   spacing: 2,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    _FilterLabel('२. कालावधी'),
+                                    _FilterLabel('२. ${Statics.getLabel("duration")}'),
                                     AppDropdown<DurationTypes>(
                                       value: _kalavadha,
                                       items: DurationTypes.values,
@@ -1003,6 +1054,21 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
             ],
           );
         },
+      ),
+    );
+  }
+
+  Widget _statCard(String key, String value) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(border: Border.all(color: Colors.grey.shade700, width: 0.7), borderRadius: BorderRadius.circular(12)),
+      child: Row(
+        children: [
+          Flexible(child: Text(key, maxLines: 2, softWrap: true, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12.5, color: Colors.black, fontWeight: FontWeight.w500))),
+          Expanded(
+              child: Text(value,
+                  maxLines: 2, softWrap: true, overflow: TextOverflow.ellipsis, textAlign: TextAlign.end, style: TextStyle(fontSize: 15, color: Colors.deepOrange, fontWeight: FontWeight.w900))),
+        ],
       ),
     );
   }

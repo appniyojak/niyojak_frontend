@@ -277,7 +277,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _getGeoUnitID();
     await Future.wait([
       _fetchMyDashboardData(),
-      _getUpkhandUpnagarReport("0", "praant"),
+      if ((userLevelId ?? 0) > 8) _getUpkhandUpnagarReport("0", "praant"),
       _fetchNotificationData(),
       _getShaakhaaVruttaReport(),
     ]);

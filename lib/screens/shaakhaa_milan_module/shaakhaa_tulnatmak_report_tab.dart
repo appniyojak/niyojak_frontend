@@ -21,10 +21,6 @@ import 'report_widgets/custom_app_dropdowns.dart';
 
 // ─── Shared visual tokens ─────────────────────────────────────────────────────
 
-const Color _orange = Color(0xFFF97316);
-const Color _pageBg = Color(0xFFF3F4F6);
-const Color _grayText = Color(0xFF9CA3AF);
-
 final BoxDecoration _cardDecoration = BoxDecoration(
   color: Colors.white,
   borderRadius: BorderRadius.circular(12),
@@ -41,7 +37,6 @@ final BoxDecoration _cardDecoration = BoxDecoration(
 // "activities" (line chart series), since both lists are now data-driven
 // and not a fixed length of 4-5 like the old mock.
 const List<Color> _palette = [
-  Color(0xFF9CA3AF),
   Color(0xFFF472B6),
   Color(0xFFFB923C),
   Color(0xFF60A5FA),
@@ -51,6 +46,7 @@ const List<Color> _palette = [
   Color(0xFF34D399),
   Color(0xFFF87171),
   Color(0xFF38BDF8),
+  Color(0xFF9CA3AF),
 ];
 
 Color _colorAt(int index) => _palette[index % _palette.length];
@@ -418,7 +414,7 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
     super.build(context);
 
     return Scaffold(
-      backgroundColor: _pageBg,
+      backgroundColor: Colors.grey.shade100,
       floatingActionButton: response == null
           ? Offstage()
           : FloatingActionButton(
@@ -447,9 +443,9 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
                   style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700, color: Color(0xFF111827)),
                 ),
                 const SizedBox(height: 3),
-                const Text(
+                Text(
                   "वर्षनिहाय तुलना अहवाल",
-                  style: TextStyle(fontSize: 12, color: _grayText),
+                  style: TextStyle(fontSize: 12, color: Colors.grey.shade300),
                 ),
                 const SizedBox(height: 14),
 
@@ -460,7 +456,7 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
                 if (isLoading && response == null)
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 60),
-                    child: Center(child: CircularProgressIndicator(color: _orange)),
+                    child: Center(child: CircularProgressIndicator(color: Colors.orange)),
                   )
                 else if (errorMessage != null && response == null)
                   _errorState()
@@ -547,6 +543,7 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
                   controller: ctrl,
                   decoration: styledDropdownDecoration(Statics.getLabel("Graam")),
                   onChanged: (p0) => _fetchData(),
+                  isSankalpit: true,
                 ),
 
               if (ctrl.hasItems(GeoLevel.Vasti))
@@ -556,6 +553,7 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
                   controller: ctrl,
                   decoration: styledDropdownDecoration(Statics.getLabel("Vasti")),
                   onChanged: (p0) => _fetchData(),
+                  isSankalpit: true,
                 ),
 
               if (ctrl.hasItems(GeoLevel.Shaakhaa))
@@ -569,7 +567,7 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
 
               if (ctrl.deepestSelectedLevelId != 1) ...[
                 const SizedBox(),
-                _FilterLabel('३. ${Statics.getLabel("Vayogat")}'),
+                _FilterLabel('२. ${Statics.getLabel("Vayogat")}'),
                 AppDropdown<StaticMasterBAL>(
                   value: _selectedVayogat,
                   items: _vayogatOptions,
@@ -634,7 +632,7 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
           const SizedBox(height: 10),
           TextButton(
             onPressed: _fetchData,
-            style: TextButton.styleFrom(foregroundColor: _orange),
+            style: TextButton.styleFrom(foregroundColor: Colors.orange),
             child: const Text("पुन्हा प्रयत्न करा"),
           ),
         ],
@@ -671,7 +669,7 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
             if (isLoading)
               const Padding(
                 padding: EdgeInsets.only(bottom: 10),
-                child: LinearProgressIndicator(color: _orange, minHeight: 2),
+                child: LinearProgressIndicator(color: Colors.orange, minHeight: 2),
               ),
 
             // ── KPI Cards ──
@@ -731,7 +729,7 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
                 children: [
                   Row(
                     children: const [
-                      Icon(Icons.bar_chart, size: 15, color: _orange),
+                      Icon(Icons.bar_chart, size: 15, color: Colors.orange),
                       SizedBox(width: 7),
                       Text(
                         "आयुगट अनुसार उपस्थिती तुलना",
@@ -754,7 +752,7 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
             // ── Karyakram continuity (single combined chart) ──
             Row(
               children: const [
-                Icon(Icons.show_chart, size: 15, color: _orange),
+                Icon(Icons.show_chart, size: 15, color: Colors.orange),
                 SizedBox(width: 7),
                 Text(
                   "कार्यक्रम निरंतरता ट्रेंड",
@@ -762,11 +760,11 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
                 ),
               ],
             ),
-            const Padding(
+            Padding(
               padding: EdgeInsets.only(top: 2, bottom: 12),
               child: Text(
                 "महिन्यानिहाय गतिविधी (वर्षनिहाय तुलना)",
-                style: TextStyle(fontSize: 11, color: _grayText),
+                style: TextStyle(fontSize: 11, color: Colors.grey.shade300),
               ),
             ),
             if (activitySeries.isEmpty)
@@ -796,7 +794,7 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
                         padding: const EdgeInsets.only(top: 2, bottom: 10),
                         child: Text(
                           "${series.years.length} ${Statics.getLabel("yearonly")} · ${series.months.length} ${Statics.getLabel("monthOnly")}",
-                          style: const TextStyle(fontSize: 11, color: _grayText),
+                          style: TextStyle(fontSize: 11, color: Colors.grey.shade300),
                         ),
                       ),
                       LegendRow(
@@ -817,10 +815,10 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
   }
 
   Widget _emptyChartPlaceholder() {
-    return const Padding(
+    return Padding(
       padding: EdgeInsets.symmetric(vertical: 40),
       child: Center(
-        child: Text("या निवडीसाठी डेटा उपलब्ध नाही.", style: TextStyle(fontSize: 12, color: _grayText)),
+        child: Text("या निवडीसाठी डेटा उपलब्ध नाही.", style: TextStyle(fontSize: 12, color: Colors.grey.shade300)),
       ),
     );
   }
@@ -836,7 +834,7 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(fontSize: 12, color: _grayText)),
+        Text(label, style: TextStyle(fontSize: 12, color: Colors.grey.shade300)),
         const SizedBox(height: 6),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 10),

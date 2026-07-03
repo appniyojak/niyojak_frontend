@@ -77,7 +77,7 @@ class DatabaseHelper {
           ' LevelID INT, DisplaySequence INT, ' +
           '   HasGraaminKshetra BOOL, ParentKshetraID INT, ParentPraantID INT, ParentMahaanagarID INT, ' +
           '   ParentVibhaagID INT, ParentBhaagID INT, ParentNagarID INT, ParentShaharID INT, ' +
-          '   ParentMandalID INT, ParentVastiID INT, ParentGraamID INT, ParentUpaNagarID INT)');
+          '   ParentMandalID INT, ParentVastiID INT, ParentGraamID INT, ParentUpaNagarID INT, issankalpit INT)');
 
       db.execute(' CREATE TABLE SwayamsevakMaster(SwayamsevakID INT, FullName VARCHAR(50), ' + '   MobileNumber VARCHAR(10), LinkedGeoUnitID INT, AppPassword VARCHAR(20), PreferredLanguageID INT)');
       db.execute(' CREATE TABLE DaayitvaMaster(DaayitvaID INT, PraantID INT, DaayitvaName VARCHAR(50), DaayitvaForID INT, ' + '   IsPravaasiDaayitva BIT)');
@@ -293,7 +293,7 @@ class DatabaseHelper {
               (cnt == 1
                   ? 'INSERT INTO GeoUnitMaster(GeoUnitID, PraantID, GeoUnitName, LevelID, DisplaySequence, ' +
                       ' ParentKshetraID, ParentPraantID, ParentMahaanagarID, ParentVibhaagID, ParentBhaagID, ParentNagarID, ' +
-                      ' ParentShaharID, ParentMandalID, ParentGraamID, ParentVastiID, HasGraaminKshetra, ParentUpaNagarID) VALUES '
+                      ' ParentShaharID, ParentMandalID, ParentGraamID, ParentVastiID, HasGraaminKshetra, ParentUpaNagarID, issankalpit) VALUES '
                   : ',') +
               '(' +
               data['GeoUnitID'].toString() +
@@ -329,6 +329,8 @@ class DatabaseHelper {
               (data['HasGraaminKshetra'].toString() == 'true' ? '1' : '0') +
               ',' +
               (data['ParentUpaNagarID'].toString()) +
+              ',' +
+              (data['issankalpit'].toString()) +
               ')';
         }
         cnt = cnt + 1;
@@ -816,7 +818,7 @@ class DatabaseHelper {
       // Record not found, then insert
       sqlStr = 'INSERT INTO GeoUnitMaster(GeoUnitID, PraantID, GeoUnitName, LevelID, DisplaySequence, ' +
           ' ParentKshetraID, ParentPraantID, ParentMahaanagarID, ParentVibhaagID, ParentBhaagID, ParentNagarID, ' +
-          ' ParentShaharID, ParentMandalID, ParentGraamID, ParentVastiID, HasGraaminKshetra, ParentUpaNagarID) VALUES (' +
+          ' ParentShaharID, ParentMandalID, ParentGraamID, ParentVastiID, HasGraaminKshetra, ParentUpaNagarID, issankalpit) VALUES (' +
           data['GeoUnitID'].toString() +
           ',' +
           data['PraantID'].toString() +
@@ -850,6 +852,8 @@ class DatabaseHelper {
           (data['HasGraaminKshetra'].toString() == 'true' ? '1' : '0') +
           ',' +
           (data['ParentUpaNagarID'].toString()) +
+          ',' +
+          (data['issankalpit'].toString()) +
           ');';
       // }
     } else if (tableName == 'AbhiyaanGeoUnitMaster') {
@@ -1206,14 +1210,10 @@ class DatabaseHelper {
       await db.execute('PRAGMA foreign_keys = OFF;');
 
       // 2. Get all user tables
-      final List<Map<String, dynamic>> tables = await db.rawQuery(
-          "SELECT name FROM sqlite_master WHERE type='table'"
-      );
+      final List<Map<String, dynamic>> tables = await db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'");
 
       // 3. Check if the sqlite_sequence table even exists
-      final List<Map<String, dynamic>> seqCheck = await db.rawQuery(
-          "SELECT name FROM sqlite_master WHERE type='table' AND name='sqlite_sequence'"
-      );
+      final List<Map<String, dynamic>> seqCheck = await db.rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='sqlite_sequence'");
       final bool hasSequenceTable = seqCheck.isNotEmpty;
 
       // 4. Clear every single table

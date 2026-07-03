@@ -962,6 +962,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevel(String levelID) async {
       data['ParentVastiID'],
       data['ParentGraamID'],
       data['ParentUpaNagarID'],
+      data['issankalpit'],
     );
     _geounitList.add(info);
   });
@@ -1037,6 +1038,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForVasti(String levelI
       data['ParentVastiID'],
       data['ParentGraamID'],
       data['ParentUpaNagarID'],
+      data['issankalpit'],
     );
     _geounitList.add(info);
   });
@@ -1113,6 +1115,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForMandal(String level
       data['ParentVastiID'],
       data['ParentGraamID'],
       data['ParentUpaNagarID'],
+      data['issankalpit'],
     );
     _geounitList.add(info);
   });
@@ -1189,6 +1192,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForUpnagar(String leve
       data['ParentVastiID'],
       data['ParentGraamID'],
       data['ParentUpaNagarID'],
+      data['issankalpit'],
     );
     _geounitList.add(info);
   });
@@ -1197,11 +1201,12 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForUpnagar(String leve
 
 //===================================================================================================================================================================
 
-Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParent(String levelID, String parentID, String parentType, String pattern, {bool isAbhiyaan = false}) async {
+Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParent(String levelID, String parentID, String parentType, String pattern, {bool isAbhiyaan = false, bool isSankalpit = false}) async {
   // print("isabhiyaan >>>>>>>>>>>>>>>>>>>>>> $isAbhiyaan");
   if (parentID == '') parentID = '0';
   String strSql = "Select * from ${isAbhiyaan ? "AbhiyaanGeoUnitMaster" : "GeoUnitMaster"} WHERE LevelID=" +
       levelID +
+      (isSankalpit ? " AND issankalpit=0" : "") +
       (parentType != ""
           ? parentType == "Praant"
               ? " AND ParentPraantID=" + parentID
@@ -1254,6 +1259,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParent(String levelID, Strin
       data['ParentVastiID'],
       data['ParentGraamID'],
       data['ParentUpaNagarID'],
+      data['issankalpit'],
     );
     _geounitList.add(info);
   });
@@ -1294,6 +1300,7 @@ Future<GeoUnitMasterBAL?> getGeoUnitsByID(String geoUnitID) async {
       result[0]['ParentVastiID'],
       result[0]['ParentGraamID'],
       result[0]['ParentUpaNagarID'],
+      result[0]['issankalpit'],
     );
     return _geounit;
   } else {
@@ -4889,6 +4896,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitMasterForApp(
       data['ParentVastiID'],
       data['ParentGraamID'],
       data['ParentUpaNagarID'],
+      data['issankalpit'],
     );
     geoUnitList.add(info);
   });
@@ -6613,6 +6621,7 @@ Future<List<GeoUnitMasterBAL>?> getGeoShaakhaaForReportData(BuildContext context
             data['ParentVastiID'],
             data['ParentGraamID'],
             data['ParentUpaNagarID'],
+            data['issankalpit'],
           );
           geoUnitList.add(info);
         });

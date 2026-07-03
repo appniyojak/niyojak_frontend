@@ -5,6 +5,10 @@ class ShakhaaDailyWeeklyResponse {
   final String message;
   final int totalpresent;
   final int totalnewpresent;
+  final int shaakhaacount;
+  final int milancount;
+  final int mansikcount;
+  final int sangacount;
   final List<ActivityData> data;
 
   const ShakhaaDailyWeeklyResponse({
@@ -12,6 +16,10 @@ class ShakhaaDailyWeeklyResponse {
     required this.message,
     required this.totalpresent,
     required this.totalnewpresent,
+    required this.shaakhaacount,
+    required this.milancount,
+    required this.mansikcount,
+    required this.sangacount,
     required this.data,
   });
 
@@ -21,6 +29,10 @@ class ShakhaaDailyWeeklyResponse {
       message: json['Message'] ?? '',
       totalpresent: json['totalpresent'] ?? 0,
       totalnewpresent: json['totalnewpresent'] ?? 0,
+      shaakhaacount: json['shaakhaacount'] ?? 0,
+      milancount: json['milancount'] ?? 0,
+      mansikcount: json['mansikcount'] ?? 0,
+      sangacount: json['sangacount'] ?? 0,
       data: (json['Data'] as List<dynamic>? ?? []).map((e) => ActivityData.fromJson(e)).toList(),
     );
   }
@@ -53,6 +65,10 @@ class ShaakhaaMonthlyResponse {
   final String message;
   final int totalpresent;
   final int totalnewpresent;
+  final int shaakhaacount;
+  final int milancount;
+  final int mansikcount;
+  final int sangacount;
   final List<ActivityDataMonthly> mData;
 
   const ShaakhaaMonthlyResponse({
@@ -60,6 +76,10 @@ class ShaakhaaMonthlyResponse {
     required this.message,
     required this.totalpresent,
     required this.totalnewpresent,
+    required this.shaakhaacount,
+    required this.milancount,
+    required this.mansikcount,
+    required this.sangacount,
     required this.mData,
   });
 
@@ -69,6 +89,10 @@ class ShaakhaaMonthlyResponse {
       message: json['Message'] ?? '',
       totalpresent: json['totalpresent'] ?? 0,
       totalnewpresent: json['totalnewpresent'] ?? 0,
+      shaakhaacount: json['shaakhaacount'] ?? 0,
+      milancount: json['milancount'] ?? 0,
+      mansikcount: json['mansikcount'] ?? 0,
+      sangacount: json['sangacount'] ?? 0,
       mData: (json['MData'] as List<dynamic>? ?? []).map((e) => ActivityDataMonthly.fromJson(e)).toList(),
     );
   }
@@ -137,6 +161,10 @@ class ShaakhaaMultiMonthlyResponse {
   final String message;
   final int totalpresent;
   final int totalnewpresent;
+  final int shaakhaacount;
+  final int milancount;
+  final int mansikcount;
+  final int sangacount;
   final List<ActivityMonthlyData> data;
 
   const ShaakhaaMultiMonthlyResponse({
@@ -144,6 +172,10 @@ class ShaakhaaMultiMonthlyResponse {
     required this.message,
     required this.totalpresent,
     required this.totalnewpresent,
+    required this.shaakhaacount,
+    required this.milancount,
+    required this.mansikcount,
+    required this.sangacount,
     required this.data,
   });
 
@@ -153,6 +185,10 @@ class ShaakhaaMultiMonthlyResponse {
       message: json['Message'] ?? '',
       totalpresent: json['totalpresent'] ?? 0,
       totalnewpresent: json['totalnewpresent'] ?? 0,
+      shaakhaacount: json['shaakhaacount'] ?? 0,
+      milancount: json['milancount'] ?? 0,
+      mansikcount: json['mansikcount'] ?? 0,
+      sangacount: json['sangacount'] ?? 0,
       data: (json['Data'] as List<dynamic>? ?? []).map((e) => ActivityMonthlyData.fromJson(e)).toList(),
     );
   }
@@ -203,12 +239,20 @@ class MonthData {
 class AllDailyResponse {
   final String status;
   final String message;
+  final int shaakhaacount;
+  final int milancount;
+  final int mansikcount;
+  final int sangacount;
   final List<PresentList> pData;
   final List<ActivityData> aData; // reuses existing ActivityData
 
   const AllDailyResponse({
     required this.status,
     required this.message,
+    required this.shaakhaacount,
+    required this.milancount,
+    required this.mansikcount,
+    required this.sangacount,
     required this.pData,
     required this.aData,
   });
@@ -217,6 +261,10 @@ class AllDailyResponse {
     return AllDailyResponse(
       status: json['Status'] ?? '',
       message: json['Message'] ?? '',
+      shaakhaacount: json['shaakhaacount'] ?? 0,
+      milancount: json['milancount'] ?? 0,
+      mansikcount: json['mansikcount'] ?? 0,
+      sangacount: json['sangacount'] ?? 0,
       pData: (json['pData'] as List<dynamic>? ?? []).map((e) => PresentList.fromJson(e)).toList(),
       aData: (json['aData'] as List<dynamic>? ?? []).map((e) => ActivityData.fromJson(e)).toList(),
     );
@@ -276,6 +324,10 @@ class TotalCountShaakhaa {
 class AllWeeklyResponse {
   final String status;
   final String message;
+  final int shaakhaacount;
+  final int milancount;
+  final int mansikcount;
+  final int sangacount;
   final List<PresentList> pData;
   final List<AllWeeklyActivity> aData;
   final List<TotalCountShaakhaa> shaakhatotalcount;
@@ -286,6 +338,10 @@ class AllWeeklyResponse {
   const AllWeeklyResponse({
     required this.status,
     required this.message,
+    required this.shaakhaacount,
+    required this.milancount,
+    required this.mansikcount,
+    required this.sangacount,
     required this.pData,
     required this.aData,
     required this.shaakhatotalcount,
@@ -297,6 +353,10 @@ class AllWeeklyResponse {
   factory AllWeeklyResponse.fromJson(Map<String, dynamic> json) => AllWeeklyResponse(
         status: json['Status'] ?? '',
         message: json['Message'] ?? '',
+        shaakhaacount: json['shaakhaacount'] ?? 0,
+        milancount: json['milancount'] ?? 0,
+        mansikcount: json['mansikcount'] ?? 0,
+        sangacount: json['sangacount'] ?? 0,
         pData: (json['pData'] as List<dynamic>? ?? []).map((e) => PresentList.fromJson(e)).toList(),
         aData: (json['aData'] as List<dynamic>? ?? []).map((e) => AllWeeklyActivity.fromJson(e)).toList(),
         shaakhatotalcount: (json['shaakhatotalcount'] as List<dynamic>? ?? []).map((e) => TotalCountShaakhaa.fromJson(e)).toList(),
@@ -325,6 +385,10 @@ class AllWeeklyActivity {
 class AllMonthlyResponse {
   final String status;
   final String message;
+  final int shaakhaacount;
+  final int milancount;
+  final int mansikcount;
+  final int sangacount;
   final List<PresentList> pData;
   final List<AllMonthlyActivity> aData;
   final List<TotalCountShaakhaa> shaakhatotalcount;
@@ -335,6 +399,10 @@ class AllMonthlyResponse {
   const AllMonthlyResponse({
     required this.status,
     required this.message,
+    required this.shaakhaacount,
+    required this.milancount,
+    required this.mansikcount,
+    required this.sangacount,
     required this.pData,
     required this.aData,
     required this.shaakhatotalcount,
@@ -346,6 +414,10 @@ class AllMonthlyResponse {
   factory AllMonthlyResponse.fromJson(Map<String, dynamic> json) => AllMonthlyResponse(
         status: json['Status'] ?? '',
         message: json['Message'] ?? '',
+        shaakhaacount: json['shaakhaacount'] ?? 0,
+        milancount: json['milancount'] ?? 0,
+        mansikcount: json['mansikcount'] ?? 0,
+        sangacount: json['sangacount'] ?? 0,
         pData: (json['pData'] as List<dynamic>? ?? []).map((e) => PresentList.fromJson(e)).toList(),
         aData: (json['aData'] as List<dynamic>? ?? []).map((e) => AllMonthlyActivity.fromJson(e)).toList(),
         shaakhatotalcount: (json['shaakhatotalcount'] as List<dynamic>? ?? []).map((e) => TotalCountShaakhaa.fromJson(e)).toList(),
@@ -382,6 +454,10 @@ class AllMonthlyActivity {
 class AllMultiMonthlyResponse {
   final String status;
   final String message;
+  final int shaakhaacount;
+  final int milancount;
+  final int mansikcount;
+  final int sangacount;
   final List<PresentList> pData;
   final List<ActivityMonthlyData> aData; // reuses existing model
   final List<TotalCountShaakhaa> shaakhatotalcount;
@@ -392,6 +468,10 @@ class AllMultiMonthlyResponse {
   const AllMultiMonthlyResponse({
     required this.status,
     required this.message,
+    required this.shaakhaacount,
+    required this.milancount,
+    required this.mansikcount,
+    required this.sangacount,
     required this.pData,
     required this.aData,
     required this.shaakhatotalcount,
@@ -403,6 +483,10 @@ class AllMultiMonthlyResponse {
   factory AllMultiMonthlyResponse.fromJson(Map<String, dynamic> json) => AllMultiMonthlyResponse(
         status: json['Status'] ?? '',
         message: json['Message'] ?? '',
+        shaakhaacount: json['shaakhaacount'] ?? 0,
+        milancount: json['milancount'] ?? 0,
+        mansikcount: json['mansikcount'] ?? 0,
+        sangacount: json['sangacount'] ?? 0,
         pData: (json['pData'] as List<dynamic>? ?? []).map((e) => PresentList.fromJson(e)).toList(),
         aData: (json['aData'] as List<dynamic>? ?? []).map((e) => ActivityMonthlyData.fromJson(e)).toList(),
         shaakhatotalcount: (json['shaakhatotalcount'] as List<dynamic>? ?? []).map((e) => TotalCountShaakhaa.fromJson(e)).toList(),

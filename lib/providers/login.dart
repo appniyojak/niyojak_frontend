@@ -329,6 +329,7 @@ class LogIn {
   // }
   Future<void> logOut({bool isUpdate = false}) async {
     try {
+      Statics.deleteUserToken();
       print("logOut running");
 
       // Update user details
@@ -360,7 +361,7 @@ class LogIn {
       // print("clearData called");
 
       await DatabaseHelper.dropCompleteDB();
-      if(Platform.isIOS)await DatabaseHelper.forcePurgeDatabase();
+      if (Platform.isIOS) await DatabaseHelper.forcePurgeDatabase();
 
       print("logOut Done");
       // Clear mobile cache

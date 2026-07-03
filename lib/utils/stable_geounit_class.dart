@@ -565,7 +565,7 @@ class GeoHierarchyController extends ChangeNotifier {
 
   ////////////////////////////////////////////
 
-  Future<void> loadLevel(GeoLevel level, {GeoHierarchyFetchMode fetchMode = GeoHierarchyFetchMode.all}) async {
+  Future<void> loadLevel(GeoLevel level, {GeoHierarchyFetchMode fetchMode = GeoHierarchyFetchMode.all, bool isSankalpit = false}) async {
     /// DO NOT LOAD SHAAKHAA
     /// UNTIL GRAAM OR VASTI IS SELECTED
 
@@ -602,6 +602,7 @@ class GeoHierarchyController extends ChangeNotifier {
       parentId,
       parentType,
       fetchMode,
+      isSankalpit: isSankalpit,
     );
 
     state.items[level] = data;
@@ -611,7 +612,7 @@ class GeoHierarchyController extends ChangeNotifier {
 
   ////////////////////////////////////////////
 
-  Future<List<GeoUnitMasterBAL>> _fetchData(GeoHierarchyNode node, String parentId, String parentType, GeoHierarchyFetchMode fetchMode) async {
+  Future<List<GeoUnitMasterBAL>> _fetchData(GeoHierarchyNode node, String parentId, String parentType, GeoHierarchyFetchMode fetchMode, {bool isSankalpit = false}) async {
     final levelId = Statics.levels[node.levelIdKey].toString();
 
     switch (fetchMode) {
@@ -626,6 +627,7 @@ class GeoHierarchyController extends ChangeNotifier {
           parentType,
           '',
           isAbhiyaan: false,
+          isSankalpit: isSankalpit,
         );
 
       //////////////////////////////////////////
@@ -668,7 +670,7 @@ class GeoHierarchyController extends ChangeNotifier {
 
   ////////////////////////////////////////////
 
-  Future<void> onDropdownChanged({required GeoLevel level, required String? value, GeoHierarchyFetchMode fetchMode = GeoHierarchyFetchMode.all}) async {
+  Future<void> onDropdownChanged({required GeoLevel level, required String? value, GeoHierarchyFetchMode fetchMode = GeoHierarchyFetchMode.all, bool isSankalpit = false}) async {
     /// SAVE SELECTION
     final selectedItem = state.items[level]?.firstWhere((e) => e.geoUnitID.toString() == value);
 
@@ -710,7 +712,7 @@ class GeoHierarchyController extends ChangeNotifier {
 
     else if (level == GeoLevel.Graam || level == GeoLevel.Vasti) {
       if (_hasLevel(GeoLevel.Shaakhaa)) {
-        await loadLevel(GeoLevel.Shaakhaa);
+        await loadLevel(GeoLevel.Shaakhaa, isSankalpit: isSankalpit);
       }
     }
     ////////////////////////////////////////
@@ -1160,6 +1162,7 @@ class GeoDropdownWidget extends StatelessWidget {
   final GeoHierarchyFetchMode fetchMode;
   final InputDecoration? decoration;
   final bool? isDisabled;
+  final bool isSankalpit;
 
   const GeoDropdownWidget({
     super.key,
@@ -1172,6 +1175,7 @@ class GeoDropdownWidget extends StatelessWidget {
     this.isDisabled,
     this.decoration,
     this.fetchMode = GeoHierarchyFetchMode.all,
+    this.isSankalpit = false,
   });
 
   @override
@@ -1194,6 +1198,7 @@ class GeoDropdownWidget extends StatelessWidget {
           level: level,
           value: value,
           fetchMode: fetchMode,
+          isSankalpit: isSankalpit,
         );
         if (onChanged != null) onChanged!.call(value);
       },
