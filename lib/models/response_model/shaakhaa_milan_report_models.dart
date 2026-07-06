@@ -40,11 +40,13 @@ class ShakhaaDailyWeeklyResponse {
 
 class ActivityData {
   final String activity;
+  final String parentactivity;
   final String percentage; // ignored for daily
   final int value;
 
   const ActivityData({
     required this.activity,
+    required this.parentactivity,
     required this.percentage,
     required this.value,
   });
@@ -52,6 +54,7 @@ class ActivityData {
   factory ActivityData.fromJson(Map<String, dynamic> json) {
     return ActivityData(
       activity: json['Activity'] ?? '',
+      parentactivity: json['parentActivity'] ?? json['ParentActivity'] ?? '',
       percentage: (json['Percentage'] ?? '0').toString().replaceAll("%", ""),
       value: json['Value'] ?? 0,
     );
@@ -100,6 +103,7 @@ class ShaakhaaMonthlyResponse {
 
 class ActivityDataMonthly {
   final String activity;
+  final String parentactivity;
   final int week1;
   final String week1Percent;
   final String week1Range;
@@ -117,6 +121,7 @@ class ActivityDataMonthly {
 
   const ActivityDataMonthly({
     required this.activity,
+    required this.parentactivity,
     required this.week1,
     required this.week1Percent,
     required this.week1Range,
@@ -136,6 +141,7 @@ class ActivityDataMonthly {
   factory ActivityDataMonthly.fromJson(Map<String, dynamic> json) {
     return ActivityDataMonthly(
       activity: json['Activity'] ?? '',
+      parentactivity: json['parentActivity'] ?? json['ParentActivity'] ?? '',
       week1: json['Week1'] ?? 0,
       week1Percent: (json['Week1Percent'] ?? '0').toString().replaceAll("%", ""),
       week1Range: json['Week1Range'] ?? '',
@@ -196,16 +202,19 @@ class ShaakhaaMultiMonthlyResponse {
 
 class ActivityMonthlyData {
   final String activity;
+  final String parentactivity;
   final List<MonthData> months;
 
   const ActivityMonthlyData({
     required this.activity,
+    required this.parentactivity,
     required this.months,
   });
 
   factory ActivityMonthlyData.fromJson(Map<String, dynamic> json) {
     return ActivityMonthlyData(
       activity: json['Activity'] ?? '',
+      parentactivity: json['parentActivity'] ?? json['ParentActivity'] ?? '',
       months: (json['Months'] as List<dynamic>? ?? []).map((e) => MonthData.fromJson(e)).toList(),
     );
   }
@@ -368,13 +377,15 @@ class AllWeeklyResponse {
 
 class AllWeeklyActivity {
   final String activity;
+  final String parentactivity;
   final int timesDone; // TODO: confirm if this is day index (1–7) or cumulative count
   final int shaakhaCount;
 
-  const AllWeeklyActivity({required this.activity, required this.timesDone, required this.shaakhaCount});
+  const AllWeeklyActivity({required this.activity, required this.parentactivity, required this.timesDone, required this.shaakhaCount});
 
   factory AllWeeklyActivity.fromJson(Map<String, dynamic> json) => AllWeeklyActivity(
         activity: json['Activity'] ?? '',
+        parentactivity: json['parentActivity'] ?? json['ParentActivity'] ?? '',
         timesDone: json['TimesDone'] ?? 0,
         shaakhaCount: json['ShaakhaCount'] ?? 0,
       );
@@ -429,12 +440,14 @@ class AllMonthlyResponse {
 
 class AllMonthlyActivity {
   final String activity;
+  final String parentactivity;
   final String weekcolumn; // "Week1", "Week2", etc.
   final String weekRange; // "सप्ताह १", etc.
   final int shaakhaCount;
 
   const AllMonthlyActivity({
     required this.activity,
+    required this.parentactivity,
     required this.weekcolumn,
     required this.weekRange,
     required this.shaakhaCount,
@@ -442,6 +455,7 @@ class AllMonthlyActivity {
 
   factory AllMonthlyActivity.fromJson(Map<String, dynamic> json) => AllMonthlyActivity(
         activity: json['Activity'] ?? '',
+        parentactivity: json['parentActivity'] ?? json['ParentActivity'] ?? '',
         weekcolumn: json['weekcolumn'] ?? '',
         weekRange: json['WeekRange'] ?? '',
         shaakhaCount: json['ShaakhaCount'] ?? 0,

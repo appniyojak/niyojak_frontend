@@ -20,17 +20,17 @@ extension Durations on DurationTypes {
   String get name {
     switch (this) {
       case DurationTypes.daily:
-        return 'दैनिक';
+        return Statics.getLabel('daily', returnKey: true);
       case DurationTypes.weekly:
-        return 'साप्ताहिक';
+        return Statics.getLabel('weekly', returnKey: true);
       case DurationTypes.monthly:
-        return 'मासिक';
+        return Statics.getLabel('monthly', returnKey: true);
       case DurationTypes.quarterly:
-        return 'त्रैमासिक';
+        return Statics.getLabel('quarterly', returnKey: true);
       case DurationTypes.halfYearly:
-        return 'अर्धवार्षिक';
+        return Statics.getLabel('halfyearly', returnKey: true);
       case DurationTypes.yearly:
-        return 'वार्षिक';
+        return Statics.getLabel('yearly', returnKey: true);
     }
   }
 
@@ -68,6 +68,7 @@ class ProgrammeActivity {
 
 class ProgrammeBar {
   final String name;
+  final String parentActivity; // NEW
   final double progressFraction;
   final int totalDays;
   final double percent;
@@ -75,6 +76,7 @@ class ProgrammeBar {
 
   const ProgrammeBar({
     required this.name,
+    required this.parentActivity, // NEW
     required this.progressFraction,
     required this.totalDays,
     required this.percent,
@@ -134,7 +136,8 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
   int _sangacount = 0;
   List<BreakdownItem> _card1Breakdown = [];
   List<BreakdownItem> _card2Breakdown = [];
-  List<ProgrammeActivity> _activities = [];
+  List<ActivityData> _activities = [];
+  List<MapEntry<ActivityData, List<ActivityData>>> _groupedActivitiesList = [];
   List<ProgrammeBar> _programmeBars = [];
 
   // ── All-level daily (levelId != 1) ────────────────────────────────────────────
@@ -241,6 +244,33 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
     });
   }
 
+  /// Groups flat activity list into parent -> children structure.
+  /// - Activities with empty/null parentActivity are treated as top-level.
+  /// - An activity becomes a child if its `parentactivity` matches another activity's `activity` name.
+  List<MapEntry<ActivityData, List<ActivityData>>> _groupActivities(List<ActivityData> activities) {
+    final Set<String> activityNames = activities.map((a) => a.activity).toSet();
+
+    // Top-level = no parent, OR parent doesn't match any known activity (orphan, treat as top-level)
+    final topLevel = activities.where((a) {
+      return a.parentactivity.isEmpty || !activityNames.contains(a.parentactivity);
+    }).toList();
+
+    return topLevel.map((parent) {
+      final children = activities.where((a) => a.parentactivity.isNotEmpty && a.parentactivity == parent.activity).toList();
+      return MapEntry(parent, children);
+    }).toList();
+  }
+
+  List<MapEntry<ProgrammeBar, List<ProgrammeBar>>> _groupProgrammeBars(List<ProgrammeBar> bars) {
+    final names = bars.map((b) => b.name).toSet();
+    final topLevel = bars.where((b) => b.parentActivity.isEmpty || !names.contains(b.parentActivity)).toList();
+
+    return topLevel.map((parent) {
+      final children = bars.where((b) => b.parentActivity.isNotEmpty && b.parentActivity == parent.name).toList();
+      return MapEntry(parent, children);
+    }).toList();
+  }
+
   Future<void> _fetchReport() async {
     _isCleared = true;
     setState(() => _isSearched = false);
@@ -266,18 +296,20 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
             // ── Shaakhaa level (existing logic) ─────────────────────────────
             final res = await Statics.fetchShaakhaaDaily(req);
             if (!mounted) return;
+
             if (res == null) {
               Statics.showToast(Statics.getLabel('NoDataFound'));
               setState(() => _isSearched = _isCleared = false);
               return;
             }
+            _groupedActivitiesList = _groupActivities(res.data.toList());
             setState(() {
               _card1Value = res.totalpresent.toString();
               _card2Value = res.totalnewpresent.toString();
               _card1Breakdown = [];
               _card2Breakdown = [];
 
-              _activities = res.data.map((e) => ProgrammeActivity(e.activity, e.value == 1)).toList();
+              _activities = res.data.toList();
               _programmeBars = [];
               // clear all-level state
               _allPresentBreakdown = [];
@@ -328,6 +360,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                 final pct = double.tryParse(e.percentage) ?? 0;
                 return ProgrammeBar(
                   name: e.activity,
+                  parentActivity: e.parentactivity ?? '',
                   progressFraction: pct / 100,
                   totalDays: e.value,
                   percent: pct,
@@ -364,9 +397,9 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                         activityKey: e.key,
                         bars: e.value
                             .map((w) => ChartBarData(
-                                  xLabel: '${Statics.getLabel("daysonly")} ${w.timesDone}',
+                                  xLabel: '${w.timesDone} ${Statics.getLabel("daysonly")}',
                                   value: w.shaakhaCount,
-                                  tooltipTitle: '${Statics.getLabel("daysonly")} ${w.timesDone}',
+                                  tooltipTitle: '${w.timesDone} ${Statics.getLabel("daysonly")}',
                                 ))
                             .toList(),
                       ))
@@ -394,6 +427,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                 final pct = double.tryParse(e.percentage28Days) ?? 0;
                 return ProgrammeBar(
                   name: e.activity,
+                  parentActivity: e.parentactivity,
                   progressFraction: pct / 100,
                   totalDays: e.total28Days,
                   percent: pct,
@@ -486,6 +520,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
 
                 return ProgrammeBar(
                   name: e.activity,
+                  parentActivity: e.parentactivity,
                   progressFraction: avgPct / 100,
                   totalDays: totalDays,
                   percent: avgPct,
@@ -581,29 +616,31 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                 SizedBox(height: 170, child: Center(child: Text(Statics.getLabel('noDataFoundTryAnotherSearch'))))
               else ...[
                 // ── Stat Cards ──────────────────────────────────────────────
-                Row(
-                  spacing: 12,
-                  children: [
-                    Expanded(
-                      child: _statCard(Statics.getLabel("shaakhaaCount"), _shaakhaacount.toString()),
-                    ),
-                    Expanded(
-                      child: _statCard(Statics.getLabel("saaptaahikMilanCount"), _milancount.toString()),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  spacing: 12,
-                  children: [
-                    Expanded(
-                      child: _statCard(Statics.getLabel("masikMilanCount"), _mansikcount.toString()),
-                    ),
-                    Expanded(
-                      child: _statCard(Statics.getLabel("sanghaCount"), _sangacount.toString()),
-                    ),
-                  ],
-                ),
+                if (controller.deepestSelectedLevelId != 1) ...[
+                  Row(
+                    spacing: 12,
+                    children: [
+                      Expanded(
+                        child: _statCard(Statics.getLabel("shaakhaaCount"), _shaakhaacount.toString()),
+                      ),
+                      Expanded(
+                        child: _statCard(Statics.getLabel("saaptaahikMilanCount"), _milancount.toString()),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    spacing: 12,
+                    children: [
+                      Expanded(
+                        child: _statCard(Statics.getLabel("masikMilanCount"), _mansikcount.toString()),
+                      ),
+                      Expanded(
+                        child: _statCard(Statics.getLabel("sanghaCount"), _sangacount.toString()),
+                      ),
+                    ],
+                  ),
+                ],
                 const SizedBox(height: 14),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -685,7 +722,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
 
                 // ── Programme / Chart section ────────────────────────────────
                 if (_kalavadha == DurationTypes.daily) ...[
-                  if (_isAllLevel) _AllLevelProgrammeBarsSection(aData: _allAData) else _DailyChecklistWidget(activities: _activities),
+                  if (_isAllLevel) _AllLevelProgrammeBarsSection(aData: _allAData) else _DailyChecklistWidget(groupActivities: _groupedActivitiesList),
                 ] else ...[
                   if (_isAllLevel)
                     AllLevelChartSection(
@@ -693,7 +730,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                       kalavadha: _kalavadha,
                     )
                   else
-                    _ProgrammeBarsSection(bars: _programmeBars, kalavadha: _kalavadha),
+                    _ProgrammeBarsSection(grouped: _groupProgrammeBars(_programmeBars), kalavadha: _kalavadha),
                 ],
 
                 // ── Top 10 — only when all-level + non-daily ──────────────
@@ -761,9 +798,9 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   Text(
-                    'शाखा रैंकिंग',
+                    Statics.getLabel('shaakhaaRanking'),
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w800,
@@ -773,7 +810,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                   ),
                   SizedBox(height: 3),
                   Text(
-                    'अपनी शाखा की स्थिति और आस-पास की प्रतिस्पर्धा देखें',
+                    Statics.getLabel('shaakhaaRankingSubTitle'),
                     style: TextStyle(
                       fontSize: 11.5,
                       color: Colors.white70,
@@ -1202,7 +1239,9 @@ class _StatCard extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              b.label.substring(0, 3),
+                              b.label.contains("Proudh")
+                                  ? Statics.getLabel(b.label.replaceAll(' ', ''), returnKey: true).split(" ").first
+                                  : Statics.getLabel(b.label.replaceAll(' ', '') == "TarunVidyaarthi" ? "mahavidya" : b.label.replaceAll(' ', ''), returnKey: true).substring(0, 3),
                               style: const TextStyle(
                                 fontSize: 9,
                                 color: Color(0xFF8E8E93),
@@ -1234,9 +1273,10 @@ class _StatCard extends StatelessWidget {
 
 // ─── Daily Checklist Widget ───────────────────────────────────────────────────
 class _DailyChecklistWidget extends StatelessWidget {
-  final List<ProgrammeActivity> activities;
+  // final List<ActivityData> activities;
+  final List<MapEntry<ActivityData, List<ActivityData>>> groupActivities;
 
-  const _DailyChecklistWidget({required this.activities});
+  const _DailyChecklistWidget({required this.groupActivities});
 
   @override
   Widget build(BuildContext context) {
@@ -1269,7 +1309,12 @@ class _DailyChecklistWidget extends StatelessWidget {
               ],
             ),
           ),
-          ...activities.map((a) => _ChecklistRow(activity: a)),
+          // ...activities.map((a) => _ChecklistRow(activity: a)),
+          ...groupActivities.map((entry) {
+            final parent = entry.key;
+            final children = entry.value;
+            return children.isEmpty ? _ChecklistRow(activity: parent) : _ExpandableParentTile(parent: parent, children: children);
+          }),
         ],
       ),
     );
@@ -1277,34 +1322,164 @@ class _DailyChecklistWidget extends StatelessWidget {
 }
 
 class _ChecklistRow extends StatelessWidget {
-  final ProgrammeActivity activity;
+  final ActivityData activity;
+  final bool isChild;
 
-  const _ChecklistRow({required this.activity});
+  const _ChecklistRow({required this.activity, this.isChild = false});
 
   @override
   Widget build(BuildContext context) {
+    final bool isDone = activity.value >= 1;
+    final Color statusColor = isDone ? const Color(0xFF22C55E) : const Color(0xFFEF4444);
+
     return Container(
-      decoration: const BoxDecoration(
-        border: Border(
+      decoration: BoxDecoration(
+        color: isChild ? const Color(0xFFFAFAFC) : Colors.white,
+        border: const Border(
           bottom: BorderSide(color: Color(0xFFF2F2F7), width: 1),
         ),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      padding: EdgeInsets.only(
+        left: isChild ? 0 : 16, // no left padding for children; stub handles spacing
+        right: 16,
+        top: isChild ? 12 : 16,
+        bottom: isChild ? 12 : 16,
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            Statics.getLabel(activity.name),
-            style: const TextStyle(
-              fontSize: 14,
-              color: Color(0xFF1C1C1E),
-              fontWeight: FontWeight.w400,
+          Expanded(
+            child: Row(
+              children: [
+                if (isChild) ...[
+                  // horizontal stub connecting the shared trunk line to the label
+                  Container(
+                    margin: const EdgeInsets.only(left: 28),
+                    width: 16,
+                    height: 1.5,
+                    color: const Color(0xFFD1D1D6),
+                  ),
+                  const SizedBox(width: 8),
+                ] else
+                  const SizedBox.shrink(),
+                Expanded(
+                  child: Text(
+                    Statics.getLabel(activity.activity, returnKey: true),
+                    style: TextStyle(
+                      fontSize: isChild ? 13.5 : 14.5,
+                      color: isChild ? const Color(0xFF48484A) : const Color(0xFF1C1C1E),
+                      fontWeight: isChild ? FontWeight.w400 : FontWeight.w600,
+                      height: 1.3,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
             ),
           ),
-          Icon(
-            activity.completed ? Icons.check_circle_outline : Icons.cancel_outlined,
-            size: 22,
-            color: activity.completed ? const Color(0xFF22C55E) : const Color(0xFFEF4444),
+          const SizedBox(width: 10),
+          Container(
+            width: isChild ? 26 : 30,
+            height: isChild ? 26 : 30,
+            decoration: BoxDecoration(
+              color: statusColor.withOpacity(0.12),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              isDone ? Icons.check_rounded : Icons.close_rounded,
+              size: isChild ? 15 : 18,
+              color: statusColor,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ExpandableParentTile extends StatelessWidget {
+  final ActivityData parent;
+  final List<ActivityData> children;
+
+  const _ExpandableParentTile({required this.parent, required this.children});
+
+  static const double _rowHeight = 52; // fixed height assumption per child row (single-line text)
+  static const double _trunkX = 28;
+
+  @override
+  Widget build(BuildContext context) {
+    final bool isDone = parent.value >= 1;
+    final Color statusColor = isDone ? const Color(0xFF22C55E) : const Color(0xFFEF4444);
+
+    return Theme(
+      // strip default divider lines ExpansionTile adds, we already draw our own borders
+      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+      child: ExpansionTile(
+        key: PageStorageKey(parent.activity),
+        // preserves expand state across rebuilds/_fetchData()
+        initiallyExpanded: true,
+        // keep existing "always visible" behavior by default
+        tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        childrenPadding: EdgeInsets.zero,
+        backgroundColor: Colors.white,
+        collapsedBackgroundColor: Colors.white,
+        controlAffinity: ListTileControlAffinity.leading,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Text(
+                Statics.getLabel(parent.activity, returnKey: true),
+                style: const TextStyle(
+                  fontSize: 14.5,
+                  color: Color(0xFF1C1C1E),
+                  fontWeight: FontWeight.w600,
+                  height: 1.3,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            const SizedBox(width: 10),
+            Container(
+              width: 30,
+              height: 30,
+              decoration: BoxDecoration(
+                color: statusColor.withOpacity(0.12),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                isDone ? Icons.check_rounded : Icons.close_rounded,
+                size: 18,
+                color: statusColor,
+              ),
+            ),
+          ],
+        ),
+        // default chevron auto-appears here, animated by ExpansionTile itself
+        children: [
+          Stack(
+            children: [
+              if (children.length > 1)
+                Positioned(
+                  left: _trunkX,
+                  top: 0,
+                  child: Container(
+                    width: 1.5,
+                    height: (children.length - 1) * _rowHeight + (_rowHeight / 2),
+                    color: const Color(0xFFD1D1D6),
+                  ),
+                ),
+              Column(
+                children: children
+                    .map((c) => SizedBox(
+                          height: _rowHeight,
+                          child: _ChecklistRow(activity: c, isChild: true),
+                        ))
+                    .toList(),
+              ),
+            ],
           ),
         ],
       ),
@@ -1315,25 +1490,23 @@ class _ChecklistRow extends StatelessWidget {
 // ─── Programme Bars Section ───────────────────────────────────────────────────
 
 class _ProgrammeBarsSection extends StatelessWidget {
-  final List<ProgrammeBar> bars;
+  // final List<ProgrammeBar> bars;
+  final List<MapEntry<ProgrammeBar, List<ProgrammeBar>>> grouped;
   final DurationTypes kalavadha;
 
-  const _ProgrammeBarsSection({
-    required this.bars,
-    required this.kalavadha,
-  });
+  const _ProgrammeBarsSection({required this.grouped, required this.kalavadha});
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: bars
-          .map(
-            (bar) => Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: _ProgrammeBarCard(bar: bar, kalavadha: kalavadha),
-            ),
-          )
-          .toList(),
+      children: grouped.map((entry) {
+        final parent = entry.key;
+        final children = entry.value;
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: children.isEmpty ? _ProgrammeBarCard(bar: parent, kalavadha: kalavadha) : _ExpandableProgrammeBarGroup(parent: parent, children: children, kalavadha: kalavadha),
+        );
+      }).toList(),
     );
   }
 }
@@ -1341,84 +1514,158 @@ class _ProgrammeBarsSection extends StatelessWidget {
 class _ProgrammeBarCard extends StatelessWidget {
   final ProgrammeBar bar;
   final DurationTypes kalavadha;
+  final bool isChild; // NEW
+  final bool embedded; // NEW
 
-  const _ProgrammeBarCard({required this.bar, required this.kalavadha});
+  const _ProgrammeBarCard({
+    required this.bar,
+    required this.kalavadha,
+    this.isChild = false,
+    this.embedded = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     final hasSubPeriods = bar.subPeriods.isNotEmpty;
 
-    return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 18),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Text(
-                  Statics.getLabel(bar.name),
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFF1C1C1E),
-                  ),
+    final content = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Text(
+                Statics.getLabel(bar.name, returnKey: true),
+                style: TextStyle(
+                  fontSize: isChild ? 13.5 : 15,
+                  fontWeight: isChild ? FontWeight.w500 : FontWeight.w600,
+                  color: const Color(0xFF1C1C1E),
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFFF3E0),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  '${Statics.getLabel("Total")}: ${bar.totalDays} ${Statics.getLabel("daysonly")} (${bar.percent.toStringAsFixed(2)}%)',
-                  style: const TextStyle(
-                    fontSize: 11.5,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFFE65100),
-                  ),
-                ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFF3E0),
+                borderRadius: BorderRadius.circular(20),
               ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          LayoutBuilder(
-            builder: (context, constraints) {
-              return Stack(
-                children: [
-                  Container(
-                    height: 8,
-                    width: constraints.maxWidth,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFE5E5EA),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  ),
-                  Container(
-                    height: 8,
-                    width: constraints.maxWidth * bar.progressFraction,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFF6B00),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  ),
-                ],
-              );
-            },
-          ),
-          if (hasSubPeriods) ...[
-            const SizedBox(height: 14),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: bar.subPeriods.map((sp) => _SubPeriodCell(subPeriod: sp)).toList(),
+              child: Text(
+                '${Statics.getLabel("Total")}: ${bar.totalDays} ${Statics.getLabel("daysonly")} (${bar.percent.toStringAsFixed(2)}%)',
+                style: const TextStyle(
+                  fontSize: 11.5,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFFE65100),
+                ),
               ),
             ),
           ],
+        ),
+        const SizedBox(height: 10),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            return Stack(
+              children: [
+                Container(
+                  height: 8,
+                  width: constraints.maxWidth,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFE5E5EA),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                ),
+                Container(
+                  height: 8,
+                  width: constraints.maxWidth * bar.progressFraction,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFF6B00),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+        if (hasSubPeriods) ...[
+          const SizedBox(height: 14),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: bar.subPeriods.map((sp) => _SubPeriodCell(subPeriod: sp)).toList(),
+            ),
+          ),
         ],
+      ],
+    );
+
+    if (embedded) return content; // parent wrapper below supplies the box + padding
+
+    return Container(
+      decoration: BoxDecoration(
+        color: isChild ? const Color(0xFFFAFAFC) : Colors.white,
+        borderRadius: BorderRadius.circular(isChild ? 8 : 0),
+        border: isChild ? Border.all(color: const Color(0xFFF0F0F0)) : null,
+      ),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 18),
+      child: content,
+    );
+  }
+}
+
+class _ExpandableProgrammeBarGroup extends StatelessWidget {
+  final ProgrammeBar parent;
+  final List<ProgrammeBar> children;
+  final DurationTypes kalavadha;
+
+  const _ExpandableProgrammeBarGroup({
+    required this.parent,
+    required this.children,
+    required this.kalavadha,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Theme(
+      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+      child: Container(
+        clipBehavior: Clip.antiAlias,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: const Color(0xFFF0F0F0)),
+        ),
+        child: ExpansionTile(
+          key: PageStorageKey(parent.name),
+          // preserves expand state across rebuilds
+          initiallyExpanded: true,
+          tilePadding: const EdgeInsets.fromLTRB(16, 16, 16, 18),
+          childrenPadding: const EdgeInsets.only(left: 12, right: 12, bottom: 12),
+          title: _ProgrammeBarCard(bar: parent, kalavadha: kalavadha, embedded: true),
+          children: List.generate(children.length, (i) {
+            final isLast = i == children.length - 1;
+            return IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(
+                    width: 28,
+                    child: CustomPaint(painter: _TreeLinePainter(isLast: isLast)),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: _ProgrammeBarCard(
+                        bar: children[i],
+                        kalavadha: kalavadha,
+                        isChild: true,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }),
+        ),
       ),
     );
   }
@@ -2558,4 +2805,30 @@ class _RankRow extends StatelessWidget {
         );
     }
   }
+}
+
+class _TreeLinePainter extends CustomPainter {
+  final bool isLast;
+
+  _TreeLinePainter({required this.isLast});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = const Color(0xFFD1D1D6)
+      ..strokeWidth = 1.5
+      ..style = PaintingStyle.stroke;
+
+    final double midY = size.height / 2;
+    final double centerX = size.width / 2;
+
+    canvas.drawLine(Offset(centerX, 0), Offset(centerX, midY), paint); // trunk down to stub
+    canvas.drawLine(Offset(centerX, midY), Offset(size.width, midY), paint); // stub into the card
+    if (!isLast) {
+      canvas.drawLine(Offset(centerX, midY), Offset(centerX, size.height), paint); // continue trunk to next sibling
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _TreeLinePainter oldDelegate) => oldDelegate.isLast != isLast;
 }

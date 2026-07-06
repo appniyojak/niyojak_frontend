@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -11,6 +12,11 @@ import '../helpers/static_data.dart' as Statics;
 import '../screens/shaakhaa_milan_module/shaakha_main_tab_screen.dart';
 
 /// -----------------------------------------------------------------------
+@pragma('vm:entry-point')
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  debugPrint('[PushNotification] Background message: ${message.messageId}');
+}
 
 /// Central service responsible for:
 /// - Requesting notification permissions (Android 13+/iOS)
@@ -41,6 +47,10 @@ class PushNotificationService with WidgetsBindingObserver {
 
   int _notificationId = 0;
   bool _initialized = false;
+
+  /// True when _pendingRouteData came from a cold (terminated) launch —
+  /// meaning startup data (Statics.userDetails etc.) may not be loaded yet.
+  bool _isColdStartRoute = false;
 
   /// Route we couldn't dispatch yet because the Navigator wasn't attached
   /// (typically: app launched cold via a notification tap).
@@ -223,7 +233,13 @@ class PushNotificationService with WidgetsBindingObserver {
   Future<void> _handleTerminatedLaunchMessage() async {
     final initialMessage = await _messaging.getInitialMessage();
     if (initialMessage != null) {
-      _routeFromData(initialMessage.data);
+      // Do NOT route now — app was launched cold, SplashScreenCheck hasn't
+      // finished its data loading yet (login state, Statics.userDetails,
+      // etc.). Stash it; SplashScreenCheck.switchScreens() will call
+      // dispatchAfterStartup() once startup is actually done.
+      _pendingRouteData = initialMessage.data;
+      _isColdStartRoute = true;
+      debugPrint('[PushNotification] Cold start via notification, deferring route: ${initialMessage.data}');
     }
   }
 
@@ -396,6 +412,29 @@ class PushNotificationService with WidgetsBindingObserver {
 
       default:
         debugPrint('[PushNotification] Unhandled action "$action".');
+    }
+  }
+
+  /// Called by SplashScreenCheck once it has finished loading startup data
+  /// and decided the normal [landingPage]. Navigates to landingPage, then —
+  /// only if a cold-start notification is pending — pushes the notification's
+  /// target route on top, now that the app actually has data to show.
+  void dispatchAfterStartup(BuildContext context, Widget landingPage) {
+    final data = _pendingRouteData;
+    final isCold = _isColdStartRoute;
+    _pendingRouteData = null;
+    _isColdStartRoute = false;
+
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => landingPage));
+
+    if (isCold && data != null) {
+      final action = data['action']?.toString() ?? '';
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final navigator = navigatorKey.currentState;
+        if (navigator != null) {
+          _dispatchRoute(navigator, action, data);
+        }
+      });
     }
   }
 }

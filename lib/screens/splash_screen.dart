@@ -17,6 +17,7 @@ import '../providers/login.dart';
 import '../screens/change_password.dart';
 import '../screens/login_screen.dart';
 import '../screens/update_version.dart';
+import '../utils/notification_service.dart';
 import 'AbhiyanScreen.dart';
 import 'home_screen/home_screen.dart';
 import 'shatabdi_vrutta_sankalan/gruh_sampark_abhiyaan/gruh_abhiyaan_main_tab_screen.dart';
@@ -140,6 +141,10 @@ class _SplashScreenCheckState extends State<SplashScreenCheck> {
       if (Statics.userDetails['userID'] != null) {
         Navigator.of(contx).pushReplacementNamed(EditSwayamsevakScreen.routeName, arguments: Statics.ScreenArgumentsNew(int.parse(Statics.userDetails['userID']), Statics.getLabel('EditMenu')));
       }
+    } else if (landingPage is HomeScreen || landingPage is GruhAbhiyaanMainTabScreen) {
+      // Startup data is guaranteed loaded here — safe to dispatch any
+      // deferred cold-start notification route on top of this screen.
+      PushNotificationService.instance.dispatchAfterStartup(contx, landingPage);
     } else {
       Navigator.of(contx).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => landingPage));
     }

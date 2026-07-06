@@ -114,7 +114,7 @@ Future<void> main() async {
   // deliver a background message while the rest of init() is still running.
   // `firebaseMessagingBackgroundHandler` lives in notification_service.dart
   // so there is a single source of truth for background handling.
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
   // Owns: permission requests, local-notification channel setup, foreground
   // display, FCM token issuance/refresh + persistence, and tap-to-route
@@ -122,12 +122,6 @@ Future<void> main() async {
   await PushNotificationService.instance.init();
 
   runApp(NiyojakApp());
-}
-
-@pragma('vm:entry-point')
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp(name: "niyojak-cdd79", options: DefaultFirebaseOptions.currentPlatform);
-  debugPrint('[PushNotification] Background message: ${message.messageId}');
 }
 
 class NiyojakApp extends StatefulWidget {

@@ -155,11 +155,17 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
   bool _isExcelDownloading = false;
 
   // Year selector range for the "प्रारंभ वर्ष / अंत वर्ष" dropdowns.
-  late final List<int> allYears = List.generate(10, (i) => DateTime.now().year - 9 + i);
+  static const int _startYear = 2023;
+  static const int _maxSpan = 4; // inclusive span, e.g. 2022-2025
+
+  late final List<int> allYears = List.generate(
+    DateTime.now().year - _startYear + 1,
+    (i) => _startYear + i,
+  );
 
   String vayogat = "एकूण";
-  late int fromYear = DateTime.now().year - 4;
-  late int toYear = DateTime.now().year;
+  late int toYear = allYears.last;
+  late int fromYear = (toYear - (_maxSpan - 1)) < _startYear ? _startYear : toYear - (_maxSpan - 1);
 
   bool isLoading = false;
   String? errorMessage;
@@ -232,7 +238,7 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
       final res = await Statics.fetchTulnatmak(req);
       if (res?.isSuccess == false) {
         setState(() {
-          errorMessage = res?.message.isNotEmpty == true ? res?.message : "डेटा मिळवण्यात अडचण आली.";
+          errorMessage = res?.message.isNotEmpty == true ? res?.message : "errorOccurred";
           isLoading = false;
         });
         return;
@@ -243,7 +249,7 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
       });
     } catch (e) {
       setState(() {
-        errorMessage = "नेटवर्क त्रुटी आली. पुन्हा प्रयत्न करा.";
+        errorMessage = "internetNotConnected";
         isLoading = false;
       });
     }
@@ -252,9 +258,20 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
   void _handleFromYear(int y) {
     setState(() {
       fromYear = y;
-      if (y > toYear) toYear = y;
+      // clamp toYear so span never exceeds _maxSpan years
+      final maxAllowedTo = fromYear + (_maxSpan - 1);
+      if (toYear < fromYear) {
+        toYear = fromYear;
+      } else if (toYear > maxAllowedTo) {
+        toYear = maxAllowedTo > allYears.last ? allYears.last : maxAllowedTo;
+      }
     });
-    _fetchData();
+    // _fetchData();
+  }
+
+  void _handleToYear(int y) {
+    setState(() => toYear = y);
+    // _fetchData();
   }
 
   /////////////////////////////////////////////////////////////////////////
@@ -489,7 +506,6 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
                 title: 'Mahaanagar',
                 controller: ctrl,
                 decoration: styledDropdownDecoration(Statics.getLabel("Mahaanagar")),
-                onChanged: (p0) => _fetchData(),
               ),
 
               GeoDropdownWidget(
@@ -497,7 +513,6 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
                 title: 'Vibhaag',
                 controller: ctrl,
                 decoration: styledDropdownDecoration(Statics.getLabel("Vibhaag")),
-                onChanged: (p0) => _fetchData(),
               ),
 
               if (ctrl.hasItems(GeoLevel.Bhaag))
@@ -506,7 +521,6 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
                   title: 'Bhaag',
                   controller: ctrl,
                   decoration: styledDropdownDecoration(Statics.getLabel("Bhaag")),
-                  onChanged: (p0) => _fetchData(),
                 ),
 
               if (ctrl.hasItems(GeoLevel.Nagar))
@@ -515,7 +529,6 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
                   title: 'Nagar',
                   controller: ctrl,
                   decoration: styledDropdownDecoration(Statics.getLabel("Nagar")),
-                  onChanged: (p0) => _fetchData(),
                 ),
 
               if (ctrl.hasItems(GeoLevel.upnagarUpkhanda))
@@ -524,7 +537,6 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
                   title: 'upnagarUpkhanda',
                   controller: ctrl,
                   decoration: styledDropdownDecoration(Statics.getLabel("upnagarUpkhanda")),
-                  onChanged: (p0) => _fetchData(),
                 ),
 
               if (ctrl.hasItems(GeoLevel.Mandal))
@@ -533,7 +545,6 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
                   title: 'Mandal',
                   controller: ctrl,
                   decoration: styledDropdownDecoration(Statics.getLabel("Mandal")),
-                  onChanged: (p0) => _fetchData(),
                 ),
 
               if (ctrl.hasItems(GeoLevel.Graam))
@@ -542,7 +553,6 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
                   title: 'Graam',
                   controller: ctrl,
                   decoration: styledDropdownDecoration(Statics.getLabel("Graam")),
-                  onChanged: (p0) => _fetchData(),
                   isSankalpit: true,
                 ),
 
@@ -552,7 +562,6 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
                   title: 'Vasti',
                   controller: ctrl,
                   decoration: styledDropdownDecoration(Statics.getLabel("Vasti")),
-                  onChanged: (p0) => _fetchData(),
                   isSankalpit: true,
                 ),
 
@@ -562,7 +571,6 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
                   title: 'Shaakhaa',
                   controller: ctrl,
                   decoration: styledDropdownDecoration(Statics.getLabel("Shaakhaa")),
-                  onChanged: (p0) => _fetchData(),
                 ),
 
               if (ctrl.deepestSelectedLevelId != 1) ...[
@@ -578,7 +586,6 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
                   onChanged: (v) {
                     if (v != null) {
                       setState(() => _selectedVayogat = v);
-                      _fetchData();
                     }
                   },
                 ),
@@ -599,14 +606,46 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
                       label: "अंत वर्ष (तक)",
                       value: toYear,
                       options: allYears.where((y) => y >= fromYear).toList(),
-                      onChanged: (v) {
-                        setState(() => toYear = v);
-                        _fetchData();
-                      },
+                      //options: allYears.where((y) => y >= fromYear && y <= fromYear + (_maxSpan - 1)).toList(),
+                      onChanged: _handleToYear,
                     ),
                   ),
                 ],
               ),
+
+              // ── Kalavadhi + Vayogat row ──────────────────
+              if (ctrl.deepestSelectedLevelId != 1)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  spacing: 12,
+                  children: [
+                    // Kalavadhi dropdown
+                    MaterialButton(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 15,
+                        vertical: 8,
+                      ),
+                      color: Theme.of(context).primaryColor,
+                      textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+                      onPressed: _fetchData,
+                      child: Text(
+                        Statics.getLabel('Search'),
+                        style: TextStyle(fontSize: 25),
+                      ),
+                    ),
+
+                    // Vayogat dropdown — populated from DB with Total prepended
+                    MaterialButton(
+                        onPressed: () {
+                          print("clear button pressed");
+                          response = null;
+                          setState(() => isLoading = false);
+                          ctrl.loadHierarchyForUser();
+                        },
+                        child: Text(Statics.getLabel('clear')))
+                  ],
+                ),
             ],
           ),
         );
@@ -626,14 +665,14 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            errorMessage ?? "काहीतरी चुकले.",
+            Statics.getLabel(errorMessage ?? "unableToCompleteProcess"),
             style: const TextStyle(fontSize: 13, color: Color(0xFFB91C1C)),
           ),
           const SizedBox(height: 10),
           TextButton(
             onPressed: _fetchData,
             style: TextButton.styleFrom(foregroundColor: Colors.orange),
-            child: const Text("पुन्हा प्रयत्न करा"),
+            child: const Text("noDataFoundTryAnotherSearch"),
           ),
         ],
       ),
@@ -673,29 +712,71 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
               ),
 
             // ── KPI Cards ──
-            Row(
-              spacing: 12,
-              children: [
-                Expanded(
-                  child: _statCard(Statics.getLabel("shaakhaaCount"), _shaakhaacount),
-                ),
-                Expanded(
-                  child: _statCard(Statics.getLabel("saaptaahikMilanCount"), _milancount),
-                ),
-              ],
+
+            // ── FRD / selection summary banner ───────────────
+            Container(
+              width: double.infinity,
+              color: const Color(0xFFEFF6FF),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Icon(Icons.info_outline, size: 16, color: Color(0xFF3B82F6)),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${Statics.getLabel(controller.deepestSelectedLevelName ?? "praant")}: '
+                          '${controller.deepestSelectedGeoUnitName ?? ""}',
+                          style: const TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF1D4ED8),
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          '${controller.deepestSelectedLevelId != 1 ? "${_selectedVayogat.codeForDisplay ?? ""}" : ""}',
+                          style: const TextStyle(
+                            fontSize: 11,
+                            color: Color(0xFF3B82F6),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: 12),
-            Row(
-              spacing: 12,
-              children: [
-                Expanded(
-                  child: _statCard(Statics.getLabel("masikMilanCount"), _mansikcount),
-                ),
-                Expanded(
-                  child: _statCard(Statics.getLabel("sanghaCount"), _sangacount),
-                ),
-              ],
-            ),
+
+            const SizedBox(height: 10),
+            if (controller.deepestSelectedLevelId != 1) ...[
+              Row(
+                spacing: 12,
+                children: [
+                  Expanded(
+                    child: _statCard(Statics.getLabel("shaakhaaCount"), _shaakhaacount),
+                  ),
+                  Expanded(
+                    child: _statCard(Statics.getLabel("saaptaahikMilanCount"), _milancount),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Row(
+                spacing: 12,
+                children: [
+                  Expanded(
+                    child: _statCard(Statics.getLabel("masikMilanCount"), _mansikcount),
+                  ),
+                  Expanded(
+                    child: _statCard(Statics.getLabel("sanghaCount"), _sangacount),
+                  ),
+                ],
+              ),
+            ],
             const SizedBox(height: 14),
             Row(
               children: [
@@ -703,7 +784,7 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
                   child: _kpiCard(
                     label: "उपस्थिती (YoY)",
                     showUp: !totalIsNeg,
-                    valueText: data.totalGrowth.isEmpty ? "—" : data.totalGrowth,
+                    valueText: data.totalGrowth.isEmpty ? "0" : data.totalGrowth,
                     // valueColor: totalIsNeg ? const Color(0xFFB91C1C) : const Color(0xFF15803D),
                   ),
                 ),
@@ -712,7 +793,7 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
                   child: _kpiCard(
                     label: "नवीन भरती (YoY)",
                     showUp: !newIsNeg,
-                    valueText: data.newGrowth.isEmpty ? "—" : data.newGrowth,
+                    valueText: data.newGrowth.isEmpty ? "0" : data.newGrowth,
                     // valueColor: newIsNeg ? const Color(0xFFB91C1C) : const Color(0xFF15803D),
                   ),
                 ),
