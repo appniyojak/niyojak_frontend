@@ -526,7 +526,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                   percent: avgPct,
                   subPeriods: e.months
                       .map((m) => SubPeriod(
-                            m.range.isNotEmpty ? m.range : '${Statics.getLabel("monthOnly")} ${m.monthNo}',
+                            m.range.isNotEmpty ? m.range : '${m.monthNo} ${Statics.getLabel("monthOnly")}',
                             '${m.value} ${Statics.getLabel("daysonly")}',
                             m.percentage.toStringAsFixed(2),
                           ))
@@ -561,9 +561,9 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                         activityKey: e.activity,
                         bars: e.months
                             .map((m) => ChartBarData(
-                                  xLabel: m.range.isNotEmpty ? m.range : '${Statics.getLabel("monthOnly")} ${m.monthNo}',
+                                  xLabel: m.range.isNotEmpty ? m.range : '${m.monthNo} ${Statics.getLabel("monthOnly")}',
                                   value: m.value,
-                                  tooltipTitle: m.range.isNotEmpty ? m.range : '${Statics.getLabel("monthOnly")} ${m.monthNo}',
+                                  tooltipTitle: m.range.isNotEmpty ? m.range : '${m.monthNo} ${Statics.getLabel("monthOnly")}',
                                 ))
                             .toList(),
                       ))
@@ -1526,8 +1526,6 @@ class _ProgrammeBarCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hasSubPeriods = bar.subPeriods.isNotEmpty;
-
     final content = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1544,56 +1542,65 @@ class _ProgrammeBarCard extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: BoxDecoration(
-                color: const Color(0xFFFFF3E0),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Text(
-                '${Statics.getLabel("Total")}: ${bar.totalDays} ${Statics.getLabel("daysonly")} (${bar.percent.toStringAsFixed(2)}%)',
-                style: const TextStyle(
-                  fontSize: 11.5,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFFE65100),
+            Flexible(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFFF3E0),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  '${Statics.getLabel("Total")}: ${bar.totalDays} ${Statics.getLabel("daysonly")} (${bar.percent.toStringAsFixed(2)}%)',
+                  softWrap: true,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                  style: const TextStyle(
+                    fontSize: 11.5,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFFE65100),
+                  ),
                 ),
               ),
             ),
           ],
         ),
         const SizedBox(height: 10),
-        LayoutBuilder(
-          builder: (context, constraints) {
-            return Stack(
-              children: [
-                Container(
-                  height: 8,
-                  width: constraints.maxWidth,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFE5E5EA),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                ),
-                Container(
-                  height: 8,
-                  width: constraints.maxWidth * bar.progressFraction,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFF6B00),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                ),
-              ],
-            );
-          },
-        ),
-        if (hasSubPeriods) ...[
-          const SizedBox(height: 14),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: bar.subPeriods.map((sp) => _SubPeriodCell(subPeriod: sp)).toList(),
+        Stack(
+          children: [
+            Container(
+              height: 8,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: const Color(0xFFE5E5EA),
+                borderRadius: BorderRadius.circular(4),
+              ),
             ),
+            FractionallySizedBox(
+              widthFactor: bar.progressFraction.isNaN ? 0.0 : bar.progressFraction.clamp(0.0, 1.0).toDouble(),
+              alignment: Alignment.centerLeft,
+              child: Container(
+                height: 8,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFF6B00),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+            ),
+          ],
+        ),
+        if (bar.subPeriods.isNotEmpty) ...[
+          const SizedBox(height: 14),
+          // SingleChildScrollView(
+          //   controller: ScrollController(),
+          //   padding: EdgeInsets.only(left: 12),
+          //   scrollDirection: Axis.horizontal,
+          //   child:
+          Row(
+            // shrinkWrap: true,scrollDirection: Axis.horizontal,
+            spacing: 6,
+            children: bar.subPeriods.map((sp) => _SubPeriodCell(subPeriod: sp)).toList(),
           ),
+          // ),
         ],
       ],
     );
@@ -1636,7 +1643,7 @@ class _ExpandableProgrammeBarGroup extends StatelessWidget {
         ),
         child: ExpansionTile(
           key: PageStorageKey(parent.name),
-          // preserves expand state across rebuilds
+          controlAffinity: ListTileControlAffinity.leading,
           initiallyExpanded: true,
           tilePadding: const EdgeInsets.fromLTRB(16, 16, 16, 18),
           childrenPadding: const EdgeInsets.only(left: 12, right: 12, bottom: 12),
@@ -1681,7 +1688,7 @@ class _SubPeriodCell extends StatelessWidget {
     return Container(
       // width: 90,
       constraints: BoxConstraints(minWidth: 70, maxWidth: 120),
-      margin: const EdgeInsets.only(right: 6),
+      // margin: const EdgeInsets.only(right: 6),
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       decoration: BoxDecoration(
         color: const Color(0xFFF8F8F8),

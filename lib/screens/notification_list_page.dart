@@ -9,7 +9,7 @@ import '../helpers/static_data.dart';
 import '../models/response_model/baithakvrutta_by_id_model.dart';
 import '../models/response_model/notification_list_model.dart';
 import 'edit_join_rss.dart';
-import 'shaakhaa_milan_module/shaakha_main_tab_screen.dart';
+import 'shaakhaa_milan_module/search_shaakhaa.dart';
 
 class NotificationListPage extends StatefulWidget {
   final String userId;
@@ -68,7 +68,7 @@ class _NotificationListPageState extends State<NotificationListPage> {
                     final notification = notifications[index];
                     return GestureDetector(
                       onTap: () {
-                        if (notification.activity == "ShakhaaVrutta") Navigator.of(context).pushNamed(ShaakhaMainTabScreen.routeName);
+                        if (notification.activity == "ShakhaaVrutta") Navigator.of(context).pushNamed(SearchShaakhaaScreen.routeName);
                         handleCardClick(notification.pkID!, notification.swayamsevakID!, notification.activity!);
                       },
                       child: Card(

@@ -15,7 +15,6 @@ import '../screens/search_annual_baithak_vrutta.dart';
 import '../screens/search_swayamsevak_transfer.dart';
 import '../screens/sewa_vasti_list.dart';
 import '../screens/shaakhaa_milan_module/search_shaakhaa.dart';
-import '../screens/shaakhaa_milan_module/shaakha_main_tab_screen.dart';
 
 class AppDrawer extends StatefulWidget {
   const AppDrawer({Key? key}) : super(key: key);
@@ -628,7 +627,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   style: TextStyle(fontSize: 18),
                 ),
                 onTap: () {
-                  Navigator.of(context).pushReplacementNamed(ShaakhaMainTabScreen.routeName);
+                  Navigator.of(context).pushReplacementNamed(SearchShaakhaaScreen.routeName);
                 },
               ),
             if (Statics.levelId > 3) Divider(),

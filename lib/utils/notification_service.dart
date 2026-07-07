@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:permission_handler/permission_handler.dart' show openAppSettings;
 
 import '../helpers/static_data.dart' as Statics;
+import '../screens/shaakhaa_milan_module/search_shaakhaa.dart';
 import '../screens/shaakhaa_milan_module/shaakha_main_tab_screen.dart';
 
 /// -----------------------------------------------------------------------
@@ -399,7 +400,7 @@ class PushNotificationService with WidgetsBindingObserver {
   void _dispatchRoute(NavigatorState navigator, String action, Map<String, dynamic> data) {
     switch (action) {
       case 'ShakhaaVrutta':
-        navigator.pushNamed(ShaakhaMainTabScreen.routeName); //, arguments: data);
+        navigator.pushNamed(SearchShaakhaaScreen.routeName); //, arguments: data);
         debugPrint('[PushNotification] Route -> ShakhaaVrutta with data: $data');
         break;
 

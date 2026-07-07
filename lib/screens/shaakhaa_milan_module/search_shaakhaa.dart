@@ -10,6 +10,7 @@ import '../../helpers/static_data.dart' as Statics;
 import '../../providers/bals.dart';
 import '../../utils/globals.dart';
 import '../../utils/stable_geounit_class.dart';
+import '../../widgets/app_drawer.dart';
 import '../../widgets/shaakhaa_card.dart';
 import '../maps_display.dart';
 import 'edit_shaakhaa.dart';
@@ -347,7 +348,7 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /*appBar: AppBar(
+      appBar: AppBar(
         title: Text(
           Statics.getLabel('searchShaakhaaScreenLabel'),
           style: TextStyle(fontSize: 24),
@@ -367,7 +368,7 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
             ),
         ],
       ),
-      drawer: AppDrawer(),*/
+      drawer: AppDrawer(),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -378,13 +379,13 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
             child: Icon(Icons.download_sharp),
             backgroundColor: Colors.green,
           ),
-          FloatingActionButton(
+          /*FloatingActionButton(
             mini: true,
             tooltip: Statics.getLabel("fillNewRecord"),
             onPressed: () => Navigator.of(context).pushNamed(EditShaakhaaScreen.routeName, arguments: Statics.ScreenArguments(0, Statics.getLabel('EditMenu'))),
             child: Icon(Icons.add),
             backgroundColor: Colors.purple,
-          ),
+          ),*/
         ],
       ),
       body: PopScope(

@@ -43,7 +43,7 @@ import '../search_event.dart';
 import '../search_join_rss.dart';
 import '../search_rjb_nidhi_sankalan.dart';
 import '../search_soochi_screen.dart';
-import '../shaakhaa_milan_module/shaakha_main_tab_screen.dart';
+import '../shaakhaa_milan_module/search_shaakhaa.dart';
 import '../shatabdi_vrutta_sankalan/gruh_sampark_abhiyaan/gruh_abhiyaan_main_tab_screen.dart';
 import '../shatabdi_vrutta_sankalan/hindu_sanmelan/hindu_sanmelan_main_tab.dart';
 import '../shatabdi_vrutta_sankalan/pramukh_jansanvad/pramukh_jan_main_tab.dart';
@@ -86,6 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _isMySearching = false;
   bool _isReportSearching = false;
   bool _isTgSearching = false;
+  bool _isTgSearched = false;
 
   // ─── Panel expansion ───────────────────────────────────────────────────────
   // bool isDailySelected = false;
@@ -547,6 +548,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _fetchTargetDashboardData() async {
     final _controller = context.read<GeoHierarchyController>();
     _tgLevelID = _controller.deepestSelectedLevelId ?? 0;
+    _isTgSearched = false;
     setState(() => _isTgSearching = true);
     final data = await Statics.getDashboardDataByGeoUnit(Statics.userDetails["userID"], _controller.deepestSelectedGeoUnitId ?? "0");
     if (data['Status'] != "Success") {
@@ -634,6 +636,7 @@ class _HomeScreenState extends State<HomeScreen> {
       tgShaakhaaGTE25 = vd["ShaakhaaGTE25"].toString();
       tgShaakhaaEQ30 = vd["ShaakhaaEQ30"].toString();
       _isTgSearching = false;
+      _isTgSearched = true;
     });
   }
 
@@ -2313,7 +2316,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(height: 24),
                 _cardTile(
                   Statics.getLabel('searchShaakhaaScreenLabel'),
-                  () => Navigator.of(context).pushNamed(ShaakhaMainTabScreen.routeName),
+                  () => Navigator.of(context).pushNamed(SearchShaakhaaScreen.routeName),
                   makeHighlight: true,
                 ),
                 const SizedBox(height: 18),
@@ -2715,7 +2718,7 @@ class _HomeScreenState extends State<HomeScreen> {
       Legend(legendString: "BhaugolikVistaar", fontsize: 18),
       _buildBhaugolikTable(Statics.tgLstBhaugolikVistaar),
       const SizedBox(height: 15),
-      Legend(legendString: "SwayamsevakCount", fontsize: 18, onPressed: () => showNamesList(geoUnitID: controller.deepestSelectedGeoUnitId, type: "SwayamsevakCount")),
+      Legend(legendString: "SwayamsevakCount", fontsize: 18, onPressed: !_isTgSearched ? null : () => showNamesList(geoUnitID: controller.deepestSelectedGeoUnitId, type: "SwayamsevakCount")),
       SingleColumnRow(txtString: Statics.getLabel('TotalKaaryakartaaCount'), value: tgTotalSwayamsevakCount, fontsize: 15),
       SingleColumnRow(txtString: Statics.getLabel('PratidnyitCount'), value: tgPratidnyitCount, fontsize: 15),
       const SizedBox(height: 15),
@@ -2726,24 +2729,25 @@ class _HomeScreenState extends State<HomeScreen> {
         tarunVy: tgTarunVyavasaayeeCount,
         proudha: tgProudhaVyavasaayeeCount,
         unknown: tgUnknownAgeCount,
+        showListIcon: _isTgSearched,
         controller: controller,
       ),
       const SizedBox(height: 15),
-      _swayamsewakByBloodGroup(bloodgroup: _tgbloodgroup, controller: controller),
+      _swayamsewakByBloodGroup(bloodgroup: _tgbloodgroup, showListIcon: _isTgSearched, controller: controller),
       const SizedBox(height: 15),
-      _swayamsewakExperties(expertieslist: _tgexpertieslist, controller: controller),
+      _swayamsewakExperties(expertieslist: _tgexpertieslist, showListIcon: _isTgSearched, controller: controller),
       const SizedBox(height: 15),
-      _swayamsewakInterests(interestlist: _tginterestlist, controller: controller),
+      _swayamsewakInterests(interestlist: _tginterestlist, showListIcon: _isTgSearched, controller: controller),
       const SizedBox(height: 15),
-      _swayamsewakInfoWidget(infolist: _tgmothertonguelist, heading: 'MotherTongue', controller: controller),
+      _swayamsewakInfoWidget(infolist: _tgmothertonguelist, heading: 'MotherTongue', showListIcon: _isTgSearched, controller: controller),
       const SizedBox(height: 15),
-      _swayamsewakInfoWidget(infolist: _tgsangayulist, heading: 'Sangayu', controller: controller),
+      _swayamsewakInfoWidget(infolist: _tgsangayulist, heading: 'Sangayu', showListIcon: _isTgSearched, controller: controller),
       const SizedBox(height: 15),
-      _swayamsewakInfoWidget(infolist: _tgghoshwadlist, heading: 'Ghoshwadak', controller: controller),
+      _swayamsewakInfoWidget(infolist: _tgghoshwadlist, heading: 'Ghoshwadak', showListIcon: _isTgSearched, controller: controller),
       const SizedBox(height: 15),
-      _tgganveshData == null ? SizedBox() : _swayamsewakUniform(ganvesh: _tgganveshData!, controller: controller),
+      _tgganveshData == null ? SizedBox() : _swayamsewakUniform(ganvesh: _tgganveshData!, showListIcon: _isTgSearched, controller: controller),
       const SizedBox(height: 15),
-      _tgvehicle == null ? SizedBox() : _swayamsewakVehicle(vehicle: _tgvehicle!, controller: controller),
+      _tgvehicle == null ? SizedBox() : _swayamsewakVehicle(vehicle: _tgvehicle!, showListIcon: _isTgSearched, controller: controller),
       const SizedBox(height: 15),
       _shikshanSection(
         prarambhik: _nullToZero(tgPraarambhikShikshitCount),
@@ -2752,6 +2756,7 @@ class _HomeScreenState extends State<HomeScreen> {
         dwitiya: _nullToZero(tgDwitiyaVarshaShikshitCount),
         trutiya: _nullToZero(tgTrutiyaVarshaShikshitCount),
         noShikshan: tgNoShikshanCount,
+        showListIcon: _isTgSearched,
         controller: controller,
       ),
       _kaaryakartaaByLevelSection(
@@ -2771,6 +2776,7 @@ class _HomeScreenState extends State<HomeScreen> {
         akhilBhaarat: tgAkhilBhaaratiyaKaaryakartaaCount,
         pravaasee: tgPravaaseeKaaryakartaaCount,
         total: tgTotalKaaryakartaaCount,
+        showListIcon: _isTgSearched,
         controller: controller,
       ),
       Legend(legendString: "GatividhiAayaamSansthaaKaaryakartaaCount", fontsize: 18),
@@ -2866,13 +2872,14 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _swayamsewakInfoWidget({
     required List<GetCount> infolist,
     required String heading,
+    bool showListIcon = true,
     GeoHierarchyController? controller,
   }) {
     double normalwidth = MediaQuery.sizeOf(context).width * 0.75;
     double maxwidth = MediaQuery.sizeOf(context).width * 0.35;
     return Column(
       children: [
-        Legend(legendString: heading, fontsize: 18, onPressed: () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: heading)),
+        Legend(legendString: heading, fontsize: 18, onPressed: !showListIcon ? null : () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: heading)),
         infolist.isEmpty
             ? Center(child: Text(Statics.getLabel('NoDataFound')))
             : Wrap(
@@ -2896,13 +2903,13 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _swayamsewakVehicle({required Vehicle vehicle, GeoHierarchyController? controller}) {
+  Widget _swayamsewakVehicle({required Vehicle vehicle, bool showListIcon = true, GeoHierarchyController? controller}) {
     return Column(
       children: [
         Legend(
           legendString: "VehicleInformation",
           fontsize: 18,
-          onPressed: () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: "VehicleInformation"),
+          onPressed: !showListIcon ? null : () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: "VehicleInformation"),
         ),
         Single1ColumnRow(
           txtString: Statics.getLabel('VehicleType2W'),
@@ -2928,10 +2935,10 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _swayamsewakExperties({required List<GetCount> expertieslist, GeoHierarchyController? controller}) {
+  Widget _swayamsewakExperties({required List<GetCount> expertieslist, bool showListIcon = true, GeoHierarchyController? controller}) {
     return Column(
       children: [
-        Legend(legendString: "Experties", fontsize: 18, onPressed: () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: "Experties")),
+        Legend(legendString: "Experties", fontsize: 18, onPressed: !showListIcon ? null : () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: "Experties")),
         expertieslist.isEmpty
             ? Center(child: Text(Statics.getLabel('NoDataFound')))
             : ListView.builder(
@@ -2952,10 +2959,10 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _swayamsewakInterests({required List<GetCount> interestlist, GeoHierarchyController? controller}) {
+  Widget _swayamsewakInterests({required List<GetCount> interestlist, bool showListIcon = true, GeoHierarchyController? controller}) {
     return Column(
       children: [
-        Legend(legendString: "Interests", fontsize: 18, onPressed: () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: "Interests")),
+        Legend(legendString: "Interests", fontsize: 18, onPressed: !showListIcon ? null : () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: "Interests")),
         interestlist.isEmpty
             ? Center(child: Text(Statics.getLabel('NoDataFound')))
             : ListView.builder(
@@ -2976,11 +2983,11 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _swayamsewakUniform({required GanveshData ganvesh, GeoHierarchyController? controller}) {
+  Widget _swayamsewakUniform({required GanveshData ganvesh, bool showListIcon = true, GeoHierarchyController? controller}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Legend(legendString: "GanveshDetails", fontsize: 18, onPressed: () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: "GanveshDetails")),
+        Legend(legendString: "GanveshDetails", fontsize: 18, onPressed: !showListIcon ? null : () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: "GanveshDetails")),
         Single1ColumnRow(
           txtString: Statics.getLabel('NoBelt'),
           value: ganvesh.Hasbelt.toString(),
@@ -3030,13 +3037,16 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _swayamsewakByBloodGroup({required List<GetCount> bloodgroup, GeoHierarchyController? controller}) {
+  Widget _swayamsewakByBloodGroup({required List<GetCount> bloodgroup, bool showListIcon = true, GeoHierarchyController? controller}) {
     double normalwidth = MediaQuery.sizeOf(context).width * 0.75;
     double maxwidth = MediaQuery.sizeOf(context).width * 0.35;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Legend(legendString: "SwayamsevakCountByBloodGroup", fontsize: 18, onPressed: () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: "SwayamsevakCountByBloodGroup")),
+        Legend(
+            legendString: "SwayamsevakCountByBloodGroup",
+            fontsize: 18,
+            onPressed: !showListIcon ? null : () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: "SwayamsevakCountByBloodGroup")),
         bloodgroup.isEmpty
             ? Center(child: Text(Statics.getLabel('NoDataFound')))
             : Wrap(
@@ -3067,10 +3077,12 @@ class _HomeScreenState extends State<HomeScreen> {
     required String? tarunVy,
     required String? proudha,
     required String? unknown,
+    bool showListIcon = true,
     GeoHierarchyController? controller,
   }) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Legend(legendString: "SwayamsevakCountByAge", fontsize: 18, onPressed: () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: "SwayamsevakCountByAge")),
+      Legend(
+          legendString: "SwayamsevakCountByAge", fontsize: 18, onPressed: !showListIcon ? null : () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: "SwayamsevakCountByAge")),
       SingleColumnRow(txtString: Statics.getLabel('Shishu'), value: shishu, fontsize: 15),
       SingleColumnRow(txtString: Statics.getLabel('Baal'), value: baal, fontsize: 15),
       SingleColumnRow(txtString: Statics.getLabel('TarunVidyaarthi'), value: tarunV, fontsize: 15),
@@ -3088,10 +3100,14 @@ class _HomeScreenState extends State<HomeScreen> {
     required String? dwitiya,
     required String? trutiya,
     required String? noShikshan,
+    bool showListIcon = true,
     GeoHierarchyController? controller,
   }) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Legend(legendString: "ShikshitSwayamsevakCount", fontsize: 18, onPressed: () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: "ShikshitSwayamsevakCount")),
+      Legend(
+          legendString: "ShikshitSwayamsevakCount",
+          fontsize: 18,
+          onPressed: !showListIcon ? null : () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: "ShikshitSwayamsevakCount")),
       SingleColumnRow(txtString: Statics.getLabel('PrarambhikShikshit'), value: prarambhik, fontsize: 15),
       SingleColumnRow(txtString: Statics.getLabel('PraathamikShikshit'), value: praathamik, fontsize: 15),
       SingleColumnRow(txtString: Statics.getLabel('PrathamVarshShikshit'), value: prathamVarsha, fontsize: 15),
@@ -3119,13 +3135,14 @@ class _HomeScreenState extends State<HomeScreen> {
     required String? akhilBhaarat,
     required String? pravaasee,
     required String? total,
+    bool showListIcon = true,
     GeoHierarchyController? controller,
   }) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Legend(
         legendString: "KaaryakartaaCountByLevel",
         fontsize: 18,
-        onPressed: () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: "KaaryakartaaCountByLevel"),
+        onPressed: !showListIcon ? null : () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: "KaaryakartaaCountByLevel"),
       ),
       TwoColumnRow(txtString: Statics.getLabel('Shaakhaa'), value: shaakhaa, txtString2: Statics.getLabel('SaaptaahikLabelShort'), value2: saptahik, fontsize: 15),
       TwoColumnRow(txtString: Statics.getLabel('MilanMandali'), value: milan, txtString2: Statics.getLabel('VastiKaaryakartaaCount'), value2: vasti, fontsize: 15),
@@ -3175,7 +3192,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   /// Replace "null" string with "0".
-  String _nullToZero(String? v) => (v == null || v == 'null') ? '0' : v;
+  String _nullToZero(String? v) => (v == null || v == 'null' || v.isEmpty) ? '0' : v;
 
   // ═══════════════════════════════════════════════════════════════════════════
   // UPNAGAR COUNT DATA TABLE (unchanged, already using DataTable)
