@@ -18,8 +18,9 @@ class ShakhaaSaptahFormScreen extends StatefulWidget {
   final bool fromYesterday;
   final String? viewType;
   final bool showAppBar;
+  final bool isNew;
 
-  const ShakhaaSaptahFormScreen({this.shaakhaa, this.shaakhaaId, this.fromYesterday = false, this.showAppBar = true, this.viewType, super.key});
+  const ShakhaaSaptahFormScreen({this.shaakhaa, this.shaakhaaId, this.fromYesterday = false, this.isNew = false, this.showAppBar = true, this.viewType, super.key});
 
   @override
   State<ShakhaaSaptahFormScreen> createState() => _ShakhaaSaptahFormScreenState();
@@ -158,8 +159,8 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
       Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));
     } else {
       final data = await Statics.getShaakhaaSaptahVruttaData(context, {
-        "ShaakhaaID": widget.shaakhaaId ?? widget.shaakhaa?.shaakhaaID,
-        "pkid": widget.shaakhaa?.pkid,
+        "ShaakhaaID": widget.isNew ? 0 : widget.shaakhaaId ?? widget.shaakhaa?.shaakhaaID ?? 0,
+        "pkid": widget.isNew ? widget.shaakhaaId : widget.shaakhaa?.pkid,
         "date": DateFormat("dd/MM/yyyy").format(DateFormat("dd-MMM-yyyy").parse(_vruttaDateCntrl.text)),
         "appuserid": int.parse(Statics.userDetails['userID']),
       });
@@ -276,9 +277,9 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
 
   saveVruttaDetails(BuildContext context) async {
     var inputData = {
-      "ShaakhaaVruttaID": widget.shaakhaa?.pkid,
+      "ShaakhaaVruttaID": widget.shaakhaa?.pkid ?? widget.shaakhaaId,
       "PraantID": 1,
-      "pkid": vrutta?.pkid ?? widget.shaakhaa?.pkid,
+      "pkid": vrutta?.pkid ?? widget.shaakhaa?.pkid ?? widget.shaakhaaId,
       "ShaakhaaID": widget.shaakhaaId ?? widget.shaakhaa?.shaakhaaID,
       "date": DateFormat("dd/MM/yyyy").format(DateFormat("dd-MMM-yyyy").parse(_vruttaDateCntrl.text)),
       "VruttaDateStr": DateFormat("dd/MM/yyyy").format(DateFormat("dd-MMM-yyyy").parse(_vruttaDateCntrl.text)),

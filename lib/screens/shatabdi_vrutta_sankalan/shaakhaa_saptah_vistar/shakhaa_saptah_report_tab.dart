@@ -300,6 +300,7 @@ class ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Aut
                   MaterialPageRoute(
                     builder: (context) => ShakhaaSaptahFormScreen(
                       shaakhaaId: report?.mid,
+                      isNew: selectedshaakhaa?.isnew == 1,
                       fromYesterday: isYesterday,
                       viewType: "EditVrutta",
                     ),

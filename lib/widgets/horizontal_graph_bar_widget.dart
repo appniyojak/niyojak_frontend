@@ -244,7 +244,7 @@ class HorizontalBarChartState extends State<HorizontalBarChart> {
                 child: InkWell(
                   borderRadius: BorderRadius.circular(8),
                   // Triggers the injected callback instead of hardcoded logic
-                  onTap: widget.onTooltipTap == null
+                  onTap: !widget.showEditIcon || widget.onTooltipTap == null
                       ? null
                       : () {
                           final selectedData = widget.data[_touchedGroupIndex!];
