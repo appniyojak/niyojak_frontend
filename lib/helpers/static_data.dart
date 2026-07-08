@@ -38,6 +38,7 @@ import '../models/response_model/sankalit_data_names_model.dart';
 import '../models/response_model/search_abhiyaan_karyakarta_model.dart';
 import '../models/response_model/shaakhaa_milan_report_models.dart';
 import '../models/response_model/shaakhaa_milan_tulnatmak_model.dart';
+import '../models/response_model/shaakhaa_report_models.dart';
 import '../models/response_model/shaakhaa_vistaar_vrutta_resp_model.dart';
 import '../models/response_model/shaakhaa_vistar_detail_resp_model.dart';
 import '../models/response_model/shaakhaa_vistar_list_resp_model.dart';
@@ -310,6 +311,7 @@ const String urlSVRAllWeekly = baseUrlAPI + '/shakhaavruttareport_allweekly';
 const String urlSVRAllMonthly = baseUrlAPI + '/shakhaavruttareport_allmonthly';
 const String urlSVRAllMultiMonthly = baseUrlAPI + '/shakhaavruttareport_allmultimonthly';
 const String urlSVRKaryakramRanking = baseUrlAPI + '/shakhaavruttareport_karyakram';
+const String urlSVRMyShaakhaaRanking = baseUrlAPI + '/shakhaavruttareport_myshakhaa';
 const String urlSVRTulnatmak = baseUrlAPI + '/shakhaavruttareport_tulnatmak';
 
 const String urlHomeScreenNames = baseUrlAPI + '/RefreshHomeScreenForAppNames';
@@ -7072,6 +7074,31 @@ Future<KaryakramResponse?> fetchKaryakram(Map<String, dynamic> inputJson) async 
       final Map<String, dynamic> data = jsonDecode(response.body);
       KaryakramResponse model = KaryakramResponse.fromJson(data);
       log("fetchKaryakram >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+      return model;
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return null;
+    }
+  } catch (e, stack) {
+    print("Exception: $e \n$stack");
+    return null;
+  } finally {}
+}
+
+Future<MylvlResponse?> fetchMyShakhaaRanking(Map<String, dynamic> inputJson) async {
+  bool? connected = await isInternetConnected();
+  if (connected == false) return null;
+
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  log(urlSVRMyShaakhaaRanking);
+  print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+  try {
+    var response = await http.post(Uri.parse(urlSVRMyShaakhaaRanking), headers: jHeaders, body: jsonEncode(inputJson));
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      MylvlResponse model = MylvlResponse.fromJson(data);
+      log("fetchMyShakhaaRanking >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
       return model;
     } else {
       print("Error: ${response.statusCode} - ${response.body}");

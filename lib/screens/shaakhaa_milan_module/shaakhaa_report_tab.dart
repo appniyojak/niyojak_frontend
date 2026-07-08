@@ -10,47 +10,10 @@ import '../../providers/bals.dart';
 import '../../utils/globals.dart';
 import '../../utils/stable_geounit_class.dart';
 import 'report_widgets/custom_app_dropdowns.dart';
+import 'report_widgets/module_constants.dart';
 import 'shaakhaa_ranking_screen.dart';
 
 // ─── Data Models ─────────────────────────────────────────────────────────────
-
-enum DurationTypes { daily, weekly, monthly, quarterly, halfYearly, yearly }
-
-extension Durations on DurationTypes {
-  String get name {
-    switch (this) {
-      case DurationTypes.daily:
-        return Statics.getLabel('daily', returnKey: true);
-      case DurationTypes.weekly:
-        return Statics.getLabel('weekly', returnKey: true);
-      case DurationTypes.monthly:
-        return Statics.getLabel('monthly', returnKey: true);
-      case DurationTypes.quarterly:
-        return Statics.getLabel('quarterly', returnKey: true);
-      case DurationTypes.halfYearly:
-        return Statics.getLabel('halfyearly', returnKey: true);
-      case DurationTypes.yearly:
-        return Statics.getLabel('yearly', returnKey: true);
-    }
-  }
-
-  int get pkValues {
-    switch (this) {
-      case DurationTypes.daily:
-        return 1;
-      case DurationTypes.weekly:
-        return 7;
-      case DurationTypes.monthly:
-        return 30;
-      case DurationTypes.quarterly:
-        return 90;
-      case DurationTypes.halfYearly:
-        return 180;
-      case DurationTypes.yearly:
-        return 360;
-    }
-  }
-}
 
 class BreakdownItem {
   final String label;
@@ -189,6 +152,8 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
         return Statics.getLabel('halfyearlytotalupastithi');
       case DurationTypes.yearly:
         return Statics.getLabel('yearlytotalupastithi');
+      default:
+        return "";
     }
   }
 
@@ -206,6 +171,8 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
         return Statics.getLabel("halfyearlyNewupastithi");
       case DurationTypes.yearly:
         return Statics.getLabel("yearlyNewupastithi");
+      default:
+        return "";
     }
   }
 
@@ -1522,6 +1489,7 @@ class _ProgrammeBarCard extends StatelessWidget {
     required this.kalavadha,
     this.isChild = false,
     this.embedded = false,
+    super.key,
   });
 
   @override
@@ -1590,17 +1558,17 @@ class _ProgrammeBarCard extends StatelessWidget {
         ),
         if (bar.subPeriods.isNotEmpty) ...[
           const SizedBox(height: 14),
-          // SingleChildScrollView(
-          //   controller: ScrollController(),
-          //   padding: EdgeInsets.only(left: 12),
-          //   scrollDirection: Axis.horizontal,
-          //   child:
-          Row(
-            // shrinkWrap: true,scrollDirection: Axis.horizontal,
-            spacing: 6,
-            children: bar.subPeriods.map((sp) => _SubPeriodCell(subPeriod: sp)).toList(),
+          SingleChildScrollView(
+            controller: ScrollController(keepScrollOffset: false),
+            primary: false,
+            padding: EdgeInsets.only(left: 12),
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              // shrinkWrap: true,scrollDirection: Axis.horizontal,
+              spacing: 6,
+              children: bar.subPeriods.map((sp) => _SubPeriodCell(subPeriod: sp)).toList(),
+            ),
           ),
-          // ),
         ],
       ],
     );
@@ -1662,6 +1630,7 @@ class _ExpandableProgrammeBarGroup extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 10),
                       child: _ProgrammeBarCard(
+                        key: ValueKey(children[i].name),
                         bar: children[i],
                         kalavadha: kalavadha,
                         isChild: true,
@@ -2420,26 +2389,7 @@ class _ActivityChartCardState extends State<_ActivityChartCard> {
 
 enum _Top10Tab { shaakhaa, saptahikMilan }
 
-enum _Top10Filter { upasthiti, naveen, kaaryakram }
-
 // ─── Top 10 Section ───────────────────────────────────────────────────────────
-
-// Fixed kname list — order matches screenshot dropdown
-const List<MapEntry<String, String>> _kKaryakramItems = [
-  MapEntry('IsDoneUrdhvapad', 'Minimum5minutesUrdhvapad'),
-  MapEntry('IsDoneDandaPrahaar', 'Minimum1minuteDandaPrahaar'),
-  MapEntry('IsDoneSaanghikGeet', 'SaanghikGeet'),
-  MapEntry('IsDoneAmrutaVachan', 'AmrutaVachan'),
-  MapEntry('IsDoneSubhaashit', 'Subhaashit'),
-  MapEntry('IsDoneDeepBreathing', 'Minimum5minutesDeepBreathing'),
-  MapEntry('IsDoneSooryaNamaskaar', 'Minimum5minutesSooryaNamaskaar'),
-  MapEntry('IsDoneSanchalanAbhyaas', 'Minimum5minutesSanchalanAbhyaas'),
-  MapEntry('IsDoneBoodhKatha', 'BoodhKathaOnceWeek'),
-  MapEntry('IsDoneBoudhikDays', 'BoudhikDays'),
-  MapEntry('IsDoneSewaDays', 'SewaDays'),
-  MapEntry('IsOptionalShaaririk', 'ConductedOptionalShaaririkVishay'),
-  MapEntry('IsOptionalOther', 'ConductedOtherOptionalKaaryakram'),
-];
 
 class _Top10ShaakhaaSection extends StatefulWidget {
   final List<TotalCountShaakhaa> shaakhatotalcount;
@@ -2468,19 +2418,19 @@ class _Top10ShaakhaaSection extends StatefulWidget {
 
 class _Top10ShaakhaaSectionState extends State<_Top10ShaakhaaSection> {
   _Top10Tab _tab = _Top10Tab.shaakhaa;
-  _Top10Filter _filter = _Top10Filter.upasthiti;
+  RankTab _filter = RankTab.upasthiti;
 
   // Karyakram state
-  String _selectedKname = _kKaryakramItems.first.key;
+  String _selectedKname = karyakramItems.first.key;
   bool _kLoading = false;
   List<TotalCountShaakhaa> _karyakramList = [];
 
   // Resolve list for upasthiti / naveen filters
   List<TotalCountShaakhaa> get _activeList {
     if (_tab == _Top10Tab.shaakhaa) {
-      return _filter == _Top10Filter.upasthiti ? widget.shaakhatotalcount : widget.shaakhanewcount;
+      return _filter == RankTab.upasthiti ? widget.shaakhatotalcount : widget.shaakhanewcount;
     } else {
-      return _filter == _Top10Filter.upasthiti ? widget.sapthahiktotalcount : widget.sapthahiknewcount;
+      return _filter == RankTab.upasthiti ? widget.sapthahiktotalcount : widget.sapthahiknewcount;
     }
   }
 
@@ -2516,7 +2466,7 @@ class _Top10ShaakhaaSectionState extends State<_Top10ShaakhaaSection> {
 
   @override
   Widget build(BuildContext context) {
-    final showKaryakram = _filter == _Top10Filter.kaaryakram;
+    final showKaryakram = _filter == RankTab.kaaryakram;
     final top10 = showKaryakram ? _karyakramList : _activeList.take(10).toList();
 
     return Container(
@@ -2569,11 +2519,11 @@ class _Top10ShaakhaaSectionState extends State<_Top10ShaakhaaSection> {
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Row(
               children: [
-                _buildChip('उपस्थिति', _Top10Filter.upasthiti),
+                _buildChip('उपस्थिति', RankTab.upasthiti),
                 const SizedBox(width: 8),
-                _buildChip('नवीन भरती', _Top10Filter.naveen),
+                _buildChip('नवीन भरती', RankTab.naveenBharti),
                 const SizedBox(width: 8),
-                _buildChip('कार्यक्रम', _Top10Filter.kaaryakram),
+                _buildChip('कार्यक्रम', RankTab.kaaryakram),
               ],
             ),
           ),
@@ -2612,7 +2562,7 @@ class _Top10ShaakhaaSectionState extends State<_Top10ShaakhaaSection> {
                           color: Color(0xFF1C1C1E),
                           fontWeight: FontWeight.w500,
                         ),
-                        items: _kKaryakramItems
+                        items: karyakramItems
                             .map((e) => DropdownMenuItem(
                                   value: e.key,
                                   child: Text(Statics.getLabel(e.value, returnKey: true)),
@@ -2670,7 +2620,7 @@ class _Top10ShaakhaaSectionState extends State<_Top10ShaakhaaSection> {
       onTap: () {
         setState(() => _tab = tab);
         // Re-fetch if already on कार्यक्रम filter
-        if (_filter == _Top10Filter.kaaryakram) _fetchKaryakram();
+        if (_filter == RankTab.kaaryakram) _fetchKaryakram();
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -2695,13 +2645,13 @@ class _Top10ShaakhaaSectionState extends State<_Top10ShaakhaaSection> {
     );
   }
 
-  Widget _buildChip(String label, _Top10Filter filter) {
+  Widget _buildChip(String label, RankTab filter) {
     final sel = _filter == filter;
     return GestureDetector(
       onTap: () {
         setState(() => _filter = filter);
         // Trigger fetch when switching TO कार्यक्रम
-        if (filter == _Top10Filter.kaaryakram && _karyakramList.isEmpty) {
+        if (filter == RankTab.kaaryakram && _karyakramList.isEmpty) {
           _fetchKaryakram();
         }
       },

@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 
 import '../../helpers/static_data.dart' as Statics;
-
-// ─── Enums ────────────────────────────────────────────────────────────────────
-
-enum _TimePeriod { today, yesterday, lastWeek, lastMonth, last3Months }
-
-enum _RankTab { upasthiti, naveenBharti, kaaryakram }
+import '../../models/response_model/shaakhaa_report_models.dart';
+import 'report_widgets/module_constants.dart';
 
 // ─── Models ───────────────────────────────────────────────────────────────────
 class _TabItem {
-  final _RankTab tab;
+  final RankTab tab;
   final IconData icon;
   final String label;
 
@@ -20,17 +16,17 @@ class _TabItem {
 class RankingData {
   final int rank;
   final int totalShaakhaa;
-  final int rankChange; // +ve = up, -ve = down, 0 = no change
-  final int stableWeeks; // "पिछले N सप्ताह से इसी पायदान पर"
-  final String levelLabel; // "नगर स्तर"
-  final int value; // score / count
+  final int rankChange;
+  final int stableDays; // ← was stableWeeks; now actual days from API
+  final String levelLabel;
+  final int value;
   final List<NearbyCompetitor> nearby;
 
   const RankingData({
     required this.rank,
     required this.totalShaakhaa,
     required this.rankChange,
-    required this.stableWeeks,
+    required this.stableDays, // ← renamed
     required this.levelLabel,
     required this.value,
     required this.nearby,
@@ -42,30 +38,25 @@ class NearbyCompetitor {
   final String name;
   final int value;
   final bool isMe;
+  final int myRank; // ← ADD; used to determine direction arrow
 
   const NearbyCompetitor({
     required this.rank,
     required this.name,
     required this.value,
     required this.isMe,
+    required this.myRank,
   });
 }
 
-// ─── Dummy data ───────────────────────────────────────────────────────────────
-
-RankingData _dummyData(_TimePeriod p, _RankTab t) => RankingData(
-      rank: 3,
-      totalShaakhaa: 18,
-      rankChange: 4,
-      stableWeeks: 2,
-      levelLabel: 'नगर स्तर',
-      value: 48,
-      nearby: const [
-        NearbyCompetitor(rank: 2, name: 'भगत सिंह शाखा', value: 52, isMe: false),
-        NearbyCompetitor(rank: 3, name: 'शिवाजी नगर शाखा', value: 48, isMe: true),
-        NearbyCompetitor(rank: 4, name: 'सुभाष चंद्र शाखा', value: 45, isMe: false),
-      ],
-    );
+// Geo level items: (levelId, displayLabel)
+// TODO: confirm IDs match your DB GeoLevel table
+List<MapEntry<int, String>> _kGeoLevelItems = [
+  MapEntry(9, Statics.getLabel("Mahaanagar")),
+  MapEntry(8, Statics.getLabel("Vibhaag")),
+  MapEntry(7, Statics.getLabel("Bhaag")),
+  MapEntry(6, Statics.getLabel("Nagar")),
+];
 
 // ─── Screen ───────────────────────────────────────────────────────────────────
 
@@ -79,40 +70,29 @@ class ShaakhaaRankingScreen extends StatefulWidget {
 }
 
 class _ShaakhaaRankingScreenState extends State<ShaakhaaRankingScreen> {
-  _TimePeriod _period = _TimePeriod.lastMonth;
-  _RankTab _tab = _RankTab.upasthiti;
-  String _geoLevel = 'नगर';
-  String _vayogatScope = 'मेरी आयुगट की शाखाओं में';
+  DurationTypes _period = DurationTypes.monthly;
+  RankTab _tab = RankTab.upasthiti;
+  int _geoLevelId = 6; // default: नगर
+  int _vayogat = 1; // 1 = मेरी आयुगट, 0 = सभी
+
+  // Karyakram tab
+  String? _selectedKname;
 
   bool _isLoading = false;
   RankingData? _data;
+  List<MylvlGraph> _gData = [];
 
   // ── Period labels ──────────────────────────────────────────────────────────
 
-  String _periodLabel(_TimePeriod p) {
-    switch (p) {
-      case _TimePeriod.today:
-        return 'आज';
-      case _TimePeriod.yesterday:
-        return 'कल';
-      case _TimePeriod.lastWeek:
-        return 'पिछले सप्ताह';
-      case _TimePeriod.lastMonth:
-        return 'पिछले महीने';
-      case _TimePeriod.last3Months:
-        return 'पिछले ३ महीने';
-    }
-  }
-
-  String get _currentPeriodLabel => _periodLabel(_period);
+  String get _currentPeriodLabel => _period.pastName;
 
   String get _tabBasisLabel {
     switch (_tab) {
-      case _RankTab.upasthiti:
+      case RankTab.upasthiti:
         return 'कुल उपस्थिति';
-      case _RankTab.naveenBharti:
+      case RankTab.naveenBharti:
         return 'नवीन भरती';
-      case _RankTab.kaaryakram:
+      case RankTab.kaaryakram:
         return 'कार्यक्रम निरंतरता';
     }
   }
@@ -126,14 +106,72 @@ class _ShaakhaaRankingScreenState extends State<ShaakhaaRankingScreen> {
   }
 
   Future<void> _fetchRanking() async {
+    // Gate: karyakram tab needs an activity selected first
+    if (_tab == RankTab.kaaryakram && _selectedKname == null) {
+      setState(() {
+        _data = null;
+      });
+      return;
+    }
+
     if (!mounted) return;
     setState(() => _isLoading = true);
-    await Future.delayed(const Duration(milliseconds: 500)); // TODO: real API
-    if (!mounted) return;
-    setState(() {
-      _data = _dummyData(_period, _tab);
-      _isLoading = false;
-    });
+
+    try {
+      final req = {
+        'AppUserID': int.tryParse(Statics.userDetails['userID'] ?? '0') ?? 0,
+        'Geounitid': 0, // shaakhaa user — backend resolves from AppUserID
+        'day': _period.pkValues,
+        'level': _geoLevelId,
+        'vayogat': _vayogat,
+        'istotal': _tab == RankTab.naveenBharti ? 1 : 0,
+        'kname': _tab == RankTab.kaaryakram ? (_selectedKname ?? '') : '',
+      };
+
+      final res = await Statics.fetchMyShakhaaRanking(req);
+      if (!mounted) return;
+
+      if (res == null || res.status != 'Success' || res.myperformancedata == null) {
+        setState(() {
+          _data = null;
+          _isLoading = false;
+        });
+        return;
+      }
+
+      final perf = res.myperformancedata!;
+      final myRank = perf.currentRank;
+
+      setState(() {
+        _gData = res.gData;
+        _data = RankingData(
+          rank: perf.currentRank,
+          totalShaakhaa: perf.totalshaakha,
+          // RankMovement is +ve when improved (rank number went down = better)
+          rankChange: perf.movement == 'Up'
+              ? perf.rankMovement.abs()
+              : perf.movement == 'Down'
+                  ? -perf.rankMovement.abs()
+                  : 0,
+          stableDays: perf.rankStayedDays,
+          levelLabel: _kGeoLevelItems.firstWhere((e) => e.key == _geoLevelId, orElse: () => const MapEntry(0, 'स्तर')).value + ' स्तर',
+          value: res.myData.firstWhere((e) => e.ismyshaakha == 1, orElse: () => const MyNearby(geoUnitName: '', presentcnt: 0, rankNo: 0, ismyshaakha: 1)).presentcnt,
+          nearby: res.myData
+              .map((e) => NearbyCompetitor(
+                    rank: e.rankNo,
+                    name: e.geoUnitName,
+                    value: e.presentcnt,
+                    isMe: e.ismyshaakha == 1,
+                    myRank: myRank, // ← pass so _NearbyRow knows direction
+                  ))
+              .toList(),
+        );
+        _isLoading = false;
+      });
+    } catch (e, s) {
+      debugPrint('fetchMyShakhaa error: $e\n$s');
+      if (mounted) setState(() => _isLoading = false);
+    }
   }
 
   // ── Build ──────────────────────────────────────────────────────────────────
@@ -174,15 +212,70 @@ class _ShaakhaaRankingScreenState extends State<ShaakhaaRankingScreen> {
                       : ListView(
                           padding: const EdgeInsets.fromLTRB(14, 0, 14, 24),
                           children: [
-                            _RankCard(
-                              data: _data!,
-                              periodLabel: _currentPeriodLabel,
-                            ),
-                            const SizedBox(height: 14),
-                            _NearbySection(
-                              data: _data!,
-                              basisLabel: _tabBasisLabel,
-                            ),
+                            // ── Karyakram activity dropdown ───────────────
+                            if (_tab == RankTab.kaaryakram) ...[
+                              const SizedBox(height: 4),
+                              const Text(
+                                'रैंकिंग के लिए विशिष्ट कार्यक्रम चुनें:',
+                                style: TextStyle(fontSize: 11, color: Color(0xFF8E8E93)),
+                              ),
+                              const SizedBox(height: 6),
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 14),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(color: const Color(0xFFE5E5EA), width: 1.2),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton<String>(
+                                    value: _selectedKname,
+                                    isExpanded: true,
+                                    hint: const Text('कार्यक्रम चुनें...', style: TextStyle(fontSize: 14, color: Color(0xFF8E8E93))),
+                                    icon: const Icon(Icons.keyboard_arrow_down_rounded, color: Color(0xFFFF6B00), size: 22),
+                                    items: karyakramItems
+                                        .map((e) => DropdownMenuItem(
+                                              value: e.key,
+                                              child: Text(Statics.getLabel(e.value, returnKey: true)),
+                                            ))
+                                        .toList(),
+                                    onChanged: (v) {
+                                      if (v != null) {
+                                        setState(() => _selectedKname = v);
+                                        _fetchRanking();
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 14),
+                            ],
+
+                            // ── Placeholder until activity chosen ─────────
+                            if (_tab == RankTab.kaaryakram && _selectedKname == null)
+                              Container(
+                                height: 180,
+                                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: const [
+                                    Icon(Icons.touch_app_outlined, size: 38, color: Color(0xFFFF6B00)),
+                                    SizedBox(height: 12),
+                                    Text('ऊपर से कार्यक्रम चुनें', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFF1C1C1E))),
+                                    SizedBox(height: 4),
+                                    Text(
+                                      'रैंकिंग देखने के लिए एक कार्यक्रम\nचुनना आवश्यक है',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(fontSize: 11.5, color: Color(0xFF8E8E93)),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            else if (_data != null) ...[
+                              _RankCard(data: _data!, periodLabel: _currentPeriodLabel),
+                              const SizedBox(height: 14),
+                              _NearbySection(data: _data!, basisLabel: _tabBasisLabel),
+                            ],
                           ],
                         ),
             ),
@@ -200,7 +293,7 @@ class _ShaakhaaRankingScreenState extends State<ShaakhaaRankingScreen> {
       child: ListView(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 14),
-        children: _TimePeriod.values.map((p) {
+        children: DurationTypes.values.map((p) {
           final sel = _period == p;
           return GestureDetector(
             onTap: () {
@@ -219,7 +312,7 @@ class _ShaakhaaRankingScreenState extends State<ShaakhaaRankingScreen> {
                 ),
               ),
               child: Text(
-                _periodLabel(p),
+                p.pastName,
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
@@ -238,34 +331,83 @@ class _ShaakhaaRankingScreenState extends State<ShaakhaaRankingScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 14),
       child: Row(
         children: [
-          // Geo level dropdown
+          // Geo level
           Expanded(
-            child: _FilterDropdown(
-              icon: Icons.location_on_outlined,
-              iconColor: const Color(0xFFFF6B00),
-              value: _geoLevel,
-              items: const ['महानगर', 'विभाग', 'भाग', 'नगर', 'मंडल'],
-              onChanged: (v) {
-                if (v != null) setState(() => _geoLevel = v);
-                _fetchRanking();
-              },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: const Color(0xFFE5E5EA), width: 1.2),
+              ),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<int>(
+                  value: _geoLevelId,
+                  isExpanded: true,
+                  icon: const SizedBox.shrink(),
+                  style: const TextStyle(fontSize: 13, color: Color(0xFF1C1C1E)),
+                  selectedItemBuilder: (_) => _kGeoLevelItems
+                      .map((e) => Row(
+                            children: [
+                              const Icon(Icons.location_on_outlined, size: 16, color: Color(0xFFFF6B00)),
+                              const SizedBox(width: 6),
+                              Expanded(child: Text(e.value, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w500))),
+                              const Icon(Icons.keyboard_arrow_down_rounded, size: 18, color: Color(0xFFFF6B00)),
+                            ],
+                          ))
+                      .toList(),
+                  items: _kGeoLevelItems.map((e) => DropdownMenuItem(value: e.key, child: Text(e.value))).toList(),
+                  onChanged: (v) {
+                    if (v != null) setState(() => _geoLevelId = v);
+                    _fetchRanking();
+                  },
+                ),
+              ),
             ),
           ),
+
           const SizedBox(width: 10),
-          // Vayogat scope dropdown
+
+          // Vayogat scope
           Expanded(
-            child: _FilterDropdown(
-              icon: Icons.people_alt_outlined,
-              iconColor: const Color(0xFF6366F1),
-              value: _vayogatScope,
-              items: const [
-                'मेरी आयुगट की शाखाओं में',
-                'सभी शाखाओं में',
-              ],
-              onChanged: (v) {
-                if (v != null) setState(() => _vayogatScope = v);
-                _fetchRanking();
-              },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: const Color(0xFFE5E5EA), width: 1.2),
+              ),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<int>(
+                  value: _vayogat,
+                  isExpanded: true,
+                  icon: const SizedBox.shrink(),
+                  style: const TextStyle(fontSize: 13, color: Color(0xFF1C1C1E)),
+                  selectedItemBuilder: (_) => [1, 0]
+                      .map((v) => Row(
+                            children: [
+                              const Icon(Icons.people_alt_outlined, size: 16, color: Color(0xFF6366F1)),
+                              const SizedBox(width: 6),
+                              Expanded(
+                                  child: Text(
+                                v == 1 ? 'मेरी आयुगट की शाखाओं में' : 'सभी शाखाओं में',
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w500),
+                              )),
+                              const Icon(Icons.keyboard_arrow_down_rounded, size: 18, color: Color(0xFFFF6B00)),
+                            ],
+                          ))
+                      .toList(),
+                  items: const [
+                    DropdownMenuItem(value: 1, child: Text('मेरी आयुगट की शाखाओं में')),
+                    DropdownMenuItem(value: 0, child: Text('सभी शाखाओं में')),
+                  ],
+                  onChanged: (v) {
+                    if (v != null) setState(() => _vayogat = v);
+                    _fetchRanking();
+                  },
+                ),
+              ),
             ),
           ),
         ],
@@ -275,9 +417,9 @@ class _ShaakhaaRankingScreenState extends State<ShaakhaaRankingScreen> {
 
   Widget _TabRow() {
     final tabs = [
-      _TabItem(_RankTab.upasthiti, Icons.people_outline, 'कुल उपस्थिति'),
-      _TabItem(_RankTab.naveenBharti, Icons.person_add_alt_1_outlined, 'नवीन भरती'),
-      _TabItem(_RankTab.kaaryakram, Icons.show_chart, 'कार्यक्रम\nनिरंतरता'),
+      _TabItem(RankTab.upasthiti, Icons.people_outline, 'कुल उपस्थिति'),
+      _TabItem(RankTab.naveenBharti, Icons.person_add_alt_1_outlined, 'नवीन भरती'),
+      _TabItem(RankTab.kaaryakram, Icons.show_chart, 'कार्यक्रम\nनिरंतरता'),
     ];
 
     return Container(
@@ -537,7 +679,7 @@ class _RankCard extends StatelessWidget {
             ),
           ),
 
-          /*// ── Stable-since info bar ──────────────────────────────────────
+          // ── Stable-since info bar ──────────────────────────────────────
           Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -564,7 +706,7 @@ class _RankCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      'पिछले ${data.stableWeeks} सप्ताह से इसी पायदान पर!',
+                      'पिछले ${data.stableDays} दिनों से इसी पायदान पर!',
                       style: const TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w700,
@@ -575,7 +717,7 @@ class _RankCard extends StatelessWidget {
                 ),
               ],
             ),
-          ),*/
+          ),
         ],
       ),
     );
@@ -659,22 +801,9 @@ class _NearbyRow extends StatelessWidget {
 
   const _NearbyRow({required this.competitor});
 
-  // String get _motivationalText {
-  //   if (competitor.isMe) return '';
-  //   // Rows above the user (smaller rank number = better)
-  //   if (competitor.rank < _myRank) return 'बस थोड़ा और आगे निकलो!';
-  //   return 'इन्हें पीछे ही रखो!';
-  // }
-
-  // We derive "my rank" from context — the isMe flag tells us which row is us,
-  // so rows with rank < mine are above, rows with rank > mine are below.
-  // Since we don't have _data here we rely on the list order:
-  // rank above = motivational push-up, rank below = motivational keep-ahead.
-  int get _myRank => 3; // TODO: pass as param when wiring real API
-
   Color get _iconColor {
     if (competitor.isMe) return const Color(0xFFFF6B00);
-    if (competitor.rank < _myRank) return const Color(0xFF6366F1);
+    if (competitor.rank < competitor.myRank) return const Color(0xFF6366F1);
     return const Color(0xFF22C55E);
   }
 
@@ -719,27 +848,6 @@ class _NearbyRow extends StatelessWidget {
                     color: competitor.isMe ? const Color(0xFF1C1C1E) : Colors.grey.shade600,
                   ),
                 ),
-                /*if (!competitor.isMe) ...[
-                  const SizedBox(height: 3),
-                  Row(
-                    children: [
-                      Icon(
-                        competitor.rank < _myRank ? Icons.arrow_forward_rounded : Icons.shield_outlined,
-                        size: 12,
-                        color: _iconColor,
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        _motivationalText,
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: _iconColor,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],*/
               ],
             ),
           ),

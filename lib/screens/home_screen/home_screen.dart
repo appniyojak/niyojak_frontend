@@ -43,7 +43,7 @@ import '../search_event.dart';
 import '../search_join_rss.dart';
 import '../search_rjb_nidhi_sankalan.dart';
 import '../search_soochi_screen.dart';
-import '../shaakhaa_milan_module/search_shaakhaa.dart';
+import '../shaakhaa_milan_module/shaakha_main_tab_screen.dart';
 import '../shatabdi_vrutta_sankalan/gruh_sampark_abhiyaan/gruh_abhiyaan_main_tab_screen.dart';
 import '../shatabdi_vrutta_sankalan/hindu_sanmelan/hindu_sanmelan_main_tab.dart';
 import '../shatabdi_vrutta_sankalan/pramukh_jansanvad/pramukh_jan_main_tab.dart';
@@ -2316,7 +2316,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(height: 24),
                 _cardTile(
                   Statics.getLabel('searchShaakhaaScreenLabel'),
-                  () => Navigator.of(context).pushNamed(SearchShaakhaaScreen.routeName),
+                  () => Navigator.of(context).pushNamed(ShaakhaMainTabScreen.routeName),
                   makeHighlight: true,
                 ),
                 const SizedBox(height: 18),
