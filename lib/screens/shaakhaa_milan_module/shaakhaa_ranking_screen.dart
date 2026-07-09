@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 import '../../helpers/static_data.dart' as Statics;
@@ -158,22 +161,17 @@ class _ShaakhaaRankingScreenState extends State<ShaakhaaRankingScreen> {
         _data = RankingData(
           rank: perf.currentRank,
           totalShaakhaa: perf.totalshaakha,
-          // RankMovement is +ve when improved (rank number went down = better)
-          rankChange: perf.movement == 'Up'
-              ? perf.rankMovement.abs()
-              : perf.movement == 'Down'
-                  ? -perf.rankMovement.abs()
-                  : 0,
+          rankChange: perf.previousRank == 0 ? 0 : perf.previousRank - perf.currentRank,
           stableDays: perf.rankStayedDays,
-          levelLabel: _kGeoLevelItems.firstWhere((e) => e.key == _geoLevelId, orElse: () => const MapEntry(0, 'स्तर')).value + ' स्तर',
-          value: res.myData.firstWhere((e) => e.ismyshaakha == 1, orElse: () => const MyNearby(geoUnitName: '', presentcnt: 0, rankNo: 0, ismyshaakha: 1)).presentcnt,
+          levelLabel: (_kGeoLevelItems.firstWhere((e) => e.key == _geoLevelId, orElse: () => const MapEntry(0, 'स्तर')).value) + ' स्तर',
+          value: res.myData.firstWhere((e) => e.ismyshaakha == 1, orElse: () => MyNearby(geoUnitName: '', presentcnt: 0, rankNo: 0, ismyshaakha: 1)).presentcnt,
           nearby: res.myData
               .map((e) => NearbyCompetitor(
                     rank: e.rankNo,
                     name: e.geoUnitName,
                     value: e.presentcnt,
                     isMe: e.ismyshaakha == 1,
-                    myRank: myRank, // ← pass so _NearbyRow knows direction
+                    myRank: perf.currentRank,
                   ))
               .toList(),
         );
@@ -213,7 +211,7 @@ class _ShaakhaaRankingScreenState extends State<ShaakhaaRankingScreen> {
                   ? const Center(
                       child: CircularProgressIndicator(color: Color(0xFFFF6B00)),
                     )
-                  : _data == null
+                  : _data == null && _tab != RankTab.kaaryakram
                       ? Center(
                           child: Text(
                             Statics.getLabel('NoDataFound'),
@@ -286,6 +284,9 @@ class _ShaakhaaRankingScreenState extends State<ShaakhaaRankingScreen> {
                               _RankCard(data: _data!, periodLabel: _currentPeriodLabel),
                               const SizedBox(height: 14),
                               _NearbySection(data: _data!, basisLabel: _tabBasisLabel),
+
+                              // ── Rank trend chart ─────────────────────────────
+                              if (_gData.length > 1) _RankTrendChart(gData: _gData),
                             ],
                           ],
                         ),
@@ -650,7 +651,7 @@ class _RankCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      '#${data.rank}',
+                      '#${data.rank == 0 ? "-" : data.rank}',
                       style: const TextStyle(
                         fontSize: 56,
                         fontWeight: FontWeight.w900,
@@ -717,7 +718,11 @@ class _RankCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      'पिछले ${data.stableDays} दिनों से इसी पायदान पर!',
+                      data.stableDays <= 0
+                          ? 'पहली बार इस पायदान पर!'
+                          : data.stableDays == 1
+                              ? 'आज इस पायदान पर आए!'
+                              : 'पिछले ${data.stableDays} दिनों से इसी पायदान पर!',
                       style: const TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w700,
@@ -727,6 +732,327 @@ class _RankCard extends StatelessWidget {
                   ],
                 ),
               ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ─── Rank Trend Chart ─────────────────────────────────────────────────────────
+
+class _RankTrendChart extends StatefulWidget {
+  final List<MylvlGraph> gData;
+
+  const _RankTrendChart({required this.gData});
+
+  @override
+  State<_RankTrendChart> createState() => _RankTrendChartState();
+}
+
+class _RankTrendChartState extends State<_RankTrendChart> {
+  // -1 = default to last point (most recent)
+  int _shownIndex = -1;
+
+  int get _n => widget.gData.length;
+
+  int get _resolvedIndex => _shownIndex < 0 ? _n - 1 : _shownIndex.clamp(0, _n - 1);
+
+  /// Picks a "nice" step (1, 2, 5, 10, 20, 50, 100 ...) so the axis divides
+  /// cleanly instead of the old raw-divide-by-5/10 branches, which produced
+  /// inconsistent spacing depending on which bucket the value fell in.
+  int _niceStep(num range) {
+    if (range <= 0) return 1;
+    final rawStep = range / 3.0; // aim for ~3 divisions
+    final exponent = (log(rawStep) / ln10).floor();
+    final magnitude = pow(10, exponent).toDouble();
+    final residual = rawStep / magnitude;
+
+    double niceResidual;
+    if (residual <= 1) {
+      niceResidual = 1;
+    } else if (residual <= 2) {
+      niceResidual = 2;
+    } else if (residual <= 5) {
+      niceResidual = 5;
+    } else {
+      niceResidual = 10;
+    }
+    final step = (niceResidual * magnitude).round();
+    return step < 1 ? 1 : step;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.gData.isEmpty) return const SizedBox.shrink();
+
+    final n = _n;
+
+    // ── Y range: derived ONLY from gData (no injected current-rank point) ──
+    final ranks = widget.gData.map((e) => e.rankNo).toList();
+    final minRank = ranks.reduce((a, b) => a < b ? a : b);
+    final maxRank = ranks.reduce((a, b) => a > b ? a : b);
+
+    final step = _niceStep(maxRank - minRank);
+
+    // Floor/ceil to clean multiples of `step`, never going below rank 1.
+    int niceMin = (minRank ~/ step) * step;
+    if (niceMin < 1) niceMin = 1;
+    int niceMax = ((maxRank + step - 1) ~/ step) * step;
+    if (niceMax <= niceMin) niceMax = niceMin + step;
+
+    final interval = step.toDouble();
+
+    // Negate so rank 1 = top, higher rank number = lower on screen.
+    final double minY = -niceMax.toDouble();
+    final double maxY = -niceMin.toDouble();
+
+    // ── Spots — one per API data point, nothing synthetic added ──────────
+    final spots = <FlSpot>[
+      for (final e in widget.gData.asMap().entries) FlSpot(e.key.toDouble(), -e.value.rankNo.toDouble()),
+    ];
+
+    // ── X labels: prefer DateRange (actually unique per point); fall back
+    // to periodType+periodNo only if DateRange is missing. The previous
+    // code always used periodType+periodNo even though DateRange was
+    // available, which is what caused repeated labels (e.g. "Day 1"
+    // showing up for two different weeks).
+    final xLabels = widget.gData.map((e) => '${e.periodType} ${e.periodNo}').toList();
+    final ttLabels = widget.gData.map((e) => e.dateRange.trim().isNotEmpty ? e.dateRange : '${e.periodType} ${e.periodNo}').toList();
+
+    // ── Which x indices to show — evenly spaced, always unique, capped
+    // at a max tick count so labels never crowd or repeat.
+    const maxTicks = 5;
+    final showSet = <int>{};
+    if (n <= maxTicks) {
+      showSet.addAll(List.generate(n, (i) => i));
+    } else {
+      final tickCount = maxTicks;
+      for (int i = 0; i < tickCount; i++) {
+        final idx = (i * (n - 1) / (tickCount - 1)).round();
+        showSet.add(idx.clamp(0, n - 1));
+      }
+    }
+
+    final shownIdx = _resolvedIndex;
+
+    // ── Line data — single bar with all spots = always fully connected.
+    final barData = LineChartBarData(
+      spots: spots,
+      isCurved: true,
+      curveSmoothness: 0.35,
+      preventCurveOverShooting: true,
+      color: const Color(0xFFFF6B00),
+      barWidth: 2.5,
+      isStrokeCapRound: true,
+      dotData: FlDotData(
+        show: true,
+        getDotPainter: (spot, _, __, idx) => FlDotCirclePainter(
+          radius: idx == shownIdx ? 6.5 : 4,
+          color: Colors.white,
+          strokeWidth: 2.5,
+          strokeColor: const Color(0xFFFF6B00),
+        ),
+      ),
+      belowBarData: BarAreaData(
+        show: true,
+        gradient: LinearGradient(
+          colors: [
+            const Color(0xFFFF6B00).withOpacity(0.10),
+            const Color(0xFFFF6B00).withOpacity(0.01),
+          ],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+      ),
+    );
+
+    // Small horizontal buffer on minX/maxX keeps the first/last dot from
+    // sitting flush against the chart border, so the whole line reads as
+    // centered rather than pinned to the edges.
+    const edgePad = 0.4;
+
+    return Container(
+      color: Colors.white,
+      margin: const EdgeInsets.only(top: 14),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'पायदान का इतिहास (Rank Trend)',
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w700,
+              color: Color(0xFF1C1C1E),
+            ),
+          ),
+          const SizedBox(height: 4),
+          const Text(
+            'समय के साथ आपके प्रदर्शन में सुधार\n(ग्राफ में ऊपर जाना = बेहतर रैंक)',
+            style: TextStyle(fontSize: 10.5, color: Color(0xFF8E8E93), height: 1.3),
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            height: 220,
+            child: Padding(
+              // Symmetric horizontal padding keeps the plotted line visually
+              // centered inside the card instead of hugging the left axis.
+              padding: const EdgeInsets.symmetric(horizontal: 6),
+              child: LineChart(
+                LineChartData(
+                  minX: -edgePad,
+                  maxX: (n - 1) + edgePad,
+                  minY: minY - edgePad,
+                  maxY: maxY + edgePad,
+                  clipData: const FlClipData.all(),
+                  gridData: FlGridData(
+                    show: true,
+                    drawVerticalLine: false,
+                    horizontalInterval: interval,
+                    getDrawingHorizontalLine: (_) => const FlLine(
+                      color: Color(0xFFF2F2F7),
+                      strokeWidth: 1,
+                    ),
+                  ),
+                  borderData: FlBorderData(
+                    show: true,
+                    border: const Border(
+                      bottom: BorderSide(color: Color(0xFFE5E5EA), width: 1),
+                      left: BorderSide(color: Color(0xFFE5E5EA), width: 1),
+                    ),
+                  ),
+                  titlesData: FlTitlesData(
+                    rightTitles: const AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
+                    topTitles: const AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
+                    // ── Y labels: only within [niceMin, niceMax] ──────────
+                    leftTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        reservedSize: 28,
+                        minIncluded: false,
+                        // maxIncluded: false,
+                        interval: interval,
+                        getTitlesWidget: (value, _) {
+                          final rank = (-value).round();
+                          if (rank < niceMin || rank > niceMax) {
+                            return const SizedBox.shrink();
+                          }
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 4),
+                            child: Text(
+                              '$rank',
+                              textAlign: TextAlign.right,
+                              style: TextStyle(fontSize: 9, color: Colors.grey.shade500),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    // ── X labels: unique, evenly spaced, capped count ─────
+                    bottomTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        minIncluded: false,
+                        maxIncluded: false,
+                        interval: 1,
+                        reservedSize: 36,
+                        getTitlesWidget: (value, _) {
+                          final idx = value.round();
+                          if (idx < 0 || idx >= xLabels.length) {
+                            return const SizedBox.shrink();
+                          }
+                          if (!showSet.contains(idx)) return const SizedBox.shrink();
+
+                          final isLatest = idx == n - 1;
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 6),
+                            child: Text(
+                              xLabels[idx],
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 9,
+                                fontWeight: isLatest ? FontWeight.w700 : FontWeight.w400,
+                                color: isLatest ? const Color(0xFFFF6B00) : Colors.grey.shade500,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  lineTouchData: LineTouchData(
+                    enabled: true,
+                    touchTooltipData: LineTouchTooltipData(
+                      getTooltipColor: (_) => Colors.white,
+                      tooltipBorder: const BorderSide(color: Color(0xFFFFE0B2), width: 1),
+                      tooltipBorderRadius: BorderRadius.circular(8),
+                      tooltipPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                      getTooltipItems: (lineBarSpots) {
+                        return lineBarSpots.map((spot) {
+                          final rank = (-spot.y).round();
+                          final label = ttLabels[spot.spotIndex];
+                          return LineTooltipItem(
+                            '$label\n',
+                            const TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xFFE65100),
+                            ),
+                            children: [
+                              TextSpan(
+                                text: 'पायदान : Rank #$rank',
+                                style: const TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w500,
+                                  color: Color(0xFF6366F1),
+                                ),
+                              ),
+                            ],
+                          );
+                        }).toList();
+                      },
+                    ),
+                    getTouchedSpotIndicator: (_, spotIndexes) => spotIndexes
+                        .map((_) => TouchedSpotIndicatorData(
+                              const FlLine(
+                                color: Color(0xFFFF6B00),
+                                strokeWidth: 1.5,
+                                dashArray: [4, 4],
+                              ),
+                              FlDotData(
+                                getDotPainter: (_, __, ___, ____) => FlDotCirclePainter(
+                                  radius: 6.5,
+                                  color: Colors.white,
+                                  strokeWidth: 2.5,
+                                  strokeColor: const Color(0xFFFF6B00),
+                                ),
+                              ),
+                            ))
+                        .toList(),
+                    touchCallback: (event, response) {
+                      if (event is FlTapUpEvent || event is FlPanUpdateEvent) {
+                        final idx = response?.lineBarSpots?.first.spotIndex ?? -1;
+                        if (idx >= 0) setState(() => _shownIndex = idx);
+                      }
+                    },
+                    handleBuiltInTouches: true,
+                  ),
+                  lineBarsData: [barData],
+                  showingTooltipIndicators: [
+                    ShowingTooltipIndicators([
+                      LineBarSpot(barData, 0, spots[shownIdx]),
+                    ]),
+                  ],
+                ),
+                duration: const Duration(milliseconds: 250),
+                curve: Curves.easeOut,
+              ),
             ),
           ),
         ],
