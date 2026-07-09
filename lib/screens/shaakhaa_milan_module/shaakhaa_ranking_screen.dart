@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../helpers/static_data.dart' as Statics;
+import '../../models/response_model/dropdown_level_responsemodel.dart';
 import '../../models/response_model/shaakhaa_report_models.dart';
+import '../../utils/globals.dart';
 import 'report_widgets/module_constants.dart';
 
 // ─── Models ───────────────────────────────────────────────────────────────────
@@ -75,6 +77,8 @@ class _ShaakhaaRankingScreenState extends State<ShaakhaaRankingScreen> {
   int _geoLevelId = 6; // default: नगर
   int _vayogat = 1; // 1 = मेरी आयुगट, 0 = सभी
 
+  late DropDownModel dm;
+
   // Karyakram tab
   String? _selectedKname;
 
@@ -102,6 +106,13 @@ class _ShaakhaaRankingScreenState extends State<ShaakhaaRankingScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) => _initData());
+  }
+
+  _initData() async {
+    dm = await MyAppGlobals.getLevelLDB();
+
+    setState(() {});
     _fetchRanking();
   }
 
@@ -120,7 +131,7 @@ class _ShaakhaaRankingScreenState extends State<ShaakhaaRankingScreen> {
     try {
       final req = {
         'AppUserID': int.tryParse(Statics.userDetails['userID'] ?? '0') ?? 0,
-        'Geounitid': 0, // shaakhaa user — backend resolves from AppUserID
+        'Geounitid': dm.geoUnitID,
         'day': _period.pkValues,
         'level': _geoLevelId,
         'vayogat': _vayogat,
@@ -293,7 +304,7 @@ class _ShaakhaaRankingScreenState extends State<ShaakhaaRankingScreen> {
       child: ListView(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 14),
-        children: DurationTypes.values.map((p) {
+        children: DurationTypes.values.where((e) => e != DurationTypes.daily).toList().map((p) {
           final sel = _period == p;
           return GestureDetector(
             onTap: () {

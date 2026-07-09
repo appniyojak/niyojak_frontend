@@ -936,7 +936,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                                     _FilterLabel('२. ${Statics.getLabel("duration")}'),
                                     AppDropdown<DurationTypes>(
                                       value: _kalavadha,
-                                      items: DurationTypes.values,
+                                      items: DurationTypes.values.where((e) => e != DurationTypes.today && e != DurationTypes.yesterday).toList(),
                                       itemLabel: (v) => v.name,
                                       onChanged: (v) {
                                         setState(() => _kalavadha = v!);

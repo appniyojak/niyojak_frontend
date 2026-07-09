@@ -10,7 +10,7 @@ extension DurationsFilter on DurationTypes {
       case DurationTypes.today:
         return Statics.getLabel('today', returnKey: true);
       case DurationTypes.yesterday:
-        return Statics.getLabel('yesterday', returnKey: true);
+        return Statics.getLabel('yesterdays', returnKey: true);
       case DurationTypes.daily:
         return Statics.getLabel('daily', returnKey: true);
       case DurationTypes.weekly:
@@ -31,7 +31,7 @@ extension DurationsFilter on DurationTypes {
       case DurationTypes.today:
         return Statics.getLabel('today', returnKey: true);
       case DurationTypes.yesterday:
-        return Statics.getLabel('yesterday', returnKey: true);
+        return Statics.getLabel('yesterdays', returnKey: true);
       case DurationTypes.daily:
         return Statics.getLabel('daily', returnKey: true);
       case DurationTypes.weekly:
@@ -52,7 +52,6 @@ extension DurationsFilter on DurationTypes {
       case DurationTypes.today:
         return 0;
       case DurationTypes.yesterday:
-        return 1;
       case DurationTypes.daily:
         return 1;
       case DurationTypes.weekly:

@@ -4547,9 +4547,9 @@ Future<String> deleteShaakhaaVrutta(String inputJson) async {
     return "";
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
-  log("saveShaakhaaVruttaForApp inputJson -> $inputJson");
+  log("deleteShaakhaaVrutta inputJson -> $inputJson");
   var response = await http.post(Uri.parse(urlDeleteShaakhaaVruttaForApp), headers: jHeaders, body: inputJson);
-  log("saveShaakhaaVruttaForApp responseBody -> ${response.body}");
+  log("deleteShaakhaaVrutta responseBody -> ${response.body}");
   var responseBody = json.decode(response.body);
   return responseBody['Message'].toString();
 }
@@ -7091,8 +7091,8 @@ Future<MylvlResponse?> fetchMyShakhaaRanking(Map<String, dynamic> inputJson) asy
 
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
+  log("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
   log(urlSVRMyShaakhaaRanking);
-  print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
   try {
     var response = await http.post(Uri.parse(urlSVRMyShaakhaaRanking), headers: jHeaders, body: jsonEncode(inputJson));
     if (response.statusCode == 200) {
