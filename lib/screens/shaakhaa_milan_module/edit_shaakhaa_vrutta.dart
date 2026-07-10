@@ -18,8 +18,9 @@ class EditShaakhaaVrutta extends StatefulWidget {
   var vruttaID;
   var onSaveDetails;
   var viewType;
+  final String? vruttadate;
 
-  EditShaakhaaVrutta({Key? key, this.shaakhaaID, this.vruttaID, this.onSaveDetails, this.viewType}) : super(key: key);
+  EditShaakhaaVrutta({Key? key, this.shaakhaaID, this.vruttaID, this.onSaveDetails, this.viewType, this.vruttadate}) : super(key: key);
 
   @override
   _EditShaakhaaVruttaState createState() => _EditShaakhaaVruttaState();
@@ -89,12 +90,23 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
   }
 
   initData() async {
-    int vruttaID = int.tryParse(widget.vruttaID == null ? "0" : widget.vruttaID) ?? 0;
-    int shaakhaaID = int.tryParse(widget.shaakhaaID == null ? "0" : widget.shaakhaaID.toString()) ?? 0;
+    final int vruttaID = int.tryParse(widget.vruttaID?.toString() ?? "0") ?? 0;
+    final int shaakhaaID = int.tryParse(widget.shaakhaaID?.toString() ?? "0") ?? 0;
+
     await populateShaakhaVayogat(shaakhaaID.toString());
-    _vruttaDateCntrl.text = DateFormat('dd-MMM-yyyy').format(DateTime.now());
-    _vruttaDate = DateFormat('yyyy/MM/dd').parse(DateFormat('yyyy/MM/dd').format(DateTime.now()));
-    getSwDetails(vruttaID, dateSelected: vruttaID == 0 ? DateFormat('dd/MM/yyyy').format(DateTime.now()) : null);
+
+    final inputFormatter = DateFormat('dd/MM/yyyy');
+    final displayFormatter = DateFormat('dd-MMM-yyyy');
+
+    final DateTime selectedDate = widget.vruttadate != null ? inputFormatter.parse(widget.vruttadate!) : DateTime.now();
+
+    _vruttaDate = selectedDate;
+    _vruttaDateCntrl.text = displayFormatter.format(selectedDate);
+
+    getSwDetails(
+      vruttaID,
+      dateSelected: inputFormatter.format(selectedDate),
+    );
   }
 
   Future<void> populateShaakhaVayogat(shaakhaaID) async {
@@ -138,7 +150,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
     if (!isConnected) {
       Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));
     } else {
-      dataList = dateSelected != null
+      dataList = theId == 0 || theId == null
           ? await Statics.getShaakhaaVruttaDetailsByDateForApp(int.tryParse(widget.shaakhaaID == null ? "0" : widget.shaakhaaID.toString()) ?? 0, dateSelected)
           : await Statics.getShaakhaaVruttaListForApp(null, theId);
       if (dataList != null && dataList.isNotEmpty) {

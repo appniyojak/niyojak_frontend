@@ -2168,6 +2168,8 @@ Map<String, String> resEnglish = {
   "notificationDialogSubtitle": "You won't receive important updates (like daily Vrutta reminders) unless notifications are enabled for this app.",
   "notNow": "Not Now",
   "openSettings": "Open Settings",
+
+  ////////////////////////////////////// Main Shakhaa Milan(NEW KEYS) //////////////////////////////////////
 };
 
 ///1,584

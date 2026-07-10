@@ -12,6 +12,7 @@ import '../../utils/globals.dart';
 import '../../utils/stable_geounit_class.dart';
 import '../../widgets/shaakhaa_card.dart';
 import '../maps_display.dart';
+import 'edit_shaakhaa.dart';
 
 class SearchShaakhaaScreen extends StatefulWidget {
   static const routeName = '/search-shaakhaa-screen';
@@ -377,13 +378,13 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
             child: Icon(Icons.download_sharp),
             backgroundColor: Colors.green,
           ),
-          /*FloatingActionButton(
+          FloatingActionButton(
             mini: true,
             tooltip: Statics.getLabel("fillNewRecord"),
             onPressed: () => Navigator.of(context).pushNamed(EditShaakhaaScreen.routeName, arguments: Statics.ScreenArguments(0, Statics.getLabel('EditMenu'))),
             child: Icon(Icons.add),
             backgroundColor: Colors.purple,
-          ),*/
+          ),
         ],
       ),
       body: PopScope(

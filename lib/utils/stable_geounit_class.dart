@@ -916,6 +916,52 @@ class GeoHierarchyController extends ChangeNotifier {
     );
   }
 
+  String getHierarchyTrail(GeoHierarchyNameTrail trail) {
+    final values = <String, String?>{
+      'Mahaanagar': trail.mahaanagarName,
+      'Vibhaag': trail.vibhaagName,
+      'Bhaag': trail.bhaagName,
+      'Nagar': trail.nagarName,
+      'Upnagar': trail.upnagarName,
+      'Mandal': trail.mandalName,
+      'Graam': trail.graamName,
+      'Vasti': trail.vastiName,
+      'Shakhaa': trail.shakhaaName,
+    };
+
+    const hierarchy = [
+      'Mahaanagar',
+      'Vibhaag',
+      'Bhaag',
+      'Nagar',
+      'Upnagar',
+      'Mandal',
+      'Graam',
+      'Vasti',
+      'Shakhaa',
+    ];
+
+    bool hasValue(String? value) => value != null && value.trim().isNotEmpty;
+
+    // Keep only selected levels in hierarchy order.
+    final selectedLevels = hierarchy.where((level) => hasValue(values[level])).toList();
+
+    if (selectedLevels.isEmpty) return '';
+
+    // Default: last 3 levels (or fewer if not available).
+    int start = selectedLevels.length > 3 ? selectedLevels.length - 3 : 0;
+
+    // If the returned trail starts with Upnagar,
+    // include Nagar as well (making it 4).
+    if (start > 0 && selectedLevels[start] == 'Upnagar') {
+      start--;
+    }
+
+    final result = selectedLevels.sublist(start).map((level) => values[level]!).toList();
+
+    return result.join(' -> ');
+  }
+
   ////////////////////////////////////////////
 
   Future<GeoHierarchyTrail?> getTrailFromGeoUnitId(String geoUnitId) async {

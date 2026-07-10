@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../helpers/static_data.dart' as Statics;
-import '../../models/response_model/home_screen_names_resp_model.dart';
+import '../../models/response_model/names_data_model.dart';
+import '../shaakhaa_milan_module/edit_shaakhaa_vrutta.dart';
 
 class DataDetailsScreen extends StatelessWidget {
   final String infoName;
+  final IconData? icon;
   final List<DataDetailsGroup> groupedData;
 
-  const DataDetailsScreen({super.key, required this.groupedData, required this.infoName});
+  const DataDetailsScreen({super.key, required this.groupedData, this.icon, required this.infoName});
 
   int get _totalEntries => groupedData.fold(0, (sum, g) => sum + g.items.length);
 
@@ -44,7 +47,7 @@ class DataDetailsScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 10),
               itemCount: groupedData.length,
               itemBuilder: (context, index) {
-                return _DataGroupTile(group: groupedData[index]);
+                return _DataGroupTile(group: groupedData[index], icon: icon);
               },
             ),
           ),
@@ -56,8 +59,9 @@ class DataDetailsScreen extends StatelessWidget {
 
 class _DataGroupTile extends StatelessWidget {
   final DataDetailsGroup group;
+  final IconData? icon;
 
-  const _DataGroupTile({required this.group});
+  const _DataGroupTile({required this.group, this.icon});
 
   static const double _maxItemsHeight = 240;
 
@@ -103,15 +107,28 @@ class _DataGroupTile extends StatelessWidget {
                 return ListTile(
                   dense: true,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                  onTap: person.id == 0 || person.id == null
+                      ? null
+                      : () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => EditShaakhaaVrutta(
+                                    shaakhaaID: person.id.toString(),
+                                    vruttaID: null,
+                                    onSaveDetails: null,
+                                    viewType: "EditVrutta",
+                                    vruttadate: person.vdate != null && (person.vdate?.isNotEmpty == true) ? DateFormat('dd/MM/yyyy').format(DateFormat('yyyy-MM-dd').parse(person.vdate!)) : null,
+                                  ))),
                   leading: CircleAvatar(
                     radius: 14,
                     backgroundColor: Colors.indigo.shade50,
-                    child: Icon(Icons.person_outline, size: 14, color: Colors.indigo.shade400),
+                    child: Icon(icon ?? Icons.person_outline, size: 14, color: Colors.indigo.shade400),
                   ),
                   title: Text(
                     person.value ?? '—',
                     style: const TextStyle(fontSize: 13, color: Colors.black87),
                   ),
+                  trailing: person.id == 0 || person.id == null ? null : Icon(Icons.keyboard_arrow_right_rounded),
                 );
               },
             ),

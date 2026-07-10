@@ -24,6 +24,7 @@ class RankingData {
   final int rankChange;
   final int stableDays; // ← was stableWeeks; now actual days from API
   final String levelLabel;
+  final String movement;
   final int value;
   final List<NearbyCompetitor> nearby;
 
@@ -33,6 +34,7 @@ class RankingData {
     required this.rankChange,
     required this.stableDays, // ← renamed
     required this.levelLabel,
+    required this.movement,
     required this.value,
     required this.nearby,
   });
@@ -161,6 +163,7 @@ class _ShaakhaaRankingScreenState extends State<ShaakhaaRankingScreen> {
         _data = RankingData(
           rank: perf.currentRank,
           totalShaakhaa: perf.totalshaakha,
+          movement: perf.movement,
           rankChange: perf.previousRank == 0 ? 0 : perf.previousRank - perf.currentRank,
           stableDays: perf.rankStayedDays,
           levelLabel: (_kGeoLevelItems.firstWhere((e) => e.key == _geoLevelId, orElse: () => const MapEntry(0, 'स्तर')).value) + ' स्तर',
@@ -572,6 +575,7 @@ class _RankCard extends StatelessWidget {
     final changeUp = data.rankChange > 0;
     final changeDown = data.rankChange < 0;
     final changeAbs = data.rankChange.abs();
+    final changeStr = data.movement;
 
     return Container(
       decoration: BoxDecoration(
@@ -619,7 +623,7 @@ class _RankCard extends StatelessWidget {
                             ),
                             const SizedBox(width: 3),
                             Text(
-                              '+$changeAbs पायदान ${changeUp ? "ऊपर" : "नीचे"}',
+                              '${changeUp ? "+" : "-"}$changeStr',
                               style: const TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.w700,

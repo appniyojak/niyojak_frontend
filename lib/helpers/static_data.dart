@@ -26,8 +26,10 @@ import '../models/response_model/gruh_abhiyaan_vrutta_data_model.dart';
 import '../models/response_model/hindu_sanmelan_model.dart';
 import '../models/response_model/hindu_sanmelan_report_model.dart';
 import '../models/response_model/home_screen_names_resp_model.dart';
+import '../models/response_model/home_shaakhaa_report_names_model.dart';
 import '../models/response_model/mandalVastisarvekshanReportModel.dart';
 import '../models/response_model/nagar_vasti_model.dart';
+import '../models/response_model/names_data_model.dart';
 import '../models/response_model/nirikshan_baithak_vrutta.dart';
 import '../models/response_model/notification_list_model.dart';
 import '../models/response_model/release_notes_model.dart';
@@ -315,6 +317,7 @@ const String urlSVRMyShaakhaaRanking = baseUrlAPI + '/shakhaavruttareport_myshak
 const String urlSVRTulnatmak = baseUrlAPI + '/shakhaavruttareport_tulnatmak';
 
 const String urlHomeScreenNames = baseUrlAPI + '/RefreshHomeScreenForAppNames';
+const String urlHomeShaakhaaVruttaNames = baseUrlAPI + '/yestardayShaakhaaVruttanames';
 
 //////////////////////////////////////////////////////////////////////////////////////////
 const String patchSuffix = '';
@@ -7150,6 +7153,34 @@ Future<List<DataDetails>?> refreshHomeScreenNamesData(Map<String, dynamic> input
       final Map<String, dynamic> data = jsonDecode(response.body);
       HomeScreenNamesRespModel model = HomeScreenNamesRespModel.fromJson(data);
       log("fetchTulnatmak >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+      return model.data;
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return null;
+    }
+  } catch (e, stack) {
+    print("Exception: $e \n$stack");
+    return null;
+  } finally {
+    if (context != null) Navigator.of(context, rootNavigator: true).pop();
+  }
+}
+
+Future<List<DataDetails>?> homeShaakhaaReportNamesData(Map<String, dynamic> inputJson, {BuildContext? context}) async {
+  bool? connected = await isInternetConnected();
+  if (connected == false) return null;
+  if (context != null) showLoaderDialog(context);
+
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  log(urlHomeShaakhaaVruttaNames);
+  print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+  try {
+    var response = await http.post(Uri.parse(urlHomeShaakhaaVruttaNames), headers: jHeaders, body: jsonEncode(inputJson));
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      HomeShaakhaaReportNamesRespModel model = HomeShaakhaaReportNamesRespModel.fromJson(data);
+      log("homeShaakhaaReportNamesData >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
       return model.data;
     } else {
       print("Error: ${response.statusCode} - ${response.body}");

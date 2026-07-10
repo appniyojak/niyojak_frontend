@@ -1,13 +1,13 @@
 import 'names_data_model.dart';
 
-class HomeScreenNamesRespModel {
+class HomeShaakhaaReportNamesRespModel {
   String? status;
   String? message;
   List<DataDetails>? data;
 
-  HomeScreenNamesRespModel({this.status, this.message, this.data});
+  HomeShaakhaaReportNamesRespModel({this.status, this.message, this.data});
 
-  HomeScreenNamesRespModel.fromJson(Map<String, dynamic> json) {
+  HomeShaakhaaReportNamesRespModel.fromJson(Map<String, dynamic> json) {
     status = json['Status'];
     message = json['Message'];
     if (json['data'] != null) {

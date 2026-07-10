@@ -18,6 +18,7 @@ import '../../providers/bals.dart';
 import '../../utils/globals.dart';
 import '../../utils/stable_geounit_class.dart';
 import 'report_widgets/custom_app_dropdowns.dart';
+import 'report_widgets/helper_widgets.dart';
 
 // ─── Shared visual tokens ─────────────────────────────────────────────────────
 
@@ -168,6 +169,7 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
   late int fromYear = (toYear - (_maxSpan - 1)) < _startYear ? _startYear : toYear - (_maxSpan - 1);
 
   bool isLoading = false;
+  bool _isExpanded = false;
   String? errorMessage;
   TulnatmakResponse? response;
 
@@ -224,6 +226,7 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
 
   Future<void> _fetchData() async {
     setState(() {
+      _isExpanded = false;
       isLoading = true;
       errorMessage = null;
     });
@@ -257,6 +260,7 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
 
   void _handleFromYear(int y) {
     setState(() {
+      response = null;
       fromYear = y;
       // clamp toYear so span never exceeds _maxSpan years
       final maxAllowedTo = fromYear + (_maxSpan - 1);
@@ -266,12 +270,13 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
         toYear = maxAllowedTo > allYears.last ? allYears.last : maxAllowedTo;
       }
     });
-    // _fetchData();
+    if (userLevelId == 1) _fetchData();
   }
 
   void _handleToYear(int y) {
+    response = null;
     setState(() => toYear = y);
-    // _fetchData();
+    if (userLevelId == 1) _fetchData();
   }
 
   /////////////////////////////////////////////////////////////////////////
@@ -462,7 +467,7 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
                 const SizedBox(height: 3),
                 Text(
                   "वर्षनिहाय तुलना अहवाल",
-                  style: TextStyle(fontSize: 12, color: Colors.grey.shade300),
+                  style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
                 ),
                 const SizedBox(height: 14),
 
@@ -491,163 +496,187 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
     return ChangeNotifierProvider.value(
       value: controller,
       child: Consumer<GeoHierarchyController>(builder: (_, ctrl, __) {
-        return Container(
-          padding: const EdgeInsets.all(16),
-          decoration: _cardDecoration,
-          child: Column(
-            spacing: 6,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // ── Geo hierarchy dropdowns ──────────────────
-              _FilterLabel('१. ${Statics.getLabel("selectStar")}'),
-
-              GeoDropdownWidget(
-                level: GeoLevel.Mahaanagar,
-                title: 'Mahaanagar',
-                controller: ctrl,
-                decoration: styledDropdownDecoration(Statics.getLabel("Mahaanagar")),
-              ),
-
-              GeoDropdownWidget(
-                level: GeoLevel.Vibhaag,
-                title: 'Vibhaag',
-                controller: ctrl,
-                decoration: styledDropdownDecoration(Statics.getLabel("Vibhaag")),
-              ),
-
-              if (ctrl.hasItems(GeoLevel.Bhaag))
-                GeoDropdownWidget(
-                  level: GeoLevel.Bhaag,
-                  title: 'Bhaag',
-                  controller: ctrl,
-                  decoration: styledDropdownDecoration(Statics.getLabel("Bhaag")),
-                ),
-
-              if (ctrl.hasItems(GeoLevel.Nagar))
-                GeoDropdownWidget(
-                  level: GeoLevel.Nagar,
-                  title: 'Nagar',
-                  controller: ctrl,
-                  decoration: styledDropdownDecoration(Statics.getLabel("Nagar")),
-                ),
-
-              if (ctrl.hasItems(GeoLevel.upnagarUpkhanda))
-                GeoDropdownWidget(
-                  level: GeoLevel.upnagarUpkhanda,
-                  title: 'upnagarUpkhanda',
-                  controller: ctrl,
-                  decoration: styledDropdownDecoration(Statics.getLabel("upnagarUpkhanda")),
-                ),
-
-              if (ctrl.hasItems(GeoLevel.Mandal))
-                GeoDropdownWidget(
-                  level: GeoLevel.Mandal,
-                  title: 'Mandal',
-                  controller: ctrl,
-                  decoration: styledDropdownDecoration(Statics.getLabel("Mandal")),
-                ),
-
-              if (ctrl.hasItems(GeoLevel.Graam))
-                GeoDropdownWidget(
-                  level: GeoLevel.Graam,
-                  title: 'Graam',
-                  controller: ctrl,
-                  decoration: styledDropdownDecoration(Statics.getLabel("Graam")),
-                  isSankalpit: true,
-                ),
-
-              if (ctrl.hasItems(GeoLevel.Vasti))
-                GeoDropdownWidget(
-                  level: GeoLevel.Vasti,
-                  title: 'Vasti',
-                  controller: ctrl,
-                  decoration: styledDropdownDecoration(Statics.getLabel("Vasti")),
-                  isSankalpit: true,
-                ),
-
-              if (ctrl.hasItems(GeoLevel.Shaakhaa))
-                GeoDropdownWidget(
-                  level: GeoLevel.Shaakhaa,
-                  title: 'Shaakhaa',
-                  controller: ctrl,
-                  decoration: styledDropdownDecoration(Statics.getLabel("Shaakhaa")),
-                ),
-
-              if (ctrl.deepestSelectedLevelId != 1) ...[
-                const SizedBox(),
-                _FilterLabel('२. ${Statics.getLabel("Vayogat")}'),
-                AppDropdown<StaticMasterBAL>(
-                  value: _selectedVayogat,
-                  items: _vayogatOptions,
-                  // Use staticID-based equality so the sentinel
-                  // and DB items are both matched correctly.
-                  itemKey: (v) => v.staticID?.toString() ?? '',
-                  itemLabel: (v) => v.codeForDisplay ?? '--',
-                  onChanged: (v) {
-                    if (v != null) {
-                      setState(() => _selectedVayogat = v);
-                    }
-                  },
-                ),
-              ],
-              Row(
-                spacing: 12,
-                children: [
-                  Expanded(
-                    child: _yearSelect(
-                      label: "प्रारंभ वर्ष (से)",
-                      value: fromYear,
-                      options: allYears,
-                      onChanged: _handleFromYear,
-                    ),
-                  ),
-                  Expanded(
-                    child: _yearSelect(
-                      label: "अंत वर्ष (तक)",
-                      value: toYear,
-                      options: allYears.where((y) => y >= fromYear).toList(),
-                      //options: allYears.where((y) => y >= fromYear && y <= fromYear + (_maxSpan - 1)).toList(),
-                      onChanged: _handleToYear,
-                    ),
-                  ),
-                ],
-              ),
-
-              // ── Kalavadhi + Vayogat row ──────────────────
-              if (ctrl.deepestSelectedLevelId != 1)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  spacing: 12,
+        return ExpansionPanelList(
+          expansionCallback: (int index, bool isExpanded) {
+            setState(() {
+              _isExpanded = isExpanded;
+            });
+          },
+          children: [
+            ExpansionPanel(
+              isExpanded: _isExpanded,
+              headerBuilder: (_, __) => ListTile(title: Text(Statics.getLabel('TargetGeoUnitDetails'))),
+              body: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: _cardDecoration,
+                child: Column(
+                  spacing: 6,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Kalavadhi dropdown
-                    MaterialButton(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 15,
-                        vertical: 8,
-                      ),
-                      color: Theme.of(context).primaryColor,
-                      textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
-                      onPressed: _fetchData,
-                      child: Text(
-                        Statics.getLabel('Search'),
-                        style: TextStyle(fontSize: 25),
-                      ),
+                    // ── Geo hierarchy dropdowns ──────────────────
+                    FilterLabel('१. ${Statics.getLabel("selectStar")}'),
+
+                    GeoDropdownWidget(
+                      level: GeoLevel.Mahaanagar,
+                      title: 'Mahaanagar',
+                      controller: ctrl,
+                      decoration: styledDropdownDecoration(Statics.getLabel("Mahaanagar")),
+                      onChanged: (p0) => setState(() => response = null),
                     ),
 
-                    // Vayogat dropdown — populated from DB with Total prepended
-                    MaterialButton(
-                        onPressed: () {
-                          print("clear button pressed");
-                          response = null;
-                          setState(() => isLoading = false);
-                          ctrl.loadHierarchyForUser();
+                    GeoDropdownWidget(
+                      level: GeoLevel.Vibhaag,
+                      title: 'Vibhaag',
+                      controller: ctrl,
+                      decoration: styledDropdownDecoration(Statics.getLabel("Vibhaag")),
+                      onChanged: (p0) => setState(() => response = null),
+                    ),
+
+                    if (ctrl.hasItems(GeoLevel.Bhaag))
+                      GeoDropdownWidget(
+                        level: GeoLevel.Bhaag,
+                        title: 'Bhaag',
+                        controller: ctrl,
+                        decoration: styledDropdownDecoration(Statics.getLabel("Bhaag")),
+                        onChanged: (p0) => setState(() => response = null),
+                      ),
+
+                    if (ctrl.hasItems(GeoLevel.Nagar))
+                      GeoDropdownWidget(
+                        level: GeoLevel.Nagar,
+                        title: 'Nagar',
+                        controller: ctrl,
+                        decoration: styledDropdownDecoration(Statics.getLabel("Nagar")),
+                        onChanged: (p0) => setState(() => response = null),
+                      ),
+
+                    if (ctrl.hasItems(GeoLevel.upnagarUpkhanda))
+                      GeoDropdownWidget(
+                        level: GeoLevel.upnagarUpkhanda,
+                        title: 'upnagarUpkhanda',
+                        controller: ctrl,
+                        decoration: styledDropdownDecoration(Statics.getLabel("upnagarUpkhanda")),
+                        onChanged: (p0) => setState(() => response = null),
+                      ),
+
+                    if (ctrl.hasItems(GeoLevel.Mandal))
+                      GeoDropdownWidget(
+                        level: GeoLevel.Mandal,
+                        title: 'Mandal',
+                        controller: ctrl,
+                        decoration: styledDropdownDecoration(Statics.getLabel("Mandal")),
+                        onChanged: (p0) => setState(() => response = null),
+                      ),
+
+                    if (ctrl.hasItems(GeoLevel.Graam))
+                      GeoDropdownWidget(
+                        level: GeoLevel.Graam,
+                        title: 'Graam',
+                        controller: ctrl,
+                        decoration: styledDropdownDecoration(Statics.getLabel("Graam")),
+                        isSankalpit: true,
+                        onChanged: (p0) => setState(() => response = null),
+                      ),
+
+                    if (ctrl.hasItems(GeoLevel.Vasti))
+                      GeoDropdownWidget(
+                        level: GeoLevel.Vasti,
+                        title: 'Vasti',
+                        controller: ctrl,
+                        decoration: styledDropdownDecoration(Statics.getLabel("Vasti")),
+                        isSankalpit: true,
+                        onChanged: (p0) => setState(() => response = null),
+                      ),
+
+                    if (ctrl.hasItems(GeoLevel.Shaakhaa))
+                      GeoDropdownWidget(
+                        level: GeoLevel.Shaakhaa,
+                        title: 'Shaakhaa',
+                        controller: ctrl,
+                        decoration: styledDropdownDecoration(Statics.getLabel("Shaakhaa")),
+                        onChanged: (p0) => _fetchData(),
+                      ),
+
+                    if (ctrl.deepestSelectedLevelId != 1) ...[
+                      const SizedBox(),
+                      FilterLabel('२. ${Statics.getLabel("Vayogat")}'),
+                      AppDropdown<StaticMasterBAL>(
+                        value: _selectedVayogat,
+                        items: _vayogatOptions,
+                        // Use staticID-based equality so the sentinel
+                        // and DB items are both matched correctly.
+                        itemKey: (v) => v.staticID?.toString() ?? '',
+                        itemLabel: (v) => v.codeForDisplay ?? '--',
+                        onChanged: (v) {
+                          if (v != null) {
+                            response = null;
+                            setState(() => _selectedVayogat = v);
+                          }
                         },
-                        child: Text(Statics.getLabel('clear')))
+                      ),
+                    ],
+                    Row(
+                      spacing: 12,
+                      children: [
+                        Expanded(
+                          child: _yearSelect(
+                            label: "प्रारंभ वर्ष (से)",
+                            value: fromYear,
+                            options: allYears,
+                            onChanged: _handleFromYear,
+                          ),
+                        ),
+                        Expanded(
+                          child: _yearSelect(
+                            label: "अंत वर्ष (तक)",
+                            value: toYear,
+                            options: allYears.where((y) => y >= fromYear).toList(),
+                            //options: allYears.where((y) => y >= fromYear && y <= fromYear + (_maxSpan - 1)).toList(),
+                            onChanged: _handleToYear,
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    // ── Kalavadhi + Vayogat row ──────────────────
+                    if (ctrl.ctrlUserLevelId != 1)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        spacing: 12,
+                        children: [
+                          // Kalavadhi dropdown
+                          MaterialButton(
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 15,
+                              vertical: 8,
+                            ),
+                            color: Theme.of(context).primaryColor,
+                            textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+                            onPressed: _fetchData,
+                            child: Text(
+                              Statics.getLabel('Search'),
+                              style: TextStyle(fontSize: 25),
+                            ),
+                          ),
+
+                          // Vayogat dropdown — populated from DB with Total prepended
+                          MaterialButton(
+                              onPressed: () {
+                                print("clear button pressed");
+                                response = null;
+                                setState(() => isLoading = false);
+                                ctrl.loadHierarchyForUser();
+                                _fetchData();
+                              },
+                              child: Text(Statics.getLabel('clear')))
+                        ],
+                      ),
                   ],
                 ),
-            ],
-          ),
+              ),
+            ),
+          ],
         );
       }),
     );
@@ -698,6 +727,8 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
     final _mansikcount = data.mansikcount.toString();
     final _sangacount = data.sangacount.toString();
 
+    final _trail = controller.getHierarchyTrail(controller.hierarchyNameTrail);
+
     return RepaintBoundary(
       key: _globalKey,
       child: SizedBox(
@@ -725,25 +756,36 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
                   const SizedBox(width: 10),
                   Expanded(
                     child: Column(
+                      spacing: 2,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '${Statics.getLabel(controller.deepestSelectedLevelName ?? "praant")}: '
-                          '${controller.deepestSelectedGeoUnitName ?? ""}',
+                          '${Statics.getLabel("Level")}: '
+                          '${Statics.getLabel(controller.deepestSelectedLevelName ?? "praant")}',
+                          // ': ${controller.deepestSelectedGeoUnitName ?? ""}',
                           style: const TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
                             color: Color(0xFF1D4ED8),
                           ),
                         ),
-                        const SizedBox(height: 2),
-                        Text(
-                          '${controller.deepestSelectedLevelId != 1 ? "${_selectedVayogat.codeForDisplay ?? ""}" : ""}',
-                          style: const TextStyle(
-                            fontSize: 11,
-                            color: Color(0xFF3B82F6),
+                        if (_trail.isNotEmpty)
+                          Text(
+                            _trail,
+                            style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xFF1D4ED8),
+                            ),
                           ),
-                        ),
+                        if (controller.deepestSelectedLevelId != 1)
+                          Text(
+                            _selectedVayogat.codeForDisplay ?? "",
+                            style: const TextStyle(
+                              fontSize: 11,
+                              color: Color(0xFF3B82F6),
+                            ),
+                          ),
                       ],
                     ),
                   ),
@@ -845,7 +887,7 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
               padding: EdgeInsets.only(top: 2, bottom: 12),
               child: Text(
                 "महिन्यानिहाय गतिविधी (वर्षनिहाय तुलना)",
-                style: TextStyle(fontSize: 11, color: Colors.grey.shade300),
+                style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
               ),
             ),
             if (activitySeries.isEmpty)
@@ -875,7 +917,7 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
                         padding: const EdgeInsets.only(top: 2, bottom: 10),
                         child: Text(
                           "${series.years.length} ${Statics.getLabel("yearonly")} · ${series.months.length} ${Statics.getLabel("monthOnly")}",
-                          style: TextStyle(fontSize: 11, color: Colors.grey.shade300),
+                          style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
                         ),
                       ),
                       LegendRow(
@@ -899,7 +941,7 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 40),
       child: Center(
-        child: Text("या निवडीसाठी डेटा उपलब्ध नाही.", style: TextStyle(fontSize: 12, color: Colors.grey.shade300)),
+        child: Text("या निवडीसाठी डेटा उपलब्ध नाही.", style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
       ),
     );
   }
@@ -915,7 +957,7 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: TextStyle(fontSize: 12, color: Colors.grey.shade300)),
+        Text(label, style: TextStyle(fontSize: 11, color: Colors.grey.shade700, fontWeight: FontWeight.w500)),
         const SizedBox(height: 6),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -1208,6 +1250,7 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
             sideTitles: SideTitles(
               showTitles: true,
               reservedSize: 32,
+              maxIncluded: false,
               getTitlesWidget: (value, meta) => Text(
                 value.toInt().toString(),
                 style: const TextStyle(fontSize: 10, color: Color(0xFF6B7280)),
@@ -1258,22 +1301,4 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
       ),
     );
   }
-}
-
-// ─── Filter Label ─────────────────────────────────────────────────────────────
-
-class _FilterLabel extends StatelessWidget {
-  final String text;
-
-  const _FilterLabel(this.text);
-
-  @override
-  Widget build(BuildContext context) => Text(
-        text,
-        style: const TextStyle(
-          fontSize: 11,
-          color: Color(0xFF8E8E93),
-          fontWeight: FontWeight.w400,
-        ),
-      );
 }

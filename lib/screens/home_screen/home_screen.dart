@@ -19,7 +19,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart' as xls;
 
 import '../../helpers/static_data.dart' as Statics;
-import '../../models/response_model/home_screen_names_resp_model.dart';
+import '../../models/response_model/names_data_model.dart';
 import '../../models/response_model/notification_list_model.dart';
 import '../../models/response_model/shaakhaa_vrutta_report_home_resp_model.dart';
 import '../../models/response_model/upkhanda_upnagar_report_data_model.dart';
@@ -909,6 +909,38 @@ class _HomeScreenState extends State<HomeScreen> {
     } finally {}
   }
 
+  showShaakhaaNamesList({String? geoUnitID, required String type, required String title}) async {
+    setState(() {
+      // isLoading = true;
+      // errorMessage = null;
+    });
+    try {
+      final req = {
+        "AppUserID": int.tryParse(Statics.userDetails['userID'] ?? "0") ?? 0,
+        "TargetGeoUnitID": int.tryParse((geoUnitID ?? userGeoUnitId ?? 0).toString()),
+        "type": type,
+      };
+
+      final response = await Statics.homeShaakhaaReportNamesData(req, context: context);
+
+      if (response == null) {
+        Statics.showToast(Statics.getLabel("NoDataFound"));
+        return;
+      }
+
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => DataDetailsScreen(infoName: title, icon: Icons.location_on, groupedData: _getGroupedDataModels(response)),
+        ),
+      );
+
+      return;
+    } catch (e) {
+      print(e);
+      return null;
+    } finally {}
+  }
+
   List<DataDetailsGroup> _getGroupedDataModels(List<DataDetails> response) {
     List<DataDetailsGroup> groupedList = [];
 
@@ -1223,6 +1255,7 @@ class _HomeScreenState extends State<HomeScreen> {
         todayShakhaa: data.todayShaakhaaCount,
         yesterdayShakhaa: data.yesterdayShaakhaaCount,
         mainLabel: Statics.getLabel("shakhaaTulna"),
+        onListTap: () => showShaakhaaNamesList(title: Statics.getLabel("shakhaaTulna"), type: "daily"),
       );
     }
 
@@ -1241,6 +1274,7 @@ class _HomeScreenState extends State<HomeScreen> {
             currentLabel: Statics.getLabel("currentWeekShakhaa"),
             lastLabel: Statics.getLabel("previousWeekShakhaa"),
             currentTotalLabel: Statics.getLabel("thisWeekTotalShakhaa"),
+            onListTap: () => showShaakhaaNamesList(title: Statics.getLabel("shakhaaTulna"), type: "weeklyshaakhaa"),
           ),
           ReusableBarTabCard(
             inRow: true,
@@ -1252,6 +1286,7 @@ class _HomeScreenState extends State<HomeScreen> {
             currentLabel: Statics.getLabel("currentWeekMilan"),
             lastLabel: Statics.getLabel('previousWeekMilan'),
             totalLabel: Statics.getLabel("totalMilanSampann"),
+            onListTap: () => showShaakhaaNamesList(title: Statics.getLabel("weeklyShakhaaTulna"), type: "weeklysaaptaahik"),
           )
         ],
       );
@@ -1273,6 +1308,7 @@ class _HomeScreenState extends State<HomeScreen> {
             lastLabel: "$prevMonthName ${Statics.getLabel('fromMonthShaakha')} ${Statics.getLabel("onBasisOfNityaVrutta")}",
             currentTotalLabel: Statics.getLabel("todayShaakhaaMonthCount"),
             note: Statics.getLabel("lessThan15Tip"),
+            onListTap: () => showShaakhaaNamesList(title: Statics.getLabel("shakhaaTulna"), type: "monthlyshaakhaa"),
             rows: [
               BarRow(
                 label: "$prevofPrevMonthName ${Statics.getLabel('fromMonthShaakha')} ${Statics.getLabel("onBasisOfMasikVrutta")}",
@@ -1320,6 +1356,7 @@ class _HomeScreenState extends State<HomeScreen> {
             totalLabel: Statics.getLabel("totalMilanSampann"),
             currentTotalLabel: Statics.getLabel("thisMonthTotalShaapthahikCount"),
             note: Statics.getLabel("lessThan3Tip"),
+            onListTap: () => showShaakhaaNamesList(title: Statics.getLabel("weeklyShakhaaTulna"), type: "monthlysaaptaahik"),
             rows: [
               BarRow(
                 label: "$prevofPrevMonthName ${Statics.getLabel('fromMonthSaptahik')} ${Statics.getLabel("onBasisOfMasikVrutta")}",
@@ -1366,6 +1403,7 @@ class _HomeScreenState extends State<HomeScreen> {
             lastLabel: "$prevMonthName ${Statics.getLabel('fromMonthSangha')} ${Statics.getLabel("onBasisOfNityaVrutta")}",
             totalLabel: Statics.getLabel("totalshaakhaamandaliCount"),
             currentTotalLabel: Statics.getLabel("thisMonthTotalMandaliCount"),
+            onListTap: () => showShaakhaaNamesList(title: Statics.getLabel("shaakhaamandaliCount"), type: "monthlysangha"),
             rows: [
               BarRow(
                 label: "$prevofPrevMonthName ${Statics.getLabel('fromMonthSangha')} ${Statics.getLabel("onBasisOfMasikVrutta")}",
@@ -1398,6 +1436,7 @@ class _HomeScreenState extends State<HomeScreen> {
             lastLabel: "$prevMonthName ${Statics.getLabel('fromMonthMasik')} ${Statics.getLabel("onBasisOfNityaVrutta")}",
             totalLabel: Statics.getLabel("totalmasikCount"),
             currentTotalLabel: Statics.getLabel("thisMonthTotalMasikCount"),
+            onListTap: () => showShaakhaaNamesList(title: Statics.getLabel("masikCount"), type: "monthlymaasik"),
             rows: [
               BarRow(
                 label: "$prevofPrevMonthName ${Statics.getLabel('fromMonthMasik')} ${Statics.getLabel("onBasisOfMasikVrutta")}",
@@ -1440,6 +1479,7 @@ class _HomeScreenState extends State<HomeScreen> {
             lastLabel: "$laststarttoendname ${Statics.getLabel("prevYearCount")} ${Statics.getLabel("onBasisOfNityaVrutta")}",
             currentTotalLabel: Statics.getLabel("thisYearTotalCount"),
             note: Statics.getLabel("lessThan15Tip"),
+            onListTap: () => showShaakhaaNamesList(title: Statics.getLabel("shakhaaTulna"), type: "yearlyshaakhaa"),
             rows: [
               BarRow(
                 label: "$prevYearName ${Statics.getLabel("YearsShaakhaaCount")} ${Statics.getLabel("onBasisOfMasikVrutta")}",
@@ -1487,6 +1527,7 @@ class _HomeScreenState extends State<HomeScreen> {
             totalLabel: Statics.getLabel("totalYearshaapthahikCount"),
             currentTotalLabel: Statics.getLabel("thisYearTotalShaapthahikCount"),
             note: Statics.getLabel("lessThan3Tip"),
+            onListTap: () => showShaakhaaNamesList(title: Statics.getLabel(")"), type: "yearlysaaptaahik"),
             rows: [
               BarRow(
                 label: "$prevYearName ${Statics.getLabel("YearsSaptikCount")} ${Statics.getLabel("onBasisOfMasikVrutta")}",
@@ -1533,6 +1574,7 @@ class _HomeScreenState extends State<HomeScreen> {
             lastLabel: "$laststarttoendname ${Statics.getLabel('lastYearMandaliCount')} ${Statics.getLabel("onBasisOfNityaVrutta")}",
             totalLabel: Statics.getLabel("totalYearshaakhaamandaliCount"),
             currentTotalLabel: Statics.getLabel("thisYearTotalMandaliCount"),
+            onListTap: () => showShaakhaaNamesList(title: Statics.getLabel("shaakhaamandaliCount"), type: "yearlysangha"),
             rows: [
               BarRow(
                 label: "$prevYearName ${Statics.getLabel("YearsSanghaCount")} ${Statics.getLabel("onBasisOfMasikVrutta")}",
@@ -1565,6 +1607,7 @@ class _HomeScreenState extends State<HomeScreen> {
             lastLabel: "$laststarttoendname ${Statics.getLabel('lastYearMasikCount')} ${Statics.getLabel("onBasisOfNityaVrutta")}",
             totalLabel: Statics.getLabel("totalYearmasikCount"),
             currentTotalLabel: Statics.getLabel("thisYearTotalMasikCount"),
+            onListTap: () => showShaakhaaNamesList(title: Statics.getLabel("masikCount"), type: "yearlymaasik"),
             rows: [
               BarRow(
                 label: "$prevYearName ${Statics.getLabel("YearsMasikCount")} ${Statics.getLabel("onBasisOfMasikVrutta")}",

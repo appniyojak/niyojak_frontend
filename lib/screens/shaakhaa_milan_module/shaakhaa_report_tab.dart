@@ -10,6 +10,7 @@ import '../../providers/bals.dart';
 import '../../utils/globals.dart';
 import '../../utils/stable_geounit_class.dart';
 import 'report_widgets/custom_app_dropdowns.dart';
+import 'report_widgets/helper_widgets.dart';
 import 'report_widgets/module_constants.dart';
 import 'shaakhaa_ranking_screen.dart';
 
@@ -108,7 +109,6 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
   int _allTotalPresent = 0;
   List<BreakdownItem> _allPresentBreakdown = [];
 
-// TODO: card 2 average needs shaakhaa count from API — flagged for backend
   String _allAvgPresent = '--';
   List<BreakdownItem> _allAvgBreakdown = [];
   int _allNewPresent = 0;
@@ -132,7 +132,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
     // _allNewPresent = pData.fold<int>(0, (s, p) => s + p.totalnewpresent);
     _allNewPresent = pData.firstWhere((e) => e.vagogatname == "ekun").totalnewpresent;
     _allNewBreakdown = pData.where((e) => e.vagogatname != "ekun").toList().map((p) => BreakdownItem(p.vagogatname, p.totalnewpresent.toString())).toList();
-    _allAvgPresent = '--'; // TODO: backend to supply shaakhaa count for avg
+    _allAvgPresent = '--';
     _allAvgBreakdown = [];
   }
 
@@ -296,6 +296,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
               _mapAllLevelPData(res.pData);
               // Programme bars
               _allAData = res.aData;
+              _groupedActivitiesList = _groupActivities(res.aData.toList());
 
               _shaakhaacount = res.shaakhaacount ?? 0;
               _milancount = res.milancount ?? 0;
@@ -689,7 +690,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
 
                 // ── Programme / Chart section ────────────────────────────────
                 if (_kalavadha == DurationTypes.daily) ...[
-                  if (_isAllLevel) _AllLevelProgrammeBarsSection(aData: _allAData) else _DailyChecklistWidget(groupActivities: _groupedActivitiesList),
+                  if (_isAllLevel) _AllLevelProgrammeBarsSection(grouped: _groupedActivitiesList) else _DailyChecklistWidget(groupActivities: _groupedActivitiesList),
                 ] else ...[
                   if (_isAllLevel)
                     AllLevelChartSection(
@@ -817,6 +818,8 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
       value: controller,
       child: Consumer<GeoHierarchyController>(
         builder: (_, ctrl, __) {
+          final _trail = controller.getHierarchyTrail(controller.hierarchyNameTrail);
+
           return Column(
             spacing: 12,
             children: [
@@ -838,14 +841,14 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // ── Geo hierarchy dropdowns ──────────────────
-                          _FilterLabel('१. ${Statics.getLabel("selectStar")}'),
+                          FilterLabel('१. ${Statics.getLabel("selectStar")}'),
 
                           GeoDropdownWidget(
                             level: GeoLevel.Mahaanagar,
                             title: 'Mahaanagar',
                             controller: ctrl,
                             decoration: styledDropdownDecoration(Statics.getLabel("Mahaanagar")),
-                            onChanged: (p0) => setState(() => _isCleared = true),
+                            onChanged: (p0) => setState(() => _isSearched = !(_isCleared = true)),
                           ),
 
                           GeoDropdownWidget(
@@ -853,7 +856,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                             title: 'Vibhaag',
                             controller: ctrl,
                             decoration: styledDropdownDecoration(Statics.getLabel("Vibhaag")),
-                            onChanged: (p0) => setState(() => _isCleared = true),
+                            onChanged: (p0) => setState(() => _isSearched = !(_isCleared = true)),
                           ),
 
                           if (ctrl.hasItems(GeoLevel.Bhaag))
@@ -862,7 +865,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                               title: 'Bhaag',
                               controller: ctrl,
                               decoration: styledDropdownDecoration(Statics.getLabel("Bhaag")),
-                              onChanged: (p0) => setState(() => _isCleared = true),
+                              onChanged: (p0) => setState(() => _isSearched = !(_isCleared = true)),
                             ),
 
                           if (ctrl.hasItems(GeoLevel.Nagar))
@@ -871,7 +874,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                               title: 'Nagar',
                               controller: ctrl,
                               decoration: styledDropdownDecoration(Statics.getLabel("Nagar")),
-                              onChanged: (p0) => setState(() => _isCleared = true),
+                              onChanged: (p0) => setState(() => _isSearched = !(_isCleared = true)),
                             ),
 
                           if (ctrl.hasItems(GeoLevel.upnagarUpkhanda))
@@ -880,7 +883,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                               title: 'upnagarUpkhanda',
                               controller: ctrl,
                               decoration: styledDropdownDecoration(Statics.getLabel("upnagarUpkhanda")),
-                              onChanged: (p0) => setState(() => _isCleared = true),
+                              onChanged: (p0) => setState(() => _isSearched = !(_isCleared = true)),
                             ),
 
                           if (ctrl.hasItems(GeoLevel.Mandal))
@@ -889,7 +892,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                               title: 'Mandal',
                               controller: ctrl,
                               decoration: styledDropdownDecoration(Statics.getLabel("Mandal")),
-                              onChanged: (p0) => setState(() => _isCleared = true),
+                              onChanged: (p0) => setState(() => _isSearched = !(_isCleared = true)),
                             ),
 
                           if (ctrl.hasItems(GeoLevel.Graam))
@@ -898,7 +901,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                               title: 'Graam',
                               controller: ctrl,
                               decoration: styledDropdownDecoration(Statics.getLabel("Graam")),
-                              onChanged: (p0) => setState(() => _isCleared = true),
+                              onChanged: (p0) => setState(() => _isSearched = !(_isCleared = true)),
                               isSankalpit: true,
                             ),
 
@@ -908,7 +911,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                               title: 'Vasti',
                               controller: ctrl,
                               decoration: styledDropdownDecoration(Statics.getLabel("Vasti")),
-                              onChanged: (p0) => setState(() => _isCleared = true),
+                              onChanged: (p0) => setState(() => _isSearched = !(_isCleared = true)),
                               isSankalpit: true,
                             ),
 
@@ -933,14 +936,14 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                                   spacing: 2,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    _FilterLabel('२. ${Statics.getLabel("duration")}'),
+                                    FilterLabel('२. ${Statics.getLabel("duration")}'),
                                     AppDropdown<DurationTypes>(
                                       value: _kalavadha,
                                       items: DurationTypes.values.where((e) => e != DurationTypes.today && e != DurationTypes.yesterday).toList(),
                                       itemLabel: (v) => v.name,
                                       onChanged: (v) {
                                         setState(() => _kalavadha = v!);
-                                        _fetchReport();
+                                        if (userLevelId == 1) _fetchReport();
                                       },
                                     ),
                                   ],
@@ -954,7 +957,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                                     spacing: 2,
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      _FilterLabel('३. ${Statics.getLabel("Vayogat")}'),
+                                      FilterLabel('३. ${Statics.getLabel("Vayogat")}'),
                                       AppDropdown<StaticMasterBAL>(
                                         value: _selectedVayogat,
                                         items: _vayogatOptions,
@@ -965,7 +968,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                                         onChanged: (v) {
                                           if (v != null) {
                                             setState(() => _selectedVayogat = v);
-                                            _fetchReport();
+                                            //_fetchReport();
                                           }
                                         },
                                       ),
@@ -976,7 +979,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                           ),
 
                           // ── Kalavadhi + Vayogat row ──────────────────
-                          if (ctrl.deepestSelectedLevelId != 1)
+                          if (ctrl.ctrlUserLevelId != 1)
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               spacing: 12,
@@ -1001,9 +1004,8 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                                 MaterialButton(
                                     onPressed: () {
                                       print("clear button pressed");
-                                      _isCleared = true;
-                                      setState(() => _isSearched = false);
                                       ctrl.loadHierarchyForUser();
+                                      _fetchReport();
                                     },
                                     child: Text(Statics.getLabel('clear')))
                               ],
@@ -1031,22 +1033,32 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '${Statics.getLabel(ctrl.deepestSelectedLevelName ?? "praant")}: '
-                              '${ctrl.deepestSelectedGeoUnitName ?? ""}',
+                              '${Statics.getLabel("Level")}: '
+                              '${Statics.getLabel(ctrl.deepestSelectedLevelName ?? "praant")}',
+                              // ': ${ctrl.deepestSelectedGeoUnitName ?? ""}',
                               style: const TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
                                 color: Color(0xFF1D4ED8),
                               ),
                             ),
-                            const SizedBox(height: 2),
-                            Text(
-                              '${_kalavadha.name} ${ctrl.deepestSelectedLevelId != 1 ? "+ ${_selectedVayogat.codeForDisplay ?? ""}" : ""}',
-                              style: const TextStyle(
-                                fontSize: 11,
-                                color: Color(0xFF3B82F6),
+                            if (_trail.isNotEmpty)
+                              Text(
+                                _trail,
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600,
+                                  color: Color(0xFF1D4ED8),
+                                ),
                               ),
-                            ),
+                            if (controller.deepestSelectedLevelId != 1)
+                              Text(
+                                '${_kalavadha.name} ${ctrl.deepestSelectedLevelId != 1 ? "+ ${_selectedVayogat.codeForDisplay ?? ""}" : ""}',
+                                style: const TextStyle(
+                                  fontSize: 11,
+                                  color: Color(0xFF3B82F6),
+                                ),
+                              ),
                           ],
                         ),
                       ),
@@ -1076,24 +1088,6 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
       ),
     );
   }
-}
-
-// ─── Filter Label ─────────────────────────────────────────────────────────────
-
-class _FilterLabel extends StatelessWidget {
-  final String text;
-
-  const _FilterLabel(this.text);
-
-  @override
-  Widget build(BuildContext context) => Text(
-        text,
-        style: const TextStyle(
-          fontSize: 11,
-          color: Color(0xFF8E8E93),
-          fontWeight: FontWeight.w400,
-        ),
-      );
 }
 
 // ─── Stat Card ────────────────────────────────────────────────────────────────
@@ -1703,7 +1697,7 @@ class _SubPeriodCell extends StatelessWidget {
   }
 }
 
-// ─── All-Level Daily Section ──────────────────────────────────────────────────
+/*// ─── All-Level Daily Section ──────────────────────────────────────────────────
 
 class _AllDailySection extends StatelessWidget {
   final String totalPresent;
@@ -1781,14 +1775,15 @@ class _AllDailySection extends StatelessWidget {
       ],
     );
   }
-}
+}*/
 
 // ─── All-Level Programme Bars ─────────────────────────────────────────────────
 
 class _AllLevelProgrammeBarsSection extends StatelessWidget {
-  final List<ActivityData> aData;
+  // final List<ActivityData> aData;
+  final List<MapEntry<ActivityData, List<ActivityData>>> grouped;
 
-  const _AllLevelProgrammeBarsSection({required this.aData});
+  const _AllLevelProgrammeBarsSection({required this.grouped});
 
   @override
   Widget build(BuildContext context) {
@@ -1828,7 +1823,12 @@ class _AllLevelProgrammeBarsSection extends StatelessWidget {
               ],
             ),
           ),
-          ...aData.map((e) => _AllLevelBarRow(activity: e)),
+          // ...activities.map((a) => _ChecklistRow(activity: a)),
+          ...grouped.map((entry) {
+            final parent = entry.key;
+            final children = entry.value;
+            return children.isEmpty ? _AllLevelBarRow(activity: parent) : _ExpandableAllLevelBarGroup(parent: parent, children: children);
+          }),
         ],
       ),
     );
@@ -1837,73 +1837,153 @@ class _AllLevelProgrammeBarsSection extends StatelessWidget {
 
 class _AllLevelBarRow extends StatelessWidget {
   final ActivityData activity;
+  final bool isChild; // NEW — matches _ProgrammeBarCard's grouping support
+  final bool embedded; // NEW — lets a parent wrapper (e.g. ExpansionTile) supply the box + padding
 
-  const _AllLevelBarRow({required this.activity});
+  const _AllLevelBarRow({
+    required this.activity,
+    this.isChild = false,
+    this.embedded = false,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     final pct = (double.tryParse(activity.percentage) ?? 0.0).clamp(0.0, 100.0);
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: Color(0xFFF2F2F7), width: 1)),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            spacing: 8,
-            children: [
-              // Activity name
-              Expanded(
-                child: Text(
-                  Statics.getLabel(activity.activity),
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: Color(0xFF1C1C1E),
-                    fontWeight: FontWeight.w500,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
+    final content = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Text(
+                Statics.getLabel(activity.activity, returnKey: true),
+                style: TextStyle(
+                  fontSize: isChild ? 12.5 : 14,
+                  fontWeight: isChild ? FontWeight.w500 : FontWeight.w600,
+                  color: const Color(0xFF1C1C1E),
                 ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
-              // Percentage label
-              Text(
-                '${pct.toStringAsFixed(2)}%',
-                textAlign: TextAlign.right,
-                style: const TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF6366F1),
-                ),
-              ),
-            ],
-          ),
-          // Progress bar
-          LayoutBuilder(
-            builder: (context, constraints) => Stack(
-              children: [
-                Container(
-                  height: 8,
-                  width: constraints.maxWidth,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFE5E5EA),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                ),
-                Container(
-                  height: 8,
-                  width: constraints.maxWidth * (pct / 100),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF6366F1),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                ),
-              ],
             ),
-          ),
-        ],
+            Flexible(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFEEF2FF),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  '${pct.toStringAsFixed(2)}%',
+                  softWrap: true,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                  style: const TextStyle(
+                    fontSize: 11.5,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF6366F1),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        Stack(
+          children: [
+            Container(
+              height: 8,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: const Color(0xFFE5E5EA),
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
+            FractionallySizedBox(
+              widthFactor: (pct / 100).isNaN ? 0.0 : (pct / 100).clamp(0.0, 1.0),
+              alignment: Alignment.centerLeft,
+              child: Container(
+                height: 8,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF6366F1),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+
+    if (embedded) return content; // parent wrapper supplies the box + padding
+
+    return Container(
+      decoration: BoxDecoration(
+        color: isChild ? const Color(0xFFFAFAFC) : Colors.white,
+        borderRadius: BorderRadius.circular(isChild ? 8 : 0),
+        border: isChild ? Border.all(color: Colors.grey.shade300) : Border.symmetric(horizontal: BorderSide(color: Colors.grey.shade300, width: 0.7)),
+      ),
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+      child: content,
+    );
+  }
+}
+
+class _ExpandableAllLevelBarGroup extends StatelessWidget {
+  final ActivityData parent;
+  final List<ActivityData> children;
+
+  const _ExpandableAllLevelBarGroup({
+    required this.parent,
+    required this.children,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Theme(
+      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+      child: Container(
+        clipBehavior: Clip.antiAlias,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.symmetric(horizontal: BorderSide(color: const Color(0xFFF0F0F0))),
+        ),
+        child: ExpansionTile(
+          key: PageStorageKey(parent.activity),
+          controlAffinity: ListTileControlAffinity.leading,
+          initiallyExpanded: true,
+          tilePadding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+          childrenPadding: const EdgeInsets.only(left: 12, right: 12, bottom: 12),
+          title: _AllLevelBarRow(activity: parent, embedded: true),
+          children: List.generate(children.length, (i) {
+            final isLast = i == children.length - 1;
+            return IntrinsicHeight(
+              // constraints: BoxConstraints(maxHeight: 80),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(
+                    width: 28,
+                    child: CustomPaint(painter: _TreeLinePainter(isLast: isLast)),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: _AllLevelBarRow(
+                        key: ValueKey(children[i].activity),
+                        activity: children[i],
+                        isChild: true,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }),
+        ),
       ),
     );
   }

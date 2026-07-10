@@ -15,6 +15,7 @@ class ReusableBarTabCard extends StatelessWidget {
   final bool inRow;
   final bool isHighlighted;
   final List<BarRow>? rows;
+  final void Function()? onListTap;
 
   const ReusableBarTabCard(
       {super.key,
@@ -29,7 +30,8 @@ class ReusableBarTabCard extends StatelessWidget {
       this.rows,
       this.note,
       this.inRow = false,
-      this.isHighlighted = false});
+      this.isHighlighted = false,
+      this.onListTap});
 
   @override
   Widget build(BuildContext context) {
@@ -97,6 +99,7 @@ class ReusableBarTabCard extends StatelessWidget {
           ComparisonCard(
             title: mainLabel ?? Statics.getLabel('dailyShakhaaTulna'),
             note: note,
+            onListTap: onListTap,
             rows: [
                   BarRow(
                     label: totalLabel ?? Statics.getLabel('totalShakhaaSampann'),
@@ -423,11 +426,13 @@ class ComparisonCard extends StatelessWidget {
   final String title;
   final String? note;
   final List<BarRow> rows;
+  final void Function()? onListTap;
 
   const ComparisonCard({
     required this.title,
     this.note,
     required this.rows,
+    this.onListTap,
   });
 
   @override
@@ -458,14 +463,17 @@ class ComparisonCard extends StatelessWidget {
                 color: Color(0xFF8E8E93),
               ),
               const SizedBox(width: 6),
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF3A3A3C),
+              Expanded(
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF3A3A3C),
+                  ),
                 ),
               ),
+              if (onListTap != null) IconButton(onPressed: onListTap, icon: Icon(Icons.list))
             ],
           ),
           const SizedBox(height: 16),
