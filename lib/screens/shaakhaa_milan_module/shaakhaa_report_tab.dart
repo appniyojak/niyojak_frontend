@@ -685,7 +685,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                 ),
 
                 const SizedBox(height: 10),
-                if (controller.ctrlUserLevelId == 1) navigateToRanking(),
+                if (controller.deepestSelectedLevelId == 1) navigateToRanking(),
                 const SizedBox(height: 10),
 
                 // ── Programme / Chart section ────────────────────────────────
@@ -724,7 +724,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
 
   Widget navigateToRanking() {
     return GestureDetector(
-      onTap: () => Navigator.of(context).pushNamed(ShaakhaaRankingScreen.routeName),
+      onTap: () => Navigator.of(context).pushNamed(ShaakhaaRankingScreen.routeName, arguments: controller.deepestSelectedGeoUnitId),
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
         padding: const EdgeInsets.all(16),

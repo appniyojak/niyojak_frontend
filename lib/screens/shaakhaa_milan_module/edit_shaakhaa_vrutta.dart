@@ -137,6 +137,9 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
       // print("code >>>>>>>>>>>>>>>>>>>>>>>>>>>>> $code");
       print("frequencyId >>>>>>>>>>>>>>>>>>>>>>>>>>>>> $frequencyId");
     }
+
+    _boudhikDaysList.sort((a, b) => (a?.displaySequence ?? 0).compareTo(b?.displaySequence ?? 0));
+
     setState(() {});
     // _boudhikDaysList.forEach((e) => print("e >>>>>>>>>>>>>>>>>>>> ${e?.toJson()}"));
   }
@@ -815,6 +818,10 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                             print(_boudhikDaysList.firstWhere((e) => e?.codeForDisplay == Statics.getLabel("anyaOption"))?.staticID);
                             print(_selectedBoudhikDaysId == _boudhikDaysList.firstWhere((e) => e?.codeForDisplay == Statics.getLabel("anyaOption"))?.staticID.toString());
                           },
+                          validator: (val) {
+                            if (val == null || val.isEmpty) return Statics.getLabel("optionSelectionRequired");
+                            return null;
+                          },
                         ),
                         SizedBox(height: 10),
                         if (_selectedBoudhikDaysId == _boudhikDaysList.firstWhere((e) => e?.codeForDisplay == Statics.getLabel("anyaOption"))?.staticID.toString())
@@ -833,7 +840,12 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                               // ),
                               contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12), // Align left of field
                             ),
-                            style: const TextStyle(color: Colors.black, fontSize: 14), // Original fields looked greyed out
+                            style: const TextStyle(color: Colors.black, fontSize: 14),
+                            // Original fields looked greyed out
+                            validator: (val) {
+                              if (val == null || val.isEmpty) return Statics.getLabel("otherInfoValidation");
+                              return null;
+                            },
                           ),
                       ],
                       SizedBox(
@@ -898,6 +910,10 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                             }).toList();
                             print("valueeeeeeeesssss >>>>>>>>>>>>>>> $values");
                             setState(() {});
+                          },
+                          validator: (val) {
+                            if (val == null || val.isEmpty) return Statics.getLabel("atLeastOneOptionRequired");
+                            return null;
                           },
                         ),
                         SizedBox(height: 10),

@@ -59,6 +59,7 @@ class NearbyCompetitor {
 // Geo level items: (levelId, displayLabel)
 // TODO: confirm IDs match your DB GeoLevel table
 List<MapEntry<int, String>> _kGeoLevelItems = [
+  MapEntry(10, Statics.getLabel("praant")),
   MapEntry(9, Statics.getLabel("Mahaanagar")),
   MapEntry(8, Statics.getLabel("Vibhaag")),
   MapEntry(7, Statics.getLabel("Bhaag")),
@@ -83,6 +84,7 @@ class _ShaakhaaRankingScreenState extends State<ShaakhaaRankingScreen> {
   int _vayogat = 1; // 1 = मेरी आयुगट, 0 = सभी
 
   late DropDownModel dm;
+  String? geoId;
 
   // Karyakram tab
   String? _selectedKname;
@@ -114,6 +116,12 @@ class _ShaakhaaRankingScreenState extends State<ShaakhaaRankingScreen> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) => _initData());
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    geoId = ModalRoute.of(context)?.settings.arguments as String?;
+  }
+
   _initData() async {
     dm = await MyAppGlobals.getLevelLDB();
 
@@ -136,7 +144,7 @@ class _ShaakhaaRankingScreenState extends State<ShaakhaaRankingScreen> {
     try {
       final req = {
         'AppUserID': int.tryParse(Statics.userDetails['userID'] ?? '0') ?? 0,
-        'Geounitid': dm.geoUnitID,
+        'Geounitid': geoId ?? dm.geoUnitID,
         'day': _period.pkValues,
         'level': _geoLevelId,
         'vayogat': _vayogat,

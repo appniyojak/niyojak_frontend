@@ -2168,7 +2168,7 @@ class ShaakhaaVruttaBAL {
     isDoneUrdhvapad = map["IsDoneUrdhvapad"];
     isDoneBoodhKatha = map["IsDoneBoodhKatha"];
     isDoneBoudhikDays = map["IsDoneBoudhikDays"];
-    SelectedBoudhikDaysId = map["BoudhikDaysId"].toString();
+    SelectedBoudhikDaysId = map["BoudhikDaysId"]?.toString();
     AnyaBoudhikDays = map["AnyaBoudhikDays"];
     isDoneSewaDays = map["IsDoneSewaDays"];
     SelectedSewaDaysId = map["SewaDaysId"].toString();

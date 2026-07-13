@@ -9,10 +9,10 @@ import 'package:permission_handler/permission_handler.dart';
 import '../helpers/static_data.dart' as Statics;
 import '../screens/maps_display.dart';
 import '../screens/shaakhaa_milan_module/edit_shaakhaa.dart';
+import '../screens/shaakhaa_milan_module/edit_shaakhaa_vrutta.dart';
 import '../screens/shaakhaa_milan_module/shaakhaa_pat.dart';
 import '../screens/shaakhaa_milan_module/shaakhaa_sewa_vasti_link.dart';
 import '../screens/shaakhaa_milan_module/shaakhaa_toli.dart';
-import '../screens/shaakhaa_milan_module/shaakhaa_vrutta.dart';
 
 class ShaakhaaCard extends StatelessWidget {
   final shaakhaaItem;
@@ -266,17 +266,16 @@ class ShaakhaaCard extends StatelessWidget {
                     if (value == 'ShaakhaaPat')
                       Navigator.of(context).pushNamed(ShaakhaaPat.routeName, arguments: Statics.ScreenArguments(shaakhaaItem["ShaakhaaID"], value));
                     else if (value == 'Vrutta')
-                      /*Navigator.push(
+                      Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                  EditShaakhaaVrutta(
+                              builder: (context) => EditShaakhaaVrutta(
                                     shaakhaaID: shaakhaaItem["ShaakhaaID"].toString(),
                                     vruttaID: "0",
                                     onSaveDetails: null,
                                     viewType: "EditVrutta",
-                                  )));*/
-                      Navigator.of(context).pushNamed(ShaakhaaVrutta.routeName, arguments: Statics.ScreenArguments(shaakhaaItem["ShaakhaaID"], value));
+                                  )));
+                    // Navigator.of(context).pushNamed(ShaakhaaVrutta.routeName, arguments: Statics.ScreenArguments(shaakhaaItem["ShaakhaaID"], value));
                     else if (value == 'ViewLocation') {
                       if (shaakhaaItem["ShaakhaaLatitude"] != null && shaakhaaItem["ShaakhaaLatitude"].toString() != "") {
                         _latLng.add(Statics.cLatLong(shaakhaaItem["ShaakhaaID"], shaakhaaItem["GeoUnitName"].toString(), shaakhaaItem["FrequencyCode"].toString(),

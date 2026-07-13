@@ -282,7 +282,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _fetchNotificationData(),
       _getShaakhaaVruttaReport(),
     ]);
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   // ═══════════════════════════════════════════════════════════════════════════

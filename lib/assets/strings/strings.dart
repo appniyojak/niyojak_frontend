@@ -935,6 +935,8 @@ Map<String, String> resEnglish = {
   'BoodhKathaOnceWeek': 'Boodh Katha (Once a Week)',
   'BoudhikDays': 'Boudhik Days',
   'anyaOption': 'Anya',
+  'optionSelectionRequired': 'Option is need to be selected',
+  'atLeastOneOptionRequired': 'At least one option is need to be selected',
   'SewaDays': 'Sewa Days',
 
   'SaanghikGeet': 'Saanghik Geet',
@@ -3119,6 +3121,8 @@ Map<String, String> resMarathi = {
   'BoodhKathaOnceWeek': 'बोध कथा (आठवड्यातून एकदा)',
   'BoudhikDays': 'बौद्धिक दिवस',
   'anyaOption': 'अन्य',
+  'optionSelectionRequired': 'पर्याय निवडणे आवश्यक आहे',
+  'atLeastOneOptionRequired': 'किमान एक पर्याय निवडणे आवश्यक आहे',
   'SewaDays': 'सेवा दिवस',
 
   'SaanghikGeet': 'सांघिक गीत',
@@ -5299,6 +5303,8 @@ Map<String, String> resHindi = {
   'BoodhKathaOnceWeek': 'बोध कथा (सप्ताह में एक बार )',
   'BoudhikDays': 'बौद्धिक दिवस',
   'anyaOption': 'अन्य',
+  'optionSelectionRequired': 'विकल्प का चयन करना आवश्यक है।',
+  'atLeastOneOptionRequired': 'कम से कम एक विकल्प का चयन करना आवश्यक है।',
   'SewaDays': 'सेवा दिवस',
 
   'SaanghikGeet': 'सांघिक गीत',
