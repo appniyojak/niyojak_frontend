@@ -4415,10 +4415,10 @@ Future<List<dynamic>> getShaakhaaVruttaListForApp(var shaakhaaID, var shaakhaaVr
   return responseBody['ShaakhaaVruttaList'];
 }
 
-Future<List<dynamic>> getShaakhaaVruttaDetailsByDateForApp(var shaakhaaID, var vruttadate) async {
+Future<({List<dynamic> vruttaList, List<dynamic> data})?> getShaakhaaVruttaDetailsByDateForApp(var shaakhaaID, var vruttadate) async {
   bool? connected = await isInternetConnected();
   if (connected == false) {
-    return [];
+    return null;
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
   log(urlGetShaakhaaVruttabydate);
@@ -4435,7 +4435,7 @@ Future<List<dynamic>> getShaakhaaVruttaDetailsByDateForApp(var shaakhaaID, var v
   //   }
   // }
 
-  return [responseBody['ShaakhaaVruttaList']];
+  return (vruttaList: [responseBody['ShaakhaaVruttaList']], data: List<dynamic>.from(responseBody['Data'] ?? []));
 }
 
 Future<String> saveShaakhaaVruttaForApp(String inputJson) async {

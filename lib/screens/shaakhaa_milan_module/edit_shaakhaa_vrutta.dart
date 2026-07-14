@@ -6,11 +6,31 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 import '../../helpers/static_data.dart' as Statics;
 import '../../providers/bals.dart';
 import '../../utils/globals.dart';
+import '../../utils/multi_select_option_widget.dart';
+
+class SewaDaysGroupData {
+  final int groupId;
+  final int staticId;
+  final String name;
+
+  const SewaDaysGroupData({
+    required this.groupId,
+    required this.staticId,
+    required this.name,
+  });
+
+  factory SewaDaysGroupData.fromJson(Map<String, dynamic> json) {
+    return SewaDaysGroupData(
+      groupId: json['GroupId'] as int,
+      staticId: json['StaticID'] as int,
+      name: json['name'] as String,
+    );
+  }
+}
 
 class EditShaakhaaVrutta extends StatefulWidget {
   static const String routeName = '/edit-shaakhaa-vrutta-screen';
@@ -81,7 +101,9 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
 
   List<StaticMasterBAL?> _boudhikDaysList = [];
   List<StaticMasterBAL?> _sewaDaysList = [];
-  List<int?> _selectedSewaDaysList = [];
+  List<int> _selectedSewaDaysList = [];
+
+  Map<String, List<SelectItem<int>>> _sewaDaysGroup = {};
 
   @override
   void initState() {
@@ -144,6 +166,28 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
     // _boudhikDaysList.forEach((e) => print("e >>>>>>>>>>>>>>>>>>>> ${e?.toJson()}"));
   }
 
+  Map<String, List<SelectItem<int>>> buildGroupedItemsFromApi(List<SewaDaysGroupData> data) {
+    // Step 1: collect headers (GroupId == 0) -> {StaticID: headerName}.
+    final Map<int, String> groupHeaders = {};
+    for (final item in data) {
+      if (item.groupId == 0) {
+        groupHeaders[item.staticId] = item.name;
+      }
+    }
+
+    // Step 2: bucket every non-header row under its matching header,
+    // preserving the order headers were first encountered.
+    final Map<String, List<SelectItem<int>>> grouped = {};
+    for (final item in data) {
+      if (item.groupId == 0) continue; // header row itself, not selectable
+      final headerName = groupHeaders[item.groupId] ?? 'Other';
+      grouped.putIfAbsent(headerName, () => []);
+      grouped[headerName]!.add(SelectItem<int>(item.staticId, item.name));
+    }
+
+    return grouped;
+  }
+
   void getSwDetails(var theId, {String? dateSelected}) async {
     setState(() {
       _isFetchingData = true;
@@ -153,11 +197,17 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
     if (!isConnected) {
       Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));
     } else {
-      dataList = theId == 0 || theId == null
-          ? await Statics.getShaakhaaVruttaDetailsByDateForApp(int.tryParse(widget.shaakhaaID == null ? "0" : widget.shaakhaaID.toString()) ?? 0, dateSelected)
-          : await Statics.getShaakhaaVruttaListForApp(null, theId);
-      if (dataList != null && dataList.isNotEmpty) {
-        var data = ShaakhaaVruttaBAL.fromMap(dataList[0]);
+      // dataList = theId == 0 || theId == null
+      dataList = await Statics.getShaakhaaVruttaDetailsByDateForApp(int.tryParse(widget.shaakhaaID == null ? "0" : widget.shaakhaaID.toString()) ?? 0, dateSelected);
+      // : await Statics.getShaakhaaVruttaListForApp(null, theId);
+      if (dataList != null && dataList.vruttaList.isNotEmpty) {
+        var data = ShaakhaaVruttaBAL.fromMap(dataList.vruttaList[0]);
+
+        final List<dynamic> rawData = dataList.data;
+        final apiItems = rawData.map((e) => SewaDaysGroupData.fromJson(e as Map<String, dynamic>)).toList();
+        _sewaDaysGroup = buildGroupedItemsFromApi(apiItems);
+
+        // var data = ShaakhaaVruttaBAL.fromMap(theId == 0 || theId == null ? dataList.vruttaList[0] : dataList[0]);
         if (!mounted) return;
         setState(() {
           vrutta = data;
@@ -866,55 +916,18 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                       ),
                       SizedBox(height: 10),
                       if (_isDoneSewaDays) ...[
-                        MultiSelectDialogField(
-                          title: Text(Statics.getLabel('SewaDays')),
-                          buttonText: Text(Statics.getLabel('SewaDays')),
-                          buttonIcon: Icon(Icons.arrow_drop_down),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                            border: Border.all(color: _sewaDaysList.isEmpty ? Colors.grey.shade400 : Colors.transparent),
-                          ),
-                          confirmText: Text(
-                            Statics.getLabel('Submit'),
-                            style: const TextStyle(color: Colors.purple),
-                          ),
-                          cancelText: Text(
-                            Statics.getLabel('clear'),
-                            style: const TextStyle(color: Colors.purple),
-                          ),
-                          searchable: false,
-                          listType: MultiSelectListType.LIST,
-                          items: _sewaDaysList.map((bg) => MultiSelectItem(bg?.staticID, (bg?.codeForDisplay ?? "--").toString())).toList(),
+                        GroupedMultiSelectField<int>(
+                          title: Statics.getLabel('SewaDays'),
+                          buttonText: Statics.getLabel('SewaDays'),
+                          confirmText: Statics.getLabel('Submit'),
+                          cancelText: Statics.getLabel('clear'),
+                          groupedItems: _sewaDaysGroup,
                           initialValue: _selectedSewaDaysList,
-                          chipDisplay: MultiSelectChipDisplay(
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.purple, width: 0.7),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              // icon: Icon(Icons.done, color: Colors.purple, size: 16),
-                              chipColor: Colors.white,
-                              textStyle: TextStyle(fontSize: 12, color: Colors.purple, fontWeight: FontWeight.w500)),
-                          // onSaved: (newValue) {},
-                          onConfirm: (values) {
-                            _selectedSewaDaysList = values.map((e) {
-                              // Check if the element is an integer
-                              if (e is int) {
-                                return e;
-                              }
-                              // If it's a string, try to parse it
-                              else if (e is String) {
-                                return int.tryParse(e); // Use tryParse to handle invalid strings and return null
-                              }
-                              // Otherwise, return null or handle as needed
-                              return null;
-                            }).toList();
-                            print("valueeeeeeeesssss >>>>>>>>>>>>>>> $values");
-                            setState(() {});
-                          },
                           validator: (val) {
                             if (val == null || val.isEmpty) return Statics.getLabel("atLeastOneOptionRequired");
                             return null;
                           },
+                          onConfirm: (values) => setState(() => _selectedSewaDaysList = values),
                         ),
                         SizedBox(height: 10),
                       ],

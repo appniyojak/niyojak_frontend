@@ -3,10 +3,10 @@ description: Niyojak Prod project.
 
 publish_to: 'none'
 
-version: 3.7.6+115
+version: 1.0.33+33
 
 environment:
-  sdk: "^2.19.0"
+  sdk: "^3.1.0"
 
 dependencies:
   flutter:

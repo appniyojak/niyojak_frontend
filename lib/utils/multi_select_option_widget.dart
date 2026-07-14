@@ -97,8 +97,8 @@ class _GroupedMultiSelectFieldState<T> extends State<GroupedMultiSelectField<T>>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(widget.title, style: const TextStyle(fontSize: 13, color: Colors.black54)),
-        const SizedBox(height: 4),
+        /*Text(widget.title, style: const TextStyle(fontSize: 13, color: Colors.black54)),
+        const SizedBox(height: 4),*/
         InkWell(
           borderRadius: BorderRadius.circular(12),
           onTap: _openDialog,

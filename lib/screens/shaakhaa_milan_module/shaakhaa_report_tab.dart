@@ -98,11 +98,17 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
   int _milancount = 0;
   int _mansikcount = 0;
   int _sangacount = 0;
+  int _pravasiKaryakartaCount = 0;
+  int _shaakhaPravasiCount = 0;
+  int _kittedin = 0;
+  List<Sdetail> _sdetail = [];
   List<BreakdownItem> _card1Breakdown = [];
   List<BreakdownItem> _card2Breakdown = [];
   List<ActivityData> _activities = [];
   List<MapEntry<ActivityData, List<ActivityData>>> _groupedActivitiesList = [];
   List<ProgrammeBar> _programmeBars = [];
+
+  bool _expanded = true;
 
   // ── All-level daily (levelId != 1) ────────────────────────────────────────────
   bool _isAllLevel = false;
@@ -302,6 +308,10 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
               _milancount = res.milancount ?? 0;
               _mansikcount = res.mansikcount ?? 0;
               _sangacount = res.sangacount ?? 0;
+              _pravasiKaryakartaCount = res.pravasiKaryakartaCount ?? 0;
+              _shaakhaPravasiCount = res.shaakhaPravasiCount ?? 0;
+              // _kittedin = res.kittedin ?? 0;
+              _sdetail = res.sdetail ?? [];
 
               // clear shaakhaa-level state
               _activities = [];
@@ -353,6 +363,10 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
               _milancount = res.milancount ?? 0;
               _mansikcount = res.mansikcount ?? 0;
               _sangacount = res.sangacount ?? 0;
+              _pravasiKaryakartaCount = res.pravasiKaryakartaCount ?? 0;
+              _shaakhaPravasiCount = res.shaakhaPravasiCount ?? 0;
+              _kittedin = res.kittedin ?? 0;
+              _sdetail = res.sdetail ?? [];
               _shaakhatotalcount = res.shaakhatotalcount;
               _shaakhanewcount = res.shaakhanewcount;
               _sapthahiktotalcount = res.sapthahiktotalcount;
@@ -442,6 +456,10 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
               _milancount = res.milancount ?? 0;
               _mansikcount = res.mansikcount ?? 0;
               _sangacount = res.sangacount ?? 0;
+              _pravasiKaryakartaCount = res.pravasiKaryakartaCount ?? 0;
+              _shaakhaPravasiCount = res.shaakhaPravasiCount ?? 0;
+              _kittedin = res.kittedin ?? 0;
+              _sdetail = res.sdetail ?? [];
               _shaakhatotalcount = res.shaakhatotalcount;
               _shaakhanewcount = res.shaakhanewcount;
               _sapthahiktotalcount = res.sapthahiktotalcount;
@@ -520,6 +538,10 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
               _milancount = res.milancount ?? 0;
               _mansikcount = res.mansikcount ?? 0;
               _sangacount = res.sangacount ?? 0;
+              _pravasiKaryakartaCount = res.pravasiKaryakartaCount ?? 0;
+              _shaakhaPravasiCount = res.shaakhaPravasiCount ?? 0;
+              _kittedin = res.kittedin ?? 0;
+              _sdetail = res.sdetail ?? [];
               _shaakhatotalcount = res.shaakhatotalcount;
               _shaakhanewcount = res.shaakhanewcount;
               _sapthahiktotalcount = res.sapthahiktotalcount;
@@ -608,6 +630,14 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                       ),
                     ],
                   ),
+                  const SizedBox(height: 12),
+                  if (controller.deepestSelectedLevelId != 1)
+                    _pravasiKaryakartaSection(
+                      pravasiKaryakartaCount: _pravasiKaryakartaCount,
+                      shaakhaPravasiCount: _shaakhaPravasiCount,
+                      kittedin: _kittedin,
+                      kittedinDetails: _sdetail,
+                    ),
                 ],
                 const SizedBox(height: 14),
                 Padding(
@@ -943,7 +973,12 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                                       itemLabel: (v) => v.name,
                                       onChanged: (v) {
                                         setState(() => _kalavadha = v!);
-                                        if (userLevelId == 1) _fetchReport();
+                                        if (userLevelId == 1)
+                                          _fetchReport();
+                                        else {
+                                          _isCleared = true;
+                                          setState(() => _isSearched = false);
+                                        }
                                       },
                                     ),
                                   ],
@@ -1085,6 +1120,285 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
               child: Text(value,
                   maxLines: 2, softWrap: true, overflow: TextOverflow.ellipsis, textAlign: TextAlign.end, style: TextStyle(fontSize: 15, color: Colors.deepOrange, fontWeight: FontWeight.w900))),
         ],
+      ),
+    );
+  }
+
+  Widget _pravasiKaryakartaSection({required int pravasiKaryakartaCount, required int shaakhaPravasiCount, required int kittedin, required List<Sdetail> kittedinDetails}) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.black.withOpacity(0.08)),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          InkWell(
+            onTap: () => setState(() => _expanded = !_expanded),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              child: Row(
+                children: [
+                  const Expanded(
+                    child: Text(
+                      'प्रवासी कार्यकर्ता',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black87,
+                      ),
+                    ),
+                  ),
+                  AnimatedRotation(
+                    turns: _expanded ? 0.5 : 0,
+                    duration: const Duration(milliseconds: 200),
+                    child: const Icon(
+                      Icons.keyboard_arrow_down_rounded,
+                      color: Color(0xFF9C27B0),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          AnimatedCrossFade(
+            duration: const Duration(milliseconds: 220),
+            crossFadeState: _expanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+            firstChild: const SizedBox(width: double.infinity, height: 0),
+            secondChild: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 6),
+              child: Column(
+                children: [
+                  const Divider(height: 1),
+                  _buildRow(
+                    label: Statics.getLabel("TotalCountLabel"),
+                    value: pravasiKaryakartaCount,
+                  ),
+                  _buildRow(
+                    label: Statics.getLabel("ShaakhaaPravasiCount"),
+                    value: shaakhaPravasiCount,
+                  ),
+                  if (_kalavadha != DurationTypes.daily)
+                    _buildRow(
+                      label: Statics.getLabel("TotalDaysPravasCount"),
+                      value: kittedin,
+                      details: kittedinDetails,
+                      isLast: true,
+                    ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRow({
+    required String label,
+    required int value,
+    List<Sdetail>? details,
+    bool isLast = false,
+  }) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  label,
+                  style: const TextStyle(fontSize: 14.5, color: Colors.black87),
+                ),
+              ),
+              Text(
+                '$value',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFFFF5722),
+                ),
+              ),
+              const SizedBox(width: 8),
+              if (details != null && details.isNotEmpty)
+                InkWell(
+                  borderRadius: BorderRadius.circular(20),
+                  onTap: () => _showDetailDialog(label, details),
+                  child: Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: Color(0xFF9C27B0).withOpacity(0.08),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.remove_red_eye_outlined,
+                      size: 18,
+                      color: Color(0xFF9C27B0),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+        if (!isLast) const Divider(height: 1),
+      ],
+    );
+  }
+
+  void _showDetailDialog(String title, List<Sdetail> details) {
+    showDialog(
+      context: context,
+      builder: (ctx) => Dialog(
+        surfaceTintColor: Color(0xFFD45D00),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(ctx).size.height * 0.7,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(18, 16, 10, 16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        title,
+                        style: const TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xFFD45D00),
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close_rounded),
+                      onPressed: () => Navigator.of(ctx).pop(),
+                      splashRadius: 20,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                const Divider(height: 1),
+                const SizedBox(height: 8),
+                Flexible(
+                  child: details.isEmpty
+                      ? const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 28),
+                          child: Text(
+                            'माहिती उपलब्ध नाही',
+                            style: TextStyle(color: Colors.black54),
+                          ),
+                        )
+                      : Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(18),
+                            border: Border.all(color: const Color(0xFFD45D00).withOpacity(0.18)),
+                          ),
+                          clipBehavior: Clip.antiAlias,
+                          child: SingleChildScrollView(
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: DataTable(
+                                headingRowHeight: 46,
+                                dataRowHeight: 44,
+                                horizontalMargin: 16,
+                                columnSpacing: 28,
+                                dividerThickness: 0.6,
+                                headingRowColor: MaterialStateProperty.all(
+                                  const Color(0xFFFFF0E5),
+                                ),
+                                columns: [
+                                  DataColumn(
+                                    label: Text(
+                                      Statics.getLabel('count'),
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 13,
+                                        color: Color(0xFF7A3D00),
+                                      ),
+                                    ),
+                                    numeric: true,
+                                  ),
+                                  if (_kalavadha != DurationTypes.daily)
+                                    DataColumn(
+                                      label: Text(
+                                        Statics.getLabel('daysonly'),
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 13,
+                                          color: Color(0xFF7A3D00),
+                                        ),
+                                      ),
+                                      numeric: true,
+                                    ),
+                                  DataColumn(
+                                    label: Text(
+                                      Statics.getLabel('name'),
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 13,
+                                        color: Color(0xFF7A3D00),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                                rows: List.generate(details.length, (i) {
+                                  final d = details[i];
+                                  final isEven = i % 2 == 0;
+                                  return DataRow(
+                                    color: MaterialStateProperty.all(
+                                      isEven ? Colors.white : const Color(0xFFFFF8F2),
+                                    ),
+                                    cells: [
+                                      DataCell(
+                                        Center(
+                                          child: Text(
+                                            '${d.value ?? 0}',
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.w700,
+                                              color: Color(0xFFD45D00),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      if (_kalavadha != DurationTypes.daily)
+                                        DataCell(
+                                          Center(
+                                            child: Text(
+                                              '${d.kittedin ?? 0}',
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                color: Colors.black87,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      DataCell(
+                                        Text(
+                                          d.sname ?? '-',
+                                          style: const TextStyle(color: Colors.black87),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                }),
+                              ),
+                            ),
+                          ),
+                        ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
