@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -689,6 +690,7 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
                       controller: widget.viewType == 'JoinRss' ? mobileController : _mobileCntrl,
                       decoration: InputDecoration(labelText: Statics.getLabel('Mobile')),
                       keyboardType: TextInputType.phone,
+                      inputFormatters: [LengthLimitingTextInputFormatter(10), FilteringTextInputFormatter.digitsOnly],
                       maxLength: 10,
                       validator: (value) {
                         if (value!.isEmpty || value.trim().length < 10) return (Statics.getLabel('MobileValidationMessage'));
