@@ -1176,16 +1176,13 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                   _buildRow(
                     label: Statics.getLabel("TotalCountLabel"),
                     value: pravasiKaryakartaCount,
+                    details: kittedinDetails,
                   ),
-                  _buildRow(
-                    label: Statics.getLabel("ShaakhaaPravasiCount"),
-                    value: shaakhaPravasiCount,
-                  ),
+                  _buildRow(label: Statics.getLabel("ShaakhaaPravasiCount"), value: shaakhaPravasiCount, isLast: _kalavadha == DurationTypes.daily),
                   if (_kalavadha != DurationTypes.daily)
                     _buildRow(
                       label: Statics.getLabel("TotalDaysPravasCount"),
                       value: kittedin,
-                      details: kittedinDetails,
                       isLast: true,
                     ),
                 ],
@@ -1208,6 +1205,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10),
           child: Row(
+            spacing: 8,
             children: [
               Expanded(
                 child: Text(
@@ -1223,7 +1221,6 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                   color: Color(0xFFFF5722),
                 ),
               ),
-              const SizedBox(width: 8),
               if (details != null && details.isNotEmpty)
                 InkWell(
                   borderRadius: BorderRadius.circular(20),
@@ -1555,6 +1552,8 @@ class _DailyChecklistWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (groupActivities.isEmpty) return SizedBox();
+
     return Container(
       color: Colors.white,
       child: Column(

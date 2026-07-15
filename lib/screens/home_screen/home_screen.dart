@@ -73,6 +73,10 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   DateTime? currentBackPressTime;
 
+  final _myAreaReportController = createGeoController();
+  final _swayamsevakController = createGeoController();
+  final _anyaInfoController = createGeoController();
+
   // ─── Scroll ────────────────────────────────────────────────────────────────
   final ScrollController _scrollController = ScrollController();
 
@@ -85,11 +89,12 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _isSearching = false;
   bool _isMySearching = false;
   bool _isReportSearching = false;
+  bool _isReportCleared = false;
   bool _isTgSearching = false;
   bool _isTgSearched = false;
 
   // ─── Panel expansion ───────────────────────────────────────────────────────
-  // bool isDailySelected = false;
+  bool _isMyAreaReportExp = false;
   bool _isSwExpanded = false;
   bool _isGeounitExpanded = false;
   bool _isNagarTableExpanded = false;
@@ -250,7 +255,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   callAllData() async {
-    initData();
+    await initData();
     await _initScreen();
     _getReleaseNotes();
   }
@@ -258,9 +263,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> initData() async {
     final dm = await MyAppGlobals.getLevelLDB();
 
-    final controller = context.read<GeoHierarchyController>();
-
-    await controller.initialize(dm);
+    await _myAreaReportController.initialize(dm);
+    await _swayamsevakController.initialize(dm);
+    await _anyaInfoController.initialize(dm);
 
     setState(() {
       userLevelId = dm.levelID;
@@ -277,7 +282,8 @@ class _HomeScreenState extends State<HomeScreen> {
     _populateDropdownSet2();
     _getGeoUnitID();
     await Future.wait([
-      _fetchMyDashboardData(),
+      _fetchSwayamsevakPanelData(),
+      _fetchAnyaPanelData(),
       if ((userLevelId ?? 0) > 8) _getUpkhandUpnagarReport("0", "praant"),
       _fetchNotificationData(),
       _getShaakhaaVruttaReport(),
@@ -310,13 +316,14 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _getShaakhaaVruttaReport() async {
     shaakhaLevelData = otherLevelData = shaakhaausertype = prevofPrevMonthName = prevMonthName = thisMonthName = null;
     tabs = [];
-    setState(() => _isReportSearching = _isMySearching = true);
+    _isMyAreaReportExp = false;
+    setState(() => _isReportSearching = _isReportCleared = true);
     final data = await Statics.yestardayShaakhaaVruttaHomeReportData(
       userID: int.tryParse(Statics.userDetails["userID"] ?? "0") ?? 0,
-      targetGeoUnitID: null,
+      targetGeoUnitID: int.tryParse(_myAreaReportController.deepestSelectedGeoUnitId ?? "0") ?? 0,
     );
     setState(() {
-      _isReportSearching = _isMySearching = false;
+      _isMyAreaReportExp = _isReportCleared = _isReportSearching = _isMySearching = false;
     });
     if (data != null) {
       shaakhaLevelData = data.shaakhadata;
@@ -449,7 +456,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  // ── My dashboard data ──────────────────────────────────────────────────────
+  /*// ── My dashboard data ──────────────────────────────────────────────────────
   Future<void> _fetchMyDashboardData() async {
     setState(() => _isMySearching = true);
     final data = await Statics.refreshDashboardData(Statics.userDetails["userID"], geoUnitID);
@@ -661,6 +668,219 @@ class _HomeScreenState extends State<HomeScreen> {
       _tgbloodgroup = _tgexpertieslist = _tginterestlist = _tgmothertonguelist = _tgsangayulist = _tgghoshwadlist = [];
       _tgganveshData = null;
       _tgvehicle = null;
+      _isTgSearching = false;
+    });
+  }*/
+
+  // ── Swayamsevak Panel data ──────────────────────────────────────────────────
+  Future<void> _fetchSwayamsevakPanelData() async {
+    _tgLevelID = _swayamsevakController.deepestSelectedLevelId ?? 0;
+    _isTgSearched = false;
+    setState(() => _isMySearching = true);
+    final data = await Statics.getDashboardDataByGeoUnit(Statics.userDetails["userID"], _swayamsevakController.deepestSelectedGeoUnitId ?? "0");
+    if (data['Status'] != "Success") {
+      _clearSwayamsevakPanelData();
+      return;
+    }
+    final sd = data["HomeScreenData"];
+    final vd = sd["ShaakhaaVruttaSummaryData"];
+    if (sd["BloodGroup"] != null) {
+      _tgbloodgroup.clear();
+      sd["BloodGroup"].forEach((v) => _tgbloodgroup.add(GetCount.fromJson(v)));
+    }
+    if (sd["AreaOfExpertise"] != null) {
+      _tgexpertieslist.clear();
+      sd["AreaOfExpertise"].forEach((v) => _tgexpertieslist.add(GetCount.fromJson(v)));
+    }
+    if (sd["AreaOfInterest"] != null) {
+      _tginterestlist.clear();
+      sd["AreaOfInterest"].forEach((v) => _tginterestlist.add(GetCount.fromJson(v)));
+    }
+    if (sd["MotherTongue"] != null) {
+      _tgmothertonguelist.clear();
+      sd["MotherTongue"].forEach((v) => _tgmothertonguelist.add(GetCount.fromJson(v)));
+    }
+    if (sd["sangaayu"] != null) {
+      _tgsangayulist.clear();
+      sd["sangaayu"].forEach((v) => _tgsangayulist.add(GetCount.fromJson(v)));
+    }
+    if (sd["goshwad"] != null) {
+      _tgghoshwadlist.clear();
+      sd["goshwad"].forEach((v) => _tgghoshwadlist.add(GetCount.fromJson(v)));
+    }
+    if (sd["GanaveshData"] != null) {
+      _tgganveshData = GanveshData.fromJson(sd["GanaveshData"]);
+    }
+    if (sd['VehicleData'] != null) {
+      _tgvehicle = Vehicle.fromJson(sd['VehicleData']);
+    }
+    setState(() {
+      tgTotalKaaryakartaaCount = sd["TotalKaaryakartaaCount"].toString();
+      tgTotalSwayamsevakCount = sd["TotalSwayamsevakCount"].toString();
+      tgPratidnyitCount = sd["PratidnyitCount"].toString();
+      tgShaakhaaKaaryakartaaCount = sd["ShaakhaaKaaryakartaaCount"].toString();
+      tgShishuCount = sd["ShishuCount"].toString();
+      tgBaalCount = sd["BaalCount"].toString();
+      tgTarunVidyaarthiCount = sd["TarunVidyaarthiCount"].toString();
+      tgTarunVyavasaayeeCount = sd["TarunVyavasaayeeCount"].toString();
+      tgProudhaVyavasaayeeCount = sd["ProudhaVyavasaayeeCount"].toString();
+      tgUnknownAgeCount = sd["UnknownAgeCount"].toString();
+      tgPraarambhikShikshitCount = sd["PrarambhikShikshitCount"].toString();
+      tgPraathamikShikshitCount = sd["PraathamikShikshitCount"].toString();
+      tgPrathamVarshaShikshitCount = sd["PrathamVarshaShikshitCount"].toString();
+      tgDwitiyaVarshaShikshitCount = sd["DwitiyaVarshaShikshitCount"].toString();
+      tgTrutiyaVarshaShikshitCount = sd["TrutiyaVarshaShikshitCount"].toString();
+      tgNoShikshanCount = sd["NoShikshanCount"].toString();
+      tgDailyShaakhaaKaaryakartaaCount = sd["DailyShaakhaaKaaryakartaaCount"].toString();
+      tgSaaptaahikMilanKaaryakartaaCount = sd["SaaptaahikMilanKaaryakartaaCount"].toString();
+      tgMaasikMilanKaaryakartaaCount = sd["MaasikMilanKaaryakartaaCount"].toString();
+      tgVastiKaaryakartaaCount = sd["VastiKaaryakartaaCount"].toString();
+      tgGraamKaaryakartaaCount = sd["GraamKaaryakartaaCount"].toString();
+      tgMandalKaaryakartaaCount = sd["MandalKaaryakartaaCount"].toString();
+      tgNagarKaaryakartaaCount = sd["NagarKaaryakartaaCount"].toString();
+      tgShaharKaaryakartaaCount = sd["ShaharKaaryakartaaCount"].toString();
+      tgBhaagKaaryakartaaCount = sd["BhaagKaaryakartaaCount"].toString();
+      tgVibhaagKaaryakartaaCount = sd["VibhaagKaaryakartaaCount"].toString();
+      tgMahaanagarKaaryakartaaCount = sd["MahaanagarKaaryakartaaCount"].toString();
+      tgPraantKaaryakartaaCount = sd["PraantKaaryakartaaCount"].toString();
+      tgKshetraKaaryakartaaCount = sd["KshetraKaaryakartaaCount"].toString();
+      tgAkhilBhaaratiyaKaaryakartaaCount = sd["AkhilBhaaratiyaKaaryakartaaCount"].toString();
+      tgPravaaseeKaaryakartaaCount = sd["PravaaseeKaaryakartaaCount"].toString();
+      tgGatividhiKaaryakartaaCount = sd["GatividhiKaaryakartaaCount"].toString();
+      tgAayaamKaaryakartaaCount = sd["AayaamKaaryakartaaCount"].toString();
+      tgSanghaPreritSansthaaKaaryakartaaCount = sd["SanghaPreritSansthaaKaaryakartaaCount"].toString();
+      tgSocialOrganizationKaaryakartaaCount = sd["SocialOrganizationKaaryakartaaCount"].toString();
+      notificationCount = sd["Notificationcount"].toString();
+
+      // Vrutta summary
+      tgMaasikEQ0 = vd["MaasikEQ0"].toString();
+      tgMaasikEQ1 = vd["MaasikEQ1"].toString();
+      tgSaaptaahikEQ0 = vd["SaaptaahikEQ0"].toString();
+      tgSaaptaahik1To3 = vd["Saaptaahik1To3"].toString();
+      tgSaaptaahikGTE4 = vd["SaaptaahikGTE4"].toString();
+      tgShaakhaaEQ0 = vd["ShaakhaaEQ0"].toString();
+      tgShaakhaa1To24 = vd["Shaakhaa1To24"].toString();
+      tgShaakhaaGTE25 = vd["ShaakhaaGTE25"].toString();
+      tgShaakhaaEQ30 = vd["ShaakhaaEQ30"].toString();
+      _isMySearching = false;
+      _isTgSearched = true;
+    });
+  }
+
+  void _clearSwayamsevakPanelData() {
+    setState(() {
+      tgTotalKaaryakartaaCount = tgPratidnyitCount = tgShaakhaaKaaryakartaaCount = '';
+      tgShishuCount = tgBaalCount = tgTarunVidyaarthiCount = '';
+      tgTarunVyavasaayeeCount = tgProudhaVyavasaayeeCount = tgUnknownAgeCount = '';
+      tgPraarambhikShikshitCount = tgPraathamikShikshitCount = '';
+      tgPrathamVarshaShikshitCount = tgDwitiyaVarshaShikshitCount = tgTrutiyaVarshaShikshitCount = '';
+      tgNoShikshanCount = tgDailyShaakhaaKaaryakartaaCount = '';
+      tgSaaptaahikMilanKaaryakartaaCount = tgMaasikMilanKaaryakartaaCount = '';
+      tgVastiKaaryakartaaCount = tgGraamKaaryakartaaCount = tgMandalKaaryakartaaCount = '';
+      tgNagarKaaryakartaaCount = tgShaharKaaryakartaaCount = tgBhaagKaaryakartaaCount = '';
+      tgVibhaagKaaryakartaaCount = tgMahaanagarKaaryakartaaCount = tgPraantKaaryakartaaCount = '';
+      tgKshetraKaaryakartaaCount = tgAkhilBhaaratiyaKaaryakartaaCount = tgPravaaseeKaaryakartaaCount = '';
+      tgGatividhiKaaryakartaaCount = tgAayaamKaaryakartaaCount = '';
+      tgSanghaPreritSansthaaKaaryakartaaCount = tgSocialOrganizationKaaryakartaaCount = '';
+      tgTotalSwayamsevakCount = tgMasikMilanCount = tgSanghaMandaliCount = '';
+      tgMaasikEQ0 = tgMaasikEQ1 = tgSaaptaahikEQ0 = tgSaaptaahik1To3 = tgSaaptaahikGTE4 = '';
+      tgShaakhaaEQ0 = tgShaakhaa1To24 = tgShaakhaaGTE25 = tgShaakhaaEQ30 = '';
+      _tgbloodgroup = _tgexpertieslist = _tginterestlist = _tgmothertonguelist = _tgsangayulist = _tgghoshwadlist = [];
+      _tgganveshData = null;
+      _tgvehicle = null;
+      _isMySearching = false;
+    });
+  }
+
+  // ── Anya Panel data ──────────────────────────────────────────────────
+  Future<void> _fetchAnyaPanelData() async {
+    _tgLevelID = _anyaInfoController.deepestSelectedLevelId ?? 0;
+    _isTgSearched = false;
+    setState(() => _isTgSearching = true);
+    final data = await Statics.getDashboardDataByGeoUnit(Statics.userDetails["userID"], _anyaInfoController.deepestSelectedGeoUnitId ?? "0");
+    if (data['Status'] != "Success") {
+      _clearAnyaPanelData();
+      return;
+    }
+    final sd = data["HomeScreenData"];
+    final vd = sd["ShaakhaaVruttaSummaryData"];
+
+    setState(() {
+      /*tgTotalKaaryakartaaCount = sd["TotalKaaryakartaaCount"].toString();
+      tgTotalSwayamsevakCount = sd["TotalSwayamsevakCount"].toString();
+      tgPratidnyitCount = sd["PratidnyitCount"].toString();
+      tgShaakhaaKaaryakartaaCount = sd["ShaakhaaKaaryakartaaCount"].toString();
+      tgShishuCount = sd["ShishuCount"].toString();
+      tgBaalCount = sd["BaalCount"].toString();
+      tgTarunVidyaarthiCount = sd["TarunVidyaarthiCount"].toString();
+      tgTarunVyavasaayeeCount = sd["TarunVyavasaayeeCount"].toString();
+      tgProudhaVyavasaayeeCount = sd["ProudhaVyavasaayeeCount"].toString();
+      tgUnknownAgeCount = sd["UnknownAgeCount"].toString();
+      tgPraarambhikShikshitCount = sd["PrarambhikShikshitCount"].toString();
+      tgPraathamikShikshitCount = sd["PraathamikShikshitCount"].toString();
+      tgPrathamVarshaShikshitCount = sd["PrathamVarshaShikshitCount"].toString();
+      tgDwitiyaVarshaShikshitCount = sd["DwitiyaVarshaShikshitCount"].toString();
+      tgTrutiyaVarshaShikshitCount = sd["TrutiyaVarshaShikshitCount"].toString();
+      tgNoShikshanCount = sd["NoShikshanCount"].toString();
+      tgDailyShaakhaaKaaryakartaaCount = sd["DailyShaakhaaKaaryakartaaCount"].toString();
+      tgSaaptaahikMilanKaaryakartaaCount = sd["SaaptaahikMilanKaaryakartaaCount"].toString();
+      tgMaasikMilanKaaryakartaaCount = sd["MaasikMilanKaaryakartaaCount"].toString();
+      tgVastiKaaryakartaaCount = sd["VastiKaaryakartaaCount"].toString();
+      tgGraamKaaryakartaaCount = sd["GraamKaaryakartaaCount"].toString();
+      tgMandalKaaryakartaaCount = sd["MandalKaaryakartaaCount"].toString();
+      tgNagarKaaryakartaaCount = sd["NagarKaaryakartaaCount"].toString();
+      tgShaharKaaryakartaaCount = sd["ShaharKaaryakartaaCount"].toString();
+      tgBhaagKaaryakartaaCount = sd["BhaagKaaryakartaaCount"].toString();
+      tgVibhaagKaaryakartaaCount = sd["VibhaagKaaryakartaaCount"].toString();
+      tgMahaanagarKaaryakartaaCount = sd["MahaanagarKaaryakartaaCount"].toString();
+      tgPraantKaaryakartaaCount = sd["PraantKaaryakartaaCount"].toString();
+      tgKshetraKaaryakartaaCount = sd["KshetraKaaryakartaaCount"].toString();
+      tgAkhilBhaaratiyaKaaryakartaaCount = sd["AkhilBhaaratiyaKaaryakartaaCount"].toString();
+      tgPravaaseeKaaryakartaaCount = sd["PravaaseeKaaryakartaaCount"].toString();
+      tgGatividhiKaaryakartaaCount = sd["GatividhiKaaryakartaaCount"].toString();
+      tgAayaamKaaryakartaaCount = sd["AayaamKaaryakartaaCount"].toString();
+      tgSanghaPreritSansthaaKaaryakartaaCount = sd["SanghaPreritSansthaaKaaryakartaaCount"].toString();
+      tgSocialOrganizationKaaryakartaaCount = sd["SocialOrganizationKaaryakartaaCount"].toString();
+      notificationCount = (sd["Notificationcount"] ?? 0).toString();
+
+      // Vrutta summary
+      tgMaasikEQ0 = vd["MaasikEQ0"].toString();
+      tgMaasikEQ1 = vd["MaasikEQ1"].toString();
+      tgSaaptaahikEQ0 = vd["SaaptaahikEQ0"].toString();
+      tgSaaptaahik1To3 = vd["Saaptaahik1To3"].toString();
+      tgSaaptaahikGTE4 = vd["SaaptaahikGTE4"].toString();
+      tgShaakhaaEQ0 = vd["ShaakhaaEQ0"].toString();
+      tgShaakhaa1To24 = vd["Shaakhaa1To24"].toString();
+      tgShaakhaaGTE25 = vd["ShaakhaaGTE25"].toString();
+      tgShaakhaaEQ30 = vd["ShaakhaaEQ30"].toString();*/
+
+      _isTgSearching = false;
+      _isTgSearched = true;
+    });
+  }
+
+  void _clearAnyaPanelData() {
+    setState(() {
+      /*tgTotalKaaryakartaaCount = tgPratidnyitCount = tgShaakhaaKaaryakartaaCount = '';
+      tgShishuCount = tgBaalCount = tgTarunVidyaarthiCount = '';
+      tgTarunVyavasaayeeCount = tgProudhaVyavasaayeeCount = tgUnknownAgeCount = '';
+      tgPraarambhikShikshitCount = tgPraathamikShikshitCount = '';
+      tgPrathamVarshaShikshitCount = tgDwitiyaVarshaShikshitCount = tgTrutiyaVarshaShikshitCount = '';
+      tgNoShikshanCount = tgDailyShaakhaaKaaryakartaaCount = '';
+      tgSaaptaahikMilanKaaryakartaaCount = tgMaasikMilanKaaryakartaaCount = '';
+      tgVastiKaaryakartaaCount = tgGraamKaaryakartaaCount = tgMandalKaaryakartaaCount = '';
+      tgNagarKaaryakartaaCount = tgShaharKaaryakartaaCount = tgBhaagKaaryakartaaCount = '';
+      tgVibhaagKaaryakartaaCount = tgMahaanagarKaaryakartaaCount = tgPraantKaaryakartaaCount = '';
+      tgKshetraKaaryakartaaCount = tgAkhilBhaaratiyaKaaryakartaaCount = tgPravaaseeKaaryakartaaCount = '';
+      tgGatividhiKaaryakartaaCount = tgAayaamKaaryakartaaCount = '';
+      tgSanghaPreritSansthaaKaaryakartaaCount = tgSocialOrganizationKaaryakartaaCount = '';
+      tgTotalSwayamsevakCount = tgMasikMilanCount = tgSanghaMandaliCount = '';
+      tgMaasikEQ0 = tgMaasikEQ1 = tgSaaptaahikEQ0 = tgSaaptaahik1To3 = tgSaaptaahikGTE4 = '';
+      tgShaakhaaEQ0 = tgShaakhaa1To24 = tgShaakhaaGTE25 = tgShaakhaaEQ30 = '';
+      _tgbloodgroup = _tgexpertieslist = _tginterestlist = _tgmothertonguelist = _tgsangayulist = _tgghoshwadlist = [];
+      _tgganveshData = null;
+      _tgvehicle = null;
+      */
       _isTgSearching = false;
     });
   }
@@ -899,7 +1119,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (_) => DataDetailsScreen(infoName: type, groupedData: _getGroupedDataModels(response)),
+          builder: (_) => DataDetailsScreen(infoName: type, groupedData: _getGroupedDataModels(response), from: "homeNames"),
         ),
       );
       return;
@@ -909,7 +1129,7 @@ class _HomeScreenState extends State<HomeScreen> {
     } finally {}
   }
 
-  showShaakhaaNamesList({String? geoUnitID, required String type, required String title}) async {
+  showShaakhaaNamesList({required String type, required String title}) async {
     setState(() {
       // isLoading = true;
       // errorMessage = null;
@@ -917,7 +1137,7 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       final req = {
         "AppUserID": int.tryParse(Statics.userDetails['userID'] ?? "0") ?? 0,
-        "TargetGeoUnitID": int.tryParse((geoUnitID ?? userGeoUnitId ?? 0).toString()),
+        "TargetGeoUnitID": int.tryParse((_myAreaReportController.deepestSelectedGeoUnitId ?? userGeoUnitId ?? 0).toString()),
         "type": type,
       };
 
@@ -930,7 +1150,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (_) => DataDetailsScreen(infoName: title, icon: Icons.location_on, groupedData: _getGroupedDataModels(response)),
+          builder: (_) => DataDetailsScreen(infoName: title, icon: Icons.location_on, groupedData: _getGroupedDataModels(response), from: "shaakhaaNames"),
         ),
       );
 
@@ -1131,77 +1351,188 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // ── 5. Yesterday praant table ─────────────────────────────────────────────
   Widget _buildYesterdayPraantTable() {
-    return Column(
-      spacing: 12,
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-          decoration: BoxDecoration(
-            color: Colors.grey.shade100,
-            borderRadius: BorderRadius.circular(28),
-          ),
-          // 1. Wrap the Row in a SingleChildScrollView
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal, // 2. Enable horizontal scrolling
-            physics: const BouncingScrollPhysics(), // Gives it a nice native bounce effect
-            child: Row(
-              // Removed mainAxisAlignment: spaceEvenly since the scrollable width is infinite
-              children: List.generate(tabs.length, (index) {
-                final isSelected = activeTabIndex == index;
+    return ChangeNotifierProvider.value(
+      value: _myAreaReportController,
+      child: Consumer<GeoHierarchyController>(builder: (_, ctrl, __) {
+        return Column(
+          spacing: 12,
+          children: [
+            ExpansionPanelList(
+              expansionCallback: (_, isExpanded) => setState(() => _isMyAreaReportExp = isExpanded),
+              children: [
+                ExpansionPanel(
+                  isExpanded: _isMyAreaReportExp,
+                  headerBuilder: (_, __) => ListTile(title: Text(Statics.getLabel('selectStar'))),
+                  body: Container(
+                    margin: const EdgeInsets.all(20),
+                    child: Column(children: [
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: _clearButton(() {
+                          ctrl.loadHierarchyForUser();
+                          _getShaakhaaVruttaReport();
+                        }),
+                      ),
 
-                return GestureDetector(
-                  onTap: () => onTabTapped(index),
-                  child: Container(
-                    // The margin here handles the spacing between tabs nicely
-                    margin: const EdgeInsets.symmetric(horizontal: 4),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(24),
-                      child: BackdropFilter(
-                        filter: ImageFilter.blur(
-                          sigmaX: isSelected ? 15.0 : 0.0,
-                          sigmaY: isSelected ? 15.0 : 0.0,
+                      // if (ctrl.hasItems(GeoLevel.vibhaag))
+                      GeoDropdownWidget(
+                        level: GeoLevel.Mahaanagar,
+                        title: 'Mahaanagar',
+                        controller: ctrl,
+                        onChanged: (p0) => setState(() => _isReportCleared = true),
+                      ),
+
+                      // if (ctrl.hasItems(GeoLevel.vibhaag))
+                      GeoDropdownWidget(
+                        level: GeoLevel.Vibhaag,
+                        title: 'Vibhaag',
+                        controller: ctrl,
+                        onChanged: (p0) => setState(() => _isReportCleared = true),
+                      ),
+
+                      if (ctrl.hasItems(GeoLevel.Bhaag))
+                        GeoDropdownWidget(
+                          level: GeoLevel.Bhaag,
+                          title: 'Bhaag',
+                          controller: ctrl,
+                          onChanged: (p0) => setState(() => _isReportCleared = true),
                         ),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(24),
-                            border: Border.all(
-                              color: isSelected ? Colors.white.withOpacity(0.4) : Colors.transparent,
-                              width: 1.0,
-                            ),
-                            gradient: isSelected
-                                ? LinearGradient(
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                    colors: [
-                                      Colors.white.withOpacity(0.4),
-                                      Colors.purple.withOpacity(0.1),
-                                      Colors.deepPurple.withOpacity(0.37),
-                                      Colors.deepPurple.withOpacity(0.7),
-                                    ],
-                                    stops: const [0.0, 0.3, 0.6, 1.0],
-                                  )
-                                : null,
-                            color: isSelected ? null : Colors.white.withOpacity(0.05),
-                          ),
-                          child: Text(
-                            tabs[index],
-                            style: TextStyle(
-                              color: isSelected ? Colors.black : Colors.grey.shade700,
-                              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                            ),
-                          ),
+
+                      if (ctrl.hasItems(GeoLevel.Nagar))
+                        GeoDropdownWidget(
+                          level: GeoLevel.Nagar,
+                          title: 'Nagar',
+                          controller: ctrl,
+                          onChanged: (p0) => setState(() => _isReportCleared = true),
+                        ),
+
+                      /// CONDITIONAL
+                      if (ctrl.hasItems(GeoLevel.upnagarUpkhanda))
+                        GeoDropdownWidget(
+                          level: GeoLevel.upnagarUpkhanda,
+                          title: 'upnagarUpkhanda',
+                          controller: ctrl,
+                          onChanged: (p0) => setState(() => _isReportCleared = true),
+                        ),
+
+                      if (ctrl.hasItems(GeoLevel.Mandal))
+                        GeoDropdownWidget(
+                          level: GeoLevel.Mandal,
+                          title: 'Mandal',
+                          controller: ctrl,
+                          onChanged: (p0) => setState(() => _isReportCleared = true),
+                        ),
+
+                      if (ctrl.hasItems(GeoLevel.Graam))
+                        GeoDropdownWidget(
+                          level: GeoLevel.Graam,
+                          title: 'Graam',
+                          controller: ctrl,
+                          onChanged: (p0) => setState(() => _isReportCleared = true),
+                        ),
+
+                      if (ctrl.hasItems(GeoLevel.Vasti))
+                        GeoDropdownWidget(
+                          level: GeoLevel.Vasti,
+                          title: 'Vasti',
+                          controller: ctrl,
+                          onChanged: (p0) => setState(() => _isReportCleared = true),
+                        ),
+
+                      const SizedBox(height: 12),
+                      MaterialButton(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                        color: Theme.of(context).primaryColor,
+                        textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+                        onPressed: _getShaakhaaVruttaReport,
+                        child: Text(
+                          Statics.getLabel('Search'),
+                          style: TextStyle(fontSize: 16),
                         ),
                       ),
-                    ),
+                    ]),
                   ),
-                );
-              }),
+                ),
+              ],
             ),
-          ),
-        ),
-        buildDataBody(),
-      ],
+            const SizedBox(height: 12),
+            if (_isReportSearching)
+              const CircularProgressIndicator()
+            else if (_isReportCleared)
+              const SizedBox(height: 120)
+            else ...[
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade100,
+                  borderRadius: BorderRadius.circular(28),
+                ),
+                // 1. Wrap the Row in a SingleChildScrollView
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal, // 2. Enable horizontal scrolling
+                  physics: const BouncingScrollPhysics(), // Gives it a nice native bounce effect
+                  child: Row(
+                    // Removed mainAxisAlignment: spaceEvenly since the scrollable width is infinite
+                    children: List.generate(tabs.length, (index) {
+                      final isSelected = activeTabIndex == index;
+
+                      return GestureDetector(
+                        onTap: () => onTabTapped(index),
+                        child: Container(
+                          // The margin here handles the spacing between tabs nicely
+                          margin: const EdgeInsets.symmetric(horizontal: 4),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(24),
+                            child: BackdropFilter(
+                              filter: ImageFilter.blur(
+                                sigmaX: isSelected ? 15.0 : 0.0,
+                                sigmaY: isSelected ? 15.0 : 0.0,
+                              ),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(24),
+                                  border: Border.all(
+                                    color: isSelected ? Colors.white.withOpacity(0.4) : Colors.transparent,
+                                    width: 1.0,
+                                  ),
+                                  gradient: isSelected
+                                      ? LinearGradient(
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight,
+                                          colors: [
+                                            Colors.white.withOpacity(0.4),
+                                            Colors.purple.withOpacity(0.1),
+                                            Colors.deepPurple.withOpacity(0.37),
+                                            Colors.deepPurple.withOpacity(0.7),
+                                          ],
+                                          stops: const [0.0, 0.3, 0.6, 1.0],
+                                        )
+                                      : null,
+                                  color: isSelected ? null : Colors.white.withOpacity(0.05),
+                                ),
+                                child: Text(
+                                  tabs[index],
+                                  style: TextStyle(
+                                    color: isSelected ? Colors.black : Colors.grey.shade700,
+                                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
+                  ),
+                ),
+              ),
+              buildDataBody(),
+            ]
+          ],
+        );
+      }),
     );
     /*
     final data = Statics.lstYesterdayPraantData;
@@ -2367,17 +2698,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
               // ── Yesterday Praant ───────────────────────────────────────────
               Legend(legendString: "MyGeoVruttaData", fontsize: 18),
-              _isReportSearching ? const CircularProgressIndicator() : _buildYesterdayPraantTable(),
+              _buildYesterdayPraantTable(),
               const SizedBox(height: 15),
 
               // ── My Geo Unit details (expansion) ───────────────────────────
-              _myGeoUnitPanel(),
+              // _myGeoUnitPanel(),
+              _newInfoPanel(),
               const SizedBox(height: 10),
+
+              _newInfoPanel(isAnya: true),
+              const SizedBox(height: 15),
 
               if (userLevelId != 1) ...[
                 // ── Target Geo Unit details (expansion) ───────────────────────
-                _targetGeoUnitPanel(),
-                const SizedBox(height: 15),
+                // _targetGeoUnitPanel(),
+                // const SizedBox(height: 15),
 
                 if ((userLevelId ?? 0) > 8) ...[
                   // ── Bhaugolik rachana (expansion) ─────────────────────────────
@@ -2419,6 +2754,268 @@ class _HomeScreenState extends State<HomeScreen> {
   // ═══════════════════════════════════════════════════════════════════════════
   // EXPANSION PANELS
   // ═══════════════════════════════════════════════════════════════════════════
+
+  Widget _newInfoPanel({bool isAnya = false}) {
+    return ChangeNotifierProvider.value(
+      value: isAnya ? _anyaInfoController : _swayamsevakController,
+      child: Consumer<GeoHierarchyController>(builder: (_, ctrl, __) {
+        return ExpansionPanelList(
+          expansionCallback: (_, isExpanded) => isAnya ? setState(() => _isGeounitExpanded = isExpanded) : setState(() => _isSwExpanded = isExpanded),
+          children: [
+            ExpansionPanel(
+              isExpanded: isAnya ? _isGeounitExpanded : _isSwExpanded,
+              headerBuilder: (_, __) => ListTile(title: Text(Statics.getLabel(isAnya ? 'otherInfo' : 'SwayamsevakInfo'))),
+              body: Container(
+                margin: const EdgeInsets.all(20),
+                child: Column(children: [
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: _clearButton(() {
+                      ctrl.loadHierarchyForUser();
+                      isAnya ? _fetchAnyaPanelData() : _fetchSwayamsevakPanelData();
+                    }),
+                  ),
+
+                  // if (ctrl.hasItems(GeoLevel.vibhaag))
+                  GeoDropdownWidget(
+                    level: GeoLevel.Vibhaag,
+                    title: 'Vibhaag',
+                    controller: ctrl,
+                    onChanged: (p0) => isAnya ? _clearAnyaPanelData() : _clearSwayamsevakPanelData(),
+                  ),
+
+                  if (ctrl.hasItems(GeoLevel.Bhaag))
+                    GeoDropdownWidget(
+                      level: GeoLevel.Bhaag,
+                      title: 'Bhaag',
+                      controller: ctrl,
+                      onChanged: (p0) => isAnya ? _clearAnyaPanelData() : _clearSwayamsevakPanelData(),
+                    ),
+
+                  if (ctrl.hasItems(GeoLevel.Nagar))
+                    GeoDropdownWidget(
+                      level: GeoLevel.Nagar,
+                      title: 'Nagar',
+                      controller: ctrl,
+                      onChanged: (p0) => isAnya ? _clearAnyaPanelData() : _clearSwayamsevakPanelData(),
+                    ),
+
+                  /// CONDITIONAL
+                  if (ctrl.hasItems(GeoLevel.upnagarUpkhanda))
+                    GeoDropdownWidget(
+                      level: GeoLevel.upnagarUpkhanda,
+                      title: 'upnagarUpkhanda',
+                      controller: ctrl,
+                      onChanged: (p0) => isAnya ? _clearAnyaPanelData() : _clearSwayamsevakPanelData(),
+                    ),
+
+                  if (ctrl.hasItems(GeoLevel.Mandal))
+                    GeoDropdownWidget(
+                      level: GeoLevel.Mandal,
+                      title: 'Mandal',
+                      controller: ctrl,
+                      onChanged: (p0) => isAnya ? _clearAnyaPanelData() : _clearSwayamsevakPanelData(),
+                    ),
+
+                  if (ctrl.hasItems(GeoLevel.Graam))
+                    GeoDropdownWidget(
+                      level: GeoLevel.Graam,
+                      title: 'Graam',
+                      controller: ctrl,
+                      onChanged: (p0) => isAnya ? _clearAnyaPanelData() : _clearSwayamsevakPanelData(),
+                    ),
+
+                  if (ctrl.hasItems(GeoLevel.Vasti))
+                    GeoDropdownWidget(
+                      level: GeoLevel.Vasti,
+                      title: 'Vasti',
+                      controller: ctrl,
+                      onChanged: (p0) => isAnya ? _clearAnyaPanelData() : _clearSwayamsevakPanelData(),
+                    ),
+
+                  const SizedBox(height: 12),
+                  MaterialButton(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                    color: Theme.of(context).primaryColor,
+                    textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+                    onPressed: isAnya ? _fetchAnyaPanelData : _fetchSwayamsevakPanelData,
+                    child: Text(
+                      Statics.getLabel('Search'),
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                  const SizedBox(height: 40),
+                  if (isAnya)
+                    if (_isTgSearching) const CircularProgressIndicator() else _anyaInfoPanel(ctrl)
+                  else ...[if (_isMySearching) const CircularProgressIndicator() else _swayamsevakInfoPanel(ctrl)],
+                ]),
+              ),
+            ),
+          ],
+        );
+      }),
+    );
+  }
+
+  Widget _swayamsevakInfoPanel(GeoHierarchyController controller) {
+    return Column(children: [
+      /*Legend(legendString: "yesterdayNews", fontsize: 18),
+      _buildYesterdaySummaryTable(Statics.tgLstYesterdayVruttaSummary),
+      if (_tgLevelID <= 6) _buildYesterdayDetailTable(Statics.tgLstYesterdayVruttaDetail),
+      const SizedBox(height: 15),
+      _vruttaSummarySection(
+        shaakhaaEQ0: _nullToZero(tgShaakhaaEQ0),
+        shaakhaa1To24: _nullToZero(tgShaakhaa1To24),
+        shaakhaaGTE25: _nullToZero(tgShaakhaaGTE25),
+        shaakhaaEQ30: _nullToZero(tgShaakhaaEQ30),
+        saaptaahikEQ0: _nullToZero(tgSaaptaahikEQ0),
+        saaptaahik1To3: _nullToZero(tgSaaptaahik1To3),
+        saaptaahikGTE4: _nullToZero(tgSaaptaahikGTE4),
+        maasikEQ0: _nullToZero(tgMaasikEQ0),
+        maasikEQ1: _nullToZero(tgMaasikEQ1),
+      ),
+      const SizedBox(height: 15),
+      Legend(legendString: "SankalpTable", fontsize: 18),
+      _buildSadyasthitiTable(Statics.tgLstdashboardSadyaSthitiData),
+      const SizedBox(height: 15),
+      Legend(legendString: "NewSankalpTable", fontsize: 18),
+      _buildSankalpByAadhaarTable(Statics.tgLstSankalpByAadhaarData),
+      const SizedBox(height: 15),
+      Legend(legendString: "BhaugolikVistaar", fontsize: 18),
+      _buildBhaugolikTable(Statics.tgLstBhaugolikVistaar),
+      const SizedBox(height: 15),*/
+      Legend(legendString: "SwayamsevakCount", fontsize: 18, onPressed: !_isTgSearched ? null : () => showNamesList(geoUnitID: controller.deepestSelectedGeoUnitId, type: "SwayamsevakCount")),
+      SingleColumnRow(txtString: Statics.getLabel('TotalKaaryakartaaCount'), value: tgTotalSwayamsevakCount, fontsize: 15),
+      SingleColumnRow(txtString: Statics.getLabel('PratidnyitCount'), value: tgPratidnyitCount, fontsize: 15),
+      const SizedBox(height: 15),
+      _swayamsevakCountByAge(
+        shishu: tgShishuCount,
+        baal: tgBaalCount,
+        tarunV: tgTarunVidyaarthiCount,
+        tarunVy: tgTarunVyavasaayeeCount,
+        proudha: tgProudhaVyavasaayeeCount,
+        unknown: tgUnknownAgeCount,
+        showListIcon: _isTgSearched,
+        controller: controller,
+      ),
+      const SizedBox(height: 15),
+      _swayamsewakByBloodGroup(bloodgroup: _tgbloodgroup, showListIcon: _isTgSearched, controller: controller),
+      const SizedBox(height: 15),
+      _swayamsewakExperties(expertieslist: _tgexpertieslist, showListIcon: _isTgSearched, controller: controller),
+      const SizedBox(height: 15),
+      _swayamsewakInterests(interestlist: _tginterestlist, showListIcon: _isTgSearched, controller: controller),
+      const SizedBox(height: 15),
+      _swayamsewakInfoWidget(infolist: _tgmothertonguelist, heading: 'MotherTongue', showListIcon: _isTgSearched, controller: controller),
+      const SizedBox(height: 15),
+      _swayamsewakInfoWidget(infolist: _tgsangayulist, heading: 'Sangayu', showListIcon: _isTgSearched, controller: controller),
+      const SizedBox(height: 15),
+      _swayamsewakInfoWidget(infolist: _tgghoshwadlist, heading: 'Ghoshwadak', showListIcon: _isTgSearched, controller: controller),
+      const SizedBox(height: 15),
+      _tgganveshData == null ? SizedBox() : _swayamsewakUniform(ganvesh: _tgganveshData!, showListIcon: _isTgSearched, controller: controller),
+      const SizedBox(height: 15),
+      _tgvehicle == null ? SizedBox() : _swayamsewakVehicle(vehicle: _tgvehicle!, showListIcon: _isTgSearched, controller: controller),
+      const SizedBox(height: 15),
+      _shikshanSection(
+        prarambhik: _nullToZero(tgPraarambhikShikshitCount),
+        praathamik: _nullToZero(tgPraathamikShikshitCount),
+        prathamVarsha: _nullToZero(tgPrathamVarshaShikshitCount),
+        dwitiya: _nullToZero(tgDwitiyaVarshaShikshitCount),
+        trutiya: _nullToZero(tgTrutiyaVarshaShikshitCount),
+        noShikshan: tgNoShikshanCount,
+        showListIcon: _isTgSearched,
+        controller: controller,
+      ),
+      _kaaryakartaaByLevelSection(
+        shaakhaa: tgDailyShaakhaaKaaryakartaaCount,
+        saptahik: tgSaaptaahikMilanKaaryakartaaCount,
+        milan: tgMaasikMilanKaaryakartaaCount,
+        vasti: tgVastiKaaryakartaaCount,
+        graam: tgGraamKaaryakartaaCount,
+        mandal: tgMandalKaaryakartaaCount,
+        nagar: tgNagarKaaryakartaaCount,
+        shahar: tgShaharKaaryakartaaCount,
+        bhaag: tgBhaagKaaryakartaaCount,
+        vibhaag: tgVibhaagKaaryakartaaCount,
+        mahaanagar: tgMahaanagarKaaryakartaaCount,
+        praant: tgPraantKaaryakartaaCount,
+        kshetra: tgKshetraKaaryakartaaCount,
+        akhilBhaarat: tgAkhilBhaaratiyaKaaryakartaaCount,
+        pravaasee: tgPravaaseeKaaryakartaaCount,
+        total: tgTotalKaaryakartaaCount,
+        showListIcon: _isTgSearched,
+        controller: controller,
+      ),
+      Legend(legendString: "GatividhiAayaamSansthaaKaaryakartaaCount", fontsize: 18),
+      SingleColumnRow(txtString: Statics.getLabel('GatividhiKaaryakartaaCount'), value: tgGatividhiKaaryakartaaCount, fontsize: 15),
+      SingleColumnRow(txtString: Statics.getLabel('AayaamKaaryakartaaCount'), value: tgAayaamKaaryakartaaCount, fontsize: 15),
+      SingleColumnRow(txtString: Statics.getLabel('SanghaPreritSansthaaKaaryakartaaCount'), value: tgSanghaPreritSansthaaKaaryakartaaCount, fontsize: 15),
+      SingleColumnRow(txtString: Statics.getLabel('SocialOrganizationKaaryakartaaCount'), value: tgSocialOrganizationKaaryakartaaCount, fontsize: 15),
+      const SizedBox(height: 15),
+      Legend(legendString: "Gatividhi", fontsize: 18),
+      _buildNameCountTable(
+          data: Statics.tgLstGatividhiKaaryakartaa,
+          nameHeader: Statics.getLabel('Gatividhi'),
+          countHeader: Statics.getLabel('KaaryakartaaCount'),
+          nameOf: (i) => i.gatividhiName ?? '',
+          countOf: (i) => '${i.kaaryakartaaCount}'),
+      const SizedBox(height: 15),
+      Legend(legendString: "Aayaam", fontsize: 18),
+      _buildNameCountTable(
+          data: Statics.tgLstAayaamKaaryakartaa,
+          nameHeader: Statics.getLabel('Aayaam'),
+          countHeader: Statics.getLabel('KaaryakartaaCount'),
+          nameOf: (i) => i.aayaamName ?? '',
+          countOf: (i) => '${i.kaaryakartaaCount}'),
+      const SizedBox(height: 15),
+      Legend(legendString: "Sangha-PreritSansthaa", fontsize: 18),
+      _buildNameCountTable(
+          data: Statics.tgLstPreritKaaryakartaa,
+          nameHeader: Statics.getLabel('AreaOfOperations'),
+          countHeader: Statics.getLabel('KaaryakartaaCount'),
+          nameOf: (i) => i.preritAOOName ?? '',
+          countOf: (i) => '${i.kaaryakartaaCount}'),
+      const SizedBox(height: 15),
+      Legend(legendString: "OtherSocialOrganization", fontsize: 18),
+      _buildNameCountTable(
+          data: Statics.tgLstSocialOrgKaaryakartaa,
+          nameHeader: Statics.getLabel('AreaOfOperations'),
+          countHeader: Statics.getLabel('KaaryakartaaCount'),
+          nameOf: (i) => i.mainAOOName ?? '',
+          countOf: (i) => '${i.kaaryakartaaCount}'),
+      const SizedBox(height: 15),
+      Legend(legendString: "StudentCategory", fontsize: 18),
+      _buildNameCountTable(
+          data: Statics.tgLstStudentCategory,
+          nameHeader: Statics.getLabel('StudentCategory'),
+          countHeader: Statics.getLabel('SwayamsevakCount'),
+          nameOf: (i) => i.studentCategoryName ?? '',
+          countOf: (i) => '${i.countByStudentCategory}'),
+      const SizedBox(height: 15),
+      Legend(legendString: "VyavasaayeeCategory", fontsize: 18),
+      _buildNameCountTable(
+          data: Statics.tgLstVyavasaayeeCategory,
+          nameHeader: Statics.getLabel('VyavasaayeeCategory'),
+          countHeader: Statics.getLabel('SwayamsevakCount'),
+          nameOf: (i) => i.vyavasaayeeCategoryName ?? '',
+          countOf: (i) => '${i.countByVyavasaayeeCategory}'),
+      const SizedBox(height: 15),
+    ]);
+  }
+
+  Widget _anyaInfoPanel(GeoHierarchyController controller) {
+    return Column(children: [
+      Legend(legendString: "SankalpTable", fontsize: 18),
+      _buildSadyasthitiTable(Statics.tgLstdashboardSadyaSthitiData),
+      const SizedBox(height: 15),
+      Legend(legendString: "NewSankalpTable", fontsize: 18),
+      _buildSankalpByAadhaarTable(Statics.tgLstSankalpByAadhaarData),
+      const SizedBox(height: 15),
+      Legend(legendString: "BhaugolikVistaar", fontsize: 18),
+      _buildBhaugolikTable(Statics.tgLstBhaugolikVistaar),
+      const SizedBox(height: 15),
+    ]);
+  }
 
   Widget _bhaugolikRachanaPanel() {
     return ExpansionPanelList(
@@ -2479,7 +3076,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _myGeoUnitPanel() {
+  /*Widget _myGeoUnitPanel() {
     return ExpansionPanelList(
       expansionCallback: (_, isExpanded) => setState(() => _isSwExpanded = isExpanded),
       children: [
@@ -2877,7 +3474,7 @@ class _HomeScreenState extends State<HomeScreen> {
           countOf: (i) => '${i.countByVyavasaayeeCategory}'),
       const SizedBox(height: 15),
     ]);
-  }
+  }*/
 
   // ═══════════════════════════════════════════════════════════════════════════
   // REUSABLE SECTION WIDGETS (repeated blocks extracted to named methods)

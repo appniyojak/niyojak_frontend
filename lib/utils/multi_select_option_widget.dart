@@ -17,7 +17,6 @@ class GroupedMultiSelectField<T> extends StatefulWidget {
   final Map<String, List<SelectItem<T>>> groupedItems;
   final List<T> initialValue;
   final ValueChanged<List<T>> onConfirm;
-  final FormFieldValidator<List<T>>? validator;
 
   final Color emptyBorderColor;
   final Color filledBorderColor;
@@ -32,7 +31,6 @@ class GroupedMultiSelectField<T> extends StatefulWidget {
     required this.onConfirm,
     this.confirmText = 'Submit',
     this.cancelText = 'clear',
-    this.validator,
     this.emptyBorderColor = const Color(0xFFBDBDBD), // grey.shade400
     this.filledBorderColor = Colors.transparent,
     this.accentColor = Colors.purple,
@@ -44,7 +42,6 @@ class GroupedMultiSelectField<T> extends StatefulWidget {
 
 class _GroupedMultiSelectFieldState<T> extends State<GroupedMultiSelectField<T>> {
   late List<T> _selectedValues;
-  String? _errorText;
 
   @override
   void initState() {
@@ -78,7 +75,6 @@ class _GroupedMultiSelectFieldState<T> extends State<GroupedMultiSelectField<T>>
     if (result != null) {
       setState(() {
         _selectedValues = result;
-        _errorText = widget.validator?.call(_selectedValues);
       });
       widget.onConfirm(_selectedValues);
     }
@@ -87,7 +83,6 @@ class _GroupedMultiSelectFieldState<T> extends State<GroupedMultiSelectField<T>>
   void _removeChip(T value) {
     setState(() {
       _selectedValues.remove(value);
-      _errorText = widget.validator?.call(_selectedValues);
     });
     widget.onConfirm(_selectedValues);
   }
@@ -146,14 +141,6 @@ class _GroupedMultiSelectFieldState<T> extends State<GroupedMultiSelectField<T>>
             }).toList(),
           ),
         ],
-        if (_errorText != null)
-          Padding(
-            padding: const EdgeInsets.only(top: 4, left: 12),
-            child: Text(
-              _errorText!,
-              style: TextStyle(color: Theme.of(context).colorScheme.error, fontSize: 12),
-            ),
-          ),
       ],
     );
   }

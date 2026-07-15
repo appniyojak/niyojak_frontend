@@ -257,8 +257,8 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
             _isDoneBoudhikDays = vrutta?.isDoneBoudhikDays ?? false;
             _isDoneSewaDays = vrutta?.isDoneSewaDays ?? false;
 
-            _selectedBoudhikDaysId = vrutta?.SelectedBoudhikDaysId;
-            _anyaBoudhikDaysCtrl.text = vrutta?.AnyaBoudhikDays ?? "";
+            _selectedBoudhikDaysId = _isDoneBoudhikDays ? vrutta?.SelectedBoudhikDaysId : null;
+            _anyaBoudhikDaysCtrl.text = _isDoneBoudhikDays ? vrutta?.AnyaBoudhikDays ?? "" : "";
             _selectedSewaDaysList = vrutta?.SelectedSewaDaysId?.split(',').map((e) => int.tryParse(e)).where((e) => e != null).cast<int>().toList() ?? [];
           }
         });
@@ -301,6 +301,12 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
       return;
     }
     _formKey.currentState!.save();
+
+    if (_isDoneSewaDays && _selectedSewaDaysList.isEmpty) {
+      Statics.showMessageDialog(context, Statics.getLabel("atLeastOneOptionRequired"));
+      return;
+    }
+
     setState(() {
       _isLoading = true;
     });
@@ -923,10 +929,6 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                           cancelText: Statics.getLabel('clear'),
                           groupedItems: _sewaDaysGroup,
                           initialValue: _selectedSewaDaysList,
-                          validator: (val) {
-                            if (val == null || val.isEmpty) return Statics.getLabel("atLeastOneOptionRequired");
-                            return null;
-                          },
                           onConfirm: (values) => setState(() => _selectedSewaDaysList = values),
                         ),
                         SizedBox(height: 10),

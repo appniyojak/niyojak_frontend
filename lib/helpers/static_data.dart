@@ -25,6 +25,7 @@ import '../models/response_model/gruh_abhiyaan_report_model.dart';
 import '../models/response_model/gruh_abhiyaan_vrutta_data_model.dart';
 import '../models/response_model/hindu_sanmelan_model.dart';
 import '../models/response_model/hindu_sanmelan_report_model.dart';
+import '../models/response_model/home_screen_main_data_resp_model.dart';
 import '../models/response_model/home_screen_names_resp_model.dart';
 import '../models/response_model/home_shaakhaa_report_names_model.dart';
 import '../models/response_model/mandalVastisarvekshanReportModel.dart';
@@ -1782,6 +1783,41 @@ Future<String> refreshData() async {
   }
 }
 
+Future<HomeScreenData?> getDashboardData(Map<String, dynamic> inputJson, {BuildContext? context}) async {
+  bool? connected = await isInternetConnected();
+  if (connected == false) {
+    return null;
+  }
+  if (context != null) showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  log(urlRefreshHomeScreenForApp);
+  log("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+  try {
+    var response = await http.post(Uri.parse(urlRefreshHomeScreenForApp), headers: jHeaders, body: jsonEncode(inputJson));
+
+    // Navigator.of(context, rootNavigator: true).pop();
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+
+      HomeScreenDataRespModel model = HomeScreenDataRespModel.fromJson(data);
+      log("getDashboardData >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+
+      return model.homeScreenData; // ✅ return karna zaroori hai
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return null; // ✅ error case
+    }
+  } catch (e) {
+    // Navigator.of(context, rootNavigator: true).pop();
+    print("Exception: $e");
+    return null;
+  } finally {
+    if (context != null) Navigator.of(context, rootNavigator: true).pop();
+  }
+}
+
 Future<dynamic> refreshDashboardData(String? userID, String? targetGeoUnitID) async {
   bool? connected = await isInternetConnected();
   if (connected == false) {
@@ -1795,6 +1831,8 @@ Future<dynamic> refreshDashboardData(String? userID, String? targetGeoUnitID) as
   print(json.encode({"AppUserID": userID, "TargetGeoUnitID": targetGeoUnitID}));
 
   var responseBody = json.decode(response.body);
+
+  log("REPONSE >>>>>>>>>>>>>> ${jsonEncode(responseBody)}");
 
   var dataList = responseBody['HomeScreenData'];
   var listShaakhaaCountByVayogat = responseBody['HomeScreenData']['ListShaakhaaCountByVayogat'];
