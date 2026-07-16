@@ -322,7 +322,7 @@ const String urlHomeShaakhaaVruttaNames = baseUrlAPI + '/yestardayShaakhaaVrutta
 
 //////////////////////////////////////////////////////////////////////////////////////////
 const String patchSuffix = '';
-const String dbVersion = '4';
+const String dbVersion = '5';
 const int shaakhaaFrequencyDaily = 34;
 const int shaakhaaFrequencyWeekly = 35;
 const int shaakhaaFrequencyMonthly = 36;

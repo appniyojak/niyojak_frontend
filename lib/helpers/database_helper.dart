@@ -36,8 +36,8 @@ class DatabaseHelper {
     }
     print(dataDir);
     var dbPath = dataDir + '/' + _dbName;
-    var database = await openDatabase(dbPath, version: _dbVersion, singleInstance: false, onUpgrade: (db, oldVersion, newVersion) {
-      print('initDatabase - database upgraded, oldVersion:' + oldVersion.toString() + '; newVersion:' + newVersion.toString());
+    var database = await openDatabase(dbPath, version: _dbVersion, singleInstance: false, onUpgrade: (db, oldVersion, newVersion) async {
+      log('initDatabase - database upgraded, oldVersion:' + oldVersion.toString() + '; newVersion:' + newVersion.toString());
       // db.execute('DROP TABLE UserDataMaster');
       // db.execute('DROP TABLE IF EXISTS AbhiyaanVrutta');
       // db.execute('DROP TABLE IF EXISTS AbhiyaanParticipant');
@@ -65,6 +65,10 @@ class DatabaseHelper {
           ' DaayitvaID INT,DaayitvaGeoUnitName VARCHAR(100),DaayitvaGeoUnitID INT,BirthDate VARCHAR(20), ' +
           ' LinkedGeoUnitHierarchy VARCHAR(100), IsFirstLogin BOOL, LastLoginTimeStamp VARCHAR(30), ' +
           ' IsLoggedIn VARCHAR(10), IsPravaasiKaaryakartaa BOOL)');
+
+      if (oldVersion < 5) {
+        await _ensureColumn(db, 'GeoUnitMaster', 'issankalpit', 'INT');
+      }
     }, onCreate: (db, version) {
       print('initDatabase - database created; version:' + version.toString());
 
@@ -120,6 +124,27 @@ class DatabaseHelper {
           'ParentNagarID INT,ParentUpaNagarID INT,ParentMandalID INT,ParentGraamID INT,ParentVastiID INT,isvasti INT,ismandal INT)');
     });
     return database;
+  }
+
+  static Future<void> _ensureColumn(
+    Database db,
+    String table,
+    String column,
+    String type,
+  ) async {
+    final info = await db.rawQuery('PRAGMA table_info($table)');
+    final exists = info.any((c) => c['name'] == column);
+    if (!exists) {
+      await db.execute('ALTER TABLE $table ADD COLUMN $column $type');
+      print('Patched $table.$column');
+    }
+  }
+
+  static Future<void> _ensureTable(Database db, String createSql) async {
+    // Extract table name defensively isn't reliable from raw SQL,
+    // so just always use CREATE TABLE IF NOT EXISTS for full-table creation —
+    // this part IS safe, it's only column-level changes that need ALTER TABLE.
+    await db.execute(createSql);
   }
 
   static Future<void> executeQuery(String strQuery) async {
@@ -1203,45 +1228,31 @@ class DatabaseHelper {
   }
 
   static Future<void> forcePurgeDatabase() async {
-    final db = await initDatabase();
-
     try {
-      // 1. Turn off foreign keys to prevent iOS from blocking deletes
-      await db.execute('PRAGMA foreign_keys = OFF;');
+      final String dataDir = Platform.isIOS ? (await getLibraryDirectory()).path : await getDatabasesPath();
+      final String path = '$dataDir/$_dbName';
 
-      // 2. Get all user tables
-      final List<Map<String, dynamic>> tables = await db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'");
+      // Close every connection we can reach. With singleInstance:false in play
+      // historically, there may be more than one native handle open — but
+      // going forward we should only ever have one (see step 2).
+      try {
+        final db = await openDatabase(path);
+        await db.close();
+      } catch (_) {}
 
-      // 3. Check if the sqlite_sequence table even exists
-      final List<Map<String, dynamic>> seqCheck = await db.rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='sqlite_sequence'");
-      final bool hasSequenceTable = seqCheck.isNotEmpty;
+      // sqflite's official delete — closes its own cached instance too.
+      await databaseFactory.deleteDatabase(path);
 
-      // 4. Clear every single table
-      for (var table in tables) {
-        final String tableName = table['name'];
-
-        if (tableName != 'sqlite_sequence' && tableName != 'android_metadata') {
-          // Force delete all rows
-          await db.rawDelete('DELETE FROM $tableName');
-
-          // Only clear sequence if the table actually exists
-          if (hasSequenceTable) {
-            await db.rawDelete("DELETE FROM sqlite_sequence WHERE name = ?", [tableName]);
-          }
-
-          print('Successfully cleared table: $tableName');
-        }
+      // iOS WAL residue cleanup — this is the piece that was almost certainly
+      // missing before and is why old data kept resurfacing.
+      for (final suffix in ['-wal', '-shm', '-journal']) {
+        final f = File('$path$suffix');
+        if (await f.exists()) await f.delete();
       }
 
-      // 5. Force a VACUUM to purge the iOS Write-Ahead Log (WAL) and rebuild the file
-      await db.execute('VACUUM;');
-
-      // 6. Turn foreign keys back on
-      await db.execute('PRAGMA foreign_keys = ON;');
-
-      print('Database completely purged and vacuumed on iOS!');
+      print('Database file + WAL residue deleted cleanly.');
     } catch (e) {
-      print('Error while forcing database purge: $e');
+      print('Error while force-deleting database: $e');
     }
   }
 }

@@ -115,7 +115,7 @@ class DataDetailsScreen extends StatelessWidget {
                 const Icon(Icons.list_alt_outlined, size: 18, color: Colors.purple),
                 const SizedBox(width: 8),
                 Text(
-                  '$_totalEntries entries across ${groupedData.length} groups',
+                  Statics.getLabel("entriesAcrossGroups").replaceAll('{totalEntries}', _totalEntries.toString()).replaceAll('{groupCount}', groupedData.length.toString()),
                   style: const TextStyle(fontSize: 13, color: Colors.black54, fontWeight: FontWeight.w500),
                 ),
               ],
@@ -304,7 +304,7 @@ class _DataGroupTile extends StatelessWidget {
           style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Colors.black87),
         ),
         subtitle: Text(
-          '${group.items.length} entries',
+          '${group.items.length} ${Statics.getLabel('entries')}',
           style: const TextStyle(fontSize: 12, color: Colors.black45),
         ),
         children: [

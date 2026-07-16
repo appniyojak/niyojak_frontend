@@ -2174,6 +2174,8 @@ Map<String, String> resEnglish = {
   "notificationDialogSubtitle": "You won't receive important updates (like daily Vrutta reminders) unless notifications are enabled for this app.",
   "notNow": "Not Now",
   "openSettings": "Open Settings",
+  'entriesAcrossGroups': '{totalEntries} entries across {groupCount} groups',
+  'entries': 'entries',
 
   ////////////////////////////////////// Main Shakhaa Milan(NEW KEYS) //////////////////////////////////////
 };
@@ -4364,6 +4366,8 @@ Map<String, String> resMarathi = {
   "notificationDialogSubtitle": "या एपसाठी सूचना (Notifications) सुरू केल्याशिवाय तुम्हाला महत्त्वाच्या सूचना (उदा. दैनिक वृत्त स्मरणपत्रे) मिळणार नाहीत.",
   "notNow": "आत्ता नाही",
   "openSettings": "सेटिंग्ज उघडा",
+  'entriesAcrossGroups': '{groupCount} गटांमध्ये एकूण {totalEntries} नोंदी',
+  'entries': 'नोंदी',
 };
 
 ///1,583
@@ -6550,4 +6554,6 @@ Map<String, String> resHindi = {
   "notificationDialogSubtitle": "जब तक इस ऐप के लिए सूचनाएँ (Notifications) चालू नहीं होंगी, तब तक आपको महत्वपूर्ण अपडेट (जैसे दैनिक वृत्त अनुस्मारक) प्राप्त नहीं होंगे।",
   "notNow": "अभी नहीं",
   "openSettings": "सेटिंग्स खोलें",
+  'entriesAcrossGroups': '{groupCount} समूहों में कुल {totalEntries} प्रविष्टियाँ',
+  'entries': 'प्रविष्टियाँ',
 };
