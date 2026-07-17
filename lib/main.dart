@@ -320,13 +320,12 @@ class NiyojakAppState extends State<NiyojakApp> {
               },
             ),
             if (Statics.isDevelopment)
-              Positioned(
-                top: kToolbarHeight * 0.6,
-                left: 0,
+              Align(
+                alignment: Alignment.topCenter,
                 child: Container(
-                  decoration: BoxDecoration(borderRadius: const BorderRadius.horizontal(right: Radius.circular(5)), color: Colors.red.withValues(alpha: 0.7)),
+                  decoration: BoxDecoration(borderRadius: const BorderRadius.vertical(bottom: Radius.circular(5)), color: Colors.red.withValues(alpha: 0.7)),
                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                  child: Text("Dev - 1.0.34 ", style: const TextStyle(fontSize: 13, color: Colors.white, fontWeight: FontWeight.w600)),
+                  child: Text(" Dev  -  1.0.34 ", style: const TextStyle(fontSize: 13, color: Colors.white, fontWeight: FontWeight.w600)),
                 ),
               ),
           ],

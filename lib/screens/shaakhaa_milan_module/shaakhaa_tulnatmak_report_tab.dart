@@ -1234,6 +1234,8 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
             axisNameWidget: Text(Statics.getLabel("monthOnly")),
             sideTitles: SideTitles(
               showTitles: true,
+              maxIncluded: false,
+              minIncluded: false,
               getTitlesWidget: (value, meta) {
                 final idx = value.toInt();
                 if (idx < 0 || idx >= months.length) return const SizedBox();

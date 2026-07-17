@@ -2312,7 +2312,7 @@ Future<UpnagarUpkhandaReportModel?> upkhandUpnagarReportData({required String us
 
   log("API >>>>>>>>>>>>>> $urlUpkhandupnagarreport");
 
-  print(json.encode({"iAppUserID": userID, "iGeoUnitID": targetGeoUnitID, "type": type}));
+  log(json.encode({"iAppUserID": userID, "iGeoUnitID": targetGeoUnitID, "type": type}));
 
   var response = await http.post(Uri.parse(urlUpkhandupnagarreport), headers: jHeaders, body: json.encode({"iAppUserID": userID, "iGeoUnitID": targetGeoUnitID, "type": type}));
 

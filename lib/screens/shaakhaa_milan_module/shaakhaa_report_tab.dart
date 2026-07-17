@@ -1142,9 +1142,9 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               child: Row(
                 children: [
-                  const Expanded(
+                  Expanded(
                     child: Text(
-                      'प्रवासी कार्यकर्ता',
+                      Statics.getLabel('PravaasiKaaryakartaa'),
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,

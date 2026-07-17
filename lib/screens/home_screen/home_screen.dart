@@ -2778,6 +2778,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   // if (ctrl.hasItems(GeoLevel.vibhaag))
                   GeoDropdownWidget(
+                    level: GeoLevel.Mahaanagar,
+                    title: 'Mahaanagar',
+                    controller: ctrl,
+                    onChanged: (p0) => isAnya ? _clearAnyaPanelData() : _clearSwayamsevakPanelData(),
+                  ),
+
+                  // if (ctrl.hasItems(GeoLevel.vibhaag))
+                  GeoDropdownWidget(
                     level: GeoLevel.Vibhaag,
                     title: 'Vibhaag',
                     controller: ctrl,

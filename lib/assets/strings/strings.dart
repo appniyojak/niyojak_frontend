@@ -801,8 +801,8 @@ Map<String, String> resEnglish = {
   'PravasiKaryakartaCount': 'Count of Pravasi Karyakarta in Shakhaa Pat',
   'PravasiKaryakartaCount2': 'Count of Pravasi Karyakarta in Shakhaa',
   'OnlyPravasiKaryakartaCount': 'Pravasi Karyakarta Count',
-  'ShaakhaaPravasiCount': 'Shaakhaa Pravasi Count',
-  'TotalDaysPravasCount': 'Total Pravaas Days',
+  'ShaakhaaPravasiCount': 'On How Many Shakhas?',
+  'TotalDaysPravasCount': 'How Many Days?',
   'AnyaPravasiKaryakartaCount': 'Anya Pravasi Karyakarta Count',
 
   'AbhyaagatCount': 'Abhyaagat Sankhyaa',
@@ -2993,8 +2993,8 @@ Map<String, String> resMarathi = {
   'PravasiKaryakartaCount': 'शाखा पटावर असलेल्या प्रवासी कार्यकर्त्यांची संख्या',
   'PravasiKaryakartaCount2': 'शाखेवर उपस्थित प्रवासी कार्यकर्त्यांची संख्या',
   'OnlyPravasiKaryakartaCount': 'प्रवासी कार्यकर्त्यांची संख्या',
-  'ShaakhaaPravasiCount': 'शाखा प्रवासी संख्या',
-  'TotalDaysPravasCount': 'एकूण प्रवास दिवस',
+  'ShaakhaaPravasiCount': 'किती शाखेत ?',
+  'TotalDaysPravasCount': 'किती दिवस ?',
   'AnyaPravasiKaryakartaCount': 'अन्य प्रवासी कार्यकर्त्यांची संख्या',
 
   'AbhyaagatCount': 'अभ्यागत संख्या',
@@ -5181,8 +5181,8 @@ Map<String, String> resHindi = {
   'PravasiKaryakartaCount': 'शाखा के पट पर हैं ऐसे प्रवासी कार्यकर्ताओं की संख्या',
   'PravasiKaryakartaCount2': 'शाख पर उपस्थित प्रवासी कार्यकर्ताओं की संख्या',
   'OnlyPravasiKaryakartaCount': 'प्रवासी कार्यकर्ताओं की संख्या',
-  'ShaakhaaPravasiCount': 'शाखा प्रवासी संख्या',
-  'TotalDaysPravasCount': 'कुल प्रवास दिवस',
+  'ShaakhaaPravasiCount': 'कितनी शाखाओं पर ?',
+  'TotalDaysPravasCount': 'कितने दिन ?',
   'AnyaPravasiKaryakartaCount': 'अन्य प्रवासी कार्यकर्ताओं की संख्या',
 
   'AbhyaagatCount': 'अभ्यागत संख्या',

@@ -317,12 +317,12 @@ class _DataGroupTile extends StatelessWidget {
               itemCount: group.items.length,
               itemBuilder: (context, i) {
                 final person = group.items[i];
+                final hasValidId = person.id != null && person.id != 0;
                 return ListTile(
                   dense: true,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                  onTap: (from != "shaakhaaNames" && (person.id == 0 || person.id == null))
-                      ? null
-                      : () => Navigator.push(
+                  onTap: (from == "shaakhaaNames" && hasValidId)
+                      ? () => Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => EditShaakhaaVrutta(
@@ -331,7 +331,8 @@ class _DataGroupTile extends StatelessWidget {
                                     onSaveDetails: null,
                                     viewType: "EditVrutta",
                                     vruttadate: person.vdate != null && (person.vdate?.isNotEmpty == true) ? DateFormat('dd/MM/yyyy').format(DateFormat('yyyy-MM-dd').parse(person.vdate!)) : null,
-                                  ))),
+                                  )))
+                      : null,
                   leading: CircleAvatar(
                     radius: 14,
                     backgroundColor: Colors.indigo.shade50,
@@ -342,9 +343,9 @@ class _DataGroupTile extends StatelessWidget {
                     style: const TextStyle(fontSize: 13, color: Colors.black87),
                   ),
                   trailing: from == "shaakhaaNames"
-                      ? person.id == 0 || person.id == null
-                          ? null
-                          : Icon(Icons.keyboard_arrow_right_rounded)
+                      ? hasValidId
+                          ? const Icon(Icons.keyboard_arrow_right_rounded)
+                          : null
                       : _buildMenuButton(context, person.id ?? 0, _getPermissions()),
                 );
               },
