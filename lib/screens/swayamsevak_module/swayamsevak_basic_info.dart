@@ -208,8 +208,8 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
     if (forShakhaClear) await populatelinkedGraamDropdown(_linkedmandalValue!);
     if (forGeoClear) _graamValue = (level == 3 ? (dm.geoUnitID ?? 0).toString() : selection.graam) ?? _linkedgraamValue;
     if (forShakhaClear) _linkedgraamValue = (level == 3 ? (dm.geoUnitID ?? 0).toString() : selection.graam) ?? _linkedgraamValue;
-    if (level == 3) {
-      swDetails?.linkedGeoUnitID = dm.geoUnitID ?? dm.parentGraamID;
+    if (level == 3 || level == 1) {
+      swDetails?.linkedGeoUnitID = dm.parentGraamID ?? dm.geoUnitID;
       // selctedLevel = 'Graam';
     }
 
@@ -221,8 +221,8 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
           (selection.upnagar != null && selection.upnagar!.isNotEmpty), (selection.upnagar != null && selection.upnagar!.isNotEmpty) ? _linkedupnagarValue! : _linkednagarValue!);
     if (forGeoClear) _vastiValue = (level == 2 ? (dm.geoUnitID ?? 0).toString() : selection.vasti) ?? _linkedvastiValue;
     if (forShakhaClear) _linkedvastiValue = (level == 2 ? (dm.geoUnitID ?? 0).toString() : selection.vasti) ?? _linkedvastiValue;
-    if (level == 2) {
-      swDetails?.linkedGeoUnitID = dm.geoUnitID ?? dm.parentVastiID;
+    if (level == 2 || level == 1) {
+      swDetails?.linkedGeoUnitID = dm.parentVastiID ?? dm.geoUnitID;
       // selctedLevel = 'Vasti';
     }
 
