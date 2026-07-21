@@ -502,7 +502,7 @@ class ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Aut
                         ],
                       )
                     else*/
-                    if ((context.read<GeoHierarchyController>().ctrlUserLevelId ?? 0) > 1)
+                    if ((ctrl.ctrlUserLevelId ?? 0) > 1)
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -538,6 +538,7 @@ class ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Aut
                                   _linkedshaakhaa = selectedshaakhaa = null;
                                 });
                                 ctrl.loadHierarchyForUser();
+                                getReportDataFun(selectedshaakhaa?.geoUnitID ?? ctrl.deepestSelectedGeoUnitId);
                               },
                               child: Text(Statics.getLabel('clear'))),
                         ],

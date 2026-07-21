@@ -317,6 +317,8 @@ class _HomeScreenState extends State<HomeScreen> {
     shaakhaLevelData = otherLevelData = shaakhaausertype = prevofPrevMonthName = prevMonthName = thisMonthName = null;
     tabs = [];
     _isMyAreaReportExp = false;
+
+    log("the id >>>>>>>>>>>>>>>>>> ${_myAreaReportController.deepestSelectedGeoUnitId}");
     setState(() => _isReportSearching = _isReportCleared = true);
     final data = await Statics.yestardayShaakhaaVruttaHomeReportData(
       userID: int.tryParse(Statics.userDetails["userID"] ?? "0") ?? 0,
@@ -1368,8 +1370,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Column(children: [
                       Align(
                         alignment: Alignment.centerRight,
-                        child: _clearButton(() {
-                          ctrl.loadHierarchyForUser();
+                        child: _clearButton(() async {
+                          await ctrl.loadHierarchyForUser();
                           _getShaakhaaVruttaReport();
                         }),
                       ),

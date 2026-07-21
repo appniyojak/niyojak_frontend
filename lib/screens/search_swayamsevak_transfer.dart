@@ -729,6 +729,7 @@ class _SearchSwayamsevakTransferState extends State<SearchSwayamsevakTransfer> {
                                   _fromDate = _toDate = null;
                                 });
                                 populateLinkedBhaagDropdown();
+                                _search();
                               },
                               child: Text(Statics.getLabel('clear'))),
                         ],
