@@ -2,6 +2,7 @@ import 'dart:core';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../helpers/static_data.dart' as Statics;
@@ -75,6 +76,8 @@ class ShaakhaaReportTabScreen extends StatefulWidget {
 class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
   final controller = createGeoController();
 
+  TextEditingController dateController = TextEditingController();
+
   DurationTypes _kalavadha = DurationTypes.daily;
 
   // Vayogat dropdown — always starts with the synthetic "Total" entry.
@@ -107,6 +110,8 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
   List<ActivityData> _activities = [];
   List<MapEntry<ActivityData, List<ActivityData>>> _groupedActivitiesList = [];
   List<ProgrammeBar> _programmeBars = [];
+
+  Shaakhaaresponse? shaakhaaRank;
 
   bool _expanded = true;
 
@@ -193,6 +198,11 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
   Future<void> _initData() async {
     final dm = await MyAppGlobals.getLevelLDB();
     await controller.initialize(dm);
+
+    final displayFormatter = DateFormat('dd/MM/yyyy');
+
+    dateController.text = displayFormatter.format(DateTime.now());
+
     await _populateVayogatDropdown();
     await _fetchReport();
     if (mounted) setState(() {});
@@ -254,6 +264,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
       "Geounitid": geoUnitId,
       "vayogat": controller.deepestSelectedLevelId != 1 ? _selectedVayogat.staticID : 0,
       "days": _kalavadha.pkValues,
+      "date": _kalavadha == DurationTypes.daily ? DateFormat("MM/dd/yyyy").format(DateFormat("dd/MM/yyyy").parse(dateController.text)).toString() : "",
     };
 
     if (!mounted) return;
@@ -281,6 +292,8 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
               _card2Value = res.totalnewpresent.toString();
               _card1Breakdown = [];
               _card2Breakdown = [];
+
+              shaakhaaRank = res.shaakhaaresponse;
 
               _activities = res.data.toList();
               _programmeBars = [];
@@ -333,6 +346,9 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
               _card2Value = res.totalnewpresent.toString();
               _card1Breakdown = [];
               _card2Breakdown = [];
+
+              shaakhaaRank = res.shaakhaaresponse;
+
               _activities = [];
               _programmeBars = res.data.map((e) {
                 final pct = double.tryParse(e.percentage) ?? 0;
@@ -404,6 +420,9 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
               _card2Value = res.totalnewpresent.toString();
               _card1Breakdown = [];
               _card2Breakdown = [];
+
+              shaakhaaRank = res.shaakhaaresponse;
+
               _activities = [];
               _programmeBars = res.mData.map((e) {
                 final pct = double.tryParse(e.percentage28Days) ?? 0;
@@ -499,6 +518,9 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
               _card1Breakdown = [];
               _card2Breakdown = [];
               _activities = [];
+
+              shaakhaaRank = res.shaakhaaresponse;
+
               _programmeBars = res.data.map((e) {
                 // Overall % = average of all months
                 final avgPct = e.months.isEmpty ? 0.0 : e.months.map((m) => m.percentage).reduce((a, b) => a + b) / e.months.length;
@@ -795,18 +817,33 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
             // ── Text ───────────────────────────────────────────────────────
             Expanded(
               child: Column(
+                spacing: 4,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    Statics.getLabel('shaakhaaRanking'),
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.white,
-                      letterSpacing: 0.2,
-                    ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          Statics.getLabel('shaakhaaRanking'),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w800,
+                            color: Colors.white,
+                            letterSpacing: 0.2,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        "#${shaakhaaRank?.rankNo ?? "-"}",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.white,
+                          letterSpacing: 0.2,
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 3),
                   Text(
                     Statics.getLabel('shaakhaaRankingSubTitle'),
                     style: TextStyle(
@@ -1002,6 +1039,8 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                                         itemLabel: (v) => v.codeForDisplay ?? '--',
                                         onChanged: (v) {
                                           if (v != null) {
+                                            _isCleared = true;
+                                            _isSearched = false;
                                             setState(() => _selectedVayogat = v);
                                             //_fetchReport();
                                           }
@@ -1012,6 +1051,45 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                                 ),
                             ],
                           ),
+
+                          // Vayogat dropdown — populated from DB with Total prepended
+                          if (_kalavadha == DurationTypes.daily) ...[
+                            FilterLabel('४. ${Statics.getLabel("selectDate")}'),
+                            AppDropdown(
+                              child: TextFormField(
+                                controller: dateController,
+                                style: TextStyle(fontSize: 14),
+                                autofocus: false,
+                                onTap: () async {
+                                  DateTime? currentDate = dateController.text.isEmpty ? null : DateFormat("dd/MM/yyyy").parse(dateController.text);
+
+                                  DateTime? newDate = await showDatePicker(
+                                    context: context,
+                                    initialDate: currentDate ?? DateTime.now(),
+                                    firstDate: DateTime(2000),
+                                    lastDate: DateTime.now(),
+                                  );
+
+                                  if (newDate == null) return;
+
+                                  if (dateController.text == DateFormat("dd/MM/yyyy").format(newDate)) {
+                                    return;
+                                  }
+                                  setState(() => _isSearched = !(_isCleared = true));
+
+                                  dateController.text = DateFormat("dd/MM/yyyy").format(newDate);
+                                  setState(() {});
+                                },
+                                readOnly: true,
+                                decoration: InputDecoration(
+                                    suffixIcon: Icon(Icons.calendar_month, color: Colors.orange),
+                                    isDense: true,
+                                    hintText: "DD/MM/YYYY",
+                                    contentPadding: EdgeInsets.only(top: 12, bottom: 12),
+                                    border: InputBorder.none),
+                              ),
+                            ),
+                          ],
 
                           // ── Kalavadhi + Vayogat row ──────────────────
                           if (ctrl.ctrlUserLevelId != 1)
@@ -1039,6 +1117,9 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                                 MaterialButton(
                                     onPressed: () {
                                       print("clear button pressed");
+                                      dateController.text = DateFormat("dd/MM/yyyy").format(DateTime.now());
+                                      _kalavadha = DurationTypes.daily;
+                                      if (ctrl.deepestSelectedLevelId != 1) _selectedVayogat = _totalEntry;
                                       ctrl.loadHierarchyForUser();
                                       _fetchReport();
                                     },
@@ -1088,7 +1169,7 @@ class _ShaakhaaReportTabScreenState extends State<ShaakhaaReportTabScreen> {
                               ),
                             if (controller.deepestSelectedLevelId != 1)
                               Text(
-                                '${_kalavadha.name} ${ctrl.deepestSelectedLevelId != 1 ? "+ ${_selectedVayogat.codeForDisplay ?? ""}" : ""}',
+                                '${_kalavadha.name}${_kalavadha == DurationTypes.daily ? " (${dateController.text})" : ""}${ctrl.deepestSelectedLevelId != 1 ? " + ${_selectedVayogat.codeForDisplay ?? ""}" : ""}',
                                 style: const TextStyle(
                                   fontSize: 11,
                                   color: Color(0xFF3B82F6),

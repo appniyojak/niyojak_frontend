@@ -112,9 +112,9 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
   Future<void> initData() async {
     final dm = await MyAppGlobals.getLevelLDB();
 
-    if (args != null && geoidPassed != null) {
+    if (args != null && geoidPassed != null && geoidPassed != 0) {
       final trail = await controller.getTrailFromGeoUnitId((geoidPassed ?? 0).toString());
-      if (trail != null) await controller.setHierarchyFromTrail(trail: trail);
+      if (trail != null) await controller.setHierarchyFromTrail(trail: trail, setMahanagar: false);
     } else {
       await controller.initialize(dm);
     }

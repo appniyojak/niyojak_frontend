@@ -984,7 +984,7 @@ class GeoHierarchyController extends ChangeNotifier {
     );
   }
 
-  Future<void> setHierarchyFromTrail({required GeoHierarchyTrail trail, GeoHierarchyFetchMode fetchMode = GeoHierarchyFetchMode.all}) async {
+  Future<void> setHierarchyFromTrail({required GeoHierarchyTrail trail, GeoHierarchyFetchMode fetchMode = GeoHierarchyFetchMode.all, bool setMahanagar = true}) async {
     /// CLEAR OLD STATE
 
     state.items.clear();
@@ -996,7 +996,7 @@ class GeoHierarchyController extends ChangeNotifier {
     notifyListeners();
 
     /// MAHAANAGAR
-    if (trail.mahaanagarId != null && trail.mahaanagarId!.isNotEmpty) {
+    if (setMahanagar && trail.mahaanagarId != null && trail.mahaanagarId!.isNotEmpty) {
       await loadLevel(
         GeoLevel.Mahaanagar,
         fetchMode: fetchMode,

@@ -78,10 +78,10 @@ class ShaakhaaRankingScreen extends StatefulWidget {
 }
 
 class _ShaakhaaRankingScreenState extends State<ShaakhaaRankingScreen> {
-  DurationTypes _period = DurationTypes.monthly;
+  DurationTypes _period = DurationTypes.daily;
   RankTab _tab = RankTab.upasthiti;
   int _geoLevelId = 6; // default: नगर
-  int _vayogat = 1; // 1 = मेरी आयुगट, 0 = सभी
+  int _vayogat = 0; // 1 = मेरी आयुगट, 0 = सभी
 
   late DropDownModel dm;
   String? geoId;

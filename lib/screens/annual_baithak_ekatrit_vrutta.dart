@@ -178,9 +178,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
         await customDir.create(recursive: true);
       }
 
-      final timestamp = DateTime
-          .now()
-          .millisecondsSinceEpoch;
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
       final imgFile = File('${customDir.path}/screenshot_$timestamp.png');
       await imgFile.writeAsBytes(pngBytes);
       print("Screenshot saved to ${imgFile.path}");
@@ -266,11 +264,13 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
 
   /// Helper function to crop the ui.Image instantly on canvas.
   /// Avoids byte-decoding loops to keep RAM footprint low.
-  Future<Uint8List> _cropImage(ui.Image srcImage,
-      double width,
-      double height,
-      double yOffset,
-      double canvasHeight,) async {
+  Future<Uint8List> _cropImage(
+    ui.Image srcImage,
+    double width,
+    double height,
+    double yOffset,
+    double canvasHeight,
+  ) async {
     final recorder = ui.PictureRecorder();
     final canvas = Canvas(recorder, Rect.fromLTWH(0, 0, width, canvasHeight));
 
@@ -302,7 +302,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
     if (isConnected) {
       try {
         String strInput =
-        json.encode({"AppUserID": Statics.userDetails['userID'], "AnnualBaithakTypeID": int.parse(annualBaithakTypeID!), "GeoUnitID": int.tryParse(geoUnitID ?? "0") ?? 0, "type": type});
+            json.encode({"AppUserID": Statics.userDetails['userID'], "AnnualBaithakTypeID": int.parse(annualBaithakTypeID!), "GeoUnitID": int.tryParse(geoUnitID ?? "0") ?? 0, "type": type});
 
         SankalitBaithakVruttaDataNamesModel? dataModel = await Statics.getSankalitBaithakVruttaDataNames(strInput);
 
@@ -347,25 +347,23 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
       ),
       floatingActionButton: donloadexportList != []
           ? FloatingActionButton(
-        tooltip: Statics.getLabel("ExportToExcel"),
-        onPressed: takeScreenShot,
-        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('CSV file saved successfully')));
-        child: _isExcelDownloading
-            ? CircularProgressIndicator(
-          color: Colors.white,
-          // padding: EdgeInsets.all(8),
-        )
-            : Icon(Icons.download_sharp),
-        backgroundColor: Colors.green,
-      )
+              tooltip: Statics.getLabel("ExportToExcel"),
+              onPressed: takeScreenShot,
+              // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('CSV file saved successfully')));
+              child: _isExcelDownloading
+                  ? CircularProgressIndicator(
+                      color: Colors.white,
+                      // padding: EdgeInsets.all(8),
+                    )
+                  : Icon(Icons.download_sharp),
+              backgroundColor: Colors.green,
+            )
           : Container(),
       drawer: AppDrawer(),
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.all(20),
-          width: Statics
-              .getDeviceSize(context)
-              .width,
+          width: Statics.getDeviceSize(context).width,
           child: Column(
             children: <Widget>[
               Text(
@@ -434,17 +432,12 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                                   isExpanded: true,
                                   value: _baithakTypeYear == "" ? null : _baithakTypeYear,
                                   items: _baithakTypes
-                                      ?.map((bg) =>
-                                  bg.monthYear
-                                      .toString()
-                                      .split(',')
-                                      .last)
+                                      ?.map((bg) => bg.monthYear.toString().split(',').last)
                                       .toSet()
-                                      .map((year) =>
-                                      DropdownMenuItem(
-                                        value: year,
-                                        child: Text(year),
-                                      ))
+                                      .map((year) => DropdownMenuItem(
+                                            value: year,
+                                            child: Text(year),
+                                          ))
                                       .toList(),
                                   onChanged: (value) {
                                     print("Year ---==>  $value");
@@ -463,16 +456,11 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                                     isExpanded: true,
                                     value: _baithakTypeValue == "" ? null : _baithakTypeValue,
                                     items: _baithakTypes!
-                                        .where((bg) =>
-                                    bg.monthYear
-                                        .toString()
-                                        .split(',')
-                                        .last == _baithakTypeYear)
-                                        .map((bg) =>
-                                        DropdownMenuItem(
-                                          value: bg.staticID.toString(),
-                                          child: Text(bg.codeForDisplay!),
-                                        ))
+                                        .where((bg) => bg.monthYear.toString().split(',').last == _baithakTypeYear)
+                                        .map((bg) => DropdownMenuItem(
+                                              value: bg.staticID.toString(),
+                                              child: Text(bg.codeForDisplay!),
+                                            ))
                                         .toList(),
                                     onChanged: (value) {
                                       setState(() {
@@ -500,14 +488,8 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                                   horizontal: 15,
                                   vertical: 8,
                                 ),
-                                color: Theme
-                                    .of(context)
-                                    .primaryColor,
-                                textColor: Theme
-                                    .of(context)
-                                    .primaryTextTheme
-                                    .labelMedium
-                                    ?.color,
+                                color: Theme.of(context).primaryColor,
+                                textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                                 onPressed: () async {
                                   await _search(ctrl.deepestSelectedGeoUnitId);
 
@@ -550,9 +532,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                 RepaintBoundary(
                   key: _globalKey,
                   child: Container(
-                    width: MediaQuery
-                        .sizeOf(context)
-                        .width,
+                    width: MediaQuery.sizeOf(context).width,
                     child: Column(
                       children: [
                         SizedBox(height: 10),
@@ -625,9 +605,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                                 fontsize: 18,
                                 view: true,
                                 btnAction: () {
-                                  redirctToList("mahanagar", _baithakType.toString(), context
-                                      .read<GeoHierarchyController>()
-                                      .deepestSelectedGeoUnitId, Statics.getLabel('mahaanagar'));
+                                  redirctToList("mahanagar", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('mahaanagar'));
                                 }),
                             NewFourColumnRow(
                               txtString: Statics.getLabel('sambhaagSam'),
@@ -642,9 +620,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                             ),
 
                             Container(
-                              width: Statics
-                                  .getDeviceSize(context)
-                                  .width,
+                              width: Statics.getDeviceSize(context).width,
                               child: Divider(
                                 color: Colors.black,
                               ),
@@ -667,9 +643,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                               fontsize: 15,
                             ),
                             Container(
-                              width: Statics
-                                  .getDeviceSize(context)
-                                  .width,
+                              width: Statics.getDeviceSize(context).width,
                               child: Divider(
                                 color: Colors.black,
                               ),
@@ -692,9 +666,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                                 fontsize: 18,
                                 view: true,
                                 btnAction: () {
-                                  redirctToList("anyaNagar", _baithakType.toString(), context
-                                      .read<GeoHierarchyController>()
-                                      .deepestSelectedGeoUnitId, Statics.getLabel('anyaNagar'));
+                                  redirctToList("anyaNagar", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('anyaNagar'));
                                 }),
                             NewFiveColumnRow(
                               // txtString: Statics.getLabel('Total')+" "+Statics.getLabel('nagarCount'),
@@ -711,9 +683,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                               fontsize: 15,
                             ),
                             Container(
-                              width: Statics
-                                  .getDeviceSize(context)
-                                  .width,
+                              width: Statics.getDeviceSize(context).width,
                               child: Divider(
                                 color: Colors.black,
                               ),
@@ -722,21 +692,13 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                               height: 7,
                             ),
                             SingleColumnRow(
-                                txtString: "एकूण " + Statics
-                                    .getLabel('nagarCount')
-                                    .split(" ")
-                                    .first + ':-',
+                                txtString: "एकूण " + Statics.getLabel('nagarCount').split(" ").first + ':-',
                                 value: '',
                                 fontsize: 18,
                                 view: true,
                                 btnAction: () {
-                                  redirctToList("nagarCountTotal", _baithakType.toString(), context
-                                      .read<GeoHierarchyController>()
-                                      .deepestSelectedGeoUnitId,
-                                      "एकूण " + Statics
-                                          .getLabel('nagarCount')
-                                          .split(" ")
-                                          .first);
+                                  redirctToList("nagarCountTotal", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId,
+                                      "एकूण " + Statics.getLabel('nagarCount').split(" ").first);
                                 }),
                             NewFiveColumnRow(
                               txtString: "एकूण\n" + Statics.getLabel('nagarCount'),
@@ -750,7 +712,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
 
                               txtString4: "एकूण\n" + Statics.getLabel('nagarWithMin2Shaakhaa'),
                               value4:
-                              "${(int.parse(_ekatritVrutta['AnyaNagarMin2ShaakhaaYuktaNagarCount'].toString()) + int.parse(_ekatritVrutta['MahaanagarMin2ShaakhaaYuktaNagarCount'].toString()))}",
+                                  "${(int.parse(_ekatritVrutta['AnyaNagarMin2ShaakhaaYuktaNagarCount'].toString()) + int.parse(_ekatritVrutta['MahaanagarMin2ShaakhaaYuktaNagarCount'].toString()))}",
 
                               txtString5: 'एकूण मंडळी युक्त नगर',
                               value5: "${(int.parse(_ekatritVrutta['AnyaNagarMaasikYuktaNagarCount'].toString()) + int.parse(_ekatritVrutta['MahaanagarMaasikYuktaNagarCount'].toString()))}",
@@ -758,9 +720,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                               fontsize: 15,
                             ),
                             Container(
-                              width: Statics
-                                  .getDeviceSize(context)
-                                  .width,
+                              width: Statics.getDeviceSize(context).width,
                               child: Divider(
                                 color: Colors.black,
                               ),
@@ -774,15 +734,10 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                                 fontsize: 18,
                                 view: true,
                                 btnAction: () {
-                                  redirctToList("graaminTaaluka", _baithakType.toString(), context
-                                      .read<GeoHierarchyController>()
-                                      .deepestSelectedGeoUnitId, Statics.getLabel('graaminTaaluka'));
+                                  redirctToList("graaminTaaluka", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('graaminTaaluka'));
                                 }),
                             NewThreeColumnRow(
-                              txtString: Statics.getLabel('graaminTaaluka') + "\n" + Statics
-                                  .getLabel('nagarCount')
-                                  .split(" ")
-                                  .last,
+                              txtString: Statics.getLabel('graaminTaaluka') + "\n" + Statics.getLabel('nagarCount').split(" ").last,
                               value: _ekatritVrutta['GraaminTaalukaaCount'].toString(),
                               txtString2: Statics.getLabel('shaakhaaYukta') + " " + Statics.getLabel('graaminTaaluka'),
                               value2: _ekatritVrutta['ShaakhaaYuktaTaalukaaCount'].toString(),
@@ -791,9 +746,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                               fontsize: 15,
                             ),
                             Container(
-                              width: Statics
-                                  .getDeviceSize(context)
-                                  .width,
+                              width: Statics.getDeviceSize(context).width,
                               child: Divider(
                                 color: Colors.black,
                               ),
@@ -807,15 +760,10 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                                 fontsize: 18,
                                 view: true,
                                 btnAction: () {
-                                  redirctToList("mandal", _baithakType.toString(), context
-                                      .read<GeoHierarchyController>()
-                                      .deepestSelectedGeoUnitId, "मंडळ");
+                                  redirctToList("mandal", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, "मंडळ");
                                 }),
                             NewFourColumnRow(
-                              txtString: "मंडळ\n" + Statics
-                                  .getLabel('nagarCount')
-                                  .split(" ")
-                                  .last,
+                              txtString: "मंडळ\n" + Statics.getLabel('nagarCount').split(" ").last,
                               value: _ekatritVrutta['GraaminMandalCount'].toString(),
                               txtString2: Statics.getLabel('shaakhaaYukta') + "\nमंडळ",
                               value2: _ekatritVrutta['ShaakhaaYuktaMandalCount'].toString(),
@@ -826,9 +774,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                               fontsize: 15,
                             ),
                             Container(
-                              width: Statics
-                                  .getDeviceSize(context)
-                                  .width,
+                              width: Statics.getDeviceSize(context).width,
                               child: Divider(
                                 color: Colors.black,
                               ),
@@ -849,9 +795,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                               fontsize: 15,
                             ),
                             Container(
-                              width: Statics
-                                  .getDeviceSize(context)
-                                  .width,
+                              width: Statics.getDeviceSize(context).width,
                               child: Divider(
                                 color: Colors.black,
                               ),
@@ -872,9 +816,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                               fontsize: 15,
                             ),
                             Container(
-                              width: Statics
-                                  .getDeviceSize(context)
-                                  .width,
+                              width: Statics.getDeviceSize(context).width,
                               child: Divider(
                                 color: Colors.black,
                               ),
@@ -883,17 +825,12 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                               height: 10,
                             ),
                             SingleColumnRow(
-                                txtString: "एकूण " + Statics
-                                    .getLabel('vastiCount')
-                                    .split(" ")
-                                    .first + ':-',
+                                txtString: "एकूण " + Statics.getLabel('vastiCount').split(" ").first + ':-',
                                 value: '',
                                 fontsize: 18,
                                 view: true,
                                 btnAction: () {
-                                  redirctToList("vasti", _baithakType.toString(), context
-                                      .read<GeoHierarchyController>()
-                                      .deepestSelectedGeoUnitId, Statics.getLabel('vastiCount'));
+                                  redirctToList("vasti", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('vastiCount'));
                                 }),
                             NewFourColumnRow(
                               txtString: "एकूण\n" + Statics.getLabel('vastiCount'),
@@ -907,9 +844,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                               fontsize: 15,
                             ),
                             Container(
-                              width: Statics
-                                  .getDeviceSize(context)
-                                  .width,
+                              width: Statics.getDeviceSize(context).width,
                               child: Divider(
                                 color: Colors.black,
                               ),
@@ -943,9 +878,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                                 fontsize: 18,
                                 view: true,
                                 btnAction: () {
-                                  redirctToList("sthaan", _baithakType.toString(), context
-                                      .read<GeoHierarchyController>()
-                                      .deepestSelectedGeoUnitId, Statics.getLabel('sthaan'));
+                                  redirctToList("sthaan", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('sthaan'));
                                 }),
                             NewThreeColumnRow(
                               txtString: 'महानगरीय\nस्थान',
@@ -960,9 +893,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                               value3: (int.parse(_ekatritVrutta['AnyaNagarShaakhaaYuktaNagarCount'].toString()) + int.parse(_ekatritVrutta['MahaanagarShaakhaaYuktaNagarCount'].toString())).toString(),
                             ),
                             Container(
-                              width: Statics
-                                  .getDeviceSize(context)
-                                  .width,
+                              width: Statics.getDeviceSize(context).width,
                               child: Divider(
                                 color: Colors.black,
                               ),
@@ -970,10 +901,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                             NewThreeColumnRow(
                               txtString: Statics.getLabel('graamin') + "\n" + Statics.getLabel('sthaan').toString(),
                               value: _ekatritVrutta['ShaakhaaYuktaGraamCount'].toString(),
-                              txtString2: Statics
-                                  .getLabel('totalShaakhaaYuktaSthaanCount')
-                                  .split(" ")
-                                  .first + "\n" + Statics.getLabel('sthaan').toString(),
+                              txtString2: Statics.getLabel('totalShaakhaaYuktaSthaanCount').split(" ").first + "\n" + Statics.getLabel('sthaan').toString(),
                               value2: "${_ekatritVrutta['MahaanagarShaakhaaYuktaNagarCount'] + _ekatritVrutta['AnyaNagarShaakhaaYuktaNagarCount'] + _ekatritVrutta['ShaakhaaYuktaGraamCount']}",
                               // txtString3: "मंडळी\n" + Statics.getLabel('sthaan'),
                               // value3: _ekatritVrutta['GraaminMandaliYuktaGraamCount'].toString(),
@@ -994,9 +922,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                             fontsize: 18,
                             view: true,
                             btnAction: () {
-                              redirctToList("sewaVrutta", _baithakType.toString(), context
-                                  .read<GeoHierarchyController>()
-                                  .deepestSelectedGeoUnitId, Statics.getLabel('sewaVrutta'));
+                              redirctToList("sewaVrutta", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('sewaVrutta'));
                             }),
                         TwoColumnRow(
                           txtString: 'सेवा वस्ती संख्या',
@@ -1080,9 +1006,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                           children: [
                             Center(
                               child: Container(
-                                width: Statics
-                                    .getDeviceSize(context)
-                                    .width * 0.84,
+                                width: Statics.getDeviceSize(context).width * 0.84,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
@@ -1095,9 +1019,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                                     ),
                                     IconButton(
                                         onPressed: () {
-                                          redirctToList("kiman5ShakhaJilaKendra", _baithakType.toString(), context
-                                              .read<GeoHierarchyController>()
-                                              .deepestSelectedGeoUnitId,
+                                          redirctToList("kiman5ShakhaJilaKendra", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId,
                                               Statics.getLabel('shakhaJilhaKendra'));
                                         },
                                         icon: Icon(
@@ -1111,9 +1033,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                             ),
                             Center(
                               child: Container(
-                                width: Statics
-                                    .getDeviceSize(context)
-                                    .width,
+                                width: Statics.getDeviceSize(context).width,
                                 child: Divider(
                                   color: Colors.black,
                                 ),
@@ -1170,9 +1090,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                               children: [
                                 Center(
                                   child: Container(
-                                    width: Statics
-                                        .getDeviceSize(context)
-                                        .width * 0.84,
+                                    width: Statics.getDeviceSize(context).width * 0.84,
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
@@ -1185,9 +1103,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                                         ),
                                         IconButton(
                                             onPressed: () {
-                                              redirctToList("purnaVartamaanAndSankalp", _baithakType.toString(), context
-                                                  .read<GeoHierarchyController>()
-                                                  .deepestSelectedGeoUnitId,
+                                              redirctToList("purnaVartamaanAndSankalp", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId,
                                                   Statics.getLabel('vartamaanAndSankalp'));
                                             },
                                             icon: Icon(
@@ -1201,9 +1117,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                                 ),
                                 Center(
                                   child: Container(
-                                    width: Statics
-                                        .getDeviceSize(context)
-                                        .width,
+                                    width: Statics.getDeviceSize(context).width,
                                     child: Divider(
                                       color: Colors.black,
                                     ),
@@ -1213,18 +1127,10 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                             ),
                             Table(
                               columnWidths: {
-                                0: FixedColumnWidth(Statics
-                                    .getDeviceSize(context)
-                                    .width * 0.5),
-                                1: FixedColumnWidth(Statics
-                                    .getDeviceSize(context)
-                                    .width * 0.25),
-                                2: FixedColumnWidth(Statics
-                                    .getDeviceSize(context)
-                                    .width * 0.25),
-                                3: FixedColumnWidth(Statics
-                                    .getDeviceSize(context)
-                                    .width * 0.25)
+                                0: FixedColumnWidth(Statics.getDeviceSize(context).width * 0.5),
+                                1: FixedColumnWidth(Statics.getDeviceSize(context).width * 0.25),
+                                2: FixedColumnWidth(Statics.getDeviceSize(context).width * 0.25),
+                                3: FixedColumnWidth(Statics.getDeviceSize(context).width * 0.25)
                               },
                               children: [
                                 TableRow(
@@ -1373,12 +1279,12 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                                   Text(Statics.getLabel('kitaneNagarMe')),
                                   Text(
                                     _ekatritVrutta['JilhaWithPoornana'
-                                        'arCount'] ==
-                                        null
+                                                'arCount'] ==
+                                            null
                                         ? "0"
                                         : _ekatritVrutta['JilhaWithPoornana'
-                                        'arCount']
-                                        .toString(),
+                                                'arCount']
+                                            .toString(),
                                     style: TextStyle(fontSize: 15),
                                   ),
                                   Text(
@@ -1626,21 +1532,13 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                             view: true,
                             btnAction: () {
                               redirctToList(
-                                  "kaaryaSthitiSankhyaatmak", _baithakType.toString(), context
-                                  .read<GeoHierarchyController>()
-                                  .deepestSelectedGeoUnitId, Statics.getLabel('kaaryaSthitiSankhyaatmak'));
+                                  "kaaryaSthitiSankhyaatmak", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('kaaryaSthitiSankhyaatmak'));
                             }),
                         Table(
                           columnWidths: {
-                            0: FixedColumnWidth(Statics
-                                .getDeviceSize(context)
-                                .width * 0.45),
-                            1: FixedColumnWidth(Statics
-                                .getDeviceSize(context)
-                                .width * 0.24),
-                            2: FixedColumnWidth(Statics
-                                .getDeviceSize(context)
-                                .width * 0.18)
+                            0: FixedColumnWidth(Statics.getDeviceSize(context).width * 0.45),
+                            1: FixedColumnWidth(Statics.getDeviceSize(context).width * 0.24),
+                            2: FixedColumnWidth(Statics.getDeviceSize(context).width * 0.18)
                           },
                           children: [
                             TableRow(
@@ -1784,15 +1682,9 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                         Legend(legendString: "nagareeySaaptaahik", fontsize: 18),
                         Table(
                           columnWidths: {
-                            0: FixedColumnWidth(Statics
-                                .getDeviceSize(context)
-                                .width * 0.45),
-                            1: FixedColumnWidth(Statics
-                                .getDeviceSize(context)
-                                .width * 0.24),
-                            2: FixedColumnWidth(Statics
-                                .getDeviceSize(context)
-                                .width * 0.18)
+                            0: FixedColumnWidth(Statics.getDeviceSize(context).width * 0.45),
+                            1: FixedColumnWidth(Statics.getDeviceSize(context).width * 0.24),
+                            2: FixedColumnWidth(Statics.getDeviceSize(context).width * 0.18)
                           },
                           children: [
                             TableRow(
@@ -1891,9 +1783,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                                 view: true,
                                 btnAction: () {
                                   redirctToList(
-                                      "graaminSaaptaahik", _baithakType.toString(), context
-                                      .read<GeoHierarchyController>()
-                                      .deepestSelectedGeoUnitId, Statics.getLabel('graaminSaaptaahikSthan'));
+                                      "graaminSaaptaahik", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('graaminSaaptaahikSthan'));
                                 }),
                             Single1ColumnRow(txtString: Statics.getLabel('graaminSaaptaahikMilanYuktyaSthan'), value: getTotalCount(_ekatritVrutta), fontsize: 15),
                             Legend(
@@ -1902,15 +1792,9 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                             ),
                             Table(
                               columnWidths: {
-                                0: FixedColumnWidth(Statics
-                                    .getDeviceSize(context)
-                                    .width * 0.45),
-                                1: FixedColumnWidth(Statics
-                                    .getDeviceSize(context)
-                                    .width * 0.24),
-                                2: FixedColumnWidth(Statics
-                                    .getDeviceSize(context)
-                                    .width * 0.17)
+                                0: FixedColumnWidth(Statics.getDeviceSize(context).width * 0.45),
+                                1: FixedColumnWidth(Statics.getDeviceSize(context).width * 0.24),
+                                2: FixedColumnWidth(Statics.getDeviceSize(context).width * 0.17)
                               },
                               children: [
                                 TableRow(
@@ -2003,22 +1887,14 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                                 fontsize: 18,
                                 view: true,
                                 btnAction: () {
-                                  redirctToList("totalKaryastithiSaaptaahikMilan", _baithakType.toString(), context
-                                      .read<GeoHierarchyController>()
-                                      .deepestSelectedGeoUnitId,
+                                  redirctToList("totalKaryastithiSaaptaahikMilan", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId,
                                       Statics.getLabel('TotalSaaptaahikMilan'));
                                 }),
                             Table(
                               columnWidths: {
-                                0: FixedColumnWidth(Statics
-                                    .getDeviceSize(context)
-                                    .width * 0.45),
-                                1: FixedColumnWidth(Statics
-                                    .getDeviceSize(context)
-                                    .width * 0.24),
-                                2: FixedColumnWidth(Statics
-                                    .getDeviceSize(context)
-                                    .width * 0.18)
+                                0: FixedColumnWidth(Statics.getDeviceSize(context).width * 0.45),
+                                1: FixedColumnWidth(Statics.getDeviceSize(context).width * 0.24),
+                                2: FixedColumnWidth(Statics.getDeviceSize(context).width * 0.18)
                               },
                               children: [
                                 TableRow(children: [
@@ -2166,21 +2042,13 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                             fontsize: 18,
                             view: true,
                             btnAction: () {
-                              redirctToList("maasikMilan", _baithakType.toString(), context
-                                  .read<GeoHierarchyController>()
-                                  .deepestSelectedGeoUnitId, Statics.getLabel('MaasikMilan'));
+                              redirctToList("maasikMilan", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('MaasikMilan'));
                             }),
                         Table(
                           columnWidths: {
-                            0: FixedColumnWidth(Statics
-                                .getDeviceSize(context)
-                                .width * 0.45),
-                            1: FixedColumnWidth(Statics
-                                .getDeviceSize(context)
-                                .width * 0.24),
-                            2: FixedColumnWidth(Statics
-                                .getDeviceSize(context)
-                                .width * 0.18)
+                            0: FixedColumnWidth(Statics.getDeviceSize(context).width * 0.45),
+                            1: FixedColumnWidth(Statics.getDeviceSize(context).width * 0.24),
+                            2: FixedColumnWidth(Statics.getDeviceSize(context).width * 0.18)
                           },
                           children: [
                             TableRow(
@@ -2260,21 +2128,13 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                             fontsize: 18,
                             view: true,
                             btnAction: () {
-                              redirctToList("sanghaMandali", _baithakType.toString(), context
-                                  .read<GeoHierarchyController>()
-                                  .deepestSelectedGeoUnitId, Statics.getLabel('SanghaMandali'));
+                              redirctToList("sanghaMandali", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('SanghaMandali'));
                             }),
                         Table(
                           columnWidths: {
-                            0: FixedColumnWidth(Statics
-                                .getDeviceSize(context)
-                                .width * 0.45),
-                            1: FixedColumnWidth(Statics
-                                .getDeviceSize(context)
-                                .width * 0.24),
-                            2: FixedColumnWidth(Statics
-                                .getDeviceSize(context)
-                                .width * 0.18)
+                            0: FixedColumnWidth(Statics.getDeviceSize(context).width * 0.45),
+                            1: FixedColumnWidth(Statics.getDeviceSize(context).width * 0.24),
+                            2: FixedColumnWidth(Statics.getDeviceSize(context).width * 0.18)
                           },
                           children: [
                             TableRow(
@@ -2340,15 +2200,9 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                         Legend(legendString: "MandaliSthan", fontsize: 18),
                         Table(
                           columnWidths: {
-                            0: FixedColumnWidth(Statics
-                                .getDeviceSize(context)
-                                .width * 0.45),
-                            1: FixedColumnWidth(Statics
-                                .getDeviceSize(context)
-                                .width * 0.24),
-                            2: FixedColumnWidth(Statics
-                                .getDeviceSize(context)
-                                .width * 0.18)
+                            0: FixedColumnWidth(Statics.getDeviceSize(context).width * 0.45),
+                            1: FixedColumnWidth(Statics.getDeviceSize(context).width * 0.24),
+                            2: FixedColumnWidth(Statics.getDeviceSize(context).width * 0.18)
                           },
                           children: [
                             TableRow(
@@ -2415,9 +2269,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                             fontsize: 18,
                             view: true,
                             btnAction: () {
-                              redirctToList("shaakhaToli", _baithakType.toString(), context
-                                  .read<GeoHierarchyController>()
-                                  .deepestSelectedGeoUnitId, Statics.getLabel('shaakhaaToli'));
+                              redirctToList("shaakhaToli", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('shaakhaaToli'));
                             }),
                         SingleColumnRow(txtString: Statics.getLabel('baalSanyukt'), value: _ekatritVrutta['BaalShaakhaaToliYuktaCount'].toString(), fontsize: 15),
                         SingleColumnRow(txtString: Statics.getLabel('mahaavidyaalayeen'), value: _ekatritVrutta['TarunVidyaarthiShaakhaaToliYuktaCount'].toString(), fontsize: 15),
@@ -2435,9 +2287,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                             fontsize: 18,
                             view: true,
                             btnAction: () {
-                              redirctToList("saptahikMilanToli", _baithakType.toString(), context
-                                  .read<GeoHierarchyController>()
-                                  .deepestSelectedGeoUnitId, Statics.getLabel('saptahikMilanToli'));
+                              redirctToList("saptahikMilanToli", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('saptahikMilanToli'));
                             }),
                         SingleColumnRow(
                             txtString: Statics.getLabel('baalSanyukt'),
@@ -2462,9 +2312,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                             fontsize: 18,
                             view: true,
                             btnAction: () {
-                              redirctToList("baithakKrnaraShakha", _baithakType.toString(), context
-                                  .read<GeoHierarchyController>()
-                                  .deepestSelectedGeoUnitId, Statics.getLabel('baithakKrnaraShakha'));
+                              redirctToList("baithakKrnaraShakha", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('baithakKrnaraShakha'));
                             }),
                         SingleColumnRow(txtString: Statics.getLabel('baalSanyukt'), value: _ekatritVrutta['BalBaithakShaakaaCount'].toString(), fontsize: 15),
                         SingleColumnRow(txtString: Statics.getLabel('mahaavidyaalayeen'), value: _ekatritVrutta['TarunBaithakShaakaaCount'].toString(), fontsize: 15),
@@ -2590,7 +2438,9 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                         SingleColumnRow(txtString: Statics.getLabel('ShaakhaaEQ30'), value: "${_ekatritVrutta['balShaakhaaEQ30']}", fontsize: 15),
                         SingleColumnRow(txtString: Statics.getLabel('SaaptaahikMilan') + ':-', value: '', fontsize: 18),
                         SingleColumnRow(txtString: Statics.getLabel('SaaptaahikEQ0'), value: "${_ekatritVrutta['balSaaptaahikEQ0']}", fontsize: 15),
-                        SingleColumnRow(txtString: Statics.getLabel('Saaptaahik1To3'), value: "${_ekatritVrutta['balSaaptaahik1To3']}", fontsize: 15),
+                        // SingleColumnRow(txtString: Statics.getLabel('Saaptaahik1To3'), value: "${_ekatritVrutta['balSaaptaahik1To3']}", fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('Saaptaahik1To2'), value: "${_ekatritVrutta['balSaaptaahik1To2']}", fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('Saaptaahik3'), value: "${_ekatritVrutta['balSaaptaahik3']}", fontsize: 15),
                         SingleColumnRow(txtString: Statics.getLabel('SaaptaahikGTE4'), value: "${_ekatritVrutta['balSaaptaahikGTE4']}", fontsize: 15),
                         SingleColumnRow(txtString: Statics.getLabel('MaasikMilan') + '/' + Statics.getLabel('SanghaMandali') + ':-', value: '', fontsize: 18),
                         SingleColumnRow(txtString: Statics.getLabel('MaasikEQ0'), value: "${_ekatritVrutta['balMaasikEQ0']}", fontsize: 15),
@@ -2607,7 +2457,9 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                         SingleColumnRow(txtString: Statics.getLabel('ShaakhaaEQ30'), value: "${_ekatritVrutta['MahavidyaShaakhaaEQ30']}", fontsize: 15),
                         SingleColumnRow(txtString: Statics.getLabel('SaaptaahikMilan') + ':-', value: '', fontsize: 18),
                         SingleColumnRow(txtString: Statics.getLabel('SaaptaahikEQ0'), value: "${_ekatritVrutta['MahavidyataahikEQ0']}", fontsize: 15),
-                        SingleColumnRow(txtString: Statics.getLabel('Saaptaahik1To3'), value: "${_ekatritVrutta['MahavidyaSaaptaahik1To3']}", fontsize: 15),
+                        // SingleColumnRow(txtString: Statics.getLabel('Saaptaahik1To3'), value: "${_ekatritVrutta['MahavidyaSaaptaahik1To3']}", fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('Saaptaahik1To2'), value: "${_ekatritVrutta['MahavidyaSaaptaahik1To2']}", fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('Saaptaahik3'), value: "${_ekatritVrutta['MahavidyaSaaptaahik3']}", fontsize: 15),
                         SingleColumnRow(txtString: Statics.getLabel('SaaptaahikGTE4'), value: "${_ekatritVrutta['MahavidyaSaaptaahikGTE4']}", fontsize: 15),
                         SingleColumnRow(txtString: Statics.getLabel('MaasikMilan') + '/' + Statics.getLabel('SanghaMandali') + ':-', value: '', fontsize: 18),
                         SingleColumnRow(txtString: Statics.getLabel('MaasikEQ0'), value: "${_ekatritVrutta['MahavidyaMaasikEQ0']}", fontsize: 15),
@@ -2624,7 +2476,9 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                         SingleColumnRow(txtString: Statics.getLabel('ShaakhaaEQ30'), value: "${_ekatritVrutta['TarunShaakhaaEQ30']}", fontsize: 15),
                         SingleColumnRow(txtString: Statics.getLabel('SaaptaahikMilan') + ':-', value: '', fontsize: 18),
                         SingleColumnRow(txtString: Statics.getLabel('SaaptaahikEQ0'), value: "${_ekatritVrutta['TarunSaaptaahikEQ0']}", fontsize: 15),
-                        SingleColumnRow(txtString: Statics.getLabel('Saaptaahik1To3'), value: "${_ekatritVrutta['TarunSaaptaahik1To3']}", fontsize: 15),
+                        // SingleColumnRow(txtString: Statics.getLabel('Saaptaahik1To3'), value: "${_ekatritVrutta['TarunSaaptaahik1To3']}", fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('Saaptaahik1To2'), value: "${_ekatritVrutta['TarunSaaptaahik1To2']}", fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('Saaptaahik3'), value: "${_ekatritVrutta['TarunSaaptaahik3']}", fontsize: 15),
                         SingleColumnRow(txtString: Statics.getLabel('SaaptaahikGTE4'), value: "${_ekatritVrutta['TarunSaaptaahikGTE4']}", fontsize: 15),
                         SingleColumnRow(txtString: Statics.getLabel('MaasikMilan') + '/' + Statics.getLabel('SanghaMandali') + ':-', value: '', fontsize: 18),
                         SingleColumnRow(txtString: Statics.getLabel('MaasikEQ0'), value: "${_ekatritVrutta['TarunMaasikEQ0']}", fontsize: 15),
@@ -2641,7 +2495,9 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                         SingleColumnRow(txtString: Statics.getLabel('ShaakhaaEQ30'), value: "${_ekatritVrutta['ProudhShaakhaaEQ30']}", fontsize: 15),
                         SingleColumnRow(txtString: Statics.getLabel('SaaptaahikMilan') + ':-', value: '', fontsize: 18),
                         SingleColumnRow(txtString: Statics.getLabel('SaaptaahikEQ0'), value: "${_ekatritVrutta['ProudhSaaptaahikEQ0']}", fontsize: 15),
-                        SingleColumnRow(txtString: Statics.getLabel('Saaptaahik1To3'), value: "${_ekatritVrutta['ProudhSaaptaahik1To3']}", fontsize: 15),
+                        // SingleColumnRow(txtString: Statics.getLabel('Saaptaahik1To3'), value: "${_ekatritVrutta['ProudhSaaptaahik1To3']}", fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('Saaptaahik1To2'), value: "${_ekatritVrutta['ProudhSaaptaahik1To2']}", fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('Saaptaahik3'), value: "${_ekatritVrutta['ProudhSaaptaahik3']}", fontsize: 15),
                         SingleColumnRow(txtString: Statics.getLabel('SaaptaahikGTE4'), value: "${_ekatritVrutta['ProudhSaaptaahikGTE4']}", fontsize: 15),
                         SingleColumnRow(txtString: Statics.getLabel('MaasikMilan') + '/' + Statics.getLabel('SanghaMandali') + ':-', value: '', fontsize: 18),
                         SingleColumnRow(txtString: Statics.getLabel('MaasikEQ0'), value: "${_ekatritVrutta['ProudhMaasikEQ0']}", fontsize: 15),
@@ -2674,14 +2530,18 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                             value: "${_ekatritVrutta['balSaaptaahikEQ0'] + _ekatritVrutta['MahavidyataahikEQ0'] + _ekatritVrutta['TarunSaaptaahikEQ0'] + _ekatritVrutta['ProudhSaaptaahikEQ0']}",
                             fontsize: 15),
                         SingleColumnRow(
-                            txtString: Statics.getLabel('Saaptaahik1To3'),
+                            txtString: Statics.getLabel('Saaptaahik1To2'),
                             value:
-                            "${_ekatritVrutta['balSaaptaahik1To3'] + _ekatritVrutta['MahavidyaSaaptaahik1To3'] + _ekatritVrutta['TarunSaaptaahik1To3'] + _ekatritVrutta['ProudhSaaptaahik1To3']}",
+                                "${_ekatritVrutta['balSaaptaahik1To2'] + _ekatritVrutta['MahavidyaSaaptaahik1To2'] + _ekatritVrutta['TarunSaaptaahik1To2'] + _ekatritVrutta['ProudhSaaptaahik1To2']}",
+                            fontsize: 15),
+                        SingleColumnRow(
+                            txtString: Statics.getLabel('Saaptaahik3'),
+                            value: "${_ekatritVrutta['balSaaptaahik3'] + _ekatritVrutta['MahavidyaSaaptaahik3'] + _ekatritVrutta['TarunSaaptaahik3'] + _ekatritVrutta['ProudhSaaptaahik3']}",
                             fontsize: 15),
                         SingleColumnRow(
                             txtString: Statics.getLabel('SaaptaahikGTE4'),
                             value:
-                            "${_ekatritVrutta['balSaaptaahikGTE4'] + _ekatritVrutta['MahavidyaSaaptaahikGTE4'] + _ekatritVrutta['TarunSaaptaahikGTE4'] + _ekatritVrutta['ProudhSaaptaahikGTE4']}",
+                                "${_ekatritVrutta['balSaaptaahikGTE4'] + _ekatritVrutta['MahavidyaSaaptaahikGTE4'] + _ekatritVrutta['TarunSaaptaahikGTE4'] + _ekatritVrutta['ProudhSaaptaahikGTE4']}",
                             fontsize: 15),
                         SingleColumnRow(txtString: Statics.getLabel('MaasikMilan') + '/' + Statics.getLabel('SanghaMandali') + ':-', value: '', fontsize: 18),
                         SingleColumnRow(
@@ -2710,9 +2570,9 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
     String totalCount = "0";
     try {
       totalCount = (int.parse(ekatritVrutta['BaalSamparkYuktaGraamCount'].toString()) +
-          int.parse(ekatritVrutta['MahaavidyaalayeenSamparkYuktaGraamCount'].toString()) +
-          int.parse(ekatritVrutta['VyavasaayeeSamparkYuktaGraamCount'].toString()) +
-          int.parse(ekatritVrutta['ProudhaSamparkYuktaGraamCount'].toString()))
+              int.parse(ekatritVrutta['MahaavidyaalayeenSamparkYuktaGraamCount'].toString()) +
+              int.parse(ekatritVrutta['VyavasaayeeSamparkYuktaGraamCount'].toString()) +
+              int.parse(ekatritVrutta['ProudhaSamparkYuktaGraamCount'].toString()))
           .toString();
       return totalCount;
     } catch (e) {

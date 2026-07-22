@@ -9,6 +9,7 @@ class ShakhaaDailyWeeklyResponse {
   final int milancount;
   final int mansikcount;
   final int sangacount;
+  final Shaakhaaresponse? shaakhaaresponse;
   final List<ActivityData> data;
 
   const ShakhaaDailyWeeklyResponse({
@@ -20,6 +21,7 @@ class ShakhaaDailyWeeklyResponse {
     required this.milancount,
     required this.mansikcount,
     required this.sangacount,
+    required this.shaakhaaresponse,
     required this.data,
   });
 
@@ -33,6 +35,7 @@ class ShakhaaDailyWeeklyResponse {
       milancount: json['milancount'] ?? 0,
       mansikcount: json['mansikcount'] ?? 0,
       sangacount: json['sangacount'] ?? 0,
+      shaakhaaresponse: json['shaakhaaresponse'] != null ? new Shaakhaaresponse.fromJson(json['shaakhaaresponse']) : null,
       data: (json['Data'] as List<dynamic>? ?? []).map((e) => ActivityData.fromJson(e)).toList(),
     );
   }
@@ -72,6 +75,7 @@ class ShaakhaaMonthlyResponse {
   final int milancount;
   final int mansikcount;
   final int sangacount;
+  final Shaakhaaresponse? shaakhaaresponse;
   final List<ActivityDataMonthly> mData;
 
   const ShaakhaaMonthlyResponse({
@@ -83,6 +87,7 @@ class ShaakhaaMonthlyResponse {
     required this.milancount,
     required this.mansikcount,
     required this.sangacount,
+    required this.shaakhaaresponse,
     required this.mData,
   });
 
@@ -96,6 +101,7 @@ class ShaakhaaMonthlyResponse {
       milancount: json['milancount'] ?? 0,
       mansikcount: json['mansikcount'] ?? 0,
       sangacount: json['sangacount'] ?? 0,
+      shaakhaaresponse: json['shaakhaaresponse'] != null ? new Shaakhaaresponse.fromJson(json['shaakhaaresponse']) : null,
       mData: (json['MData'] as List<dynamic>? ?? []).map((e) => ActivityDataMonthly.fromJson(e)).toList(),
     );
   }
@@ -171,6 +177,7 @@ class ShaakhaaMultiMonthlyResponse {
   final int milancount;
   final int mansikcount;
   final int sangacount;
+  final Shaakhaaresponse? shaakhaaresponse;
   final List<ActivityMonthlyData> data;
 
   const ShaakhaaMultiMonthlyResponse({
@@ -182,6 +189,7 @@ class ShaakhaaMultiMonthlyResponse {
     required this.milancount,
     required this.mansikcount,
     required this.sangacount,
+    required this.shaakhaaresponse,
     required this.data,
   });
 
@@ -195,6 +203,7 @@ class ShaakhaaMultiMonthlyResponse {
       milancount: json['milancount'] ?? 0,
       mansikcount: json['mansikcount'] ?? 0,
       sangacount: json['sangacount'] ?? 0,
+      shaakhaaresponse: json['shaakhaaresponse'] != null ? new Shaakhaaresponse.fromJson(json['shaakhaaresponse']) : null,
       data: (json['Data'] as List<dynamic>? ?? []).map((e) => ActivityMonthlyData.fromJson(e)).toList(),
     );
   }
@@ -242,6 +251,33 @@ class MonthData {
     );
   }
 }
+
+//--
+class Shaakhaaresponse {
+  int? rankNo;
+  int? score;
+  int? geounitid;
+  String? geounitname;
+
+  Shaakhaaresponse({this.rankNo, this.score, this.geounitid, this.geounitname});
+
+  Shaakhaaresponse.fromJson(Map<String, dynamic> json) {
+    rankNo = json['RankNo'];
+    score = json['Score'];
+    geounitid = json['geounitid'];
+    geounitname = json['geounitname'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['RankNo'] = this.rankNo;
+    data['Score'] = this.score;
+    data['geounitid'] = this.geounitid;
+    data['geounitname'] = this.geounitname;
+    return data;
+  }
+}
+//
 
 // ─── All Levels (levelId != 1) — Daily ───────────────────────────────────────
 
