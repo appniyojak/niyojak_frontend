@@ -635,3 +635,11 @@ class Sdetail {
     return data;
   }
 }
+
+//--------------------------------------------------------
+class ActivityNode {
+  final ActivityData activity;
+  final List<ActivityNode> children;
+
+  const ActivityNode({required this.activity, required this.children});
+}

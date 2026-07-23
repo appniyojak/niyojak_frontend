@@ -78,7 +78,7 @@ class ShaakhaaRankingScreen extends StatefulWidget {
 }
 
 class _ShaakhaaRankingScreenState extends State<ShaakhaaRankingScreen> {
-  DurationTypes _period = DurationTypes.daily;
+  DurationTypes _period = DurationTypes.today;
   RankTab _tab = RankTab.upasthiti;
   int _geoLevelId = 6; // default: नगर
   int _vayogat = 0; // 1 = मेरी आयुगट, 0 = सभी
@@ -164,7 +164,6 @@ class _ShaakhaaRankingScreenState extends State<ShaakhaaRankingScreen> {
       }
 
       final perf = res.myperformancedata!;
-      final myRank = perf.currentRank;
 
       setState(() {
         _gData = res.gData;

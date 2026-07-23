@@ -2180,6 +2180,7 @@ Map<String, String> resEnglish = {
   'entries': 'entries',
 
   ////////////////////////////////////// Main Shakhaa Milan(NEW KEYS) //////////////////////////////////////
+  "dailyActivityHeader": "Were the daily activities conducted?",
 };
 
 ///1,584
@@ -4372,6 +4373,9 @@ Map<String, String> resMarathi = {
   "openSettings": "सेटिंग्ज उघडा",
   'entriesAcrossGroups': '{groupCount} गटांमध्ये एकूण {totalEntries} नोंदी',
   'entries': 'नोंदी',
+
+  ////////////////////////////////////// Main Shakhaa Milan(NEW KEYS) //////////////////////////////////////
+  "dailyActivityHeader": "दैनिक कार्यक्रम पार पडला का?",
 };
 
 ///1,583
@@ -6562,4 +6566,7 @@ Map<String, String> resHindi = {
   "openSettings": "सेटिंग्स खोलें",
   'entriesAcrossGroups': '{groupCount} समूहों में कुल {totalEntries} प्रविष्टियाँ',
   'entries': 'प्रविष्टियाँ',
+
+  ////////////////////////////////////// Main Shakhaa Milan(NEW KEYS) //////////////////////////////////////
+  "dailyActivityHeader": "दैनिक कार्यक्रम हुआ या नहीं?",
 };
