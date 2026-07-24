@@ -31,6 +31,7 @@ import '../models/response_model/home_shaakhaa_report_names_model.dart';
 import '../models/response_model/mandalVastisarvekshanReportModel.dart';
 import '../models/response_model/nagar_vasti_model.dart';
 import '../models/response_model/names_data_model.dart';
+import '../models/response_model/new_search_swayamsevak_model.dart';
 import '../models/response_model/nirikshan_baithak_vrutta.dart';
 import '../models/response_model/notification_list_model.dart';
 import '../models/response_model/release_notes_model.dart';
@@ -319,6 +320,8 @@ const String urlSVRTulnatmak = baseUrlAPI + '/shakhaavruttareport_tulnatmak';
 
 const String urlHomeScreenNames = baseUrlAPI + '/RefreshHomeScreenForAppNames';
 const String urlHomeShaakhaaVruttaNames = baseUrlAPI + '/yestardayShaakhaaVruttanames';
+
+const String urlSearchSwayamsevakNew = baseUrlAPI + '/SearchSwayamsevak';
 
 //////////////////////////////////////////////////////////////////////////////////////////
 const String patchSuffix = '';
@@ -6826,7 +6829,7 @@ Future<String?> saveShaakhaaSaptahVruttaData(BuildContext context, Map<String, d
   }
 }
 
-Future<ShakhaaVistarDetail?> getShaakhaaSaptahByIdData(BuildContext context, String? pkId) async {
+Future<ShakhaaVistarDetail?> getShaakhaaSaptahByIdData(BuildContext context, String? pkId, String? userid) async {
   bool? connected = await isInternetConnected();
   if (connected == false) {
     return null;
@@ -6834,10 +6837,10 @@ Future<ShakhaaVistarDetail?> getShaakhaaSaptahByIdData(BuildContext context, Str
   showLoaderDialog(context);
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  print("req >>>>>>>>>>>> ${jsonEncode({"ShaakhaaID": pkId})}");
+  print("req >>>>>>>>>>>> ${jsonEncode({"ShaakhaaID": pkId, "AppUserID": userid})}");
   log(urlGetShaakhaaVistarById);
   try {
-    var response = await http.post(Uri.parse(urlGetShaakhaaVistarById), headers: jHeaders, body: jsonEncode({"ShaakhaaID": pkId}));
+    var response = await http.post(Uri.parse(urlGetShaakhaaVistarById), headers: jHeaders, body: jsonEncode({"ShaakhaaID": pkId, "AppUserID": userid}));
 
     // Navigator.of(context, rootNavigator: true).pop();
 
@@ -7219,6 +7222,34 @@ Future<List<DataDetails>?> homeShaakhaaReportNamesData(Map<String, dynamic> inpu
       final Map<String, dynamic> data = jsonDecode(response.body);
       HomeShaakhaaReportNamesRespModel model = HomeShaakhaaReportNamesRespModel.fromJson(data);
       log("homeShaakhaaReportNamesData >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+      return model.data;
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return null;
+    }
+  } catch (e, stack) {
+    print("Exception: $e \n$stack");
+    return null;
+  } finally {
+    if (context != null) Navigator.of(context, rootNavigator: true).pop();
+  }
+}
+
+Future<List<SwayamsevakNewData>?> searchSwayamsevakNewData(Map<String, dynamic> inputJson, {BuildContext? context}) async {
+  bool? connected = await isInternetConnected();
+  if (connected == false) return null;
+  if (context != null) showLoaderDialog(context);
+
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  log(urlSearchSwayamsevakNew);
+  print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+  try {
+    var response = await http.post(Uri.parse(urlSearchSwayamsevakNew), headers: jHeaders, body: jsonEncode(inputJson));
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      SearchSwyamsevakNewModel model = SearchSwyamsevakNewModel.fromJson(data);
+      log("searchSwayamsevakNewData >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
       return model.data;
     } else {
       print("Error: ${response.statusCode} - ${response.body}");

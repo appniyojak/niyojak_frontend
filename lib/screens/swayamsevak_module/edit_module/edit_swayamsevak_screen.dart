@@ -48,7 +48,7 @@ class EditSwayamsevakScreenState extends State<EditSwayamsevakScreen> with Singl
   @override
   void initState() {
     super.initState();
-    getData();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) => getData());
   }
 
   Future<void> getData() async {

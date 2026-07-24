@@ -1,19 +1,19 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../helpers/static_data.dart' as Statics;
+import '../../../models/response_model/new_search_swayamsevak_model.dart';
 import '../../../models/response_model/shaakhaa_vistar_detail_resp_model.dart';
 import '../../../providers/bals.dart';
-import '../../../providers/swayamsevak_provider.dart';
 import '../../../utils/globals.dart';
 import '../../../utils/stable_geounit_class.dart';
-
-enum SankalpAadhaarEnum { Kaaryakartaa, Shaakhaa }
+import '../../swayamsevak_module/edit_module/edit_swayamsevak_screen.dart';
 
 class AddNewShaakhaaVistaarScreen extends StatefulWidget {
   static const routeName = '/add-new-shakhaa-vistar-screen';
@@ -23,6 +23,8 @@ class AddNewShaakhaaVistaarScreen extends StatefulWidget {
   @override
   State<AddNewShaakhaaVistaarScreen> createState() => _AddNewShaakhaaVistaarScreenState();
 }
+
+enum KaryakartaSearchStage { search, searching, found, notfound, nameOnly }
 
 class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey();
@@ -36,65 +38,32 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
   int? geoidPassed;
 
   bool _isSankalpit = true;
-  SankalpAadhaarEnum _sankalpAadhaarEnum = SankalpAadhaarEnum.Kaaryakartaa;
 
-  int? _sankalpAadhaarSwayamsevakID, _sankalpAadhaarShaakhaaID;
-
-  // var _sankalpCompletionMonthCtrl = TextEditingController();
-  // var _sankalpCompletionYearCtrl = TextEditingController();
-  var _sankalpAadhaarSwayamsevakCtrl = TextEditingController();
-  var _sankalpAadhaarShaakhaaCtrl = TextEditingController();
-  String _sankalpAadhaarSwayamsevakValue = "";
-  String _sankalpAadhaarShaakhaaValue = "";
-  bool _isMon = false;
-  bool _isTue = false;
-  bool _isWed = false;
-  bool _isThu = false;
-  bool _isFri = false;
-  bool _isSat = false;
-  bool _isSun = false;
-
-  bool _hasToli = false;
-  bool _hasPaalak = false;
-
-  var _dayOfMonthCtrl = TextEditingController();
-  var _locationCtrl = TextEditingController();
-
-  //var _timingCtrl = TextEditingController();
-  var _remarkCtrl = TextEditingController();
   var _shaakhaanameCtrl = TextEditingController();
 
-  var _otherOptionalVishayCtrl = TextEditingController();
-
-  final List<TextEditingController> _aadharControllers = [];
-
-  List<StaticMasterBAL>? _frequency;
   List<StaticMasterBAL>? _vayogat;
-  List<StaticMasterBAL>? _status;
-  List<StaticMasterBAL>? _shaaririkVishay;
 
   ShakhaaVistarDetail? shaakhaa;
 
-  // String? _frequencyValue;
   String? _vayogatValue;
-  String? _statusValue;
-
-  String? _sharirikVishayValue;
-
-  String? _dayofWeekValue;
-
-  TimeOfDay? _fromTime;
-  var _fromTimeCntrl = TextEditingController();
-
-  TimeOfDay? _toTime;
-  var _toTimeCntrl = TextEditingController();
 
   var bhaagID;
+
+  // ===================== आधार कार्यकर्ता जोडा (new flow) =====================
+  // Entries added via mobile-search have a non-null swayamSevakID (system match).
+  // Entries added via "name only" / "add new person" have swayamSevakID == null.
+  List<SwayamsevakNewData> _karyakartaList = [];
+
+  KaryakartaSearchStage _karyakartaStage = KaryakartaSearchStage.search;
+
+  SwayamsevakNewData? _foundKaryakarta;
+
+  final TextEditingController _mobileSearchCtrl = TextEditingController();
+  final TextEditingController _nameOnlyCtrl = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _aadharControllers.add(TextEditingController());
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) => initData());
     // if (!mounted) return;
   }
@@ -106,7 +75,7 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
 
     pkidPassed = int.tryParse((args?["pkid"] ?? 0).toString());
     geoidPassed = int.tryParse((args?["geoid"] ?? 0).toString());
-    log("LOG >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> $args");
+    // log("LOG >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> $args");
   }
 
   Future<void> initData() async {
@@ -127,152 +96,21 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
   @override
   void dispose() {
     super.dispose();
-    // Always dispose controllers to avoid memory leaks
-    for (var controller in _aadharControllers) {
-      controller.dispose();
-    }
-    _dayOfMonthCtrl.dispose();
-    _locationCtrl.dispose();
-    //_timingCtrl.dispose();
-    _fromTimeCntrl.dispose();
-    _toTimeCntrl.dispose();
-    _remarkCtrl.dispose();
     _shaakhaanameCtrl.dispose();
-    _otherOptionalVishayCtrl.dispose();
-    // _sankalpCompletionMonthCtrl.dispose();
-    // _sankalpCompletionYearCtrl.dispose();
-    _sankalpAadhaarShaakhaaCtrl.dispose();
-    _sankalpAadhaarSwayamsevakCtrl.dispose();
-  }
-
-  // Add a new text field (Max 5)
-  void _addNewField() {
-    if (_aadharControllers.length < 5 && _areAllFieldsValid()) {
-      setState(() {
-        _aadharControllers.add(TextEditingController());
-      });
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Please fill all existing fields before adding a new one!"),
-          duration: Duration(seconds: 2),
-        ),
-      );
-    }
-  }
-
-  // Remove a field automatically if it gets cleared
-  void _handleFieldChange(int index, String value) {
-    // If text is cleared AND we have more than the minimum of 1 field
-    if (value.trim().isEmpty && _aadharControllers.length > 1) {
-      // Use PostFrameCallback to prevent element tree conflicts during active rendering
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        setState(() {
-          _aadharControllers[index].dispose();
-          _aadharControllers.removeAt(index);
-        });
-      });
-    } else {
-      // Re-trigger state build to update the "Add More" button's enabled/disabled visual state
-      setState(() {});
-    }
-  }
-
-  void _removeField(int index) {
-    setState(() {
-      // 1. Dispose to prevent memory leaks
-      _aadharControllers[index].dispose();
-
-      // 2. Remove the controller from the list
-      _aadharControllers.removeAt(index);
-
-      // Note: If you maintain any other lists corresponding to this index
-      // (e.g., FocusNodes, or a list of saved string values),
-      // make sure to remove the item at this index from those lists as well.
-    });
-  }
-
-  // Checks both emptiness AND duplicates to control the "Add More" button
-  bool _areAllFieldsValid() {
-    // 1. Check for empty fields
-    bool hasEmpty = _aadharControllers.any((c) => c.text.trim().isEmpty);
-    if (hasEmpty) return false;
-
-    // 2. Check for duplicates (case-insensitive)
-    List<String> names = _aadharControllers.map((c) => c.text.trim().toLowerCase()).toList();
-    Set<String> uniqueNames = names.toSet();
-
-    // If the Set length is smaller than the List length, duplicates exist
-    if (names.length != uniqueNames.length) return false;
-
-    return true;
-  }
-
-  // TextFormField level validator
-  String? _validateField(String? value, int index) {
-    if (value == null || value.trim().isEmpty) {
-      return "Field cannot be empty";
-    }
-
-    final currentName = value.trim().toLowerCase();
-    int duplicateCount = 0;
-
-    // Count how many times this exact text appears across all controllers
-    for (var controller in _aadharControllers) {
-      if (controller.text.trim().toLowerCase() == currentName) {
-        duplicateCount++;
-      }
-    }
-
-    if (duplicateCount > 1) {
-      return Statics.getLabel("duplicationValidation");
-    }
-
-    return null;
+    _mobileSearchCtrl.dispose();
+    _nameOnlyCtrl.dispose();
   }
 
   // 1. Prepare data to SEND to the API
   Map<String, dynamic> preparePayloadForApi(Map<String, dynamic> payload) {
     for (int i = 1; i <= 5; i++) {
-      if (i <= _aadharControllers.length) {
-        payload['aadhar$i'] = _aadharControllers[i - 1].text.trim();
+      if (i <= _karyakartaList.length) {
+        payload['aadhar$i'] = (_karyakartaList[i - 1].fullName ?? '').toString().trim();
       } else {
-        payload['aadhar$i'] = ""; // Set empty if field doesn't exist
+        payload['aadhar$i'] = ""; // Set empty if entry doesn't exist
       }
     }
     return payload;
-  }
-
-  // 2. Load data received FROM the API
-  void loadDataFromModel(ShakhaaVistarDetail model) {
-    setState(() {
-      // Safely clear out old controllers to prevent memory leaks
-      for (var controller in _aadharControllers) {
-        controller.dispose();
-      }
-      _aadharControllers.clear();
-
-      // Group properties into a temporary list for easy iteration
-      final apiFields = [
-        model.aadhar1,
-        model.aadhar2,
-        model.aadhar3,
-        model.aadhar4,
-        model.aadhar5,
-      ];
-
-      // Loop through your model data and build controllers
-      for (String? value in apiFields) {
-        if (value != null && value.trim().isNotEmpty) {
-          _aadharControllers.add(TextEditingController(text: value));
-        }
-      }
-
-      // Safety fallback: Ensure at least one blank field exists if model data was empty
-      if (_aadharControllers.isEmpty) {
-        _aadharControllers.add(TextEditingController());
-      }
-    });
   }
 
   Future<void> populateDropdown() async {
@@ -283,10 +121,7 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
 
     if (!mounted) return;
     setState(() {
-      _frequency = data;
       _vayogat = data2;
-      _status = data3;
-      _shaaririkVishay = data4;
     });
   }
 
@@ -302,7 +137,7 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
     if (!isConnected) {
       Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));
     } else {
-      var data = await Statics.getShaakhaaSaptahByIdData(context, (pkidPassed ?? 0).toString());
+      var data = await Statics.getShaakhaaSaptahByIdData(context, (pkidPassed ?? 0).toString(), Statics.userDetails["userID"].toString());
       log("data -=-=-=>>>>>  $data");
       if (!mounted) return;
       shaakhaa = data;
@@ -312,57 +147,7 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
         if (trail != null) await controller.setHierarchyFromTrail(trail: trail);
         loadDataFromModel(shaakhaa!);
         setState(() {
-          _shaakhaanameCtrl.text = (shaakhaa?.shaakhaaName ?? "").toString();
-
-          // _frequencyValue = shaakhaa!.frequencyID == null ? null : shaakhaa!.frequencyID.toString();
-
-          _dayofWeekValue = shaakhaa!.daysOfWeek == null ? null : shaakhaa!.daysOfWeek.toString();
-
-          if (_dayofWeekValue != null) {
-            var arr = _dayofWeekValue!.split(',');
-            _isSun = arr.contains("0") ? true : false;
-            _isMon = arr.contains("1") ? true : false;
-            _isTue = arr.contains("2") ? true : false;
-            _isWed = arr.contains("3") ? true : false;
-            _isThu = arr.contains("4") ? true : false;
-            _isFri = arr.contains("5") ? true : false;
-            _isSat = arr.contains("6") ? true : false;
-          } else {
-            _isSun = _isMon = _isTue = _isWed = _isThu = _isFri = _isSat = false;
-          }
-
-          _dayOfMonthCtrl.text = shaakhaa!.dayOfMonth.toString();
-          _locationCtrl.text = shaakhaa!.location.toString();
-          // _timingCtrl.text = shaakhaa!.timing.toString();
-
-          final format = DateFormat("hh:mm a");
-
-          _fromTime = ((shaakhaa!.startTimeStr != null && shaakhaa!.startTimeStr != "") ? TimeOfDay.fromDateTime(format.parse(shaakhaa!.startTimeStr!)) : null);
-
-          _fromTimeCntrl.text = shaakhaa!.startTimeStr == null ? "" : shaakhaa!.startTimeStr!;
-
-          _toTime = ((shaakhaa!.endTimeStr != null && shaakhaa!.endTimeStr != "") ? TimeOfDay.fromDateTime(format.parse(shaakhaa!.endTimeStr!)) : null);
-
-          _toTimeCntrl.text = shaakhaa!.endTimeStr == null ? "" : shaakhaa!.endTimeStr!;
-
           _vayogatValue = (shaakhaa?.vayogatID == null || shaakhaa?.vayogatID == 0) ? null : (shaakhaa?.vayogatID ?? "").toString();
-
-          _remarkCtrl.text = shaakhaa!.remark.toString();
-
-          _isSankalpit = shaakhaa?.isSankalpit ?? true;
-          _sankalpAadhaarEnum = (shaakhaa!.sankalpAadhaar == 'Shaakhaa' ? SankalpAadhaarEnum.Shaakhaa : SankalpAadhaarEnum.Kaaryakartaa);
-          _sankalpAadhaarSwayamsevakID = shaakhaa!.sankalpAadhaarSwayamsevakID;
-          _sankalpAadhaarSwayamsevakValue = (shaakhaa!.sankalpAadhaarSwayamsevakID == null ? '' : shaakhaa!.sankalpAadhaarSwayamsevakID.toString());
-          _sankalpAadhaarSwayamsevakCtrl.text = (shaakhaa!.sankalpAadhaarSwayamsevakID == null ? "" : shaakhaa!.sankalpAadhaarSwayamsevakName!);
-          _sankalpAadhaarShaakhaaID = shaakhaa!.sankalpAadhaarShaakhaaID;
-          _sankalpAadhaarShaakhaaValue = (shaakhaa!.sankalpAadhaarShaakhaaID == null ? '' : (shaakhaa?.sankalpAadhaarShaakhaaName ?? ""));
-          _sankalpAadhaarShaakhaaCtrl.text = (shaakhaa!.sankalpAadhaarShaakhaaID == null ? "" : (shaakhaa?.sankalpAadhaarShaakhaaName ?? ""));
-          // _sankalpCompletionMonthCtrl.text = (shaakhaa!.sankalpCompletionMonth == null ? "" : shaakhaa!.sankalpCompletionMonth.toString());
-          // _sankalpCompletionYearCtrl.text = (shaakhaa!.sankalpCompletionYear == null ? "" : shaakhaa!.sankalpCompletionYear.toString());
-          _hasToli = shaakhaa!.hasToli == true ? true : false;
-          _hasPaalak = shaakhaa!.hasPaalak == true ? true : false;
-          _sharirikVishayValue = shaakhaa!.optionalShaaririkVishayID == null ? null : shaakhaa!.optionalShaaririkVishayID.toString();
-          _otherOptionalVishayCtrl.text = (shaakhaa!.otherOptionalVishay ?? "");
         });
       }
     }
@@ -371,18 +156,36 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
     });
   }
 
-  Future<List<dynamic>> populateSankalpAadhaarSwayamsevak(String pattern) async {
-    if (pattern.length <= 2) return [];
-    var swList = SwayamsevakProvider().getSwayamsevaks(json.encode({
-      'AppUserID': Statics.userDetails["userID"],
-      'GeoUnitID': controller.hierarchyTrail.bhaagId,
-      "SearchCriteria": pattern.isEmpty ? "" : pattern,
-    }));
-    for (var i in await swList) {
-      print(i);
-    }
+  // 2. Load data received FROM the API (pre-existing saved names have no
+  // swayamSevakID/mobile info stored against them, so they're loaded as
+  // "name only" entries).
+  void loadDataFromModel(ShakhaaVistarDetail model) {
+    // setState(() {
+    //   _karyakartaList.clear();
+    //
+    //   final apiFields = model.;
+    //
+    //   for (String? value in apiFields) {
+    //     if (value != null && value.trim().isNotEmpty) {
+    //       _karyakartaList.add(SwayamsevakNewData(fullName: value.trim()));
+    //     }
+    //   }
+    // });
+  }
 
-    return swList;
+  Future<List<SwayamsevakNewData>> populateSankalpAadhaarSwayamsevak(String pattern) async {
+    if (pattern.length <= 2) return [];
+
+    final inpt = {
+      'AppUserID': Statics.userDetails["userID"],
+      'GeounitId': controller.hierarchyTrail.bhaagId,
+      "SearchText": pattern.isEmpty ? "" : pattern,
+      "From": "vistar",
+    };
+
+    var swList = await Statics.searchSwayamsevakNewData(inpt);
+
+    return swList ?? [];
   }
 
   Future<List<dynamic>> populateSankalpAadhaarShaakhaa(String pattern) async {
@@ -396,25 +199,6 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
   }
 
   saveShaakhaaDetails() async {
-    // return;
-    var _dayOfWeek = "";
-    if (_isSun == true) _dayOfWeek = _dayOfWeek + "0,";
-    if (_isMon == true) _dayOfWeek = _dayOfWeek + "1,";
-    if (_isTue == true) _dayOfWeek = _dayOfWeek + "2,";
-    if (_isWed == true) _dayOfWeek = _dayOfWeek + "3,";
-    if (_isThu == true) _dayOfWeek = _dayOfWeek + "4,";
-    if (_isFri == true) _dayOfWeek = _dayOfWeek + "5,";
-    if (_isSat == true) _dayOfWeek = _dayOfWeek + "6,";
-
-    // if (_isSankalpit == false) {
-    //   if (_frequency![_frequency!.indexWhere((p) => p.staticID.toString() == _frequencyValue.toString())].code == "Weekly") if (_dayOfWeek != "")
-    //     shaakhaa!.daysOfWeek = _dayOfWeek.substring(0, _dayOfWeek.length - 1);
-    //   else {
-    //     Statics.showToast(Statics.getLabel('DayOfWeekValidationMessage'));
-    //     return;
-    //   }
-    // }
-
     var inputData = {
       "PraantID": 1,
       "PkId": pkidPassed ?? 0,
@@ -428,10 +212,13 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
       "ShaakhaaID": 0,
       "ShaakhaaName": _shaakhaanameCtrl.text,
       "ShaakhaaNameDevNaagari": _shaakhaanameCtrl.text,
+      "VayogatID": int.tryParse(_vayogatValue ?? ""),
+      "aadhardata": _karyakartaList.map((e) => e.toJson()).toList(),
+
       "FrequencyID": 36,
+
       "DaysOfWeek": shaakhaa?.daysOfWeek ?? '',
       "DayOfMonth": shaakhaa?.dayOfMonth ?? '',
-      "VayogatID": int.tryParse(_vayogatValue ?? ""),
       "Location": shaakhaa?.location,
       //"Timing": shaakhaa!.timing,
       /*"StartTimeStr": (_fromTime != null
@@ -447,59 +234,28 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
       "Remark": shaakhaa?.remark ?? "",
       "IsSankalpit": _isSankalpit == true ? true : false,
 //========================= OLD REQ PARAM =============================================================================================================================================================================
-      "SankalpAadhaar": (_isSankalpit ? _sankalpAadhaarEnum.toString().split('.').last : null),
+      "SankalpAadhaar": null,
+      //(_isSankalpit ? _sankalpAadhaarEnum.toString().split('.').last : null),
       "SankalpAadhaarSwayamsevakID": (_isSankalpit ? shaakhaa?.sankalpAadhaarSwayamsevakID : null),
       "SankalpAadhaarShaakhaaID": (_isSankalpit ? shaakhaa?.sankalpAadhaarShaakhaaID : null),
       "SankalpCompletionMonth": (_isSankalpit ? shaakhaa?.sankalpCompletionMonth : null),
       "SankalpCompletionYear": (_isSankalpit ? shaakhaa?.sankalpCompletionYear : null),
 
-      "HasToli": _hasToli == true ? true : false,
-      "HasPaalak": _hasPaalak == true ? true : false,
+      "HasToli": false,
+      "HasPaalak": false,
       "OtherOptionalVishay": shaakhaa?.otherOptionalVishay ?? "",
       "OptionalShaaririkVishayID": shaakhaa?.optionalShaaririkVishayID,
       "ModifiedBy": int.tryParse(Statics.userDetails["userID"]) ?? 0
     };
 
-    final _finalInputData = preparePayloadForApi(inputData);
+    log("inputData =-=->  ${json.encode(inputData)}");
 
-    log("inputData =-=->  ${json.encode(_finalInputData)}");
-
-    var data = await Statics.addNewShaakhaaVistarData(context, _finalInputData);
+    var data = await Statics.addNewShaakhaaVistarData(context, inputData);
     if (data == null) return;
     setState(() {});
     if (data == "200") {
       Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
       Navigator.of(context).pop(true);
-    }
-  }
-
-  _pickFrmTime() async {
-    TimeOfDay? time = await showTimePicker(
-      context: context,
-      initialTime: _fromTime == null ? TimeOfDay.now() : _fromTime!,
-    );
-
-    if (time != null) {
-      setState(() {
-        _fromTime = time;
-        _fromTimeCntrl.text =
-            DateFormat("hh:mm").format(new DateFormat("yyyy-MM-dd hh:mm").parse("2021-02-01 " + time.hour.toString() + ":" + time.minute.toString())) + (time.period == DayPeriod.am ? " AM" : " PM");
-      });
-    }
-  }
-
-  _pickToTime() async {
-    TimeOfDay? time = await showTimePicker(
-      context: context,
-      initialTime: _toTime == null ? TimeOfDay.now() : _toTime!,
-    );
-
-    if (time != null) {
-      setState(() {
-        _toTime = time;
-        _toTimeCntrl.text =
-            DateFormat("hh:mm").format(new DateFormat("yyyy-MM-dd hh:mm").parse("2021-02-01 " + time.hour.toString() + ":" + time.minute.toString())) + (time.period == DayPeriod.am ? " AM" : " PM");
-      });
     }
   }
 
@@ -531,10 +287,6 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
         await saveShaakhaaDetails();
       }
       print("_submit 7");
-    } on Exception catch (error) {
-      print("_submit 8");
-
-      Statics.showErrorDialog(context, Statics.getLabel('unableToCompleteProcess'));
     } catch (error) {
       print("_submit 9");
 
@@ -710,80 +462,10 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
                         },
                       ),
                     ),*/
-                    SizedBox(height: 14),
-                    Text(
-                      Statics.getLabel('addAadharPerson'),
-                      style: TextStyle(color: Colors.black, decoration: TextDecoration.underline, fontWeight: FontWeight.w700, fontSize: 16),
-                    ),
-                    SizedBox(height: 12),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "* ${Statics.getLabel('Note')} : ",
-                          style: TextStyle(color: Colors.red.shade700, fontWeight: FontWeight.w600, decoration: TextDecoration.underline, decorationColor: Colors.red, fontStyle: FontStyle.italic),
-                        ),
-                        Expanded(
-                          child: Text(
-                            Statics.getLabel('addAadharPersonTip'),
-                            style: TextStyle(color: Colors.grey.shade700, fontWeight: FontWeight.w600, fontStyle: FontStyle.italic),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 12),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: _aadharControllers.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: Row(
-                            children: [
-                              // The Dynamic TextFormField
-                              Expanded(
-                                child: TextFormField(
-                                  controller: _aadharControllers[index],
-                                  decoration: InputDecoration(
-                                    labelText: "${Statics.getLabel("name")} ${index + 1}",
-                                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                                  ),
-                                  validator: (value) => _validateField(value, index),
-                                  onChanged: (value) => _handleFieldChange(index, value),
-                                ),
-                              ),
-                              const SizedBox(width: 10),
 
-                              // 1. Cancel Button (Show ONLY on newly added fields, i.e., index > 0)
-                              if (index > 0)
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 8.0),
-                                  child: IconButton(
-                                    icon: const Icon(Icons.cancel_outlined, color: Colors.red),
-                                    tooltip: "Remove",
-                                    onPressed: () => _removeField(index), // Logic provided below
-                                  ),
-                                ),
+                    // ===== नवीन UI: आधार कार्यकर्ता जोडा (मोबाईल-शोध आधारित) =====
+                    buildAadharKaryakartaSection(),
 
-                              // 2. "Add More" button ONLY on the last item and if count < 5
-                              if (index == _aadharControllers.length - 1 && _aadharControllers.length < 5)
-                                ElevatedButton.icon(
-                                  onPressed: _areAllFieldsValid() ? _addNewField : null,
-                                  icon: const Icon(Icons.add),
-                                  label: Text(Statics.getLabel("AddMore")),
-                                  style: ElevatedButton.styleFrom(
-                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-                                  ),
-                                )
-                              else if (index == 0)
-                                // Empty placeholder to keep alignment consistent for the first item
-                                const SizedBox(width: 21),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
                     SizedBox(height: 21),
 
                     if (_isLoading)
@@ -811,4 +493,618 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
           inAsyncCall: _isfetchingData),
     );
   }
+
+  // ------------------- karyakarta search/add helpers -------------------
+
+  bool _isDuplicateKaryakarta(String name) {
+    return _karyakartaList.any((w) => (w.fullName ?? '').trim().toLowerCase() == name.trim().toLowerCase());
+  }
+
+  Future<void> _searchKaryakartaByMobile() async {
+    final mobile = _mobileSearchCtrl.text.trim();
+    if (mobile.length < 9) {
+      Statics.showToast(Statics.getLabel('EnterValidMobileNumber'));
+      return;
+    }
+
+    setState(() {
+      _karyakartaStage = KaryakartaSearchStage.searching;
+    });
+
+    final results = await populateSankalpAadhaarSwayamsevak(mobile);
+
+    SwayamsevakNewData? match;
+    for (var item in results) {
+      if (item.mobileNumber == mobile) {
+        match = item;
+        break;
+      }
+    }
+
+    if (!mounted) return;
+
+    if (match != null) {
+      setState(() {
+        _foundKaryakarta = match;
+        _karyakartaStage = KaryakartaSearchStage.found;
+      });
+    } else {
+      setState(() {
+        _foundKaryakarta = null;
+        _karyakartaStage = KaryakartaSearchStage.notfound;
+      });
+    }
+  }
+
+  void _resetKaryakartaSearch() {
+    setState(() {
+      _mobileSearchCtrl.clear();
+      _foundKaryakarta = null;
+      _karyakartaStage = KaryakartaSearchStage.search;
+    });
+  }
+
+  void _switchToNameOnlyKaryakarta() {
+    setState(() {
+      _nameOnlyCtrl.clear();
+      _karyakartaStage = KaryakartaSearchStage.nameOnly;
+    });
+  }
+
+  void _confirmAddFoundKaryakarta() {
+    if (_foundKaryakarta == null) return;
+    final name = (_foundKaryakarta!.fullName ?? '').trim();
+
+    if (name.isEmpty) return;
+
+    if (_isDuplicateKaryakarta(name)) {
+      Statics.showToast(Statics.getLabel('duplicationValidation'));
+      return;
+    }
+
+    if (_karyakartaList.length >= 5) {
+      Statics.showToast(Statics.getLabel('MaxKaryakartaLimitReached'));
+      return;
+    }
+
+    setState(() {
+      _karyakartaList.add(_foundKaryakarta!);
+    });
+
+    _resetKaryakartaSearch();
+  }
+
+  void _addNameOnlyKaryakarta() {
+    final name = _nameOnlyCtrl.text.trim();
+    if (name.isEmpty) {
+      Statics.showToast(Statics.getLabel('ShaakhaaNameValidationMessage'));
+      return;
+    }
+
+    if (_isDuplicateKaryakarta(name)) {
+      Statics.showToast(Statics.getLabel('duplicationValidation'));
+      return;
+    }
+
+    if (_karyakartaList.length >= 5) {
+      Statics.showToast(Statics.getLabel('MaxKaryakartaLimitReached'));
+      return;
+    }
+
+    setState(() {
+      _karyakartaList.add(SwayamsevakNewData(fullName: name));
+    });
+
+    _resetKaryakartaSearch();
+  }
+
+  void _removeKaryakarta(int index) {
+    setState(() {
+      _karyakartaList.removeAt(index);
+    });
+  }
+
+  void _savePersonAndReturnKaryakarta(String name, String mobile) {
+    if (name.trim().isEmpty || mobile.trim().length != 10) {
+      Statics.showToast(Statics.getLabel('unableToCompleteProcess'));
+      return;
+    }
+
+    if (_isDuplicateKaryakarta(name.trim())) {
+      Statics.showToast(Statics.getLabel('duplicationValidation'));
+      Navigator.of(context).pop();
+      return;
+    }
+
+    if (_karyakartaList.length >= 5) {
+      Statics.showToast(Statics.getLabel('MaxKaryakartaLimitReached'));
+      Navigator.of(context).pop();
+      return;
+    }
+
+    Navigator.of(context).pop();
+
+    setState(() {
+      _karyakartaList.add(SwayamsevakNewData(
+        fullName: name.trim(),
+        mobileNumber: mobile.trim(),
+      ));
+    });
+
+    _resetKaryakartaSearch();
+  }
+
+  // ------------------- karyakarta widget-building functions -------------------
+  // (functions returning Widgets, not separate Widget classes)
+
+  Widget buildSectionDivider(String title) {
+    return Container(
+      alignment: Alignment.center,
+      margin: const EdgeInsets.only(top: 32, bottom: 6),
+      child: Text(
+        title,
+        style: const TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.w700,
+          decoration: TextDecoration.underline,
+          decorationThickness: 2,
+        ),
+      ),
+    );
+  }
+
+  Widget buildKaryakartaTip() {
+    return Container(
+      margin: const EdgeInsets.only(top: 16, bottom: 22),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFBF8FC),
+        borderRadius: BorderRadius.circular(8),
+        border: const Border(left: BorderSide(color: Color(0xFF9C27B0), width: 4)),
+      ),
+      child: RichText(
+        text: TextSpan(
+          style: TextStyle(fontStyle: FontStyle.italic, color: Colors.grey.shade700, fontWeight: FontWeight.w600, fontSize: 13.5),
+          children: [
+            TextSpan(
+              text: "* ${Statics.getLabel('Note')} : ",
+              style: const TextStyle(color: Color(0xFFC23B3B), fontStyle: FontStyle.normal, fontWeight: FontWeight.w600, decoration: TextDecoration.underline, decorationColor: Color(0xFFC23B3B)),
+            ),
+            TextSpan(text: Statics.getLabel('addAadharPersonTip')),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildKaryakartaSearchStage() {
+    if (_karyakartaList.length == 5) return SizedBox();
+    final isSearching = _karyakartaStage == KaryakartaSearchStage.searching;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(Statics.getLabel('searchUsingMobile'), style: TextStyle(fontSize: 14, color: Colors.grey.shade600)),
+        const SizedBox(height: 6),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: TextField(
+                controller: _mobileSearchCtrl,
+                keyboardType: TextInputType.phone,
+                maxLength: 10,
+                decoration: InputDecoration(
+                  counterText: '',
+                  hintText: Statics.getLabel('addAbhiyaanKaryakartaValidation2'),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+              ),
+            ),
+            const SizedBox(width: 10),
+            ElevatedButton.icon(
+              onPressed: isSearching ? null : _searchKaryakartaByMobile,
+              icon: isSearching
+                  ? const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                    )
+                  : const Icon(Icons.search, size: 18),
+              label: isSearching ? const SizedBox.shrink() : Text(Statics.getLabel('Search')),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF9C27B0),
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        GestureDetector(
+          onTap: _switchToNameOnlyKaryakarta,
+          child: RichText(
+            text: TextSpan(
+              style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
+              children: [
+                TextSpan(text: "${Statics.getLabel('MobileNumberNotAvailable')} ?"),
+                TextSpan(
+                  text: Statics.getLabel('AddWithNameOnly'),
+                  style: const TextStyle(color: Color(0xFF9C27B0), fontWeight: FontWeight.w600),
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+      ],
+    );
+  }
+
+  Widget buildKaryakartaFoundStage() {
+    final name = (_foundKaryakarta?.fullName ?? '').toString();
+    final mobile = (_foundKaryakarta?.mobileNumber ?? '').toString();
+    final initial = name.trim().isNotEmpty ? name.trim()[0] : '?';
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          margin: const EdgeInsets.only(bottom: 14),
+          decoration: BoxDecoration(color: const Color(0xFFE9F8EF), borderRadius: BorderRadius.circular(12)),
+          child: Row(
+            children: [
+              const Icon(Icons.check_circle, color: Color(0xFF1F9254), size: 18),
+              const SizedBox(width: 8),
+              Text(Statics.getLabel('KaryakartaFound'), style: const TextStyle(color: Color(0xFF1F9254))),
+            ],
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          margin: const EdgeInsets.only(bottom: 16),
+          decoration: BoxDecoration(
+            border: Border.all(color: const Color(0xFFE8E1EA), width: 1.5),
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 21,
+                backgroundColor: const Color(0xFFB347C4),
+                child: Text(initial, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                    Text(mobile, style: TextStyle(fontSize: 13, color: Colors.grey.shade600)),
+                  ],
+                ),
+              ),
+              ElevatedButton(
+                onPressed: _confirmAddFoundKaryakarta,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF1F9254),
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                ),
+                child: Text("+ ${Statics.getLabel('Add')}"),
+              ),
+            ],
+          ),
+        ),
+        GestureDetector(
+          onTap: _resetKaryakartaSearch,
+          child: Text("\u2190 ${Statics.getLabel('SearchAgain')}", style: const TextStyle(color: Color(0xFF9C27B0), fontWeight: FontWeight.w600)),
+        ),
+        const SizedBox(height: 16),
+      ],
+    );
+  }
+
+  Widget buildKaryakartaNotFoundStage() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          margin: const EdgeInsets.only(bottom: 14),
+          decoration: BoxDecoration(color: const Color(0xFFFCEDED), borderRadius: BorderRadius.circular(12)),
+          child: Row(
+            children: [
+              const Icon(Icons.cancel, color: Color(0xFFC23B3B), size: 18),
+              const SizedBox(width: 8),
+              Expanded(child: Text(Statics.getLabel('MobileNumberNotFound'), style: const TextStyle(color: Color(0xFFC23B3B)))),
+            ],
+          ),
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: OutlinedButton(
+                onPressed: _resetKaryakartaSearch,
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: const Color(0xFF9C27B0),
+                  side: const BorderSide(color: Color(0xFF9C27B0), width: 1.5),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+                child: Text(Statics.getLabel('SearchAgain')),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () =>
+                    Navigator.of(context).pushNamed(EditSwayamsevakScreen.routeName, arguments: Statics.ScreenArgumentsNew(0, Statics.getLabel('EditMenu'), mobile: _mobileSearchCtrl.text.trim())),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF9C27B0),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+                child: Text(Statics.getLabel('AddNewPerson')),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+      ],
+    );
+  }
+
+  Widget buildKaryakartaNameOnlyStage() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(Statics.getLabel('KaryakartaName'), style: TextStyle(fontSize: 14, color: Colors.grey.shade600)),
+        const SizedBox(height: 6),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+          margin: const EdgeInsets.only(bottom: 10),
+          decoration: BoxDecoration(
+            border: Border.all(color: const Color(0xFFE8E1EA), width: 1.5),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: TextField(
+            controller: _nameOnlyCtrl,
+            decoration: InputDecoration(border: InputBorder.none, hintText: Statics.getLabel('EnterName')),
+          ),
+        ),
+        GestureDetector(
+          onTap: _resetKaryakartaSearch,
+          child: Text("\u2190 ${Statics.getLabel('searchUsingMobile')}", style: const TextStyle(color: Color(0xFF9C27B0), fontWeight: FontWeight.w600)),
+        ),
+        const SizedBox(height: 12),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: ElevatedButton(
+            onPressed: _addNameOnlyKaryakarta,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF9C27B0),
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 12),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            ),
+            child: Text(Statics.getLabel('Add')),
+          ),
+        ),
+        const SizedBox(height: 16),
+      ],
+    );
+  }
+
+  Widget buildKaryakartaSearchFlow() {
+    switch (_karyakartaStage) {
+      case KaryakartaSearchStage.found:
+        return buildKaryakartaFoundStage();
+      case KaryakartaSearchStage.notfound:
+        return buildKaryakartaNotFoundStage();
+      case KaryakartaSearchStage.nameOnly:
+        return buildKaryakartaNameOnlyStage();
+      case KaryakartaSearchStage.search:
+      case KaryakartaSearchStage.searching:
+        return buildKaryakartaSearchStage();
+    }
+  }
+
+  Widget buildKaryakartaListItem(int index) {
+    final worker = _karyakartaList[index];
+    final name = (worker.fullName ?? '').toString();
+    final mobile = worker.mobileNumber;
+    final level = worker.levelName;
+    final daayitva = worker.daayitvaName;
+    final verified = worker.swayamSevakID != null;
+    final initial = name.trim().isNotEmpty ? name.trim()[0] : '?';
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
+      decoration: BoxDecoration(color: const Color(0xFFFBF8FC), borderRadius: BorderRadius.circular(14)),
+      child: Row(
+        children: [
+          CircleAvatar(
+            radius: 19,
+            backgroundColor: const Color(0xFF9C27B0),
+            child: Text(initial, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              spacing: 2,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                if (mobile != null && mobile.isNotEmpty)
+                  RichText(
+                      text: TextSpan(
+                          text: mobile,
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              launch("tel://" + mobile.toString());
+                            },
+                          style: TextStyle(fontSize: 13.5, color: Colors.blue.shade600, fontWeight: FontWeight.w600))),
+                Wrap(
+                  spacing: 4,
+                  runSpacing: 4,
+                  children: [
+                    if (level != null && level.isNotEmpty)
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        decoration: BoxDecoration(color: Colors.orange.shade100, borderRadius: BorderRadius.circular(12), border: Border.all(color: Colors.orange, width: 0.7)),
+                        child: Text(level, style: TextStyle(fontSize: 12.5, color: Colors.orange.shade600, fontWeight: FontWeight.w700)),
+                      ),
+                    if (daayitva != null && daayitva.isNotEmpty)
+                      Container(
+                          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                          decoration: BoxDecoration(color: Colors.green.shade100, borderRadius: BorderRadius.circular(12), border: Border.all(color: Colors.green, width: 0.7)),
+                          child: Text(daayitva, style: TextStyle(fontSize: 12.5, color: Colors.green.shade600, fontWeight: FontWeight.w700))),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          /*Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+            decoration: BoxDecoration(
+              color: verified ? const Color(0xFFE9F8EF) : const Color(0xFFFFF3D6),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              verified ? Statics.getLabel('Verified') : Statics.getLabel('NameOnly'),
+              style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.bold, color: verified ? const Color(0xFF1F9254) : const Color(0xFF9A6A00)),
+            ),
+          ),*/
+          IconButton(
+            icon: Icon(Icons.close, color: Colors.grey.shade600, size: 20),
+            tooltip: Statics.getLabel('Remove'),
+            onPressed: () => _removeKaryakarta(index),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildKaryakartaList() {
+    if (_karyakartaList.isEmpty) return const SizedBox.shrink();
+
+    return Container(
+      margin: const EdgeInsets.only(top: 6),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(Statics.getLabel('AddedKaryakarta'), style: TextStyle(fontSize: 14, color: Colors.grey.shade600, fontWeight: FontWeight.w600)),
+          const SizedBox(height: 10),
+          for (int i = 0; i < _karyakartaList.length; i++) buildKaryakartaListItem(i),
+        ],
+      ),
+    );
+  }
+
+  Widget buildAadharKaryakartaSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        buildSectionDivider(Statics.getLabel('addAadharPerson')),
+        buildKaryakartaTip(),
+        buildKaryakartaSearchFlow(),
+        buildKaryakartaList(),
+        if (_karyakartaList.length < 5)
+          GestureDetector(
+            onTap: _resetKaryakartaSearch,
+            child: Container(
+              margin: const EdgeInsets.only(top: 14),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 22,
+                    height: 22,
+                    decoration: const BoxDecoration(color: Color(0xFF9C27B0), shape: BoxShape.circle),
+                    child: const Icon(Icons.add, color: Colors.white, size: 15),
+                  ),
+                  const SizedBox(width: 6),
+                  Text(Statics.getLabel('AddAnotherKaryakarta'), style: const TextStyle(color: Color(0xFF9C27B0), fontWeight: FontWeight.bold, fontSize: 14.5)),
+                ],
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  // builds the content of the "add new person" bottom sheet (function, not a class)
+  Widget buildAddPersonSheetContent(BuildContext sheetCtx, TextEditingController nameCtrl, TextEditingController mobileCtrl) {
+    return StatefulBuilder(
+      builder: (ctx, setModalState) {
+        return SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(Statics.getLabel('AddNewPerson'), style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+                  GestureDetector(
+                    onTap: () => Navigator.of(ctx).pop(),
+                    child: Icon(Icons.close, color: Colors.grey.shade600),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Text(
+                Statics.getLabel('AddNewPersonSubtitle'),
+                style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
+              ),
+              const SizedBox(height: 18),
+              Text(Statics.getLabel('FullName'), style: TextStyle(fontSize: 13, color: Colors.grey.shade600)),
+              const SizedBox(height: 6),
+              TextField(
+                controller: nameCtrl,
+                decoration: InputDecoration(
+                  hintText: Statics.getLabel('FullNameHint'),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text(Statics.getLabel('MobileNumber'), style: TextStyle(fontSize: 13, color: Colors.grey.shade600)),
+              const SizedBox(height: 6),
+              TextField(
+                controller: mobileCtrl,
+                keyboardType: TextInputType.phone,
+                maxLength: 10,
+                decoration: InputDecoration(
+                  counterText: '',
+                  hintText: Statics.getLabel('MobileNumberHint'),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                ),
+              ),
+              const SizedBox(height: 6),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () => _savePersonAndReturnKaryakarta(nameCtrl.text, mobileCtrl.text),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF9C27B0),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 13),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  ),
+                  child: Text(Statics.getLabel('SaveAndReturn')),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+// =============================================================================
 }

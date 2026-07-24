@@ -1,3 +1,5 @@
+
+
 class ShaakhaaVistarDetailRespModel {
   String? status;
   String? message;
@@ -60,6 +62,8 @@ class ShakhaaVistarDetail {
   String? otherOptionalVishay;
   int? optionalShaaririkVishayID;
   int? modifiedBy;
+
+  // List<SwayamsevakNewData>? data;
 
   ShakhaaVistarDetail(
       {this.praantID,

@@ -37,21 +37,16 @@ class SwayamsevakBasicInfo extends StatefulWidget {
 }
 
 class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
-  late TextEditingController nameController;
-  late TextEditingController mobileController;
-  late TextEditingController emailController;
-  late TextEditingController birthDateController;
+  TextEditingController nameController = TextEditingController();
+  TextEditingController mobileController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController birthDateController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey();
   var _isLoading = false;
 
   bool _isfetingData = false;
 
   SwayamsevakBAL? swDetails;
-
-  var _fullNameCntrl = TextEditingController();
-  var _mobileCntrl = TextEditingController();
-  var _emailCntrl = TextEditingController();
-  var _birthDateCntrl = TextEditingController();
 
   DateTime? _birthDate;
 
@@ -249,12 +244,12 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
         setState(() {
           swDetails = data;
           if (swDetails != null) {
-            _fullNameCntrl.text = swDetails!.fullName.toString();
-            _mobileCntrl.text = swDetails!.mobileNumber.toString();
-            _emailCntrl.text = swDetails!.email.toString();
+            nameController.text = swDetails!.fullName.toString();
+            mobileController.text = swDetails!.mobileNumber.toString();
+            emailController.text = swDetails!.email.toString();
 
             _birthDate = ((swDetails!.birthDate != null && swDetails!.birthDate != "") ? (DateFormat('dd/MM/yyyy').parse(swDetails!.birthDate!.split(" ").first)) : null);
-            _birthDateCntrl.text = ((swDetails!.birthDate != null && swDetails!.birthDate != "") ? DateFormat('dd-MMM-yyyy').format(_birthDate!) : '');
+            birthDateController.text = ((swDetails!.birthDate != null && swDetails!.birthDate != "") ? DateFormat('dd-MMM-yyyy').format(_birthDate!) : '');
 
             var _geoUnitID = swDetails!.linkedGeoUnitID == null ? null : swDetails!.linkedGeoUnitID.toString();
 
@@ -343,7 +338,7 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
       if (mounted)
         setState(() {
           _birthDate = date;
-          _birthDateCntrl.text = DateFormat('dd-MMM-yyyy').format(date);
+          birthDateController.text = DateFormat('dd-MMM-yyyy').format(date);
         });
     }
   }
@@ -646,13 +641,10 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
   @override
   void dispose() {
     super.dispose();
-    _fullNameCntrl.dispose();
-    _mobileCntrl.dispose();
-    _emailCntrl.dispose();
-    _birthDateCntrl.dispose();
     nameController.dispose();
     mobileController.dispose();
     emailController.dispose();
+    birthDateController.dispose();
   }
 
   @override
@@ -671,7 +663,7 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
                     Legend(legendString: 'BasicInfo', fontsize: 18),
                     TextFormField(
                       textInputAction: TextInputAction.next,
-                      controller: widget.viewType == 'JoinRss' ? nameController : _fullNameCntrl,
+                      controller: nameController,
                       decoration: InputDecoration(labelText: Statics.getLabel('FullName')),
                       keyboardType: TextInputType.text,
                       validator: (value) {
@@ -687,7 +679,7 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
                     ),
                     TextFormField(
                       textInputAction: TextInputAction.next,
-                      controller: widget.viewType == 'JoinRss' ? mobileController : _mobileCntrl,
+                      controller: mobileController,
                       decoration: InputDecoration(labelText: Statics.getLabel('Mobile')),
                       keyboardType: TextInputType.phone,
                       inputFormatters: [LengthLimitingTextInputFormatter(10), FilteringTextInputFormatter.digitsOnly],
@@ -705,7 +697,7 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
                     ),
                     TextFormField(
                       textInputAction: TextInputAction.next,
-                      controller: widget.viewType == 'JoinRss' ? emailController : _emailCntrl,
+                      controller: emailController,
                       decoration: InputDecoration(labelText: Statics.getLabel('Email')),
                       keyboardType: TextInputType.emailAddress,
                       maxLength: 100,
@@ -731,7 +723,7 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
                           width: Statics.getDeviceSize(context).width * 0.7,
                           child: TextFormField(
                             readOnly: true,
-                            controller: _birthDateCntrl,
+                            controller: birthDateController,
                             decoration: InputDecoration(labelText: Statics.getLabel('BirthDate')),
                             textInputAction: TextInputAction.next,
                             // controller: widget.viewType == 'JoinRss' ? emailController : _emailCntrl,

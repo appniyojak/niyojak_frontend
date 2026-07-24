@@ -2178,6 +2178,15 @@ Map<String, String> resEnglish = {
   "openSettings": "Open Settings",
   'entriesAcrossGroups': '{totalEntries} entries across {groupCount} groups',
   'entries': 'entries',
+  'searchUsingMobile': 'Search by Mobile',
+  'MobileNumberNotAvailable': 'Mobile Number Not Available',
+  'MobileNumberNotFound': 'Mobile Number Not Found',
+  'AddWithNameOnly': 'Add With Name Only',
+  'AddAnotherKaryakarta': 'Add more karykartas',
+  'SearchAgain': 'Search Again',
+  'AddNewPerson': 'Add New Person',
+  'KaryakartaFound': 'Karyakarta Found',
+  'AddedKaryakarta': 'Added Karyakarta',
 
   ////////////////////////////////////// Main Shakhaa Milan(NEW KEYS) //////////////////////////////////////
   "dailyActivityHeader": "Were the daily activities conducted?",
@@ -4373,6 +4382,15 @@ Map<String, String> resMarathi = {
   "openSettings": "सेटिंग्ज उघडा",
   'entriesAcrossGroups': '{groupCount} गटांमध्ये एकूण {totalEntries} नोंदी',
   'entries': 'नोंदी',
+  'searchUsingMobile': 'मोबाईल नंबर द्वारे शोधा',
+  'MobileNumberNotAvailable': 'मोबाईल नंबर उपलब्ध नाही',
+  'MobileNumberNotFound': 'हा मोबाईल नंबर सापडला नाही',
+  'AddWithNameOnly': 'फक्त नाव टाकून जोडा',
+  'AddAnotherKaryakarta': 'आणखी एक कार्यकर्ता जोडा',
+  'SearchAgain': 'पुन्हा शोधा',
+  'AddNewPerson': 'नवीन व्यक्ती जोडा',
+  'KaryakartaFound': 'कार्यकर्ता सापडला',
+  'AddedKaryakarta': 'जोडलेले कार्यकर्ते',
 
   ////////////////////////////////////// Main Shakhaa Milan(NEW KEYS) //////////////////////////////////////
   "dailyActivityHeader": "दैनिक कार्यक्रम पार पडला का?",
@@ -6566,6 +6584,15 @@ Map<String, String> resHindi = {
   "openSettings": "सेटिंग्स खोलें",
   'entriesAcrossGroups': '{groupCount} समूहों में कुल {totalEntries} प्रविष्टियाँ',
   'entries': 'प्रविष्टियाँ',
+  'searchUsingMobile': 'मोबाइल नंबर द्वारा खोजें',
+  'MobileNumberNotAvailable': 'मोबाइल नंबर उपलब्ध नहीं',
+  'MobileNumberNotFound': 'यह मोबाइल नंबर नहीं मिला।',
+  'AddWithNameOnly': 'बस नाम जोड़ें',
+  'AddAnotherKaryakarta': 'और कार्यकर्ता जोड़ें',
+  'SearchAgain': 'पुनः खोजें',
+  'AddNewPerson': 'नया व्यक्ति जोड़ें',
+  'KaryakartaFound': 'कार्यकर्ता मिल गया',
+  'AddedKaryakarta': 'जुड़े कार्यकर्ता',
 
   ////////////////////////////////////// Main Shakhaa Milan(NEW KEYS) //////////////////////////////////////
   "dailyActivityHeader": "दैनिक कार्यक्रम हुआ या नहीं?",
