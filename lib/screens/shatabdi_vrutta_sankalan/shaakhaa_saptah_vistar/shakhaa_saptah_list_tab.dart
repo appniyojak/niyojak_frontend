@@ -42,6 +42,7 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
   List<ShaakhaaList>? _shaakhaaList = [];
   List<ShaakhaaList> _sankalpitShaakhaaList = [];
   List<ShaakhaaList> _newShaakhaaList = [];
+  List<ShaakhaaList> _anyaShaakhaaList = [];
   List<Statics.cLatLong> _latLng = [];
 
   final controller = createGeoController();
@@ -103,7 +104,7 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
 
   Future<void> _search(String? selectedGeoUnitId, var ctx) async {
     setState(() {
-      _shaakhaaList = _sankalpitShaakhaaList = _newShaakhaaList = [];
+      _shaakhaaList = _sankalpitShaakhaaList = _newShaakhaaList = _anyaShaakhaaList = [];
       _isSearching = true;
     });
 
@@ -124,16 +125,19 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
     final _isNotSankalpitList = _list.where((e) => e.isSankalpit == false && e.isnew != 1);
     final _isSankalpitList = _list.where((e) => e.isSankalpit == true && e.isnew != 1);
     final _isNewSankalpitList = _list.where((e) => e.isnew == 1);
+    final _isAnyaSankalpitList = _list.where((e) => e.isanya == 1);
 
     _shaakhaaList = _isNotSankalpitList.toList();
     _sankalpitShaakhaaList = _isSankalpitList.toList();
     _newShaakhaaList = _isNewSankalpitList.toList();
+    _anyaShaakhaaList = _isAnyaSankalpitList.toList();
 
     // _shaakhaaList?.removeWhere((e) => e["IsSankalpit"] == true);
     setState(() {
       _shaakhaaList;
       _sankalpitShaakhaaList;
       _newShaakhaaList;
+      _anyaShaakhaaList;
       _isSearching = false;
       _searched = true;
       _isExpanded = false;
@@ -141,6 +145,7 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
     print(_shaakhaaList?.length);
     print(_sankalpitShaakhaaList.length);
     print(_newShaakhaaList.length);
+    print(_anyaShaakhaaList.length);
   }
 
   @override
@@ -154,7 +159,7 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
         Navigator.pushNamedAndRemoveUntil(context, Navigator.of(context).pushNamed(HomeScreen.routeName).toString(), (route) => false);
       },
       child: DefaultTabController(
-        length: 3,
+        length: _anyaShaakhaaList.isEmpty ? 3 : 4,
         child: Container(
           padding: EdgeInsets.all(20.0),
           child: Column(
@@ -193,6 +198,16 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(fontSize: 13.5),
                   )),
+                  if (_anyaShaakhaaList.isNotEmpty)
+                    Tab(
+                        child: Text(
+                      Statics.getLabel("anyaKshetrache"),
+                      textAlign: TextAlign.center,
+                      softWrap: true,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: 13.5),
+                    )),
                 ]),
                 Flexible(
                   child: TabBarView(children: [
@@ -332,6 +347,31 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
                               },
                             ),
                     ),
+
+                    ///4
+                    if (_anyaShaakhaaList.isNotEmpty)
+                      ListView.separated(
+                        shrinkWrap: true,
+                        // physics: NeverScrollableScrollPhysics(),
+                        separatorBuilder: (context, index) => SizedBox(height: 8),
+                        itemCount: _anyaShaakhaaList.length ?? 0,
+                        itemBuilder: (context, index) {
+                          return ShaakhaaCard(_anyaShaakhaaList[index].toJson(), false, _search,
+                              showOther: false,
+                              IsAnya: true,
+                              traillingIcon: IconButton(
+                                  onPressed: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ShakhaaSaptahFormScreen(
+                                                shaakhaa: _anyaShaakhaaList[index],
+                                                viewType: "EditVrutta",
+                                              ))),
+                                  icon: Column(
+                                    children: [Icon(Icons.edit), Text(Statics.getLabel("Vrutta"))],
+                                  )));
+                        },
+                      ),
                   ]),
                 )
               ],

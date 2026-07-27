@@ -31,6 +31,7 @@ class ShaakhaaList {
   int? shaakhaaID;
   int? praantID;
   int? isnew;
+  int? isanya;
   int? pkid;
   int? geoUnitID;
   String? geoUnitName;
@@ -76,6 +77,7 @@ class ShaakhaaList {
       {this.shaakhaaID,
       this.praantID,
       this.isnew,
+      this.isanya,
       this.pkid,
       this.geoUnitID,
       this.geoUnitName,
@@ -121,6 +123,7 @@ class ShaakhaaList {
     shaakhaaID = json['ShaakhaaID'];
     praantID = json['PraantID'];
     isnew = json['isnew'];
+    isanya = json['IsAnya'];
     pkid = json['pkid'];
     geoUnitID = json['GeoUnitID'];
     geoUnitName = json['GeoUnitName'];
@@ -168,6 +171,7 @@ class ShaakhaaList {
     data['ShaakhaaID'] = this.shaakhaaID;
     data['PraantID'] = this.praantID;
     data['isnew'] = this.isnew;
+    data['IsAnya'] = this.isanya;
     data['pkid'] = this.pkid;
     data['GeoUnitID'] = this.geoUnitID;
     data['GeoUnitName'] = this.geoUnitName;

@@ -2056,6 +2056,7 @@ Map<String, String> resEnglish = {
   ////////////////////////////////////// Shakhaa Saptah Vistar //////////////////////////////////////
   'searchShakhaa': 'Search Shakhaa',
   'vistarShaakhaa': 'Vistar Saptah Sankalp',
+  'anyaKshetrache': 'Anya Kshetrache',
   'newAdmission': "New Admission",
   'karyakramWiseSeq': "Karyakram",
   'sequences': "Sequence",
@@ -4260,6 +4261,7 @@ Map<String, String> resMarathi = {
   ////////////////////////////////////// Shakhaa Saptah Vistar //////////////////////////////////////
   'searchShakhaa': 'शाखा शोधा',
   'vistarShaakhaa': 'विस्तार सप्ताह संकल्प',
+  'anyaKshetrache': 'अन्य क्षेत्रातील',
   'newAdmission': "नवीन भरती",
   'karyakramWiseSeq': "कार्यक्रम",
   'sequences': "अनुक्रम",
@@ -6463,6 +6465,7 @@ Map<String, String> resHindi = {
   ////////////////////////////////////// Shakhaa Saptah Vistar //////////////////////////////////////
   'searchShakhaa': 'शाखा खोजें',
   'vistarShaakhaa': 'विस्तार सप्ताह संकल्प',
+  'anyaKshetrache': 'अन्य क्षेत्र के',
   'newAdmission': "नयी भरती",
   'karyakramWiseSeq': "कार्यक्रम",
   'sequences': "निरंतरता",

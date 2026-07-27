@@ -18,13 +18,14 @@ class ShaakhaaCard extends StatelessWidget {
   final shaakhaaItem;
   final IsSankalpit;
   final IsNew;
+  final IsAnya;
   var onSaveDetails;
   final Widget? traillingIcon;
   final bool showOther;
 
   List<Statics.MenuItem>? menuItem;
 
-  ShaakhaaCard(this.shaakhaaItem, this.IsSankalpit, this.onSaveDetails, {this.IsNew, this.traillingIcon, this.showOther = true}) {
+  ShaakhaaCard(this.shaakhaaItem, this.IsSankalpit, this.onSaveDetails, {this.IsNew, this.IsAnya, this.traillingIcon, this.showOther = true}) {
     menuItem = [
       if ((int.tryParse(Statics.userDetails['LevelID'] ?? "0") ?? 0) >= 6 && (int.tryParse(Statics.userDetails['LevelID'] ?? "0") ?? 0) < 13)
         Statics.MenuItem(Statics.getLabel('EditMenu'), FontAwesomeIcons.edit, 'EditMenu'),
