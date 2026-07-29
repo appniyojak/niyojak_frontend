@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../helpers/static_data.dart' as Statics;
 import '../models/response_model/dropdown_level_responsemodel.dart';
 import '../providers/bals.dart';
+import 'geo_unit_memory_cache.dart';
 import 'globals.dart';
 
 enum GeoLevel {
@@ -23,6 +24,12 @@ enum GeoHierarchyFetchMode {
   mandalOnly,
   vastiOnly,
   upnagarOnly,
+  fromCache, // NEW: generic, used by all future API-driven features
+}
+
+enum DynamicDropdownFeature {
+  gruh,
+  vistar,
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -248,12 +255,13 @@ final shakhaaNode = GeoHierarchyNode(
   },
 );
 
-GeoHierarchyController createGeoController() {
+GeoHierarchyController createGeoController({DynamicDropdownFeature? fromCacheNamespace}) {
   return GeoHierarchyController(
     hierarchy: [
       ...baseHierarchy,
       shakhaaNode,
     ],
+    fromCacheNamespace: fromCacheNamespace,
   );
 }
 
@@ -261,8 +269,9 @@ GeoHierarchyController createGeoController() {
 
 class GeoHierarchyController extends ChangeNotifier {
   final List<GeoHierarchyNode> hierarchy;
+  final DynamicDropdownFeature? fromCacheNamespace; // NEW
 
-  GeoHierarchyController({required this.hierarchy});
+  GeoHierarchyController({required this.hierarchy, this.fromCacheNamespace});
 
   final GeoHierarchyState state = GeoHierarchyState();
 
@@ -665,6 +674,16 @@ class GeoHierarchyController extends ChangeNotifier {
           parentType,
           '',
         );
+
+      case GeoHierarchyFetchMode.fromCache:
+        assert(fromCacheNamespace != null, 'fromCacheNamespace must be set to use GeoUnitMemoryCache');
+        debugPrint("fromCacheNamespace >>>>>>>>>>> ${fromCacheNamespace?.name}");
+        return await GeoUnitMemoryCache.instance.filterByLevelAndParent(
+          namespace: fromCacheNamespace!,
+          levelID: levelId,
+          parentID: parentId,
+          parentType: parentType,
+        );
     }
   }
 
@@ -688,31 +707,31 @@ class GeoHierarchyController extends ChangeNotifier {
       // final hasUpnagar = state.items[GeoLevel.upnagar]?.isNotEmpty ?? false;
 
       // if (!hasUpnagar) {
-      await loadLevel(GeoLevel.Mandal);
+      await loadLevel(GeoLevel.Mandal, fetchMode: fetchMode);
 
-      await loadLevel(GeoLevel.Vasti);
+      await loadLevel(GeoLevel.Vasti, fetchMode: fetchMode);
       // }
     }
 
     ////////////////////////////////////////
 
     else if (level == GeoLevel.upnagarUpkhanda) {
-      await loadLevel(GeoLevel.Mandal);
+      await loadLevel(GeoLevel.Mandal, fetchMode: fetchMode);
 
-      await loadLevel(GeoLevel.Vasti);
+      await loadLevel(GeoLevel.Vasti, fetchMode: fetchMode);
     }
 
     ////////////////////////////////////////
 
     else if (level == GeoLevel.Mandal) {
-      await loadLevel(GeoLevel.Graam);
+      await loadLevel(GeoLevel.Graam, fetchMode: fetchMode);
     }
 
     ////////////////////////////////////////
 
     else if (level == GeoLevel.Graam || level == GeoLevel.Vasti) {
       if (_hasLevel(GeoLevel.Shaakhaa)) {
-        await loadLevel(GeoLevel.Shaakhaa, isSankalpit: isSankalpit);
+        await loadLevel(GeoLevel.Shaakhaa, isSankalpit: isSankalpit, fetchMode: fetchMode);
       }
     }
     ////////////////////////////////////////
@@ -1207,6 +1226,7 @@ class GeoDropdownWidget extends StatelessWidget {
   final void Function(dynamic)? onSaved;
   final GeoHierarchyFetchMode fetchMode;
   final InputDecoration? decoration;
+  final TextStyle Function(GeoUnitMasterBAL item)? itemTextStyle;
   final bool? isDisabled;
   final bool isSankalpit;
 
@@ -1220,6 +1240,7 @@ class GeoDropdownWidget extends StatelessWidget {
     this.onChanged,
     this.isDisabled,
     this.decoration,
+    this.itemTextStyle,
     this.fetchMode = GeoHierarchyFetchMode.all,
     this.isSankalpit = false,
   });
@@ -1236,7 +1257,7 @@ class GeoDropdownWidget extends StatelessWidget {
       items: items.map((e) {
         return DropdownMenuItem(
           value: e.geoUnitID.toString(),
-          child: Text(e.geoUnitName ?? ''),
+          child: Text(e.geoUnitName ?? '', style: itemTextStyle?.call(e)),
         );
       }).toList(),
       onChanged: (value) async {

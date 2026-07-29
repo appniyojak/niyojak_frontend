@@ -472,6 +472,7 @@ class GeoUnitMasterBAL {
   int? levelID;
 
   int? isnew;
+  int? isanya;
 
   String? name;
   String? fullName;
@@ -501,6 +502,7 @@ class GeoUnitMasterBAL {
     this.praantID,
     this.levelID,
     this.isnew,
+    this.isanya,
     this.name,
     this.fullName,
     this.levelName,
@@ -528,6 +530,7 @@ class GeoUnitMasterBAL {
     praantID = map["PraantID"];
     levelID = map["LevelID"];
     isnew = map["isnew"];
+    isanya = map["anya"] ?? 0;
     name = map["Name"];
     fullName = map["FullName"];
     levelName = map["LevelName"];
@@ -555,6 +558,7 @@ class GeoUnitMasterBAL {
     data['DisplaySequence'] = this.displaySequence;
     data['GeoUnitID'] = this.geoUnitID;
     data['isnew'] = this.isnew;
+    data['anya'] = this.isanya;
     data['GeoUnitName'] = this.geoUnitName;
     data['HasGraaminKshetra'] = this.hasGraaminKshetra;
     data['LevelID'] = this.levelID;

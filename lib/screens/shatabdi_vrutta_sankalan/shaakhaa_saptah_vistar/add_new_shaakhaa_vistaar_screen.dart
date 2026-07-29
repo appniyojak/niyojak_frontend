@@ -145,7 +145,11 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
         final trail = await controller.getTrailFromGeoUnitId((shaakhaa?.parentGraamID ?? shaakhaa?.parentVastiID).toString());
 
         if (trail != null) await controller.setHierarchyFromTrail(trail: trail);
-        loadDataFromModel(shaakhaa!);
+
+        _shaakhaanameCtrl.text = data?.shaakhaaName ?? "";
+
+        _karyakartaList = data?.shaakhaaVistarAadharList ?? [];
+
         setState(() {
           _vayogatValue = (shaakhaa?.vayogatID == null || shaakhaa?.vayogatID == 0) ? null : (shaakhaa?.vayogatID ?? "").toString();
         });

@@ -39,13 +39,13 @@ class SwayamsevakNewData {
   SwayamsevakNewData({this.swayamSevakID, this.levelID, this.isanya, this.fullName, this.mobileNumber, this.daayitvaName, this.levelName});
 
   SwayamsevakNewData.fromJson(Map<String, dynamic> json) {
-    swayamSevakID = json['swayamSevakID'];
-    levelID = json['levelID'];
-    isanya = json['isanya'];
-    fullName = json['fullName'];
-    mobileNumber = json['mobileNumber'];
-    daayitvaName = json['daayitvaName'];
-    levelName = json['levelName'];
+    swayamSevakID = json['SwayamsevakID'] ?? json['swayamSevakID'];
+    levelID = json['LevelID'] ?? json['levelID'];
+    isanya = json['IsAnya'] ?? json['isanya'];
+    fullName = json['FullName'] ?? json['fullName'];
+    mobileNumber = json['MobileNumber'] ?? json['mobileNumber'];
+    daayitvaName = json['DaayitvaName'] ?? json['daayitvaName'];
+    levelName = json['LevelName'] ?? json['levelName'];
   }
 
   Map<String, dynamic> toJson() {

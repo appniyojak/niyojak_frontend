@@ -303,6 +303,7 @@ const String urlShaakhaaVistarReport = baseUrlAPI + '/GetVistarShaakhaaVruttaRep
 const String urlGeoShaakhaaForReport = baseUrlAPI + '/getshakhaforvistarreport';
 
 const String urlVastiSarvekshanDataDump = baseUrlAPI + '/VastisarVekshanDataDump';
+const String urlGetGeoUnitForVistarApi = baseUrlAPI + '/getgeounitdataforvistar';
 const String urlGetReleaseNotes = baseUrlAPI + '/getreleasenote';
 
 //Main Shakha/Milan Vrutta Report Apis
@@ -954,6 +955,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevel(String levelID) async {
       data['PraantID'],
       data['LevelID'],
       data['isnew'] ?? 0,
+      data['anya'] ?? 0,
       data['GeoUnitName'],
       "",
       "",
@@ -1030,6 +1032,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForVasti(String levelI
       data['PraantID'],
       data['LevelID'],
       data['isnew'] ?? 0,
+      data['anya'] ?? 0,
       data['GeoUnitName'],
       "",
       "",
@@ -1107,6 +1110,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForMandal(String level
       data['PraantID'],
       data['LevelID'],
       data['isnew'] ?? 0,
+      data['anya'] ?? 0,
       data['GeoUnitName'],
       "",
       "",
@@ -1184,6 +1188,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForUpnagar(String leve
       data['PraantID'],
       data['LevelID'],
       data['isnew'] ?? 0,
+      data['anya'] ?? 0,
       data['GeoUnitName'],
       "",
       "",
@@ -1251,6 +1256,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParent(String levelID, Strin
       data['PraantID'],
       data['LevelID'],
       data['isnew'] ?? 0,
+      data['anya'] ?? 0,
       data['GeoUnitName'],
       "",
       "",
@@ -1292,6 +1298,7 @@ Future<GeoUnitMasterBAL?> getGeoUnitsByID(String geoUnitID) async {
       result[0]['PraantID'],
       result[0]['LevelID'],
       result[0]['isnew'] ?? 0,
+      result[0]['anya'] ?? 0,
       result[0]['GeoUnitName'],
       result[0]['FullName'],
       result[0]['LevelName'],
@@ -4925,6 +4932,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitMasterForApp(
       data['PraantID'],
       data['LevelID'],
       data['isnew'] ?? 0,
+      data['anya'] ?? 0,
       data['GeoUnitName'],
       "",
       data['LevelName'],
@@ -5575,6 +5583,35 @@ Future<VastiSarvekshanRespModel?> getVastiSarvekshanDataDump(BuildContext contex
     return null;
   } finally {
     Navigator.of(context, rootNavigator: true).pop();
+  }
+}
+
+Future<List<GeoUnitMasterBAL>?> getGeoUnitMasterDataForVistar(Map<String, dynamic> inputJson, {BuildContext? context}) async {
+  bool? connected = await isInternetConnected();
+  if (connected == false) return null;
+
+  if (context != null) showLoaderDialog(context);
+  log(urlGetGeoUnitForVistarApi);
+  log(jsonEncode(inputJson));
+
+  try {
+    final response = await http.post(
+      Uri.parse(urlGetGeoUnitForVistarApi),
+      headers: {'Content-Type': 'application/json', 'Accept': '*/*'},
+      body: jsonEncode(inputJson),
+    );
+
+    if (response.statusCode != 200) return null;
+
+    final data = jsonDecode(response.body);
+    if (data["Status"] != "200" && data["Status"] != "Success") return null;
+
+    return (data['GeoUnitListforAbhiyaan'] as List? ?? []).map((e) => GeoUnitMasterBAL.fromJson(e)).toList();
+  } catch (e) {
+    log("getGeoUnitMasterDataForVistar exception: $e");
+    return null;
+  } finally {
+    if (context != null) Navigator.of(context, rootNavigator: true).pop();
   }
 }
 
@@ -6650,6 +6687,7 @@ Future<List<GeoUnitMasterBAL>?> getGeoShaakhaaForReportData(BuildContext context
             data['PraantID'],
             data['LevelID'],
             data['isnew'] ?? 0,
+            data['anya'] ?? 0,
             data['name'],
             data['fullName'],
             data['levelName'],

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../helpers/static_data.dart' as Statics;
 import '../../../models/response_model/shaakhaa_vistar_report_repo_model.dart';
 import '../../../providers/bals.dart';
+import '../../../utils/geo_unit_memory_cache.dart';
 import '../../../utils/globals.dart';
 import '../../../utils/stable_geounit_class.dart';
 import '../../../widgets/horizontal_graph_bar_widget.dart';
@@ -27,7 +28,7 @@ class ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Aut
   @override
   bool get wantKeepAlive => true;
 
-  final controller = createGeoController();
+  final controller = createGeoController(fromCacheNamespace: DynamicDropdownFeature.vistar);
 
   // bool isShakhaaSelected = true;
   bool isDailySelected = true;
@@ -67,21 +68,41 @@ class ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Aut
     WidgetsBinding.instance.addPostFrameCallback((_) => initData());
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    GeoUnitMemoryCache.instance.clear(DynamicDropdownFeature.vistar);
+    debugPrint("dispose >>>>>> check cache >>>>>>>>> ${GeoUnitMemoryCache.instance.isLoaded(DynamicDropdownFeature.vistar)}");
+    debugPrint("dispose >>>>>> check cache >>>>>>>>> ${GeoUnitMemoryCache.instance.cache}");
+
+    super.dispose();
+  }
+
   initData() async {
     final dm = await MyAppGlobals.getLevelLDB();
 
-    await controller.initialize(dm);
+    await GeoUnitMemoryCache.instance.ensureLoaded(
+      namespace: DynamicDropdownFeature.vistar,
+      fetcher: () => Statics.getGeoUnitMasterDataForVistar({'SwayamsevakID': int.tryParse(Statics.userDetails["userID"] ?? "0") ?? 0}),
+    );
+
+    // GeoUnitMemoryCache.instance.cache.entries.first.value.forEach((element) => debugPrint("init >>>>>> check cache >>>>>>>>> ${element.isnew}"));
+
+    await controller.initialize(dm, fetchMode: GeoHierarchyFetchMode.fromCache);
 
     // isShakhaaSelected = (controller.ctrlUserLevelId == 1);
 
     setState(() {});
 
-    if ([2, 3].contains(controller.ctrlUserLevelId)) {
-      populatelinkedShaakhaDropdown(controller.deepestSelectedGeoUnitId ?? "0", controller.ctrlUserLevelId == 3);
-    }
+    // if ([2, 3].contains(controller.ctrlUserLevelId)) {
+    //   populatelinkedShaakhaDropdown(controller.deepestSelectedGeoUnitId ?? "0", controller.ctrlUserLevelId == 3);
+    // }
     if (controller.ctrlUserLevelId == 1) {
       selectedshaakhaa = controller.deepestSelectedGeoUnitBAL;
     }
+
+    debugPrint("check cache >>>>>>>>> ${GeoUnitMemoryCache.instance.isLoaded(DynamicDropdownFeature.vistar)}");
+
     getReportDataFun(controller.deepestSelectedGeoUnitId);
   }
 
@@ -352,6 +373,7 @@ class ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Aut
                       level: GeoLevel.Mahaanagar,
                       title: 'Mahaanagar',
                       controller: ctrl,
+                      fetchMode: GeoHierarchyFetchMode.fromCache,
                       onChanged: (p0) => setState(() {
                         _searched = false;
                         _linkedshaakhaa = selectedshaakhaa = null;
@@ -363,6 +385,7 @@ class ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Aut
                       level: GeoLevel.Vibhaag,
                       title: 'Vibhaag',
                       controller: ctrl,
+                      fetchMode: GeoHierarchyFetchMode.fromCache,
                       onChanged: (p0) => setState(() {
                         _searched = false;
                         _linkedshaakhaa = selectedshaakhaa = null;
@@ -374,6 +397,7 @@ class ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Aut
                         level: GeoLevel.Bhaag,
                         title: 'Bhaag',
                         controller: ctrl,
+                        fetchMode: GeoHierarchyFetchMode.fromCache,
                         onChanged: (p0) => setState(() {
                           _searched = false;
                           _linkedshaakhaa = selectedshaakhaa = null;
@@ -385,6 +409,7 @@ class ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Aut
                         level: GeoLevel.Nagar,
                         title: 'Nagar',
                         controller: ctrl,
+                        fetchMode: GeoHierarchyFetchMode.fromCache,
                         onChanged: (p0) => setState(() {
                           _searched = false;
                           _linkedshaakhaa = selectedshaakhaa = null;
@@ -399,6 +424,7 @@ class ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Aut
                         level: GeoLevel.upnagarUpkhanda,
                         title: 'upnagarUpkhanda',
                         controller: ctrl,
+                        fetchMode: GeoHierarchyFetchMode.fromCache,
                         onChanged: (p0) => setState(() {
                           _searched = false;
                           _linkedshaakhaa = selectedshaakhaa = null;
@@ -412,6 +438,7 @@ class ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Aut
                         level: GeoLevel.Mandal,
                         title: 'Mandal',
                         controller: ctrl,
+                        fetchMode: GeoHierarchyFetchMode.fromCache,
                         onChanged: (p0) => setState(() {
                           _searched = false;
                           _linkedshaakhaa = selectedshaakhaa = null;
@@ -422,25 +449,27 @@ class ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Aut
                       GeoDropdownWidget(
                         level: GeoLevel.Graam,
                         title: 'Graam',
-                        controller: ctrl,
-                        onChanged: (p0) => populatelinkedShaakhaDropdown(p0, true),
+                        controller: ctrl, fetchMode: GeoHierarchyFetchMode.fromCache,
+                        // onChanged: (p0) => populatelinkedShaakhaDropdown(p0, true),
                       ),
 
                     if (ctrl.hasItems(GeoLevel.Vasti))
                       GeoDropdownWidget(
                         level: GeoLevel.Vasti,
                         title: 'Vasti',
-                        controller: ctrl,
-                        onChanged: (p0) => populatelinkedShaakhaDropdown(p0, false),
+                        controller: ctrl, fetchMode: GeoHierarchyFetchMode.fromCache,
+                        // onChanged: (p0) => populatelinkedShaakhaDropdown(p0, false),
                       ),
 
-                    if (ctrl.ctrlUserLevelId == 1 && ctrl.hasItems(GeoLevel.Shaakhaa))
+                    if (ctrl.hasItems(GeoLevel.Shaakhaa))
                       GeoDropdownWidget(
                         level: GeoLevel.Shaakhaa,
                         title: 'Shaakhaa',
                         controller: ctrl,
+                        fetchMode: GeoHierarchyFetchMode.fromCache,
+                        itemTextStyle: (bg) => TextStyle(color: bg.isnew == 1 ? Colors.blue : Colors.black),
                       ),
-                    if (ctrl.ctrlUserLevelId != 1 && _linkedshaakhaa != null && _linkedshaakhaa!.isNotEmpty)
+                    /*if (ctrl.ctrlUserLevelId != 1 && _linkedshaakhaa != null && _linkedshaakhaa!.isNotEmpty)
                       DropdownButtonFormField<GeoUnitMasterBAL>(
                         decoration: InputDecoration(labelText: Statics.getLabel("Shaakhaa")),
                         isExpanded: true,
@@ -458,7 +487,7 @@ class ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Aut
                           _searched = false;
                           selectedshaakhaa = value;
                         }),
-                      ),
+                      ),*/
 
                     SizedBox(height: 12),
                     /*if (isShakhaaSelected)

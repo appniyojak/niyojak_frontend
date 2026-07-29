@@ -1,4 +1,4 @@
-
+import 'new_search_swayamsevak_model.dart';
 
 class ShaakhaaVistarDetailRespModel {
   String? status;
@@ -62,6 +62,7 @@ class ShakhaaVistarDetail {
   String? otherOptionalVishay;
   int? optionalShaaririkVishayID;
   int? modifiedBy;
+  List<SwayamsevakNewData>? shaakhaaVistarAadharList;
 
   // List<SwayamsevakNewData>? data;
 
@@ -102,7 +103,8 @@ class ShakhaaVistarDetail {
       this.hasPaalak,
       this.otherOptionalVishay,
       this.optionalShaaririkVishayID,
-      this.modifiedBy});
+      this.modifiedBy,
+      this.shaakhaaVistarAadharList});
 
   ShakhaaVistarDetail.fromJson(Map<String, dynamic> json) {
     praantID = json['PraantID'];
@@ -142,6 +144,12 @@ class ShakhaaVistarDetail {
     otherOptionalVishay = json['OtherOptionalVishay'];
     optionalShaaririkVishayID = json['OptionalShaaririkVishayID'];
     modifiedBy = json['ModifiedBy'];
+    if (json['shaakhaaVistarAadharList'] != null) {
+      shaakhaaVistarAadharList = <SwayamsevakNewData>[];
+      json['shaakhaaVistarAadharList'].forEach((v) {
+        shaakhaaVistarAadharList!.add(new SwayamsevakNewData.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -183,6 +191,9 @@ class ShakhaaVistarDetail {
     data['OtherOptionalVishay'] = this.otherOptionalVishay;
     data['OptionalShaaririkVishayID'] = this.optionalShaaririkVishayID;
     data['ModifiedBy'] = this.modifiedBy;
+    if (this.shaakhaaVistarAadharList != null) {
+      data['shaakhaaVistarAadharList'] = this.shaakhaaVistarAadharList!.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }
