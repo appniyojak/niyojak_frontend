@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -7,12 +8,13 @@ import '../../../providers/bals.dart';
 import '../../../utils/globals.dart';
 import '../../../utils/stable_geounit_class.dart';
 import '../../../widgets/shaakhaa_card.dart';
-import '../../home_screen/home_screen.dart';
 import 'add_new_shaakhaa_vistaar_screen.dart';
 import 'shakhaa_saptah_form_screen.dart';
 
 class ShakhaaSaptahListTab extends StatefulWidget {
-  const ShakhaaSaptahListTab({super.key});
+  final bool hitApiWtoDropdown;
+
+  const ShakhaaSaptahListTab({super.key, this.hitApiWtoDropdown = false});
 
   @override
   State<ShakhaaSaptahListTab> createState() => _ShakhaaSaptahListTabState();
@@ -43,9 +45,9 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
   List<ShaakhaaList> _sankalpitShaakhaaList = [];
   List<ShaakhaaList> _newShaakhaaList = [];
   List<ShaakhaaList> _anyaShaakhaaList = [];
-  List<Statics.cLatLong> _latLng = [];
+  Map<String, List<ShaakhaaList>> _groupedAnyaShaakhaaByTrail = {};
 
-  final controller = createGeoController();
+  final _controller = createGeoController();
 
   @override
   void didChangeDependencies() {
@@ -85,9 +87,11 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
   Future<void> initData() async {
     final dm = await MyAppGlobals.getLevelLDB();
 
-    await controller.initialize(dm);
+    await _controller.initialize(dm);
 
     await populateDropdown();
+
+    if (widget.hitApiWtoDropdown) _search(_controller.deepestSelectedGeoUnitId, context);
 
     setState(() {});
   }
@@ -105,6 +109,7 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
   Future<void> _search(String? selectedGeoUnitId, var ctx) async {
     setState(() {
       _shaakhaaList = _sankalpitShaakhaaList = _newShaakhaaList = _anyaShaakhaaList = [];
+      _groupedAnyaShaakhaaByTrail = {};
       _isSearching = true;
     });
 
@@ -132,6 +137,8 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
     _newShaakhaaList = _isNewSankalpitList.toList();
     _anyaShaakhaaList = _isAnyaSankalpitList.toList();
 
+    _groupedAnyaShaakhaaByTrail = groupBy(_anyaShaakhaaList, (ShaakhaaList item) => item.trail ?? Statics.getLabel("anyaKshetrache"));
+
     // _shaakhaaList?.removeWhere((e) => e["IsSankalpit"] == true);
     setState(() {
       _shaakhaaList;
@@ -152,43 +159,43 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
   Widget build(BuildContext context) {
     super.build(context);
 
-    return PopScope(
-      canPop: false,
-      onPopInvoked: (didpop) {
-        if (didpop) return;
-        Navigator.pushNamedAndRemoveUntil(context, Navigator.of(context).pushNamed(HomeScreen.routeName).toString(), (route) => false);
-      },
-      child: DefaultTabController(
-        length: _anyaShaakhaaList.isEmpty ? 3 : 4,
-        child: Container(
-          padding: EdgeInsets.all(20.0),
-          child: Column(
-            children: <Widget>[
-              /*Text(
-                Statics.getLabel('searchShaakhaaScreenBanner'),
-                style: TextStyle(fontSize: 20),
-              ),*/
-              SizedBox(height: 10),
+    return DefaultTabController(
+      length: widget.hitApiWtoDropdown
+          ? 2
+          : _anyaShaakhaaList.isEmpty
+              ? 3
+              : 4,
+      child: Container(
+        padding: EdgeInsets.all(20.0),
+        child: Column(
+          children: <Widget>[
+            /*Text(
+              Statics.getLabel('searchShaakhaaScreenBanner'),
+              style: TextStyle(fontSize: 20),
+            ),*/
+            SizedBox(height: 10),
 
-              ///
-              _dropdownSection(),
+            ///
+            if (!widget.hitApiWtoDropdown) _dropdownSection(),
 
-              ///
+            ///
 
-              if (_searched) ...[
-                TabBar(labelColor: Colors.purple, unselectedLabelColor: Colors.grey, tabs: [
-                  Tab(
-                      child: Text(
-                    Statics.getLabel("vartamaan"),
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 13.5),
-                  )),
+            if (_searched) ...[
+              TabBar(labelColor: Colors.purple, unselectedLabelColor: Colors.grey, tabs: [
+                Tab(
+                    child: Text(
+                  Statics.getLabel("vartamaan"),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 13.5),
+                )),
+                if (!widget.hitApiWtoDropdown)
                   Tab(
                       child: Text(
                     Statics.getLabel("sankalpit"),
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 13.5),
                   )),
+                if (!widget.hitApiWtoDropdown)
                   Tab(
                       child: Text(
                     Statics.getLabel("vistarShaakhaa"),
@@ -198,51 +205,53 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(fontSize: 13.5),
                   )),
-                  if (_anyaShaakhaaList.isNotEmpty)
-                    Tab(
-                        child: Text(
-                      Statics.getLabel("anyaKshetrache"),
-                      textAlign: TextAlign.center,
-                      softWrap: true,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 13.5),
-                    )),
-                ]),
-                Flexible(
-                  child: TabBarView(children: [
-                    ///1
-                    _shaakhaaList == null || (_shaakhaaList?.isEmpty == true)
-                        ? SizedBox(
-                            height: 120,
-                            child: Center(
-                              child: Text(Statics.getLabel("noDataFoundTryAnotherSearch")),
-                            ),
-                          )
-                        : ListView.separated(
-                            shrinkWrap: true,
-                            // physics: NeverScrollableScrollPhysics(),
-                            separatorBuilder: (context, index) => SizedBox(height: 8),
-                            itemCount: _shaakhaaList?.length ?? 0,
-                            itemBuilder: (context, index) {
-                              return ShaakhaaCard(_shaakhaaList?[index].toJson(), false, _search,
-                                  showOther: false,
-                                  traillingIcon: IconButton(
-                                      onPressed: () => Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => ShakhaaSaptahFormScreen(
-                                                    shaakhaa: _shaakhaaList?[index],
-                                                    viewType: "EditVrutta",
-                                                  ))),
-                                      icon: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [Icon(Icons.edit), Text(Statics.getLabel("Vrutta"))],
-                                      )));
-                            },
+                if (_anyaShaakhaaList.isNotEmpty)
+                  Tab(
+                      child: Text(
+                    Statics.getLabel("anyaKshetrache"),
+                    textAlign: TextAlign.center,
+                    softWrap: true,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 13.5),
+                  )),
+              ]),
+              Flexible(
+                child: TabBarView(children: [
+                  ///1
+                  _shaakhaaList == null || (_shaakhaaList?.isEmpty == true)
+                      ? SizedBox(
+                          height: 120,
+                          child: Center(
+                            child: Text(Statics.getLabel("noDataFoundTryAnotherSearch")),
                           ),
+                        )
+                      : ListView.separated(
+                          shrinkWrap: true,
+                          // physics: NeverScrollableScrollPhysics(),
+                          padding: EdgeInsets.only(bottom: 80, top: 16),
+                          separatorBuilder: (context, index) => SizedBox(height: 8),
+                          itemCount: _shaakhaaList?.length ?? 0,
+                          itemBuilder: (context, index) {
+                            return ShaakhaaCard(_shaakhaaList?[index].toJson(), false, _search,
+                                showOther: false,
+                                traillingIcon: IconButton(
+                                    onPressed: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => ShakhaaSaptahFormScreen(
+                                                  shaakhaa: _shaakhaaList?[index],
+                                                  viewType: "EditVrutta",
+                                                ))),
+                                    icon: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [Icon(Icons.edit), Text(Statics.getLabel("Vrutta"))],
+                                    )));
+                          },
+                        ),
 
-                    ///2
+                  ///2
+                  if (!widget.hitApiWtoDropdown)
                     (_sankalpitShaakhaaList.isEmpty)
                         ? SizedBox(
                             height: 120,
@@ -255,6 +264,7 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
                             // physics: NeverScrollableScrollPhysics(),
                             separatorBuilder: (context, index) => SizedBox(height: 8),
                             itemCount: _sankalpitShaakhaaList.length ?? 0,
+                            padding: EdgeInsets.only(bottom: 80, top: 16),
                             itemBuilder: (context, index) {
                               return ShaakhaaCard(_sankalpitShaakhaaList[index].toJson(), _sankalpitShaakhaaList[index].isSankalpit, _search,
                                   showOther: false,
@@ -272,11 +282,12 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
                             },
                           ),
 
-                    ///3
+                  ///3
+                  if (!widget.hitApiWtoDropdown)
                     Scaffold(
                       floatingActionButton: FloatingActionButton(
-                        onPressed: () => Navigator.pushNamed(context, AddNewShaakhaaVistaarScreen.routeName, arguments: {"geoid": controller.deepestSelectedGeoUnitId}).then((value) {
-                          if (value == true) _search(controller.deepestSelectedGeoUnitId, context);
+                        onPressed: () => Navigator.pushNamed(context, AddNewShaakhaaVistaarScreen.routeName, arguments: {"geoid": _controller.deepestSelectedGeoUnitId}).then((value) {
+                          if (value == true) _search(_controller.deepestSelectedGeoUnitId, context);
                         }),
                         child: Icon(Icons.add, color: Colors.blueAccent.shade700),
                       ),
@@ -289,7 +300,7 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
                             )
                           : ListView.separated(
                               shrinkWrap: true,
-                              padding: EdgeInsets.only(bottom: 80),
+                              padding: EdgeInsets.only(bottom: 80, top: 16),
                               // physics: NeverScrollableScrollPhysics(),
                               separatorBuilder: (context, index) => SizedBox(height: 8),
                               itemCount: _newShaakhaaList.length ?? 0,
@@ -305,7 +316,7 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
                                                       "pkid": _newShaakhaaList[index].pkid,
                                                       "geoid": _newShaakhaaList[index].parentVastiID ?? _newShaakhaaList[index].parentGraamID
                                                     }).then((value) {
-                                                      if (value == true) _search(controller.deepestSelectedGeoUnitId, context);
+                                                      if (value == true) _search(_controller.deepestSelectedGeoUnitId, context);
                                                     }),
                                                 child: ListTile(
                                                   // tileColor: Colors.white,
@@ -348,35 +359,67 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
                             ),
                     ),
 
-                    ///4
-                    if (_anyaShaakhaaList.isNotEmpty)
-                      ListView.separated(
-                        shrinkWrap: true,
-                        // physics: NeverScrollableScrollPhysics(),
-                        separatorBuilder: (context, index) => SizedBox(height: 8),
-                        itemCount: _anyaShaakhaaList.length ?? 0,
-                        itemBuilder: (context, index) {
-                          return ShaakhaaCard(_anyaShaakhaaList[index].toJson(), false, _search,
-                              showOther: false,
-                              IsAnya: true,
-                              traillingIcon: IconButton(
-                                  onPressed: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => ShakhaaSaptahFormScreen(
-                                                shaakhaa: _anyaShaakhaaList[index],
-                                                viewType: "EditVrutta",
-                                              ))),
-                                  icon: Column(
-                                    children: [Icon(Icons.edit), Text(Statics.getLabel("Vrutta"))],
-                                  )));
-                        },
-                      ),
-                  ]),
-                )
-              ],
+                  ///4
+                  if (_groupedAnyaShaakhaaByTrail.isNotEmpty)
+                    ListView.separated(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      padding: EdgeInsets.only(top: 16),
+                      separatorBuilder: (context, index) => SizedBox(height: 8),
+                      itemCount: _groupedAnyaShaakhaaByTrail.length,
+                      itemBuilder: (context, index) {
+                        final trailName = _groupedAnyaShaakhaaByTrail.keys.elementAt(index);
+                        final itemsInTrail = _groupedAnyaShaakhaaByTrail[trailName]!;
+
+                        return Card(
+                          clipBehavior: Clip.antiAlias,
+                          child: ExpansionTile(
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            title: Text(
+                              trailName,
+                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                            initiallyExpanded: true,
+                            childrenPadding: EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 12),
+                            children: [
+                              ListView.separated(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                separatorBuilder: (context, i) => SizedBox(height: 8),
+                                itemCount: itemsInTrail.length,
+                                itemBuilder: (context, i) {
+                                  final shaakhaa = itemsInTrail[i];
+                                  return ShaakhaaCard(
+                                    shaakhaa.toJson(),
+                                    false,
+                                    _search,
+                                    showOther: false,
+                                    IsAnya: true,
+                                    traillingIcon: IconButton(
+                                      onPressed: () => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => ShakhaaSaptahFormScreen(
+                                                    shaakhaa: shaakhaa,
+                                                    viewType: "EditVrutta",
+                                                  ))),
+                                      icon: Column(
+                                        children: [Icon(Icons.edit), Text(Statics.getLabel("Vrutta"))],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                ]),
+              )
             ],
-          ),
+          ],
         ),
       ),
     );
@@ -384,7 +427,7 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
 
   Widget _dropdownSection() {
     return ChangeNotifierProvider.value(
-      value: controller,
+      value: _controller,
       child: Consumer<GeoHierarchyController>(builder: (_, ctrl, __) {
         return Column(
           children: [

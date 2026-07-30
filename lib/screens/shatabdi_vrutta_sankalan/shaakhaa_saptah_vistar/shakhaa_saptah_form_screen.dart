@@ -125,7 +125,7 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
     await populateShaakhaVayogat(shaakhaaID.toString());
     // if (vruttaID > 0) {
     await getSwDetails();
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   populateShaakhaVayogat(shaakhaaID) async {
@@ -146,11 +146,12 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
       // print("code >>>>>>>>>>>>>>>>>>>>>>>>>>>>> $code");
       print("frequencyId >>>>>>>>>>>>>>>>>>>>>>>>>>>>> $frequencyId");
     }
-    setState(() {});
+    if (mounted) setState(() {});
     // _boudhikDaysList.forEach((e) => print("e >>>>>>>>>>>>>>>>>>>> ${e?.toJson()}"));
   }
 
   getSwDetails() async {
+    if (!mounted) return;
     setState(() {
       _isFetchingData = true;
     });
@@ -216,9 +217,10 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
       });
       // print(_vruttaDate);
     }
-    setState(() {
-      _isFetchingData = false;
-    });
+    if (mounted)
+      setState(() {
+        _isFetchingData = false;
+      });
   }
 
   _pickFromDate() async {

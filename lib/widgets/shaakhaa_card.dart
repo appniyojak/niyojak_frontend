@@ -215,7 +215,11 @@ class ShaakhaaCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: IsNew == true ? Colors.lightBlue.shade100 : (IsSankalpit == true ? Colors.amber : null),
+      color: IsAnya == true
+          ? Colors.deepOrange.shade100
+          : IsNew == true
+              ? Colors.lightBlue.shade100
+              : (IsSankalpit == true ? Colors.amber : null),
       margin: EdgeInsets.all(5),
       elevation: 5,
       child: Padding(

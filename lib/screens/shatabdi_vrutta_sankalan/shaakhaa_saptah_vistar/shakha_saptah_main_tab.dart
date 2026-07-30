@@ -6,6 +6,7 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import '../../../helpers/static_data.dart' as Statics;
 import '../../../models/response_model/dropdown_level_responsemodel.dart';
 import '../../../utils/globals.dart';
+import '../../../utils/stable_geounit_class.dart';
 import '../../../widgets/app_drawer.dart';
 import 'shakhaa_saptah_form_screen.dart';
 import 'shakhaa_saptah_list_tab.dart';
@@ -82,6 +83,9 @@ class _ShakhaSaptahMainTabState extends State<ShakhaSaptahMainTab> with SingleTi
     // It should pop normally if it's a single screen OR if the user is already on the first tab (index 0).
     final bool canPopScreen = _tabController?.index == 0;
 
+    final _reportTabState = _reportTabKey.currentState;
+    final _reportTabCtrl = _reportTabState?.controller;
+
     return PopScope(
       canPop: canPopScreen,
       onPopInvokedWithResult: (didPop, result) {
@@ -107,14 +111,14 @@ class _ShakhaSaptahMainTabState extends State<ShakhaSaptahMainTab> with SingleTi
               controller: _tabController,
               indicatorColor: Colors.white,
               physics: NeverScrollableScrollPhysics(),
-              onTap: (index) {
+              onTap: (index) async {
                 if (index == 0 && userLevelId == 1) {
                   // This safely calls the refresh method inside your tab
-                  _reportTabKey.currentState?.getReportDataFun(_reportTabKey.currentState?.selectedshaakhaa?.geoUnitID ?? _reportTabKey.currentState?.controller.deepestSelectedGeoUnitId);
-                } else if (index == 0 && [2, 3].contains(userLevelId)) {
-                  // This safely calls the refresh method inside your tab
-                  _reportTabKey.currentState?.populatelinkedShaakhaDropdown(
-                      (_reportTabKey.currentState?.selectedshaakhaa?.geoUnitID ?? _reportTabKey.currentState?.controller.deepestSelectedGeoUnitId).toString(), userLevelId == 1);
+                  await _reportTabCtrl?.loadHierarchyForUser(fetchMode: GeoHierarchyFetchMode.fromCache);
+                  _reportTabState?.getReportDataFun(_reportTabCtrl?.deepestSelectedGeoUnitId);
+                  // } else if (index == 0 && [2, 3].contains(userLevelId)) {
+                  //   // This safely calls the refresh method inside your tab
+                  //   _reportTabState?.populatelinkedShaakhaDropdown((_reportTabCtrl?.deepestSelectedGeoUnitId).toString(), userLevelId == 1);
                 }
               },
               tabs: <Widget>[
@@ -161,7 +165,9 @@ class _ShakhaSaptahMainTabState extends State<ShakhaSaptahMainTab> with SingleTi
               children: <Widget>[
                 ShakhaaSaptahReportTab(key: _reportTabKey, onIdTap: onIdSelected),
                 userLevelId == 1
-                    ? ShakhaaSaptahFormScreen(key: ValueKey('$selectedId-$_fromYest-$_viewType'), showAppBar: false, shaakhaaId: selectedId, fromYesterday: _fromYest, viewType: _viewType)
+                    ? (_reportTabState?.cacheInst.isAnyaExist() ?? false)
+                        ? ShakhaaSaptahListTab(hitApiWtoDropdown: true)
+                        : ShakhaaSaptahFormScreen(key: ValueKey('$selectedId-$_fromYest-$_viewType'), showAppBar: false, shaakhaaId: selectedId, fromYesterday: _fromYest, viewType: _viewType)
                     : ShakhaaSaptahListTab(),
               ],
             ),

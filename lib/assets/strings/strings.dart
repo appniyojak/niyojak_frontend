@@ -2056,7 +2056,7 @@ Map<String, String> resEnglish = {
   ////////////////////////////////////// Shakhaa Saptah Vistar //////////////////////////////////////
   'searchShakhaa': 'Search Shakhaa',
   'vistarShaakhaa': 'Vistar Saptah Sankalp',
-  'anyaKshetrache': 'Anya Kshetrache',
+  'anyaKshetrache': 'Anya Level',
   'newAdmission': "New Admission",
   'karyakramWiseSeq': "Karyakram",
   'sequences': "Sequence",
@@ -2169,6 +2169,7 @@ Map<String, String> resEnglish = {
   "addAadharPerson": "Add Aadhaar Karyakarta",
   "addAadharPersonTip":
       "If Aadhaar Karyakarta do not have any assigned responsibilities, they should be assigned the responsibility of a Vasti/Graam Shaakhaa Vistar Sahyogi and be permitted to use the app.",
+  "searchAadharPersonTip": "Karyakarte from other levels are shown in orange(🟠).",
   "duplicationValidation": "Duplication Detected",
   "reportBarGraphTitle": "Activity-wise Report Of Shaakhaas",
   "reportBarGraphSubtitle": "Week/Month wise bar graph of each activity",
@@ -2188,6 +2189,7 @@ Map<String, String> resEnglish = {
   'AddNewPerson': 'Add New Person',
   'KaryakartaFound': 'Karyakarta Found',
   'AddedKaryakarta': 'Added Karyakarta',
+  'vistarDropdownTip': 'Color Guide: 🟠 Anya Sthar | 🔵 New Shaakha | ⚫ Your Assigned Daayitva',
 
   ////////////////////////////////////// Main Shakhaa Milan(NEW KEYS) //////////////////////////////////////
   "dailyActivityHeader": "Were the daily activities conducted?",
@@ -4261,7 +4263,7 @@ Map<String, String> resMarathi = {
   ////////////////////////////////////// Shakhaa Saptah Vistar //////////////////////////////////////
   'searchShakhaa': 'शाखा शोधा',
   'vistarShaakhaa': 'विस्तार सप्ताह संकल्प',
-  'anyaKshetrache': 'अन्य क्षेत्रातील',
+  'anyaKshetrache': 'अन्य स्तरातील',
   'newAdmission': "नवीन भरती",
   'karyakramWiseSeq': "कार्यक्रम",
   'sequences': "अनुक्रम",
@@ -4374,6 +4376,7 @@ Map<String, String> resMarathi = {
   "prevyearmaansik": "मागील महिना (Masik)",
   "addAadharPerson": "आधार कार्यकर्ता जोडा",
   "addAadharPersonTip": "आधार कार्यकर्त्यांकडे जर कुठलीही जवाबदारी नसेल तर त्यांना वस्ती/ग्राम शाखा विस्तार सहयोगी म्हणून जवाबदारी देऊन एप वापरण्याची परवानगी द्यावी",
+  "searchAadharPersonTip": "इतर स्तरावरील कार्यकर्ते नारंगी (🟠) रंगाने दर्शविले आहेत.",
   "duplicationValidation": "एकाच नावाची नोंद आधीपासून आढळली आहे.",
   "reportBarGraphTitle": "शाखांचा कार्यक्रमानुसार अहवाल",
   "reportBarGraphSubtitle": "प्रत्येक कार्यक्रमाचा आठवडा/महिन्यानुसार बार ग्राफ",
@@ -4393,6 +4396,7 @@ Map<String, String> resMarathi = {
   'AddNewPerson': 'नवीन व्यक्ती जोडा',
   'KaryakartaFound': 'कार्यकर्ता सापडला',
   'AddedKaryakarta': 'जोडलेले कार्यकर्ते',
+  'vistarDropdownTip': 'रंग संकेत: 🟠 इतर स्तर | 🔵 नवीन शाखा | ⚫ सामान्य(तुमच्याकडे सोपवलेले दायित्व)',
 
   ////////////////////////////////////// Main Shakhaa Milan(NEW KEYS) //////////////////////////////////////
   "dailyActivityHeader": "दैनिक कार्यक्रम पार पडला का?",
@@ -6465,7 +6469,7 @@ Map<String, String> resHindi = {
   ////////////////////////////////////// Shakhaa Saptah Vistar //////////////////////////////////////
   'searchShakhaa': 'शाखा खोजें',
   'vistarShaakhaa': 'विस्तार सप्ताह संकल्प',
-  'anyaKshetrache': 'अन्य क्षेत्र के',
+  'anyaKshetrache': 'अन्य स्तर के',
   'newAdmission': "नयी भरती",
   'karyakramWiseSeq': "कार्यक्रम",
   'sequences': "निरंतरता",
@@ -6577,6 +6581,7 @@ Map<String, String> resHindi = {
   "prevyearmaansik": "पिछले माह (Masik)",
   "addAadharPerson": "आधार कार्यकर्ता जोड़ें",
   "addAadharPersonTip": "यदि आधार कार्यकर्ताओं के पास कोई जिम्मेदारी नहीं है, तो उन्हें बस्ती/ग्राम शाखा विस्तार सहयोगी के रूप में जिम्मेदारी देकर ऐप उपयोग करने की अनुमति दी जानी चाहिए।",
+  "searchAadharPersonTip": "अन्य स्तर के कार्यकर्ताओं को नारंगी (🟠) रंग में दर्शाया गया है।",
   "duplicationValidation": "समान नाम की प्रविष्टि पहले से मौजूद है।",
   "reportBarGraphTitle": "कार्यक्रम के अनुसार शाखाओं की रिपोर्ट",
   "reportBarGraphSubtitle": "प्रत्येक गतिविधि का सप्ताह/माह के अनुसार बार ग्राफ",
@@ -6596,6 +6601,7 @@ Map<String, String> resHindi = {
   'AddNewPerson': 'नया व्यक्ति जोड़ें',
   'KaryakartaFound': 'कार्यकर्ता मिल गया',
   'AddedKaryakarta': 'जुड़े कार्यकर्ता',
+  'vistarDropdownTip': 'रंग संकेत: 🟠 अन्य स्तर | 🔵 नई शाखा | ⚫ सामान्य(आपका सौंपा गया दायित्व)',
 
   ////////////////////////////////////// Main Shakhaa Milan(NEW KEYS) //////////////////////////////////////
   "dailyActivityHeader": "दैनिक कार्यक्रम हुआ या नहीं?",

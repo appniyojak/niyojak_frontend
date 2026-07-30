@@ -526,6 +526,7 @@ class GeoHierarchyController extends ChangeNotifier {
       await _loadAndSetLevel(
         level: GeoLevel.Mandal,
         trailValue: selection.mandal,
+        fetchMode: fetchMode,
       );
       // }
       // if (_isRestrictedAt(6) || _isRestrictedAt(13)) return;
@@ -536,6 +537,7 @@ class GeoHierarchyController extends ChangeNotifier {
       await _loadAndSetLevel(
         level: GeoLevel.Graam,
         trailValue: selection.graam,
+        fetchMode: fetchMode,
       );
       // }
       // if (_isRestrictedAt(4)) return;
@@ -546,6 +548,7 @@ class GeoHierarchyController extends ChangeNotifier {
       await _loadAndSetLevel(
         level: GeoLevel.Vasti,
         trailValue: selection.vasti,
+        fetchMode: fetchMode,
       );
       // }
       // if (_isRestrictedAt(2)) return;
@@ -556,6 +559,7 @@ class GeoHierarchyController extends ChangeNotifier {
         await _loadAndSetLevel(
           level: GeoLevel.Shaakhaa,
           trailValue: selection.shakhaa,
+          fetchMode: fetchMode,
         );
       }
       // if (_isRestrictedAt(2)) return;
@@ -564,6 +568,19 @@ class GeoHierarchyController extends ChangeNotifier {
     } finally {
       notifyListeners();
     }
+  }
+
+  Future<void> loadRootTopsOnly({GeoHierarchyFetchMode fetchMode = GeoHierarchyFetchMode.all}) async {
+    state.items.clear();
+    state.selectedValues.clear();
+    state.selectedNames.clear();
+
+    notifyListeners();
+
+    await loadLevel(GeoLevel.Mahaanagar, fetchMode: fetchMode);
+    await loadLevel(GeoLevel.Vibhaag, fetchMode: fetchMode);
+
+    notifyListeners();
   }
 
   ////////////////////////////////////////////

@@ -529,8 +529,8 @@ class GeoUnitMasterBAL {
     geoUnitID = map["GeoUnitID"];
     praantID = map["PraantID"];
     levelID = map["LevelID"];
-    isnew = map["isnew"];
-    isanya = map["anya"] ?? 0;
+    isnew = map["IsNew"] ?? map["isnew"] ?? 0;
+    isanya = map["Anya"] ?? map["anya"] ?? 0;
     name = map["Name"];
     fullName = map["FullName"];
     levelName = map["LevelName"];
@@ -548,8 +548,8 @@ class GeoUnitMasterBAL {
     parentMandalID = map["ParentMandalID"];
     parentVastiID = map["ParentVastiID"];
     parentGraamID = map["ParentGraamID"];
-    parentUpaNagarID = map["parentUpaNagarID"];
-    issankalpit = map["issankalpit"];
+    parentUpaNagarID = map["ParentUpaNagarID"] ?? map["parentUpaNagarID"];
+    issankalpit = map["IsSankalpit"] ?? map["issankalpit"];
     // canEdit = map["canEdit"];
   }
 
@@ -574,7 +574,7 @@ class GeoUnitMasterBAL {
     data['ParentVastiID'] = this.parentVastiID;
     data['ParentVibhaagID'] = this.parentVibhaagID;
     data['PraantID'] = this.praantID;
-    data['parentUpaNagarID'] = this.parentUpaNagarID;
+    data['ParentUpaNagarID'] = this.parentUpaNagarID;
     // data['canEdit'] = this.canEdit;
     return data;
   }

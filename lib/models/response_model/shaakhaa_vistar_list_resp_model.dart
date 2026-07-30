@@ -35,6 +35,7 @@ class ShaakhaaList {
   int? pkid;
   int? geoUnitID;
   String? geoUnitName;
+  String? trail;
   String? geoUnitNameDevNaagari;
   int? frequencyID;
   String? frequencyCode;
@@ -81,6 +82,7 @@ class ShaakhaaList {
       this.pkid,
       this.geoUnitID,
       this.geoUnitName,
+      this.trail,
       this.geoUnitNameDevNaagari,
       this.frequencyID,
       this.frequencyCode,
@@ -127,6 +129,7 @@ class ShaakhaaList {
     pkid = json['pkid'];
     geoUnitID = json['GeoUnitID'];
     geoUnitName = json['GeoUnitName'];
+    trail = json['trail'];
     geoUnitNameDevNaagari = json['GeoUnitNameDevNaagari'];
     frequencyID = json['FrequencyID'];
     frequencyCode = json['FrequencyCode'];
@@ -175,6 +178,7 @@ class ShaakhaaList {
     data['pkid'] = this.pkid;
     data['GeoUnitID'] = this.geoUnitID;
     data['GeoUnitName'] = this.geoUnitName;
+    data['trail'] = this.trail;
     data['GeoUnitNameDevNaagari'] = this.geoUnitNameDevNaagari;
     data['FrequencyID'] = this.frequencyID;
     data['FrequencyCode'] = this.frequencyCode;

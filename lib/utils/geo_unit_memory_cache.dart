@@ -13,6 +13,8 @@ class GeoUnitMemoryCache {
 
   bool isLoaded(DynamicDropdownFeature namespace) => _cache.containsKey(namespace.name);
 
+  bool isAnyaExist() => _cache.values.any((list) => list.any((item) => item.isanya == 1));
+
   /// Call once per screen-open. No-op if this namespace is already loaded this app-run.
   Future<void> ensureLoaded({
     required DynamicDropdownFeature namespace,
