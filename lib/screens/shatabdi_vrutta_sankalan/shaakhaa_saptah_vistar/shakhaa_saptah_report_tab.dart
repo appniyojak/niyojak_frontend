@@ -96,6 +96,7 @@ class ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Aut
 
     debugPrint("check cache >>>>>>>>> ${cacheInst.isLoaded(DynamicDropdownFeature.vistar)}");
     debugPrint("check isAnyaExist >>>>>>>>> ${cacheInst.isAnyaExist()}");
+    debugPrint(controller.deepestSelectedLevel?.name);
 
     getReportDataFun(controller.deepestSelectedGeoUnitId);
 
@@ -203,7 +204,7 @@ class ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Aut
               else ...[
                 _typeResultTab(),
                 _buildHeader(),
-                if ((controller.ctrlUserLevelId ?? 0) > 1)
+                if ((controller.deepestSelectedLevelId ?? 11) > 1)
                   isDailySelected
                       ? ReusableBarTabCard(
                           todayShakhaa: report?.todayShakhaa,
@@ -364,7 +365,7 @@ class ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Aut
       child: Consumer<GeoHierarchyController>(builder: (_, ctrl, __) {
         final isAnyaSelected = ctrl.deepestSelectedGeoUnitBAL?.isanya == 1;
 
-        final shouldShowSearch = cacheInst.isAnyaExist() ? (isAnyaSelected ? ctrl.deepestSelectedLevelId == 1 : (ctrl.ctrlUserLevelId ?? 0) > 1) : (ctrl.ctrlUserLevelId ?? 0) > 1;
+        final shouldShowSearch = cacheInst.isAnyaExist() ? (isAnyaSelected ? ctrl.deepestSelectedLevelId == 1 : ctrl.isUserLevelOrBelowSelected) : (ctrl.ctrlUserLevelId ?? 11) > 1;
         return ExpansionPanelList(
           expansionCallback: (int index, bool isExpanded) {
             setState(() {
@@ -414,7 +415,7 @@ class ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Aut
                                   : Colors.black),
                     ),
 
-                    if (ctrl.hasItems(GeoLevel.Bhaag))
+                    if (ctrl.hasItems(GeoLevel.Bhaag) && ctrl.hasItemsAndParentSelected(GeoLevel.Bhaag))
                       GeoDropdownWidget(
                         level: GeoLevel.Bhaag,
                         title: 'Bhaag',
@@ -430,7 +431,7 @@ class ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Aut
                                     : Colors.black),
                       ),
 
-                    if (ctrl.hasItems(GeoLevel.Nagar))
+                    if (ctrl.hasItems(GeoLevel.Nagar) && ctrl.hasItemsAndParentSelected(GeoLevel.Nagar))
                       GeoDropdownWidget(
                         level: GeoLevel.Nagar,
                         title: 'Nagar',
@@ -449,7 +450,7 @@ class ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Aut
                     ////////////////////////////////////////
                     /// CONDITIONAL
 
-                    if (ctrl.hasItems(GeoLevel.upnagarUpkhanda))
+                    if (ctrl.hasItems(GeoLevel.upnagarUpkhanda) && ctrl.hasItemsAndParentSelected(GeoLevel.upnagarUpkhanda))
                       GeoDropdownWidget(
                         level: GeoLevel.upnagarUpkhanda,
                         title: 'upnagarUpkhanda',
@@ -467,7 +468,7 @@ class ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Aut
 
                     ////////////////////////////////////////
 
-                    if (ctrl.hasItems(GeoLevel.Mandal))
+                    if (ctrl.hasItems(GeoLevel.Mandal) && ctrl.hasItemsAndParentSelected(GeoLevel.Mandal))
                       GeoDropdownWidget(
                         level: GeoLevel.Mandal,
                         title: 'Mandal',
@@ -483,7 +484,7 @@ class ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Aut
                                     : Colors.black),
                       ),
 
-                    if (ctrl.hasItems(GeoLevel.Graam))
+                    if (ctrl.hasItems(GeoLevel.Graam) && ctrl.hasItemsAndParentSelected(GeoLevel.Graam))
                       GeoDropdownWidget(
                         level: GeoLevel.Graam,
                         title: 'Graam',
@@ -499,7 +500,7 @@ class ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Aut
                                     : Colors.black),
                       ),
 
-                    if (ctrl.hasItems(GeoLevel.Vasti))
+                    if (ctrl.hasItems(GeoLevel.Vasti) && ctrl.hasItemsAndParentSelected(GeoLevel.Vasti))
                       GeoDropdownWidget(
                         level: GeoLevel.Vasti,
                         title: 'Vasti',
@@ -515,7 +516,7 @@ class ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Aut
                                     : Colors.black),
                       ),
 
-                    if (ctrl.hasItems(GeoLevel.Shaakhaa))
+                    if (ctrl.hasItems(GeoLevel.Shaakhaa) && ctrl.hasItemsAndParentSelected(GeoLevel.Shaakhaa))
                       GeoDropdownWidget(
                         level: GeoLevel.Shaakhaa,
                         title: 'Shaakhaa',
@@ -627,9 +628,10 @@ class ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Aut
                                 setState(() {
                                   _searched = false;
                                 });
-                                if (cacheInst.isAnyaExist())
+                                if (cacheInst.isAnyaExist()) {
                                   ctrl.loadRootTopsOnly(fetchMode: GeoHierarchyFetchMode.fromCache);
-                                else {
+                                  if ([10, 11, 12].contains(ctrl.ctrlUserLevelId)) getReportDataFun(ctrl.deepestSelectedGeoUnitId);
+                                } else {
                                   ctrl.loadHierarchyForUser(fetchMode: GeoHierarchyFetchMode.fromCache);
                                   getReportDataFun(ctrl.deepestSelectedGeoUnitId);
                                 }

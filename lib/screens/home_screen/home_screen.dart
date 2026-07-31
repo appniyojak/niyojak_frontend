@@ -2772,8 +2772,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(children: [
                   Align(
                     alignment: Alignment.centerRight,
-                    child: _clearButton(() {
-                      ctrl.loadHierarchyForUser();
+                    child: _clearButton(() async {
+                      await ctrl.loadHierarchyForUser();
                       isAnya ? _fetchAnyaPanelData() : _fetchSwayamsevakPanelData();
                     }),
                   ),

@@ -183,7 +183,7 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
 
     final inpt = {
       'AppUserID': Statics.userDetails["userID"],
-      'GeounitId': controller.hierarchyTrail.bhaagId,
+      'GeounitId': controller.hierarchyTrail.vastiId ?? controller.hierarchyTrail.graamId,
       "SearchText": pattern.isEmpty ? "" : pattern,
       "From": "vistar",
     };
@@ -747,24 +747,34 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
   Widget buildKaryakartaFoundStage() {
     return Column(
       children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-          margin: const EdgeInsets.only(bottom: 14),
-          decoration: BoxDecoration(color: const Color(0xFFE9F8EF), borderRadius: BorderRadius.circular(12)),
-          child: Row(
-            children: [
-              const Icon(Icons.check_circle, color: Color(0xFF1F9254), size: 18),
-              const SizedBox(width: 8),
-              Text(Statics.getLabel('KaryakartaFound'), style: const TextStyle(color: Color(0xFF1F9254))),
-            ],
-          ),
+        Row(
+          spacing: 12,
+          children: [
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                margin: const EdgeInsets.only(bottom: 14),
+                decoration: BoxDecoration(color: const Color(0xFFE9F8EF), borderRadius: BorderRadius.circular(12)),
+                child: Row(
+                  children: [
+                    const Icon(Icons.check_circle, color: Color(0xFF1F9254), size: 18),
+                    const SizedBox(width: 8),
+                    Text(Statics.getLabel('KaryakartaFound'), style: const TextStyle(color: Color(0xFF1F9254))),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12.0),
+              child: GestureDetector(
+                onTap: _resetKaryakartaSearch,
+                child: Text("\u2190 ${Statics.getLabel('SearchAgain')}", style: const TextStyle(color: Color(0xFF9C27B0), fontWeight: FontWeight.w600)),
+              ),
+            ),
+          ],
         ),
         for (int i = 0; i < _foundKaryakartaList.length; i++)
           if (_karyakartaList.any((e) => e.swayamSevakID == _foundKaryakartaList[i].swayamSevakID)) SizedBox() else buildKaryakartaListItem(i, _foundKaryakartaList),
-        GestureDetector(
-          onTap: _resetKaryakartaSearch,
-          child: Text("\u2190 ${Statics.getLabel('SearchAgain')}", style: const TextStyle(color: Color(0xFF9C27B0), fontWeight: FontWeight.w600)),
-        ),
         const SizedBox(height: 16),
       ],
     );

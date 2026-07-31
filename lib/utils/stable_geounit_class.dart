@@ -802,6 +802,39 @@ class GeoHierarchyController extends ChangeNotifier {
 
   bool hasItems(GeoLevel level) => state.items[level]?.isNotEmpty ?? false;
 
+  bool get isUserOwnLevelSelected {
+    final userLevel = _mapLevelIdToGeoLevel(ctrlUserLevelId);
+    return userLevel != null && deepestSelectedLevel == userLevel;
+  }
+
+  bool get isUserLevelOrBelowSelected {
+    final userLevel = _mapLevelIdToGeoLevel(ctrlUserLevelId);
+    if (userLevel == null) return true;
+
+    final selected = deepestSelectedLevel;
+    if (selected == null) return false;
+
+    final userIndex = GeoLevel.values.indexOf(userLevel);
+    final selectedIndex = GeoLevel.values.indexOf(selected);
+
+    return selectedIndex >= userIndex;
+  }
+
+  bool hasItemsAndParentSelected(GeoLevel level) {
+    final node = hierarchy.firstWhere((e) => e.level == level);
+
+    final parentLevel = node.parentResolver?.call(state);
+
+    /// NO PARENT REQUIRED (root level, e.g. Mahaanagar)
+    if (parentLevel == null) {
+      return hasItems(level);
+    }
+
+    final parentSelected = state.selectedValues[parentLevel]?.isNotEmpty ?? false;
+
+    return hasItems(level) && parentSelected;
+  }
+
   bool shouldLoadLevel(GeoLevel level) {
     final currentLevel = _mapLevelIdToGeoLevel(ctrlUserLevelId);
 

@@ -127,8 +127,8 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
     // _shaakhaaList = _getshaakhaaList(
     //     geoUnitID, _searchController.text, frequencyVal, vayogatVal);
 
-    final _isNotSankalpitList = _list.where((e) => e.isSankalpit == false && e.isnew != 1);
-    final _isSankalpitList = _list.where((e) => e.isSankalpit == true && e.isnew != 1);
+    final _isNotSankalpitList = _list.where((e) => e.isSankalpit == false && e.isnew != 1 && e.isanya != 1);
+    final _isSankalpitList = _list.where((e) => e.isSankalpit == true && e.isnew != 1 && e.isanya != 1);
     final _isNewSankalpitList = _list.where((e) => e.isnew == 1);
     final _isAnyaSankalpitList = _list.where((e) => e.isanya == 1);
 
@@ -181,7 +181,7 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
             ///
 
             if (_searched) ...[
-              TabBar(labelColor: Colors.purple, unselectedLabelColor: Colors.grey, tabs: [
+              TabBar(labelColor: Colors.purple, labelPadding: EdgeInsets.symmetric(horizontal: 4), unselectedLabelColor: Colors.grey, tabs: [
                 Tab(
                     child: Text(
                   Statics.getLabel("vartamaan"),
