@@ -1,14 +1,16 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../providers/swayamsevak_provider.dart';
+import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
+
+import '../helpers/static_data.dart' as Statics;
+import '../models/response_model/new_search_swayamsevak_model.dart';
+import '../providers/bals.dart';
 import '../widgets/event_member_card.dart';
 import '../widgets/legend.dart';
-import '../providers/bals.dart';
-import '../helpers/static_data.dart' as Statics;
-import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 class EventMembers extends StatefulWidget {
   static const String routeName = '/event-members-screen';
@@ -139,61 +141,21 @@ class _EventMembersState extends State<EventMembers> {
     }
   }
 
-  Future<List<dynamic>> populateSwayamSevak(String pattern) async {
+  Future<List<SwayamsevakNewData>> populateSwayamSevak(String pattern) async {
     bool isConnected = await Statics.isInternetConnected();
 
     if (pattern.length < 4) return [];
     if (isConnected) {
-      var inputData = json.encode({
-        "AppUserID": Statics.userDetails["userID"],
-        "SearchCriteria": _swController.text.isEmpty ? null : _swController.text,
-        "BloodGroupID": null,
-        "MotherTongueID": null,
-        "ShaakhaaExperience": null,
-        "GeoUnitID": null,
-        "IsPratidnyit": null,
-        "PratidnyaYear": null,
-        "IsGanaveshComplete": null,
-        "NoCap": null,
-        "NoShirt": null,
-        "NoPant": null,
-        "NoBelt": null,
-        "NoShoes": null,
-        "NoSocks": null,
-        "NoDanda": null,
-        "VehicleType": null,
-        "HasDriver": null,
-        "SanghaShikshanCode": null,
-        "SanghaShikshanYearFrom": null,
-        "SanghaShikshanYearTo": null,
-        "MukhyaShaaririkVishayCodes": null,
-        "AnyaShaaririkVishayCodes": null,
-        "PrathamVaadyaCodes": null,
-        "DwitiyaVaadyaCodes": null,
-        "TrutiyaVaadyaCodes": null,
-        "AnyaVaadyaCodes": null,
-        "OccupationCategoryID": null,
-        "EducationInstitutionName": null,
-        "EducationStandardID": null,
-        "EducationProgramID": null,
-        "EducationProgramName": null,
-        "GovernmentDepartment": null,
-        "Designation": null,
-        "OfficeLocation": null,
-        "WeeklyOffDayIDs": null,
-        "OrganizationName": null,
-        "IndustryVertical": null,
-        "OrganizationAtRetirement": null,
-        "DesignationAtRetirement": null,
-        "DepartmentAtRetirement": null,
-        "DaayitvaForID": null,
-        "DaayitvaID": null,
-        "DaayitvaLevelID": null,
-        "DaayitvaGeoUnitID": null,
-        "SortOrder": "Name",
-      });
+      var inputData = {
+        'AppUserID': Statics.userDetails["userID"],
+        'GeounitId': 0,
+        "SearchText": pattern.isEmpty ? "" : pattern,
+        "From": "karyakram",
+      };
 
-      return SwayamsevakProvider().getSwayamsevaks(inputData);
+      var swList = await Statics.searchSwayamsevakNewData(inputData);
+
+      return swList ?? [];
     } else {
       Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));
       return [];
@@ -205,6 +167,7 @@ class _EventMembersState extends State<EventMembers> {
 
     if (pattern.length < 4) return [];
     if (isConnected) {
+      debugPrint("CALLED HERE >>>>>>>>>>>>>>>>>>>");
       return Statics.getSoochiList(pattern, true, true);
     } else {
       return [];
@@ -227,9 +190,9 @@ class _EventMembersState extends State<EventMembers> {
       } else {
         await saveEventMembers();
       }
-    } on Exception catch (error) {
-      Statics.showErrorDialog(context, Statics.getLabel('unableToCompleteProcess'));
-    } catch (error) {
+    } catch (error, stack) {
+      log(error.toString());
+      log(stack.toString());
       Statics.showErrorDialog(context, Statics.getLabel('unableToCompleteProcess'));
     }
 
@@ -241,7 +204,7 @@ class _EventMembersState extends State<EventMembers> {
   saveEventMembers() async {
     var inputData = json.encode({
       "PraantID": 1,
-      "EventID": int.parse(eventID),
+      "EventID": int.parse(eventID.toString()),
       "SwayamsevakID": (_swValue == "") ? null : _swValue,
       "SoochiID": (_soochiValue == "") ? null : _soochiValue,
       "ApekshitOrSharing": isSharing == true ? "Sharing" : "Apekshit",
@@ -304,7 +267,7 @@ class _EventMembersState extends State<EventMembers> {
                         Container(
                           width: Statics.getDeviceSize(context).width * 0.75,
                           child: TypeAheadField(
-                            controller: _soochiController,
+                            controller: _swController,
                             builder: (context, controller, focusNode) {
                               return TextField(
                                   controller: controller,
@@ -321,19 +284,19 @@ class _EventMembersState extends State<EventMembers> {
                             },
                             itemBuilder: (context, suggestion) {
                               return ListTile(
-                                title: Text(suggestion["FullName"]),
+                                title: Text(suggestion.fullName ?? "--"),
                                 subtitle: Wrap(
                                   children: [
                                     Text(
-                                      suggestion["DaayitvaGeoUnitName"] + "-",
+                                      (suggestion.daayitvaGeoUnitName ?? "--") + "-",
                                       style: TextStyle(fontSize: 12),
                                     ),
                                     Text(
-                                      suggestion["LevelName"] + "-",
+                                      (suggestion.levelName ?? "--") + "-",
                                       style: TextStyle(fontSize: 12),
                                     ),
                                     Text(
-                                      suggestion["DaayitvaName"],
+                                      suggestion.daayitvaName ?? "--",
                                       style: TextStyle(fontSize: 12),
                                     ),
                                   ],
@@ -356,8 +319,8 @@ class _EventMembersState extends State<EventMembers> {
                             //   return suggestionsBox;
                             // },
                             onSelected: (suggestion) {
-                              this._swController.text = suggestion["FullName"];
-                              _swValue = suggestion["SwayamsevakID"].toString();
+                              this._swController.text = suggestion.fullName ?? "";
+                              _swValue = suggestion.swayamSevakID.toString();
                             },
                           ),
                         ),

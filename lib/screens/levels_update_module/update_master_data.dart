@@ -86,17 +86,25 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
     });
   }
 
-  void _submitForm(GeoHierarchyController controller) {
+  void _submitForm(GeoHierarchyController controller) async {
+    if (controller.deepestSelectedGeoUnitId == null) return;
+
+    final _trail = await controller.getTrailFromGeoUnitId(controller.deepestSelectedGeoUnitId!);
+
+    if (_trail != null) await controller.setHierarchyFromTrail(trail: _trail);
+
+    setState(() {});
+
     var inputData = json.encode({
       "GeoUnitID": controller.deepestSelectedGeoUnitId,
-      "ParentMahaanagarID": controller.hierarchyTrail.mahaanagarId,
-      "ParentVibhaagID": controller.hierarchyTrail.vibhaagId,
-      "ParentBhaagID": controller.hierarchyTrail.bhaagId,
-      "ParentNagarID": controller.hierarchyTrail.nagarId,
-      "ParentUpaNagarID": controller.hierarchyTrail.upnagarId,
-      "ParentMandalID": controller.hierarchyTrail.mandalId,
-      "ParentGraamID": controller.hierarchyTrail.graamId,
-      "ParentVastiID": controller.hierarchyTrail.vastiId,
+      "ParentMahaanagarID": controller.deepestSelectedLevelId == 9 ? null : controller.hierarchyTrail.mahaanagarId,
+      "ParentVibhaagID": controller.deepestSelectedLevelId == 8 ? null : controller.hierarchyTrail.vibhaagId,
+      "ParentBhaagID": controller.deepestSelectedLevelId == 7 ? null : controller.hierarchyTrail.bhaagId,
+      "ParentNagarID": controller.deepestSelectedLevelId == 6 ? null : controller.hierarchyTrail.nagarId,
+      "ParentUpaNagarID": controller.deepestSelectedLevelId == 13 ? null : controller.hierarchyTrail.upnagarId,
+      "ParentMandalID": controller.deepestSelectedLevelId == 4 ? null : controller.hierarchyTrail.mandalId,
+      "ParentGraamID": controller.deepestSelectedLevelId == 3 ? null : controller.hierarchyTrail.graamId,
+      "ParentVastiID": controller.deepestSelectedLevelId == 2 ? null : controller.hierarchyTrail.vastiId,
       "GeoUnitNameMarathi": marathiNameController.text,
       "GeoUnitNameHindi": hindiNameController.text,
       "GeoUnitName": englishNameController.text,

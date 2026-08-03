@@ -262,6 +262,7 @@ class _SoochiMembersState extends State<SoochiMembers> {
 
     if (pattern.length < 4) return [];
     if (isConnected) {
+      debugPrint("CALLED HERE >>>>>>>>>>>>>>>>>>> MEMBER");
       return Statics.getSoochiList(pattern, true, true);
     } else {
       return [];

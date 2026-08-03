@@ -34,9 +34,10 @@ class SwayamsevakNewData {
   String? fullName;
   String? mobileNumber;
   String? daayitvaName;
+  String? daayitvaGeoUnitName;
   String? levelName;
 
-  SwayamsevakNewData({this.swayamSevakID, this.levelID, this.isanya, this.fullName, this.mobileNumber, this.daayitvaName, this.levelName});
+  SwayamsevakNewData({this.swayamSevakID, this.levelID, this.isanya, this.fullName, this.mobileNumber, this.daayitvaName, this.daayitvaGeoUnitName, this.levelName});
 
   SwayamsevakNewData.fromJson(Map<String, dynamic> json) {
     swayamSevakID = json['SwayamsevakID'] ?? json['swayamSevakID'];
@@ -45,6 +46,7 @@ class SwayamsevakNewData {
     fullName = json['FullName'] ?? json['fullName'];
     mobileNumber = json['MobileNumber'] ?? json['mobileNumber'];
     daayitvaName = json['DaayitvaName'] ?? json['daayitvaName'];
+    daayitvaGeoUnitName = json['DaayitvaGeoUnitName'] ?? json['daayitvaGeoUnitName'];
     levelName = json['LevelName'] ?? json['levelName'];
   }
 
@@ -56,6 +58,7 @@ class SwayamsevakNewData {
     data['fullName'] = this.fullName;
     data['mobileNumber'] = this.mobileNumber;
     data['daayitvaName'] = this.daayitvaName;
+    data['daayitvaGeoUnitName'] = this.daayitvaGeoUnitName;
     data['levelName'] = this.levelName;
     return data;
   }

@@ -268,6 +268,7 @@ class _SoochiSharingState extends State<SoochiSharing> {
 
     if (pattern.length < 4) return [];
     if (isConnected) {
+      debugPrint("CALLED HERE >>>>>>>>>>>>>>>>>>> SHARING");
       return Statics.getSoochiList(pattern, true, true);
     } else {
       return [];

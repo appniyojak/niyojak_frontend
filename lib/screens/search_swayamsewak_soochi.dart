@@ -446,6 +446,7 @@ class _SearchSwayamsewakSoochiScreenState extends State<SearchSwayamsewakSoochiS
   Future<List<dynamic>> _getSoochiList(String searchString, bool includeOwnedSoochi, bool includeSharedSoochi) async {
     bool isConnected = await Statics.isInternetConnected();
     if (isConnected) {
+      debugPrint("CALLED HERE >>>>>>>>>>>>>>>>>>> SEARCH SWAYAM");
       return Statics.getSoochiList(searchString, includeOwnedSoochi, includeSharedSoochi);
     } else {
       Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));

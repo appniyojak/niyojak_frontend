@@ -4067,9 +4067,14 @@ Future<String> saveEventMembers(String inputJson) async {
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
+  print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+  log(urlSaveEventApekshitSwayamsevakForApp);
+
   var response = await http.post(Uri.parse(urlSaveEventApekshitSwayamsevakForApp), headers: jHeaders, body: inputJson);
 
   var responseBody = json.decode(response.body);
+
+  log("saveEventMembers >>>>>>>>>>>>>>>>> ${(jsonEncode(responseBody))}");
 
   return responseBody['OutputEventID'].toString();
 }

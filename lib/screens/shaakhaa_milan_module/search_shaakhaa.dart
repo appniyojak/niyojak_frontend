@@ -389,61 +389,52 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
       ),
       body: PopScope(
         canPop: false,
-        onPopInvoked: (didpop) {
-          if (didpop) return;
-          Navigator.pushNamedAndRemoveUntil(context, Navigator.of(context).pushNamed(HomeScreen.routeName).toString(), (route) => false);
+        onPopInvokedWithResult: (didPop, result) {
+          if (didPop) return;
+          Navigator.pushNamedAndRemoveUntil(context, HomeScreen.routeName, (route) => false);
         },
-        child: Container(
-          padding: EdgeInsets.all(20.0),
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                Text(
-                  Statics.getLabel('searchShaakhaaScreenBanner'),
-                  style: TextStyle(fontSize: 20),
+        child: CustomScrollView(
+          slivers: [
+            SliverPadding(
+              padding: const EdgeInsets.all(20.0),
+              sliver: SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    Text(
+                      Statics.getLabel('searchShaakhaaScreenBanner'),
+                      style: const TextStyle(fontSize: 20),
+                    ),
+                    const SizedBox(height: 10),
+                    dropDownSection(),
+                  ],
                 ),
-                SizedBox(height: 10),
-
-                ///
-                dropDownSection(),
-
-                ///
-                SizedBox(
-                  height: MediaQuery.sizeOf(context).height * 0.7,
-                  child: _shaakhaaList == null || (_shaakhaaList?.isEmpty == true)
-                      ? Center(
-                          child: Text(Statics.getLabel("noDataFoundTryAnotherSearch")),
-                        )
-                      : ListView.separated(
-                          shrinkWrap: true,
-                          // physics: NeverScrollableScrollPhysics(),
-                          separatorBuilder: (context, index) => SizedBox(height: 8),
-                          itemCount: _shaakhaaList?.length ?? 0,
-                          itemBuilder: (context, index) {
-                            return ShaakhaaCard(_shaakhaaList?[index], _shaakhaaList?[index]["IsSankalpit"], _search);
-                          },
-                        ),
-                )
-                /*FutureBuilder<List<dynamic>>(
-                    future: _shaakhaaList,
-                    builder: (ctx, dataSnapshot) {
-                      if (dataSnapshot.connectionState != ConnectionState.done) {
-                        return _isSearching == true ? CircularProgressIndicator() : Container();
-                      }
-                      if (dataSnapshot.hasError) {
-                        print("  dataSnapshot  ${dataSnapshot}  ");
-                        return Center(child: Text(Statics.getLabel('noDataFoundTryAnotherSearch')));
-                      }
-                      return dataSnapshot.hasData && dataSnapshot.data!.length > 0
-                          ? Column(
-                              children: dataSnapshot.data!.map((shaakhaa) => ShaakhaaCard(shaakhaa, shaakhaa['IsSankalpit'], _search)).toList(),
-                            )
-                          : Center(child: Text(Statics.getLabel('noDataFoundTryAnotherSearch')));
-                    },
-                  ),*/
-              ],
+              ),
             ),
-          ),
+
+            // The list is now a lazy, lifted-up sliver — part of the SAME scroll view
+            if (_shaakhaaList == null || _shaakhaaList!.isEmpty)
+              SliverFillRemaining(
+                hasScrollBody: false,
+                child: Center(
+                  child: Text(Statics.getLabel("noDataFoundTryAnotherSearch")),
+                ),
+              )
+            else
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                sliver: SliverList.separated(
+                  itemCount: _shaakhaaList?.length ?? 0,
+                  separatorBuilder: (context, index) => const SizedBox(height: 8),
+                  itemBuilder: (context, index) {
+                    return ShaakhaaCard(
+                      _shaakhaaList?[index],
+                      _shaakhaaList?[index]["IsSankalpit"],
+                      _search,
+                    );
+                  },
+                ),
+              ),
+          ],
         ),
       ),
     );

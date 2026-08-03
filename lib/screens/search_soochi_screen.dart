@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../screens/edit_soochi.dart';
-import '../widgets/sooochi_card.dart';
 
 import '../helpers/static_data.dart' as Statics;
+import '../screens/edit_soochi.dart';
 import '../widgets/app_drawer.dart';
+import '../widgets/sooochi_card.dart';
 
 class SearchSoochiScreen extends StatefulWidget {
   static const routeName = '/search-soochi-screen';
@@ -24,6 +24,7 @@ class _SearchSoochiScreenState extends State<SearchSoochiScreen> {
   Future<List<dynamic>> _getSoochiList(String searchString, bool includeOwnedSoochi, bool includeSharedSoochi) async {
     bool isConnected = await Statics.isInternetConnected();
     if (isConnected) {
+      debugPrint("CALLED HERE >>>>>>>>>>>>>>>>>>> SEARCH");
       return Statics.getSoochiList(searchString, includeOwnedSoochi, includeSharedSoochi);
     } else {
       Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));
