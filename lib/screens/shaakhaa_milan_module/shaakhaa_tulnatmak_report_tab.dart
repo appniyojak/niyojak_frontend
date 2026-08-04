@@ -104,32 +104,53 @@ class FreqSubcategory {
   const FreqSubcategory({required this.key, required this.getter});
 }
 
-const List<FreqSubcategory> kFreqSubcategories = [
-  FreqSubcategory(key: 'ShakhaCount1_14', getter: _get114),
-  FreqSubcategory(key: 'ShakhaCount15_29', getter: _get1529),
-  FreqSubcategory(key: 'ShakhaCountGreaterThan29', getter: _getGt29),
+// Per-data-type subcategory configs
+const List<FreqSubcategory> kShaakhaSubcategories = [
+  FreqSubcategory(key: 'ShakhaCount1plus', getter: _getShakha1plus),
+  FreqSubcategory(key: 'ShakhaCount15plus', getter: _getShakha15plus),
 ];
 
-int _get114(FGraph f) => f.shakhaCount114;
+const List<FreqSubcategory> kSaptahikSubcategories = [
+  FreqSubcategory(key: 'saphathikCount1plus', getter: _getSaptahik1plus),
+  FreqSubcategory(key: 'saphathikCount3plus', getter: _getSaptahik3plus),
+];
 
-int _get1529(FGraph f) => f.shakhaCount1529;
+const List<FreqSubcategory> kManshikSubcategories = [
+  FreqSubcategory(key: 'manshikCount1plus', getter: _getManshik1plus),
+];
 
-int _getGt29(FGraph f) => f.shakhaCountGreaterThan29;
+const List<FreqSubcategory> kSangaSubcategories = [
+  FreqSubcategory(key: 'sangaCount1plus', getter: _getSanga1plus),
+];
 
-// dash pattern per subcategory index — null = solid line.
-// Parallel list to kFreqSubcategories; extend if you add a 4th subcategory.
+int _getShakha1plus(FGraph f) => f.shakhaCount1plus;
+
+int _getShakha15plus(FGraph f) => f.shakhaCount15plus;
+
+int _getSaptahik1plus(FGraph f) => f.saphathikCount1plus;
+
+int _getSaptahik3plus(FGraph f) => f.saphathikCount3plus;
+
+int _getManshik1plus(FGraph f) => f.manshikCount1plus;
+
+int _getSanga1plus(FGraph f) => f.sangaCount1plus;
+
+// dash pattern by subcategory index; used only when subCount > 1
 const List<List<int>?> kFreqDashPatterns = [
-  null, // 1-14        -> solid
-  [6, 4], // 15-29       -> dashed
-  [1, 3], // 29+         -> dotted
+  null, // index 0 -> solid
+  [6, 4], // index 1 -> dashed
 ];
+
+const List<String> kFreqLineGlyphs = ['━━', '╌╌'];
+
+// ─── Data model (generic over subcategory config) ────────────────────────
 
 class FrequencySeries {
   final int frequencyID;
   final String freqname;
-  final List<int> months; // sorted distinct months present
-  final List<String> years; // sorted distinct years present (as strings)
-  final Map<String, Map<String, Map<int, int>>> values; // year -> subcategory -> month -> count
+  final List<int> months;
+  final List<String> years;
+  final Map<String, Map<String, Map<int, int>>> values; // year -> subcategory key -> month -> count
 
   FrequencySeries({
     required this.frequencyID,
@@ -140,10 +161,13 @@ class FrequencySeries {
   });
 }
 
-List<FrequencySeries> buildFrequencySeries(List<FGraph> fData) {
+List<FrequencySeries> buildFrequencySeries(
+  List<FGraph> data,
+  List<FreqSubcategory> subcategories,
+) {
   final byFreq = <int, List<FGraph>>{};
-  for (final f in fData) {
-    if (f.frequencyID == 0) continue;
+  for (final f in data) {
+    if (f.frequencyID == 0) continue; // ignore frequencyID 0
     byFreq.putIfAbsent(f.frequencyID, () => []).add(f);
   }
 
@@ -161,9 +185,9 @@ List<FrequencySeries> buildFrequencySeries(List<FGraph> fData) {
       values.putIfAbsent(
           yr,
           () => {
-                for (final sc in kFreqSubcategories) sc.key: <int, int>{},
+                for (final sc in subcategories) sc.key: <int, int>{},
               });
-      for (final sc in kFreqSubcategories) {
+      for (final sc in subcategories) {
         values[yr]![sc.key]![r.month] = sc.getter(r);
       }
     }
@@ -218,15 +242,23 @@ class LegendRow extends StatelessWidget {
   }
 }
 
-// ─── Legend: grouped by year, dashed swatches per subcategory ──────────
+// ─── Legend: grouped by year; subcategory row only shown when subCount > 1 ──
 class FrequencyLegend extends StatelessWidget {
   final List<String> years;
+  final List<FreqSubcategory> subcategories;
   final Color Function(int yearIndex) yearColor;
 
-  const FrequencyLegend({super.key, required this.years, required this.yearColor});
+  const FrequencyLegend({
+    super.key,
+    required this.years,
+    required this.subcategories,
+    required this.yearColor,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final showSubRow = subcategories.length > 1;
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: Wrap(
@@ -249,24 +281,26 @@ class FrequencyLegend extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 4),
-              Wrap(
-                spacing: 8,
-                runSpacing: 4,
-                children: List.generate(kFreqSubcategories.length, (si) {
-                  return Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      _dashedLineSwatch(color: color, dashArray: kFreqDashPatterns[si]),
-                      const SizedBox(width: 4),
-                      Text(
-                        Statics.getLabel(kFreqSubcategories[si].key, returnKey: true),
-                        style: const TextStyle(fontSize: 10, color: Color(0xFF6B7280)),
-                      ),
-                    ],
-                  );
-                }),
-              ),
+              if (showSubRow) ...[
+                const SizedBox(height: 4),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 4,
+                  children: List.generate(subcategories.length, (si) {
+                    return Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _dashedLineSwatch(color: color, dashArray: kFreqDashPatterns[si]),
+                        const SizedBox(width: 4),
+                        Text(
+                          Statics.getLabel(subcategories[si].key, returnKey: true),
+                          style: const TextStyle(fontSize: 10, color: Color(0xFF6B7280)),
+                        ),
+                      ],
+                    );
+                  }),
+                ),
+              ],
             ],
           );
         }),
@@ -278,12 +312,11 @@ class FrequencyLegend extends StatelessWidget {
     return SizedBox(
       width: 16,
       height: 6,
-      child: CustomPaint(
-        painter: _DashedLinePainter(color: color, dashArray: dashArray),
-      ),
+      child: CustomPaint(painter: _DashedLinePainter(color: color, dashArray: dashArray)),
     );
   }
 }
+
 // ─── Main Screen ──────────────────────────────────────────────────────────────
 
 class ShaakhaaTulnatmakReportTab extends StatefulWidget {
@@ -874,7 +907,6 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
     final barYears = data.vData.map((v) => v.year).toSet().toList()..sort();
 
     final activitySeries = buildActivitySeries(data.hData);
-    final frequencySeries = buildFrequencySeries(data.fData);
 
     final totalIsNeg = data.totalGrowth.trim().startsWith('-');
     final newIsNeg = data.newGrowth.trim().startsWith('-');
@@ -998,19 +1030,20 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
                 ),
               ],
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 21),
 
             // ── Karyakram continuity (single combined chart) ──
             Row(
-              children: const [
-                Icon(Icons.show_chart, size: 15, color: Colors.orange),
-                SizedBox(width: 7),
+              children: [
+                const Icon(Icons.show_chart, size: 15, color: Colors.orange),
+                const SizedBox(width: 7),
                 Text(
-                  "", //"कार्यक्रम निरंतरता ट्रेंड",
+                  Statics.getLabel("shaakhaaMilanMandaliHeader"), //"कार्यक्रम निरंतरता ट्रेंड",
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFF1F2937)),
                 ),
               ],
             ),
+            SizedBox(height: 12),
             // Padding(
             //   padding: EdgeInsets.only(top: 2, bottom: 12),
             //   child: Text(
@@ -1019,45 +1052,31 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
             //   ),
             // ),
 // (inside your Column children, mirrors the activitySeries block)
-            if (frequencySeries.isEmpty)
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: _cardDecoration,
-                child: _emptyChartPlaceholder(),
-              )
-            else
-              ...frequencySeries.map((series) {
-                return Container(
-                  margin: const EdgeInsets.only(bottom: 12),
-                  padding: const EdgeInsets.all(16),
-                  decoration: _cardDecoration,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        Statics.getLabel(series.freqname, returnKey: true),
-                        style: const TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xFF1F2937),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 2, bottom: 10),
-                        child: Text(
-                          "${series.years.length} ${Statics.getLabel("yearonly")} · ${series.months.length} ${Statics.getLabel("monthOnly")}",
-                          style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
-                        ),
-                      ),
-                      FrequencyLegend(
-                        years: series.years,
-                        yearColor: (i) => _colorAt(i),
-                      ),
-                      SizedBox(height: 200, child: _buildFrequencyLineChart(series)),
-                    ],
-                  ),
-                );
-              }),
+
+            _buildFrequencySection(
+              titleLabelKey: "Shaakhaa",
+              value: _shaakhaacount,
+              data: response?.shaakhaData ?? [],
+              subcategories: kShaakhaSubcategories,
+            ),
+            _buildFrequencySection(
+              titleLabelKey: "SaaptaahikMilan",
+              value: _milancount,
+              data: response?.saptahikData ?? [],
+              subcategories: kSaptahikSubcategories,
+            ),
+            _buildFrequencySection(
+              titleLabelKey: "MaasikMilan",
+              value: _mansikcount,
+              data: response?.manshikData ?? [],
+              subcategories: kManshikSubcategories,
+            ),
+            _buildFrequencySection(
+              titleLabelKey: "SanghaMandali",
+              value: _sangacount,
+              data: response?.sangaData ?? [],
+              subcategories: kSangaSubcategories,
+            ),
 
             const SizedBox(height: 14),
 
@@ -1069,11 +1088,11 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
-                    children: const [
-                      Icon(Icons.bar_chart, size: 15, color: Colors.orange),
-                      SizedBox(width: 7),
+                    children: [
+                      const Icon(Icons.bar_chart, size: 15, color: Colors.orange),
+                      const SizedBox(width: 7),
                       Text(
-                        "आयुगट अनुसार उपस्थिती तुलना",
+                        Statics.getLabel("aayugatWiseBarHeader"),
                         style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFF1F2937)),
                       ),
                     ],
@@ -1092,11 +1111,11 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
 
             // ── Karyakram continuity (single combined chart) ──
             Row(
-              children: const [
-                Icon(Icons.show_chart, size: 15, color: Colors.orange),
-                SizedBox(width: 7),
+              children: [
+                const Icon(Icons.show_chart, size: 15, color: Colors.orange),
+                const SizedBox(width: 7),
                 Text(
-                  "कार्यक्रम निरंतरता ट्रेंड",
+                  Statics.getLabel("activityTrendHeader"),
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFF1F2937)),
                 ),
               ],
@@ -1104,7 +1123,7 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
             Padding(
               padding: EdgeInsets.only(top: 2, bottom: 12),
               child: Text(
-                "महिन्यानिहाय गतिविधी (वर्षनिहाय तुलना)",
+                Statics.getLabel("activityTrendSubHeader"),
                 style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
               ),
             ),
@@ -1159,7 +1178,7 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 40),
       child: Center(
-        child: Text("या निवडीसाठी डेटा उपलब्ध नाही.", style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
+        child: Text(Statics.getLabel("noDataFoundTryAnotherSearch"), style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
       ),
     );
   }
@@ -1526,54 +1545,20 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
 
   List<String> kFreqLineGlyphs = ['━━', '╌╌', '··'];
 
-  Widget _buildFrequencyLineChart(FrequencySeries series) {
+// ─── Single-subcategory line chart: years as lines, solid color-per-year ────
+
+  Widget _buildFrequencySubChart(FrequencySeries series, FreqSubcategory subcategory) {
     final months = series.months;
     final years = series.years;
-    final subCount = kFreqSubcategories.length;
 
     double maxV = 0;
     for (final yr in years) {
-      for (final sc in kFreqSubcategories) {
-        for (final m in months) {
-          final v = (series.values[yr]?[sc.key]?[m] ?? 0).toDouble();
-          if (v > maxV) maxV = v;
-        }
+      for (final m in months) {
+        final v = (series.values[yr]?[subcategory.key]?[m] ?? 0).toDouble();
+        if (v > maxV) maxV = v;
       }
     }
     final maxY = maxV == 0 ? 10.0 : (maxV / 10) * 10 + 10;
-
-    final lineBars = <LineChartBarData>[];
-    for (var yi = 0; yi < years.length; yi++) {
-      final yr = years[yi];
-      final color = _colorAt(yi);
-      for (var si = 0; si < subCount; si++) {
-        final sc = kFreqSubcategories[si];
-        final spots = List.generate(months.length, (j) {
-          final m = months[j];
-          final val = (series.values[yr]?[sc.key]?[m] ?? 0).toDouble();
-          return FlSpot(j.toDouble(), val);
-        });
-        lineBars.add(
-          LineChartBarData(
-            spots: spots,
-            isCurved: true,
-            preventCurveOverShooting: true,
-            color: color,
-            barWidth: 2,
-            dashArray: kFreqDashPatterns[si],
-            dotData: FlDotData(
-              show: true,
-              getDotPainter: (spot, percent, bar, index) => FlDotCirclePainter(
-                radius: 3,
-                color: color,
-                strokeWidth: 1.5,
-                strokeColor: Colors.white,
-              ),
-            ),
-          ),
-        );
-      }
-    }
 
     return LineChart(
       LineChartData(
@@ -1592,8 +1577,7 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
             axisNameWidget: Text(Statics.getLabel("monthOnly")),
             sideTitles: SideTitles(
               showTitles: true,
-              maxIncluded: false,
-              minIncluded: false,
+              interval: 1,
               getTitlesWidget: (value, meta) {
                 final idx = value.toInt();
                 if (idx < 0 || idx >= months.length) return const SizedBox();
@@ -1608,7 +1592,6 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
             sideTitles: SideTitles(
               showTitles: true,
               reservedSize: 32,
-              maxIncluded: false,
               getTitlesWidget: (value, meta) => Text(
                 value.toInt().toString(),
                 style: const TextStyle(fontSize: 10, color: Color(0xFF6B7280)),
@@ -1625,8 +1608,6 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
             tooltipMargin: 12,
             maxContentWidth: 220,
             fitInsideHorizontally: true,
-            fitInsideVertically: true,
-            // showOnTopOfTheChartBoxArea: true,
             getTooltipItems: (spots) {
               if (spots.isEmpty) return [];
 
@@ -1636,20 +1617,16 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
               return spots.asMap().entries.map((entry) {
                 final i = entry.key;
                 final s = entry.value;
-                final yearIdx = s.barIndex ~/ subCount;
-                final subIdx = s.barIndex % subCount;
-                final yr = years[yearIdx];
-                final color = _colorAt(yearIdx);
-                final subLabel = Statics.getLabel(kFreqSubcategories[subIdx].key, returnKey: true);
-                final glyph = kFreqLineGlyphs[subIdx];
+                final yr = years[s.barIndex];
+                final color = _colorAt(s.barIndex);
 
                 return LineTooltipItem(
-                  '', // unused when children is provided
+                  '',
                   const TextStyle(),
                   children: [
                     if (i == 0)
                       TextSpan(
-                        text: "Month $monthNum\n",
+                        text: "${Statics.getLabel("monthOnly")} $monthNum\n",
                         style: const TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w800,
@@ -1658,11 +1635,7 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
                         ),
                       ),
                     TextSpan(
-                      text: "$glyph ",
-                      style: TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: color),
-                    ),
-                    TextSpan(
-                      text: "$yr · $subLabel  ",
+                      text: "$yr  ",
                       style: const TextStyle(fontSize: 11, color: Color(0xFF6B7280)),
                     ),
                     TextSpan(
@@ -1676,8 +1649,128 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
             },
           ),
         ),
-        lineBarsData: lineBars,
+        lineBarsData: List.generate(years.length, (i) {
+          final yr = years[i];
+          final spots = List.generate(months.length, (j) {
+            final m = months[j];
+            final val = (series.values[yr]?[subcategory.key]?[m] ?? 0).toDouble();
+            return FlSpot(j.toDouble(), val);
+          });
+          final color = _colorAt(i);
+          return LineChartBarData(
+            spots: spots,
+            isCurved: true,
+            preventCurveOverShooting: true,
+            color: color,
+            barWidth: 2,
+            dotData: FlDotData(
+              show: true,
+              getDotPainter: (spot, percent, bar, index) => FlDotCirclePainter(
+                radius: 4,
+                color: color,
+                strokeWidth: 2,
+                strokeColor: Colors.white,
+              ),
+            ),
+          );
+        }),
       ),
+    );
+  }
+
+// ─── Reusable section: title + list of frequency cards (each with N sub-charts) ──
+
+  Widget _buildFrequencySection({
+    required String titleLabelKey,
+    required String value,
+    required List<FGraph> data,
+    required List<FreqSubcategory> subcategories,
+  }) {
+    final series = buildFrequencySeries(data, subcategories);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (series.isEmpty)
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: _cardDecoration,
+            child: _emptyChartPlaceholder(),
+          )
+        else
+          ...series.map((s) {
+            return Container(
+              margin: const EdgeInsets.only(bottom: 12),
+              padding: const EdgeInsets.all(16),
+              decoration: _cardDecoration,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: 8,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              titleLabelKey == "SanghaMandali" ? Statics.getLabel(s.freqname, returnKey: true).split("/").last : Statics.getLabel(s.freqname, returnKey: true).split("/").first,
+                              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF1F2937)),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 2, bottom: 10),
+                              child: Text(
+                                "${s.years.length} ${Statics.getLabel("yearonly")} · ${s.months.length} ${Statics.getLabel("monthOnly")}",
+                                style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                        decoration: BoxDecoration(color: Colors.deepOrange.shade100.withAlpha(90), border: Border.all(color: Colors.deepOrange), borderRadius: BorderRadius.circular(12)),
+                        child: Text(value,
+                            maxLines: 2,
+                            softWrap: true,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.end,
+                            style: TextStyle(fontSize: 15, color: Colors.deepOrange, fontWeight: FontWeight.w900)),
+                      ),
+                    ],
+                  ),
+                  // year legend shown once — same years/colors apply to every sub-chart below
+                  LegendRow(
+                    isLine: true,
+                    items: [
+                      for (var i = 0; i < s.years.length; i++) MapEntry(s.years[i], _colorAt(i)),
+                    ],
+                  ),
+                  // one sub-chart per subcategory, each with its own subheading
+                  for (var si = 0; si < subcategories.length; si++) ...[
+                    if (subcategories.length > 1 && si != 0)
+                      Container(
+                        margin: EdgeInsets.only(top: 16, bottom: 8),
+                        width: double.infinity,
+                        height: 6,
+                        child: CustomPaint(painter: _DashedLinePainter(color: Colors.grey.shade200, dashArray: [6, 4])),
+                      ),
+                    Padding(
+                      padding: EdgeInsets.only(top: si == 0 ? 4 : 16, bottom: 6),
+                      child: Text(
+                        Statics.getLabel(subcategories[si].key, returnKey: true),
+                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Color(0xFF374151)),
+                      ),
+                    ),
+                    SizedBox(height: 180, child: _buildFrequencySubChart(s, subcategories[si])),
+                  ],
+                ],
+              ),
+            );
+          }),
+        const SizedBox(height: 8),
+      ],
     );
   }
 }

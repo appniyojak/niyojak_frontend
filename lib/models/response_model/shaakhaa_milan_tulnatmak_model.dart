@@ -9,7 +9,10 @@ class TulnatmakResponse {
   final int sangacount;
   final List<VGraph> vData;
   final List<HGraph> hData;
-  final List<FGraph> fData;
+  final List<FGraph> shaakhaData;
+  final List<FGraph> saptahikData;
+  final List<FGraph> manshikData;
+  final List<FGraph> sangaData;
 
   TulnatmakResponse({
     required this.status,
@@ -22,7 +25,10 @@ class TulnatmakResponse {
     required this.sangacount,
     required this.vData,
     required this.hData,
-    required this.fData,
+    required this.shaakhaData,
+    required this.saptahikData,
+    required this.manshikData,
+    required this.sangaData,
   });
 
   factory TulnatmakResponse.fromJson(Map<String, dynamic> json) => TulnatmakResponse(
@@ -36,7 +42,10 @@ class TulnatmakResponse {
         sangacount: json["sangacount"] ?? 0,
         vData: (json["vData"] as List<dynamic>? ?? []).map((e) => VGraph.fromJson(e as Map<String, dynamic>)).toList(),
         hData: (json["hData"] as List<dynamic>? ?? []).map((e) => HGraph.fromJson(e as Map<String, dynamic>)).toList(),
-        fData: (json["fData"] as List<dynamic>? ?? []).map((e) => FGraph.fromJson(e as Map<String, dynamic>)).toList(),
+        shaakhaData: (json["shaakhaData"] as List<dynamic>? ?? []).map((e) => FGraph.fromJson(e as Map<String, dynamic>)).toList(),
+        saptahikData: (json["saptahikData"] as List<dynamic>? ?? []).map((e) => FGraph.fromJson(e as Map<String, dynamic>)).toList(),
+        manshikData: (json["manshikData"] as List<dynamic>? ?? []).map((e) => FGraph.fromJson(e as Map<String, dynamic>)).toList(),
+        sangaData: (json["sangaData"] as List<dynamic>? ?? []).map((e) => FGraph.fromJson(e as Map<String, dynamic>)).toList(),
       );
 
   bool get isSuccess => status.trim().toLowerCase() == "success";
@@ -56,36 +65,6 @@ class VGraph {
       );
 }
 
-class FGraph {
-  final int frequencyID;
-  final int month;
-  final int year;
-  final String freqname;
-  final int shakhaCount114;
-  final int shakhaCount1529;
-  final int shakhaCountGreaterThan29;
-
-  FGraph({
-    required this.frequencyID,
-    required this.month,
-    required this.year,
-    required this.freqname,
-    required this.shakhaCount114,
-    required this.shakhaCount1529,
-    required this.shakhaCountGreaterThan29,
-  });
-
-  factory FGraph.fromJson(Map<String, dynamic> json) => FGraph(
-        frequencyID: json["FrequencyID"] is int ? json["FrequencyID"] as int : int.tryParse(json["FrequencyID"]?.toString() ?? "") ?? 0,
-        month: json["Month"] is int ? json["Month"] as int : int.tryParse(json["Month"]?.toString() ?? "") ?? 0,
-        year: json["Year"] is int ? json["Year"] as int : int.tryParse(json["Year"]?.toString() ?? "") ?? 0,
-        freqname: json["freqname"] as String? ?? "",
-        shakhaCount114: json["ShakhaCount1_14"] is int ? json["ShakhaCount1_14"] as int : int.tryParse(json["ShakhaCount1_14"]?.toString() ?? "") ?? 0,
-        shakhaCount1529: json["ShakhaCount15_29"] is int ? json["ShakhaCount15_29"] as int : int.tryParse(json["ShakhaCount15_29"]?.toString() ?? "") ?? 0,
-        shakhaCountGreaterThan29: json["ShakhaCountGreaterThan29"] is int ? json["ShakhaCountGreaterThan29"] as int : int.tryParse(json["ShakhaCountGreaterThan29"]?.toString() ?? "") ?? 0,
-      );
-}
-
 class HGraph {
   final String year;
   final String activity;
@@ -98,6 +77,44 @@ class HGraph {
         year: json["Year"]?.toString() ?? "",
         activity: json["Activity"] as String? ?? "",
         month: json["Month"] ?? 0,
-        sCount: json["SCount"] is int ? json["SCount"] as int : int.tryParse(json["SCount"]?.toString() ?? "") ?? 0,
+        sCount: json["SCount"] as int? ?? 0,
+      );
+}
+
+class FGraph {
+  final String freqname;
+  final int year;
+  final int month;
+  final int frequencyID;
+  final int shakhaCount1plus;
+  final int shakhaCount15plus;
+  final int saphathikCount1plus;
+  final int saphathikCount3plus;
+  final int manshikCount1plus;
+  final int sangaCount1plus;
+
+  FGraph(
+      {required this.freqname,
+      required this.year,
+      required this.month,
+      required this.frequencyID,
+      required this.shakhaCount1plus,
+      required this.shakhaCount15plus,
+      required this.saphathikCount1plus,
+      required this.saphathikCount3plus,
+      required this.manshikCount1plus,
+      required this.sangaCount1plus});
+
+  factory FGraph.fromJson(Map<String, dynamic> json) => FGraph(
+        frequencyID: json["FrequencyID"] as int? ?? 0,
+        month: json["Month"] as int? ?? 0,
+        year: json["Year"] as int? ?? 0,
+        freqname: json["freqname"] as String? ?? "",
+        shakhaCount1plus: json["ShakhaCount1plus"] as int? ?? 0,
+        shakhaCount15plus: json["ShakhaCount15plus"] as int? ?? 0,
+        saphathikCount1plus: json["saphathikCount1plus"] as int? ?? 0,
+        saphathikCount3plus: json["saphathikCount3plus"] as int? ?? 0,
+        manshikCount1plus: json["manshikCount1plus"] as int? ?? 0,
+        sangaCount1plus: json["sangaCount1plus"] as int? ?? 0,
       );
 }

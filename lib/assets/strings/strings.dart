@@ -1116,9 +1116,6 @@ Map<String, String> resEnglish = {
   'masikMilanCount': 'Masik Milan Count',
   'sanghaCount': 'Sangha Mandali Count',
   'mandaliCount': 'Mandali Count',
-  'ShakhaCount1_14': 'Upto 14 Days',
-  'ShakhaCount15_29': '15 to 29 Days',
-  'ShakhaCountGreaterThan29': '30 Days',
   'mandaliYuktaNagar': 'mandali Yukta Nagar',
   'graamPramukhName': 'Graam Pramukh Name',
   'isUdayGraam': 'Uday Graam',
@@ -2196,6 +2193,16 @@ Map<String, String> resEnglish = {
 
   ////////////////////////////////////// Main Shakhaa Milan(NEW KEYS) //////////////////////////////////////
   "dailyActivityHeader": "Were the daily activities conducted?",
+  "shaakhaaMilanMandaliHeader": "Shaakhaa/Milan/Mandali Trend",
+  "aayugatWiseBarHeader": "Aayugat-wise Comparison",
+  "activityTrendHeader": "Program Continuity Trend",
+  "activityTrendSubHeader": "Monthly Activity (Year-over-Year Comparison)",
+  'ShakhaCount1plus': '1 to 14 Times',
+  'ShakhaCount15plus': '15 Days above',
+  'saphathikCount1plus': '1 to 2 Times',
+  'saphathikCount3plus': '3 Times',
+  'manshikCount1plus': 'More Than 1 Time',
+  'sangaCount1plus': 'More Than 1 Time',
 };
 
 ///1,584
@@ -3326,9 +3333,6 @@ Map<String, String> resMarathi = {
   'masikMilanCount': 'मासिक मिलन संख्या',
   'sanghaCount': 'संघ मंडळी संख्या',
   'mandaliCount': 'मंडळी संख्या',
-  'ShakhaCount1_14': '१ ते १४ दिवस लागली',
-  'ShakhaCount15_29': '१५ ते २९ दिवस लागली',
-  'ShakhaCountGreaterThan29': '३० दिवस लागली',
   'mandaliYuktaNagar': 'मंडळी युक्त नगर',
   'graamPramukhName': 'ग्राम प्रमुख नाव',
   'isUdayGraam': 'उदय ग्राम',
@@ -4406,6 +4410,16 @@ Map<String, String> resMarathi = {
 
   ////////////////////////////////////// Main Shakhaa Milan(NEW KEYS) //////////////////////////////////////
   "dailyActivityHeader": "दैनिक कार्यक्रम पार पडला का?",
+  "shaakhaaMilanMandaliHeader": "शाखा/मिलन/मंडळी ट्रेंड",
+  "aayugatWiseBarHeader": "आयुगट अनुसार उपस्थिती तुलना",
+  "activityTrendHeader": "कार्यक्रम निरंतरता ट्रेंड",
+  "activityTrendSubHeader": "महिन्यानिहाय गतिविधी (वर्षनिहाय तुलना)",
+  "ShakhaCount1plus": "१ ते १४ वेळा लागली",
+  "ShakhaCount15plus": "१५ दिवस किंवा अधिक वेळा लागली",
+  "saphathikCount1plus": "१ ते २ वेळा लागली",
+  "saphathikCount3plus": "३ वेळा किंवा अधिक वेळा लागली",
+  "manshikCount1plus": "१ पेक्षा जास्त वेळा लागली",
+  "sangaCount1plus": "१ पेक्षा जास्त वेळा लागली",
 };
 
 ///1,583
@@ -5536,9 +5550,6 @@ Map<String, String> resHindi = {
   'masikMilanCount': 'मासिक मिलन संख्या',
   'sanghaCount': 'संघ मंडळी संख्या',
   'mandaliCount': 'मंडली संख्या',
-  'ShakhaCount1_14': '१ से १४ दिन लगी',
-  'ShakhaCount15_29': '१५ से १९ दिन लगी',
-  'ShakhaCountGreaterThan29': '३० दिन लगी',
   'mandaliYuktaNagar': 'मंडळी युक्त नगर',
   'graamPramukhName': 'ग्राम प्रमुख नाम',
   'isUdayGraam': 'उदय ग्राम',
@@ -6614,4 +6625,14 @@ Map<String, String> resHindi = {
 
   ////////////////////////////////////// Main Shakhaa Milan(NEW KEYS) //////////////////////////////////////
   "dailyActivityHeader": "दैनिक कार्यक्रम हुआ या नहीं?",
+  "shaakhaaMilanMandaliHeader": "शाखा/मिलन/मंडळी ट्रेंड",
+  "aayugatWiseBarHeader": "आयुगट अनुसार उपस्थिती तुलना",
+  "activityTrendHeader": "कार्यक्रम निरंतरता ट्रेंड",
+  "activityTrendSubHeader": "माहवार गतिविधि (वर्षवार तुलना)",
+  "ShakhaCount1plus": "1 से 14 बार लगी",
+  "ShakhaCount15plus": "15 दिन या अधिक बार लगी",
+  "saphathikCount1plus": "1 से 2 बार लगी",
+  "saphathikCount3plus": "3 बार या अधिक बार लगी",
+  "manshikCount1plus": "1 से अधिक बार लगी",
+  "sangaCount1plus": "1 से अधिक बार लगी",
 };
