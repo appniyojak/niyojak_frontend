@@ -769,122 +769,6 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      // onPressed: () {
-                      //   if (sajjanShaktiType ==
-                      //       1) if ((sajjanShaktiShreniEditDataId?.isOther == 1 &&
-                      //           sajjanShaktiAnyaShreniNameController.text ==
-                      //               "") ||
-                      //       (sajjanShaktiVisheshEditDataId?.isOther == 1 &&
-                      //           sajjanShaktiAnyaVisheshNameController.text ==
-                      //               "")) {
-                      //     Statics.showToast(
-                      //         "${Statics.getLabel('otherInfoValidation')}");
-                      //   } else if (sajjanShaktiPhoneController.text.length !=
-                      //       10) {
-                      //     Statics.showToast(
-                      //         "${Statics.getLabel('mobileNumberLimit')}");
-                      //   } else {
-                      //     Vastisarsajjanshakti newData = Vastisarsajjanshakti(
-                      //       name: sajjanShaktiNameController.text.trim(),
-                      //       address: sajjanShaktiAddressController.text.trim(),
-                      //       doorabhaash: sajjanShaktiPhoneController.text.trim(),
-                      //       shreneeid: sajjanShaktiShreniId,
-                      //       selectedDropdownValueName: sajjanShaktiShreniName,
-                      //       otherShreniName:
-                      //           sajjanShaktiAnyaShreniNameController.text.trim(),
-                      //       sanstheCheNaav:
-                      //           sajjanShaktiSansthecheNaavController.text.trim(),
-                      //       sansthechaKuthalaPadavar:
-                      //           sajjanShaktiSansthKuthalyaPadavarController.text
-                      //               .trim(),
-                      //       samparksthitiid: sajjanShaktiSamparkStithiId,
-                      //       selectedDropdownValueName1:
-                      //           sajjanShaktiSamparkStithiName,
-                      //       visheshId: sajjanShaktiVisheshId,
-                      //       selectedDropdownValueName2: sajjanShaktiVisheshName,
-                      //       otherVisheshName:
-                      //           sajjanShaktiAnyaVisheshNameController.text.trim(),
-                      //       prabhaavkshetrid: sajjanShaktiPrabhavKeshtraId,
-                      //       selectedDropdownValueName3:
-                      //           sajjanShaktiPrabhavKeshtraName,
-                      //       samparkasutranava:
-                      //           sajjanShaktiContactPersonNameController.text
-                      //               .trim(),
-                      //       samparkasutraMobileNumber:
-                      //           sajjanShaktiContactPersonDoorbhashController.text
-                      //               .trim(),
-                      //       isactive: 1,
-                      //       vastiid: int.parse(selctedLevelId!),
-                      //       pkid: 0,
-                      //     );
-                      //     sajjanShaktiDataList.add(newData);
-                      //   }
-                      //   if (sajjanShaktiType ==
-                      //       0) if ((selectedUpShreni?.isOther == 1 &&
-                      //           anyaPrabhaviLokAnyaUppshreniController.text ==
-                      //               "") ||
-                      //       (selectedUpShreni2?.isOther == 1 &&
-                      //           anyaPrabhaviLokAnyaUppshreni1Controller.text ==
-                      //               "")) {
-                      //     Statics.showToast(
-                      //         "${Statics.getLabel('otherInfoValidation')}");
-                      //   } else if (anyaPrabhaviLokMobileNoController
-                      //           .text.length !=
-                      //       10) {
-                      //     log("anyaPrabhaviLokMobileNoController.text.length  -->> ${anyaPrabhaviLokMobileNoController.text.length}");
-                      //     Statics.showToast(
-                      //         "${Statics.getLabel('mobileNumberLimit')}");
-                      //   } else if (anyaPrabhaviLokSamparkSutraDoorbhashController
-                      //           .text.length !=
-                      //       10) {
-                      //     log("anyaPrabhaviLokSamparkSutraDoorbhashController.text.length  -->> ${anyaPrabhaviLokSamparkSutraDoorbhashController.text.length}");
-                      //     Statics.showToast(
-                      //         "${Statics.getLabel('mobileNumberLimit')}");
-                      //   } else {
-                      //     VastisarAnyaprabhavilokam newData =
-                      //         VastisarAnyaprabhavilokam(
-                      //       name: anyaPrabhaviLokNaavController.text,
-                      //       address: anyaPrabhaviLokAddressController.text,
-                      //       doorabhaash: anyaPrabhaviLokMobileNoController.text,
-                      //       shreneeid: anyaPrabhaviLokShreniId,
-                      //       selectedDropdownValueName: anyaPrabhaviLokShreniName,
-                      //       upshreneeid: anyaPrabhaviLokUpShreniId,
-                      //       selectedDropdownValueName1:
-                      //           anyaPrabhaviLokUpShreniName,
-                      //       upshreneeid2: anyaPrabhaviLokUpShreni1Id,
-                      //       selectedDropdownValueName2:
-                      //           anyaPrabhaviLokUpShreni1Name,
-                      //       visheshid: anyaPrabhaviLokVisheshId,
-                      //       selectedDropdownValueName3:
-                      //           anyaPrabhaviLokVisheshName,
-                      //       prabhaavkshetrid: anyaPrabhaviLokPrabhavKshetraId,
-                      //       selectedDropdownValueName4:
-                      //           anyaPrabhaviLokPrabhavKshetraName,
-                      //       othervishesh:
-                      //           anyaPrabhaviLokAnyaVisheshMahitiController.text,
-                      //       samparksthitiid: anyaPrabhaviLokSamparkStithiId,
-                      //       selectedDropdownValueName5:
-                      //           anyaPrabhaviLokSamparkStithiName,
-                      //       samparkasutranav:
-                      //           anyaPrabhaviLokSamparkSutraNaavController.text,
-                      //       samparkaSutraDoorbhash:
-                      //           anyaPrabhaviLokSamparkSutraDoorbhashController
-                      //               .text,
-                      //       pkid: 0,
-                      //       anyavisesamahiti:
-                      //           anyaPrabhaviLokAnyaVisheshMahitiController.text,
-                      //       otherupshrenee:
-                      //           anyaPrabhaviLokAnyaUppshreniController.text,
-                      //       otherupshrenee2:
-                      //           anyaPrabhaviLokAnyaUppshreni1Controller.text,
-                      //       isactive: 1,
-                      //       vastiid: int.parse(selctedLevelId!),
-                      //     );
-                      //     anyaPrabhaviLokDataList.add(newData);
-                      //   }
-                      //
-                      //   submitForm();
-                      // },
                       onPressed: () {
                         bool isValid = true;
 
@@ -1017,7 +901,6 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
                           submitForm();
                         }
                       },
-
                       child: Text(
                         Statics.getLabel('Submit'),
                         style: const TextStyle(

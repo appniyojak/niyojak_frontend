@@ -1471,8 +1471,8 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
             axisNameWidget: Text(Statics.getLabel("monthOnly")),
             sideTitles: SideTitles(
               showTitles: true,
-              maxIncluded: false,
-              minIncluded: false,
+              // maxIncluded: false,
+              // minIncluded: false,
               getTitlesWidget: (value, meta) {
                 final idx = value.toInt();
                 if (idx < 0 || idx >= months.length) return const SizedBox();
@@ -1731,12 +1731,12 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
                       Container(
                         padding: EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                         decoration: BoxDecoration(color: Colors.deepOrange.shade100.withAlpha(90), border: Border.all(color: Colors.deepOrange), borderRadius: BorderRadius.circular(12)),
-                        child: Text(value,
+                        child: Text("${Statics.getLabel("sankalpaLabel")} : $value",
                             maxLines: 2,
                             softWrap: true,
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.end,
-                            style: TextStyle(fontSize: 15, color: Colors.deepOrange, fontWeight: FontWeight.w900)),
+                            style: TextStyle(fontSize: 13.5, color: Colors.deepOrange, fontWeight: FontWeight.w900)),
                       ),
                     ],
                   ),
@@ -1748,22 +1748,23 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
                     ],
                   ),
                   // one sub-chart per subcategory, each with its own subheading
-                  for (var si = 0; si < subcategories.length; si++) ...[
-                    if (subcategories.length > 1 && si != 0)
+                  for (var si = subcategories.length - 1; si >= 0; si--) ...[
+                    if (subcategories.length > 1 && si != subcategories.length - 1) ...[
                       Container(
                         margin: EdgeInsets.only(top: 16, bottom: 8),
                         width: double.infinity,
                         height: 6,
                         child: CustomPaint(painter: _DashedLinePainter(color: Colors.grey.shade200, dashArray: [6, 4])),
                       ),
-                    Padding(
-                      padding: EdgeInsets.only(top: si == 0 ? 4 : 16, bottom: 6),
-                      child: Text(
-                        Statics.getLabel(subcategories[si].key, returnKey: true),
-                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Color(0xFF374151)),
+                      Padding(
+                        padding: EdgeInsets.only(top: si == 0 ? 4 : 16, bottom: 6),
+                        child: Text(
+                          Statics.getLabel(subcategories[si].key, returnKey: true),
+                          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Color(0xFF374151)),
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 180, child: _buildFrequencySubChart(s, subcategories[si])),
+                    ],
+                    Container(height: 210, margin: EdgeInsets.only(top: 8), child: _buildFrequencySubChart(s, subcategories[si])),
                   ],
                 ],
               ),
