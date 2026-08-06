@@ -8,23 +8,23 @@ class BulkExcelSajjanAnyaRespModel {
   BulkExcelSajjanAnyaRespModel({this.status, this.message, this.valid, this.invalid, this.duplicate});
 
   BulkExcelSajjanAnyaRespModel.fromJson(Map<String, dynamic> json) {
-    status = json['status'];
-    message = json['message'];
-    if (json['valid'] != null) {
+    status = json['Status'] ?? json['status'];
+    message = json['Message'] ?? json['message'];
+    if (json['Valid'] != null) {
       valid = <SajjanAnyaData>[];
-      json['valid'].forEach((v) {
+      json['Valid'].forEach((v) {
         valid!.add(new SajjanAnyaData.fromJson(v));
       });
     }
-    if (json['invalid'] != null) {
+    if (json['Invalid'] != null) {
       invalid = <SajjanAnyaData>[];
-      json['invalid'].forEach((v) {
+      json['Invalid'].forEach((v) {
         invalid!.add(new SajjanAnyaData.fromJson(v));
       });
     }
-    if (json['duplicate'] != null) {
+    if (json['Duplicate'] != null) {
       duplicate = <SajjanAnyaData>[];
-      json['duplicate'].forEach((v) {
+      json['Duplicate'].forEach((v) {
         duplicate!.add(new SajjanAnyaData.fromJson(v));
       });
     }
@@ -32,16 +32,16 @@ class BulkExcelSajjanAnyaRespModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['message'] = this.message;
+    data['Status'] = this.status;
+    data['Message'] = this.message;
     if (this.valid != null) {
-      data['valid'] = this.valid!.map((v) => v.toJson()).toList();
+      data['Valid'] = this.valid!.map((v) => v.toJson()).toList();
     }
     if (this.invalid != null) {
-      data['invalid'] = this.invalid!.map((v) => v.toJson()).toList();
+      data['Invalid'] = this.invalid!.map((v) => v.toJson()).toList();
     }
     if (this.duplicate != null) {
-      data['duplicate'] = this.duplicate!.map((v) => v.toJson()).toList();
+      data['Duplicate'] = this.duplicate!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -53,10 +53,13 @@ class SajjanAnyaData {
   String? patta;
   String? doorbhash;
   String? ling;
+  int? isfemale;
   String? shreni;
   int? shreniid;
   String? upshreni;
   String? upshreniid;
+  String? upshreni2;
+  String? upshreni2id;
   String? anyaVishesh;
   int? anyaVisheshid;
   String? anyaPrabhavKshetra;
@@ -83,10 +86,13 @@ class SajjanAnyaData {
       this.patta,
       this.doorbhash,
       this.ling,
+      this.isfemale,
       this.shreni,
       this.shreniid,
       this.upshreni,
       this.upshreniid,
+      this.upshreni2,
+      this.upshreni2id,
       this.anyaVishesh,
       this.anyaVisheshid,
       this.anyaPrabhavKshetra,
@@ -108,34 +114,37 @@ class SajjanAnyaData {
       this.errorMessages});
 
   SajjanAnyaData.fromJson(Map<String, dynamic> json) {
-    excelRowNumber = json['excelRowNumber'];
-    naav = json['naav'];
-    patta = json['patta'];
-    doorbhash = json['doorbhash'];
-    ling = json['ling'];
-    shreni = json['shreni'];
-    shreniid = json['shreniid'];
-    upshreni = json['upshreni'];
-    upshreniid = json['upshreniid'];
-    anyaVishesh = json['anyaVishesh'];
-    anyaVisheshid = json['anyaVisheshid'];
-    anyaPrabhavKshetra = json['anyaPrabhavKshetra'];
-    anyaPrabhavKshetraid = json['anyaPrabhavKshetraid'];
-    anyaVisheshMahiti = json['anyaVisheshMahiti'];
-    anyaSamparkSthiti = json['anyaSamparkSthiti'];
-    anyaSamparkSthitiid = json['anyaSamparkSthitiid'];
-    sansthaNaav = json['sansthaNaav'];
-    sansthaPadavi = json['sansthaPadavi'];
-    sajjanSamparkSthiti = json['sajjanSamparkSthiti'];
-    sajjanSamparkSthitiid = json['sajjanSamparkSthitiid'];
-    sajjanVishesh = json['sajjanVishesh'];
-    sajjanVisheshid = json['sajjanVisheshid'];
-    sajjanPrabhavKshetra = json['sajjanPrabhavKshetra'];
-    sajjanPrabhavKshetraid = json['sajjanPrabhavKshetraid'];
-    samparkSutraNaav = json['samparkSutraNaav'];
-    samparkSutraDoorbhash = json['samparkSutraDoorbhash'];
-    rowStatus = json['rowStatus'];
-    errorMessages = json['errorMessages'].cast<String>();
+    excelRowNumber = json['ExcelRowNumber'] ?? json['excelRowNumber'];
+    naav = json['Naav'] ?? json['naav'];
+    patta = json['Patta'] ?? json['patta'];
+    doorbhash = json['Doorbhash'] ?? json['doorbhash'];
+    ling = json['Ling'] ?? json['ling'];
+    isfemale = json['Isfemale'] ?? json['isfemale'] ?? 0;
+    shreni = json['Shreni'] ?? json['shreni'];
+    shreniid = json['Shreniid'] ?? json['shreniid'];
+    upshreni = json['Upshreni'] ?? json['upshreni'];
+    upshreniid = json['Upshreniid'] ?? json['upshreniid'];
+    upshreni2 = json['Upshreni2'] ?? json['upshreni2'];
+    upshreni2id = json['Upshreni2id'] ?? json['upshreni2id'];
+    anyaVishesh = json['AnyaVishesh'] ?? json['anyaVishesh'];
+    anyaVisheshid = json['AnyaVisheshid'] ?? json['anyaVisheshid'];
+    anyaPrabhavKshetra = json['AnyaPrabhavKshetra'] ?? json['anyaPrabhavKshetra'];
+    anyaPrabhavKshetraid = json['AnyaPrabhavKshetraid'] ?? json['anyaPrabhavKshetraid'];
+    anyaVisheshMahiti = json['AnyaVisheshMahiti'] ?? json['anyaVisheshMahiti'];
+    anyaSamparkSthiti = json['AnyaSamparkSthiti'] ?? json['anyaSamparkSthiti'];
+    anyaSamparkSthitiid = json['AnyaSamparkSthitiid'] ?? json['anyaSamparkSthitiid'];
+    sansthaNaav = json['SansthaNaav'] ?? json['sansthaNaav'];
+    sansthaPadavi = json['SansthaPadavi'] ?? json['sansthaPadavi'];
+    sajjanSamparkSthiti = json['SajjanSamparkSthiti'] ?? json['sajjanSamparkSthiti'];
+    sajjanSamparkSthitiid = json['SajjanSamparkSthitiid'] ?? json['sajjanSamparkSthitiid'];
+    sajjanVishesh = json['SajjanVishesh'] ?? json['sajjanVishesh'];
+    sajjanVisheshid = json['SajjanVisheshid'] ?? json['sajjanVisheshid'];
+    sajjanPrabhavKshetra = json['SajjanPrabhavKshetra'] ?? json['sajjanPrabhavKshetra'];
+    sajjanPrabhavKshetraid = json['SajjanPrabhavKshetraid'] ?? json['sajjanPrabhavKshetraid'];
+    samparkSutraNaav = json['SamparkSutraNaav'] ?? json['samparkSutraNaav'];
+    samparkSutraDoorbhash = json['SamparkSutraDoorbhash'] ?? json['samparkSutraDoorbhash'];
+    rowStatus = json['RowStatus'] ?? json['rowStatus'];
+    errorMessages = (json['ErrorMessages'] ?? json['errorMessages']).cast<String>();
   }
 
   Map<String, dynamic> toJson() {
@@ -145,10 +154,13 @@ class SajjanAnyaData {
     data['patta'] = this.patta;
     data['doorbhash'] = this.doorbhash;
     data['ling'] = this.ling;
+    data['isfemale'] = this.isfemale;
     data['shreni'] = this.shreni;
     data['shreniid'] = this.shreniid;
     data['upshreni'] = this.upshreni;
     data['upshreniid'] = this.upshreniid;
+    data['upshreni2'] = this.upshreni2;
+    data['upshreni2id'] = this.upshreni2id;
     data['anyaVishesh'] = this.anyaVishesh;
     data['anyaVisheshid'] = this.anyaVisheshid;
     data['anyaPrabhavKshetra'] = this.anyaPrabhavKshetra;

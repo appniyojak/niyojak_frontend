@@ -1,10 +1,16 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:open_filex/open_filex.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../helpers/static_data.dart' as Statics;
+import '../../../models/response_model/bulk_excel_sajjan_anya_resp_model.dart';
 import '../../../models/response_model/dropdown_level_responsemodel.dart';
 import '../../../models/response_model/get_vasti_data_by_id_model.dart';
 import '../../../models/response_model/vasti_sarvekshan_dropdown_model.dart';
@@ -93,6 +99,21 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
 
   List<Upnagarmandallist> vastimandallist = [];
   Upnagarmandallist? vastimandalData;
+
+  // ---------------- BULK UPLOAD STATE ----------------
+// Default entry mode is single; user can switch to bulk.
+  bool isBulkMode = false;
+
+  bool isDownloadingTemplate = false;
+  bool isAnalyzingExcel = false;
+  bool isSubmittingBulk = false;
+
+  PlatformFile? pickedExcelFile;
+
+  BulkExcelSajjanAnyaRespModel? bulkResponse;
+  List<SajjanAnyaData> bulkValidList = [];
+  List<SajjanAnyaData> bulkInvalidList = [];
+  List<SajjanAnyaData> bulkDuplicateList = [];
 
   //////////////////////////////////////////////////////////////////////////////////////
 
@@ -224,6 +245,18 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
 
     // Dropdown data reset
     vastisarvekshanDropDownDataModel = null;
+
+    // add inside resetSajjanShaktiAndAnyaPrabhaviLokData(), near the other resets
+    isBulkMode = false;
+    pickedExcelFile = null;
+    bulkResponse = null;
+    bulkValidList.clear();
+    bulkInvalidList.clear();
+    bulkDuplicateList.clear();
+    isDownloadingTemplate = false;
+    isAnalyzingExcel = false;
+    isSubmittingBulk = false;
+
     fetchVastiSurveyDropdownData();
   }
 
@@ -245,6 +278,203 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
       Navigator.of(context).pop();
     }
   }
+
+  /////////////////////////////////////// NEW BULK LOGIC ///////////////////////////////////////
+
+  Future<void> downloadExcelTemplate() async {
+    final String fileName = sajjanShaktiType == 1 ? "Sajjan_Shakti_Format.xlsx" : "Anyaprabhavi_Format.xlsx";
+    final String url = "${Statics.baseUrl}/format/$fileName";
+
+    setState(() => isDownloadingTemplate = true);
+
+    try {
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        final Directory dir = await getApplicationDocumentsDirectory();
+        final String savePath = "${dir.path}/$fileName";
+        final File file = File(savePath);
+        await file.writeAsBytes(response.bodyBytes);
+
+        await OpenFilex.open(savePath);
+      } else {
+        Statics.showToast("${Statics.getLabel('templateDownloadFailed')}");
+      }
+    } catch (e) {
+      print("Error downloading template: $e");
+      Statics.showToast("${Statics.getLabel('templateDownloadFailed')}");
+    } finally {
+      setState(() => isDownloadingTemplate = false);
+    }
+  }
+
+  Future<void> pickExcelFile() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['xlsx'],
+      withData: true, // ensures bytes are available even on Android/iOS
+    );
+
+    if (result != null && result.files.isNotEmpty) {
+      setState(() => pickedExcelFile = result.files.first);
+    }
+  }
+
+  Future<void> uploadAndAnalyzeExcel() async {
+    if (pickedExcelFile == null || pickedExcelFile!.bytes == null) {
+      Statics.showToast("${Statics.getLabel('pleaseSelectFile')}");
+      return;
+    }
+    bulkValidList = bulkInvalidList = bulkDuplicateList = [];
+    setState(() => isAnalyzingExcel = true);
+
+    try {
+      final String base64File = base64Encode(pickedExcelFile!.bytes!);
+
+      final Map<String, dynamic> body = {
+        "AppUserID": int.parse(Statics.userDetails['userID']),
+        "type": sajjanShaktiType == 1 ? "SajjanShakti" : "AnyaPrabhavi",
+        "ExcelBase64": base64File,
+      };
+
+      final response = await Statics.bulkExcelUploadSajjanAnyaData(body);
+
+      if (response != null) {
+        bulkResponse = response;
+
+        bulkValidList = response.valid ?? [];
+        bulkInvalidList = response.invalid ?? [];
+        bulkDuplicateList = response.duplicate ?? [];
+
+        setState(() {});
+      } else {
+        debugPrint("analyzeFailed >>>>>>>>>>>>>>> else");
+        Statics.showToast("${Statics.getLabel('analyzeFailed')}");
+      }
+    } catch (e) {
+      debugPrint("Error analyzing excel: $e");
+      Statics.showToast("${Statics.getLabel('analyzeFailed')}");
+    } finally {
+      setState(() => isAnalyzingExcel = false);
+    }
+  }
+
+  bool isEmptyStr(String? text) => text == null || text.trim().isEmpty;
+
+  bool isSajjanRowValid(SajjanAnyaData row) {
+    if (isEmptyStr(row.naav)) return false;
+    if (row.doorbhash == null || row.doorbhash!.trim().length != 10) return false;
+    if (row.shreniid == null) return false;
+    if (row.sajjanSamparkSthitiid == null) return false;
+    if (row.sajjanVisheshid == null) return false;
+    if (row.sajjanPrabhavKshetraid == null) return false;
+    if (isEmptyStr(row.samparkSutraNaav)) return false;
+    if (row.samparkSutraDoorbhash == null || row.samparkSutraDoorbhash!.trim().length != 10) return false;
+    return true;
+  }
+
+  bool isAnyaRowValid(SajjanAnyaData row) {
+    if (isEmptyStr(row.naav)) return false;
+    if (row.doorbhash == null || row.doorbhash!.trim().length != 10) return false;
+    if (row.shreniid == null) return false;
+    if (row.upshreniid == null || row.upshreniid!.trim().isEmpty) return false;
+    if (row.anyaSamparkSthitiid == null) return false;
+    if (row.anyaVisheshid == null) return false;
+    if (row.anyaPrabhavKshetraid == null) return false;
+    if (isEmptyStr(row.samparkSutraNaav)) return false;
+    if (row.samparkSutraDoorbhash == null || row.samparkSutraDoorbhash!.trim().length != 10) return false;
+    return true;
+  }
+
+  bool isBulkRowValid(SajjanAnyaData row) {
+    return sajjanShaktiType == 1 ? isSajjanRowValid(row) : isAnyaRowValid(row);
+  }
+
+  /// Call this after editing a row in the bottom sheet — moves it between
+  /// invalid/valid lists based on current field values. Does NOT touch
+  /// bulkDuplicateList (duplicate status only comes from the server).
+  void reclassifyBulkRow(SajjanAnyaData row) {
+    bulkInvalidList.removeWhere((r) => r.excelRowNumber == row.excelRowNumber);
+    bulkValidList.removeWhere((r) => r.excelRowNumber == row.excelRowNumber);
+
+    if (isBulkRowValid(row)) {
+      bulkValidList.add(row);
+    } else {
+      bulkInvalidList.add(row);
+    }
+    setState(() {});
+  }
+
+  Vastisarsajjanshakti sajjanAnyaDataToSajjanShakti(SajjanAnyaData row) {
+    return Vastisarsajjanshakti(
+      name: row.naav,
+      address: row.patta,
+      doorabhaash: row.doorbhash,
+      shreneeid: row.shreniid,
+      selectedDropdownValueName: row.shreni,
+      sanstheCheNaav: row.sansthaNaav,
+      sansthechaKuthalaPadavar: row.sansthaPadavi,
+      samparksthitiid: row.sajjanSamparkSthitiid,
+      selectedDropdownValueName1: row.sajjanSamparkSthiti,
+      visheshId: row.sajjanVisheshid,
+      selectedDropdownValueName2: row.sajjanVishesh,
+      prabhaavkshetrid: row.sajjanPrabhavKshetraid,
+      selectedDropdownValueName3: row.sajjanPrabhavKshetra,
+      samparkasutranava: row.samparkSutraNaav,
+      samparkasutraMobileNumber: row.samparkSutraDoorbhash,
+      isactive: 1,
+      isfemale: row.isfemale,
+      vastiid: int.tryParse(_controller.deepestSelectedGeoUnitId ?? "0") ?? 0,
+      pkid: 0,
+    );
+  }
+
+  VastisarAnyaprabhavilokam sajjanAnyaDataToAnyaPrabhaviLok(SajjanAnyaData row) {
+    return VastisarAnyaprabhavilokam(
+      name: row.naav,
+      address: row.patta,
+      doorabhaash: row.doorbhash,
+      shreneeid: row.shreniid,
+      selectedDropdownValueName: row.shreni,
+      upshreneeid: int.tryParse(row.upshreniid ?? ""),
+      selectedDropdownValueName1: row.upshreni,
+      visheshid: row.anyaVisheshid,
+      selectedDropdownValueName3: row.anyaVishesh,
+      prabhaavkshetrid: row.anyaPrabhavKshetraid,
+      selectedDropdownValueName4: row.anyaPrabhavKshetra,
+      othervishesh: row.anyaVisheshMahiti,
+      anyavisesamahiti: row.anyaVisheshMahiti,
+      samparksthitiid: row.anyaSamparkSthitiid,
+      selectedDropdownValueName5: row.anyaSamparkSthiti,
+      samparkasutranav: row.samparkSutraNaav,
+      samparkaSutraDoorbhash: row.samparkSutraDoorbhash,
+      isactive: 1,
+      isfemale: row.isfemale,
+      vastiid: int.tryParse(_controller.deepestSelectedGeoUnitId ?? "0") ?? 0,
+      pkid: 0,
+    );
+  }
+
+  Future<void> submitBulkData() async {
+    if (bulkValidList.isEmpty) {
+      Statics.showToast("${Statics.getLabel('noValidRowsToSubmit')}");
+      return;
+    }
+
+    setState(() => isSubmittingBulk = true);
+
+    if (sajjanShaktiType == 1) {
+      sajjanShaktiDataList.addAll(bulkValidList.map(sajjanAnyaDataToSajjanShakti));
+    } else {
+      anyaPrabhaviLokDataList.addAll(bulkValidList.map(sajjanAnyaDataToAnyaPrabhaviLok));
+    }
+
+    await submitForm(); // reuses your existing save + navigation-pop logic
+
+    setState(() => isSubmittingBulk = false);
+  }
+
+  //////////////////////////////////////////////////////////////////////////////////////
 
   @override
   void dispose() {
@@ -310,10 +540,37 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
                   ),
                 ]),
               ),
-              SizedBox(
-                height: 15,
-              ),
-              if (sajjanShaktiType == 1)
+              SizedBox(height: 15),
+              if (showTypeOfForm == true && sajjanShaktiType != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: RadioListTile<bool>(
+                          contentPadding: EdgeInsets.zero,
+                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          title: Text("${Statics.getLabel('singleEntry')}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                          value: false,
+                          groupValue: isBulkMode,
+                          onChanged: (value) => setState(() => isBulkMode = value!),
+                        ),
+                      ),
+                      Expanded(
+                        child: RadioListTile<bool>(
+                          contentPadding: EdgeInsets.zero,
+                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          title: Text("${Statics.getLabel('bulkUpload')}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                          value: true,
+                          groupValue: isBulkMode,
+                          onChanged: (value) => setState(() => isBulkMode = value!),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              SizedBox(height: 15),
+              if (sajjanShaktiType == 1 && !isBulkMode)
                 Container(
                   padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10)), border: Border.all(color: Colors.purpleAccent)),
@@ -487,7 +744,7 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
                     ],
                   ),
                 ),
-              if (sajjanShaktiType == 0)
+              if (sajjanShaktiType == 0 && !isBulkMode)
                 Container(
                   padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10)), border: Border.all(color: Colors.purpleAccent)),
@@ -756,6 +1013,7 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
                     ],
                   ),
                 ),
+              if (sajjanShaktiType != null && isBulkMode) bulkUploadSection(),
               if (sajjanShaktiType == 0 || sajjanShaktiType == 1)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20.0),
@@ -1016,6 +1274,660 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
           ),
         );
       }),
+    );
+  }
+
+  Widget bulkUploadSection() {
+    return Container(
+      padding: EdgeInsets.all(10),
+      decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10)), border: Border.all(color: Colors.purpleAccent)),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton.icon(
+                  icon: Icon(Icons.download, color: Colors.purpleAccent),
+                  label: Text("${Statics.getLabel('downloadTemplate')}"),
+                  onPressed: isDownloadingTemplate ? null : downloadExcelTemplate,
+                ),
+              ),
+              SizedBox(width: 10),
+              Expanded(
+                child: OutlinedButton.icon(
+                  icon: Icon(Icons.upload_file, color: Colors.purpleAccent),
+                  label: Text(
+                    pickedExcelFile != null ? pickedExcelFile!.name : "${Statics.getLabel('chooseFile')}",
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  onPressed: pickExcelFile,
+                ),
+              ),
+            ],
+          ),
+          if (isDownloadingTemplate) Padding(padding: EdgeInsets.only(top: 8), child: CircularProgressIndicator()),
+          SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.purpleAccent),
+              onPressed: (pickedExcelFile == null || isAnalyzingExcel) ? null : uploadAndAnalyzeExcel,
+              child: isAnalyzingExcel
+                  ? SizedBox(height: 18, width: 18, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                  : Text("${Statics.getLabel('analyze')}", style: TextStyle(color: Colors.white)),
+            ),
+          ),
+          if (bulkResponse != null) ...[
+            SizedBox(height: 16),
+            bulkPreviewTable(
+              title: "${Statics.getLabel('validEntries')}",
+              color: Colors.green,
+              rows: bulkValidList,
+              showEdit: false,
+              onDelete: (row) => setState(() => bulkValidList.remove(row)),
+            ),
+            SizedBox(height: 16),
+            bulkPreviewTable(
+              title: "${Statics.getLabel('invalidEntries')}",
+              color: Colors.orange,
+              rows: bulkInvalidList,
+              showEdit: true,
+              onDelete: (row) => setState(() => bulkInvalidList.remove(row)),
+              onEdit: (row) => openBulkEditSheet(row),
+            ),
+            SizedBox(height: 16),
+            bulkPreviewTable(
+              title: "${Statics.getLabel('duplicateEntries')}",
+              color: Colors.red,
+              rows: bulkDuplicateList,
+              showEdit: false,
+              onDelete: (row) => setState(() => bulkDuplicateList.remove(row)),
+            ),
+            SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              height: 45,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.purpleAccent),
+                onPressed: (bulkValidList.isEmpty || isSubmittingBulk) ? null : submitBulkData,
+                child: isSubmittingBulk
+                    ? CircularProgressIndicator(color: Colors.white)
+                    : Text("${Statics.getLabel('Submit')} (${bulkValidList.length})", style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget bulkPreviewTable({
+    required String title,
+    required Color color,
+    required List<SajjanAnyaData> rows,
+    required bool showEdit,
+    required Function(SajjanAnyaData) onDelete,
+    Function(SajjanAnyaData)? onEdit,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title, style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: 15)),
+        Divider(color: color.withOpacity(0.4)),
+        if (rows.isEmpty)
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 6),
+            child: Text("${Statics.getLabel('noEntries')}", style: TextStyle(color: Colors.grey, fontStyle: FontStyle.italic, fontSize: 12)),
+          ),
+        if (rows.isNotEmpty)
+          SizedBox(
+            width: double.infinity,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: DataTable(
+                headingRowColor: MaterialStateProperty.all(color.withOpacity(0.15)),
+                columnSpacing: 20,
+                columns: [
+                  DataColumn(label: Text("${Statics.getLabel('action')}", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5))),
+                  DataColumn(label: Text("${Statics.getLabel('Name')}", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5))),
+                  DataColumn(label: Text("${Statics.getLabel('doorBhash')}", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5))),
+                ],
+                rows: rows.map((row) {
+                  return DataRow(
+                    color: MaterialStateProperty.all(color.withOpacity(0.06)),
+                    cells: [
+                      DataCell(
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (showEdit)
+                              IconButton(
+                                icon: Icon(Icons.info_outline, color: Colors.blueGrey, size: 20),
+                                padding: EdgeInsets.zero,
+                                constraints: BoxConstraints(),
+                                onPressed: () => showRowErrorDialog(row),
+                              ),
+                            if (showEdit) SizedBox(width: 6),
+                            if (showEdit)
+                              IconButton(
+                                icon: Icon(Icons.edit, color: Colors.purpleAccent, size: 20),
+                                padding: EdgeInsets.zero,
+                                constraints: BoxConstraints(),
+                                onPressed: () => onEdit?.call(row),
+                              ),
+                            if (showEdit) SizedBox(width: 6),
+                            IconButton(
+                              icon: Icon(Icons.delete, color: Colors.red, size: 20),
+                              padding: EdgeInsets.zero,
+                              constraints: BoxConstraints(),
+                              onPressed: () => onDelete(row),
+                            ),
+                          ],
+                        ),
+                      ),
+                      DataCell(Text(row.naav ?? '-', style: TextStyle(fontSize: 13))),
+                      DataCell(Text(row.doorbhash ?? '-', style: TextStyle(fontSize: 13))),
+                    ],
+                  );
+                }).toList(),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  void showRowErrorDialog(SajjanAnyaData row) {
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        return AlertDialog(
+          title: Text("${Statics.getLabel('errorDetails')}", style: TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.w600)),
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: (row.errorMessages == null || row.errorMessages!.isEmpty)
+                  ? [Text("${Statics.getLabel('noErrorDetails')}")]
+                  : row.errorMessages!
+                      .map((msg) => Padding(
+                            padding: EdgeInsets.only(bottom: 6),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Icon(Icons.error_outline, color: Colors.red, size: 16),
+                                SizedBox(width: 6),
+                                Expanded(child: Text(msg, style: TextStyle(fontSize: 13))),
+                              ],
+                            ),
+                          ))
+                      .toList(),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(),
+              child: Text("${Statics.getLabel('close')}", style: TextStyle(color: Colors.purpleAccent)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void openBulkEditSheet(SajjanAnyaData row) {
+    if (sajjanShaktiType == 1) {
+      _openSajjanBulkEditSheet(row);
+    } else {
+      _openAnyaBulkEditSheet(row);
+    }
+  }
+
+  void _openSajjanBulkEditSheet(SajjanAnyaData row) {
+    final naavCtrl = TextEditingController(text: row.naav);
+    final pattaCtrl = TextEditingController(text: row.patta);
+    final doorbhashCtrl = TextEditingController(text: row.doorbhash);
+    final sansthaNaavCtrl = TextEditingController(text: row.sansthaNaav);
+    final sansthaPadaviCtrl = TextEditingController(text: row.sansthaPadavi);
+    final samparkNaavCtrl = TextEditingController(text: row.samparkSutraNaav);
+    final samparkDoorbhashCtrl = TextEditingController(text: row.samparkSutraDoorbhash);
+
+    int? localIsFemale = row.isfemale;
+    Masterdata? localShreni;
+    Masterdata? localSamparkSthiti;
+    Masterdata? localVishesh;
+    Masterdata? localPrabhavKshetra;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.75),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(18))),
+      builder: (ctx) {
+        return StatefulBuilder(builder: (ctx, setSheetState) {
+          return Padding(
+            padding: EdgeInsets.only(bottom: MediaQuery.of(ctx).viewInsets.bottom, left: 16, right: 16, top: 16),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(width: 40, height: 4, margin: EdgeInsets.only(bottom: 14), decoration: BoxDecoration(color: Colors.grey.shade300, borderRadius: BorderRadius.circular(3))),
+                  Text("${Statics.getLabel('editEntry')}", style: TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.w600, fontSize: 18)),
+                  SizedBox(height: 12),
+                  textControllerField2(name: Statics.getLabel('Name'), controller: naavCtrl, isRequired: true),
+                  textControllerField2(name: Statics.getLabel('Address'), controller: pattaCtrl, maxLines: 4),
+                  textControllerField2(name: Statics.getLabel('doorBhash'), controller: doorbhashCtrl, keyboardType: TextInputType.number, maxInput: 10, isRequired: true),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: RadioListTile<int>(
+                          contentPadding: EdgeInsets.zero,
+                          title: Text("${Statics.getLabel('Male')}"),
+                          value: 0,
+                          groupValue: localIsFemale,
+                          onChanged: (v) => setSheetState(() => localIsFemale = v),
+                        ),
+                      ),
+                      Expanded(
+                        child: RadioListTile<int>(
+                          contentPadding: EdgeInsets.zero,
+                          title: Text("${Statics.getLabel('Female')}"),
+                          value: 1,
+                          groupValue: localIsFemale,
+                          onChanged: (v) => setSheetState(() => localIsFemale = v),
+                        ),
+                      ),
+                    ],
+                  ),
+                  if (vastisarvekshanDropDownDataModel != null)
+                    vastisarvekshanDropdown2(
+                      question: Statics.getLabel('Category'),
+                      dataModel: vastisarvekshanDropDownDataModel!,
+                      filterTypeName: "सज्जन शक्ति श्रेणी",
+                      hintText: Statics.getLabel('Category'),
+                      editId: row.shreniid,
+                      selectedValue: localShreni,
+                      onItemSelected: (id, value, isOther) {},
+                      onSelectionChanged: (v) => setSheetState(() => localShreni = v),
+                    ),
+                  textControllerField2(name: Statics.getLabel('OrganizationName'), controller: sansthaNaavCtrl),
+                  textControllerField2(name: Statics.getLabel('sansthetKuthalaPadavar'), controller: sansthaPadaviCtrl),
+                  if (vastisarvekshanDropDownDataModel != null)
+                    vastisarvekshanDropdown2(
+                      question: Statics.getLabel('samparkStithi'),
+                      dataModel: vastisarvekshanDropDownDataModel!,
+                      filterTypeName: "सज्जन शक्ति संपर्क स्थिति",
+                      hintText: Statics.getLabel('samparkStithi'),
+                      editId: row.sajjanSamparkSthitiid,
+                      selectedValue: localSamparkSthiti,
+                      onItemSelected: (id, value, isOther) {},
+                      onSelectionChanged: (v) => setSheetState(() => localSamparkSthiti = v),
+                    ),
+                  if (vastisarvekshanDropDownDataModel != null)
+                    vastisarvekshanDropdown2(
+                      question: Statics.getLabel('special'),
+                      dataModel: vastisarvekshanDropDownDataModel!,
+                      filterTypeName: "सज्जन शक्ति विशेष",
+                      hintText: Statics.getLabel('special'),
+                      editId: row.sajjanVisheshid,
+                      selectedValue: localVishesh,
+                      onItemSelected: (id, value, isOther) {},
+                      onSelectionChanged: (v) => setSheetState(() => localVishesh = v),
+                    ),
+                  if (vastisarvekshanDropDownDataModel != null)
+                    vastisarvekshanDropdown2(
+                      question: Statics.getLabel('prabhavKshetra'),
+                      dataModel: vastisarvekshanDropDownDataModel!,
+                      filterTypeName: "सज्जन शक्ति प्रभाव क्षेत्र",
+                      hintText: Statics.getLabel('prabhavKshetra'),
+                      editId: row.sajjanPrabhavKshetraid,
+                      selectedValue: localPrabhavKshetra,
+                      onItemSelected: (id, value, isOther) {},
+                      onSelectionChanged: (v) => setSheetState(() => localPrabhavKshetra = v),
+                    ),
+                  textControllerField2(name: Statics.getLabel('samparkSootraNaav'), controller: samparkNaavCtrl, isRequired: true),
+                  textControllerField2(name: Statics.getLabel('samparakSootraDoorbhash'), controller: samparkDoorbhashCtrl, keyboardType: TextInputType.number, maxInput: 10, isRequired: true),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(backgroundColor: Colors.purpleAccent),
+                      onPressed: () {
+                        bool isValid = true;
+
+                        if (isEmptyStr(naavCtrl.text)) {
+                          Statics.showToast("${Statics.getLabel('impInfoRequired')}");
+                          isValid = false;
+                        } else if (doorbhashCtrl.text.trim().length != 10) {
+                          Statics.showToast("${Statics.getLabel('mobileNumberLimit')}");
+                          isValid = false;
+                        } else if (isEmptyStr(samparkNaavCtrl.text)) {
+                          Statics.showToast("${Statics.getLabel('impInfoRequired')}");
+                          isValid = false;
+                        } else if (samparkDoorbhashCtrl.text.trim().length != 10) {
+                          Statics.showToast("${Statics.getLabel('mobileNumberLimit')}");
+                          isValid = false;
+                        } else if ((localPrabhavKshetra?.id ?? row.sajjanPrabhavKshetraid) == null ||
+                            (localVishesh?.id ?? row.sajjanVisheshid) == null ||
+                            (localSamparkSthiti?.id ?? row.sajjanSamparkSthitiid) == null ||
+                            (localShreni?.id ?? row.shreniid) == null) {
+                          Statics.showToast("${Statics.getLabel('impInfoRequired')}");
+                          isValid = false;
+                        }
+
+                        if (!isValid) return;
+
+                        row.naav = naavCtrl.text.trim();
+                        row.patta = pattaCtrl.text.trim();
+                        row.doorbhash = doorbhashCtrl.text.trim();
+                        row.isfemale = localIsFemale;
+                        row.sansthaNaav = sansthaNaavCtrl.text.trim();
+                        row.sansthaPadavi = sansthaPadaviCtrl.text.trim();
+                        row.samparkSutraNaav = samparkNaavCtrl.text.trim();
+                        row.samparkSutraDoorbhash = samparkDoorbhashCtrl.text.trim();
+                        if (localShreni != null) {
+                          row.shreniid = localShreni!.id;
+                          row.shreni = localShreni!.value;
+                        }
+                        if (localSamparkSthiti != null) {
+                          row.sajjanSamparkSthitiid = localSamparkSthiti!.id;
+                          row.sajjanSamparkSthiti = localSamparkSthiti!.value;
+                        }
+                        if (localVishesh != null) {
+                          row.sajjanVisheshid = localVishesh!.id;
+                          row.sajjanVishesh = localVishesh!.value;
+                        }
+                        if (localPrabhavKshetra != null) {
+                          row.sajjanPrabhavKshetraid = localPrabhavKshetra!.id;
+                          row.sajjanPrabhavKshetra = localPrabhavKshetra!.value;
+                        }
+
+                        reclassifyBulkRow(row);
+                        Navigator.of(ctx).pop();
+                      },
+                      child: Text("${Statics.getLabel('Submit')}", style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                ],
+              ),
+            ),
+          );
+        });
+      },
+    );
+  }
+
+  void _openAnyaBulkEditSheet(SajjanAnyaData row) {
+    final naavCtrl = TextEditingController(text: row.naav);
+    final pattaCtrl = TextEditingController(text: row.patta);
+    final doorbhashCtrl = TextEditingController(text: row.doorbhash);
+    final anyaVisheshMahitiCtrl = TextEditingController(text: row.anyaVisheshMahiti);
+    final samparkNaavCtrl = TextEditingController(text: row.samparkSutraNaav);
+    final samparkDoorbhashCtrl = TextEditingController(text: row.samparkSutraDoorbhash);
+
+    int? localIsFemale = row.isfemale;
+
+    Masterdata? localShreni;
+    Masterdata? localUpShreni;
+    Masterdata? localUpShreni2;
+    Masterdata? localVishesh;
+    Masterdata? localPrabhavKshetra;
+    Masterdata? localSamparkSthiti;
+
+    // Pre-fill cascade from row ids, same pattern the main form uses.
+    final masterDataList = vastisarvekshanDropDownDataModel?.masterdata ?? [];
+
+    if (row.shreniid != null) {
+      localShreni = masterDataList.firstWhere(
+        (e) => e.typename == "श्रेणी" && e.id == row.shreniid,
+        orElse: () => Masterdata(),
+      );
+      if (localShreni.id == null) localShreni = null;
+    }
+
+    final int? rowUpshreniId = int.tryParse(row.upshreniid ?? "");
+    if (localShreni != null && rowUpshreniId != null) {
+      localUpShreni = masterDataList.firstWhere(
+        (e) => e.parentid == localShreni!.id && e.id == rowUpshreniId,
+        orElse: () => Masterdata(),
+      );
+      if (localUpShreni.id == null) localUpShreni = null;
+    }
+
+    final int? rowUpshreni2Id = int.tryParse(row.upshreni2id ?? "");
+    if (localUpShreni != null && rowUpshreni2Id != null) {
+      localUpShreni2 = masterDataList.firstWhere(
+        (e) => e.parentid == localUpShreni!.id && e.id == rowUpshreni2Id,
+        orElse: () => Masterdata(),
+      );
+      if (localUpShreni2.id == null) localUpShreni2 = null;
+    }
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.75),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(18))),
+      builder: (ctx) {
+        return StatefulBuilder(builder: (ctx, setSheetState) {
+          return Padding(
+            padding: EdgeInsets.only(bottom: MediaQuery.of(ctx).viewInsets.bottom, left: 16, right: 16, top: 16),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(width: 40, height: 4, margin: EdgeInsets.only(bottom: 14), decoration: BoxDecoration(color: Colors.grey.shade300, borderRadius: BorderRadius.circular(3))),
+                  Text("${Statics.getLabel('editEntry')}", style: TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.w600, fontSize: 18)),
+                  SizedBox(height: 12),
+                  textControllerField2(name: Statics.getLabel('Name'), controller: naavCtrl, isRequired: true),
+                  textControllerField2(name: Statics.getLabel('Address'), controller: pattaCtrl),
+                  textControllerField2(name: Statics.getLabel('doorBhash'), controller: doorbhashCtrl, keyboardType: TextInputType.number, maxInput: 10, isRequired: true),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: RadioListTile<int>(
+                          contentPadding: EdgeInsets.zero,
+                          title: Text("${Statics.getLabel('Male')}"),
+                          value: 0,
+                          groupValue: localIsFemale,
+                          onChanged: (v) => setSheetState(() => localIsFemale = v),
+                        ),
+                      ),
+                      Expanded(
+                        child: RadioListTile<int>(
+                          contentPadding: EdgeInsets.zero,
+                          title: Text("${Statics.getLabel('Female')}"),
+                          value: 1,
+                          groupValue: localIsFemale,
+                          onChanged: (v) => setSheetState(() => localIsFemale = v),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 6),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text("${Statics.getLabel('Category')}/${Statics.getLabel('upshreni')}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                  ),
+                  SizedBox(height: 6),
+                  bulkAnyaCascadeDropdown(
+                    localShreni: localShreni,
+                    localUpShreni: localUpShreni,
+                    localUpShreni2: localUpShreni2,
+                    onShreniChanged: (v) => setSheetState(() {
+                      localShreni = v;
+                      localUpShreni = null;
+                      localUpShreni2 = null;
+                    }),
+                    onUpShreniChanged: (v) => setSheetState(() {
+                      localUpShreni = v;
+                      localUpShreni2 = null;
+                    }),
+                    onUpShreni2Changed: (v) => setSheetState(() => localUpShreni2 = v),
+                  ),
+                  SizedBox(height: 12),
+                  if (vastisarvekshanDropDownDataModel != null)
+                    vastisarvekshanDropdown2(
+                      question: Statics.getLabel('special'),
+                      dataModel: vastisarvekshanDropDownDataModel!,
+                      filterTypeName: "अन्यप्रभावीलोकंविशेष",
+                      hintText: Statics.getLabel('selectVishesh'),
+                      editId: row.anyaVisheshid,
+                      selectedValue: localVishesh,
+                      onItemSelected: (id, value, isOther) {},
+                      onSelectionChanged: (v) => setSheetState(() => localVishesh = v),
+                    ),
+                  if (vastisarvekshanDropDownDataModel != null)
+                    vastisarvekshanDropdown2(
+                      question: Statics.getLabel('prabhavKshetra'),
+                      dataModel: vastisarvekshanDropDownDataModel!,
+                      filterTypeName: "अन्यप्रभावीलोकंप्रभावक्षेत्र",
+                      hintText: Statics.getLabel('prabhavKshetraSelect'),
+                      editId: row.anyaPrabhavKshetraid,
+                      selectedValue: localPrabhavKshetra,
+                      onItemSelected: (id, value, isOther) {},
+                      onSelectionChanged: (v) => setSheetState(() => localPrabhavKshetra = v),
+                    ),
+                  textControllerField2(name: Statics.getLabel('anyaVisheshMahiti'), controller: anyaVisheshMahitiCtrl),
+                  if (vastisarvekshanDropDownDataModel != null)
+                    vastisarvekshanDropdown2(
+                      question: Statics.getLabel('samparkStithi'),
+                      dataModel: vastisarvekshanDropDownDataModel!,
+                      filterTypeName: "अन्यप्रभावीलोकंसंपर्कस्थिति",
+                      hintText: Statics.getLabel('samparkSthitiSelect'),
+                      editId: row.anyaSamparkSthitiid,
+                      selectedValue: localSamparkSthiti,
+                      onItemSelected: (id, value, isOther) {},
+                      onSelectionChanged: (v) => setSheetState(() => localSamparkSthiti = v),
+                    ),
+                  textControllerField2(name: Statics.getLabel('samparkSootraNaav'), controller: samparkNaavCtrl, isRequired: true),
+                  textControllerField2(name: Statics.getLabel('samparakSootraDoorbhash'), controller: samparkDoorbhashCtrl, keyboardType: TextInputType.number, maxInput: 10, isRequired: true),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(backgroundColor: Colors.purpleAccent),
+                      onPressed: () {
+                        bool isValid = true;
+
+                        if (isEmptyStr(naavCtrl.text)) {
+                          Statics.showToast("${Statics.getLabel('impInfoRequired')}");
+                          isValid = false;
+                        } else if (doorbhashCtrl.text.trim().length != 10) {
+                          Statics.showToast("${Statics.getLabel('mobileNumberLimit')}");
+                          isValid = false;
+                        } else if ((localSamparkSthiti?.id ?? row.anyaSamparkSthitiid) == null ||
+                            (localPrabhavKshetra?.id ?? row.anyaPrabhavKshetraid) == null ||
+                            (localVishesh?.id ?? row.anyaVisheshid) == null ||
+                            (localUpShreni?.id ?? int.tryParse(row.upshreniid ?? "")) == null ||
+                            (localShreni?.id ?? row.shreniid) == null) {
+                          Statics.showToast("${Statics.getLabel('impInfoRequired')}");
+                          isValid = false;
+                        } else if (isEmptyStr(samparkNaavCtrl.text)) {
+                          Statics.showToast("${Statics.getLabel('impInfoRequired')}");
+                          isValid = false;
+                        } else if (samparkDoorbhashCtrl.text.trim().length != 10) {
+                          Statics.showToast("${Statics.getLabel('mobileNumberLimit')}");
+                          isValid = false;
+                        }
+
+                        if (!isValid) return;
+
+                        row.naav = naavCtrl.text.trim();
+                        row.patta = pattaCtrl.text.trim();
+                        row.doorbhash = doorbhashCtrl.text.trim();
+                        row.isfemale = localIsFemale;
+                        row.anyaVisheshMahiti = anyaVisheshMahitiCtrl.text.trim();
+                        row.samparkSutraNaav = samparkNaavCtrl.text.trim();
+                        row.samparkSutraDoorbhash = samparkDoorbhashCtrl.text.trim();
+                        if (localShreni != null) {
+                          row.shreniid = localShreni!.id;
+                          row.shreni = localShreni!.value;
+                        }
+                        if (localUpShreni != null) {
+                          row.upshreniid = localUpShreni!.id?.toString();
+                          row.upshreni = localUpShreni!.value;
+                        }
+                        if (localUpShreni2 != null) {
+                          row.upshreni2id = localUpShreni2!.id?.toString();
+                          row.upshreni2 = localUpShreni2!.value;
+                        }
+                        if (localVishesh != null) {
+                          row.anyaVisheshid = localVishesh!.id;
+                          row.anyaVishesh = localVishesh!.value;
+                        }
+                        if (localPrabhavKshetra != null) {
+                          row.anyaPrabhavKshetraid = localPrabhavKshetra!.id;
+                          row.anyaPrabhavKshetra = localPrabhavKshetra!.value;
+                        }
+                        if (localSamparkSthiti != null) {
+                          row.anyaSamparkSthitiid = localSamparkSthiti!.id;
+                          row.anyaSamparkSthiti = localSamparkSthiti!.value;
+                        }
+
+                        reclassifyBulkRow(row);
+                        Navigator.of(ctx).pop();
+                      },
+                      child: Text("${Statics.getLabel('Submit')}", style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                ],
+              ),
+            ),
+          );
+        });
+      },
+    );
+  }
+
+  Widget bulkAnyaCascadeDropdown({
+    required Masterdata? localShreni,
+    required Masterdata? localUpShreni,
+    required Masterdata? localUpShreni2,
+    required void Function(Masterdata?) onShreniChanged,
+    required void Function(Masterdata?) onUpShreniChanged,
+    required void Function(Masterdata?) onUpShreni2Changed,
+  }) {
+    List<Masterdata> masterDataList = vastisarvekshanDropDownDataModel?.masterdata ?? [];
+    List<Masterdata> shreniItems = masterDataList.where((e) => e.typename == "श्रेणी").toList();
+    List<Masterdata> upshreniItems = localShreni != null ? masterDataList.where((e) => e.parentid == localShreni.id).toList() : [];
+    List<Masterdata> upshreni2Items = localUpShreni != null ? masterDataList.where((e) => e.parentid == localUpShreni.id).toList() : [];
+
+    return Column(
+      children: [
+        _buildDropdown2(
+          hintText: "${Statics.getLabel('selectShrenihint')}",
+          value: localShreni,
+          items: shreniItems,
+          onChanged: (v) {
+            onShreniChanged(v);
+            onUpShreniChanged(null);
+            onUpShreni2Changed(null);
+          },
+          viewName: true,
+        ),
+        if (upshreniItems.isNotEmpty) SizedBox(height: 10),
+        if (upshreniItems.isNotEmpty)
+          _buildDropdown2(
+            hintText: "${Statics.getLabel('selectUpshreni')}",
+            value: localUpShreni,
+            items: upshreniItems,
+            onChanged: (v) {
+              onUpShreniChanged(v);
+              onUpShreni2Changed(null);
+            },
+            viewName: true,
+          ),
+        if (upshreni2Items.isNotEmpty) SizedBox(height: 10),
+        if (upshreni2Items.isNotEmpty)
+          _buildDropdown2(
+            hintText: "${Statics.getLabel('selectUpshreni2')}",
+            value: localUpShreni2,
+            items: upshreni2Items,
+            onChanged: (v) => onUpShreni2Changed(v),
+            viewName: true,
+          ),
+      ],
     );
   }
 

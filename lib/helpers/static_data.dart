@@ -17,6 +17,7 @@ import '../helpers/static_data.dart' as Statics;
 import '../models/response_model/AbhiyaanLoginDataResponse.dart';
 import '../models/response_model/AbhiyaanSwayamsevakListResponse.dart';
 import '../models/response_model/TulnatmakResponseModel.dart';
+import '../models/response_model/bulk_excel_sajjan_anya_resp_model.dart';
 import '../models/response_model/geounit_name_model.dart';
 import '../models/response_model/get_vasti_data_by_id_model.dart';
 import '../models/response_model/get_vijaya_dashami_geounit_data.dart';
@@ -323,6 +324,7 @@ const String urlHomeScreenNames = baseUrlAPI + '/RefreshHomeScreenForAppNames';
 const String urlHomeShaakhaaVruttaNames = baseUrlAPI + '/yestardayShaakhaaVruttanames';
 
 const String urlSearchSwayamsevakNew = baseUrlAPI + '/SearchSwayamsevak';
+const String urlBulkExcelUploadSajjanAnya = baseUrlAPI + '/ExcelUploadsajjananya';
 
 //////////////////////////////////////////////////////////////////////////////////////////
 const String patchSuffix = '';
@@ -7294,6 +7296,35 @@ Future<List<SwayamsevakNewData>?> searchSwayamsevakNewData(Map<String, dynamic> 
       SearchSwyamsevakNewModel model = SearchSwyamsevakNewModel.fromJson(data);
       log("searchSwayamsevakNewData >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
       return model.data;
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return null;
+    }
+  } catch (e, stack) {
+    print("Exception: $e \n$stack");
+    return null;
+  } finally {
+    if (context != null) Navigator.of(context, rootNavigator: true).pop();
+  }
+}
+
+Future<BulkExcelSajjanAnyaRespModel?> bulkExcelUploadSajjanAnyaData(Map<String, dynamic> inputJson, {BuildContext? context}) async {
+  bool? connected = await isInternetConnected();
+  if (connected == false) return null;
+  if (context != null) showLoaderDialog(context);
+
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  log(urlBulkExcelUploadSajjanAnya);
+  print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+  try {
+    var response = await http.post(Uri.parse(urlBulkExcelUploadSajjanAnya), headers: jHeaders, body: jsonEncode(inputJson));
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      BulkExcelSajjanAnyaRespModel model = BulkExcelSajjanAnyaRespModel.fromJson(data);
+      log("bulkExcelUploadSajjanAnyaData >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+      if (model.status?.toLowerCase() == "success" || model.status == "200") return model;
+      return null;
     } else {
       print("Error: ${response.statusCode} - ${response.body}");
       return null;
