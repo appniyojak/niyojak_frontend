@@ -7323,8 +7323,7 @@ Future<BulkExcelSajjanAnyaRespModel?> bulkExcelUploadSajjanAnyaData(Map<String, 
       final Map<String, dynamic> data = jsonDecode(response.body);
       BulkExcelSajjanAnyaRespModel model = BulkExcelSajjanAnyaRespModel.fromJson(data);
       log("bulkExcelUploadSajjanAnyaData >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
-      if (model.status?.toLowerCase() == "success" || model.status == "200") return model;
-      return null;
+      return model;
     } else {
       print("Error: ${response.statusCode} - ${response.body}");
       return null;

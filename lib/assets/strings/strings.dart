@@ -2016,6 +2016,8 @@ Map<String, String> resEnglish = {
   "pleaseSelectFile": "Please Select a File",
   "analyzeFailed": "Analysis Failed",
   "noValidRowsToSubmit": "No Valid Entries to Save",
+  "errorDetails": "Error Details",
+  "noErrorDetails": "No details available",
   ////////////////////////////////////// Yuva Sangam Block //////////////////////////////////////
   'youth': "Youth",
   'yuvaSangamLevel': "Yuva Sangam Level",
@@ -4238,6 +4240,8 @@ Map<String, String> resMarathi = {
   "pleaseSelectFile": "कृपया फाईल निवडा",
   "analyzeFailed": "विश्लेषण करण्यात अयशस्वी",
   "noValidRowsToSubmit": "जतन करण्यासाठी कोणतीही योग्य नोंद नाही",
+  "errorDetails": "त्रुटीचा तपशील",
+  "noErrorDetails": "कोणताही तपशील उपलब्ध नाही",
   ////////////////////////////////////// Yuva Sangam Block //////////////////////////////////////
   'youth': "युवक",
   'yuvaSangamLevel': "युवा संगम स्तर",
@@ -6469,6 +6473,8 @@ Map<String, String> resHindi = {
   "pleaseSelectFile": "कृपया एक फ़ाइल चुनें",
   "analyzeFailed": "विश्लेषण विफल हुआ",
   "noValidRowsToSubmit": "सहेजने के लिए कोई मान्य प्रविष्टि नहीं",
+  "errorDetails": "त्रुटि का विवरण",
+  "noErrorDetails": "कोई विवरण उपलब्ध नहीं है",
   ////////////////////////////////////// Yuva Sangam Block //////////////////////////////////////
   'youth': "युवक",
   'yuvaSangamLevel': "युवा संगम स्तर",

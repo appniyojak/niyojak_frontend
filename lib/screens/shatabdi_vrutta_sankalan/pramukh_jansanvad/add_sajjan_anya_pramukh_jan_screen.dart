@@ -4,6 +4,8 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
@@ -316,7 +318,14 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
     );
 
     if (result != null && result.files.isNotEmpty) {
-      setState(() => pickedExcelFile = result.files.first);
+      setState(() {
+        pickedExcelFile = result.files.first;
+
+        bulkResponse = null;
+        bulkValidList.clear();
+        bulkInvalidList.clear();
+        bulkDuplicateList.clear();
+      });
     }
   }
 
@@ -339,7 +348,9 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
 
       final response = await Statics.bulkExcelUploadSajjanAnyaData(body);
 
-      if (response != null) {
+      if (response == null) {
+        Statics.showToast("${Statics.getLabel('analyzeFailed')}${response?.message != null ? " : ${response?.message ?? ""}" : ""}");
+      } else if (response.status?.toLowerCase() == "success" || response.status == "200") {
         bulkResponse = response;
 
         bulkValidList = response.valid ?? [];
@@ -349,7 +360,7 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
         setState(() {});
       } else {
         debugPrint("analyzeFailed >>>>>>>>>>>>>>> else");
-        Statics.showToast("${Statics.getLabel('analyzeFailed')}");
+        Statics.showToast("${Statics.getLabel('analyzeFailed')}${response.message != null ? " : ${response.message ?? ""}" : ""}", toastLength: Toast.LENGTH_LONG);
       }
     } catch (e) {
       debugPrint("Error analyzing excel: $e");
@@ -377,7 +388,7 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
     if (isEmptyStr(row.naav)) return false;
     if (row.doorbhash == null || row.doorbhash!.trim().length != 10) return false;
     if (row.shreniid == null) return false;
-    if (row.upshreniid == null || row.upshreniid!.trim().isEmpty) return false;
+    if (row.upshreniid == null) return false;
     if (row.anyaSamparkSthitiid == null) return false;
     if (row.anyaVisheshid == null) return false;
     if (row.anyaPrabhavKshetraid == null) return false;
@@ -436,7 +447,7 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
       doorabhaash: row.doorbhash,
       shreneeid: row.shreniid,
       selectedDropdownValueName: row.shreni,
-      upshreneeid: int.tryParse(row.upshreniid ?? ""),
+      upshreneeid: row.upshreniid ?? 0,
       selectedDropdownValueName1: row.upshreni,
       visheshid: row.anyaVisheshid,
       selectedDropdownValueName3: row.anyaVishesh,
@@ -532,6 +543,12 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
                       onChanged: (value) {
                         setState(() {
                           sajjanShaktiType = value!;
+
+                          pickedExcelFile = null;
+                          bulkResponse = null;
+                          bulkValidList.clear();
+                          bulkInvalidList.clear();
+                          bulkDuplicateList.clear();
                         });
                       },
                     ),
@@ -589,7 +606,6 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
                       textControllerField2(
                         name: Statics.getLabel('Name'),
                         controller: sajjanShaktiNameController,
-                        fieldHeight: 45,
                         isRequired: true,
                       ),
                       textControllerField2(
@@ -601,7 +617,7 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
                         name: Statics.getLabel('doorBhash'),
                         controller: sajjanShaktiPhoneController,
                         keyboardType: TextInputType.number,
-                        maxInput: 10,
+                        inputFormatters: [LengthLimitingTextInputFormatter(10), FilteringTextInputFormatter.digitsOnly],
                         isRequired: true,
                       ),
                       SizedBox(height: 5),
@@ -738,7 +754,7 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
                         name: Statics.getLabel('samparakSootraDoorbhash'),
                         controller: sajjanShaktiContactPersonDoorbhashController,
                         keyboardType: TextInputType.number,
-                        maxInput: 10,
+                        inputFormatters: [LengthLimitingTextInputFormatter(10), FilteringTextInputFormatter.digitsOnly],
                         isRequired: true,
                       ),
                     ],
@@ -774,7 +790,7 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
                         name: "${Statics.getLabel('doorBhash')}",
                         controller: anyaPrabhaviLokMobileNoController,
                         keyboardType: TextInputType.number,
-                        maxInput: 10,
+                        inputFormatters: [LengthLimitingTextInputFormatter(10), FilteringTextInputFormatter.digitsOnly],
                         isRequired: true,
                       ),
                       SizedBox(height: 5),
@@ -1007,14 +1023,14 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
                         name: "${Statics.getLabel('samparakSootraDoorbhash')}",
                         controller: anyaPrabhaviLokSamparkSutraDoorbhashController,
                         keyboardType: TextInputType.number,
-                        maxInput: 10,
+                        inputFormatters: [LengthLimitingTextInputFormatter(10), FilteringTextInputFormatter.digitsOnly],
                         isRequired: true,
                       ),
                     ],
                   ),
                 ),
               if (sajjanShaktiType != null && isBulkMode) bulkUploadSection(),
-              if (sajjanShaktiType == 0 || sajjanShaktiType == 1)
+              if ((sajjanShaktiType == 0 || sajjanShaktiType == 1) && !isBulkMode)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20.0),
                   child: SizedBox(
@@ -1287,6 +1303,7 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
             children: [
               Expanded(
                 child: OutlinedButton.icon(
+                  style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))),
                   icon: Icon(Icons.download, color: Colors.purpleAccent),
                   label: Text("${Statics.getLabel('downloadTemplate')}"),
                   onPressed: isDownloadingTemplate ? null : downloadExcelTemplate,
@@ -1295,6 +1312,7 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
               SizedBox(width: 10),
               Expanded(
                 child: OutlinedButton.icon(
+                  style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))),
                   icon: Icon(Icons.upload_file, color: Colors.purpleAccent),
                   label: Text(
                     pickedExcelFile != null ? pickedExcelFile!.name : "${Statics.getLabel('chooseFile')}",
@@ -1323,7 +1341,7 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
               title: "${Statics.getLabel('validEntries')}",
               color: Colors.green,
               rows: bulkValidList,
-              showEdit: false,
+              showViewInfo: true,
               onDelete: (row) => setState(() => bulkValidList.remove(row)),
             ),
             SizedBox(height: 16),
@@ -1340,7 +1358,6 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
               title: "${Statics.getLabel('duplicateEntries')}",
               color: Colors.red,
               rows: bulkDuplicateList,
-              showEdit: false,
               onDelete: (row) => setState(() => bulkDuplicateList.remove(row)),
             ),
             SizedBox(height: 16),
@@ -1365,7 +1382,8 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
     required String title,
     required Color color,
     required List<SajjanAnyaData> rows,
-    required bool showEdit,
+    bool showEdit = false,
+    bool showViewInfo = false,
     required Function(SajjanAnyaData) onDelete,
     Function(SajjanAnyaData)? onEdit,
   }) {
@@ -1380,60 +1398,204 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
             child: Text("${Statics.getLabel('noEntries')}", style: TextStyle(color: Colors.grey, fontStyle: FontStyle.italic, fontSize: 12)),
           ),
         if (rows.isNotEmpty)
-          SizedBox(
-            width: double.infinity,
-            child: SingleChildScrollView(
+          LayoutBuilder(builder: (context, constraints) {
+            return SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              child: DataTable(
-                headingRowColor: MaterialStateProperty.all(color.withOpacity(0.15)),
-                columnSpacing: 20,
-                columns: [
-                  DataColumn(label: Text("${Statics.getLabel('action')}", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5))),
-                  DataColumn(label: Text("${Statics.getLabel('Name')}", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5))),
-                  DataColumn(label: Text("${Statics.getLabel('doorBhash')}", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5))),
-                ],
-                rows: rows.map((row) {
-                  return DataRow(
-                    color: MaterialStateProperty.all(color.withOpacity(0.06)),
-                    cells: [
-                      DataCell(
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            if (showEdit)
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minWidth: constraints.maxWidth,
+                ),
+                child: DataTable(
+                  headingRowColor: MaterialStateProperty.all(color.withOpacity(0.15)),
+                  columnSpacing: 20,
+                  columns: [
+                    DataColumn(label: SizedBox()),
+                    DataColumn(label: Text("${Statics.getLabel('Name')}", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5))),
+                    DataColumn(label: Text("${Statics.getLabel('doorBhash')}", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5))),
+                  ],
+                  rows: rows.map((row) {
+                    return DataRow(
+                      color: MaterialStateProperty.all(color.withOpacity(0.06)),
+                      cells: [
+                        DataCell(
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (showViewInfo)
+                                IconButton(
+                                  icon: Icon(Icons.info_outline, color: Colors.blueGrey, size: 20),
+                                  padding: EdgeInsets.zero,
+                                  constraints: BoxConstraints(),
+                                  onPressed: () => showValidRowInfoDialog(row),
+                                ),
+                              if (showEdit)
+                                IconButton(
+                                  icon: Icon(Icons.info_outline, color: Colors.blueGrey, size: 20),
+                                  padding: EdgeInsets.zero,
+                                  constraints: BoxConstraints(),
+                                  onPressed: () => showRowErrorDialog(row),
+                                ),
+                              if (showEdit)
+                                IconButton(
+                                  icon: Icon(Icons.edit, color: Colors.purpleAccent, size: 20),
+                                  padding: EdgeInsets.zero,
+                                  constraints: BoxConstraints(),
+                                  onPressed: () => onEdit?.call(row),
+                                ),
                               IconButton(
-                                icon: Icon(Icons.info_outline, color: Colors.blueGrey, size: 20),
+                                icon: Icon(Icons.delete, color: Colors.red, size: 20),
                                 padding: EdgeInsets.zero,
                                 constraints: BoxConstraints(),
-                                onPressed: () => showRowErrorDialog(row),
+                                onPressed: () => onDelete(row),
                               ),
-                            if (showEdit) SizedBox(width: 6),
-                            if (showEdit)
-                              IconButton(
-                                icon: Icon(Icons.edit, color: Colors.purpleAccent, size: 20),
-                                padding: EdgeInsets.zero,
-                                constraints: BoxConstraints(),
-                                onPressed: () => onEdit?.call(row),
-                              ),
-                            if (showEdit) SizedBox(width: 6),
-                            IconButton(
-                              icon: Icon(Icons.delete, color: Colors.red, size: 20),
-                              padding: EdgeInsets.zero,
-                              constraints: BoxConstraints(),
-                              onPressed: () => onDelete(row),
-                            ),
-                          ],
+                            ],
+                          ),
+                        ),
+                        DataCell(Text(row.naav ?? '-', style: TextStyle(fontSize: 13))),
+                        DataCell(Text(row.doorbhash ?? '-', style: TextStyle(fontSize: 13))),
+                      ],
+                    );
+                  }).toList(),
+                ),
+              ),
+            );
+          }),
+      ],
+    );
+  }
+
+  void showValidRowInfoDialog(SajjanAnyaData row) {
+    List<MapEntry<String, String?>> fields = sajjanShaktiType == 1
+        ? [
+            MapEntry(Statics.getLabel('Name'), row.naav),
+            MapEntry(Statics.getLabel('Address'), row.patta),
+            MapEntry(Statics.getLabel('doorBhash'), row.doorbhash),
+            MapEntry(Statics.getLabel('Gender'), row.isfemale == 1 ? Statics.getLabel('Female') : Statics.getLabel('Male')),
+            MapEntry(Statics.getLabel('Category'), row.shreni),
+            MapEntry(Statics.getLabel('OrganizationName'), row.sansthaNaav),
+            MapEntry(Statics.getLabel('sansthetKuthalaPadavar'), row.sansthaPadavi),
+            MapEntry(Statics.getLabel('samparkStithi'), row.sajjanSamparkSthiti),
+            MapEntry(Statics.getLabel('special'), row.sajjanVishesh),
+            MapEntry(Statics.getLabel('prabhavKshetra'), row.sajjanPrabhavKshetra),
+            MapEntry(Statics.getLabel('samparkSootraNaav'), row.samparkSutraNaav),
+            MapEntry(Statics.getLabel('samparakSootraDoorbhash'), row.samparkSutraDoorbhash),
+          ]
+        : [
+            MapEntry(Statics.getLabel('Name'), row.naav),
+            MapEntry(Statics.getLabel('Address'), row.patta),
+            MapEntry(Statics.getLabel('doorBhash'), row.doorbhash),
+            MapEntry(Statics.getLabel('Gender'), row.isfemale == 1 ? Statics.getLabel('Female') : Statics.getLabel('Male')),
+            MapEntry(Statics.getLabel('Category'), row.shreni),
+            MapEntry(Statics.getLabel('upshreni'), row.upshreni),
+            MapEntry(Statics.getLabel('selectUpshreni2'), row.upshreni2),
+            MapEntry(Statics.getLabel('special'), row.anyaVishesh),
+            MapEntry(Statics.getLabel('prabhavKshetra'), row.anyaPrabhavKshetra),
+            MapEntry(Statics.getLabel('anyaVisheshMahiti'), row.anyaVisheshMahiti),
+            MapEntry(Statics.getLabel('samparkStithi'), row.anyaSamparkSthiti),
+            MapEntry(Statics.getLabel('samparkSootraNaav'), row.samparkSutraNaav),
+            MapEntry(Statics.getLabel('samparakSootraDoorbhash'), row.samparkSutraDoorbhash),
+          ];
+
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        return Dialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          insetPadding: const EdgeInsets.all(16),
+          // title: Text("${Statics.getLabel('viewDetails')}", style: TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.w600)),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.purple, Colors.purpleAccent],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "${Statics.getLabel('PersonalDetails')}",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
                         ),
                       ),
-                      DataCell(Text(row.naav ?? '-', style: TextStyle(fontSize: 13))),
-                      DataCell(Text(row.doorbhash ?? '-', style: TextStyle(fontSize: 13))),
+                      IconButton(
+                        icon: const Icon(Icons.close, color: Colors.white),
+                        onPressed: () => Navigator.pop(context),
+                      ),
                     ],
-                  );
-                }).toList(),
-              ),
+                  ),
+                ),
+                Flexible(
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: fields.map((f) {
+                        return Padding(
+                          padding: EdgeInsets.only(bottom: 8),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                width: 130,
+                                child: Text(f.key, style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600, color: Colors.black87)),
+                              ),
+                              Text(": ", style: TextStyle(fontSize: 13.5)),
+                              Expanded(
+                                child: Text(
+                                  (f.value == null || f.value!.trim().isEmpty) ? '-' : f.value!,
+                                  style: TextStyle(fontSize: 14),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 12, left: 12, right: 12),
+                  child: ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.purpleAccent,
+                      minimumSize: const Size.fromHeight(45),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    onPressed: () => Navigator.pop(context),
+                    icon: const Icon(Icons.check_circle, color: Colors.white),
+                    label: Text(
+                      "${Statics.getLabel('bandKara')}",
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-      ],
+          // actions: [
+          //   TextButton(
+          //     onPressed: () => Navigator.of(ctx).pop(),
+          //     child: Text("${Statics.getLabel('close')}", style: TextStyle(color: Colors.purpleAccent)),
+          //   ),
+          // ],
+        );
+      },
     );
   }
 
@@ -1467,7 +1629,7 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
           actions: [
             TextButton(
               onPressed: () => Navigator.of(ctx).pop(),
-              child: Text("${Statics.getLabel('close')}", style: TextStyle(color: Colors.purpleAccent)),
+              child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.purpleAccent)),
             ),
           ],
         );
@@ -1516,7 +1678,12 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
                   SizedBox(height: 12),
                   textControllerField2(name: Statics.getLabel('Name'), controller: naavCtrl, isRequired: true),
                   textControllerField2(name: Statics.getLabel('Address'), controller: pattaCtrl, maxLines: 4),
-                  textControllerField2(name: Statics.getLabel('doorBhash'), controller: doorbhashCtrl, keyboardType: TextInputType.number, maxInput: 10, isRequired: true),
+                  textControllerField2(
+                      name: Statics.getLabel('doorBhash'),
+                      controller: doorbhashCtrl,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [LengthLimitingTextInputFormatter(10), FilteringTextInputFormatter.digitsOnly],
+                      isRequired: true),
                   Row(
                     children: [
                       Expanded(
@@ -1586,7 +1753,12 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
                       onSelectionChanged: (v) => setSheetState(() => localPrabhavKshetra = v),
                     ),
                   textControllerField2(name: Statics.getLabel('samparkSootraNaav'), controller: samparkNaavCtrl, isRequired: true),
-                  textControllerField2(name: Statics.getLabel('samparakSootraDoorbhash'), controller: samparkDoorbhashCtrl, keyboardType: TextInputType.number, maxInput: 10, isRequired: true),
+                  textControllerField2(
+                      name: Statics.getLabel('samparakSootraDoorbhash'),
+                      controller: samparkDoorbhashCtrl,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [LengthLimitingTextInputFormatter(10), FilteringTextInputFormatter.digitsOnly],
+                      isRequired: true),
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
@@ -1685,7 +1857,7 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
       if (localShreni.id == null) localShreni = null;
     }
 
-    final int? rowUpshreniId = int.tryParse(row.upshreniid ?? "");
+    final int? rowUpshreniId = row.upshreniid ?? 0;
     if (localShreni != null && rowUpshreniId != null) {
       localUpShreni = masterDataList.firstWhere(
         (e) => e.parentid == localShreni!.id && e.id == rowUpshreniId,
@@ -1694,7 +1866,7 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
       if (localUpShreni.id == null) localUpShreni = null;
     }
 
-    final int? rowUpshreni2Id = int.tryParse(row.upshreni2id ?? "");
+    final int? rowUpshreni2Id = row.upshreni2id ?? 0;
     if (localUpShreni != null && rowUpshreni2Id != null) {
       localUpShreni2 = masterDataList.firstWhere(
         (e) => e.parentid == localUpShreni!.id && e.id == rowUpshreni2Id,
@@ -1721,7 +1893,12 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
                   SizedBox(height: 12),
                   textControllerField2(name: Statics.getLabel('Name'), controller: naavCtrl, isRequired: true),
                   textControllerField2(name: Statics.getLabel('Address'), controller: pattaCtrl),
-                  textControllerField2(name: Statics.getLabel('doorBhash'), controller: doorbhashCtrl, keyboardType: TextInputType.number, maxInput: 10, isRequired: true),
+                  textControllerField2(
+                      name: Statics.getLabel('doorBhash'),
+                      controller: doorbhashCtrl,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [LengthLimitingTextInputFormatter(10), FilteringTextInputFormatter.digitsOnly],
+                      isRequired: true),
                   Row(
                     children: [
                       Expanded(
@@ -1801,7 +1978,12 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
                       onSelectionChanged: (v) => setSheetState(() => localSamparkSthiti = v),
                     ),
                   textControllerField2(name: Statics.getLabel('samparkSootraNaav'), controller: samparkNaavCtrl, isRequired: true),
-                  textControllerField2(name: Statics.getLabel('samparakSootraDoorbhash'), controller: samparkDoorbhashCtrl, keyboardType: TextInputType.number, maxInput: 10, isRequired: true),
+                  textControllerField2(
+                      name: Statics.getLabel('samparakSootraDoorbhash'),
+                      controller: samparkDoorbhashCtrl,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [LengthLimitingTextInputFormatter(10), FilteringTextInputFormatter.digitsOnly],
+                      isRequired: true),
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
@@ -1818,7 +2000,7 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
                         } else if ((localSamparkSthiti?.id ?? row.anyaSamparkSthitiid) == null ||
                             (localPrabhavKshetra?.id ?? row.anyaPrabhavKshetraid) == null ||
                             (localVishesh?.id ?? row.anyaVisheshid) == null ||
-                            (localUpShreni?.id ?? int.tryParse(row.upshreniid ?? "")) == null ||
+                            (localUpShreni?.id ?? row.upshreniid) == null ||
                             (localShreni?.id ?? row.shreniid) == null) {
                           Statics.showToast("${Statics.getLabel('impInfoRequired')}");
                           isValid = false;
@@ -1844,11 +2026,11 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
                           row.shreni = localShreni!.value;
                         }
                         if (localUpShreni != null) {
-                          row.upshreniid = localUpShreni!.id?.toString();
+                          row.upshreniid = localUpShreni?.id ?? 0;
                           row.upshreni = localUpShreni!.value;
                         }
                         if (localUpShreni2 != null) {
-                          row.upshreni2id = localUpShreni2!.id?.toString();
+                          row.upshreni2id = localUpShreni2?.id ?? 0;
                           row.upshreni2 = localUpShreni2!.value;
                         }
                         if (localVishesh != null) {
@@ -1936,8 +2118,7 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
     required String name,
     required TextEditingController controller,
     TextInputType keyboardType = TextInputType.text,
-    int? maxInput,
-    double fieldHeight = 48, // 👈 sirf textfield ke liye height
+    List<TextInputFormatter>? inputFormatters,
     int minLines = 1,
     int maxLines = 1,
     int textFlex = 1,
@@ -2001,16 +2182,16 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
             child: TextFormField(
               controller: controller,
               keyboardType: keyboardType,
-              maxLength: maxInput,
               minLines: minLines,
               maxLines: maxLines,
+              inputFormatters: inputFormatters,
               decoration: InputDecoration(
                 counterText: "",
                 filled: true,
                 fillColor: Colors.grey.shade50,
                 contentPadding: EdgeInsets.symmetric(
                   horizontal: 12,
-                  vertical: (fieldHeight - 20) / 2,
+                  vertical: (48 - 20) / 2,
                   // 👆 fieldHeight ke hisaab se adjust hoga
                 ),
                 border: OutlineInputBorder(

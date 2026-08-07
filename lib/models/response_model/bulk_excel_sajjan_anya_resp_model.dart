@@ -57,9 +57,9 @@ class SajjanAnyaData {
   String? shreni;
   int? shreniid;
   String? upshreni;
-  String? upshreniid;
+  int? upshreniid;
   String? upshreni2;
-  String? upshreni2id;
+  int? upshreni2id;
   String? anyaVishesh;
   int? anyaVisheshid;
   String? anyaPrabhavKshetra;
