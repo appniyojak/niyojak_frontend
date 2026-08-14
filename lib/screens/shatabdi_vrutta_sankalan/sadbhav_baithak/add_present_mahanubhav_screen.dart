@@ -33,7 +33,8 @@ class _AddPresentMahanubhavScreenState extends State<AddPresentMahanubhavScreen>
   final _controller = createGeoController();
 
   List<Vastisarsajjanshakti> sajjanShaktiDataList = [];
-  int? isVastiOrGraam;
+
+  // int? isVastiOrGraam;
 
   // All your variables here
   int? sajjanShaktiShreniId = 356;
@@ -73,7 +74,6 @@ class _AddPresentMahanubhavScreenState extends State<AddPresentMahanubhavScreen>
   @override
   void initState() {
     super.initState();
-    print("abcd>>>>>>>>>>>>>>>>> 22222222222222222");
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) => initData());
   }
 
@@ -258,6 +258,7 @@ class _AddPresentMahanubhavScreenState extends State<AddPresentMahanubhavScreen>
     isDownloadingTemplate = false;
     isAnalyzingExcel = false;
     isSubmittingBulk = false;
+
     fetchVastiSurveyDropdownData();
   }
 
@@ -265,7 +266,7 @@ class _AddPresentMahanubhavScreenState extends State<AddPresentMahanubhavScreen>
     Map<String, dynamic> formData = {
       "GeoUnitID": int.tryParse(_controller.deepestSelectedGeoUnitId ?? "0") ?? 0,
       "AppUserID": int.parse(Statics.userDetails['userID']),
-      "isnagar": isVastiOrGraam,
+      "isnagar": _controller.deepestSelectedLevelId == 2 ? 1 : 0,
       "Vastisarsajjanshakti": sajjanShaktiDataList,
       "VastisarAnyaprabhavilokam": anyaPrabhaviLokDataList,
     };
@@ -542,6 +543,12 @@ class _AddPresentMahanubhavScreenState extends State<AddPresentMahanubhavScreen>
                       onChanged: (value) {
                         setState(() {
                           sajjanShaktiType = value!;
+
+                          pickedExcelFile = null;
+                          bulkResponse = null;
+                          bulkValidList.clear();
+                          bulkInvalidList.clear();
+                          bulkDuplicateList.clear();
                         });
                       },
                     ),
@@ -2520,7 +2527,7 @@ class _AddPresentMahanubhavScreenState extends State<AddPresentMahanubhavScreen>
           iconEnabledColor: iconColor ?? Colors.black,
           hint: Text(
             value != null && viewName == true ? value.value ?? "" : hintText,
-            style: TextStyle(color: textColor ?? Colors.black),
+            style: TextStyle(color: textColor ?? Colors.grey.shade600),
           ),
           value: items.any((e) => e.id == value?.id) ? value : null,
           isExpanded: true,
