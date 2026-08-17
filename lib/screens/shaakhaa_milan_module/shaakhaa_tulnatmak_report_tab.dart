@@ -1,21 +1,12 @@
-import 'dart:developer';
-import 'dart:io';
-import 'dart:ui' as ui;
-
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:open_filex/open_filex.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
 import 'package:provider/provider.dart';
 
 import '../../helpers/static_data.dart' as Statics;
 import '../../models/response_model/shaakhaa_milan_tulnatmak_model.dart';
 import '../../providers/bals.dart';
 import '../../utils/globals.dart';
+import '../../utils/screenshot_pdf_page.dart';
 import '../../utils/stable_geounit_class.dart';
 import 'report_widgets/custom_app_dropdowns.dart';
 import 'report_widgets/helper_widgets.dart';
@@ -472,148 +463,18 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
   Future<void> takeScreenShot({bool doCrop = false}) async {
     setState(() => _isExcelDownloading = true);
     try {
-      // 1. Fetch the RenderRepaintBoundary safely
-      final boundary = _globalKey.currentContext?.findRenderObject() as RenderRepaintBoundary?;
-      if (boundary == null) {
-        print("Error: Boundary context not found.");
-        return;
-      }
-      final boundarySize = boundary.size;
-
-      const maxTextureDimension = 16384.0; // Skia/Impeller hard cap
-      const desiredPixelRatio = 3.0;
-
-      // Clamp pixelRatio so neither dimension exceeds the GPU texture limit
-      final maxRatioForHeight = maxTextureDimension / boundarySize.height;
-      final maxRatioForWidth = maxTextureDimension / boundarySize.width;
-      final safePixelRatio = [desiredPixelRatio, maxRatioForHeight, maxRatioForWidth].reduce((a, b) => a < b ? a : b);
-
-      print("Boundary size: $boundarySize, using pixelRatio: $safePixelRatio");
-
-      // 2. Capture the master image context from GPU memory
-      final image = await boundary.toImage(pixelRatio: safePixelRatio);
-      print("Captured image size: ${image.width} x ${image.height}");
-
-      // Extract raw bytes for the full image backup
-      final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-      final pngBytes = byteData!.buffer.asUint8List();
-
-      final directory = await getApplicationDocumentsDirectory();
-      final customDir = Directory('${directory.path}/MyCustomFolder');
-      if (!(await customDir.exists())) {
-        await customDir.create(recursive: true);
-      }
-
-      final timestamp = DateTime.now().millisecondsSinceEpoch;
-      final imgFile = File('${customDir.path}/screenshot_$timestamp.png');
-      await imgFile.writeAsBytes(pngBytes);
-      print("Screenshot saved to ${imgFile.path}");
-
-      // 3. Setup PDF document layout constraints
-      final pdf = pw.Document();
-      const double pageWidthPt = 595.27; // A4 page width in logical points
-      const double pageHeightPt = 841.89; // A4 page height in logical points
-
-      // 4. Slice the master image safely across separate PDF pages
-      //croppin pagination
-      if (doCrop) {
-        const double targetAspectRatio = pageHeightPt / pageWidthPt;
-
-        final double imgWidthPx = image.width.toDouble();
-        final double imgHeightPx = image.height.toDouble();
-
-        // Map pagination slices entirely based on the image's layout aspect ratio
-        final double sliceHeightPx = imgWidthPx * targetAspectRatio;
-        final int numPages = (imgHeightPx / sliceHeightPx).ceil();
-
-        log("Generating PDF... Total pages calculated: $numPages");
-
-        for (int pageNum = 0; pageNum < numPages; pageNum++) {
-          final double yOffsetPx = pageNum * sliceHeightPx;
-
-          // Handle the bottom remainder crop slice for the last page
-          final double currentSliceHeightPx = (yOffsetPx + sliceHeightPx > imgHeightPx) ? (imgHeightPx - yOffsetPx) : sliceHeightPx;
-
-          // Pass the image object directly (Memory-efficient approach)
-          final Uint8List pageImgBytes = await _cropImage(
-            image,
-            imgWidthPx,
-            currentSliceHeightPx,
-            yOffsetPx,
-            sliceHeightPx,
-          );
-
-          pdf.addPage(
-            pw.Page(
-              pageFormat: PdfPageFormat.a4,
-              margin: pw.EdgeInsets.symmetric(horizontal: 24), // Edge-to-edge flush canvas
-              build: (pw.Context context) {
-                return pw.Center(
-                  child: pw.Image(
-                    pw.MemoryImage(pageImgBytes),
-                    fit: pw.BoxFit.contain,
-                  ),
-                );
-              },
-            ),
-          );
-        }
-      } else {
-        log("Generating PDF... No Crop");
-        // No cropping/pagination — just place the whole image on ONE page
-        final pdfImage = pw.MemoryImage(pngBytes);
-
-        pdf.addPage(
-          pw.Page(
-            pageFormat: PdfPageFormat.a4,
-            margin: pw.EdgeInsets.symmetric(vertical: 18),
-            build: (pw.Context context) {
-              return pw.Center(
-                child: pw.Image(pdfImage, fit: pw.BoxFit.contain),
-              );
-            },
-          ),
-        );
-      }
-
-      // 5. Save and launch the completed PDF document
-      final pdfBytes = await pdf.save();
-      final pdfFile = File('${customDir.path}/screenshot_$timestamp.pdf');
-      await pdfFile.writeAsBytes(pdfBytes);
-
-      print("PDF saved to ${pdfFile.path}");
-      final result = await OpenFilex.open(pdfFile.path);
-      print("Open file result: ${result.message}");
+      await ScreenshotPdfExporter.takeScreenShot(
+        globalKey: _globalKey,
+        doCrop: doCrop,
+        folderName: 'TulnatmakReport',
+        filePrefix: 'tulnatmak',
+        onError: (e) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Export failed: $e'))),
+      );
     } catch (e) {
       print("Error processing screenshot or PDF extraction: $e");
     } finally {
       setState(() => _isExcelDownloading = false);
     }
-  }
-
-  /// Helper function to crop the ui.Image instantly on canvas.
-  /// Avoids byte-decoding loops to keep RAM footprint low.
-  Future<Uint8List> _cropImage(
-    ui.Image srcImage,
-    double width,
-    double height,
-    double yOffset,
-    double canvasHeight,
-  ) async {
-    final recorder = ui.PictureRecorder();
-    final canvas = Canvas(recorder, Rect.fromLTWH(0, 0, width, canvasHeight));
-
-    final srcRect = Rect.fromLTWH(0, yOffset, width, height);
-    final destRect = Rect.fromLTWH(0, 0, width, height);
-
-    canvas.drawImageRect(srcImage, srcRect, destRect, Paint());
-
-    final picture = recorder.endRecording();
-    final img = await picture.toImage(width.toInt(), canvasHeight.toInt());
-
-    // Convert to PNG
-    final byteData = await img.toByteData(format: ui.ImageByteFormat.png);
-    return byteData!.buffer.asUint8List();
   }
 
   /////////////////////////////////////////////////////////////////////////

@@ -88,22 +88,8 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) => initData());
-
-    // int vruttaID = widget.shaakhaa == null ? 0 : widget.shaakhaa?.pkid ?? 0;
-    // int shaakhaaID = widget.shaakhaa == null ? (widget.shaakhaaId ?? 0) : widget.shaakhaa?.shaakhaaID ?? widget.shaakhaaId ?? 0;
-    // _vruttaDateCntrl.text = DateFormat("dd-MMM-yyyy").format(widget.fromYesterday ? DateTime.now().subtract(const Duration(days: 1)) : DateTime.now());
-    // populateShaakhaVayogat(shaakhaaID.toString());
-    // // if (vruttaID > 0) {
-    // getSwDetails();
-    // } else {
-    //   if (!mounted) return;
-    //   setState(() {
-    //     vrutta = null;
-    //   });
-    // }
   }
 
-  // ◄ ADD THIS METHOD
   @override
   void didUpdateWidget(covariant ShakhaaSaptahFormScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -733,7 +719,6 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
                             SizedBox(height: 10),
                           ],
                         ),
-
                       SizedBox(
                         width: Statics.getDeviceSize(context).width * 0.8,
                         child: CheckboxListTile(
@@ -924,50 +909,6 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
                         ),
                         SizedBox(height: 10),
                       ],
-                      // SizedBox(
-                      //   width: Statics.getDeviceSize(context).width * 0.8,
-                      //   child: CheckboxListTile(
-                      //     contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                      //     controlAffinity: ListTileControlAffinity.leading,
-                      //     title: Text(Statics.getLabel("ConductedAnivaaryaShaaririkKaaryakram"),
-                      //         style: TextStyle(fontSize: 15)),
-                      //     checkColor: Colors.white,
-                      //     activeColor: Colors.purple,
-                      //     value: _isMandatoryShaaririk == null
-                      //         ? false
-                      //         : _isMandatoryShaaririk,
-                      //     onChanged: (value) {
-                      //       setState(() {
-                      //         _isMandatoryShaaririk = value;
-                      //       });
-                      //     },
-                      //   ),
-                      // ),
-                      // SizedBox(
-                      //   height: 10
-                      // ),
-                      // SizedBox(
-                      //   width: Statics.getDeviceSize(context).width * 0.8,
-                      //   child: CheckboxListTile(
-                      //     contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                      //     controlAffinity: ListTileControlAffinity.leading,
-                      //     title: Text(Statics.getLabel("ConductedAnivaaryaBouddhikKaaryakram"),
-                      //         style: TextStyle(fontSize: 15)),
-                      //     checkColor: Colors.white,
-                      //     activeColor: Colors.purple,
-                      //     value: _isMandatoryBouddhik == null
-                      //         ? false
-                      //         : _isMandatoryBouddhik,
-                      //     onChanged: (value) {
-                      //       setState(() {
-                      //         _isMandatoryBouddhik = value;
-                      //       });
-                      //     },
-                      //   ),
-                      // ),
-                      // SizedBox(
-                      //   height: 10
-                      // ),
                       SizedBox(
                         width: Statics.getDeviceSize(context).width * 0.8,
                         child: CheckboxListTile(
