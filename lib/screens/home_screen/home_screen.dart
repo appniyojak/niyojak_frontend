@@ -684,30 +684,36 @@ class _HomeScreenState extends State<HomeScreen> {
       _clearSwayamsevakPanelData();
       return;
     }
+    _tgbloodgroup = [];
+
+    _tgexpertieslist = [];
+
+    _tginterestlist = [];
+
+    _tgmothertonguelist = [];
+
+    _tgsangayulist = [];
+
+    _tgghoshwadlist = [];
+
     final sd = data["HomeScreenData"];
     final vd = sd["ShaakhaaVruttaSummaryData"];
     if (sd["BloodGroup"] != null) {
-      _tgbloodgroup.clear();
       sd["BloodGroup"].forEach((v) => _tgbloodgroup.add(GetCount.fromJson(v)));
     }
     if (sd["AreaOfExpertise"] != null) {
-      _tgexpertieslist.clear();
       sd["AreaOfExpertise"].forEach((v) => _tgexpertieslist.add(GetCount.fromJson(v)));
     }
     if (sd["AreaOfInterest"] != null) {
-      _tginterestlist.clear();
       sd["AreaOfInterest"].forEach((v) => _tginterestlist.add(GetCount.fromJson(v)));
     }
     if (sd["MotherTongue"] != null) {
-      _tgmothertonguelist.clear();
       sd["MotherTongue"].forEach((v) => _tgmothertonguelist.add(GetCount.fromJson(v)));
     }
     if (sd["sangaayu"] != null) {
-      _tgsangayulist.clear();
       sd["sangaayu"].forEach((v) => _tgsangayulist.add(GetCount.fromJson(v)));
     }
     if (sd["goshwad"] != null) {
-      _tgghoshwadlist.clear();
       sd["goshwad"].forEach((v) => _tgghoshwadlist.add(GetCount.fromJson(v)));
     }
     if (sd["GanaveshData"] != null) {

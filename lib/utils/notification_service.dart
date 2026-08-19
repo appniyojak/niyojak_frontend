@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:permission_handler/permission_handler.dart' show openAppSettings;
 
 import '../helpers/static_data.dart' as Statics;
+import '../screens/search_event.dart';
 import '../screens/shaakhaa_milan_module/shaakha_main_tab_screen.dart';
 
 /// -----------------------------------------------------------------------
@@ -401,6 +402,11 @@ class PushNotificationService with WidgetsBindingObserver {
       case 'ShakhaaVrutta':
         navigator.pushNamed(ShaakhaMainTabScreen.routeName); //, arguments: data);
         debugPrint('[PushNotification] Route -> ShakhaaVrutta with data: $data');
+        break;
+
+      case 'event':
+        navigator.pushNamed(SearchEvent.routeName, arguments: (data["action_id"] ?? 0).toString());
+        debugPrint('[PushNotification] Route -> SearchEvent with data: $data');
         break;
 
       case 'subscription':
