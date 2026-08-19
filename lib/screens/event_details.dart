@@ -103,6 +103,8 @@ class _EventDetailsState extends State<EventDetails> {
   }
 
   void getEventDetails(int? theId) async {
+    final controller = context.read<GeoHierarchyController>();
+
     setState(() {
       _isfetingData = true;
     });
@@ -110,26 +112,33 @@ class _EventDetailsState extends State<EventDetails> {
     if (!isConnected) {
       Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));
     } else {
-      var dataList = await Statics.getEventList(theId, null, null, null);
+      var dataList = await Statics.getEventList(eventID: theId, fromDate: null, toDate: null, searchPattern: null);
       var data = EventMasterBAL(
-          dataList[0]["EventID"],
-          dataList[0]["PraantID"],
-          dataList[0]["EventTypeID"],
-          dataList[0]["EventName"],
-          dataList[0]["Description"],
-          dataList[0]["FromDateStr"],
-          dataList[0]["ToDateStr"],
-          dataList[0]["FromTimeStr"],
-          dataList[0]["ToTimeStr"],
-          dataList[0]["GeoUnitID"],
-          dataList[0]["OwnerSwayamsevakID"],
-          dataList[0]["OwnerSwayamsevakName"],
-          dataList[0]["OwnerSwayamsevakMobileNumber"],
-          dataList[0]["PreparationDetail"],
-          dataList[0]["Venue"]);
+          dataList[0].eventID,
+          dataList[0].praantID,
+          dataList[0].eventTypeID,
+          dataList[0].eventName,
+          dataList[0].description,
+          dataList[0].fromDateStr,
+          dataList[0].toDateStr,
+          dataList[0].fromTimeStr,
+          dataList[0].toTimeStr,
+          dataList[0].geoUnitID,
+          dataList[0].ownerSwayamsevakID,
+          dataList[0].ownerSwayamsevakName,
+          dataList[0].ownerSwayamsevakMobileNumber,
+          dataList[0].preparationDetail,
+          dataList[0].venue);
 
       if (!mounted) return;
       event = data;
+
+      if (data.geoUnitID != null && data.geoUnitID != 0) {
+        final _trail = await controller.getTrailFromGeoUnitId(data.geoUnitID!.toString());
+
+        if (_trail != null) await controller.setHierarchyFromTrail(trail: _trail);
+      }
+
       if (event != null) {
         setState(() {
           _eventnameCtrl.text = event!.eventName == null ? "" : event!.eventName!;

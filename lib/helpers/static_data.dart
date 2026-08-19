@@ -18,6 +18,7 @@ import '../models/response_model/AbhiyaanLoginDataResponse.dart';
 import '../models/response_model/AbhiyaanSwayamsevakListResponse.dart';
 import '../models/response_model/TulnatmakResponseModel.dart';
 import '../models/response_model/bulk_excel_sajjan_anya_resp_model.dart';
+import '../models/response_model/event_master_list_resp_model.dart';
 import '../models/response_model/geounit_name_model.dart';
 import '../models/response_model/get_vasti_data_by_id_model.dart';
 import '../models/response_model/get_vijaya_dashami_geounit_data.dart';
@@ -3972,24 +3973,30 @@ Future<List<dynamic>> getSanghaPreritSanstha(String praantID, String? sanghaPrer
   return responseBody['SanghaPreritSansthaaList'];
 }
 
-Future<List<dynamic>> getEventList(int? eventID, String? searchPattern, String? fromDate, String? toDate) async {
+Future<List<EventMaster>> getEventList({int? eventID, String? searchPattern, String? fromDate, String? toDate, bool isfuture = true}) async {
   bool? connected = await isInternetConnected();
   if (connected == false) {
     return [];
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
+  print({"EventID": eventID, "AppUserID": userDetails['userID'], "EventName": searchPattern, "FromDateStr": fromDate, "ToDateStr": toDate, "isfuture": isfuture});
+  print(Uri.parse(urlGetEventListForApp));
+
   var response = await http.post(
     Uri.parse(urlGetEventListForApp),
     headers: jHeaders,
     body: json.encode({"EventID": eventID, "AppUserID": userDetails['userID'], "EventName": searchPattern, "FromDateStr": fromDate, "ToDateStr": toDate}),
   );
-  print({"EventID": eventID, "AppUserID": userDetails['userID'], "EventName": searchPattern, "FromDateStr": fromDate, "ToDateStr": toDate});
-  log(response.body);
-  print(Uri.parse(urlGetEventListForApp));
-  var responseBody = json.decode(response.body);
 
-  return responseBody['ListEventMaster'];
+  log(response.body);
+
+  final Map<String, dynamic> data = jsonDecode(response.body);
+
+  EvenMasterRespModel model = EvenMasterRespModel.fromJson(data);
+  log("YuvaSangamReportData >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+
+  return model.listEventMaster ?? []; // ✅ return karna zaroori hai
 }
 
 Future<String> saveEventDetails(String inputJson) async {

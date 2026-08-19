@@ -144,7 +144,7 @@ class _EventMembersState extends State<EventMembers> {
   Future<List<SwayamsevakNewData>> populateSwayamSevak(String pattern) async {
     bool isConnected = await Statics.isInternetConnected();
 
-    if (pattern.length < 4) return [];
+    if (pattern.length < 2) return [];
     if (isConnected) {
       var inputData = {
         'AppUserID': Statics.userDetails["userID"],
@@ -165,7 +165,7 @@ class _EventMembersState extends State<EventMembers> {
   Future<List<dynamic>> populateSoochi(String pattern) async {
     bool isConnected = await Statics.isInternetConnected();
 
-    if (pattern.length < 4) return [];
+    if (pattern.length < 2) return [];
     if (isConnected) {
       debugPrint("CALLED HERE >>>>>>>>>>>>>>>>>>>");
       return Statics.getSoochiList(pattern, true, true);

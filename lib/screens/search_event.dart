@@ -4,10 +4,10 @@ import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 import '../helpers/static_data.dart' as Statics;
+import '../models/response_model/event_master_list_resp_model.dart';
 import '../screens/edit_event.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/event_card.dart';
-import '../widgets/legend.dart';
 
 class SearchEvent extends StatefulWidget {
   static const routeName = '/search-event-screen';
@@ -16,9 +16,10 @@ class SearchEvent extends StatefulWidget {
   _SearchEventState createState() => _SearchEventState();
 }
 
-class _SearchEventState extends State<SearchEvent> with SingleTickerProviderStateMixin {
-  Future<List<dynamic>>? _eventList;
+class _SearchEventState extends State<SearchEvent> with TickerProviderStateMixin {
+  List<EventMaster> _eventList = [];
   TabController? _tabController;
+  TabController? _tabController2;
   bool _isSearching = false;
 
   final _searchController = TextEditingController();
@@ -32,12 +33,24 @@ class _SearchEventState extends State<SearchEvent> with SingleTickerProviderStat
   void initState() {
     super.initState();
     _tabController = new TabController(length: 2, vsync: this);
+    _tabController2 = new TabController(length: 2, vsync: this);
     _tabController?.addListener(_handleTabChange);
+    _tabController2?.addListener(_handleTabChange);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) => initData());
+  }
+
+  initData() async {
+    final args = ModalRoute.of(context)?.settings.arguments as String?;
+    if (args != null && args != "0") {
+      await _search(eventId: int.tryParse(args) ?? 0);
+    }
+    setState(() {});
   }
 
   @override
   void dispose() {
     _tabController?.removeListener(_handleTabChange);
+    _tabController2?.removeListener(_handleTabChange);
     _searchController.dispose();
     _fromDateCntrl.dispose();
     _toDateCntrl.dispose();
@@ -51,10 +64,10 @@ class _SearchEventState extends State<SearchEvent> with SingleTickerProviderStat
   //   _eventList = _getEventList(-1, "get Nothing", null, null);
   // }
 
-  Future<List<dynamic>> _getEventList(int? eventId, String? searchString, String? fromDate, String? toDate) async {
+  Future<List<EventMaster>> _getEventList(int? eventId, String? searchString, String? fromDate, String? toDate, bool isfuture) async {
     bool isConnected = await Statics.isInternetConnected();
     if (isConnected) {
-      return Statics.getEventList(eventId, _searchController.text, fromDate, toDate);
+      return Statics.getEventList(eventID: eventId, searchPattern: _searchController.text, fromDate: fromDate, toDate: toDate, isfuture: isfuture);
     } else {
       Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));
       return [];
@@ -99,7 +112,8 @@ class _SearchEventState extends State<SearchEvent> with SingleTickerProviderStat
     });
   }
 
-  Future<void> _search() async {
+  Future<void> _search({int? eventId, bool isfuture = true}) async {
+    _eventList = [];
     setState(() {
       _isSearching = true;
     });
@@ -108,10 +122,10 @@ class _SearchEventState extends State<SearchEvent> with SingleTickerProviderStat
     var frmDate = _fromDate == null ? null : DateFormat('dd-MM-yyyy').format(_fromDate!);
     var toDate = _toDate == null ? null : DateFormat('dd-MM-yyyy').format(_toDate!);
 
+    final _list = await _getEventList(eventId == 0 ? null : eventId, searchString, frmDate, toDate, isfuture);
     setState(() {
-      _eventList = _getEventList(null, searchString, frmDate, toDate);
+      _eventList!.addAll(_list);
     });
-    var data = await _getEventList(null, searchString, frmDate, toDate);
     _tabController!.animateTo(1);
 
     setState(() {
@@ -291,32 +305,64 @@ class _SearchEventState extends State<SearchEvent> with SingleTickerProviderStat
                     ]),
                   ),
                 ),
-                SingleChildScrollView(
-                  child: Container(
-                    padding: EdgeInsets.all(20),
-                    child: Column(
-                      children: <Widget>[
-                        Legend(legendString: 'EventList', fontsize: 20),
-                        FutureBuilder<List<dynamic>>(
-                          future: _eventList,
-                          builder: (ctx, dataSnapshot) {
-                            if (dataSnapshot.hasError) {
-                              return Center(
-                                  child: Text(
-                                'Server Error, Please Try Again Later',
-                                style: TextStyle(color: Colors.red),
-                              ));
-                            }
-                            return dataSnapshot.hasData && dataSnapshot.data!.length > 0
-                                ? Column(
-                                    children: dataSnapshot.data!.map((swItem) => EventCard(swItem, _search)).toList(),
-                                  )
-                                : Center(child: Text(Statics.getLabel('noDataFoundTryAnotherSearch')));
-                          },
+                Column(
+                  spacing: 12,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    TabBar(
+                      controller: _tabController2,
+                      indicatorColor: Colors.purple,
+                      dividerColor: Colors.transparent,
+                      indicator: BoxDecoration(color: Colors.purple),
+                      indicatorSize: TabBarIndicatorSize.tab,
+                      onTap: (value) => _search(isfuture: value == 0),
+                      tabs: <Widget>[
+                        Tab(
+                          child: Wrap(
+                            children: [
+                              Icon(FontAwesomeIcons.globe),
+                              SizedBox(width: 20),
+                              Text(
+                                Statics.getLabel("upcomingEventLabel"),
+                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Tab(
+                          child: Wrap(
+                            children: [
+                              Icon(Icons.event),
+                              SizedBox(width: 20),
+                              Text(
+                                Statics.getLabel("completedEventLabel"),
+                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
-                  ),
+                    Expanded(
+                      child: TabBarView(controller: _tabController2, children: [
+                        _eventList == null
+                            ? Center(
+                                child: Text(
+                                'Server Error, Please Try Again Later',
+                                style: TextStyle(color: Colors.red),
+                              ))
+                            : _eventList!.isNotEmpty
+                                ? SingleChildScrollView(
+                                    padding: EdgeInsets.all(20),
+                                    child: Column(
+                                      spacing: 12,
+                                      children: _eventList!.map((swItem) => EventCard(swItem, _search)).toList(),
+                                    ),
+                                  )
+                                : Center(child: Text(Statics.getLabel('noDataFoundTryAnotherSearch')))
+                      ]),
+                    )
+                  ],
                 ),
               ],
             ),
