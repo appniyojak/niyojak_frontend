@@ -1873,7 +1873,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
               Column(
                 children: [
                   SingleColumnRow(
-                    txtString: Statics.getLabel('present'),
+                    txtString: Statics.getLabel('Present'),
                     fontWeight: FontWeight.w700,
                     value: "",
                     fontsize: 16,

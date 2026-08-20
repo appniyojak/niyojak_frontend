@@ -1,10 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+
+import '../../helpers/static_data.dart' as Statics;
 import '../../providers/bals.dart';
 import '../../providers/swayamsevak_provider.dart';
-import '../../helpers/static_data.dart' as Statics;
 
 class SwayamsevakSanghaShikshan extends StatefulWidget {
   var swId;
@@ -46,6 +46,7 @@ class SwayamsevakSanghaShikshanState extends State<SwayamsevakSanghaShikshan> {
   bool? _isTrainedInMukhyaYogachaap = false;
   bool? _isTrainedInMukhyaDandaYuddha = false;
   bool? _isTrainedInMukhyaYog = false;
+  bool? _isTrainedInMukhyaYashti = false;
 
   bool? _isTrainedInAnyaDanda = false;
   bool? _isTrainedInAnyaNiyuddha = false;
@@ -54,6 +55,7 @@ class SwayamsevakSanghaShikshanState extends State<SwayamsevakSanghaShikshan> {
   bool? _isTrainedInAnyaYogachaap = false;
   bool? _isTrainedInAnyaDandaYuddha = false;
   bool? _isTrainedInAnyaYog = false;
+  bool? _isTrainedInAnyaYashti = false;
 
   bool? _isMukhyaSharirikVishayExpanded = false;
   bool? _isAnyaSharirikVishayExpanded = false;
@@ -186,6 +188,15 @@ class SwayamsevakSanghaShikshanState extends State<SwayamsevakSanghaShikshan> {
                 else
                   _isTrainedInMukhyaYog = _isTrainedInAnyaYog = false;
               }
+
+              if (data.shaaririkVishayCode == "Yashti" || data.shaaririkVishayCode == "यष्टी") {
+                if (data.vishayFamiliarity == 1)
+                  _isTrainedInMukhyaYashti = true;
+                else if (data.vishayFamiliarity == 9)
+                  _isTrainedInAnyaYashti = true;
+                else
+                  _isTrainedInMukhyaYashti = _isTrainedInAnyaYashti = false;
+              }
             }
         }
       });
@@ -204,6 +215,7 @@ class SwayamsevakSanghaShikshanState extends State<SwayamsevakSanghaShikshan> {
     _isTrainedInMukhyaPadavinyas = _isTrainedInAnyaPadavinyas = false;
     _isTrainedInMukhyaDandaYuddha = _isTrainedInAnyaDandaYuddha = false;
     _isTrainedInMukhyaYog = _isTrainedInAnyaYog = false;
+    _isTrainedInMukhyaYashti = _isTrainedInAnyaYashti = false;
   }
 
   Future<void> _submit() async {
@@ -242,7 +254,8 @@ class SwayamsevakSanghaShikshanState extends State<SwayamsevakSanghaShikshan> {
         _isTrainedInMukhyaYogachaap == false &&
         _isTrainedInMukhyaPadavinyas == false &&
         _isTrainedInMukhyaDandaYuddha == false &&
-        _isTrainedInMukhyaYog == false) return Statics.showMessageDialog(context, Statics.getLabel('PleaseSelectatleastoneMukhyaVishay'));
+        _isTrainedInMukhyaYog == false &&
+        _isTrainedInMukhyaYashti == false) return Statics.showMessageDialog(context, Statics.getLabel('PleaseSelectatleastoneMukhyaVishay'));
     String strShaaririkVishay = getShaaririkStr();
     var inputData = '{' +
         '"SanghaShikshan": {' +
@@ -345,6 +358,13 @@ class SwayamsevakSanghaShikshanState extends State<SwayamsevakSanghaShikshan> {
       strData += '{"SwayamsevakID": ' + widget.swId + ', "PraantID": 1, "ShaaririkVishayCode": "Yog", "VishayFamiliarity": 9 },';
     else
       strData += '{"SwayamsevakID": ' + widget.swId + ', "PraantID": 1, "ShaaririkVishayCode": "Yog", "VishayFamiliarity": null },';
+
+    if (_isTrainedInMukhyaYashti == true)
+      strData += '{"SwayamsevakID": ' + widget.swId + ', "PraantID": 1, "ShaaririkVishayCode": "Yashti", "VishayFamiliarity": 1 },';
+    else if (_isTrainedInAnyaYashti == true)
+      strData += '{"SwayamsevakID": ' + widget.swId + ', "PraantID": 1, "ShaaririkVishayCode": "Yashti", "VishayFamiliarity": 9 },';
+    else
+      strData += '{"SwayamsevakID": ' + widget.swId + ', "PraantID": 1, "ShaaririkVishayCode": "Yashti", "VishayFamiliarity": null },';
 
     strData = strData.substring(0, strData.length - 1);
     return strData;
@@ -653,8 +673,8 @@ class SwayamsevakSanghaShikshanState extends State<SwayamsevakSanghaShikshan> {
                                                   onChanged: (value) {
                                                     setState(() {
                                                       _isTrainedInMukhyaDanda = value;
-                                                      _isTrainedInMukhyaNiyuddha = _isTrainedInMukhyaYogaasan =
-                                                          _isTrainedInMukhyaYogachaap = _isTrainedInMukhyaPadavinyas = _isTrainedInMukhyaDandaYuddha = _isTrainedInMukhyaYog = false;
+                                                      _isTrainedInMukhyaNiyuddha = _isTrainedInMukhyaYogaasan = _isTrainedInMukhyaYogachaap =
+                                                          _isTrainedInMukhyaPadavinyas = _isTrainedInMukhyaDandaYuddha = _isTrainedInMukhyaYog = _isTrainedInMukhyaYashti = false;
                                                     });
                                                   }),
                                             ),
@@ -674,8 +694,8 @@ class SwayamsevakSanghaShikshanState extends State<SwayamsevakSanghaShikshan> {
                                                     setState(() {
                                                       _isTrainedInMukhyaNiyuddha = value;
 
-                                                      _isTrainedInMukhyaDanda = _isTrainedInMukhyaYogaasan =
-                                                          _isTrainedInMukhyaYogachaap = _isTrainedInMukhyaPadavinyas = _isTrainedInMukhyaDandaYuddha = _isTrainedInMukhyaYog = false;
+                                                      _isTrainedInMukhyaDanda = _isTrainedInMukhyaYogaasan = _isTrainedInMukhyaYogachaap =
+                                                          _isTrainedInMukhyaPadavinyas = _isTrainedInMukhyaDandaYuddha = _isTrainedInMukhyaYog = _isTrainedInMukhyaYashti = false;
                                                     });
                                                   }),
                                             ),
@@ -695,8 +715,8 @@ class SwayamsevakSanghaShikshanState extends State<SwayamsevakSanghaShikshan> {
                                                     setState(() {
                                                       _isTrainedInMukhyaYogaasan = value;
 
-                                                      _isTrainedInMukhyaDanda = _isTrainedInMukhyaNiyuddha =
-                                                          _isTrainedInMukhyaYogachaap = _isTrainedInMukhyaPadavinyas = _isTrainedInMukhyaDandaYuddha = _isTrainedInMukhyaYog = false;
+                                                      _isTrainedInMukhyaDanda = _isTrainedInMukhyaNiyuddha = _isTrainedInMukhyaYogachaap =
+                                                          _isTrainedInMukhyaPadavinyas = _isTrainedInMukhyaDandaYuddha = _isTrainedInMukhyaYog = _isTrainedInMukhyaYashti = false;
                                                     });
                                                   }),
                                             ),
@@ -716,8 +736,8 @@ class SwayamsevakSanghaShikshanState extends State<SwayamsevakSanghaShikshan> {
                                                   setState(() {
                                                     _isTrainedInMukhyaYogachaap = value;
 
-                                                    _isTrainedInMukhyaDanda = _isTrainedInMukhyaNiyuddha =
-                                                        _isTrainedInMukhyaYogaasan = _isTrainedInMukhyaPadavinyas = _isTrainedInMukhyaDandaYuddha = _isTrainedInMukhyaYog = false;
+                                                    _isTrainedInMukhyaDanda = _isTrainedInMukhyaNiyuddha = _isTrainedInMukhyaYogaasan =
+                                                        _isTrainedInMukhyaPadavinyas = _isTrainedInMukhyaDandaYuddha = _isTrainedInMukhyaYog = _isTrainedInMukhyaYashti = false;
                                                   });
                                                 },
                                               ),
@@ -738,8 +758,8 @@ class SwayamsevakSanghaShikshanState extends State<SwayamsevakSanghaShikshan> {
                                                   setState(() {
                                                     _isTrainedInMukhyaPadavinyas = value;
 
-                                                    _isTrainedInMukhyaDanda = _isTrainedInMukhyaNiyuddha =
-                                                        _isTrainedInMukhyaYogaasan = _isTrainedInMukhyaYogachaap = _isTrainedInMukhyaDandaYuddha = _isTrainedInMukhyaYog = false;
+                                                    _isTrainedInMukhyaDanda = _isTrainedInMukhyaNiyuddha = _isTrainedInMukhyaYogaasan =
+                                                        _isTrainedInMukhyaYogachaap = _isTrainedInMukhyaDandaYuddha = _isTrainedInMukhyaYog = _isTrainedInMukhyaYashti = false;
                                                   });
                                                 },
                                               ),
@@ -760,8 +780,8 @@ class SwayamsevakSanghaShikshanState extends State<SwayamsevakSanghaShikshan> {
                                                   setState(() {
                                                     _isTrainedInMukhyaDandaYuddha = value;
 
-                                                    _isTrainedInMukhyaDanda = _isTrainedInMukhyaNiyuddha =
-                                                        _isTrainedInMukhyaYogaasan = _isTrainedInMukhyaYogachaap = _isTrainedInMukhyaPadavinyas = _isTrainedInMukhyaYog = false;
+                                                    _isTrainedInMukhyaDanda = _isTrainedInMukhyaNiyuddha = _isTrainedInMukhyaYogaasan =
+                                                        _isTrainedInMukhyaYogachaap = _isTrainedInMukhyaPadavinyas = _isTrainedInMukhyaYog = _isTrainedInMukhyaYashti = false;
                                                   });
                                                 },
                                               ),
@@ -782,8 +802,30 @@ class SwayamsevakSanghaShikshanState extends State<SwayamsevakSanghaShikshan> {
                                                   setState(() {
                                                     _isTrainedInMukhyaYog = value;
 
-                                                    _isTrainedInMukhyaDanda = _isTrainedInMukhyaNiyuddha =
-                                                        _isTrainedInMukhyaYogaasan = _isTrainedInMukhyaYogachaap = _isTrainedInMukhyaPadavinyas = _isTrainedInMukhyaDandaYuddha = false;
+                                                    _isTrainedInMukhyaDanda = _isTrainedInMukhyaNiyuddha = _isTrainedInMukhyaYogaasan =
+                                                        _isTrainedInMukhyaYogachaap = _isTrainedInMukhyaPadavinyas = _isTrainedInMukhyaDandaYuddha = _isTrainedInMukhyaYashti = false;
+                                                  });
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: Statics.getDeviceSize(context).width * 0.4,
+                                            child: AbsorbPointer(
+                                              absorbing: _isTrainedInAnyaYashti == true ? true : false,
+                                              child: CheckboxListTile(
+                                                contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                                                title: Text(Statics.getLabel('Yashti'), style: TextStyle(fontSize: 15)),
+                                                checkColor: Colors.white,
+                                                activeColor: Colors.purple,
+                                                value: _isTrainedInMukhyaYashti == null ? false : _isTrainedInMukhyaYashti,
+                                                controlAffinity: ListTileControlAffinity.leading,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    _isTrainedInMukhyaYashti = value;
+
+                                                    _isTrainedInMukhyaDanda = _isTrainedInMukhyaNiyuddha = _isTrainedInMukhyaYogaasan =
+                                                        _isTrainedInMukhyaYogachaap = _isTrainedInMukhyaPadavinyas = _isTrainedInMukhyaDandaYuddha = _isTrainedInMukhyaYog = false;
                                                   });
                                                 },
                                               ),
@@ -945,6 +987,25 @@ class SwayamsevakSanghaShikshanState extends State<SwayamsevakSanghaShikshan> {
                                                 onChanged: (value) {
                                                   setState(() {
                                                     _isTrainedInAnyaYog = value;
+                                                  });
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: Statics.getDeviceSize(context).width * 0.4,
+                                            child: AbsorbPointer(
+                                              absorbing: _isTrainedInMukhyaYashti == true ? true : false,
+                                              child: CheckboxListTile(
+                                                contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                                                title: Text(Statics.getLabel('Yashti'), style: TextStyle(fontSize: 15)),
+                                                checkColor: Colors.white,
+                                                activeColor: Colors.purple,
+                                                value: _isTrainedInAnyaYashti == null ? false : _isTrainedInAnyaYashti,
+                                                controlAffinity: ListTileControlAffinity.leading,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    _isTrainedInAnyaYashti = value;
                                                   });
                                                 },
                                               ),

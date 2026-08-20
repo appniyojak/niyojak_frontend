@@ -91,12 +91,27 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
   }
 
   Future<void> populateDropdown({bool fromClear = false}) async {
+    _status = [];
     var data1 = await Statics.getStaticLDB("JoinRSSStatus");
 
     if (!mounted) return;
+
     setState(() {
       _status = data1;
     });
+    // _status?.forEach((e) => log(jsonEncode(e.toJson())));
+
+    _status!.add(StaticMasterBAL(
+      0,
+      1,
+      "JoinRSSStatus",
+      "StartedgoingtoShakha",
+      Statics.getLabel("Unassigned"),
+      data1.length,
+      1,
+      "0",
+      "-",
+    ));
   }
 
   void _getCsv(var list) async {

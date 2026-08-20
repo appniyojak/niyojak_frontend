@@ -1085,11 +1085,12 @@
 
 import 'dart:convert';
 import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import '../providers/bals.dart';
 
 import '../helpers/static_data.dart' as Statics;
+import '../providers/bals.dart';
 
 class EditAnnualBaithakShaakhaaVrutta extends StatefulWidget {
   static const String routeName = '/edit-annual-baithak-shaakhaa-vrutta';
@@ -1462,6 +1463,43 @@ class _EditAnnualBaithakShaakhaaVruttaState extends State<EditAnnualBaithakShaak
                       setState(() {
                         _isActive = value!;
                       });
+
+                      if (_isActive == 0) {
+                        _conductingDaysCtrl.text = "0";
+                        _conductingSewaDaysCtrl.text = "0";
+                        _baalAvgCntrl.text = "0";
+                        _vidyaarthiAvgCtrl.text = "0";
+                        _vyavasaayeeAvgCtrl.text = "0";
+                        _proudhAvgCtrl.text = "0";
+                        _sewaVastiSamparkCountCtrl.text = "0";
+                        _sewaUpakramCountCtrl.text = "0";
+                        _anyaUpakramCountCtrl.text = "0";
+                        _praathamikCountCtrl.text = "0";
+                        _praathamikSakriyaCountCtrl.text = "0";
+                        _prathamGeneralCountCtrl.text = "0";
+                        _prathamGeneralSakriyaCountCtrl.text = "0";
+                        _prathamSpecialCountCtrl.text = "0";
+                        _prathamSpecialSakriyaCountCtrl.text = "0";
+                        _dwitiyaGeneralCountCtrl.text = "0";
+                        _dwitiyaGeneralSakriyaCountCtrl.text = "0";
+                        _dwitiyaSpecialCountCtrl.text = "0";
+                        _dwitiyaSpecialSakriyaCountCtrl.text = "0";
+                        _trutiyaGeneralCountCtrl.text = "0";
+                        _trutiyaGeneralSakriyaCountCtrl.text = "0";
+                        _trutiyaSpecialCountCtrl.text = "0";
+                        _trutiyaSpecialSakriyaCountCtrl.text = "0";
+                        _patSankhyaaCtrl.text = "0";
+                        _sanghaDaayitvawaanSwCountCtrl.text = "0";
+                        _preritSansthaaSangathanDaayitvawaanSwCountCtrl.text = "0";
+                        _gatividhiDaayitvawaanSwCountCtrl.text = "0";
+                        _aayaamDaayitvawaanSwCountCtrl.text = "0";
+                        _sociallyActiveSwCountCtrl.text = "0";
+                        _shishuAverageCtrl.text = "0";
+                        _shaakhaaToliBaithakCountCtrl.text = "0";
+                        _vaartaapatraCountCtrl.text = "0";
+                        _vaarshikotsavMonthValue = "0";
+                      }
+                      setState(() {});
                     },
                     validator: (value) {
                       if (value == null || value == '') return (Statics.getLabel('mandatoryInformation'));

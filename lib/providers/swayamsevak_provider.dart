@@ -164,7 +164,7 @@ class SwayamsevakProvider {
           sharirikVishayList.add(
               new ShaaririkVishayBAL(data['SwayamsevakShaaririkVishayID'], data['ShaaririkVishayID'], data['PraantID'], data['ShaaririkVishayCode'], data['VishayFamiliarity'], data['SwayamsevakID']));
         }
-        print("shaaririkVishay :-- $shaaririkVishay");
+        log("shaaririkVishay :-- $shaaririkVishay");
       }
 
       return SwayamsevakSanghaShikshanSharirikVishayBAL(swSansghaShikshan, sharirikVishayList);
