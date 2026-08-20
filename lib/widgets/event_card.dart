@@ -9,29 +9,79 @@ import '../helpers/static_data.dart' as Statics;
 import '../models/response_model/event_master_list_resp_model.dart';
 import '../models/response_model/new_search_swayamsevak_model.dart';
 import '../screens/edit_event.dart';
+import '../screens/event_attendance_screen.dart';
 import '../screens/event_members.dart';
 import '../screens/event_vrutta.dart';
 
 /// RSVP answer for "तुम्ही येणार का?" — maps to eventItem.pStatus.
-/// Adjust the int mapping in [EventCard._rsvpStatusFromCode] if your API uses different codes.
+/// Adjust the int mapping in [_EventCardState._rsvpStatusFromCode] if your API uses different codes.
 enum RsvpStatus { yes, no, half }
 
-class EventCard extends StatelessWidget {
+extension RsvpStatusVars on RsvpStatus {
+  String get name {
+    switch (this) {
+      case RsvpStatus.yes:
+        return Statics.getLabel('ConfirmationYes', returnKey: true);
+      case RsvpStatus.no:
+        return Statics.getLabel('ConfirmationNo', returnKey: true);
+      case RsvpStatus.half:
+        return Statics.getLabel('ConfirmationHalf', returnKey: true);
+    }
+  }
+
+  int get pkValues {
+    switch (this) {
+      case RsvpStatus.yes:
+        return 1;
+      case RsvpStatus.no:
+        return 0;
+      case RsvpStatus.half:
+        return 2;
+    }
+  }
+}
+
+class EventCard extends StatefulWidget {
   final EventMaster eventItem;
-  var _search;
+  final Function _search;
 
   EventCard(this.eventItem, this._search);
 
+  @override
+  State<EventCard> createState() => _EventCardState();
+}
+
+// NOTE on the fix: EventCard used to be a StatelessWidget storing RSVP/menu
+// state as plain instance fields. Every rebuild of the parent list (e.g. the
+// keyboard opening for the reason TextField, or the PopupMenuButton
+// triggering a rebuild) creates a brand-new EventCard(...) instance in your
+// itemBuilder, which wiped those fields back to their defaults. Converting
+// to StatefulWidget means Flutter keeps ONE _EventCardState object alive
+// across those rebuilds, so _selectedRsvp / _reasonController / _swController
+// now actually persist. Everything else stays as plain methods on this
+// State class — no extra widget classes.
+class _EventCardState extends State<EventCard> {
   TextEditingController _swController = TextEditingController();
   String? _swValue;
 
-  // RSVP local state (kept as plain fields on this widget instance, same
-  // pattern as _swController/_swValue above — updated via StatefulBuilder
-  // in _buildRsvpSection so no extra widget class is needed).
   RsvpStatus? _selectedRsvp;
   TextEditingController _reasonController = TextEditingController();
+  bool _isUpdatingRsvp = false;
+
+  // Whether the RSVP section is showing the होय/नाही/अर्ध picker (true) or
+  // the confirmed one-line summary with "बदला" (false). Null until the
+  // first build decides a default (edit if no answer yet, confirmed if
+  // there's already a saved response).
+  bool? _isEditingRsvp;
 
   var _todaysDate = DateTime.parse(DateFormat('yyyy-MM-dd').format(DateTime.now()));
+
+  @override
+  void dispose() {
+    _swController.dispose();
+    _reasonController.dispose();
+    super.dispose();
+  }
 
   Future<List<SwayamsevakNewData>> populateSwayamSevak(String pattern) async {
     bool isConnected = await Statics.isInternetConnected();
@@ -52,6 +102,85 @@ class EventCard extends StatelessWidget {
       Statics.showToast(Statics.getLabel('internetNotConnected'));
       return [];
     }
+  }
+
+  Future<bool> updateSwayamsevakEventStatus() async {
+    bool isConnected = await Statics.isInternetConnected();
+
+    if (isConnected) {
+      var inputData = {
+        "EventID": widget.eventItem.eventID,
+        "AppUserID": Statics.userDetails["userID"],
+        "Status": _selectedRsvp?.pkValues,
+        "SwayamsevakID": Statics.userDetails["userID"],
+        "Remark": _reasonController.text.trim()
+      };
+
+      var swList = await Statics.changeEventStatusForSwayamsevakData(inputData);
+
+      return swList;
+    } else {
+      Statics.showToast(Statics.getLabel('internetNotConnected'));
+      return false;
+    }
+  }
+
+  // ---- RSVP submit flow (wired to updateSwayamsevakEventStatus) ----
+
+  /// Calls the change-status API with whatever is currently in
+  /// _selectedRsvp / _reasonController, shows a loading state while the
+  /// request is in flight, toasts the result, and refreshes the parent
+  /// list (widget._search()) on success — same pattern _changeEventOwner
+  /// already uses.
+  Future<bool> _submitRsvp() async {
+    if (_isUpdatingRsvp) return false;
+
+    setState(() => _isUpdatingRsvp = true);
+    bool success = false;
+    try {
+      success = await updateSwayamsevakEventStatus();
+    } finally {
+      if (mounted) setState(() => _isUpdatingRsvp = false);
+    }
+
+    if (success) {
+      Statics.showToast(Statics.getLabel('RsvpUpdateSuccess') ?? 'तुमचा प्रतिसाद नोंदवला गेला');
+      if (mounted) setState(() => _isEditingRsvp = false);
+      widget._search();
+    } else {
+      Statics.showToast(Statics.getLabel('RsvpUpdateFailed') ?? 'प्रतिसाद नोंदवताना अडचण आली, पुन्हा प्रयत्न करा');
+    }
+    return success;
+  }
+
+  /// Handles a tap on होय / नाही / अर्ध.
+  /// - होय / अर्ध submit immediately (no reason needed) and collapse back
+  ///   to the confirmed summary line on success.
+  /// - नाही reveals the reason field; actual submit happens from the
+  ///   field's confirm button via _onReasonConfirmed.
+  Future<void> _onRsvpOptionTapped(RsvpStatus status) async {
+    if (_isUpdatingRsvp) return;
+
+    final previous = _selectedRsvp;
+    setState(() => _selectedRsvp = status);
+
+    if (status == RsvpStatus.no) {
+      // Wait for the reason field's confirm action.
+      return;
+    }
+
+    final ok = await _submitRsvp();
+    if (!ok && mounted) {
+      setState(() => _selectedRsvp = previous);
+    }
+  }
+
+  Future<void> _onReasonConfirmed() async {
+    if (_reasonController.text.trim().isEmpty) {
+      Statics.showToast(Statics.getLabel('ReasonValidationMessage') ?? 'कृपया कारण नमूद करा');
+      return;
+    }
+    await _submitRsvp();
   }
 
   void _changeEventOwner(var context, var eventID) async {
@@ -145,7 +274,7 @@ class EventCard extends StatelessWidget {
 
                   _swValue = null;
                   _swController.text = "";
-                  _search();
+                  widget._search();
                   Navigator.of(ctx).pop();
                 },
               ),
@@ -183,6 +312,7 @@ class EventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final eventItem = widget.eventItem;
     final bool isOwner = eventItem.ownerSwayamsevakID.toString() == Statics.userDetails["userID"];
 
     return Padding(
@@ -278,9 +408,10 @@ class EventCard extends StatelessWidget {
     );
   }
 
-  // ---- UI pieces as plain Widget-returning functions (no widget classes) ----
+  // ---- UI pieces as plain Widget-returning methods (no widget classes) ----
 
   Widget _buildPopupMenu(BuildContext context) {
+    final eventItem = widget.eventItem;
     return PopupMenuButton(
       padding: EdgeInsets.zero,
       onSelected: (value) {
@@ -293,6 +424,9 @@ class EventCard extends StatelessWidget {
         } else if (value == "EditVrutta" || value == "ViewVrutta") {
           print("value  == $value");
           Navigator.of(context).pushNamed(EventVrutta.routeName, arguments: Statics.ScreenArguments(eventItem.eventID!, value));
+        } else if (value == "attendance") {
+          print("value  == $value");
+          Navigator.of(context).pushNamed(EventAttendanceStatusScreen.routeName, arguments: eventItem.eventID).then((value) => widget._search());
         }
       },
       icon: Icon(
@@ -303,6 +437,8 @@ class EventCard extends StatelessWidget {
       itemBuilder: (BuildContext context) {
         return [
           if (eventItem.ownerSwayamsevakID.toString() == Statics.userDetails["userID"]) Statics.MenuItem(Statics.getLabel('EditMenu'), FontAwesomeIcons.edit, 'EditMenu'),
+          if (eventItem.ownerSwayamsevakID.toString() == Statics.userDetails["userID"] && eventItem.isfuture == 0)
+            Statics.MenuItem(Statics.getLabel('attendance'), Icons.playlist_add_check_rounded, 'attendance'),
           Statics.MenuItem(Statics.getLabel('ViewMenu'), FontAwesomeIcons.eye, 'ViewMenu'),
           Statics.MenuItem(Statics.getLabel('ApekshitList'), Icons.people, (eventItem.ownerSwayamsevakID.toString() == Statics.userDetails["userID"]) ? 'AddApekshitList' : 'ViewApekshitList'),
           Statics.MenuItem(Statics.getLabel('SharingList'), Icons.share, (eventItem.ownerSwayamsevakID.toString() == Statics.userDetails["userID"]) ? 'AddSharingList' : 'ViewSharingList'),
@@ -344,6 +480,7 @@ class EventCard extends StatelessWidget {
 
   // .stats — expected / present / absent pills, shown when isOwner == true.
   Widget _buildStatsRow() {
+    final eventItem = widget.eventItem;
     return Container(
       margin: const EdgeInsets.only(top: 10),
       padding: const EdgeInsets.only(top: 10),
@@ -362,7 +499,19 @@ class EventCard extends StatelessWidget {
     );
   }
 
-  Widget _buildMiniSegmented(StateSetter setLocalState) {
+  /// Segmented control OR a small spinner while a request is in flight.
+  Widget _buildRsvpControl() {
+    if (_isUpdatingRsvp) {
+      return SizedBox(
+        width: 20,
+        height: 20,
+        child: CircularProgressIndicator(strokeWidth: 2, color: Colors.purple.shade700),
+      );
+    }
+    return _buildMiniSegmented();
+  }
+
+  Widget _buildMiniSegmented() {
     const options = [
       (RsvpStatus.yes, 'ConfirmationYes'),
       (RsvpStatus.no, 'ConfirmationNo'),
@@ -380,12 +529,7 @@ class EventCard extends StatelessWidget {
         children: options.map((opt) {
           final isSelected = _selectedRsvp == opt.$1;
           return GestureDetector(
-            onTap: () {
-              setLocalState(() {
-                _selectedRsvp = opt.$1;
-              });
-              // TODO: wire to your actual RSVP submit/API call here.
-            },
+            onTap: () => _onRsvpOptionTapped(opt.$1),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 150),
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
@@ -408,58 +552,110 @@ class EventCard extends StatelessWidget {
     );
   }
 
-  // .rsvp-inline — "तुम्ही येणार का?" + होय/नाही/अर्ध + "कारण" reason field
-  // (shown when the answer isn't होय). Shown when isOwner == false.
-  // Uses the built-in StatefulBuilder for interactivity instead of a
-  // separate widget class.
+  /// Confirmed one-line summary shown once a response is saved:
+  /// "✓ प्रतिसाद : होय / अर्ध" or "✗ कारण : <reason>" — plus "बदला" to
+  /// go back into edit mode (the होय/नाही/अर्ध picker).
+  Widget _buildRsvpConfirmed() {
+    final bool isNo = _selectedRsvp == RsvpStatus.no;
+    final IconData icon = isNo ? Icons.cancel : Icons.check_circle;
+    final Color color = isNo ? Colors.red.shade700 : Colors.green.shade700;
+    final String label = isNo ? '${Statics.getLabel('ReasonLabel') ?? 'कारण'} : ${_reasonController.text}' : '${Statics.getLabel('ResponseLabel') ?? 'प्रतिसाद'} : ${_selectedRsvp?.name ?? ''}';
+
+    return Container(
+      margin: const EdgeInsets.only(top: 10),
+      padding: const EdgeInsets.only(top: 10),
+      decoration: BoxDecoration(
+        border: Border(top: BorderSide(color: Colors.grey.shade200, width: 1)),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, size: 16, color: color),
+          SizedBox(width: 6),
+          Expanded(
+            child: Text(
+              label,
+              style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, color: color),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          GestureDetector(
+            onTap: () => setState(() => _isEditingRsvp = true),
+            child: Text(
+              Statics.getLabel('ChangeLabel') ?? 'बदला',
+              style: TextStyle(
+                fontSize: 12.5,
+                fontWeight: FontWeight.w600,
+                color: Colors.purple.shade700,
+                decoration: TextDecoration.underline,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // .rsvp-inline — either the confirmed summary + "बदला", or (in edit mode)
+  // "तुम्ही येणार का?" + होय/नाही/अर्ध + "कारण" reason field (reason only
+  // for नाही). Shown when isOwner == false.
   Widget _buildRsvpSection() {
+    final eventItem = widget.eventItem;
     _selectedRsvp ??= _rsvpStatusFromCode(eventItem.pStatus);
     if (_reasonController.text.isEmpty && eventItem.reason != null) {
       _reasonController.text = eventItem.reason!;
     }
+    // First build: show the confirmed summary if there's already a saved
+    // response, otherwise go straight to the picker.
+    _isEditingRsvp ??= _selectedRsvp == null;
 
-    return StatefulBuilder(
-      builder: (context, setLocalState) {
-        final bool showReason = _selectedRsvp == RsvpStatus.no; // || _selectedRsvp == RsvpStatus.half;
+    if (_isEditingRsvp == false) {
+      return _buildRsvpConfirmed();
+    }
 
-        return Container(
-          margin: const EdgeInsets.only(top: 10),
-          padding: const EdgeInsets.only(top: 10),
-          decoration: BoxDecoration(
-            border: Border(top: BorderSide(color: Colors.grey.shade200, width: 1)),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    final bool showReason = _selectedRsvp == RsvpStatus.no;
+
+    return Container(
+      margin: const EdgeInsets.only(top: 10),
+      padding: const EdgeInsets.only(top: 10),
+      decoration: BoxDecoration(
+        border: Border(top: BorderSide(color: Colors.grey.shade200, width: 1)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
             children: [
-              Row(
-                children: [
-                  Text(
-                    Statics.getLabel('RsvpQuestion') ?? 'तुम्ही येणार का?',
-                    style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w500, color: Colors.black87),
-                  ),
-                  Spacer(),
-                  _buildMiniSegmented(setLocalState),
-                ],
+              Text(
+                Statics.getLabel('RsvpQuestion') ?? 'तुम्ही येणार का?',
+                style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w500, color: Colors.black87),
               ),
-              if (showReason) ...[
-                SizedBox(height: 10),
-                TextField(
-                  controller: _reasonController,
-                  maxLines: 2,
-                  style: TextStyle(fontSize: 12.5),
-                  decoration: InputDecoration(
-                    isDense: true,
-                    labelText: Statics.getLabel('ReasonLabel') ?? 'कारण',
-                    labelStyle: TextStyle(fontSize: 12.5),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                    contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                  ),
-                ),
-              ],
+              Spacer(),
+              _buildRsvpControl(),
             ],
           ),
-        );
-      },
+          if (showReason) ...[
+            SizedBox(height: 10),
+            TextField(
+              controller: _reasonController,
+              enabled: !_isUpdatingRsvp,
+              maxLines: 2,
+              style: TextStyle(fontSize: 12.5),
+              onSubmitted: (_) => _onReasonConfirmed(),
+              decoration: InputDecoration(
+                isDense: true,
+                labelText: Statics.getLabel('ReasonLabel') ?? 'कारण',
+                labelStyle: TextStyle(fontSize: 12.5),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                suffixIcon: IconButton(
+                  icon: Icon(Icons.check_circle, color: Colors.purple.shade700, size: 20),
+                  onPressed: _isUpdatingRsvp ? null : _onReasonConfirmed,
+                ),
+              ),
+            ),
+          ],
+        ],
+      ),
     );
   }
 

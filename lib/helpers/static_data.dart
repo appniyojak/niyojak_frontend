@@ -18,6 +18,7 @@ import '../models/response_model/AbhiyaanLoginDataResponse.dart';
 import '../models/response_model/AbhiyaanSwayamsevakListResponse.dart';
 import '../models/response_model/TulnatmakResponseModel.dart';
 import '../models/response_model/bulk_excel_sajjan_anya_resp_model.dart';
+import '../models/response_model/event_attendance_resp_model.dart';
 import '../models/response_model/event_master_list_resp_model.dart';
 import '../models/response_model/geounit_name_model.dart';
 import '../models/response_model/get_vasti_data_by_id_model.dart';
@@ -179,6 +180,8 @@ const String urlNagarVastisarvekshanReportForMandal = baseUrlAPI + '/NagarVastis
 const String urlGetShaakhaaPatForApp = baseUrlAPI + '/GetShaakhaaPatForApp';
 const String urlGetSanghaPreritSansthaaForApp = baseUrlAPI + '/GetSanghaPreritSansthaaForApp';
 const String urlGetEventListForApp = baseUrlAPI + '/GetEventListForApp';
+const String urlChangeEventStatusForSwayamsevak = baseUrlAPI + '/ChangeEventStatusForSwayamsevak';
+const String urlGetEventStatusForAllSwayamsevak = baseUrlAPI + '/GetEventStatusForAllSwayamsevak';
 const String urlSaveEventDataForApp = baseUrlAPI + '/SaveEventDataForApp';
 const String urlGetSwayamsevakCalendarForApp = baseUrlAPI + '/GetSwayamsevakCalendarForApp';
 const String urlGetEventApekshitListForApp = baseUrlAPI + '/GetEventApekshitListForApp';
@@ -840,7 +843,12 @@ Future<void> populateDashboardDetailsMap() async {
 Future<List<StaticMasterBAL>> getStaticLDB(String entityType) async {
   print("getStaticLDB == $entityType");
   List<StaticMasterBAL> _staticMaster = [];
-  var result = await DatabaseHelper.getData("Select * from StaticMaster Where EntityType='" + entityType + "' ORDER BY DisplaySequence;");
+
+  var sqlQuery = "Select * from StaticMaster Where EntityType='" + entityType + "' ORDER BY DisplaySequence;";
+
+  log(sqlQuery);
+
+  var result = await DatabaseHelper.getData(sqlQuery);
   // log("resultresult =-=->  ${result}");
   result.forEach((element) {
     var info = StaticMasterBAL.fromMap(element);
@@ -1453,7 +1461,7 @@ Future<dynamic> getShaakhaaByID(String shaakhaaID) async {
 
 Future<String> saveShaakhaaDetails(String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return "";
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -1467,7 +1475,7 @@ Future<String> saveShaakhaaDetails(String inputJson) async {
 
 Future<List<dynamic>> getSoochiList(String searchPattern, bool includeOwnedSoochi, bool includeSharedSoochi) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return [];
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -1486,7 +1494,7 @@ Future<List<dynamic>> getSoochiList(String searchPattern, bool includeOwnedSooch
 
 Future<dynamic> getSoochiDetails(var soochiID) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -1502,7 +1510,7 @@ Future<dynamic> getSoochiDetails(var soochiID) async {
 
 Future<List<dynamic>> getSoochiMembers(var soochiID) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return [];
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -1516,7 +1524,7 @@ Future<List<dynamic>> getSoochiMembers(var soochiID) async {
 
 Future<List<dynamic>> getSoochiSharing(var soochiID) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return [];
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -1531,7 +1539,7 @@ Future<List<dynamic>> getSoochiSharing(var soochiID) async {
 
 Future<String> saveSoochiDetails(String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return "";
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -1545,7 +1553,7 @@ Future<String> saveSoochiDetails(String inputJson) async {
 
 Future<String> saveSoochiMembers(String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return "";
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -1559,7 +1567,7 @@ Future<String> saveSoochiMembers(String inputJson) async {
 
 Future<String> saveSoochiSharing(String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return "";
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -1573,7 +1581,7 @@ Future<String> saveSoochiSharing(String inputJson) async {
 
 Future<String> deleteSoochiMembers(String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return "";
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -1587,7 +1595,7 @@ Future<String> deleteSoochiMembers(String inputJson) async {
 
 Future<String> deleteSoochiSharing(String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return "";
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -1601,7 +1609,7 @@ Future<String> deleteSoochiSharing(String inputJson) async {
 
 Future<String> deleteSWDaayitva(String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return "";
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -1615,7 +1623,7 @@ Future<String> deleteSWDaayitva(String inputJson) async {
 
 Future<String> deleteJoinRSS(String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return "";
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -1629,7 +1637,7 @@ Future<String> deleteJoinRSS(String inputJson) async {
 
 Future<String> deleteSoochiForApp(String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return "";
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -1643,7 +1651,7 @@ Future<String> deleteSoochiForApp(String inputJson) async {
 
 Future<String> deleteShaakhaaForApp(String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return "";
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -1658,7 +1666,7 @@ Future<String> deleteShaakhaaForApp(String inputJson) async {
 //Future<bool> isCompatibleVersion(String inputJson) async {
 Future<dynamic> isCompatibleVersion(String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   // This method checks if version is compatible and if data sync is required
@@ -1675,7 +1683,7 @@ Future<dynamic> isCompatibleVersion(String inputJson) async {
 
 Future<String> updatePassword(String oldPass, String newpass) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return "";
   }
   String strInput = "";
@@ -1704,7 +1712,7 @@ Future<String> updatePassword(String oldPass, String newpass) async {
 
 Future<bool> checkForTableExists(String table) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return false;
   }
   String sql = "SELECT name, sql FROM sqlite_master WHERE type='table' AND name='" + table + "'";
@@ -1718,7 +1726,7 @@ Future<bool> checkForTableExists(String table) async {
 
 Future<String> updateProfileData(String strFieldName, String strFieldValue, String strFieldValueCode) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return "";
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -1751,7 +1759,7 @@ Future<String> updateProfileData(String strFieldName, String strFieldValue, Stri
 
 Future<String> resetPassword(String swayamSevakID) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return "";
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -1767,7 +1775,7 @@ Future<String> refreshData() async {
   print("started");
   try {
     bool? connected = await isInternetConnected();
-    if (connected == false) {
+    if (connected != true) {
       return "";
     }
     Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -1798,7 +1806,7 @@ Future<String> refreshData() async {
 
 Future<HomeScreenData?> getDashboardData(Map<String, dynamic> inputJson, {BuildContext? context}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   if (context != null) showLoaderDialog(context);
@@ -1833,7 +1841,7 @@ Future<HomeScreenData?> getDashboardData(Map<String, dynamic> inputJson, {BuildC
 
 Future<dynamic> refreshDashboardData(String? userID, String? targetGeoUnitID) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   print("${userID}  --- $targetGeoUnitID  ");
@@ -2317,7 +2325,7 @@ Future<dynamic> refreshDashboardData(String? userID, String? targetGeoUnitID) as
 
 Future<UpnagarUpkhandaReportModel?> upkhandUpnagarReportData({required String userID, required String? targetGeoUnitID, required String? type}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   print("${userID}  --- $targetGeoUnitID  ");
@@ -2343,7 +2351,7 @@ Future<UpnagarUpkhandaReportModel?> upkhandUpnagarReportData({required String us
 
 Future<ShaakhaaVruttaReportHomeRespModel?> yestardayShaakhaaVruttaHomeReportData({required int userID, required int? targetGeoUnitID}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -2368,7 +2376,7 @@ Future<ShaakhaaVruttaReportHomeRespModel?> yestardayShaakhaaVruttaHomeReportData
 
 Future<UpnagarUpkhandaReportModel?> upkhandUpnagarReportForExcelData({required String userID, required String? targetGeoUnitID, BuildContext? context}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   if (context != null) showLoaderDialog(context);
@@ -2396,7 +2404,7 @@ Future<UpnagarUpkhandaReportModel?> upkhandUpnagarReportForExcelData({required S
 //===================================  NEW VastisarvekshanReport by Dom ===========================================================
 Future<VastiSurveyReportModel?> vastisarvekshanReportData(context, String? userID, String? targetGeoUnitID) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   showLoaderDialog(context);
@@ -2425,7 +2433,7 @@ Future<VastiSurveyReportModel?> vastisarvekshanReportData(context, String? userI
 
 Future<NagarVastiSampurnaModel?> vastisarvekshanAllReportData(context, String? userID, String? targetGeoUnitID, String? levelType) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   showLoaderDialog(context);
@@ -2457,7 +2465,7 @@ Future<NagarVastiSampurnaModel?> vastisarvekshanAllReportData(context, String? u
 
 Future<GetVijayadashamiInitModel?> getSajjanAndAnyaGuestData(context, String? userID, String? targetGeoUnitID, String? levelID) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   showLoaderDialog(context);
@@ -2492,7 +2500,7 @@ Future<GetVijayadashamiInitModel?> getSajjanAndAnyaGuestData(context, String? us
 
 Future<int?> checkExistAbhiyanKaryakartaData(int? userID, String searchCriteria, {BuildContext? context}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   if (context != null) showLoaderDialog(context);
@@ -2525,7 +2533,7 @@ Future<int?> checkExistAbhiyanKaryakartaData(int? userID, String searchCriteria,
 
 Future<GetVijayadashamiInitModel?> getVijayadashamiInitData(context, String? userID, String? targetGeoUnitID, String? levelID) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   showLoaderDialog(context);
@@ -2560,7 +2568,7 @@ Future<GetVijayadashamiInitModel?> getVijayadashamiInitData(context, String? use
 
 Future<MandalVastisarvekshanReportModel?> vastisarvekshanOnlyMandalReportData(context, String? userID, String? targetGeoUnitID, String? levelType) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
 
@@ -2592,7 +2600,7 @@ Future<MandalVastisarvekshanReportModel?> vastisarvekshanOnlyMandalReportData(co
 
 Future<TalukaMandalSampurnaModel?> vastisarvekshanAllReportDataForMandal(context, String? userID, String? targetGeoUnitID, String? levelType) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   showLoaderDialog(context);
@@ -2627,7 +2635,7 @@ Future<TalukaMandalSampurnaModel?> vastisarvekshanAllReportDataForMandal(context
 //==========================================================================================================================
 Future<Notes?> getVersionReleaseNotes() async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -2656,7 +2664,7 @@ Future<Notes?> getVersionReleaseNotes() async {
 //==========================================================================================================================
 Future<NotificationListModel?> getNotificationDataList(String? userID) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -2678,7 +2686,7 @@ Future<NotificationListModel?> getNotificationDataList(String? userID) async {
 //====================================   Vasti Sarvekshan API CALLL ===============================================================================
 Future<VastisarvekshanDropDownDataModel?> getVastiSurveyDropDownList(String? userID, {BuildContext? context}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   if (context != null) showLoaderDialog(context);
@@ -2703,7 +2711,7 @@ Future<VastisarvekshanDropDownDataModel?> getVastiSurveyDropDownList(String? use
 
 Future<dynamic> getDashboardDataByGeoUnit(String userID, String targetGeoUnitID) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -3155,7 +3163,7 @@ Future<dynamic> getDashboardDataByGeoUnit(String userID, String targetGeoUnitID)
 
 Future<dynamic> getJoinRSSData(String strInputBody) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -3173,7 +3181,7 @@ Future<dynamic> getJoinRSSData(String strInputBody) async {
 
 Future<List<dynamic>> getJoinRSSList(String strInputBody) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return [];
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -3187,7 +3195,7 @@ Future<List<dynamic>> getJoinRSSList(String strInputBody) async {
 
 Future<String> saveJoinRSSForApp(String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return "";
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -3201,7 +3209,7 @@ Future<String> saveJoinRSSForApp(String inputJson) async {
 
 Future<void> saveVijayaDashamiUtsavData(BuildContext context, Map<String, dynamic> inputJson, bool showLoader) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return;
   }
   if (showLoader) showLoaderDialog(context);
@@ -3228,7 +3236,7 @@ Future<void> saveVijayaDashamiUtsavData(BuildContext context, Map<String, dynami
 
 Future<String?> saveVijayaDashamiImageData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   if (showLoader) showLoaderDialog(context);
@@ -3259,7 +3267,7 @@ Future<String?> saveVijayaDashamiImageData({required BuildContext context, requi
 
 Future<bool> deleteVijayaDashamiImageData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return false;
   }
   if (showLoader) showLoaderDialog(context);
@@ -3292,7 +3300,7 @@ Future<bool> deleteVijayaDashamiImageData({required BuildContext context, requir
 
 Future<bool> saveVishishthaAtithiData(BuildContext context, Map<String, dynamic> inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return false;
   }
   showLoaderDialog(context);
@@ -3316,7 +3324,7 @@ Future<bool> saveVishishthaAtithiData(BuildContext context, Map<String, dynamic>
 
 Future<GetVijayadashamiDataByGeoUnitModel?> getVijayaDashamiUtsavDataByGeounit(BuildContext context, Map<String, dynamic> inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   showLoaderDialog(context);
@@ -3324,7 +3332,7 @@ Future<GetVijayadashamiDataByGeoUnitModel?> getVijayaDashamiUtsavDataByGeounit(B
 
   try {
     bool? connected = await isInternetConnected();
-    if (connected == false) {
+    if (connected != true) {
       return null;
     }
     var response = await http.post(Uri.parse(getvijayadashamiutsavbyid), headers: jHeaders, body: jsonEncode(inputJson));
@@ -3353,7 +3361,7 @@ Future<GetVijayadashamiDataByGeoUnitModel?> getVijayaDashamiUtsavDataByGeounit(B
 
 Future<GetVijayadashamiReportModel?> getVijayaDashamiUtsavReportData(BuildContext context, Map<String, dynamic> inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   showLoaderDialog(context);
@@ -3384,7 +3392,7 @@ Future<GetVijayadashamiReportModel?> getVijayaDashamiUtsavReportData(BuildContex
 
 Future<VijayadashamiExcelRespModel?> getVijayaDashamiUtsavExcelReportData(BuildContext context, Map<String, dynamic> inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   showLoaderDialog(context);
@@ -3420,7 +3428,7 @@ Future<VijayadashamiExcelRespModel?> getVijayaDashamiUtsavExcelReportData(BuildC
 
 Future<GruhAbhiyaanVruttaDataModel?> getDataforGruhAbhiyaan(Map<String, dynamic> inputJson, {BuildContext? context}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   if (context != null) showLoaderDialog(context);
@@ -3455,7 +3463,7 @@ Future<GruhAbhiyaanVruttaDataModel?> getDataforGruhAbhiyaan(Map<String, dynamic>
 
 Future<GruhAbhiyaanVruttaDataModel?> getPreviousDataforGruhAbhiyaan(Map<String, dynamic> inputJson, {BuildContext? context}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   if (context != null) showLoaderDialog(context);
@@ -3490,7 +3498,7 @@ Future<GruhAbhiyaanVruttaDataModel?> getPreviousDataforGruhAbhiyaan(Map<String, 
 
 Future<bool?> removeSwayamsevakFromToliFun(Map<String, dynamic> inputJson, {BuildContext? context}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   if (context != null) showLoaderDialog(context);
@@ -3522,7 +3530,7 @@ Future<bool?> removeSwayamsevakFromToliFun(Map<String, dynamic> inputJson, {Buil
 
 Future<GruhAbhiyaanReportModel?> getReportforGruhAbhiyaan(Map<String, dynamic> inputJson, {BuildContext? context}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   if (context != null) showLoaderDialog(context);
@@ -3559,7 +3567,7 @@ Future<GruhAbhiyaanReportModel?> getReportforGruhAbhiyaan(Map<String, dynamic> i
 
 Future<List<GeoUnitMasterBAL>?> getAbhiyaanGeoUnitMasterData(Map<String, dynamic> inputJson, {BuildContext? context}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   if (context != null) showLoaderDialog(context);
@@ -3607,7 +3615,7 @@ Future<List<GeoUnitMasterBAL>?> getAbhiyaanGeoUnitMasterData(Map<String, dynamic
 
 Future<AbhiyanSwayamsevakdata?> saveDataforGruhAbhiyaan(Map<String, dynamic> inputJson, {BuildContext? context}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   if (context != null) showLoaderDialog(context);
@@ -3641,7 +3649,7 @@ Future<AbhiyanSwayamsevakdata?> saveDataforGruhAbhiyaan(Map<String, dynamic> inp
 
 Future<dynamic> saveVisheshVyaktiDataforGruhAbhiyaan(Map<String, dynamic> inputJson, {BuildContext? context}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   if (context != null) showLoaderDialog(context);
@@ -3673,7 +3681,7 @@ Future<dynamic> saveVisheshVyaktiDataforGruhAbhiyaan(Map<String, dynamic> inputJ
 
 Future<bool> saveDataforPramukhGruhAbhiyaan(Map<String, dynamic> inputJson, {BuildContext? context}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return false;
   }
   if (context != null) showLoaderDialog(context);
@@ -3706,7 +3714,7 @@ Future<bool> saveDataforPramukhGruhAbhiyaan(Map<String, dynamic> inputJson, {Bui
 
 Future<GruhAbhiyaanVruttaDataModel?> addToToliListData(Map<String, dynamic> inputJson, {BuildContext? context}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   if (context != null) showLoaderDialog(context);
@@ -3741,7 +3749,7 @@ Future<GruhAbhiyaanVruttaDataModel?> addToToliListData(Map<String, dynamic> inpu
 
 Future<List<AbhiyanSwayamsevakList>?> getSwayamsevakForGruhAbhiyaan(Map<String, dynamic> inputJson, {BuildContext? context}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   if (context != null) showLoaderDialog(context);
@@ -3776,7 +3784,7 @@ Future<List<AbhiyanSwayamsevakList>?> getSwayamsevakForGruhAbhiyaan(Map<String, 
 
 Future<List<AbhiyanSwayamsevakList>?> searchPramukhGruhAbhiyaan(Map<String, dynamic> inputJson, {BuildContext? context}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   if (context != null) showLoaderDialog(context);
@@ -3811,7 +3819,7 @@ Future<List<AbhiyanSwayamsevakList>?> searchPramukhGruhAbhiyaan(Map<String, dyna
 
 Future<bool> saveSwayamsevakForGruhAbhiyaan(Map<String, dynamic> inputJson, {BuildContext? context}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return false;
   }
   if (context != null) showLoaderDialog(context);
@@ -3844,7 +3852,7 @@ Future<bool> saveSwayamsevakForGruhAbhiyaan(Map<String, dynamic> inputJson, {Bui
 
 Future<bool> saveAsPramukhForGruhAbhiyaan(Map<String, dynamic> inputJson, {BuildContext? context}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return false;
   }
   if (context != null) showLoaderDialog(context);
@@ -3877,7 +3885,7 @@ Future<bool> saveAsPramukhForGruhAbhiyaan(Map<String, dynamic> inputJson, {Build
 
 Future<bool> addSwayamsevakInListForGruhData(Map<String, dynamic> inputJson, {BuildContext? context}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return false;
   }
   if (context != null) showLoaderDialog(context);
@@ -3910,7 +3918,7 @@ Future<bool> addSwayamsevakInListForGruhData(Map<String, dynamic> inputJson, {Bu
 
 Future<dynamic> getJoinRSSDataByID(String joinRSSID, String type) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -3929,7 +3937,7 @@ Future<dynamic> getJoinRSSDataByID(String joinRSSID, String type) async {
 
 Future<Map<String, dynamic>> getSwayamSevakMembersInSoochi(String swayamSevakID) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return {};
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -3943,7 +3951,7 @@ Future<Map<String, dynamic>> getSwayamSevakMembersInSoochi(String swayamSevakID)
 
 Future<List<dynamic>> getShaakhaaPatForApp(String shaakhaaID) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return [];
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -3957,36 +3965,44 @@ Future<List<dynamic>> getShaakhaaPatForApp(String shaakhaaID) async {
 
 Future<List<dynamic>> getSanghaPreritSanstha(String praantID, String? sanghaPreritSansthaaID, String? sanghaPreritSansthaaName) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return [];
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  final _body = {"AppUserID": userDetails["userID"], "PraantID": praantID, "SanghaPreritSansthaaID": sanghaPreritSansthaaID, "SanghaPreritSansthaaName": sanghaPreritSansthaaName};
+
+  log(json.encode(_body));
+  log(urlGetSanghaPreritSansthaaForApp);
 
   var response = await http.post(
     Uri.parse(urlGetSanghaPreritSansthaaForApp),
     headers: jHeaders,
-    body: json.encode({"AppUserID": userDetails["userID"], "PraantID": praantID, "SanghaPreritSansthaaID": sanghaPreritSansthaaID, "SanghaPreritSansthaaName": sanghaPreritSansthaaName}),
+    body: json.encode(_body),
   );
 
   var responseBody = json.decode(response.body);
 
+  log(json.encode(responseBody));
   return responseBody['SanghaPreritSansthaaList'];
 }
 
-Future<List<EventMaster>> getEventList({int? eventID, String? searchPattern, String? fromDate, String? toDate, bool isfuture = true}) async {
+Future<List<EventMaster>> getEventList({int? eventID, String? searchPattern, String? fromDate, String? toDate, int isfuture = 1}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return [];
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  print({"EventID": eventID, "AppUserID": userDetails['userID'], "EventName": searchPattern, "FromDateStr": fromDate, "ToDateStr": toDate, "isfuture": isfuture});
+  final _body = {"EventID": eventID, "AppUserID": userDetails['userID'], "EventName": searchPattern, "FromDateStr": fromDate, "ToDateStr": toDate, "isfuture": isfuture};
+
+  print(_body);
   print(Uri.parse(urlGetEventListForApp));
 
   var response = await http.post(
     Uri.parse(urlGetEventListForApp),
     headers: jHeaders,
-    body: json.encode({"EventID": eventID, "AppUserID": userDetails['userID'], "EventName": searchPattern, "FromDateStr": fromDate, "ToDateStr": toDate}),
+    body: json.encode(_body),
   );
 
   log(response.body);
@@ -3994,14 +4010,66 @@ Future<List<EventMaster>> getEventList({int? eventID, String? searchPattern, Str
   final Map<String, dynamic> data = jsonDecode(response.body);
 
   EvenMasterRespModel model = EvenMasterRespModel.fromJson(data);
-  log("YuvaSangamReportData >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+  log("EvenMasterRespModel >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
 
   return model.listEventMaster ?? []; // ✅ return karna zaroori hai
 }
 
+Future<EvenAttendanceRespModel?> getEventStatusForAllSwayamsevakData(Map<String, dynamic> inputJson) async {
+  bool? connected = await isInternetConnected();
+  if (connected != true) {
+    return null;
+  }
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  log("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+  log(urlGetEventStatusForAllSwayamsevak);
+
+  var response = await http.post(
+    Uri.parse(urlGetEventStatusForAllSwayamsevak),
+    headers: jHeaders,
+    body: jsonEncode(inputJson),
+  );
+
+  log(response.body);
+
+  final Map<String, dynamic> data = jsonDecode(response.body);
+
+  EvenAttendanceRespModel model = EvenAttendanceRespModel.fromJson(data);
+  log("EvenAttendanceRespModel >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+
+  return model; // ✅ return karna zaroori hai
+}
+
+Future<bool> changeEventStatusForSwayamsevakData(Map<String, dynamic> inputJson) async {
+  bool? connected = await isInternetConnected();
+  if (connected != true) {
+    return false;
+  }
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  log("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+  log(urlChangeEventStatusForSwayamsevak);
+
+  var response = await http.post(
+    Uri.parse(urlChangeEventStatusForSwayamsevak),
+    headers: jHeaders,
+    body: jsonEncode(inputJson),
+  );
+
+  log(response.body);
+
+  final Map<String, dynamic> data = jsonDecode(response.body);
+
+  // EvenMasterRespModel model = EvenMasterRespModel.fromJson(data);
+  // log("EvenMasterRespModel >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+
+  return data["Status"] == "200" || data["Status"] == "Success"; // ✅ return karna zaroori hai
+}
+
 Future<String> saveEventDetails(String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return "";
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4016,7 +4084,7 @@ Future<String> saveEventDetails(String inputJson) async {
 
 Future<List<dynamic>> getCalenderEventsList(String? swayamsevakCalendarID, String month, String year) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return [];
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4034,7 +4102,7 @@ Future<List<dynamic>> getCalenderEventsList(String? swayamsevakCalendarID, Strin
 
 Future<List<dynamic>> getEventMembers(var eventID, var swayamSevakID, var apekshitOrSharing) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return [];
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4054,7 +4122,7 @@ Future<void> deleteUserToken() async {
   print("started");
   try {
     bool? connected = await isInternetConnected();
-    if (connected == false) {
+    if (connected != true) {
       return;
     }
     Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4071,7 +4139,7 @@ Future<void> deleteUserToken() async {
 
 Future<String> saveEventMembers(String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return "";
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4090,7 +4158,7 @@ Future<String> saveEventMembers(String inputJson) async {
 
 Future<String> deleteEventMembers(String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return "";
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4104,7 +4172,7 @@ Future<String> deleteEventMembers(String inputJson) async {
 
 Future<String> changeEventOwnerForApp(String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return "";
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4118,7 +4186,7 @@ Future<String> changeEventOwnerForApp(String inputJson) async {
 
 Future<String> saveEventVruttaForApp(String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return "";
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4132,7 +4200,7 @@ Future<String> saveEventVruttaForApp(String inputJson) async {
 
 Future<List<dynamic>> getEventVruttaList(var eventID, var eventVruttaID) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return [];
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4146,7 +4214,7 @@ Future<List<dynamic>> getEventVruttaList(var eventID, var eventVruttaID) async {
 
 Future<String> deleteEventVrutta(String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return "";
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4160,7 +4228,7 @@ Future<String> deleteEventVrutta(String inputJson) async {
 
 Future<dynamic> getAnnualBaithakEkatritVruttaForApp(String strInput) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4179,7 +4247,7 @@ Future<SankalitBaithakVruttaDataNamesModel?> getSankalitBaithakVruttaDataNames(S
 
   try {
     bool? connected = await isInternetConnected();
-    if (connected == false) {
+    if (connected != true) {
       return null;
     }
     print(strInput);
@@ -4213,7 +4281,7 @@ Future<SankalitBaithakVruttaDataNamesModel?> getSankalitBaithakVruttaDataNames(S
 
 Future<TulnatmakBaithakResponse?> getTulnatmakBaithakEkatritVruttaForApp(String strInput) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4240,7 +4308,7 @@ Future<TulnatmakBaithakResponse?> getTulnatmakBaithakEkatritVruttaForApp(String 
 
 Future<GetVastiDataByIdModel?> getVastidataByIDForApp(context, String strInput) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   showLoaderDialog(context);
@@ -4272,7 +4340,7 @@ Future<GetVastiDataByIdModel?> getVastidataByIDForApp(context, String strInput) 
 
 Future<dynamic> getAnnualBaithakNagarVruttaForApp(String strInput) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4287,7 +4355,7 @@ Future<dynamic> getAnnualBaithakNagarVruttaForApp(String strInput) async {
 
 Future<NIrikshanBiathakVruttaModel?> getNirikshanAnnualBaithakNagarVruttaForApp(String strInput) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4309,7 +4377,7 @@ Future<NIrikshanBiathakVruttaModel?> getNirikshanAnnualBaithakNagarVruttaForApp(
 
 Future<String> saveAnnualBaithakNagarVruttaForApp(String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return "";
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4323,7 +4391,7 @@ Future<String> saveAnnualBaithakNagarVruttaForApp(String inputJson) async {
 
 Future<List<dynamic>> getAnnualBaithakShaakhaaVruttaForApp(String strInput) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return [];
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4339,7 +4407,7 @@ Future<List<dynamic>> getAnnualBaithakShaakhaaVruttaForApp(String strInput) asyn
 
 Future<List<dynamic>> getAnnualBaithakShaakhaaVruttaForAppById(String strInput) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return [];
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4355,7 +4423,7 @@ Future<List<dynamic>> getAnnualBaithakShaakhaaVruttaForAppById(String strInput) 
 
 Future<String> saveAnnualBaithakShaakhaaVruttaForApp(String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return '';
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4370,7 +4438,7 @@ Future<String> saveAnnualBaithakShaakhaaVruttaForApp(String inputJson) async {
 
 Future<List<dynamic>> getAnnualBaithakShaakhaaViheenForApp(String strInput) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return [];
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4385,7 +4453,7 @@ Future<List<dynamic>> getAnnualBaithakShaakhaaViheenForApp(String strInput) asyn
 
 Future<String> saveAnnualBaithakShaakhaaViheenForApp(String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return '';
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4399,7 +4467,7 @@ Future<String> saveAnnualBaithakShaakhaaViheenForApp(String inputJson) async {
 
 Future<List<dynamic>> getAnnualBaithakMukhyaMaargForApp(String strInput) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return [];
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4414,7 +4482,7 @@ Future<List<dynamic>> getAnnualBaithakMukhyaMaargForApp(String strInput) async {
 
 Future<String> saveAnnualBaithakMukhyaMaargForApp(String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return "";
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4428,7 +4496,7 @@ Future<String> saveAnnualBaithakMukhyaMaargForApp(String inputJson) async {
 
 Future<List<dynamic>> getAnnualBaithakGraamVikasForApp(String strInput) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return [];
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4443,7 +4511,7 @@ Future<List<dynamic>> getAnnualBaithakGraamVikasForApp(String strInput) async {
 
 Future<String> saveAnnualBaithakGraamVikasForApp(String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return "";
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4457,7 +4525,7 @@ Future<String> saveAnnualBaithakGraamVikasForApp(String inputJson) async {
 
 Future<List<dynamic>> getShaakhaaVruttaListForApp(var shaakhaaID, var shaakhaaVruttaID) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return [];
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4479,7 +4547,7 @@ Future<List<dynamic>> getShaakhaaVruttaListForApp(var shaakhaaID, var shaakhaaVr
 
 Future<({List<dynamic> vruttaList, List<dynamic> data})?> getShaakhaaVruttaDetailsByDateForApp(var shaakhaaID, var vruttadate) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4502,7 +4570,7 @@ Future<({List<dynamic> vruttaList, List<dynamic> data})?> getShaakhaaVruttaDetai
 
 Future<String> saveShaakhaaVruttaForApp(String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return "";
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4517,7 +4585,7 @@ Future<String> saveShaakhaaVruttaForApp(String inputJson) async {
 
 Future<GetgeounitNameModel?> getlevelUpdatedata(String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4538,7 +4606,7 @@ Future<GetgeounitNameModel?> getlevelUpdatedata(String inputJson) async {
 
 Future<VastiUpDataListModel?> getVastiUpdata(String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4559,7 +4627,7 @@ Future<VastiUpDataListModel?> getVastiUpdata(String inputJson) async {
 
 Future<void> savelevelUpdatedata(context, String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return;
   }
   showLoaderDialog(context);
@@ -4582,7 +4650,7 @@ Future<void> savelevelUpdatedata(context, String inputJson) async {
 
 Future<VastiUpDataListModel?> saveUpNagarUpkhandadata(context, String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   showLoaderDialog(context);
@@ -4608,7 +4676,7 @@ Future<VastiUpDataListModel?> saveUpNagarUpkhandadata(context, String inputJson)
 
 Future<String> deleteShaakhaaVrutta(String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return "";
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4621,7 +4689,7 @@ Future<String> deleteShaakhaaVrutta(String inputJson) async {
 
 Future<String> _getDirectoryPathFun(String fileName) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return '';
   }
   Directory? dir;
@@ -4778,7 +4846,7 @@ void convertToCsv(List<List<dynamic>> rows, String fileName, BuildContext contex
 
 Future<String> saveShaakhaaCoordinatesForApp(String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return "";
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4792,7 +4860,7 @@ Future<String> saveShaakhaaCoordinatesForApp(String inputJson) async {
 
 Future<List<dynamic>> getUniversity(var universityID, String? strInput, bool isForDistanceLearning) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return [];
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4810,7 +4878,7 @@ Future<List<dynamic>> getUniversity(var universityID, String? strInput, bool isF
 
 Future<List<dynamic>> getCollege(var educationInstitutionID, var universityID, String? strInput) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return [];
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4828,7 +4896,7 @@ Future<List<dynamic>> getCollege(var educationInstitutionID, var universityID, S
 
 Future<List<dynamic>> getGetEducationProgramsForApp(var educationProgramID, var universityID, String? strInput) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return [];
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4843,7 +4911,7 @@ Future<List<dynamic>> getGetEducationProgramsForApp(var educationProgramID, var 
 
 Future<List<dynamic>> getEducationCoursesForApp(var educationCourseID, var universityID, String? strInput) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return [];
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4860,7 +4928,7 @@ Future<List<dynamic>> getEducationCoursesForApp(var educationCourseID, var unive
 
 Future<List<dynamic>> getDistrictForApp(String praantID, String? stateID, String? districtID) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return [];
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4881,7 +4949,7 @@ Future<List<dynamic>> getDistrictForApp(String praantID, String? stateID, String
 
 Future<dynamic> getSwayamsevakOtherInfoForApp(String swayamsevakID) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return [];
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4910,7 +4978,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitMasterForApp(
   String parentVastiID,
 ) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return [];
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4974,7 +5042,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitMasterForApp(
 
 Future<List<dynamic>> getShaakhaaSewaVastiLinksForApp(var shaakhaaID) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return [];
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4988,7 +5056,7 @@ Future<List<dynamic>> getShaakhaaSewaVastiLinksForApp(var shaakhaaID) async {
 
 Future<String> saveShaakhaaSewaVastiLinkForApp(String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return "";
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -5026,7 +5094,7 @@ void showLoaderDialog(BuildContext context) {
 
 Future<String> vastiSarvekshanStep1FormSubmit(context, String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return "";
   }
   showLoaderDialog(context);
@@ -5056,7 +5124,7 @@ Future<String> vastiSarvekshanStep1FormSubmit(context, String inputJson) async {
 
 Future<String> vastiSarvekshanStep2FormSubmit(context, String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return "";
   }
   showLoaderDialog(context);
@@ -5088,7 +5156,7 @@ Future<String> vastiSarvekshanStep2FormSubmit(context, String inputJson) async {
 
 Future<String> vastiSarvekshanStep3FormSubmit(context, String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return '';
   }
   showLoaderDialog(context);
@@ -5126,7 +5194,7 @@ Future<String> mandalSarvekshanStep1FormSubmit(String inputJson) async {
 
   try {
     bool? connected = await isInternetConnected();
-    if (connected == false) {
+    if (connected != true) {
       return "";
     }
     var response = await http.post(Uri.parse(mandalSarvekshanstep1Submit), headers: jHeaders, body: inputJson);
@@ -5151,7 +5219,7 @@ Future<String> mandalSarvekshanStep3FormSubmit(String inputJson) async {
 
   try {
     bool? connected = await isInternetConnected();
-    if (connected == false) {
+    if (connected != true) {
       return "";
     }
     var response = await http.post(Uri.parse(mandalSarvekshanstep3Submit), headers: jHeaders, body: inputJson);
@@ -5173,7 +5241,7 @@ Future<String> mandalSarvekshanStep3FormSubmit(String inputJson) async {
 
 Future<List<dynamic>> getJoinRSSGridByStatus(int geoUnitID, int statusID, String searchString, String fromDate, String toDate) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return [];
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -5191,7 +5259,7 @@ Future<List<dynamic>> getJoinRSSGridByStatus(int geoUnitID, int statusID, String
 
 Future<List<dynamic>> getSewaVastiForApp(String strInputBody) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return [];
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -5207,7 +5275,7 @@ Future<List<dynamic>> getSewaVastiForApp(String strInputBody) async {
 
 Future<String> saveSewaVastiForApp(String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return "";
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -5222,7 +5290,7 @@ Future<String> saveSewaVastiForApp(String inputJson) async {
 
 Future<String> deleteSewaVastiForApp(String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return "";
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -5247,7 +5315,7 @@ void openUserManual(String strSection) async {
 
 Future<List<dynamic>> getSwayamsevakTransferList(String strInput) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return [];
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -5265,7 +5333,7 @@ Future<List<dynamic>> getSwayamsevakTransferList(String strInput) async {
 
 Future<dynamic> getSwayamsevakTransferByID(String swayamsevakTransferID, String swayamsevakID) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -5286,7 +5354,7 @@ Future<dynamic> getSwayamsevakTransferByID(String swayamsevakTransferID, String 
 
 Future<String> saveSwayamsevakTransferDetails(String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return "";
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -5303,7 +5371,7 @@ Future<String> saveSwayamsevakTransferDetails(String inputJson) async {
 
 Future<String> deleteSwayamsevakTransferForApp(String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return "";
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -5317,7 +5385,7 @@ Future<String> deleteSwayamsevakTransferForApp(String inputJson) async {
 
 Future<String> deleteVisheshVyaktiForApp(String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return "";
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -5330,7 +5398,7 @@ Future<String> deleteVisheshVyaktiForApp(String inputJson) async {
 
 Future<String> deleteSahbhagiKaryakarta(String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return "";
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -5345,7 +5413,7 @@ Future<String> deleteSahbhagiKaryakarta(String inputJson) async {
 
 Future<String> deleteSwayamsevakDataForApp(String inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return "";
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -5359,7 +5427,7 @@ Future<String> deleteSwayamsevakDataForApp(String inputJson) async {
 
 Future<List<dynamic>> getNidhiSankalanVruttaForApp(String strInput) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return [];
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -5371,7 +5439,7 @@ Future<List<dynamic>> getNidhiSankalanVruttaForApp(String strInput) async {
 
 Future<List<dynamic>> getShaakhaaToliSadasyaForApp(String strInput) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return [];
   }
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -5383,7 +5451,7 @@ Future<List<dynamic>> getShaakhaaToliSadasyaForApp(String strInput) async {
 Future<HinduSanmelanModel?> getHinduSanmelanFormData(context, {required String userID, required String? targetGeoUnitID}) async {
   try {
     bool? connected = await isInternetConnected();
-    if (connected == false) {
+    if (connected != true) {
       return null;
     }
     showLoaderDialog(context);
@@ -5427,7 +5495,7 @@ Future<HinduSanmelanModel?> getHinduSanmelanFormData(context, {required String u
 
 Future<void> saveHinduSanmelanFormData(BuildContext context, Map<String, dynamic> inputJson, bool showLoader) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return;
   }
   if (showLoader) showLoaderDialog(context);
@@ -5463,7 +5531,7 @@ Future<void> saveHinduSanmelanFormData(BuildContext context, Map<String, dynamic
 Future<bool> saveSajjanAnyaFromSearch(BuildContext context, Map<String, dynamic> inputJson, {bool showLoader = true}) async {
   try {
     bool? connected = await isInternetConnected();
-    if (connected == false) {
+    if (connected != true) {
       return false;
     }
     if (showLoader) showLoaderDialog(context);
@@ -5505,7 +5573,7 @@ Future<bool> saveSajjanAnyaFromSearch(BuildContext context, Map<String, dynamic>
 
 Future<HinduSanmelanModel?> searchSajjanAnyaForVisheshMukhyaFun(Map<String, dynamic> inputJson, {BuildContext? context}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   if (context != null) showLoaderDialog(context);
@@ -5538,7 +5606,7 @@ Future<HinduSanmelanModel?> searchSajjanAnyaForVisheshMukhyaFun(Map<String, dyna
 
 Future<HinduSanmelanReportModel?> getHinduSanmelanReportData(BuildContext context, Map<String, dynamic> inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   showLoaderDialog(context);
@@ -5569,7 +5637,7 @@ Future<HinduSanmelanReportModel?> getHinduSanmelanReportData(BuildContext contex
 
 Future<VastiSarvekshanRespModel?> getVastiSarvekshanDataDump(BuildContext context, Map<String, dynamic> inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   showLoaderDialog(context);
@@ -5602,7 +5670,7 @@ Future<VastiSarvekshanRespModel?> getVastiSarvekshanDataDump(BuildContext contex
 
 Future<List<GeoUnitMasterBAL>?> getGeoUnitMasterDataForVistar(Map<String, dynamic> inputJson, {BuildContext? context}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) return null;
+  if (connected != true) return null;
 
   if (context != null) showLoaderDialog(context);
   log(urlGetGeoUnitForVistarApi);
@@ -5631,7 +5699,7 @@ Future<List<GeoUnitMasterBAL>?> getGeoUnitMasterDataForVistar(Map<String, dynami
 
 Future<String?> saveHinduSanmelanImageData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   if (showLoader) showLoaderDialog(context);
@@ -5661,7 +5729,7 @@ Future<String?> saveHinduSanmelanImageData({required BuildContext context, requi
 
 Future<bool> deleteHinduSanmelanImageData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return false;
   }
   if (showLoader) showLoaderDialog(context);
@@ -5694,7 +5762,7 @@ Future<bool> deleteHinduSanmelanImageData({required BuildContext context, requir
 
 Future<List<SadbhavKendraMasterdata>?> GetSadbhavKendraListData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   if (showLoader) showLoaderDialog(context);
@@ -5726,7 +5794,7 @@ Future<List<SadbhavKendraMasterdata>?> GetSadbhavKendraListData({required BuildC
 
 Future<SadbhavKendraRespModel?> GetAllSadbhavBaithakListData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   if (showLoader) showLoaderDialog(context);
@@ -5761,7 +5829,7 @@ Future<SadbhavKendraRespModel?> GetAllSadbhavBaithakListData({required BuildCont
 
 Future<SadbhavKendraRespModel?> GetSadbhavBaithakListByKendraIdData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   if (showLoader) showLoaderDialog(context);
@@ -5796,7 +5864,7 @@ Future<SadbhavKendraRespModel?> GetSadbhavBaithakListByKendraIdData({required Bu
 
 Future<SadbhavKendraRespModel?> CheckKendraExistsData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   if (showLoader) showLoaderDialog(context);
@@ -5829,7 +5897,7 @@ Future<SadbhavKendraRespModel?> CheckKendraExistsData({required BuildContext con
 
 Future<bool> CreateUpdateSadbhavKendraData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return false;
   }
   if (showLoader) showLoaderDialog(context);
@@ -5868,7 +5936,7 @@ Future<bool> CreateUpdateSadbhavKendraData({required BuildContext context, requi
 
 Future<bool> CreateBaithakData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return false;
   }
   if (showLoader) showLoaderDialog(context);
@@ -5907,7 +5975,7 @@ Future<bool> CreateBaithakData({required BuildContext context, required Map<Stri
 
 Future<bool> DeleteSadbhavBaithakData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return false;
   }
   if (showLoader) showLoaderDialog(context);
@@ -5943,7 +6011,7 @@ Future<bool> DeleteSadbhavBaithakData({required BuildContext context, required M
 
 Future<List<ReportData>?> SadbhavBaithakReportData(BuildContext context, Map<String, dynamic> inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   showLoaderDialog(context);
@@ -5978,7 +6046,7 @@ Future<List<ReportData>?> SadbhavBaithakReportData(BuildContext context, Map<Str
 
 Future<SadbhavBaithakVruttaRespModel?> GetSadbhavBaithakVruttaData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   if (showLoader) showLoaderDialog(context);
@@ -6015,7 +6083,7 @@ Future<SadbhavBaithakVruttaRespModel?> GetSadbhavBaithakVruttaData({required Bui
 
 Future<List<Bhaitakdata>?> SaveSadbhavBaithakVruttaData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   if (showLoader) showLoaderDialog(context);
@@ -6055,7 +6123,7 @@ Future<List<Bhaitakdata>?> SaveSadbhavBaithakVruttaData({required BuildContext c
 
 Future<List<SadbhavKendraMasterdata>?> GetPramukhJanListData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   if (showLoader) showLoaderDialog(context);
@@ -6087,7 +6155,7 @@ Future<List<SadbhavKendraMasterdata>?> GetPramukhJanListData({required BuildCont
 
 Future<SadbhavKendraRespModel?> GetAllPramukhJanKaryakramListData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   if (showLoader) showLoaderDialog(context);
@@ -6122,7 +6190,7 @@ Future<SadbhavKendraRespModel?> GetAllPramukhJanKaryakramListData({required Buil
 
 Future<SadbhavKendraRespModel?> GetPramukhJanListByIdData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   if (showLoader) showLoaderDialog(context);
@@ -6157,7 +6225,7 @@ Future<SadbhavKendraRespModel?> GetPramukhJanListByIdData({required BuildContext
 
 Future<SadbhavKendraRespModel?> CheckPramukhJanExistsData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   if (showLoader) showLoaderDialog(context);
@@ -6190,7 +6258,7 @@ Future<SadbhavKendraRespModel?> CheckPramukhJanExistsData({required BuildContext
 
 Future<bool> CreateUpdatePramukhJanData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return false;
   }
   if (showLoader) showLoaderDialog(context);
@@ -6229,7 +6297,7 @@ Future<bool> CreateUpdatePramukhJanData({required BuildContext context, required
 
 Future<bool> CreatePramukhJanData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return false;
   }
   if (showLoader) showLoaderDialog(context);
@@ -6268,7 +6336,7 @@ Future<bool> CreatePramukhJanData({required BuildContext context, required Map<S
 
 Future<bool> DeletePramukhJanData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return false;
   }
   if (showLoader) showLoaderDialog(context);
@@ -6304,7 +6372,7 @@ Future<bool> DeletePramukhJanData({required BuildContext context, required Map<S
 
 Future<List<ReportData>?> PramukhJanReportData(BuildContext context, Map<String, dynamic> inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   showLoaderDialog(context);
@@ -6339,7 +6407,7 @@ Future<List<ReportData>?> PramukhJanReportData(BuildContext context, Map<String,
 
 Future<SadbhavBaithakVruttaRespModel?> GetPramukhJanVruttaData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   if (showLoader) showLoaderDialog(context);
@@ -6376,7 +6444,7 @@ Future<SadbhavBaithakVruttaRespModel?> GetPramukhJanVruttaData({required BuildCo
 
 Future<List<Bhaitakdata>?> SavePramukhJanVruttaData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   if (showLoader) showLoaderDialog(context);
@@ -6416,7 +6484,7 @@ Future<List<Bhaitakdata>?> SavePramukhJanVruttaData({required BuildContext conte
 
 Future<List<YuvaSangamData>?> GetYuvaSangamListData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   if (showLoader) showLoaderDialog(context);
@@ -6448,7 +6516,7 @@ Future<List<YuvaSangamData>?> GetYuvaSangamListData({required BuildContext conte
 
 Future<YuvaVruttadata?> GetYuvaSangamVruttaData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   if (showLoader) showLoaderDialog(context);
@@ -6485,7 +6553,7 @@ Future<YuvaVruttadata?> GetYuvaSangamVruttaData({required BuildContext context, 
 
 Future<bool> DeleteYuvaSangamData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return false;
   }
   if (showLoader) showLoaderDialog(context);
@@ -6521,7 +6589,7 @@ Future<bool> DeleteYuvaSangamData({required BuildContext context, required Map<S
 
 Future<List<Bhaitakdata>?> SaveYuvaSangamVruttaData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   if (showLoader) showLoaderDialog(context);
@@ -6562,7 +6630,7 @@ Future<List<Bhaitakdata>?> SaveYuvaSangamVruttaData({required BuildContext conte
 
 Future<bool> CreateYuvaSangamData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return false;
   }
   if (showLoader) showLoaderDialog(context);
@@ -6601,7 +6669,7 @@ Future<bool> CreateYuvaSangamData({required BuildContext context, required Map<S
 
 Future<bool> UpdateYuvaSangamDateData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return false;
   }
   if (showLoader) showLoaderDialog(context);
@@ -6640,7 +6708,7 @@ Future<bool> UpdateYuvaSangamDateData({required BuildContext context, required M
 
 Future<List<Yuvrpt>?> YuvaSangamReportData(BuildContext context, Map<String, dynamic> inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   showLoaderDialog(context);
@@ -6675,7 +6743,7 @@ Future<List<Yuvrpt>?> YuvaSangamReportData(BuildContext context, Map<String, dyn
 
 Future<List<GeoUnitMasterBAL>?> getGeoShaakhaaForReportData(BuildContext context, Map<String, dynamic> inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   showLoaderDialog(context);
@@ -6744,7 +6812,7 @@ Future<List<GeoUnitMasterBAL>?> getGeoShaakhaaForReportData(BuildContext context
 
 Future<ShaakhaaVistaarReport?> getShaakhaaSaptahReportData(BuildContext context, Map<String, dynamic> inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   showLoaderDialog(context);
@@ -6779,7 +6847,7 @@ Future<ShaakhaaVistaarReport?> getShaakhaaSaptahReportData(BuildContext context,
 
 Future<List<ShaakhaaList>?> getShaakhaaSaptahListData(BuildContext context, Map<String, dynamic> inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   showLoaderDialog(context);
@@ -6814,7 +6882,7 @@ Future<List<ShaakhaaList>?> getShaakhaaSaptahListData(BuildContext context, Map<
 
 Future<VistaarVrutta?> getShaakhaaSaptahVruttaData(BuildContext context, Map<String, dynamic> inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   showLoaderDialog(context);
@@ -6849,7 +6917,7 @@ Future<VistaarVrutta?> getShaakhaaSaptahVruttaData(BuildContext context, Map<Str
 
 Future<String?> saveShaakhaaSaptahVruttaData(BuildContext context, Map<String, dynamic> inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   showLoaderDialog(context);
@@ -6883,7 +6951,7 @@ Future<String?> saveShaakhaaSaptahVruttaData(BuildContext context, Map<String, d
 
 Future<ShakhaaVistarDetail?> getShaakhaaSaptahByIdData(BuildContext context, String? pkId, String? userid) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   showLoaderDialog(context);
@@ -6918,7 +6986,7 @@ Future<ShakhaaVistarDetail?> getShaakhaaSaptahByIdData(BuildContext context, Str
 
 Future<String?> addNewShaakhaaVistarData(BuildContext context, Map<String, dynamic> inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) {
+  if (connected != true) {
     return null;
   }
   // showLoaderDialog(context);
@@ -6958,7 +7026,7 @@ Future<String?> addNewShaakhaaVistarData(BuildContext context, Map<String, dynam
 //Main Shakha/Milan Vrutta Report Apis
 Future<ShakhaaDailyWeeklyResponse?> fetchShaakhaaDaily(Map<String, dynamic> inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) return null;
+  if (connected != true) return null;
 
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
@@ -6983,7 +7051,7 @@ Future<ShakhaaDailyWeeklyResponse?> fetchShaakhaaDaily(Map<String, dynamic> inpu
 
 Future<ShakhaaDailyWeeklyResponse?> fetchShaakhaaWeekly(Map<String, dynamic> inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) return null;
+  if (connected != true) return null;
 
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
@@ -7008,7 +7076,7 @@ Future<ShakhaaDailyWeeklyResponse?> fetchShaakhaaWeekly(Map<String, dynamic> inp
 
 Future<ShaakhaaMonthlyResponse?> fetchShaakhaaMonthly(Map<String, dynamic> inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) return null;
+  if (connected != true) return null;
 
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
@@ -7033,7 +7101,7 @@ Future<ShaakhaaMonthlyResponse?> fetchShaakhaaMonthly(Map<String, dynamic> input
 
 Future<ShaakhaaMultiMonthlyResponse?> fetchShaakhaaMultiMonthly(Map<String, dynamic> inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) return null;
+  if (connected != true) return null;
 
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
@@ -7058,7 +7126,7 @@ Future<ShaakhaaMultiMonthlyResponse?> fetchShaakhaaMultiMonthly(Map<String, dyna
 
 Future<AllDailyResponse?> fetchAllDaily(Map<String, dynamic> inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) return null;
+  if (connected != true) return null;
 
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
@@ -7083,7 +7151,7 @@ Future<AllDailyResponse?> fetchAllDaily(Map<String, dynamic> inputJson) async {
 
 Future<AllWeeklyResponse?> fetchAllWeekly(Map<String, dynamic> inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) return null;
+  if (connected != true) return null;
 
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
@@ -7108,7 +7176,7 @@ Future<AllWeeklyResponse?> fetchAllWeekly(Map<String, dynamic> inputJson) async 
 
 Future<AllMonthlyResponse?> fetchAllMonthly(Map<String, dynamic> inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) return null;
+  if (connected != true) return null;
 
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
@@ -7133,7 +7201,7 @@ Future<AllMonthlyResponse?> fetchAllMonthly(Map<String, dynamic> inputJson) asyn
 
 Future<AllMultiMonthlyResponse?> fetchAllMultiMonthly(Map<String, dynamic> inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) return null;
+  if (connected != true) return null;
 
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
@@ -7158,7 +7226,7 @@ Future<AllMultiMonthlyResponse?> fetchAllMultiMonthly(Map<String, dynamic> input
 
 Future<KaryakramResponse?> fetchKaryakram(Map<String, dynamic> inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) return null;
+  if (connected != true) return null;
 
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
@@ -7183,7 +7251,7 @@ Future<KaryakramResponse?> fetchKaryakram(Map<String, dynamic> inputJson) async 
 
 Future<MylvlResponse?> fetchMyShakhaaRanking(Map<String, dynamic> inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) return null;
+  if (connected != true) return null;
 
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
@@ -7208,7 +7276,7 @@ Future<MylvlResponse?> fetchMyShakhaaRanking(Map<String, dynamic> inputJson) asy
 
 Future<TulnatmakResponse?> fetchTulnatmak(Map<String, dynamic> inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) return null;
+  if (connected != true) return null;
 
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
@@ -7233,7 +7301,7 @@ Future<TulnatmakResponse?> fetchTulnatmak(Map<String, dynamic> inputJson) async 
 
 Future<List<DataDetails>?> refreshHomeScreenNamesData(Map<String, dynamic> inputJson, {BuildContext? context}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) return null;
+  if (connected != true) return null;
   if (context != null) showLoaderDialog(context);
 
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -7261,7 +7329,7 @@ Future<List<DataDetails>?> refreshHomeScreenNamesData(Map<String, dynamic> input
 
 Future<List<DataDetails>?> homeShaakhaaReportNamesData(Map<String, dynamic> inputJson, {BuildContext? context}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) return null;
+  if (connected != true) return null;
   if (context != null) showLoaderDialog(context);
 
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -7289,7 +7357,7 @@ Future<List<DataDetails>?> homeShaakhaaReportNamesData(Map<String, dynamic> inpu
 
 Future<List<SwayamsevakNewData>?> searchSwayamsevakNewData(Map<String, dynamic> inputJson, {BuildContext? context}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) return null;
+  if (connected != true) return null;
   if (context != null) showLoaderDialog(context);
 
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -7317,7 +7385,7 @@ Future<List<SwayamsevakNewData>?> searchSwayamsevakNewData(Map<String, dynamic> 
 
 Future<BulkExcelSajjanAnyaRespModel?> bulkExcelUploadSajjanAnyaData(Map<String, dynamic> inputJson, {BuildContext? context}) async {
   bool? connected = await isInternetConnected();
-  if (connected == false) return null;
+  if (connected != true) return null;
   if (context != null) showLoaderDialog(context);
 
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};

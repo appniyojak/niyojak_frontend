@@ -53,6 +53,7 @@ class EventMaster {
   int? presentCnt;
   int? absentCnt;
   int? pStatus;
+  int? isfuture;
   String? reason;
 
   EventMaster(
@@ -81,6 +82,7 @@ class EventMaster {
       this.presentCnt,
       this.absentCnt,
       this.pStatus,
+      this.isfuture,
       this.reason});
 
   EventMaster.fromJson(Map<String, dynamic> json) {
@@ -109,6 +111,7 @@ class EventMaster {
     presentCnt = json['presentCnt'];
     absentCnt = json['absentCnt'];
     pStatus = json['pStatus'];
+    isfuture = json['isfuture'];
     reason = json['reason'];
   }
 
@@ -139,6 +142,7 @@ class EventMaster {
     data['presentCnt'] = this.presentCnt;
     data['absentCnt'] = this.absentCnt;
     data['pStatus'] = this.pStatus;
+    data['isfuture'] = this.isfuture;
     data['reason'] = this.reason;
     return data;
   }

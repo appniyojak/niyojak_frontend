@@ -18,8 +18,8 @@ class SearchEvent extends StatefulWidget {
 
 class _SearchEventState extends State<SearchEvent> with TickerProviderStateMixin {
   List<EventMaster> _eventList = [];
-  TabController? _tabController;
-  TabController? _tabController2;
+  late TabController _tabController;
+  late TabController _tabController2;
   bool _isSearching = false;
 
   final _searchController = TextEditingController();
@@ -64,16 +64,6 @@ class _SearchEventState extends State<SearchEvent> with TickerProviderStateMixin
   //   _eventList = _getEventList(-1, "get Nothing", null, null);
   // }
 
-  Future<List<EventMaster>> _getEventList(int? eventId, String? searchString, String? fromDate, String? toDate, bool isfuture) async {
-    bool isConnected = await Statics.isInternetConnected();
-    if (isConnected) {
-      return Statics.getEventList(eventID: eventId, searchPattern: _searchController.text, fromDate: fromDate, toDate: toDate, isfuture: isfuture);
-    } else {
-      Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));
-      return [];
-    }
-  }
-
   _pickFromDate() async {
     DateTime? date = await showDatePicker(
         context: context,
@@ -112,7 +102,7 @@ class _SearchEventState extends State<SearchEvent> with TickerProviderStateMixin
     });
   }
 
-  Future<void> _search({int? eventId, bool isfuture = true}) async {
+  Future<void> _search({int? eventId, int? isfuture}) async {
     _eventList = [];
     setState(() {
       _isSearching = true;
@@ -122,11 +112,23 @@ class _SearchEventState extends State<SearchEvent> with TickerProviderStateMixin
     var frmDate = _fromDate == null ? null : DateFormat('dd-MM-yyyy').format(_fromDate!);
     var toDate = _toDate == null ? null : DateFormat('dd-MM-yyyy').format(_toDate!);
 
-    final _list = await _getEventList(eventId == 0 ? null : eventId, searchString, frmDate, toDate, isfuture);
+    final _isFutureByDate = (_fromDate?.isAfter(DateTime.now()) ?? false) || (_toDate?.isAfter(DateTime.now()) ?? false);
+
+    final _isFuture = isfuture ?? (_fromDate == null && _toDate == null ? 1 : (_isFutureByDate ? 1 : 0));
+
+    final _list = await Statics.getEventList(
+      eventID: eventId == 0 ? null : eventId,
+      searchPattern: searchString,
+      fromDate: frmDate,
+      toDate: toDate,
+      isfuture: _isFuture,
+    );
+
     setState(() {
       _eventList!.addAll(_list);
     });
     _tabController!.animateTo(1);
+    if (_isFuture != 1) _tabController2!.animateTo(1);
 
     setState(() {
       _isSearching = false;
@@ -226,7 +228,7 @@ class _SearchEventState extends State<SearchEvent> with TickerProviderStateMixin
                           SizedBox(
                             width: Statics.getDeviceSize(context).width * 0.7,
                             child: TextField(
-                              enabled: false,
+                              readOnly: true,
                               controller: _fromDateCntrl,
                               decoration: InputDecoration(labelText: Statics.getLabel('FromDate')),
                               textInputAction: TextInputAction.done,
@@ -247,7 +249,7 @@ class _SearchEventState extends State<SearchEvent> with TickerProviderStateMixin
                           SizedBox(
                             width: Statics.getDeviceSize(context).width * 0.7,
                             child: TextField(
-                              enabled: false,
+                              readOnly: true,
                               controller: _toDateCntrl,
                               decoration: InputDecoration(labelText: Statics.getLabel('ToDate')),
                               textInputAction: TextInputAction.done,
@@ -313,38 +315,45 @@ class _SearchEventState extends State<SearchEvent> with TickerProviderStateMixin
                       controller: _tabController2,
                       indicatorColor: Colors.purple,
                       dividerColor: Colors.transparent,
-                      indicator: BoxDecoration(color: Colors.purple),
-                      indicatorSize: TabBarIndicatorSize.tab,
-                      onTap: (value) => _search(isfuture: value == 0),
+                      // indicator: BoxDecoration(color: Colors.purple),
+                      // indicatorSize: TabBarIndicatorSize.tab,
+                      unselectedLabelColor: Colors.black,
+                      labelColor: Colors.purple,
+                      onTap: (value) => _search(isfuture: value == 0 ? 1 : 0),
                       tabs: <Widget>[
                         Tab(
-                          child: Wrap(
-                            children: [
-                              Icon(FontAwesomeIcons.globe),
-                              SizedBox(width: 20),
-                              Text(
-                                Statics.getLabel("upcomingEventLabel"),
-                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                              ),
-                            ],
-                          ),
+                          text: Statics.getLabel("upcomingEventLabel"),
                         ),
                         Tab(
-                          child: Wrap(
-                            children: [
-                              Icon(Icons.event),
-                              SizedBox(width: 20),
-                              Text(
-                                Statics.getLabel("completedEventLabel"),
-                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                              ),
-                            ],
-                          ),
+                          text: Statics.getLabel("completedEventLabel"),
                         ),
                       ],
                     ),
                     Expanded(
-                      child: TabBarView(controller: _tabController2, children: [
+                      child: TabBarView(controller: _tabController2, physics: NeverScrollableScrollPhysics(), children: [
+                        _eventList == null
+                            ? Center(
+                                child: Text(
+                                'Server Error, Please Try Again Later',
+                                style: TextStyle(color: Colors.red),
+                              ))
+                            : _eventList!.isNotEmpty
+                                ? SingleChildScrollView(
+                                    padding: EdgeInsets.all(20),
+                                    child: Column(
+                                      spacing: 12,
+                                      children: _eventList!
+                                          .map((swItem) => EventCard(
+                                                swItem,
+                                                _search,
+                                                // key: ValueKey("${swItem.eventID}_${swItem.ownerSwayamsevakID}"),
+                                              ))
+                                          .toList(),
+                                    ),
+                                  )
+                                : Center(child: Text(Statics.getLabel('noDataFoundTryAnotherSearch'))),
+
+                        //2
                         _eventList == null
                             ? Center(
                                 child: Text(

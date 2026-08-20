@@ -67,6 +67,7 @@ import './screens/swayamsevak_module/swayamsevak_search.dart';
 import 'firebase_options.dart';
 import 'helpers/static_data.dart' as Statics;
 import 'providers/sadbhav_provider.dart';
+import 'screens/event_attendance_screen.dart';
 import 'screens/forget_password.dart';
 import 'screens/home_screen/home_screen.dart';
 import 'screens/shaakhaa_milan_module/edit_shaakhaa.dart';
@@ -248,6 +249,7 @@ class NiyojakAppState extends State<NiyojakApp> {
                 EditShaakhaaScreen.routeName: (ctx) => EditShaakhaaScreen(),
                 EditSoochiScreen.routeName: (ctx) => EditSoochiScreen(),
                 SearchEvent.routeName: (ctx) => SearchEvent(),
+                EventAttendanceStatusScreen.routeName: (ctx) => EventAttendanceStatusScreen(),
                 SearchSoochiScreen.routeName: (ctx) => SearchSoochiScreen(),
                 ChangePassword.routeName: (ctx) => ChangePassword(),
                 ProfileSettings.routeName: (ctx) => ProfileSettings(),
