@@ -29,7 +29,7 @@ class _NirikshanAnnualBaithakVruttaState extends State<NirikshanAnnualBaithakVru
   int? _baithakType;
   String _selectedNagarAndBaithak = '';
 
-  List<String> exportList = [];
+  // List<String> exportList = [];
   List<List<String>> donloadexportList = [];
 
   int? selectedViewOnly = 1;
@@ -333,8 +333,8 @@ class _NirikshanAnnualBaithakVruttaState extends State<NirikshanAnnualBaithakVru
                                       _baithakType = null;
                                       _baithakTypeValue = _selectedNagarAndBaithak = '';
                                       _isSearching = false;
-                                      exportList.clear();
-                                      donloadexportList.clear();
+                                      // exportList = [];
+                                      donloadexportList = [];
                                       fullDataSubmit = [];
                                       halfDataSubmit = [];
                                       noDataSubmit = [];

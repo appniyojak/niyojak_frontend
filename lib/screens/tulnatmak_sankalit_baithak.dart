@@ -76,7 +76,7 @@ class _TulnatmakBaithakEkatritVruttaState extends State<TulnatmakBaithakEkatritV
     DropdownMenuItem(value: 'sthan', child: Text("${Statics.getLabel('sthaan')}")),
   ];
   String? _mahAnyEkunManBasGram = '';
-  final List<DropdownMenuItem<String>> _mahAnyEkunManBasGramItems = [
+  List<DropdownMenuItem<String>> _mahAnyEkunManBasGramItems = [
     DropdownMenuItem(value: 'sakhayukta', child: Text("${Statics.getLabel('shaakhaaYukta')}")),
     DropdownMenuItem(value: 'saptahikmilanyukt', child: Text('साप्ताहिक मिलन युक्त')),
     DropdownMenuItem(value: 'kimandosakha', child: Text('किमान दो शाखा')),
@@ -858,7 +858,7 @@ class _TulnatmakBaithakEkatritVruttaState extends State<TulnatmakBaithakEkatritV
                                         _selectedsthansubpoint = "";
                                         _sthansubpoint = "";
 
-                                        _mahAnyEkunManBasGramItems.clear();
+                                        _mahAnyEkunManBasGramItems = [];
                                         _mahAnyEkunManBasGramItems.addAll([
                                           DropdownMenuItem(value: 'sakhayukta', child: Text("${Statics.getLabel('shaakhaaYukta')}")),
                                           DropdownMenuItem(value: 'saptahikmilanyukt', child: Text('साप्ताहिक मिलन युक्त')),

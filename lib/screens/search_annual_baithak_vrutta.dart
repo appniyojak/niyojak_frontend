@@ -45,7 +45,8 @@ class _SearchAnnualBaithakVruttaState extends State<SearchAnnualBaithakVrutta> {
   List<Widget>? _graamVikasHeaderRow;
   AnnualBaithakNagarVruttaBAL? _nagarVrutta;
   List<String> geoUnitNamesList = [];
-  List<String> exportList = [];
+
+  // List<String> exportList = [];
   List<List<String>> donloadexportList = [];
   int? selectedViewOnly = 1;
 
@@ -997,8 +998,8 @@ class _SearchAnnualBaithakVruttaState extends State<SearchAnnualBaithakVrutta> {
                             _baithakType = null;
                             _baithakTypeYear = _baithakTypeValue = _selectedNagarAndBaithak = '';
                             _isSearching = false;
-                            exportList.clear();
-                            donloadexportList.clear();
+                            // exportList = [];
+                            donloadexportList = [];
                             _lstShaakhaaVrutta = null;
                             _lstMukhyaMaarg = null;
                             _lstGraamVikas = null;
