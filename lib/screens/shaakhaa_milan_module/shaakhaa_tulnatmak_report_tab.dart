@@ -1503,7 +1503,6 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
                       text: "${s.y.toInt()}",
                       style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w800, color: color),
                     ),
-                    // if (i != spots.length - 1) const TextSpan(text: "\n"),
                   ],
                 );
               }).toList();
@@ -1512,12 +1511,24 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
         ),
         lineBarsData: List.generate(years.length, (i) {
           final yr = years[i];
-          final spots = List.generate(months.length, (j) {
-            final m = months[j];
-            final val = (series.values[yr]?[subcategory.key]?[m] ?? 0).toDouble();
-            return FlSpot(j.toDouble(), val);
-          });
+          final yearMonthMap = series.values[yr]?[subcategory.key];
           final color = _colorAt(i);
+
+          // Only add a spot for months that actually have a record — a real
+          // record can legitimately be 0 (e.g. Aug 2024 ShakhaCount1plus: 0),
+          // so we check containsKey rather than `?? 0`. Skipping a missing
+          // month's x position (instead of inserting 0 OR breaking into a
+          // new bar) makes the line connect straight across internal gaps
+          // (e.g. month 7 to month 9 when month 8 has no record), while never
+          // extending before the first or after the last real point.
+          final spots = <FlSpot>[];
+          for (int j = 0; j < months.length; j++) {
+            final m = months[j];
+            if (yearMonthMap != null && yearMonthMap.containsKey(m)) {
+              spots.add(FlSpot(j.toDouble(), yearMonthMap[m]!.toDouble()));
+            }
+          }
+
           return LineChartBarData(
             spots: spots,
             isCurved: true,

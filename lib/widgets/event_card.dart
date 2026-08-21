@@ -43,9 +43,9 @@ extension RsvpStatusVars on RsvpStatus {
 
 class EventCard extends StatefulWidget {
   final EventMaster eventItem;
-  final Function _search;
+  final void Function() search;
 
-  EventCard(this.eventItem, this._search);
+  EventCard(this.eventItem, this.search);
 
   @override
   State<EventCard> createState() => _EventCardState();
@@ -75,6 +75,17 @@ class _EventCardState extends State<EventCard> {
   bool? _isEditingRsvp;
 
   var _todaysDate = DateTime.parse(DateFormat('yyyy-MM-dd').format(DateTime.now()));
+
+  var _eventnameCtrl = TextEditingController();
+  DateTime? _fromDate, _toDate;
+  var _fromDateCntrl = TextEditingController();
+  var _toDateCntrl = TextEditingController();
+
+  TimeOfDay? _fromTime;
+  var _fromTimeCntrl = TextEditingController();
+
+  TimeOfDay? _toTime;
+  var _toTimeCntrl = TextEditingController();
 
   @override
   void dispose() {
@@ -146,12 +157,263 @@ class _EventCardState extends State<EventCard> {
     if (success) {
       Statics.showToast(Statics.getLabel('RsvpUpdateSuccess') ?? 'तुमचा प्रतिसाद नोंदवला गेला');
       if (mounted) setState(() => _isEditingRsvp = false);
-      widget._search();
+      widget.search();
     } else {
       Statics.showToast(Statics.getLabel('RsvpUpdateFailed') ?? 'प्रतिसाद नोंदवताना अडचण आली, पुन्हा प्रयत्न करा');
     }
     return success;
   }
+
+  /////////////////////////////////////////////
+  _pickFromDate() async {
+    DateTime? date = await showDatePicker(
+        context: context,
+        initialDate: _fromDate == null ? DateTime.now() : _fromDate!,
+        firstDate: DateTime((_fromDate == null ? DateTime.now().year : _fromDate!.year) - 80),
+        lastDate: DateTime((_fromDate == null ? DateTime.now().year : _fromDate!.year) + 80));
+
+    var _todaysDate = DateTime.parse(DateFormat('yyyy-MM-dd').format(DateTime.now()));
+    if (date != null && _todaysDate.isAfter(date)) {
+      Statics.showToast(Statics.getLabel('CanNotCreateEventInPast'));
+      return;
+    }
+
+    if (date != null) {
+      setState(() {
+        _fromDate = date;
+        _fromDateCntrl.text = DateFormat('dd-MMM-yyyy').format(date);
+        if (_toDate == null) {
+          _toDate = date;
+          _toDateCntrl.text = DateFormat('dd-MMM-yyyy').format(date);
+        }
+      });
+    }
+  }
+
+  _pickToDate() async {
+    DateTime? date = await showDatePicker(
+        context: context,
+        initialDate: _toDate == null ? DateTime.now() : _toDate!,
+        firstDate: DateTime((_toDate == null ? DateTime.now().year : _toDate!.year) - 80),
+        lastDate: DateTime((_toDate == null ? DateTime.now().year : _toDate!.year) + 80));
+
+    var _todaysDate = DateTime.parse(DateFormat('yyyy-MM-dd').format(DateTime.now()));
+    if (date != null && _todaysDate.isAfter(date)) {
+      Statics.showToast(Statics.getLabel('CanNotCreateEventInPast'));
+      return;
+    }
+    if (date != null && _fromDate!.isAfter(date)) {
+      Statics.showToast(Statics.getLabel('CanNotCreateEventInPast'));
+      return;
+    }
+
+    if (date != null) {
+      setState(() {
+        _toDate = date;
+        _toDateCntrl.text = DateFormat('dd-MMM-yyyy').format(date);
+      });
+    }
+  }
+
+  _pickFrmTime() async {
+    TimeOfDay? time = await showTimePicker(
+      context: context,
+      initialTime: _fromTime == null ? TimeOfDay.now() : _fromTime!,
+    );
+
+    if (time != null) {
+      setState(() {
+        _fromTime = time;
+        _fromTimeCntrl.text =
+            DateFormat("hh:mm").format(new DateFormat("yyyy-MM-dd hh:mm").parse("2021-02-01 " + time.hour.toString() + ":" + time.minute.toString())) + (time.period == DayPeriod.am ? " AM" : " PM");
+      });
+    }
+  }
+
+  _pickToTime() async {
+    TimeOfDay? time = await showTimePicker(
+      context: context,
+      initialTime: _toTime == null ? TimeOfDay.now() : _toTime!,
+    );
+
+    if (time != null) {
+      setState(() {
+        _toTime = time;
+        _toTimeCntrl.text =
+            DateFormat("hh:mm").format(new DateFormat("yyyy-MM-dd hh:mm").parse("2021-02-01 " + time.hour.toString() + ":" + time.minute.toString())) + (time.period == DayPeriod.am ? " AM" : " PM");
+      });
+    }
+  }
+
+  showDuplicateDialog() async {
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        return Dialog(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+            child: Column(
+              spacing: 12,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  Statics.getLabel("DuplicateEvent"),
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18, color: Colors.black),
+                ),
+                SizedBox(height: 10),
+                Row(
+                  children: [
+                    Expanded(
+                      child: AbsorbPointer(
+                        absorbing: true,
+                        child: TextFormField(
+                          controller: _fromDateCntrl,
+                          decoration: InputDecoration(labelText: Statics.getLabel('FromEventDate')),
+                          textInputAction: TextInputAction.done,
+                          validator: (value) {
+                            if (value!.isEmpty) return (Statics.getLabel('FromEventDateValidationMessage'));
+                            return null;
+                          },
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      color: Colors.purple,
+                      icon: FaIcon(FontAwesomeIcons.solidCalendarAlt),
+                      onPressed: _pickFromDate,
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: AbsorbPointer(
+                        absorbing: true,
+                        child: TextFormField(
+                          controller: _fromTimeCntrl,
+                          decoration: InputDecoration(labelText: Statics.getLabel('FromTime')),
+                          textInputAction: TextInputAction.done,
+                          validator: (value) {
+                            if (value!.isEmpty) return (Statics.getLabel('FromTimeValidationMessage'));
+                            return null;
+                          },
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      color: Colors.purple,
+                      icon: FaIcon(FontAwesomeIcons.clock),
+                      onPressed: _pickFrmTime,
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: AbsorbPointer(
+                        absorbing: true,
+                        child: TextFormField(
+                          controller: _toDateCntrl,
+                          decoration: InputDecoration(labelText: Statics.getLabel('ToEventDate')),
+                          textInputAction: TextInputAction.done,
+                          validator: (value) {
+                            if (value!.isEmpty) return (Statics.getLabel('ToEventDateValidationMessage'));
+                            return null;
+                          },
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      color: Colors.purple,
+                      icon: FaIcon(FontAwesomeIcons.solidCalendarAlt),
+                      onPressed: _pickToDate,
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: AbsorbPointer(
+                        absorbing: true,
+                        child: TextFormField(
+                          controller: _toTimeCntrl,
+                          decoration: InputDecoration(labelText: Statics.getLabel('ToTime')),
+                          textInputAction: TextInputAction.done,
+                          validator: (value) {
+                            if (value!.isEmpty) return (Statics.getLabel('ToTimeValidationMessage'));
+                            return null;
+                          },
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      color: Colors.purple,
+                      icon: FaIcon(FontAwesomeIcons.clock),
+                      onPressed: _pickToTime,
+                    ),
+                  ],
+                ),
+                SizedBox(height: 10),
+                MaterialButton(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 15,
+                    vertical: 8,
+                  ),
+                  color: Theme.of(context).primaryColor,
+                  textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+                  onPressed: () => _submitDuplicate(ctx),
+                  child: Text(
+                    Statics.getLabel('Submit'),
+                    style: TextStyle(fontSize: 25),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    ).then(
+      (value) => value == true ? widget.search() : null,
+    );
+  }
+
+  _submitDuplicate(BuildContext ctx) async {
+    if (_fromDate!.isAfter(_toDate!)) {
+      Statics.showErrorDialog(context, Statics.getLabel('ToDateCanNotBeBeforeFromDate'));
+      return;
+    }
+    var inputData = json.encode({
+      "EventID": widget.eventItem.eventID,
+      "FromDateStr": (_fromDate != null ? DateFormat('dd-MM-yyyy').format(_fromDate!) : null),
+      "ToDateStr": (_toDate != null ? DateFormat('dd-MM-yyyy').format(_toDate!) : null),
+      "FromTimeStr": (_fromTime != null
+          ? DateFormat("hh:mm").format(new DateFormat("yyyy-MM-dd hh:mm").parse("2021-02-01 " + _fromTime!.hour.toString() + ":" + _fromTime!.minute.toString())) +
+              (_fromTime!.period == DayPeriod.am ? " AM" : " PM")
+          : null),
+      "ToTimeStr": (_toTime != null
+          ? DateFormat("hh:mm").format(new DateFormat("yyyy-MM-dd hh:mm").parse("2021-02-01 " + _toTime!.hour.toString() + ":" + _toTime!.minute.toString())) +
+              (_toTime!.period == DayPeriod.am ? " AM" : " PM")
+          : null),
+      "ModifiedBy": Statics.userDetails["userID"]
+    });
+
+    var data = await Statics.saveDuplicateEventDetails(inputData);
+
+    if (data == null) {
+      Statics.showToast(Statics.getLabel('unableToSaveData'));
+      return;
+    } else if (data == false) {
+      Statics.showToast(Statics.getLabel('dataAlreadyExists'));
+      return;
+    }
+    setState(() {});
+
+    Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
+    Navigator.pop(ctx, true);
+  }
+
+  /////////////////////////////////////////////
 
   /// Handles a tap on होय / नाही / अर्ध.
   /// - होय / अर्ध submit immediately (no reason needed) and collapse back
@@ -274,7 +536,7 @@ class _EventCardState extends State<EventCard> {
 
                   _swValue = null;
                   _swController.text = "";
-                  widget._search();
+                  widget.search();
                   Navigator.of(ctx).pop();
                 },
               ),
@@ -314,6 +576,7 @@ class _EventCardState extends State<EventCard> {
   Widget build(BuildContext context) {
     final eventItem = widget.eventItem;
     final bool isOwner = eventItem.ownerSwayamsevakID.toString() == Statics.userDetails["userID"];
+    final bool isSharing = eventItem.isSharing == 1;
 
     return Padding(
       padding: const EdgeInsets.only(top: 6, left: 5, right: 5),
@@ -323,7 +586,7 @@ class _EventCardState extends State<EventCard> {
           // .event-card
           Container(
             width: double.infinity,
-            padding: EdgeInsets.fromLTRB(14, isOwner ? 7 : 14, 0, 12),
+            padding: EdgeInsets.fromLTRB(14, (isOwner || !isSharing) ? 7 : 14, 0, 12),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(14),
@@ -395,14 +658,21 @@ class _EventCardState extends State<EventCard> {
                 // .stats (owner) / .rsvp-inline (not owner)
                 Padding(
                   padding: const EdgeInsets.only(right: 14),
-                  child: isOwner ? _buildStatsRow() : _buildRsvpSection(),
+                  child: (isOwner) ? _buildStatsRow() : _buildRsvpSection(),
                 ),
               ],
             ),
           ),
 
           // .badge-mine — shown only when the current user is NOT the owner (invited)
-          if (!isOwner) _buildMineBadge(),
+          Positioned(
+            top: -7,
+            left: 12,
+            child: Row(
+              spacing: 4,
+              children: [if (!isOwner) _buildMineBadge("Apekshit"), if (isSharing) _buildMineBadge("Sharing")],
+            ),
+          ),
         ],
       ),
     );
@@ -412,6 +682,10 @@ class _EventCardState extends State<EventCard> {
 
   Widget _buildPopupMenu(BuildContext context) {
     final eventItem = widget.eventItem;
+
+    final _isOwner = eventItem.ownerSwayamsevakID.toString() == Statics.userDetails["userID"];
+    final _isSharing = eventItem.isSharing == 1;
+
     return PopupMenuButton(
       padding: EdgeInsets.zero,
       onSelected: (value) {
@@ -426,7 +700,11 @@ class _EventCardState extends State<EventCard> {
           Navigator.of(context).pushNamed(EventVrutta.routeName, arguments: Statics.ScreenArguments(eventItem.eventID!, value));
         } else if (value == "attendance") {
           print("value  == $value");
-          Navigator.of(context).pushNamed(EventAttendanceStatusScreen.routeName, arguments: eventItem.eventID).then((value) => widget._search());
+          Navigator.of(context).pushNamed(EventAttendanceStatusScreen.routeName, arguments: eventItem.eventID).then((value) => widget.search());
+        } else if (value == "DuplicateEvent") {
+          print("value  == $value");
+          showDuplicateDialog();
+          // Navigator.of(context).pushNamed(EditEvent.routeName, arguments: Statics.ScreenArguments(eventItem.eventID!, value)).then((value) => widget._search());
         }
       },
       icon: Icon(
@@ -436,20 +714,15 @@ class _EventCardState extends State<EventCard> {
       ),
       itemBuilder: (BuildContext context) {
         return [
-          if (eventItem.ownerSwayamsevakID.toString() == Statics.userDetails["userID"]) Statics.MenuItem(Statics.getLabel('EditMenu'), FontAwesomeIcons.edit, 'EditMenu'),
-          if (eventItem.ownerSwayamsevakID.toString() == Statics.userDetails["userID"] && eventItem.isfuture == 0)
-            Statics.MenuItem(Statics.getLabel('attendance'), Icons.playlist_add_check_rounded, 'attendance'),
+          if (_isOwner || _isSharing) Statics.MenuItem(Statics.getLabel('EditMenu'), FontAwesomeIcons.edit, 'EditMenu'),
+          if ((_isOwner || _isSharing) && eventItem.isfuture == 0) Statics.MenuItem(Statics.getLabel('attendance'), Icons.playlist_add_check_rounded, 'attendance'),
           Statics.MenuItem(Statics.getLabel('ViewMenu'), FontAwesomeIcons.eye, 'ViewMenu'),
-          Statics.MenuItem(Statics.getLabel('ApekshitList'), Icons.people, (eventItem.ownerSwayamsevakID.toString() == Statics.userDetails["userID"]) ? 'AddApekshitList' : 'ViewApekshitList'),
-          Statics.MenuItem(Statics.getLabel('SharingList'), Icons.share, (eventItem.ownerSwayamsevakID.toString() == Statics.userDetails["userID"]) ? 'AddSharingList' : 'ViewSharingList'),
-          if (eventItem.ownerSwayamsevakID.toString() == Statics.userDetails["userID"]) Statics.MenuItem(Statics.getLabel('ChangeOwner'), Icons.restore, 'ChangeOwner'),
-          Statics.MenuItem(
-              Statics.getLabel('Vrutta'),
-              FontAwesomeIcons.eye,
-              ((eventItem.ownerSwayamsevakID.toString() == Statics.userDetails["userID"]) &&
-                      (DateTime.parse(eventItem.fromDateStr!).isBefore(_todaysDate) || DateTime.parse(eventItem.fromDateStr!) == _todaysDate))
-                  ? 'EditVrutta'
-                  : 'ViewVrutta'),
+          Statics.MenuItem(Statics.getLabel('ApekshitList'), Icons.people, (_isOwner || _isSharing) ? 'AddApekshitList' : 'ViewApekshitList'),
+          Statics.MenuItem(Statics.getLabel('SharingList'), Icons.share, (_isOwner || _isSharing) ? 'AddSharingList' : 'ViewSharingList'),
+          if (_isOwner || _isSharing) Statics.MenuItem(Statics.getLabel('ChangeOwner'), Icons.restore, 'ChangeOwner'),
+          Statics.MenuItem(Statics.getLabel('Vrutta'), FontAwesomeIcons.eye,
+              ((_isOwner || _isSharing) && (DateTime.parse(eventItem.fromDateStr!).isBefore(_todaysDate) || DateTime.parse(eventItem.fromDateStr!) == _todaysDate)) ? 'EditVrutta' : 'ViewVrutta'),
+          if (_isOwner || _isSharing) Statics.MenuItem(Statics.getLabel('DuplicateEvent'), Icons.sticky_note_2, 'DuplicateEvent'),
         ].map((Statics.MenuItem menuItem) {
           return PopupMenuItem(
             //value: menuItem.menuVal,
@@ -557,8 +830,17 @@ class _EventCardState extends State<EventCard> {
   /// go back into edit mode (the होय/नाही/अर्ध picker).
   Widget _buildRsvpConfirmed() {
     final bool isNo = _selectedRsvp == RsvpStatus.no;
-    final IconData icon = isNo ? Icons.cancel : Icons.check_circle;
-    final Color color = isNo ? Colors.red.shade700 : Colors.green.shade700;
+    final bool isHalf = _selectedRsvp == RsvpStatus.half;
+    final IconData icon = isHalf
+        ? Icons.timelapse_rounded
+        : isNo
+            ? Icons.cancel
+            : Icons.check_circle;
+    final Color color = isHalf
+        ? Colors.orange.shade700
+        : isNo
+            ? Colors.red.shade700
+            : Colors.green.shade700;
     final String label = isNo ? '${Statics.getLabel('ReasonLabel') ?? 'कारण'} : ${_reasonController.text}' : '${Statics.getLabel('ResponseLabel') ?? 'प्रतिसाद'} : ${_selectedRsvp?.name ?? ''}';
 
     return Container(
@@ -581,7 +863,7 @@ class _EventCardState extends State<EventCard> {
           GestureDetector(
             onTap: () => setState(() => _isEditingRsvp = true),
             child: Text(
-              Statics.getLabel('ChangeLabel') ?? 'बदला',
+              Statics.getLabel('change') ?? 'बदला',
               style: TextStyle(
                 fontSize: 12.5,
                 fontWeight: FontWeight.w600,
@@ -625,11 +907,12 @@ class _EventCardState extends State<EventCard> {
         children: [
           Row(
             children: [
-              Text(
-                Statics.getLabel('RsvpQuestion') ?? 'तुम्ही येणार का?',
-                style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w500, color: Colors.black87),
+              Expanded(
+                child: Text(
+                  Statics.getLabel('RsvpQuestion') ?? 'तुम्ही येणार का?',
+                  style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w500, color: Colors.black87),
+                ),
               ),
-              Spacer(),
               _buildRsvpControl(),
             ],
           ),
@@ -638,7 +921,8 @@ class _EventCardState extends State<EventCard> {
             TextField(
               controller: _reasonController,
               enabled: !_isUpdatingRsvp,
-              maxLines: 2,
+              minLines: 1,
+              maxLines: 3,
               style: TextStyle(fontSize: 12.5),
               onSubmitted: (_) => _onReasonConfirmed(),
               decoration: InputDecoration(
@@ -659,25 +943,21 @@ class _EventCardState extends State<EventCard> {
     );
   }
 
-  Widget _buildMineBadge() {
-    return Positioned(
-      top: -7,
-      left: 12,
-      child: Container(
-        padding: EdgeInsets.only(left: 8, right: 8, top: 2),
-        decoration: BoxDecoration(
-          color: Colors.purple.shade700,
-          borderRadius: BorderRadius.circular(999),
-        ),
-        child: Text(
-          Statics.getLabel('Apekshit') ?? 'माझा कार्यक्रम',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 9.5,
-            fontWeight: FontWeight.w700,
-            color: Colors.white,
-            letterSpacing: 0.3,
-          ),
+  Widget _buildMineBadge(String label) {
+    return Container(
+      padding: EdgeInsets.only(left: 8, right: 8, top: 2),
+      decoration: BoxDecoration(
+        color: Colors.purple.shade700,
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Text(
+        Statics.getLabel(label, returnKey: true),
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 9.5,
+          fontWeight: FontWeight.w700,
+          color: Colors.white,
+          letterSpacing: 0.3,
         ),
       ),
     );

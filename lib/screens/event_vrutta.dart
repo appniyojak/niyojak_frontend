@@ -1,12 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import '../widgets/legend.dart';
 
 import '../helpers/static_data.dart' as Statics;
+import '../models/response_model/event_vrutta_list_resp_model.dart';
+import '../widgets/legend.dart';
 
 class EventVrutta extends StatefulWidget {
   static const String routeName = '/event-vrutta-screen';
+
   @override
   _EventVruttaState createState() => _EventVruttaState();
 }
@@ -34,7 +36,7 @@ class _EventVruttaState extends State<EventVrutta> {
       args = ModalRoute.of(context)!.settings.arguments as Statics.ScreenArguments;
       eventID = args!.itemID;
       viewType = args!.viewType;
-    print("viewType ==> $viewType");
+      print("viewType ==> $viewType");
       _getVruttaList();
     }
     _isFirstCall = false;
@@ -72,7 +74,7 @@ class _EventVruttaState extends State<EventVrutta> {
     }
   }
 
-  getDetailsColumnsandRows(List<dynamic> dataList) async {
+  getDetailsColumnsandRows(List<EventVruttaModel> dataList) async {
     List<DataColumn> cols = [];
 
     cols.add(new DataColumn(label: Text(Statics.getLabel('Title'))));
@@ -85,17 +87,14 @@ class _EventVruttaState extends State<EventVrutta> {
     List<DataRow> row = [];
     for (var data in dataList) {
       List<DataCell> cells = [];
-      cells.add(new DataCell(Container(
-          width: Statics.getDeviceSize(context).width * (viewType == "EditVrutta" ? 0.20 : 0.45), child: Text(data["BinduTitle"].toString()))));
+      cells.add(new DataCell(Container(width: Statics.getDeviceSize(context).width * (viewType == "EditVrutta" ? 0.20 : 0.45), child: Text(data.binduTitle.toString()))));
 
       cells.add(new DataCell(
           Container(
               margin: EdgeInsets.all(5),
               width: Statics.getDeviceSize(context).width * (viewType == "EditVrutta" ? 0.30 : 0.45),
-              child: Text(data["VruttaDetail"].toString().length > 25
-                  ? (data["VruttaDetail"].toString().substring(0, 25) + "...")
-                  : data["VruttaDetail"].toString())), onTap: () {
-        Statics.showMessageDialog(context, data["VruttaDetail"].toString(), title: Statics.getLabel('VruttaDetails'));
+              child: Text(data.vruttaDetail.toString().length > 25 ? (data.vruttaDetail.toString().substring(0, 25) + "...") : data.vruttaDetail.toString())), onTap: () {
+        Statics.showMessageDialog(context, data.vruttaDetail.toString(), title: Statics.getLabel('VruttaDetails'));
       }));
       if (viewType == "EditVrutta") {
         cells.add(new DataCell(Container(
@@ -107,7 +106,7 @@ class _EventVruttaState extends State<EventVrutta> {
                   iconSize: 20,
                   color: Colors.purple,
                   onPressed: () {
-                    _onEditVrutta(data["EventVruttaID"].toString(), data["EventID"].toString());
+                    _onEditVrutta(data.eventVruttaID.toString(), data.eventID.toString());
                   },
                 ),
                 IconButton(
@@ -115,7 +114,7 @@ class _EventVruttaState extends State<EventVrutta> {
                   iconSize: 20,
                   color: Colors.purple,
                   onPressed: () {
-                    _onDeleteVrutta(data["EventVruttaID"].toString(), data["EventID"].toString());
+                    _onDeleteVrutta(data.eventVruttaID.toString(), data.eventID.toString());
                   },
                 ),
               ],
@@ -179,16 +178,9 @@ class _EventVruttaState extends State<EventVrutta> {
                         if (_vruttaDetailsCntrl.text.trim() == "") {
                           return Statics.showToast(Statics.getLabel('VruttaDetailsValidationMessage'));
                         }
-                        var inputData = json.encode({
-                          "EventVruttaID": vruttaID,
-                          "PraantID": 1,
-                          "EventID": eventid,
-                          "BinduTitle": _titleCntrl.text,
-                          "VruttaDetail": _vruttaDetailsCntrl.text
-                        });
+                        var inputData = json.encode({"EventVruttaID": vruttaID, "PraantID": 1, "EventID": eventid, "BinduTitle": _titleCntrl.text, "VruttaDetail": _vruttaDetailsCntrl.text});
 
-                        var data = await Statics.saveEventVruttaForApp(
-                            '{"ListEventVrutta": [' + inputData + '],"ModifiedBy": ' + Statics.userDetails["userID"] + '}');
+                        var data = await Statics.saveEventVruttaForApp('{"ListEventVrutta": [' + inputData + '],"ModifiedBy": ' + Statics.userDetails["userID"] + '}');
                         if (data == "Event Vrutta Saved Successfully ") {
                           Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
                         } else
@@ -265,8 +257,8 @@ class _EventVruttaState extends State<EventVrutta> {
   void _getVruttalDetails(eventid, vruttaID) async {
     var data = await Statics.getEventVruttaList(eventid, vruttaID);
     if (data.length > 0) {
-      _titleCntrl.text = data[0]["BinduTitle"].toString();
-      _vruttaDetailsCntrl.text = data[0]["VruttaDetail"].toString();
+      _titleCntrl.text = data[0].binduTitle.toString();
+      _vruttaDetailsCntrl.text = data[0].vruttaDetail.toString();
     } else {
       _titleCntrl.text = "";
       _vruttaDetailsCntrl.text = "";
@@ -311,13 +303,14 @@ class _EventVruttaState extends State<EventVrutta> {
                     scrollDirection: Axis.horizontal,
                     child: SingleChildScrollView(
                       child: Column(
-                        children: [if(_detailscolumns!= null)
-                          DataTable(
-                            columnSpacing: 20,
-                            headingTextStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.black),
-                            columns: _detailscolumns!,
-                            rows: _detailsrows!,
-                          ),
+                        children: [
+                          if (_detailscolumns != null)
+                            DataTable(
+                              columnSpacing: 20,
+                              headingTextStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.black),
+                              columns: _detailscolumns!,
+                              rows: _detailsrows!,
+                            ),
                         ],
                       ),
                     ),

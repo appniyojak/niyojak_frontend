@@ -20,6 +20,7 @@ import '../models/response_model/TulnatmakResponseModel.dart';
 import '../models/response_model/bulk_excel_sajjan_anya_resp_model.dart';
 import '../models/response_model/event_attendance_resp_model.dart';
 import '../models/response_model/event_master_list_resp_model.dart';
+import '../models/response_model/event_vrutta_list_resp_model.dart';
 import '../models/response_model/geounit_name_model.dart';
 import '../models/response_model/get_vasti_data_by_id_model.dart';
 import '../models/response_model/get_vijaya_dashami_geounit_data.dart';
@@ -183,6 +184,7 @@ const String urlGetEventListForApp = baseUrlAPI + '/GetEventListForApp';
 const String urlChangeEventStatusForSwayamsevak = baseUrlAPI + '/ChangeEventStatusForSwayamsevak';
 const String urlGetEventStatusForAllSwayamsevak = baseUrlAPI + '/GetEventStatusForAllSwayamsevak';
 const String urlSaveEventDataForApp = baseUrlAPI + '/SaveEventDataForApp';
+const String urlSaveDuplicateEventDataForApp = baseUrlAPI + '/DublicateEvent';
 const String urlGetSwayamsevakCalendarForApp = baseUrlAPI + '/GetSwayamsevakCalendarForApp';
 const String urlGetEventApekshitListForApp = baseUrlAPI + '/GetEventApekshitListForApp';
 const String urlSaveEventApekshitSwayamsevakForApp = baseUrlAPI + '/SaveEventApekshitSwayamsevakForApp';
@@ -3996,8 +3998,8 @@ Future<List<EventMaster>> getEventList({int? eventID, String? searchPattern, Str
 
   final _body = {"EventID": eventID, "AppUserID": userDetails['userID'], "EventName": searchPattern, "FromDateStr": fromDate, "ToDateStr": toDate, "isfuture": isfuture};
 
-  print(_body);
-  print(Uri.parse(urlGetEventListForApp));
+  log(json.encode(_body));
+  log(urlGetEventListForApp);
 
   var response = await http.post(
     Uri.parse(urlGetEventListForApp),
@@ -4005,12 +4007,10 @@ Future<List<EventMaster>> getEventList({int? eventID, String? searchPattern, Str
     body: json.encode(_body),
   );
 
-  log(response.body);
-
   final Map<String, dynamic> data = jsonDecode(response.body);
 
   EvenMasterRespModel model = EvenMasterRespModel.fromJson(data);
-  log("EvenMasterRespModel >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+  log("EvenMasterRespModel >>>>>>>>>>>>>>>>> ${(response.body)}");
 
   return model.listEventMaster ?? []; // ✅ return karna zaroori hai
 }
@@ -4080,6 +4080,21 @@ Future<String> saveEventDetails(String inputJson) async {
   var responseBody = json.decode(response.body);
 
   return responseBody['OutputEventID'].toString();
+}
+
+Future<bool?> saveDuplicateEventDetails(String inputJson) async {
+  bool? connected = await isInternetConnected();
+  if (connected != true) {
+    return null;
+  }
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+  log(inputJson);
+  log(urlSaveDuplicateEventDataForApp);
+  var response = await http.post(Uri.parse(urlSaveDuplicateEventDataForApp), headers: jHeaders, body: inputJson);
+  log(response.body);
+  var responseBody = json.decode(response.body);
+
+  return responseBody["Status"] == "200" || responseBody["Status"].toString().toLowerCase() == "success";
 }
 
 Future<List<dynamic>> getCalenderEventsList(String? swayamsevakCalendarID, String month, String year) async {
@@ -4198,7 +4213,7 @@ Future<String> saveEventVruttaForApp(String inputJson) async {
   return responseBody['Message'].toString();
 }
 
-Future<List<dynamic>> getEventVruttaList(var eventID, var eventVruttaID) async {
+Future<List<EventVruttaModel>> getEventVruttaList(var eventID, var eventVruttaID) async {
   bool? connected = await isInternetConnected();
   if (connected != true) {
     return [];
@@ -4207,9 +4222,12 @@ Future<List<dynamic>> getEventVruttaList(var eventID, var eventVruttaID) async {
 
   var response = await http.post(Uri.parse(urlGetEventVruttaListForApp), headers: jHeaders, body: json.encode({"EventID": eventID, "EventVruttaID": eventVruttaID}));
 
-  var responseBody = json.decode(response.body);
+  final Map<String, dynamic> data = jsonDecode(response.body);
 
-  return responseBody['ListEventVrutta'];
+  EventVruttaListRespModel model = EventVruttaListRespModel.fromJson(data);
+  log("EventVruttaListRespModel >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+
+  return model.listEventVrutta ?? [];
 }
 
 Future<String> deleteEventVrutta(String inputJson) async {

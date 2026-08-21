@@ -695,7 +695,7 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
                     SizedBox(
                       height: 10,
                     ),
-                    TextFormField(
+                    /*TextFormField(
                       textInputAction: TextInputAction.next,
                       controller: emailController,
                       decoration: InputDecoration(labelText: Statics.getLabel('Email')),
@@ -716,7 +716,7 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
                     ),
                     SizedBox(
                       height: 10,
-                    ),
+                    ),*/
                     Row(
                       children: [
                         SizedBox(

@@ -311,6 +311,7 @@ class _SearchEventState extends State<SearchEvent> with TickerProviderStateMixin
                   spacing: 12,
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
+                    SizedBox(height: 24),
                     TabBar(
                       controller: _tabController2,
                       indicatorColor: Colors.purple,
@@ -365,7 +366,7 @@ class _SearchEventState extends State<SearchEvent> with TickerProviderStateMixin
                                     padding: EdgeInsets.all(20),
                                     child: Column(
                                       spacing: 12,
-                                      children: _eventList!.map((swItem) => EventCard(swItem, _search)).toList(),
+                                      children: _eventList!.map((swItem) => EventCard(swItem, () => _search(isfuture: 0))).toList(),
                                     ),
                                   )
                                 : Center(child: Text(Statics.getLabel('noDataFoundTryAnotherSearch')))

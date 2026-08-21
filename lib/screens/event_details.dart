@@ -144,6 +144,7 @@ class _EventDetailsState extends State<EventDetails> {
           _eventnameCtrl.text = event!.eventName == null ? "" : event!.eventName!;
           _descriptionCtrl.text = event!.description == null ? "" : event!.description!;
 
+          // if(widget.viewType!="DuplicateEvent"){
           _fromDate = ((event!.fromDate != null && event!.fromDate != "") ? DateTime.parse(event!.fromDate!) : null);
           _fromDateCntrl.text = ((event!.fromDate != null && event!.fromDate != "") ? DateFormat('dd-MMM-yyyy').format(_fromDate!) : '');
           _toDate = ((event!.toDate != null && event!.toDate != "") ? DateTime.parse(event!.toDate!) : null);
@@ -158,7 +159,7 @@ class _EventDetailsState extends State<EventDetails> {
           _toTime = ((event!.toTime != null && event!.toTime != "") ? TimeOfDay.fromDateTime(format.parse(event!.toTime!)) : null);
 
           _toTimeCntrl.text = event!.toTime == null ? "" : event!.toTime!;
-
+          // }
           _eventTypeValue = event!.eventTypeID == null ? null : event!.eventTypeID.toString();
 
           _venueCtrl.text = event!.venue == null ? "" : event!.venue!;
@@ -367,9 +368,7 @@ class _EventDetailsState extends State<EventDetails> {
                           event!.description = value == "" ? null : value;
                         },
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
+                      SizedBox(height: 10),
                       Row(
                         children: [
                           SizedBox(
@@ -394,9 +393,7 @@ class _EventDetailsState extends State<EventDetails> {
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
+                      SizedBox(height: 10),
                       Row(
                         children: [
                           SizedBox(
@@ -421,9 +418,7 @@ class _EventDetailsState extends State<EventDetails> {
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
+                      SizedBox(height: 10),
                       Row(
                         children: [
                           SizedBox(
@@ -448,9 +443,7 @@ class _EventDetailsState extends State<EventDetails> {
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
+                      SizedBox(height: 10),
                       Row(
                         children: [
                           SizedBox(
@@ -475,9 +468,7 @@ class _EventDetailsState extends State<EventDetails> {
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
+                      SizedBox(height: 10),
                       if (_eventType != null)
                         DropdownButtonFormField(
                           decoration: InputDecoration(labelText: Statics.getLabel('EventType')),

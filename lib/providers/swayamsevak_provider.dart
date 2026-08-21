@@ -117,10 +117,13 @@ class SwayamsevakProvider {
           data['HasProudhaVyavasaayeeShaakhaaOpeningExperience'],
           data['AreaOfInterestIDs'],
           data['AreaOfExpertiseIDs'],
+          data['anyaAreasOfInterest'],
+          data['anyaAreasOfExpertise'],
           data['SecondaryMobileNumber'],
           data['OfficePhoneNumber'],
           data['HomePhoneNumber'],
           data['WhatsAppNumber'],
+          data['Email'],
           data['SecondaryEmail'],
           data['TwitterHandle'],
           data['InstagramHandle'],
@@ -132,7 +135,9 @@ class SwayamsevakProvider {
           data['VistaarakMonthCount'],
           data['VistaarakYearCount'],
           data['PrachaarakYearCount'],
-          data['FacebookPage']);
+          data['FacebookPage'],
+          data['swayamsevakShaakhaaFreq'],
+          data['jagaranPatrikaTypes']);
     } else if (tab == 'SanghaShikshanSharirikVishay') {
       var response = await http.post(Uri.parse(Statics.urlGetSwayamsevakSanghaShikshanShaaririkVishayForApp),
           headers: jHeaders,

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -105,6 +106,9 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
   // var _birthDateCntrl = TextEditingController();
   var _sanghaPraveshYearCtrl = TextEditingController();
 
+  var otherControllerInterest = TextEditingController();
+  var otherControllerExpertise = TextEditingController();
+
   int _feildNum = 0;
 
   List<DropdownMenuItem<String>> _fieldType = [
@@ -128,6 +132,7 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
   var _txtNumber2Ctrl = TextEditingController();
   var _txtNumber3Ctrl = TextEditingController();
   var _txtNumber4Ctrl = TextEditingController();
+  var _txtPrimaryEmailCtrl = TextEditingController();
   var _txtSecondayEmailCtrl = TextEditingController();
   var _txtTwitterHandleCtrl = TextEditingController();
   var _txtInstagramHandleCtrl = TextEditingController();
@@ -171,6 +176,9 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
 
   List<AreaOfExpertiseBAL> _areaOfExpertise = [];
   List<AreaOfInterestBAL> _areaOfInterest = [];
+
+  List<AreaOfInterestBAL> _swayamsevakShaakhaaFreq = [];
+  List<AreaOfInterestBAL> _jagaranPatrikaTypes = [];
 
   @override
   void initState() {
@@ -251,11 +259,16 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
             "",
             "",
             "",
+            "",
+            "",
+            "",
             false,
             false,
             null,
             null,
             null,
+            null,
+            "",
             null,
             "");
       });
@@ -284,6 +297,8 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
     //_shaakhaaExperienceCtrl.dispose();
     // _birthDateCntrl.dispose();
     _sanghaPraveshYearCtrl.dispose();
+    otherControllerInterest.dispose();
+    otherControllerExpertise.dispose();
     _preritDesgCtrl.dispose();
     _preritRemarkCtrl.dispose();
     _othOrgNameCtrl.dispose();
@@ -293,6 +308,7 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
     _txtNumber2Ctrl.dispose();
     _txtNumber3Ctrl.dispose();
     _txtNumber4Ctrl.dispose();
+    _txtPrimaryEmailCtrl.dispose();
     _txtSecondayEmailCtrl.dispose();
     _faceBookPageCntrl.dispose();
     _txtTwitterHandleCtrl.dispose();
@@ -367,6 +383,9 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
 
           _sanghaPraveshYearCtrl.text = (swOtherInfo?.sanghaPraveshYear ?? "").toString();
 
+          otherControllerInterest.text = (swOtherInfo?.anyaAreasOfInterest ?? "").toString();
+          otherControllerExpertise.text = (swOtherInfo?.anyaAreasOfExpertise ?? "").toString();
+
           _fbUsage = swOtherInfo!.facebookUsage == null ? null : swOtherInfo!.facebookUsage.toString();
 
           _twtUsage = swOtherInfo!.twitterUsage == null ? null : swOtherInfo!.twitterUsage.toString();
@@ -397,6 +416,7 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
 
           _txtNumber4Ctrl.text = (swOtherInfo?.whatsAppNumber ?? "").toString();
 
+          _txtPrimaryEmailCtrl.text = (swOtherInfo?.Email ?? "").toString();
           _txtSecondayEmailCtrl.text = (swOtherInfo?.secondaryEmail ?? "").toString();
 
           _txtInstagramHandleCtrl.text = (swOtherInfo?.instagramHandle ?? "").toString();
@@ -406,6 +426,12 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
           _txtTwitterHandleCtrl.text = (swOtherInfo?.twitterHandle ?? "").toString();
 
           _faceBookPageCntrl.text = (swOtherInfo?.facebookPage ?? "").toString();
+
+          final ids = swOtherInfo?.jagaranPatrikaTypes?.split(',').map((id) => id.trim()).where((id) => id.isNotEmpty).toSet() ?? <String>{};
+
+          for (final item in _jagaranPatrikaTypes) {
+            item.isSelected = ids.contains(item.staticID.toString());
+          }
 
           _feildNum = 0;
           _shwFirstField = false;
@@ -495,16 +521,28 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
   populateAreaDetails() async {
     var aoi = await Statics.getStaticLDB("AreaOfInterest");
     var aoe = await Statics.getStaticLDB("AreaOfExpertise");
+    var ssf = await Statics.getStaticLDB("SwayamsevakShaakhaaFreq");
+    var jpt = await Statics.getStaticLDB("JagaranPatrikaTypes");
     _areaOfInterest = [];
     _areaOfExpertise = [];
     var aoiArr = (swOtherInfo == null || swOtherInfo!.areasOfInterestIDs == null) ? [] : swOtherInfo!.areasOfInterestIDs!.split(',');
     var aoeArr = (swOtherInfo == null || swOtherInfo!.areasOfInterestIDs == null) ? [] : swOtherInfo!.areasOfExpertiseIDs!.split(',');
+
+    var jpArr = (swOtherInfo == null || swOtherInfo!.jagaranPatrikaTypes == null) ? [] : swOtherInfo!.jagaranPatrikaTypes!.split(',');
     for (var data in aoi) {
       _areaOfInterest.add(new AreaOfInterestBAL(data.staticID, data.code, data.codeForDisplay, (aoiArr.contains(data.staticID.toString()) ? true : false)));
     }
 
     for (var data in aoe) {
       _areaOfExpertise.add(new AreaOfExpertiseBAL(data.staticID, data.code, data.codeForDisplay, (aoeArr.contains(data.staticID.toString()) ? true : false)));
+    }
+
+    for (var data in ssf) {
+      _swayamsevakShaakhaaFreq.add(new AreaOfInterestBAL(data.staticID, data.code, data.codeForDisplay, false));
+    }
+
+    for (var data in jpt) {
+      _jagaranPatrikaTypes.add(new AreaOfInterestBAL(data.staticID, data.code, data.codeForDisplay, (jpArr.contains(data.staticID.toString()) ? true : false)));
     }
   }
 
@@ -579,12 +617,17 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
         "HasVehicleDriver": _hasVehicleDriver ?? false,
         "AreaOfInterestIDs": areaOfInterestIDs.trim() == '' ? null : areaOfInterestIDs,
         "AreaOfExpertiseIDs": areaOfExpertiseIDs.trim() == '' ? null : areaOfExpertiseIDs,
+        "anyaAreasOfInterest": otherControllerInterest.text.trim(),
+        "anyaAreasOfExpertise": otherControllerExpertise.text.trim(),
         "SecondaryMobileNumber": swOtherInfo?.secondaryMobileNumber == "" ? null : swOtherInfo?.secondaryMobileNumber,
         "OfficePhoneNumber": swOtherInfo?.officePhoneNumber == "" ? null : swOtherInfo?.officePhoneNumber,
         "HomePhoneNumber": swOtherInfo?.homePhoneNumber == "" ? null : swOtherInfo?.homePhoneNumber,
         "WhatsAppNumber": swOtherInfo?.whatsAppNumber == "" ? null : swOtherInfo?.whatsAppNumber,
         "FacebookPage": swOtherInfo?.facebookPage,
+        "Email": swOtherInfo?.Email,
         "SecondaryEmail": swOtherInfo?.secondaryEmail,
+        "swayamsevakShaakhaaFreq": swOtherInfo?.swayamsevakShaakhaaFreq,
+        "jagaranPatrikaTypes": _jagaranPatrikaTypes.where((e) => e.isSelected == true).map((e) => e.staticID).join(','),
         "TwitterHandle": swOtherInfo?.twitterHandle,
         "InstagramHandle": swOtherInfo?.instagramHandle,
         "KooHandle": "", //swOtherInfo?.kooHandle,
@@ -1376,6 +1419,22 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
                     ),
                     TextFormField(
                       textInputAction: TextInputAction.next,
+                      controller: _txtPrimaryEmailCtrl,
+                      decoration: InputDecoration(labelText: Statics.getLabel('PrimaryEmail')),
+                      keyboardType: TextInputType.emailAddress,
+                      maxLength: 100,
+                      onChanged: (value) {
+                        if (value!.isNotEmpty)
+                          swOtherInfo!.Email = value.trim();
+                        else
+                          swOtherInfo!.Email = null;
+                      },
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      textInputAction: TextInputAction.next,
                       controller: _txtSecondayEmailCtrl,
                       decoration: InputDecoration(labelText: Statics.getLabel('SecondaryEmail')),
                       keyboardType: TextInputType.emailAddress,
@@ -1396,6 +1455,55 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
                     SizedBox(
                       height: 40,
                     ),
+                    Legend(legendString: 'ShaakhaaAttendanceFreq', fontsize: 18),
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Expanded(child: Text(Statics.getLabel("ShaakhaaAttendanceFreqQues"))),
+                        Expanded(
+                          child: DropdownButtonFormField<int>(
+                            decoration: InputDecoration(labelText: Statics.getLabel('Type')),
+                            isExpanded: true,
+                            value: swOtherInfo?.swayamsevakShaakhaaFreq,
+                            items: _swayamsevakShaakhaaFreq.map((e) => DropdownMenuItem(value: e.staticID, child: Text(e.codeForDisplay ?? "--"))).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                swOtherInfo?.swayamsevakShaakhaaFreq = value;
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 40),
+                    Legend(legendString: 'JagaranPatrika', fontsize: 18),
+                    SizedBox(height: 10),
+                    Text(Statics.getLabel("JagaranPatrikaQues")),
+                    SizedBox(height: 10),
+                    AbsorbPointer(
+                      absorbing: false,
+                      child: Container(
+                        width: Statics.getDeviceSize(context).width * 0.8,
+                        height: Statics.getDeviceSize(context).height * 0.3,
+                        child: ListView(
+                          children: _jagaranPatrikaTypes.map((area) {
+                            return new CheckboxListTile(
+                              controlAffinity: ListTileControlAffinity.leading,
+                              title: new Text(area.codeForDisplay!),
+                              value: area.isSelected,
+                              activeColor: Colors.purple,
+                              checkColor: Colors.white,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  area.isSelected = value;
+                                });
+                              },
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 40),
                     Legend(legendString: 'PratidnyaDetails', fontsize: 18),
                     Wrap(
                       children: [
@@ -2283,44 +2391,106 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
                       height: 40,
                     ),
                     Legend(legendString: 'AreasOfInterest', fontsize: 18),
+
                     Container(
                       width: Statics.getDeviceSize(context).width * 0.8,
                       height: Statics.getDeviceSize(context).height * 0.3,
                       child: ListView(
                         children: _areaOfInterest.map((area) {
-                          return new CheckboxListTile(
-                            controlAffinity: ListTileControlAffinity.leading,
-                            title: new Text(area.codeForDisplay!),
-                            value: area.isSelected,
-                            activeColor: Colors.purple,
-                            checkColor: Colors.white,
-                            onChanged: (bool? value) {
-                              setState(() {
-                                area.isSelected = value;
-                              });
-                            },
+                          return Column(
+                            children: [
+                              CheckboxListTile(
+                                controlAffinity: ListTileControlAffinity.leading,
+                                title: Text(area.codeForDisplay!),
+                                value: area.isSelected ?? false,
+                                activeColor: Colors.purple,
+                                checkColor: Colors.white,
+                                onChanged: (bool? value) {
+                                  setState(() {
+                                    area.isSelected = value;
+                                  });
+
+                                  log(jsonEncode(area.toJson()));
+                                },
+                              ),
+
+                              // Show TextFormField only when "Other" is selected
+                              if (area.code == "Other" && area.isSelected == true)
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 8,
+                                  ),
+                                  child: TextFormField(
+                                    controller: otherControllerInterest,
+                                    decoration: InputDecoration(
+                                      labelText: Statics.getLabel("AreasOfInterestShort"),
+                                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                                    ),
+                                    validator: (value) {
+                                      if (area.isSelected == true && (value == null || value.trim().isEmpty)) {
+                                        return Statics.getLabel('AnyaAreasOfInterestRequired');
+                                      }
+
+                                      return null;
+                                    },
+                                  ),
+                                ),
+                            ],
                           );
                         }).toList(),
                       ),
                     ),
-                    SizedBox(height: 40),
+
+                    const SizedBox(height: 40),
+
                     Legend(legendString: 'AreaOfExpertise', fontsize: 18),
+
                     Container(
                       width: Statics.getDeviceSize(context).width * 0.8,
                       height: Statics.getDeviceSize(context).height * 0.3,
                       child: ListView(
                         children: _areaOfExpertise.map((area) {
-                          return new CheckboxListTile(
-                            controlAffinity: ListTileControlAffinity.leading,
-                            title: new Text(area.codeForDisplay!),
-                            value: area.isSelected,
-                            activeColor: Colors.purple,
-                            checkColor: Colors.white,
-                            onChanged: (bool? value) {
-                              setState(() {
-                                area.isSelected = value;
-                              });
-                            },
+                          return Column(
+                            children: [
+                              CheckboxListTile(
+                                controlAffinity: ListTileControlAffinity.leading,
+                                title: Text(area.codeForDisplay!),
+                                value: area.isSelected ?? false,
+                                activeColor: Colors.purple,
+                                checkColor: Colors.white,
+                                onChanged: (bool? value) {
+                                  setState(() {
+                                    area.isSelected = value;
+                                  });
+
+                                  log(jsonEncode(area.toJson()));
+                                },
+                              ),
+
+                              // Same logic for AreaOfExpertise
+                              if (area.code == "Other" && area.isSelected == true)
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 8,
+                                  ),
+                                  child: TextFormField(
+                                    controller: otherControllerExpertise,
+                                    decoration: InputDecoration(
+                                      labelText: Statics.getLabel("AreaOfExpertiseShort"),
+                                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                                    ),
+                                    validator: (value) {
+                                      if (area.isSelected == true && (value == null || value.trim().isEmpty)) {
+                                        return Statics.getLabel('AnyaAreaOfExpertiseRequired');
+                                      }
+
+                                      return null;
+                                    },
+                                  ),
+                                ),
+                            ],
                           );
                         }).toList(),
                       ),

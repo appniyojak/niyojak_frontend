@@ -1505,6 +1505,8 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
   StaticMasterBAL? _daayitvaForValue;
   String? _levelValue = "";
   String? _daayitvaValue = "";
+  int? _gatividhiValue;
+
   String? _geoUnitsValue = "";
   TextEditingController _daayitvaController = TextEditingController();
 
@@ -1538,6 +1540,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
   List<StaticMasterBAL>? _bloodGroup;
   List<StaticMasterBAL>? _motherTongue;
   List<StaticMasterBAL>? _shaakhaSanchalan;
+  List<GatividhiMasterBAL>? _gatividhi;
   String? _bldGrpvalue = "";
   String? _mthrTngvalue = "";
   String? _shaakhaSanchalanvalue = "";
@@ -1776,6 +1779,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
     var data1 = await Statics.getStaticLDB("BloodGroup");
     var data2 = await Statics.getStaticLDB("MotherTongue");
     var data3 = await Statics.getStaticLDB("ShaakhaaExperienceYear");
+    var data8 = await Statics.getGatividhiLDB();
     var data6 = await Statics.getSanghaPreritSanstha("1", null, null);
     var data7 = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), "", "", "");
     var aoi = await Statics.getStaticLDB("AreaOfInterest");
@@ -1793,6 +1797,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
       _level = data5;
       _bloodGroup = data1;
       _motherTongue = data2;
+      _gatividhi = data8;
       _shaakhaSanchalan = data3;
       _sanghaPreritSanstha = data6;
     });
@@ -2008,6 +2013,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
         "OrganizationAtRetirement": _organizationAtRetirementCtrl.text.isEmpty ? null : _organizationAtRetirementCtrl.text,
         "DesignationAtRetirement": _desgAtRetirementCtrl.text.isEmpty ? null : _desgAtRetirementCtrl.text,
         "DepartmentAtRetirement": _deptAtRetirementCtrl.text.isEmpty ? null : _deptAtRetirementCtrl.text,
+        "GatividhiForID": _gatividhiValue,
         "DaayitvaForID": _daayitvaForValue == null ? null : _daayitvaForValue!.staticID,
         "DaayitvaID": _daayitvaValue == "" ? null : _daayitvaValue,
         "DaayitvaLevelID": _levelValue == "" ? null : _levelValue,
@@ -2810,6 +2816,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                   _hasBeenShikshak = false;
                   _noDaayitva = false;
                   _pravaasi = false;
+                  _gatividhiValue = null;
                   //
                   _wasVistaarak = null;
                   _wasPrachaarak = null;
@@ -3982,7 +3989,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                           width: Statics.getDeviceSize(context).width * 0.4,
                                           child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                                            title: Text(Statics.getLabel('Yuddha'), style: TextStyle(fontSize: 15)),
+                                            title: Text(Statics.getLabel('Yashti'), style: TextStyle(fontSize: 15)),
                                             checkColor: Colors.white,
                                             activeColor: Colors.purple,
                                             value: _isTrainedInMukhyaYashti == null ? false : _isTrainedInMukhyaYashti,
@@ -4249,6 +4256,24 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                   controller: _othOrgNameCtrl,
                                   decoration: InputDecoration(labelText: Statics.getLabel('SansthaaName')),
                                   keyboardType: TextInputType.text,
+                                ),
+                                SizedBox(height: 10),
+                              ],
+                            ),
+                        if (_daayitvaForValue != null)
+                          if (_daayitvaForValue!.code == "Gatividhi")
+                            Column(
+                              children: [
+                                DropdownButtonFormField(
+                                  decoration: InputDecoration(labelText: Statics.getLabel('SelectGatividhi')),
+                                  isExpanded: true,
+                                  value: _gatividhiValue,
+                                  items: _gatividhi!.map((bg) => DropdownMenuItem(value: bg.gatividhiID, child: Text(bg.gatividhiName!))).toList(),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _gatividhiValue = value;
+                                    });
+                                  },
                                 ),
                                 SizedBox(height: 10),
                               ],

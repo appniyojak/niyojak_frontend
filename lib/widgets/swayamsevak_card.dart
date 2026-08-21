@@ -1395,9 +1395,17 @@ class _SwayamsevakCardState extends State<SwayamsevakCard> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          widget.swItem["FullName"] ?? "",
-                          style: TextStyle(fontSize: 15.5, fontWeight: FontWeight.w600, color: Colors.black87, height: 1.3),
+                        Row(
+                          spacing: 8,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                widget.swItem["FullName"] ?? "",
+                                style: TextStyle(fontSize: 15.5, fontWeight: FontWeight.w600, color: Colors.black87, height: 1.3),
+                              ),
+                            ),
+                            _buildMenuButton(permissions),
+                          ],
                         ),
                         SizedBox(height: 8),
                         if (widget.swItem["DaayitvaGeoUnitName"].toString().isNotEmpty) ...[
@@ -1411,14 +1419,14 @@ class _SwayamsevakCardState extends State<SwayamsevakCard> {
 
                   SizedBox(width: 8),
 
-                  // Actions Column
+                  /*// Actions Column
                   Column(
                     children: [
-                      _buildEditToggle(canEdit),
-                      SizedBox(height: 8),
+                      // _buildEditToggle(canEdit),
+                      // SizedBox(height: 8),
                       _buildMenuButton(permissions),
                     ],
-                  ),
+                  ),*/
                 ],
               ),
 
@@ -1727,7 +1735,7 @@ class _SwayamsevakCardState extends State<SwayamsevakCard> {
   Widget _buildMenuButton(PermissionSet permissions) {
     return PopupMenuButton<String>(
       padding: EdgeInsets.zero,
-      color: Colors.purple.shade50,
+      color: Colors.orange.shade50,
       position: PopupMenuPosition.under,
       borderRadius: BorderRadius.circular(16),
       onSelected: (value) => _handleMenuSelection(value, permissions),
@@ -1736,16 +1744,16 @@ class _SwayamsevakCardState extends State<SwayamsevakCard> {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
         decoration: BoxDecoration(
-          color: Colors.deepPurple.withOpacity(0.1),
+          color: Colors.orange.withOpacity(0.1),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.deepPurple.withOpacity(0.3)),
+          border: Border.all(color: Colors.orange.withOpacity(0.3)),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.more_vert, size: 16, color: Colors.deepPurple),
+            Icon(Icons.more_vert, size: 16, color: Colors.orange),
             SizedBox(width: 2),
-            Text(Statics.getLabel("menu"), style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: Colors.deepPurple)),
+            Text(Statics.getLabel("menu"), style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: Colors.orange)),
           ],
         ),
       ),

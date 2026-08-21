@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -120,6 +121,9 @@ class SwayamsevakOcuupationState extends State<SwayamsevakOcuupation> {
   var _organizationAtRetirementCtrl = TextEditingController();
   var _desgAtRetirementCtrl = TextEditingController();
   var _deptAtRetirementCtrl = TextEditingController();
+
+  TimeOfDay? _fromTime;
+  TimeOfDay? _toTime;
 
   List<DropdownMenuItem> _prog = [
     new DropdownMenuItem(child: Text(Statics.getLabel('Science')), value: "Science"),
@@ -292,8 +296,20 @@ class SwayamsevakOcuupationState extends State<SwayamsevakOcuupation> {
           _deptAtRetirementCtrl.text = swOccupation!.departmentAtRetirement ?? "";
           _designationCtrl.text = swOccupation!.designation ?? "";
           _desgAtRetirementCtrl.text = swOccupation!.designationAtRetirement ?? "";
+
           _dutyHoursFrmCtrl.text = swOccupation!.officeTimingFrom ?? "";
           _dutyHoursToCtrl.text = swOccupation!.officeTimingTo ?? "";
+
+          final format = DateFormat("hh:mm a");
+
+          _fromTime = ((swOccupation!.officeTimingFrom != null && swOccupation!.officeTimingFrom != "") ? TimeOfDay.fromDateTime(format.parse(swOccupation!.officeTimingFrom!)) : null);
+
+          _dutyHoursFrmCtrl.text = swOccupation!.officeTimingFrom == null ? "" : swOccupation!.officeTimingFrom!;
+
+          _toTime = ((swOccupation!.officeTimingTo != null && swOccupation!.officeTimingTo != "") ? TimeOfDay.fromDateTime(format.parse(swOccupation!.officeTimingTo!)) : null);
+
+          _dutyHoursToCtrl.text = swOccupation!.officeTimingTo == null ? "" : swOccupation!.officeTimingTo!;
+
           _govtDeptCtrl.text = swOccupation!.governmentDepartment ?? "";
           _industrialVerticalCtrl.text = swOccupation!.industryVertical ?? "";
           _officeLocationCtrl.text = swOccupation!.officeLocation ?? "";
@@ -564,6 +580,36 @@ class SwayamsevakOcuupationState extends State<SwayamsevakOcuupation> {
         ],
       ),
     );
+  }
+
+  _pickFrmTime() async {
+    TimeOfDay? time = await showTimePicker(
+      context: context,
+      initialTime: _fromTime == null ? TimeOfDay.now() : _fromTime!,
+    );
+
+    if (time != null) {
+      setState(() {
+        _fromTime = time;
+        _dutyHoursFrmCtrl.text =
+            DateFormat("hh:mm").format(new DateFormat("yyyy-MM-dd hh:mm").parse("2021-02-01 " + time.hour.toString() + ":" + time.minute.toString())) + (time.period == DayPeriod.am ? " AM" : " PM");
+      });
+    }
+  }
+
+  _pickToTime() async {
+    TimeOfDay? time = await showTimePicker(
+      context: context,
+      initialTime: _toTime == null ? TimeOfDay.now() : _toTime!,
+    );
+
+    if (time != null) {
+      setState(() {
+        _toTime = time;
+        _dutyHoursToCtrl.text =
+            DateFormat("hh:mm").format(new DateFormat("yyyy-MM-dd hh:mm").parse("2021-02-01 " + time.hour.toString() + ":" + time.minute.toString())) + (time.period == DayPeriod.am ? " AM" : " PM");
+      });
+    }
   }
 
   Future<List<dynamic>> populateUniversity(String pattern, bool isForDistanceLearning) async {
@@ -1531,7 +1577,9 @@ class SwayamsevakOcuupationState extends State<SwayamsevakOcuupation> {
                               TextFormField(
                                 textInputAction: TextInputAction.next,
                                 controller: _dutyHoursFrmCtrl,
-                                decoration: InputDecoration(labelText: Statics.getLabel('DutyHoursFrom')),
+                                readOnly: true,
+                                onTap: _pickFrmTime,
+                                decoration: InputDecoration(prefixIcon: Icon(Icons.access_time_filled_rounded, color: Colors.purple), labelText: Statics.getLabel('DutyHoursFrom')),
                                 keyboardType: TextInputType.text,
                                 validator: (value) {
                                   if (value!.isEmpty) return (Statics.getLabel('DutyHoursFromValidationMessage'));
@@ -1552,7 +1600,9 @@ class SwayamsevakOcuupationState extends State<SwayamsevakOcuupation> {
                               TextFormField(
                                 textInputAction: TextInputAction.next,
                                 controller: _dutyHoursToCtrl,
-                                decoration: InputDecoration(labelText: Statics.getLabel('DutyHoursTo')),
+                                readOnly: true,
+                                onTap: _pickToTime,
+                                decoration: InputDecoration(prefixIcon: Icon(Icons.access_time_filled_rounded, color: Colors.purple), labelText: Statics.getLabel('DutyHoursTo')),
                                 keyboardType: TextInputType.text,
                                 validator: (value) {
                                   if (value!.isEmpty) return (Statics.getLabel('DutyHoursToValidationMessage'));

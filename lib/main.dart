@@ -169,7 +169,7 @@ class NiyojakAppState extends State<NiyojakApp> {
         requiresDeviceIdle: false,
         requiredNetworkType: NetworkType.NONE,
       ),
-      (String taskId) async {
+          (String taskId) async {
         log('[BackgroundFetch] Event: $taskId at ${DateTime.now()}');
         BackgroundFetch.finish(taskId);
       },
@@ -214,15 +214,16 @@ class NiyojakAppState extends State<NiyojakApp> {
                 fontFamily: 'Lato',
                 visualDensity: VisualDensity.adaptivePlatformDensity,
               ),
-              builder: (c, child) => SafeArea(
-                top: false,
-                child: GestureDetector(
-                  onTap: () {
-                    FocusScope.of(context).unfocus();
-                  },
-                  child: child,
-                ),
-              ),
+              builder: (c, child) =>
+                  SafeArea(
+                    top: false,
+                    child: GestureDetector(
+                      onTap: () {
+                        FocusScope.of(context).unfocus();
+                      },
+                      child: child,
+                    ),
+                  ),
               home: SplashScreenCheck(),
               routes: {
                 LogInScreen.routeName: (ctx) => LogInScreen(),
@@ -327,7 +328,7 @@ class NiyojakAppState extends State<NiyojakApp> {
                 child: Container(
                   decoration: BoxDecoration(borderRadius: const BorderRadius.vertical(bottom: Radius.circular(5)), color: Colors.red.withValues(alpha: 0.7)),
                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                  child: Text(" Dev  -  1.0.41 ", style: const TextStyle(fontSize: 13, color: Colors.white, fontWeight: FontWeight.w600)),
+                  child: Text(" Dev  -  1.0.42 ", style: const TextStyle(fontSize: 13, color: Colors.white, fontWeight: FontWeight.w600)),
                 ),
               ),
           ],

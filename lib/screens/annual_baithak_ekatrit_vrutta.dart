@@ -1679,7 +1679,15 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                           height: 25,
                         ),
 
-                        Legend(legendString: "nagareeySaaptaahik", fontsize: 18),
+                        // Legend(legendString: "nagareeySaaptaahik", fontsize: 18),
+                        SingleColumnRowLegend(
+                            txtString: Statics.getLabel('nagareeySaaptaahik') + ' :',
+                            value: '',
+                            fontsize: 18,
+                            view: true,
+                            btnAction: () {
+                              redirctToList("nagarSaaptaahik", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('nagareeySaaptaahik'));
+                            }),
                         Table(
                           columnWidths: {
                             0: FixedColumnWidth(Statics.getDeviceSize(context).width * 0.45),
@@ -1786,10 +1794,18 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                                       "graaminSaaptaahik", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('graaminSaaptaahikSthan'));
                                 }),
                             Single1ColumnRow(txtString: Statics.getLabel('graaminSaaptaahikMilanYuktyaSthan'), value: getTotalCount(_ekatritVrutta), fontsize: 15),
-                            Legend(
-                              legendString: 'graaminSaaptaahik',
-                              fontsize: 18,
-                            ),
+                            // Legend(
+                            //   legendString: 'graaminSaaptaahik',
+                            //   fontsize: 18,
+                            // ),
+                            SingleColumnRowLegend(
+                                txtString: Statics.getLabel('graaminSaaptaahik') + ' :',
+                                value: '',
+                                fontsize: 18,
+                                view: true,
+                                btnAction: () {
+                                  redirctToList("gramminSaaptaahik", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('graaminSaaptaahik'));
+                                }),
                             Table(
                               columnWidths: {
                                 0: FixedColumnWidth(Statics.getDeviceSize(context).width * 0.45),

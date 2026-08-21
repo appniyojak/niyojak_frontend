@@ -105,21 +105,34 @@ class _EventAttendanceStatusScreenState extends State<EventAttendanceStatusScree
   /// null == "सगळे" (no filter). Only used in view mode.
   AttendanceStatus? _activeFilter;
 
-  /// Per-row locally-edited status while in take-attendance mode, keyed by
-  /// swayamsevakId. Defaults to AttendanceStatus.present for every row the
-  /// moment take-attendance mode opens (per your instruction — since there's
-  /// no bulk-mark API yet, this locally achieves "everyone starts marked
-  /// present" without a network call).
+  /// Per-row locally-selected status while in take-attendance mode, keyed by
+  /// swayamsevakId. Seeded from each person's ACTUAL fetched status the
+  /// moment take-attendance mode opens (see _startTakingAttendance) — a
+  /// noResponse person has no entry here (nothing pre-selected) until they
+  /// tap an option.
   Map<int, AttendanceStatus> _editedStatus = {};
 
-  /// swayamsevakId currently mid-save, so its row shows a spinner and is
-  /// disabled instead of the toggle.
+  /// One reason controller per person, seeded with their existing reason
+  /// (or empty). Kept around for the lifetime of take-attendance mode so
+  /// typed-but-unconfirmed text isn't lost if they flip statuses and back.
+  Map<int, TextEditingController> _reasonControllers = {};
+
+  /// swayamsevakId currently mid-save, so its row shows a spinner and its
+  /// toggle/reason field are disabled.
   int? _savingId;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) => initData());
+  }
+
+  @override
+  void dispose() {
+    for (var c in _reasonControllers.values) {
+      c.dispose();
+    }
+    super.dispose();
   }
 
   initData() async {
@@ -180,14 +193,34 @@ class _EventAttendanceStatusScreenState extends State<EventAttendanceStatusScree
     return _allSwayamsevak.where((e) => e.status == _activeFilter).toList();
   }
 
+  /// Seeds every row from its ACTUAL fetched status (not a blanket "present
+  /// for everyone" default) — e.g. someone already Absent stays shown as
+  /// Absent, with their reason field already open and pre-filled, until the
+  /// user changes it. noResponse rows get no entry (no toggle option
+  /// pre-selected).
   void _startTakingAttendance() {
-    // Default every row to पूर्ण locally (no bulk API yet — see note above).
-    Map<int, AttendanceStatus> defaults = {};
+    Map<int, AttendanceStatus> seeded = {};
+    Map<int, TextEditingController> reasonCtrls = {};
+
     for (var sw in _allSwayamsevak) {
-      defaults[sw.swayamsevakID!] = AttendanceStatus.present;
+      final id = sw.swayamsevakID;
+      if (id == null) continue;
+
+      if (sw.status != AttendanceStatus.noResponse) {
+        seeded[id] = sw.status;
+      }
+      reasonCtrls[id] = TextEditingController(text: sw.reason ?? '');
     }
+
+    // Dispose any controllers left over from a previous take-attendance
+    // session before replacing the map.
+    for (var c in _reasonControllers.values) {
+      c.dispose();
+    }
+
     setState(() {
-      _editedStatus = defaults;
+      _editedStatus = seeded;
+      _reasonControllers = reasonCtrls;
       _isTakingAttendance = true;
     });
   }
@@ -198,12 +231,28 @@ class _EventAttendanceStatusScreenState extends State<EventAttendanceStatusScree
     await _fetchAttendance();
   }
 
+  /// Single source of truth for "what should back (system OR app-bar arrow)
+  /// do right now". Returns true when the screen itself should pop; false
+  /// when it only switched out of take-attendance mode.
+  Future<bool> _handleBackPressed() async {
+    if (_isTakingAttendance) {
+      await _exitTakingAttendance();
+      return false;
+    }
+    return true;
+  }
+
   /// Same underlying API you're already using for the swayamsevak's own
   /// RSVP (Statics.changeEventStatusForSwayamsevakData) — here it's the
   /// owner marking a *different* person's attendance, so SwayamsevakID is
   /// that person's id instead of the current user's.
+  ///
+  /// Remark is only ever taken from that row's live reason field (for
+  /// Absent); Present/Half always send an empty Remark.
   Future<void> _updateAttendanceFor(AttendanceSwayamsevak person, AttendanceStatus newStatus) async {
     if (_savingId != null) return;
+    final id = person.swayamsevakID;
+    if (id == null) return;
 
     bool isConnected = await Statics.isInternetConnected();
     if (!isConnected) {
@@ -211,7 +260,9 @@ class _EventAttendanceStatusScreenState extends State<EventAttendanceStatusScree
       return;
     }
 
-    setState(() => _savingId = person.swayamsevakID);
+    final reasonText = newStatus == AttendanceStatus.absent ? (_reasonControllers[id]?.text.trim() ?? '') : '';
+
+    setState(() => _savingId = id);
 
     bool success = false;
     try {
@@ -219,8 +270,8 @@ class _EventAttendanceStatusScreenState extends State<EventAttendanceStatusScree
         "EventID": eventId,
         "AppUserID": Statics.userDetails["userID"],
         "Status": newStatus.pkValue,
-        "SwayamsevakID": person.swayamsevakID,
-        "Remark": person.reason,
+        "SwayamsevakID": id,
+        "Remark": reasonText,
       };
       var result = await Statics.changeEventStatusForSwayamsevakData(inputData);
       success = result == true;
@@ -229,39 +280,70 @@ class _EventAttendanceStatusScreenState extends State<EventAttendanceStatusScree
     }
 
     if (success) {
-      setState(() => _editedStatus[person.swayamsevakID!] = newStatus);
+      setState(() => _editedStatus[id] = newStatus);
     } else {
       Statics.showToast(Statics.getLabel('RsvpUpdateFailed') ?? 'अद्ययावत करण्यात अडचण आली, पुन्हा प्रयत्न करा');
     }
   }
 
+  /// Tapping पूर्ण / अर्ध submits immediately (no reason needed).
+  /// Tapping गैर. only reveals/keeps open that row's reason field — it does
+  /// NOT call the API by itself; the actual save happens from the field's
+  /// confirm action (_onReasonConfirmed), same pattern as the RSVP नाही flow.
+  void _onToggleTapped(AttendanceSwayamsevak person, AttendanceStatus opt) {
+    final id = person.swayamsevakID;
+    if (id == null) return;
+
+    if (opt == AttendanceStatus.absent) {
+      setState(() => _editedStatus[id] = AttendanceStatus.absent);
+      return;
+    }
+    _updateAttendanceFor(person, opt);
+  }
+
+  Future<void> _onReasonConfirmed(AttendanceSwayamsevak person) async {
+    final id = person.swayamsevakID;
+    if (id == null) return;
+
+    final controller = _reasonControllers[id];
+    if (controller == null || controller.text.trim().isEmpty) {
+      Statics.showToast(Statics.getLabel('ReasonValidationMessage') ?? 'कृपया कारण नमूद करा');
+      return;
+    }
+    await _updateAttendanceFor(person, AttendanceStatus.absent);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xFFF7F5FA),
-      appBar: AppBar(
-        backgroundColor: Color(0xFF9C2AA0),
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            if (_isTakingAttendance) {
-              _exitTakingAttendance();
-            } else {
-              Navigator.of(context).pop();
-            }
-          },
+    return WillPopScope(
+      // Handles the SYSTEM back button/gesture, not just the app-bar arrow —
+      // previously only the app-bar arrow checked _isTakingAttendance, so
+      // the hardware back button would pop the whole screen straight from
+      // take-attendance mode instead of returning to view mode first.
+      onWillPop: _handleBackPressed,
+      child: Scaffold(
+        backgroundColor: Color(0xFFF7F5FA),
+        appBar: AppBar(
+          backgroundColor: Color(0xFF9C2AA0),
+          elevation: 0,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () async {
+              final shouldPop = await _handleBackPressed();
+              if (shouldPop) Navigator.of(context).pop();
+            },
+          ),
+          title: Text(
+            _isTakingAttendance ? (Statics.getLabel('TakeAttendanceTitle') ?? 'उपस्थिती घ्या') : (Statics.getLabel('AttendanceStatusTitle') ?? 'उपस्थिती स्थिती'),
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+          ),
         ),
-        title: Text(
-          _isTakingAttendance ? (Statics.getLabel('TakeAttendanceTitle') ?? 'उपस्थिती घ्या') : (Statics.getLabel('AttendanceStatusTitle') ?? 'उपस्थिती स्थिती'),
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
-        ),
+        body: _isLoading
+            ? Center(child: CircularProgressIndicator())
+            : _isTakingAttendance
+                ? _buildTakeAttendanceBody()
+                : _buildViewBody(),
       ),
-      body: _isLoading
-          ? Center(child: CircularProgressIndicator())
-          : _isTakingAttendance
-              ? _buildTakeAttendanceBody()
-              : _buildViewBody(),
     );
   }
 
@@ -271,7 +353,7 @@ class _EventAttendanceStatusScreenState extends State<EventAttendanceStatusScree
     return RefreshIndicator(
       onRefresh: _fetchAttendance,
       child: ListView(
-        padding: const EdgeInsets.fromLTRB(14, 14, 14, 24),
+        padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
         children: [
           Row(
             children: [
@@ -363,7 +445,13 @@ class _EventAttendanceStatusScreenState extends State<EventAttendanceStatusScree
   }
 
   Widget _buildFilterChips() {
-    final options = <AttendanceStatus?>[null, AttendanceStatus.present, AttendanceStatus.half, AttendanceStatus.absent];
+    final options = <AttendanceStatus?>[
+      null,
+      AttendanceStatus.present,
+      AttendanceStatus.half,
+      AttendanceStatus.absent,
+      // AttendanceStatus.noResponse,
+    ];
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -441,9 +529,7 @@ class _EventAttendanceStatusScreenState extends State<EventAttendanceStatusScree
   // ---------------- Take-attendance (edit) mode ----------------
   // NOTE: the "सगळे उपस्थित म्हणून चिन्हांकित करा" banner + "लागू करा"
   // bulk-mark button from the reference screenshot is intentionally left
-  // out — there's no bulk-mark API yet. Every row instead defaults to
-  // पूर्ण locally the moment this mode opens (see _startTakingAttendance),
-  // and each row saves individually the moment its toggle is tapped.
+  // out — there's no bulk-mark API yet.
 
   Widget _buildTakeAttendanceBody() {
     return ListView(
@@ -453,8 +539,10 @@ class _EventAttendanceStatusScreenState extends State<EventAttendanceStatusScree
   }
 
   Widget _buildEditRow(AttendanceSwayamsevak person) {
-    final current = _editedStatus[person.swayamsevakID] ?? AttendanceStatus.present;
-    final isSaving = _savingId == person.swayamsevakID;
+    final id = person.swayamsevakID;
+    final current = id != null ? _editedStatus[id] : null;
+    final isSaving = id != null && _savingId == id;
+    final showReason = current == AttendanceStatus.absent;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
@@ -463,30 +551,57 @@ class _EventAttendanceStatusScreenState extends State<EventAttendanceStatusScree
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: Text(
-              person.fullName ?? "--",
-              style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600, color: Colors.black87),
-              overflow: TextOverflow.ellipsis,
-            ),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  person.fullName ?? "--",
+                  style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600, color: Colors.black87),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              SizedBox(width: 10),
+              if (isSaving)
+                SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFF9C2AA0)),
+                )
+              else
+                _buildThreeWayToggle(person, current),
+            ],
           ),
-          SizedBox(width: 10),
-          if (isSaving)
-            SizedBox(
-              width: 20,
-              height: 20,
-              child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFF9C2AA0)),
-            )
-          else
-            _buildThreeWayToggle(person, current),
+          if (showReason) ...[
+            SizedBox(height: 10),
+            TextField(
+              controller: _reasonControllers[id],
+              enabled: !isSaving,
+              minLines: 1,
+              maxLines: 3,
+              style: TextStyle(fontSize: 12.5),
+              onSubmitted: (_) => _onReasonConfirmed(person),
+              decoration: InputDecoration(
+                isDense: true,
+                labelText: Statics.getLabel('ReasonLabel') ?? 'कारण',
+                labelStyle: TextStyle(fontSize: 12.5),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                suffixIcon: IconButton(
+                  icon: Icon(Icons.check_circle, color: Colors.purple.shade700, size: 20),
+                  onPressed: isSaving ? null : () => _onReasonConfirmed(person),
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );
   }
 
-  Widget _buildThreeWayToggle(AttendanceSwayamsevak person, AttendanceStatus current) {
+  Widget _buildThreeWayToggle(AttendanceSwayamsevak person, AttendanceStatus? current) {
     final options = [AttendanceStatus.present, AttendanceStatus.half, AttendanceStatus.absent];
 
     return Row(
@@ -494,7 +609,7 @@ class _EventAttendanceStatusScreenState extends State<EventAttendanceStatusScree
       children: options.map((opt) {
         final isSelected = current == opt;
         return GestureDetector(
-          onTap: isSelected ? null : () => _updateAttendanceFor(person, opt),
+          onTap: isSelected ? null : () => _onToggleTapped(person, opt),
           child: Container(
             margin: const EdgeInsets.only(left: 4),
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),

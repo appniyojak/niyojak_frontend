@@ -77,11 +77,14 @@ class SwayamsevakOtherInfoBAL {
 
   String? areasOfInterestIDs;
   String? areasOfExpertiseIDs;
+  String? anyaAreasOfInterest;
+  String? anyaAreasOfExpertise;
 
   String? secondaryMobileNumber;
   String? officePhoneNumber;
   String? homePhoneNumber;
   String? whatsAppNumber;
+  String? Email;
   String? secondaryEmail;
   String? twitterHandle;
   String? instagramHandle;
@@ -95,6 +98,8 @@ class SwayamsevakOtherInfoBAL {
   int? vistaarakYearCount;
   int? prachaarakYearCount;
   String? facebookPage;
+  int? swayamsevakShaakhaaFreq;
+  String? jagaranPatrikaTypes;
 
   SwayamsevakOtherInfoBAL(
       this.swayamsevakID,
@@ -151,10 +156,13 @@ class SwayamsevakOtherInfoBAL {
       this.hasProudhaVyavasaayeeShaakhaaOpeningExperience,
       this.areasOfInterestIDs,
       this.areasOfExpertiseIDs,
+      this.anyaAreasOfInterest,
+      this.anyaAreasOfExpertise,
       this.secondaryMobileNumber,
       this.officePhoneNumber,
       this.homePhoneNumber,
       this.whatsAppNumber,
+      this.Email,
       this.secondaryEmail,
       this.twitterHandle,
       this.instagramHandle,
@@ -166,7 +174,9 @@ class SwayamsevakOtherInfoBAL {
       this.vistaarakMonthCount,
       this.vistaarakYearCount,
       this.prachaarakYearCount,
-      this.facebookPage);
+      this.facebookPage,
+      this.swayamsevakShaakhaaFreq,
+      this.jagaranPatrikaTypes);
 }
 
 class SwayamsevakSanghaShikshanBAL {
@@ -2368,6 +2378,14 @@ class AreaOfInterestBAL {
     code = map["Code"];
     codeForDisplay = map["CodeForDisplay"];
   }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['StaticID'] = this.staticID;
+    data['Code'] = this.code;
+    data['CodeForDisplay'] = this.codeForDisplay;
+    return data;
+  }
 }
 
 class AreaOfExpertiseBAL {
@@ -2383,6 +2401,14 @@ class AreaOfExpertiseBAL {
     code = map["Code"];
     codeForDisplay = map["CodeForDisplay"];
   }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['StaticID'] = this.staticID;
+    data['Code'] = this.code;
+    data['CodeForDisplay'] = this.codeForDisplay;
+    return data;
+  }
 }
 
 class AreaOfOperationsBAL {
@@ -2397,6 +2423,14 @@ class AreaOfOperationsBAL {
     staticID = map["StaticID"];
     code = map["Code"];
     codeForDisplay = map["CodeForDisplay"];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['StaticID'] = this.staticID;
+    data['Code'] = this.code;
+    data['CodeForDisplay'] = this.codeForDisplay;
+    return data;
   }
 }
 

@@ -2591,7 +2591,7 @@ class _HomeScreenState extends State<HomeScreen> {
               unselectedLabelStyle: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w500),
               labelStyle: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700),
               onTap: (value) {
-                if (value == 1) {
+                if (value == 0) {
                   _initScreen();
                 }
               },
