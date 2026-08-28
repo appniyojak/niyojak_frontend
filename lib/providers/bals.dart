@@ -669,6 +669,8 @@ class UserDataBAL {
   String? lastLoginTimeStamp;
   String? isLoggedIn;
   bool? isPravaasiKaaryakartaa;
+  int? showShakhaSaptaha;
+  int? showPustika;
   bool? canEdit;
 
   UserDataBAL(
@@ -702,6 +704,8 @@ class UserDataBAL {
       this.lastLoginTimeStamp,
       this.isLoggedIn,
       this.isPravaasiKaaryakartaa,
+      this.showShakhaSaptaha,
+      this.showPustika,
       this.canEdit);
 
   UserDataBAL.fromMap(Map<String, dynamic> map) {
@@ -735,6 +739,8 @@ class UserDataBAL {
     lastLoginTimeStamp = map['LastLoginTimeStamp'];
     isLoggedIn = map['IsLoggedIn'];
     isPravaasiKaaryakartaa = map['IsPravaasiKaaryakartaa'] == 1 ? true : false;
+    showShakhaSaptaha = map['ShowShakhaSaptaha'];
+    showPustika = map['ShowPustika'];
     canEdit = map['can_edit'] == 1 ? true : false;
   }
 }
@@ -2280,6 +2286,14 @@ class AayaamKaaryakartaaCountBAL {
   int? kaaryakartaaCount;
 
   AayaamKaaryakartaaCountBAL(this.aayaamID, this.aayaamName, this.kaaryakartaaCount);
+
+  factory AayaamKaaryakartaaCountBAL.fromJson(Map<String, dynamic> json) {
+    return AayaamKaaryakartaaCountBAL(
+      json['AayaamID'],
+      json['AayaamName'],
+      json['KaaryakartaaCount'],
+    );
+  }
 }
 
 class PreritKaaryakartaaCountBAL {
@@ -2288,6 +2302,14 @@ class PreritKaaryakartaaCountBAL {
   int? kaaryakartaaCount;
 
   PreritKaaryakartaaCountBAL(this.preritAOOID, this.preritAOOName, this.kaaryakartaaCount);
+
+  factory PreritKaaryakartaaCountBAL.fromJson(Map<String, dynamic> json) {
+    return PreritKaaryakartaaCountBAL(
+      json['PreritAOOID'],
+      json['PreritAOOName'],
+      json['KaaryakartaaCount'],
+    );
+  }
 }
 
 class SocialOrgKaaryakartaaCountBAL {

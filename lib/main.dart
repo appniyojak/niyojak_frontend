@@ -22,6 +22,8 @@ import 'package:niyojak_prod/screens/levels_update_module/update_master_data.dar
 import 'package:niyojak_prod/screens/nirikshan_baithak_vrutta.dart';
 import 'package:niyojak_prod/screens/sankalit_data_name.dart';
 import 'package:niyojak_prod/screens/search_sankalp_screen.dart';
+import 'package:niyojak_prod/screens/shakha_pustika/sangraha_shkha_pustika_screen.dart';
+import 'package:niyojak_prod/screens/shakha_pustika/shakha_pustika_screen.dart';
 import 'package:niyojak_prod/screens/shatabdi_vrutta_sankalan/vijayadashami/add_mukhya_atithi_form.dart';
 import 'package:niyojak_prod/screens/shatabdi_vrutta_sankalan/vijayadashami/add_vishesh_vyakti.dart';
 import 'package:niyojak_prod/screens/shatabdi_vrutta_sankalan/vijayadashami/vijaya_dashami_report.dart';
@@ -169,7 +171,7 @@ class NiyojakAppState extends State<NiyojakApp> {
         requiresDeviceIdle: false,
         requiredNetworkType: NetworkType.NONE,
       ),
-          (String taskId) async {
+      (String taskId) async {
         log('[BackgroundFetch] Event: $taskId at ${DateTime.now()}');
         BackgroundFetch.finish(taskId);
       },
@@ -214,22 +216,23 @@ class NiyojakAppState extends State<NiyojakApp> {
                 fontFamily: 'Lato',
                 visualDensity: VisualDensity.adaptivePlatformDensity,
               ),
-              builder: (c, child) =>
-                  SafeArea(
-                    top: false,
-                    child: GestureDetector(
-                      onTap: () {
-                        FocusScope.of(context).unfocus();
-                      },
-                      child: child,
-                    ),
-                  ),
+              builder: (c, child) => SafeArea(
+                top: false,
+                child: GestureDetector(
+                  onTap: () {
+                    FocusScope.of(context).unfocus();
+                  },
+                  child: child,
+                ),
+              ),
               home: SplashScreenCheck(),
               routes: {
                 LogInScreen.routeName: (ctx) => LogInScreen(),
                 HomeScreen.routeName: (ctx) => HomeScreen(),
                 HelpScreen.routeName: (ctx) => HelpScreen(),
                 ContactUs.routeName: (ctx) => ContactUs(),
+                ShakhaPustika.routeName: (ctx) => ShakhaPustika(),
+                SangrahaShkhaPustikaScreen.routeName: (ctx) => SangrahaShkhaPustikaScreen(),
                 //SearchSwayamsevakScreen.routeName: (ctx) => SearchSwayamsevakScreen(),
                 AbhiyanScreen.routeName: (ctx) => AbhiyanScreen(),
                 ForgotPassword.routeName: (ctx) => ForgotPassword(),

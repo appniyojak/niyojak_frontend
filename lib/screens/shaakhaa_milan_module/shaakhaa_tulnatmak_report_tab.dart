@@ -42,6 +42,33 @@ const List<Color> _palette = [
 ];
 
 Color _colorAt(int index) => _palette[index % _palette.length];
+// Marathi month names, index 0 = month 1 (Jan) ... index 11 = month 12 (Dec)
+
+String _monthLabel(dynamic monthValue) {
+  int monthNum;
+  if (monthValue is int) {
+    monthNum = monthValue;
+  } else {
+    final match = RegExp(r'\d+').firstMatch(monthValue.toString());
+    monthNum = match != null ? int.tryParse(match.group(0)!) ?? 0 : 0;
+  }
+  if (monthNum < 1 || monthNum > 12) return monthValue.toString();
+  List<String> _monthNames = [
+    Statics.getLabel('Jan'),
+    Statics.getLabel('Feb'),
+    Statics.getLabel('Mar'),
+    Statics.getLabel('Apr'),
+    Statics.getLabel('May'),
+    Statics.getLabel('Jun'),
+    Statics.getLabel('Jul'),
+    Statics.getLabel('Aug'),
+    Statics.getLabel('Sept'),
+    Statics.getLabel('Oct'),
+    Statics.getLabel('Nov'),
+    Statics.getLabel('Dec'),
+  ];
+  return _monthNames[monthNum - 1];
+}
 
 // base color per year (reuse existing _colorAt), shade/opacity per subcategory
 Color _subShade(Color base, int subIndex) {
@@ -1344,6 +1371,15 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
                   child: Text(label, style: const TextStyle(fontSize: 11, color: Color(0xFF6B7280))),
                 );
               },
+              // getTitlesWidget: (value, meta) {
+              //   final idx = value.toInt();
+              //   if (idx < 0 || idx >= months.length) return const SizedBox();
+              //   final label = _monthLabel(months[idx]);
+              //   return Padding(
+              //     padding: const EdgeInsets.only(top: 6),
+              //     child: Text(label, style: const TextStyle(fontSize: 11, color: Color(0xFF6B7280))),
+              //   );
+              // },
             ),
           ),
           leftTitles: AxisTitles(
@@ -1444,9 +1480,17 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
                 if (idx < 0 || idx >= months.length) return const SizedBox();
                 return Padding(
                   padding: const EdgeInsets.only(top: 6),
-                  child: Text("${idx + 1}", style: const TextStyle(fontSize: 11, color: Color(0xFF6B7280))),
+                  child: Text(_monthLabel(months[idx]), style: const TextStyle(fontSize: 11, color: Color(0xFF6B7280))),
                 );
               },
+              // getTitlesWidget: (value, meta) {
+              //   final idx = value.toInt();
+              //   if (idx < 0 || idx >= months.length) return const SizedBox();
+              //   return Padding(
+              //     padding: const EdgeInsets.only(top: 6),
+              //     child: Text("${idx + 1}", style: const TextStyle(fontSize: 11, color: Color(0xFF6B7280))),
+              //   );
+              // },
             ),
           ),
           leftTitles: AxisTitles(
@@ -1471,9 +1515,11 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
             fitInsideHorizontally: true,
             getTooltipItems: (spots) {
               if (spots.isEmpty) return [];
-
               final monthIdx = spots.first.x.toInt();
-              final monthNum = (monthIdx >= 0 && monthIdx < months.length) ? months[monthIdx] : monthIdx + 1;
+              final rawMonth = (monthIdx >= 0 && monthIdx < months.length) ? months[monthIdx] : monthIdx + 1;
+              final monthLabel = _monthLabel(rawMonth);
+              // final monthIdx = spots.first.x.toInt();
+              // final monthNum = (monthIdx >= 0 && monthIdx < months.length) ? months[monthIdx] : monthIdx + 1;
 
               return spots.asMap().entries.map((entry) {
                 final i = entry.key;
@@ -1487,7 +1533,7 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
                   children: [
                     if (i == 0)
                       TextSpan(
-                        text: "${Statics.getLabel("monthOnly")} $monthNum\n",
+                        text: "$monthLabel\n",
                         style: const TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w800,

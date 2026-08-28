@@ -14,6 +14,9 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../assets/strings/strings.dart';
 import '../helpers/static_data.dart' as Statics;
+import '../models/request_model/shakha_pustika_list_requestmodel.dart';
+import '../models/request_model/shakha_pustika_req_model.dart';
+import '../models/request_model/shkaha_pustiks_byid_reqmodel.dart';
 import '../models/response_model/AbhiyaanLoginDataResponse.dart';
 import '../models/response_model/AbhiyaanSwayamsevakListResponse.dart';
 import '../models/response_model/TulnatmakResponseModel.dart';
@@ -52,6 +55,8 @@ import '../models/response_model/shaakhaa_vistar_detail_resp_model.dart';
 import '../models/response_model/shaakhaa_vistar_list_resp_model.dart';
 import '../models/response_model/shaakhaa_vistar_report_repo_model.dart';
 import '../models/response_model/shaakhaa_vrutta_report_home_resp_model.dart';
+import '../models/response_model/shakha_pustika_byid_responsemodel.dart';
+import '../models/response_model/shakha_pustika_list_response_model.dart';
 import '../models/response_model/taluka_mandal_model.dart';
 import '../models/response_model/upkhanda_upnagar_report_data_model.dart';
 import '../models/response_model/vasti_sarvekshan_dropdown_model.dart';
@@ -332,6 +337,9 @@ const String urlHomeShaakhaaVruttaNames = baseUrlAPI + '/yestardayShaakhaaVrutta
 const String urlSearchSwayamsevakNew = baseUrlAPI + '/SearchSwayamsevak';
 const String urlBulkExcelUploadSajjanAnya = baseUrlAPI + '/ExcelUploadsajjananya';
 
+const String urlcreateupdateshaakhapustikaRequest = baseUrlAPI + '/createupdateshaakhapustika';
+const String urlgetshaakhapustikalist = baseUrlAPI + '/getshaakhapustikalist';
+const String urlgetshaakhapustikabyid = baseUrlAPI + '/getshaakhapustikabyid';
 //////////////////////////////////////////////////////////////////////////////////////////
 const String patchSuffix = '';
 const String dbVersion = '5';
@@ -396,6 +404,8 @@ Map<String, dynamic> userDetails = {
   'LastLoginTimeStamp': '',
   'isLoggedIn': 'false',
   'IsPravaasiKaaryakartaa': false,
+  'ShowShakhaSaptaha': '',
+  'ShowPustika': '',
   'can_edit': '',
   'DaayitvaNameforshow': '',
   'DaayitvaId': '',
@@ -732,6 +742,8 @@ Future<void> populateUserDetailsMap() async {
     userDetails['LastLoginTimeStamp'] = uData.lastLoginTimeStamp;
     userDetails['isLoggedIn'] = uData.isLoggedIn;
     userDetails['IsPravaasiKaaryakartaa'] = uData.isPravaasiKaaryakartaa;
+    userDetails['ShowShakhaSaptaha'] = uData.showShakhaSaptaha;
+    userDetails['ShowPustika'] = uData.showPustika;
   });
 
   levelId = int.tryParse(Statics.userDetails["LevelID"]?.toString() ?? "0") ?? 0;
@@ -857,6 +869,22 @@ Future<List<StaticMasterBAL>> getStaticLDB(String entityType) async {
     _staticMaster.add(info);
   });
   return _staticMaster;
+}
+
+Future<List<StaticMasterBAL>> getKrayakramList() async {
+  List<StaticMasterBAL> _karyakramList = [];
+
+  var sqlQuery = "select * from StaticMaster where EntityType='shaakhapustika';";
+
+  log(sqlQuery);
+
+  var result = await DatabaseHelper.getData(sqlQuery);
+  // log("resultresult =-=->  ${result}");
+  result.forEach((element) {
+    var info = StaticMasterBAL.fromMap(element);
+    _karyakramList.add(info);
+  });
+  return _karyakramList;
 }
 
 Future<List<StateMasterBAL>> getStateLDB(String type) async {
@@ -2431,6 +2459,86 @@ Future<VastiSurveyReportModel?> vastisarvekshanReportData(context, String? userI
 
     return null;
   }
+}
+
+Future<CreateUpdateShaakhaPustikaRespModel?> createUpdateShaakhaPustika(CreateUpdateShaakhaPustikaRequest requestModel) async {
+  bool? connected = await isInternetConnected();
+  if (connected != true) {
+    return null;
+  }
+
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  log("API >>>>>>>>>>>>>> $urlcreateupdateshaakhapustikaRequest");
+  print(json.encode(requestModel.toJson()));
+
+  var response = await http.post(
+    Uri.parse(urlcreateupdateshaakhapustikaRequest),
+    headers: jHeaders,
+    body: json.encode(requestModel.toJson()),
+  );
+
+  if (response.statusCode == 200) {
+    var responseBody = json.decode(response.body);
+    final respData = CreateUpdateShaakhaPustikaRespModel.fromJson(responseBody);
+    log("Print the body for urlcreateupdateshaakhapustikaRequest >>>>>>>>>>>>>>>>> ${response.body}");
+
+    return respData; // return even on failure so you can show respData.message
+  }
+  return null;
+}
+
+Future<GetShaakhaPustikaListRespModel?> getUpdateShakhaPustikaList(GetShaakhaPustikaListRequest ListRequestmodel) async {
+  bool? connected = await isInternetConnected();
+  if (connected != true) {
+    return null;
+  }
+
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  log("API >>>>>>>>>>>>>> $urlgetshaakhapustikalist");
+  print(json.encode(ListRequestmodel.toJson()));
+
+  var response = await http.post(
+    Uri.parse(urlgetshaakhapustikalist),
+    headers: jHeaders,
+    body: json.encode(ListRequestmodel.toJson()),
+  );
+  if (response.statusCode == 200) {
+    var responseBody = json.decode(response.body);
+    final respData = GetShaakhaPustikaListRespModel.fromJson(responseBody);
+    log("Print the body for urlcreateupdateshaakhapustikaRequest >>>>>>>>>>>>>>>>> ${response.body}");
+
+    return respData; // return even on failure so you can show respData.message
+  }
+  return null;
+}
+
+Future<GetShaakhaPustikaByIdRespModel?> getShaakhaPustikaById(int pkid) async {
+  bool? connected = await isInternetConnected();
+  if (connected != true) {
+    return null;
+  }
+
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+  int id = pkid;
+  log("API >>>>>>>>>>>>>> $urlgetshaakhapustikabyid");
+  //print(json.encode(requestModel.toJson()));
+  final requestModel = RequestModelById(id: id);
+  log("requestmodel:${requestModel.toJson()}");
+  var response = await http.post(
+    Uri.parse(urlgetshaakhapustikabyid),
+    headers: jHeaders,
+    body: json.encode(requestModel.toJson()),
+  );
+  log("byid response:${response.statusCode}");
+  if (response.statusCode == 200) {
+    var responseBody = json.decode(response.body);
+    final respData = GetShaakhaPustikaByIdRespModel.fromJson(responseBody);
+    log("Print the body for urlGetShaakhaPustikaById >>>>>>>>>>>>>>>>> ${response.body}");
+    return respData; // Status may be null like your list API — caller checks data != null
+  }
+  return null;
 }
 
 Future<NagarVastiSampurnaModel?> vastisarvekshanAllReportData(context, String? userID, String? targetGeoUnitID, String? levelType) async {

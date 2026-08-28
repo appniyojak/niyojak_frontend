@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:niyojak_prod/models/response_model/AbhiyaanLoginDataResponse.dart';
 import 'package:niyojak_prod/providers/login.dart';
+import 'package:niyojak_prod/screens/shakha_pustika/shakha_pustika_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../helpers/static_data.dart' as Statics;
@@ -141,6 +142,21 @@ class _AppDrawerState extends State<AppDrawer> {
   }
 
   bool _isExpanded = false;
+  bool _toShowShakhaPustika = Statics.userDetails["ShowShakhaSaptaha"].toString() == "1";
+  int _shakhaPustika = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _shakhaPustika = Statics.userDetails['ShowPustika'];
+    print('init seeingshkahapustika:$_shakhaPustika');
+    if (_shakhaPustika == 1) {
+      setState(() {
+        _toShowShakhaPustika = true;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -173,6 +189,33 @@ class _AppDrawerState extends State<AppDrawer> {
                 Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
               },
             ),
+            if (_toShowShakhaPustika) ...[
+              Divider(),
+              ListTile(
+                dense: true,
+                leading: Icon(FontAwesomeIcons.book),
+                title: Text(
+                  Statics.getLabel('ShakhaPustika'),
+                  style: TextStyle(fontSize: 18),
+                ),
+                onTap: () {
+                  Navigator.of(context).pushReplacementNamed(ShakhaPustika.routeName);
+                },
+              ),
+            ],
+            if (Statics.levelId != 1) Divider(),
+            if (Statics.levelId != 1)
+              ListTile(
+                dense: true,
+                leading: Icon(FontAwesomeIcons.university),
+                title: Text(
+                  Statics.getLabel('searchShaakhaaScreenLabel'),
+                  style: TextStyle(fontSize: 18),
+                ),
+                onTap: () {
+                  Navigator.of(context).pushReplacementNamed(ShaakhaMainTabScreen.routeName);
+                },
+              ),
             // Divider(),
             // ExpansionTile(
             //   leading: Icon(Icons.location_searching, size: 20),
@@ -617,19 +660,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   Navigator.of(context).pushNamed(AnnualBaithakEkatritVrutta.routeName);
                 },
               ),
-            if (Statics.levelId != 1) Divider(),
-            if (Statics.levelId != 1)
-              ListTile(
-                dense: true,
-                leading: Icon(FontAwesomeIcons.university),
-                title: Text(
-                  Statics.getLabel('searchShaakhaaScreenLabel'),
-                  style: TextStyle(fontSize: 18),
-                ),
-                onTap: () {
-                  Navigator.of(context).pushReplacementNamed(ShaakhaMainTabScreen.routeName);
-                },
-              ),
+
             if (Statics.levelId > 3) Divider(),
             // if (shouldShowListTileforGeounitCHange(Statics.userDetails['LevelName'], Statics.userDetails["DaayitvaName"]) == true)
             //   ListTile(
@@ -898,6 +929,7 @@ class _AppDrawerState extends State<AppDrawer> {
                 },
               ),
             Divider(),
+
             ListTile(
               dense: true,
               leading: Icon(Icons.help),

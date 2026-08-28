@@ -99,6 +99,8 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _isGeounitExpanded = false;
   bool _isNagarTableExpanded = false;
 
+  bool _showShakhaSaptaha = false;
+
   // ─── Menu ──────────────────────────────────────────────────────────────────
   List<MenuChoices> choices = [];
 
@@ -197,6 +199,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Vehicle? _vehicle;
   GanveshData? _tgganveshData;
   Vehicle? _tgvehicle;
+  static List<GatividhiKaaryakartaa> tgLstGatividhiKaaryakartaa = [];
 
   // ─── Access-control lists ─────────────────────────────────────────────────
   final List<String> _deniedLevels = ["Shakha", "Saptahik Milan", "शाखा", "साप्ताहिक मिलन"];
@@ -257,6 +260,9 @@ class _HomeScreenState extends State<HomeScreen> {
   callAllData() async {
     await initData();
     await _initScreen();
+    await Statics.populateUserDetailsMap;
+    log("toshowshakha------------------------------>${Statics.userDetails['ShowShakhaSaptaha']}");
+    _showShakhaSaptaha = Statics.userDetails['ShowShakhaSaptaha'] == 1 ? true : false;
     _getReleaseNotes();
   }
 
@@ -682,6 +688,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final data = await Statics.getDashboardDataByGeoUnit(Statics.userDetails["userID"], _swayamsevakController.deepestSelectedGeoUnitId ?? "0");
     if (data['Status'] != "Success") {
       _clearSwayamsevakPanelData();
+
       return;
     }
     _tgbloodgroup = [];
@@ -722,6 +729,13 @@ class _HomeScreenState extends State<HomeScreen> {
     if (sd['VehicleData'] != null) {
       _tgvehicle = Vehicle.fromJson(sd['VehicleData']);
     }
+    if (sd['ListKaaryakartaaCountByGatividhi'] != null) {
+      sd['ListKaaryakartaaCountByGatividhi'].forEach((v) => tgLstGatividhiKaaryakartaa.add(GatividhiKaaryakartaa.fromJson(v)));
+    }
+    if (sd['ListKaaryakartaaCountByAayaam'] != null) {
+      sd['ListKaaryakartaaCountByAayaam'].forEach((v) => Statics.tgLstAayaamKaaryakartaa.add(AayaamKaaryakartaaCountBAL.fromJson(v)));
+    }
+
     setState(() {
       tgTotalKaaryakartaaCount = sd["TotalKaaryakartaaCount"].toString();
       tgTotalSwayamsevakCount = sd["TotalSwayamsevakCount"].toString();
@@ -796,6 +810,8 @@ class _HomeScreenState extends State<HomeScreen> {
       _tgbloodgroup = _tgexpertieslist = _tginterestlist = _tgmothertonguelist = _tgsangayulist = _tgghoshwadlist = [];
       _tgganveshData = null;
       _tgvehicle = null;
+      tgLstGatividhiKaaryakartaa = [];
+      Statics.tgLstPreritKaaryakartaa.clear();
       _isMySearching = false;
     });
   }
@@ -2703,7 +2719,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 const SizedBox(height: 18),
               ],
-
+              if (_showShakhaSaptaha) ...[
+                _cardTile(Statics.getLabel('shakhaVistaar'), () => Navigator.of(context).pushNamed(ShakhaSaptahMainTab.routeName), makeHighlight: true),
+                const SizedBox(height: 18),
+              ],
               // ── Yesterday Praant ───────────────────────────────────────────
               Legend(legendString: "MyGeoVruttaData", fontsize: 18),
               _buildYesterdayPraantTable(),
@@ -2970,53 +2989,88 @@ class _HomeScreenState extends State<HomeScreen> {
       const SizedBox(height: 15),
       _tgvehicle == null ? SizedBox() : _swayamsewakVehicle(vehicle: _tgvehicle!, showListIcon: _isTgSearched, controller: controller),
       const SizedBox(height: 15),
-      Legend(legendString: "Gatividhi", fontsize: 18),
-      _buildNameCountTable(
+      _buildNameCountList(
           data: Statics.tgLstGatividhiKaaryakartaa,
-          nameHeader: Statics.getLabel('Gatividhi'),
-          countHeader: Statics.getLabel('KaaryakartaaCount'),
-          nameOf: (i) => i.gatividhiName ?? '',
-          countOf: (i) => '${i.kaaryakartaaCount}'),
+          legendString: 'Gatividhi',
+          type: 'Gatividhi',
+          nameOf: (item) => item.gatividhiName.toString(),
+          countOf: (item) => item.kaaryakartaaCount.toString()),
+      //Legend(legendString: "Gatividhi", fontsize: 18),
+      //_gatividhiKaaryakartaa(gatividhiList: tgLstGatividhiKaaryakartaa, controller: controller, showListIcon: true),
+      // _buildNameCountTable(
+      //     data: Statics.tgLstGatividhiKaaryakartaa,
+      //     nameHeader: Statics.getLabel('Gatividhi'),
+      //     countHeader: Statics.getLabel('KaaryakartaaCount'),
+      //     nameOf: (i) => i.gatividhiName ?? '',
+      //     countOf: (i) => '${i.kaaryakartaaCount}'),
       const SizedBox(height: 15),
-      Legend(legendString: "Aayaam", fontsize: 18),
-      _buildNameCountTable(
-          data: Statics.tgLstAayaamKaaryakartaa,
-          nameHeader: Statics.getLabel('Aayaam'),
-          countHeader: Statics.getLabel('KaaryakartaaCount'),
-          nameOf: (i) => i.aayaamName ?? '',
-          countOf: (i) => '${i.kaaryakartaaCount}'),
+      _buildNameCountList(
+          data: Statics.tgLstAayaamKaaryakartaa, legendString: 'Aayaam', type: 'Aayaam', nameOf: (item) => item.aayaamName.toString(), countOf: (item) => item.kaaryakartaaCount.toString()),
+      //_aayamCount(aayamlist: Statics.tgLstAayaamKaaryakartaa, controller: controller, showListIcon: true),
+      // Legend(legendString: "Aayaam", fontsize: 18),
+      // _buildNameCountTable(
+      //     data: Statics.tgLstAayaamKaaryakartaa,
+      //     nameHeader: Statics.getLabel('Aayaam'),
+      //     countHeader: Statics.getLabel('KaaryakartaaCount'),
+      //     nameOf: (i) => i.aayaamName ?? '',
+      //     countOf: (i) => '${i.kaaryakartaaCount}'),
       const SizedBox(height: 15),
-      Legend(legendString: "Sangha-PreritSansthaa", fontsize: 18),
-      _buildNameCountTable(
+      _buildNameCountList(
           data: Statics.tgLstPreritKaaryakartaa,
-          nameHeader: Statics.getLabel('AreaOfOperations'),
-          countHeader: Statics.getLabel('KaaryakartaaCount'),
-          nameOf: (i) => i.preritAOOName ?? '',
-          countOf: (i) => '${i.kaaryakartaaCount}'),
+          legendString: 'Sangha-PreritSansthaa',
+          type: 'Sangha-PreritSansthaa',
+          nameOf: (item) => item.preritAOOName.toString(),
+          countOf: (item) => item.kaaryakartaaCount.toString()),
+      //_sanghapreritSanghatna(sanghaPreritlist: Statics.tgLstPreritKaaryakartaa, controller: controller, showListIcon: true),
+      // Legend(legendString: "Sangha-PreritSansthaa", fontsize: 18),
+      // _buildNameCountTable(
+      //     data: Statics.tgLstPreritKaaryakartaa,
+      //     nameHeader: Statics.getLabel('AreaOfOperations'),
+      //     countHeader: Statics.getLabel('KaaryakartaaCount'),
+      //     nameOf: (i) => i.preritAOOName ?? '',
+      //     countOf: (i) => '${i.kaaryakartaaCount}'),
       const SizedBox(height: 15),
-      Legend(legendString: "OtherSocialOrganization", fontsize: 18),
-      _buildNameCountTable(
+      _buildNameCountList(
           data: Statics.tgLstSocialOrgKaaryakartaa,
-          nameHeader: Statics.getLabel('AreaOfOperations'),
-          countHeader: Statics.getLabel('KaaryakartaaCount'),
-          nameOf: (i) => i.mainAOOName ?? '',
-          countOf: (i) => '${i.kaaryakartaaCount}'),
+          legendString: 'OtherSocialOrganization',
+          type: "OtherSocialOrganization",
+          nameOf: (item) => item.mainAOOName.toString(),
+          countOf: (item) => item.kaaryakartaaCount.toString()),
+      // Legend(legendString: "OtherSocialOrganization", fontsize: 18),
+      // _buildNameCountTable(
+      //     data: Statics.tgLstSocialOrgKaaryakartaa,
+      //     nameHeader: Statics.getLabel('AreaOfOperations'),
+      //     countHeader: Statics.getLabel('KaaryakartaaCount'),
+      //     nameOf: (i) => i.mainAOOName ?? '',
+      //     countOf: (i) => '${i.kaaryakartaaCount}'),
       const SizedBox(height: 15),
-      Legend(legendString: "StudentCategory", fontsize: 18),
-      _buildNameCountTable(
+      _buildNameCountList(
           data: Statics.tgLstStudentCategory,
-          nameHeader: Statics.getLabel('StudentCategory'),
-          countHeader: Statics.getLabel('SwayamsevakCount'),
-          nameOf: (i) => i.studentCategoryName ?? '',
-          countOf: (i) => '${i.countByStudentCategory}'),
+          legendString: "StudentCategory",
+          type: "StudentCategory",
+          nameOf: (item) => item.studentCategoryName.toString(),
+          countOf: (item) => item.countByStudentCategory.toString()),
+      // Legend(legendString: "StudentCategory", fontsize: 18),
+      // _buildNameCountTable(
+      //     data: Statics.tgLstStudentCategory,
+      //     nameHeader: Statics.getLabel('StudentCategory'),
+      //     countHeader: Statics.getLabel('SwayamsevakCount'),
+      //     nameOf: (i) => i.studentCategoryName ?? '',
+      //     countOf: (i) => '${i.countByStudentCategory}'),
       const SizedBox(height: 15),
-      Legend(legendString: "VyavasaayeeCategory", fontsize: 18),
-      _buildNameCountTable(
+      _buildNameCountList(
           data: Statics.tgLstVyavasaayeeCategory,
-          nameHeader: Statics.getLabel('VyavasaayeeCategory'),
-          countHeader: Statics.getLabel('SwayamsevakCount'),
-          nameOf: (i) => i.vyavasaayeeCategoryName ?? '',
-          countOf: (i) => '${i.countByVyavasaayeeCategory}'),
+          legendString: "VyavasaayeeCategory",
+          type: "VyavasaayeeCategory",
+          nameOf: (item) => item.vyavasaayeeCategoryName.toString(),
+          countOf: (item) => item.countByVyavasaayeeCategory.toString()),
+      // Legend(legendString: "VyavasaayeeCategory", fontsize: 18),
+      // _buildNameCountTable(
+      //     data: Statics.tgLstVyavasaayeeCategory,
+      //     nameHeader: Statics.getLabel('VyavasaayeeCategory'),
+      //     countHeader: Statics.getLabel('SwayamsevakCount'),
+      //     nameOf: (i) => i.vyavasaayeeCategoryName ?? '',
+      //     countOf: (i) => '${i.countByVyavasaayeeCategory}'),
       const SizedBox(height: 15),
     ]);
   }
@@ -3561,6 +3615,128 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+//-------------------Gatividhi----------------------------//
+  //Widget _gatividhiKaryakartaCount({required List<String> gatividhiList}) {}
+  Widget _gatividhiKaaryakartaa({
+    required List<GatividhiKaaryakartaa> gatividhiList,
+    bool showListIcon = true,
+    GeoHierarchyController? controller,
+  }) {
+    return Column(
+      children: [
+        // Text(gatividhiList.length.toString()),
+        Legend(
+          legendString: "Gatividhi",
+          fontsize: 18,
+          onPressed: !showListIcon
+              ? null
+              : () => showNamesList(
+                    geoUnitID: controller?.deepestSelectedGeoUnitId,
+                    type: "Gatividhi",
+                  ),
+        ),
+        ...gatividhiList.map(
+          (item) => Single1ColumnRow(
+            txtString: item.gatividhiName ?? '',
+            value: item.kaaryakartaaCount?.toString() ?? '0',
+            fontsize: 15,
+          ),
+        ),
+      ],
+    );
+  }
+
+  //-------------------------Aayam------------------------//
+  Widget _aayamCount({
+    required List<AayaamKaaryakartaaCountBAL> aayamlist,
+    bool showListIcon = true,
+    GeoHierarchyController? controller,
+  }) {
+    return Column(
+      children: [
+        // Text(gatividhiList.length.toString()),
+        Legend(
+          legendString: "Aayaam",
+          fontsize: 18,
+          onPressed: !showListIcon
+              ? null
+              : () => showNamesList(
+                    geoUnitID: controller?.deepestSelectedGeoUnitId,
+                    type: "Aayaam",
+                  ),
+        ),
+        ...aayamlist.map(
+          (item) => Single1ColumnRow(
+            txtString: item.aayaamName ?? '',
+            value: item.kaaryakartaaCount?.toString() ?? '0',
+            fontsize: 15,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _sanghapreritSanghatna({
+    required List<PreritKaaryakartaaCountBAL> sanghaPreritlist,
+    bool showListIcon = true,
+    GeoHierarchyController? controller,
+  }) {
+    return Column(
+      children: [
+        // Text(gatividhiList.length.toString()),
+        Legend(
+          legendString: "Sangha-PreritSansthaa",
+          fontsize: 18,
+          onPressed: !showListIcon
+              ? null
+              : () => showNamesList(
+                    geoUnitID: controller?.deepestSelectedGeoUnitId,
+                    type: "Sangha-PreritSansthaa",
+                  ),
+        ),
+        ...sanghaPreritlist.map(
+          (item) => Single1ColumnRow(
+            txtString: item.preritAOOName ?? '',
+            value: item.kaaryakartaaCount?.toString() ?? '0',
+            fontsize: 15,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildNameCountList<T>({
+    required List<T> data,
+    required String legendString,
+    required String type,
+    required String Function(T item) nameOf,
+    required String Function(T item) countOf,
+    bool showListIcon = true,
+    GeoHierarchyController? controller,
+  }) {
+    return Column(
+      children: [
+        Legend(
+          legendString: legendString,
+          fontsize: 18,
+          onPressed: !showListIcon
+              ? null
+              : () => showNamesList(
+                    geoUnitID: controller?.deepestSelectedGeoUnitId,
+                    type: type,
+                  ),
+        ),
+        ...data.map(
+          (item) => Single1ColumnRow(
+            txtString: nameOf(item),
+            value: countOf(item),
+            fontsize: 15,
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _swayamsewakVehicle({required Vehicle vehicle, bool showListIcon = true, GeoHierarchyController? controller}) {
     return Column(
       children: [
@@ -3983,7 +4159,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _cardRow([
           if (_fromAboveMandal) _cardTile(Statics.getLabel("yuvaSangam"), () => Navigator.of(context).pushNamed(YuvaSangamMainTab.routeName)),
           // _cardTile(Statics.getLabel("shakhaVistaar"), () => Statics.showToast(Statics.getLabel("workInProgress"), toastLength: Toast.LENGTH_LONG)),
-          _cardTile(Statics.getLabel("shakhaVistaar"), () => Navigator.of(context).pushNamed(ShakhaSaptahMainTab.routeName)),
+          if (!_showShakhaSaptaha) _cardTile(Statics.getLabel("shakhaVistaar"), () => Navigator.of(context).pushNamed(ShakhaSaptahMainTab.routeName)),
         ]),
       ],
     );
@@ -4240,5 +4416,31 @@ class Vehicle {
 
       //cnt: int.tryParse(json['cnt'].toString()) ?? 0,
     );
+  }
+}
+
+class GatividhiKaaryakartaa {
+  int? gatividhiID;
+  String? gatividhiName;
+  int? kaaryakartaaCount;
+
+  GatividhiKaaryakartaa({
+    this.gatividhiID,
+    this.gatividhiName,
+    this.kaaryakartaaCount,
+  });
+
+  GatividhiKaaryakartaa.fromJson(Map<String, dynamic> json) {
+    gatividhiID = json['GatividhiID'];
+    gatividhiName = json['GatividhiName'];
+    kaaryakartaaCount = json['KaaryakartaaCount'];
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'GatividhiID': gatividhiID,
+      'GatividhiName': gatividhiName,
+      'KaaryakartaaCount': kaaryakartaaCount,
+    };
   }
 }

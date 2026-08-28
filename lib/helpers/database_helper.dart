@@ -64,7 +64,7 @@ class DatabaseHelper {
           ' FullName VARCHAR(300),Email VARCHAR(500),DaayitvaStartYear INT,DaayitvaName VARCHAR(200),' +
           ' DaayitvaID INT,DaayitvaGeoUnitName VARCHAR(100),DaayitvaGeoUnitID INT,BirthDate VARCHAR(20), ' +
           ' LinkedGeoUnitHierarchy VARCHAR(100), IsFirstLogin BOOL, LastLoginTimeStamp VARCHAR(30), ' +
-          ' IsLoggedIn VARCHAR(10), IsPravaasiKaaryakartaa BOOL)');
+          ' IsLoggedIn VARCHAR(10), IsPravaasiKaaryakartaa BOOL,ShowShakhaSaptaha INT,ShowPustika INT)');
 
       if (oldVersion < 5) {
         await _ensureColumn(db, 'GeoUnitMaster', 'issankalpit', 'INT');
@@ -96,7 +96,7 @@ class DatabaseHelper {
           ' FullName VARCHAR(300),Email VARCHAR(500),DaayitvaStartYear INT,DaayitvaName VARCHAR(200),' +
           ' DaayitvaID INT,DaayitvaGeoUnitName VARCHAR(100),DaayitvaGeoUnitID INT,BirthDate VARCHAR(20), ' +
           ' LinkedGeoUnitHierarchy VARCHAR(100), IsFirstLogin BOOL, LastLoginTimeStamp VARCHAR(30), ' +
-          ' IsLoggedIn VARCHAR(10), IsPravaasiKaaryakartaa BOOL)');
+          ' IsLoggedIn VARCHAR(10), IsPravaasiKaaryakartaa BOOL,ShowShakhaSaptaha INT,ShowPustika INT)');
 
       db.execute(''' CREATE TABLE AbhiyanSwayamsevakData (
           AbhiyaDaayitvaID INT, AbhiyanSwayamsevakID INT, DaayityaName VARCHAR(256), Email VARCHAR(256), FullName VARCHAR(256),
@@ -415,7 +415,7 @@ class DatabaseHelper {
                       ' PreferredLanguageCode, PraantID, MobileNumber,LinkedVastiName,LinkedVastiID, LinkedShaakhaaName,' +
                       ' LinkedShaakhaaID, LinkedGraamName, LinkedGraamID, LevelName, LevelID, FullName, ' +
                       ' Email, DaayitvaStartYear, DaayitvaName, DaayitvaID, DaayitvaGeoUnitName, DaayitvaGeoUnitID, ' +
-                      ' BirthDate, LinkedGeoUnitHierarchy, IsFirstLogin, LastLoginTimeStamp, IsLoggedIn, IsPravaasiKaaryakartaa) VALUES '
+                      ' BirthDate, LinkedGeoUnitHierarchy, IsFirstLogin, LastLoginTimeStamp, IsLoggedIn, IsPravaasiKaaryakartaa, ShowShakhaSaptaha, ShowPustika) VALUES '
                   : ',') +
               '(' +
               dataList['SwayamsevakID'].toString() +
@@ -475,7 +475,12 @@ class DatabaseHelper {
               '\',\'true\', ' +
               ((dataList[' IsLoggedIn'] == null || dataList[' IsLoggedIn'] == false) ? '0' : '1') +
               ((dataList['IsPravaasiKaaryakartaa'] == null || dataList['IsPravaasiKaaryakartaa'] == false) ? '0' : '1') +
+              ',' +
+              dataList['isvistaruser'].toString() +
+              ',' +
+              dataList['showpustika'].toString() +
               ')';
+          log("sqlString:$sqlStr");
         } catch (e) {
           print(" -- DB Exception -- ${e.toString()}");
         }
@@ -923,6 +928,7 @@ class DatabaseHelper {
       sqlStr = 'SELECT 1 FROM UserDataMaster WHERE SwayamsevakID=' + data['SwayamsevakID'].toString() + ';';
       var result = await db.rawQuery(sqlStr);
       if (result.length > 0) {
+        print("checking");
         // Record found, then update it
         sqlStr = 'UPDATE UserDataMaster SET ' +
             ' SwayamsevakDaayitvaID=' +
@@ -987,6 +993,10 @@ class DatabaseHelper {
             ', IsLoggedIn=\'true\' ' +
             ', IsPravaasiKaaryakartaa=' +
             (data["IsPravaasiKaaryakartaa"] == null || data["IsPravaasiKaaryakartaa"] == false ? '0' : '1') +
+            ', ShowShakhaSaptaha=' +
+            data['isvistaruser'].toString() +
+            ', ShowPustika=' +
+            data['showpustika'].toString() +
             ' WHERE SwayamsevakID=' +
             data['SwayamsevakID'].toString() +
             ';';
@@ -996,7 +1006,7 @@ class DatabaseHelper {
             ' PreferredLanguageCode, PraantID, MobileNumber,LinkedVastiName,LinkedVastiID, LinkedShaakhaaName,' +
             ' LinkedShaakhaaID, LinkedGraamName, LinkedGraamID, LevelName, LevelID, FullName, ' +
             ' Email, DaayitvaStartYear, DaayitvaName, DaayitvaID, DaayitvaGeoUnitName, DaayitvaGeoUnitID, ' +
-            ' BirthDate, LinkedGeoUnitHierarchy, IsFirstLogin, LastLoginTimeStamp, IsLoggedIn, IsPravaasiKaaryakartaa) VALUES (' +
+            ' BirthDate, LinkedGeoUnitHierarchy, IsFirstLogin, LastLoginTimeStamp, IsLoggedIn, IsPravaasiKaaryakartaa,ShowShakhaSaptaha,ShowPustika) VALUES (' +
             data['SwayamsevakID'].toString() +
             ',' +
             data['SwayamsevakDaayitvaID'].toString() +
@@ -1054,6 +1064,10 @@ class DatabaseHelper {
             ',' +
             ((data[' IsLoggedIn'] == null || data[' IsLoggedIn'] == false) ? '0' : '1') +
             ((data['IsPravaasiKaaryakartaa'] == null || data['IsPravaasiKaaryakartaa'] == false) ? '0' : '1') +
+            ',' +
+            data['isvistaruser'].toString() +
+            ',' +
+            data['showpustika'].toString() +
             ' );';
       }
     } else if (tableName == 'AbhiyanSwayamsevakData') {
