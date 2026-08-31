@@ -29,7 +29,9 @@ class _AudioPlayerDialogState extends State<AudioPlayerDialog> {
   Duration _position = Duration.zero;
   bool _isPlaying = false;
   bool _isLoading = true;
+  bool _isCompleted = false; // NEW — tracks whether playback ran to the end
   String? _error;
+  late final Source _source; // NEW — kept so we can fully replay via play() after completion
 
   @override
   void initState() {
@@ -38,6 +40,8 @@ class _AudioPlayerDialogState extends State<AudioPlayerDialog> {
   }
 
   Future<void> _initPlayer() async {
+    await _player.setReleaseMode(ReleaseMode.stop);
+
     _player.onDurationChanged.listen((d) {
       if (mounted) setState(() => _duration = d);
     });
@@ -58,18 +62,17 @@ class _AudioPlayerDialogState extends State<AudioPlayerDialog> {
       if (mounted) {
         setState(() {
           _isPlaying = false;
-          _position = Duration.zero;
+          _isCompleted = true; // NEW — mark so the next play re-issues play(source)
+          _position = _duration; // NEW — show the slider/time at the end instead of snapping to 0
         });
       }
     });
 
     try {
-      if (widget.isLocalFile) {
-        await _player.setSourceDeviceFile(widget.audioUrl);
-      } else {
-        await _player.setSourceUrl(widget.audioUrl);
-      }
-      await _player.resume();
+      // NEW — build and hold the Source once, reused for both first play and replay
+      _source = widget.isLocalFile ? DeviceFileSource(widget.audioUrl) : UrlSource(widget.audioUrl);
+
+      await _player.play(_source); // CHANGED — play(source) instead of setSourceX + resume
       setState(() => _isLoading = false);
     } catch (e) {
       setState(() {
@@ -82,14 +85,32 @@ class _AudioPlayerDialogState extends State<AudioPlayerDialog> {
   Future<void> _togglePlayPause() async {
     if (_isPlaying) {
       await _player.pause();
-    } else {
-      await _player.resume();
+      return;
     }
+
+    if (_isCompleted) {
+      // NEW — playback had finished; resume() won't restart a completed
+      // session on some platforms, so fully re-issue play() instead.
+      setState(() {
+        _isCompleted = false;
+        _position = Duration.zero;
+      });
+      await _player.play(_source);
+      return;
+    }
+
+    await _player.resume();
   }
 
   Future<void> _seekBy(int seconds) async {
     final newPosition = _position + Duration(seconds: seconds);
     final clamped = newPosition < Duration.zero ? Duration.zero : (newPosition > _duration ? _duration : newPosition);
+
+    if (_isCompleted) {
+      // NEW — seeking after completion needs a real replay to re-arm the session
+      setState(() => _isCompleted = false);
+      await _player.play(_source);
+    }
     await _player.seek(clamped);
   }
 
@@ -153,7 +174,13 @@ class _AudioPlayerDialogState extends State<AudioPlayerDialog> {
                   max: _duration.inMilliseconds == 0 ? 1 : _duration.inMilliseconds.toDouble(),
                   activeColor: primaryColor,
                   onChanged: (value) async {
-                    await _player.seek(Duration(milliseconds: value.toInt()));
+                    final target = Duration(milliseconds: value.toInt());
+                    if (_isCompleted) {
+                      // NEW — dragging the slider after completion also needs a real replay
+                      setState(() => _isCompleted = false);
+                      await _player.play(_source);
+                    }
+                    await _player.seek(target);
                   },
                 ),
               ),

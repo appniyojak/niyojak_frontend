@@ -65,7 +65,7 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) => initData());
 
-    print("_shaakhaaList_shaakhaaList  --->>> $_shaakhaaList");
+    print("_shaakhaaList_shaakhaaListttt  --->>> $_shaakhaaList");
 
     // if(int.parse(Statics.userDetails['LevelID']) <= 2){
     //   _shaakhaaList = _getshaakhaaList(-1, "get nothing", null, null);

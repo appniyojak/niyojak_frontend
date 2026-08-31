@@ -8,6 +8,7 @@ import 'package:flutter_html/flutter_html.dart' as flutter_html;
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:flutter_quill_delta_from_html/parser/html_to_delta.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart' as delta_html;
 
 import '../../../utils/globals.dart';
@@ -15,6 +16,7 @@ import '../../helpers/static_data.dart' as Statics;
 import '../../models/request_model/shakha_pustika_req_model.dart';
 import '../../providers/bals.dart';
 import '../../utils/stable_geounit_class.dart';
+import '../../validation_blocks/validator.dart';
 import 'audio_player_dialogue.dart';
 
 class SangrahaShkhaPustikaScreen extends StatefulWidget {
@@ -69,6 +71,7 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
   String? _localAudioPath; // NEW — path of the already-downloaded audio file
   bool get _hasPlayableAudio => _localAudioPath != null;
   bool _isLoading = true;
+  bool _isOpeningLink = false;
 
   @override
   void didChangeDependencies() {
@@ -303,9 +306,12 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('कृपया वयोगट निवडा')));
       return;
     }
-    if (_karyakramValue == '310' && _selectedAudioFile == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('ऑडिओ फाइल निवडणे अनिवार्य आहे.')));
-      return;
+    if (_linkController.text.trim().isNotEmpty) {
+      final valid = await isValidUrl(_linkController.text.trim());
+      if (!valid) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(Statics.getLabel('urlValidation'))));
+        return;
+      }
     }
     setState(() => _isSaving = true);
 
@@ -343,7 +349,7 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
 
       final fullHtml = _wrapAsFullHtmlDocument(quillFragmentHtml);
       //final int? currentUserId = int.tryParse(Statics.userDetails['UserID']!.toString());
-//print("karyakramid:${_karyakramIdMap[]}")
+      //print("karyakramid:${_karyakramIdMap[]}")
       final requestModel = CreateUpdateShaakhaPustikaRequest(
         pkid: _incomingPkId == null ? 0 : _incomingPkId!,
         karyakramid: int.tryParse(_karyakramValue.toString()) ?? 0,
@@ -356,30 +362,20 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
         urllink: _linkController.text.trim(),
         filebase64: fileBase64,
       );
-      // log("pkid: ${requestModel.pkid}");
-      // log("karyakramid: ${requestModel.karyakramid}");
-      // log("monthno: ${requestModel.monthno}");
-      // log("yearno: ${requestModel.yearno}");
-      // log("cuserid: ${requestModel.cuserid}");
-      // log("vayogatid: ${requestModel.vayogatid}");
-      // log("subjecttext: ${requestModel.subjecttext}");
-      // log("filepath: ${requestModel.filepath}");
-      // log("urllink: ${requestModel.urllink}");
-      // log("filebase64: ${requestModel.filebase64}");
+
       log("request model:${requestModel.toJson()}");
       final respData = await Statics.createUpdateShaakhaPustika(requestModel);
 
       if (!mounted) return;
 
       if (respData != null && respData.Status == '200') {
-        Navigator.of(context).pop(true);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(respData.Message ?? 'यशस्वीरित्या जतन झाले')),
-        );
-        // or reset form, as needed
+        final messenger = ScaffoldMessenger.of(context); // capture BEFORE popping
+        final message = respData.Message ?? 'यशस्वीरित्या जतन झाले';
+        Navigator.of(context).pop(true); // return true to caller
+        messenger.showSnackBar(SnackBar(content: Text(message)));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(respData?.Message ?? 'जतन करताना त्रुटी आली')),
+          SnackBar(content: Text(respData?.Message == 'Already Exists' ? 'माहिती उपलब्ध आहे' : 'जतन करताना त्रुटी आली')),
         );
       }
     } catch (e) {
@@ -414,6 +410,19 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
     );
 
     if (result != null && result.files.isNotEmpty) {
+      final picked = result.files.first;
+
+      // NEW — calculate size and enforce 25 MB limit
+      const maxSizeBytes = 25 * 1024 * 1024; // 25 MB
+      final pickedSizeMb = picked.size / (1024 * 1024);
+
+      if (picked.size > maxSizeBytes) {
+        log("Rejected audio file — size: ${pickedSizeMb.toStringAsFixed(2)} MB");
+        if (mounted) {
+          await _showFileSizeExceededDialog(pickedSizeMb);
+        }
+        return; // reject — don't set _selectedAudioFile
+      }
       setState(() {
         _selectedAudioFile = result.files.first;
       });
@@ -422,6 +431,27 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
       log("Audio bytes: ${_selectedAudioFile?.bytes != null}");
       //log("Audio selected: ${_selectedAudioFile?.name}, size: ${_selectedAudioFile?.size}, hasBytes: ${_selectedAudioFile?.bytes != null}");
     }
+  }
+
+  Future<void> _showFileSizeExceededDialog(double pickedSizeMb) {
+    return showDialog(
+      context: context,
+      builder: (dialogCtx) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: const Text('फाईल आकार मर्यादा'),
+          content: Text(
+            'निवडलेली फाईल ${pickedSizeMb.toStringAsFixed(2)} MB आहे. कृपया 25 MB पेक्षा लहान फाईल निवडा.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogCtx).pop(),
+              child: Text(Statics.getLabel('OK')),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -457,10 +487,6 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
                         // ── Audio playback card — deliberately OUTSIDE the
                         // AbsorbPointer below, so it stays tappable even when
                         // _isEditable is false (which it always is for गीत rows).
-                        if (_hasPlayableAudio && !_isEditable) ...[
-                          _sectionCard(child: _audioPlaySection(primaryColor)),
-                          const SizedBox(height: 16),
-                        ],
                         Opacity(
                           opacity: _isEditable ? 1.0 : 0.7,
                           child: AbsorbPointer(
@@ -477,6 +503,12 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
                             ),
                           ),
                         ),
+
+                        if (!_isEditable && (_karyakramValue != '308' && _karyakramValue != '309')) ...[
+                          _sectionCard(child: _audioPlaySection(primaryColor)),
+                          const SizedBox(height: 10),
+                          _sectionCard(child: _isOpeningLink ? Center(child: CircularProgressIndicator()) : _clickOnLink())
+                        ],
                       ],
                     ),
                   );
@@ -763,7 +795,7 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
         // ],
 
         // ── NEW: audio file picker ──
-        if (_karyakramValue == '310' && _karyakramValue != null) ...[
+        if (_karyakramValue == '310' && _isEditable) ...[
           Text(
             'ऑडिओ फाईल निवडा',
             style: TextStyle(fontSize: 13, color: Colors.grey.shade700, fontWeight: FontWeight.w500),
@@ -972,7 +1004,141 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
     );
   }
 
+  Future<void> _openLink() async {
+    if (_isOpeningLink) return; // NEW — prevent double-taps while already loading
+
+    final link = _linkController.text.trim();
+
+    if (link.isEmpty) return;
+
+    final uri = Uri.tryParse(link);
+
+    if (uri == null || !uri.hasScheme || !(uri.scheme == 'http' || uri.scheme == 'https')) {
+      _showLinkErrorDialog('दिलेला दुवा अवैध आहे.');
+      return;
+    }
+
+    setState(() => _isOpeningLink = true); // NEW — show loader
+
+    try {
+      final launched = await launchUrl(
+        uri,
+        mode: LaunchMode.externalApplication,
+      );
+
+      if (!launched && mounted) {
+        _showLinkErrorDialog('हा दुवा उघडता आला नाही, कृपया पुन्हा प्रयत्न करा.');
+      }
+    } catch (e) {
+      if (mounted) {
+        _showLinkErrorDialog('हा दुवा उघडता आला नाही, कृपया पुन्हा प्रयत्न करा.');
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isOpeningLink = false); // NEW — hide loader regardless of outcome
+      }
+    }
+  }
+
+  void _showLinkErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (dialogCtx) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: const Text('त्रुटी'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogCtx).pop(),
+              child: Text(Statics.getLabel('OK')),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _clickOnLink() {
+    final link = _linkController.text.trim();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'दुवा',
+          style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(
+            horizontal: 12,
+            vertical: 12,
+          ),
+          decoration: BoxDecoration(
+            color: Colors.grey.shade50,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color: Colors.grey.shade300,
+            ),
+          ),
+          child: Row(
+            children: [
+              Icon(
+                Icons.link,
+                size: 20,
+                color: Theme.of(context).primaryColor,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  link.isNotEmpty ? link : 'दुवा उपलब्ध नाही',
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: link.isNotEmpty ? Colors.blue.shade700 : Colors.grey.shade600,
+                    decoration: link.isNotEmpty ? TextDecoration.underline : TextDecoration.none,
+                  ),
+                ),
+              ),
+              if (link.isNotEmpty) ...[
+                const SizedBox(width: 10), // NEW — small gap so the spinner doesn't hug the text
+                if (_isOpeningLink) ...[
+                  // NEW — loader shown while the link is resolving/launching
+                  SizedBox(
+                    width: 18,
+                    height: 18,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                ] else ...[
+                  InkWell(
+                    onTap: _openLink,
+                    child: Icon(
+                      Icons.open_in_new,
+                      size: 18,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                ],
+              ],
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _audioPlaySection(Color primaryColor) {
+    final hasAudio = _localAudioPath != null && _localAudioPath!.trim().isNotEmpty; // NEW — guards both null and empty string
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -988,33 +1154,40 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
           ),
           child: Row(
             children: [
-              Icon(Icons.music_note_rounded, color: primaryColor),
+              Icon(
+                hasAudio ? Icons.music_note_rounded : Icons.music_off_rounded, // NEW — visual cue when absent
+                color: hasAudio ? primaryColor : Colors.grey.shade500,
+              ),
               const SizedBox(width: 10),
-              const Expanded(
+              Expanded(
                 child: Text(
-                  'सेव्ह केलेली ऑडिओ फाईल ऐकण्यासाठी बटण दाबा',
-                  style: TextStyle(fontSize: 14, color: Colors.black87),
+                  hasAudio ? 'सेव्ह केलेली ऑडिओ फाईल ऐकण्यासाठी बटण दाबा' : 'ऑडिओ उपलब्ध नाही', // NEW — shown when there's no file
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: hasAudio ? Colors.black87 : Colors.grey.shade600,
+                  ),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              InkWell(
-                borderRadius: BorderRadius.circular(30),
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (_) => AudioPlayerDialog(
-                      title: Statics.getLabel('ShakhaPustika'),
-                      audioUrl: _localAudioPath!,
-                      isLocalFile: true,
-                    ),
-                  );
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(color: primaryColor, shape: BoxShape.circle),
-                  child: const Icon(Icons.play_arrow_rounded, color: Colors.white, size: 26),
+              if (hasAudio) // NEW — button only rendered when audio actually exists
+                InkWell(
+                  borderRadius: BorderRadius.circular(30),
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (_) => AudioPlayerDialog(
+                        title: Statics.getLabel('ShakhaPustika'),
+                        audioUrl: _localAudioPath!,
+                        isLocalFile: true,
+                      ),
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(color: primaryColor, shape: BoxShape.circle),
+                    child: const Icon(Icons.play_arrow_rounded, color: Colors.white, size: 26),
+                  ),
                 ),
-              ),
             ],
           ),
         ),

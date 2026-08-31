@@ -91,6 +91,7 @@ class LogIn {
     Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
     FirebaseMessaging messaging = FirebaseMessaging.instance;
+
     print(Uri.parse(Statics.urlValidateUser));
     String? token;
     if (Platform.isAndroid) {

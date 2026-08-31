@@ -209,12 +209,12 @@ class _ShakhaPustika extends State<ShakhaPustika> {
         return AlertDialog(
           backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          title: const Text(
-            'सूचना',
+          title: Text(
+            Statics.getLabel('Suchna'),
             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.purple),
           ),
-          content: const Text(
-            'कृपया आधी ऑडिओ फाईल डाउनलोड करा, त्यानंतरच माहिती बघता येईल.',
+          content: Text(
+            Statics.getLabel('DownloadFileValidation'),
             style: TextStyle(fontSize: 15),
           ),
           actions: [
@@ -232,11 +232,11 @@ class _ShakhaPustika extends State<ShakhaPustika> {
     bool isVibhagLevelUser = false;
     geoUnitId = int.tryParse(_controller.deepestSelectedGeoUnitId.toString());
     if (_karyakramValue == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('कृपया कार्यक्रम निवडा')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(Statics.getLabel('ChooseKaryakram'))));
       return;
     }
     if (_selectedMonth == null || _selectedYear == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('कृपया महिना व वर्ष निवडा')));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('ChooseMonthYearValidation')));
       return;
     }
 
@@ -264,15 +264,15 @@ class _ShakhaPustika extends State<ShakhaPustika> {
           _isSearched = true;
         });
         if (respData.list.isEmpty) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('कोणतीही माहिती आढळली नाही')));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(Statics.getLabel('NoInfoText'))));
         }
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('माहिती मिळवताना त्रुटी आली')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(Statics.getLabel('ProblemGettingInfoMsg'))));
       }
     } catch (e) {
       log("Error fetching shaakha pustika list: $e");
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('काहीतरी चूक झाली, पुन्हा प्रयत्न करा')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(Statics.getLabel('SomethingWentWrong'))));
       }
     } finally {
       if (mounted) setState(() => _isSearching = false);
@@ -302,8 +302,11 @@ class _ShakhaPustika extends State<ShakhaPustika> {
           actions: [
             if (levelId == 7)
               IconButton(
-                onPressed: () {
-                  Navigator.of(context).pushNamed(SangrahaShkhaPustikaScreen.routeName);
+                onPressed: () async {
+                  final result = await Navigator.of(context).pushNamed(SangrahaShkhaPustikaScreen.routeName);
+                  if (result == true && mounted) {
+                    await _searchShaakhaPustika(); // refresh table with same filters
+                  }
                 },
                 icon: const Icon(Icons.add),
               )
@@ -410,12 +413,12 @@ class _ShakhaPustika extends State<ShakhaPustika> {
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionTitle('कार्यक्रम तपशील', Icons.event_note_rounded, primaryColor),
+          _sectionTitle(Statics.getLabel('KaryakramHeading'), Icons.event_note_rounded, primaryColor),
           const SizedBox(height: 16),
 
           // ── कार्यक्रम निवडा dropdown ──
           Text(
-            'कार्यक्रम निवडा',
+            Statics.getLabel('ChooseKaryakramTitle'),
             style: TextStyle(fontSize: 13, color: Colors.grey.shade700, fontWeight: FontWeight.w500),
           ),
           const SizedBox(height: 6),
@@ -433,9 +436,9 @@ class _ShakhaPustika extends State<ShakhaPustika> {
             onChanged: (value) {
               setState(() {
                 _karyakramValue = value;
-                _selectedMonth = DateTime.now().month;
-                _selectedYear = DateTime.now().year;
-                _vayogatValue = null;
+                // _selectedMonth = DateTime.now().month;
+                // _selectedYear = DateTime.now().year;
+                // _vayogatValue = null;
               });
               log("karyajkramchosing:$_karyakramValue");
             },
@@ -444,7 +447,7 @@ class _ShakhaPustika extends State<ShakhaPustika> {
           const SizedBox(height: 20),
 
           Text(
-            'महिना निवडा',
+            Statics.getLabel('ChooseMonthYearValidation'),
             style: TextStyle(fontSize: 13, color: Colors.grey.shade700, fontWeight: FontWeight.w500),
           ),
           // const SizedBox(height: 8),
@@ -564,15 +567,15 @@ class _ShakhaPustika extends State<ShakhaPustika> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _sectionTitle('निकाल', Icons.table_chart_rounded, primaryColor),
+        _sectionTitle(Statics.getLabel('Result'), Icons.table_chart_rounded, primaryColor),
         const SizedBox(height: 12),
         if (karyakramList.isEmpty) ...[
-          const Padding(
+          Padding(
             padding: EdgeInsets.symmetric(vertical: 20),
             child: Center(
                 child: Column(
               children: [
-                Text('कोणतीही माहिती आढळली नाही'),
+                Text(Statics.getLabel('NoInfoText')),
               ],
             )),
           )
@@ -591,11 +594,11 @@ class _ShakhaPustika extends State<ShakhaPustika> {
                 dataRowColor: MaterialStateProperty.all(Colors.white),
                 columnSpacing: 14,
                 columns: [
-                  if (karyakramList.isNotEmpty) DataColumn(label: _tableHeaderCell('माहिती बघा')),
-                  if (_karyakramValue == '310') DataColumn(label: _tableHeaderCell('डाउनलोड करा')),
-                  DataColumn(label: _tableHeaderCell('महिना')),
-                  DataColumn(label: _tableHeaderCell('वयोगट')),
-                  DataColumn(label: _tableHeaderCell('तपशील')),
+                  if (karyakramList.isNotEmpty) DataColumn(label: _tableHeaderCell(Statics.getLabel('ViewMenu'))),
+                  if (_karyakramValue == '310') DataColumn(label: _tableHeaderCell(Statics.getLabel('DoDownload'))),
+                  DataColumn(label: _tableHeaderCell(Statics.getLabel('month'))),
+                  DataColumn(label: _tableHeaderCell(Statics.getLabel('VayogatCode'))),
+                  DataColumn(label: _tableHeaderCell(Statics.getLabel('tapshil'))),
                   // if (_showDownloadColumn) DataColumn(label: _tableHeaderCell(Statics.getLabel('downloadBtn'))),
                 ],
                 rows: karyakramList.map((item) {
@@ -625,7 +628,7 @@ class _ShakhaPustika extends State<ShakhaPustika> {
         Padding(
           padding: const EdgeInsets.only(left: 5),
           child: Text(
-            "स्क्रोल करा --->",
+            Statics.getLabel('KeepScrolling'),
             style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
           ),
         ),
@@ -644,8 +647,6 @@ class _ShakhaPustika extends State<ShakhaPustika> {
     return '$base$rel';
   }
 
-  // ── UPDATED: गीत rows now gate "माहिती बघा" on the file already
-  // being downloaded via the download icon in the same row.
   Widget _tableInfoCellFromItem(GetShaakhaPustikaListItem item) {
     final primaryColor = Theme.of(context).primaryColor;
     final bool isAudioKaryakram = _karyakramValue == '310';
@@ -653,6 +654,8 @@ class _ShakhaPustika extends State<ShakhaPustika> {
     final bool hasAudioFile = isAudioKaryakram && audioUrl.isNotEmpty;
 
     Future<void> goToInfoScreen(String selectedAction) async {
+      dynamic result; // NEW — capture what SangrahaShkhaPustikaScreen pops back
+
       if (hasAudioFile) {
         // गीत (audio) rows — check the shared helper before navigating.
         final downloaded = await AudioFileHelper.isDownloaded(audioUrl);
@@ -662,25 +665,28 @@ class _ShakhaPustika extends State<ShakhaPustika> {
         }
         final localPath = await AudioFileHelper.getLocalFilePath(audioUrl);
         if (!mounted) return;
-        Navigator.of(context).pushNamed(
+        result = await Navigator.of(context).pushNamed(
           SangrahaShkhaPustikaScreen.routeName,
           arguments: {
-            // Audio entries always open read-only — every field stays
-            // locked, only the play button (inside that screen) is active.
             'isEditable': selectedAction == 'edit',
             'pkid': item.pkid,
             'localAudioPath': localPath,
           },
         );
       } else {
-        // Not an audio entry, or no file attached — unchanged behaviour.
-        Navigator.of(context).pushNamed(
+        result = await Navigator.of(context).pushNamed(
           SangrahaShkhaPustikaScreen.routeName,
           arguments: {
             'isEditable': selectedAction == 'edit',
             'pkid': item.pkid,
           },
         );
+      }
+
+      // NEW — if the edit/save screen returned true, re-run the search
+      // with the same filters so the table reflects the latest data.
+      if (result == true && mounted) {
+        await _searchShaakhaPustika();
       }
     }
 
@@ -690,7 +696,7 @@ class _ShakhaPustika extends State<ShakhaPustika> {
         child: (item.canupdate == 1) // CHANGED — gate edit option by canupdate
             ? PopupMenuButton<String>(
                 icon: Icon(Icons.info_outline, color: primaryColor, size: 20),
-                tooltip: 'माहिती बघा',
+                tooltip: Statics.getLabel('ViewMenu'),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 onSelected: goToInfoScreen,
                 itemBuilder: (context) => [
