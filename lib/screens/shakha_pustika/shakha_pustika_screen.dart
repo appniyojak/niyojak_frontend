@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:flutter_quill_delta_from_html/parser/html_to_delta.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:niyojak_prod/models/response_model/shakha_pustika_list_response_model.dart';
 import 'package:niyojak_prod/screens/home_screen/home_screen.dart';
@@ -28,7 +29,7 @@ class ShakhaPustika extends StatefulWidget {
   State<ShakhaPustika> createState() => _ShakhaPustika();
 }
 
-class _ShakhaPustika extends State<ShakhaPustika> {
+class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin {
   bool _isExpanded = false;
   final _controller = createGeoController();
   List<StaticMasterBAL>? _vayogat;
@@ -65,7 +66,7 @@ class _ShakhaPustika extends State<ShakhaPustika> {
   int cUserId = 0;
   List<StaticMasterBAL>? _karyakram;
   String kFileBaseUrl = Statics.baseUrl;
-
+  TabController? _tabController;
 // ── Dummy result data for the table ──
 
   @override
@@ -76,6 +77,9 @@ class _ShakhaPustika extends State<ShakhaPustika> {
   @override
   void initState() {
     super.initState();
+    //await Statics.getUpdateShakhaPustikaList;
+    _tabController = new TabController(length: 2, vsync: this);
+    _tabController?.addListener(_handleTabChange);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) => _initData());
   }
 
@@ -84,6 +88,7 @@ class _ShakhaPustika extends State<ShakhaPustika> {
     _topicController.dispose();
     _remarkController.dispose();
     _audioPlayer.dispose();
+    _tabController?.dispose();
     super.dispose();
   }
 
@@ -103,7 +108,13 @@ class _ShakhaPustika extends State<ShakhaPustika> {
     //await Statics.populateUserDetailsMap();
     print("userid:${user.map((e) => e.swayamsevakID)}");
     cUserId = user.first.swayamsevakID ?? 0;
-    //await Statics.getUpdateShakhaPustikaList;
+    await _searchShaakhaPustika(karyakramval: -1);
+  }
+
+  void _handleTabChange() {
+    if (mounted) {
+      setState(() {}); // Rebuilds to update the PopScope's allowed status
+    }
   }
 
   Future<void> populateDropdown({bool fromClear = false}) async {
@@ -180,8 +191,8 @@ class _ShakhaPustika extends State<ShakhaPustika> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
-          title: const Text(
-            'सूचना',
+          title: Text(
+            Statics.getLabel('Suchna'),
             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.purple),
           ),
           content: Text(
@@ -228,10 +239,10 @@ class _ShakhaPustika extends State<ShakhaPustika> {
     );
   }
 
-  Future<void> _searchShaakhaPustika() async {
+  Future<void> _searchShaakhaPustika({int? karyakramval}) async {
     bool isVibhagLevelUser = false;
     geoUnitId = int.tryParse(_controller.deepestSelectedGeoUnitId.toString());
-    if (_karyakramValue == null) {
+    if (_karyakramValue == null && karyakramval != -1) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(Statics.getLabel('ChooseKaryakram'))));
       return;
     }
@@ -248,7 +259,7 @@ class _ShakhaPustika extends State<ShakhaPustika> {
       final requestModel = GetShaakhaPustikaListRequest(
         cuserid: cUserId,
         geounitid: isVibhagLevelUser ? 0 : geoUnitId ?? 0,
-        karyakramid: int.tryParse(_karyakramValue.toString()) ?? 0,
+        karyakramid: int.tryParse(_karyakramValue.toString()) ?? -1,
         monthno: _selectedMonth!,
         yearno: _selectedYear!,
         vayogatid: int.tryParse(_vayogatValue ?? '') ?? 0,
@@ -263,6 +274,7 @@ class _ShakhaPustika extends State<ShakhaPustika> {
           _apiList = respData.list;
           _isSearched = true;
         });
+        _tabController?.animateTo(1);
         if (respData.list.isEmpty) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(Statics.getLabel('NoInfoText'))));
         }
@@ -299,6 +311,37 @@ class _ShakhaPustika extends State<ShakhaPustika> {
             Statics.getLabel('ShakhaPustika'),
             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
           ),
+          bottom: TabBar(controller: _tabController, tabs: [
+            Tab(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    FontAwesomeIcons.globe,
+                    size: 18,
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    Statics.getLabel("Filters"),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                  ),
+                ],
+              ),
+            ),
+            Tab(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.event, size: 18),
+                  SizedBox(width: 10),
+                  Text(
+                    Statics.getLabel("searchEventsScreenLabel"),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                  ),
+                ],
+              ),
+            ),
+          ]),
           actions: [
             if (levelId == 7)
               IconButton(
@@ -319,27 +362,51 @@ class _ShakhaPustika extends State<ShakhaPustika> {
             builder: (_, ctrl, __) {
               // final bhaagSelected = (ctrl.getSelectedValue(GeoLevel.Bhaag)?.isNotEmpty ?? false);
               final bhaagSelected = (ctrl.getSelectedValue(GeoLevel.Bhaag)?.isNotEmpty ?? false);
-              return SingleChildScrollView(
-                padding: const EdgeInsets.all(14),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    if (levelId > 8 && levelId != 13)
-                      _sectionCard(
-                        child: _dropDownSection(ctrl),
-                      ),
-                    const SizedBox(height: 16),
-                    _sectionCard(
-                      child: _karyakramSection(primaryColor, ctrl, bhaagSelected),
+              return TabBarView(
+                controller: _tabController, // make sure this is passed explicitly
+                children: [
+                  // ── Tab 1: Filters ──
+                  SingleChildScrollView(
+                    padding: EdgeInsets.all(14),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        if (levelId > 8 && levelId != 13) _sectionCard(child: _dropDownSection(ctrl)),
+                        const SizedBox(height: 16),
+                        _sectionCard(child: _karyakramSection(primaryColor, ctrl, bhaagSelected)),
+                        const SizedBox(height: 20),
+                      ],
                     ),
-                    const SizedBox(height: 20),
-                  ],
-                ),
+                  ),
+
+                  // ── Tab 2: Results ──
+                  _buildResultsTab(),
+                ],
               );
             },
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildResultsTab() {
+    if (!_isSearched) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Text(
+            Statics.getLabel('SearchToSeeResults') ?? 'Search to see results',
+            style: TextStyle(color: Colors.grey.shade600, fontSize: 15),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      );
+    }
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(14),
+      child: _isSearching ? const Center(child: CircularProgressIndicator()) : _buildResultsTable(_apiList),
     );
   }
 
@@ -536,15 +603,6 @@ class _ShakhaPustika extends State<ShakhaPustika> {
               ),
             ],
           ),
-
-          if (_isSearched) ...[
-            const SizedBox(height: 20),
-            Divider(
-              color: Colors.purple,
-            ),
-            const SizedBox(height: 17),
-            _isSearching ? Center(child: CircularProgressIndicator()) : _buildResultsTable(_apiList),
-          ],
         ],
       ),
       if (!bhagSelected && isvibhagSelectionApplied)
@@ -567,7 +625,7 @@ class _ShakhaPustika extends State<ShakhaPustika> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _sectionTitle(Statics.getLabel('Result'), Icons.table_chart_rounded, primaryColor),
+        //_sectionTitle(Statics.getLabel('Result'), Icons.table_chart_rounded, primaryColor),
         const SizedBox(height: 12),
         if (karyakramList.isEmpty) ...[
           Padding(
@@ -700,23 +758,23 @@ class _ShakhaPustika extends State<ShakhaPustika> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 onSelected: goToInfoScreen,
                 itemBuilder: (context) => [
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: 'edit',
                     child: Row(
                       children: [
                         Icon(Icons.edit_outlined, size: 18),
                         SizedBox(width: 8),
-                        Text('सुधारणा'),
+                        Text(Statics.getLabel('EditMenu')),
                       ],
                     ),
                   ),
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: 'view',
                     child: Row(
                       children: [
                         Icon(Icons.visibility_outlined, size: 18),
                         SizedBox(width: 8),
-                        Text('माहिती पहा'),
+                        Text(Statics.getLabel('ViewMenu')),
                       ],
                     ),
                   ),
@@ -726,63 +784,6 @@ class _ShakhaPustika extends State<ShakhaPustika> {
                 onTap: () => goToInfoScreen('view'),
                 child: Icon(Icons.info_outline, color: primaryColor, size: 20),
               ),
-      ),
-    );
-  }
-
-  Widget _tableInfoCell(Map<String, String> row) {
-    final primaryColor = Theme.of(context).primaryColor;
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
-      child: Center(
-        child: levelId == 8
-            ? PopupMenuButton<String>(
-                icon: Icon(Icons.info_outline, color: primaryColor, size: 20),
-                tooltip: 'माहिती बघा',
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                onSelected: (value) {
-                  Navigator.of(context).pushNamed(
-                    SangrahaShkhaPustikaScreen.routeName,
-                    arguments: {
-                      'row': row,
-                      'isEditable': value == 'edit', // true for सुधारणा, false for माहिती पहा
-                    },
-                  );
-                },
-                itemBuilder: (context) => [
-                  const PopupMenuItem(
-                    value: 'edit',
-                    child: Row(
-                      children: [
-                        Icon(Icons.edit_outlined, size: 18),
-                        SizedBox(width: 8),
-                        Text('सुधारणा'),
-                      ],
-                    ),
-                  ),
-                  const PopupMenuItem(
-                    value: 'view',
-                    child: Row(
-                      children: [
-                        Icon(Icons.visibility_outlined, size: 18),
-                        SizedBox(width: 8),
-                        Text('माहिती पहा'),
-                      ],
-                    ),
-                  ),
-                ],
-              )
-            : InkWell(
-                onTap: () {
-                  Navigator.of(context).pushNamed(
-                    SangrahaShkhaPustikaScreen.routeName,
-                    arguments: {
-                      'row': row,
-                      'isEditable': false, // true for सुधारणा, false for माहिती पहा
-                    },
-                  );
-                },
-                child: Icon(Icons.info_outline, color: primaryColor, size: 20)),
       ),
     );
   }
@@ -922,7 +923,7 @@ class _ShakhaPustika extends State<ShakhaPustika> {
         ),
         const SizedBox(height: 6),
         DropdownButtonFormField<int>(
-          decoration: _boxedDecoration(hint: 'महिना'),
+          decoration: _boxedDecoration(hint: Statics.getLabel('SankalpCompletionMonth')),
           isExpanded: true,
           value: _selectedMonth,
           icon: Icon(Icons.keyboard_arrow_down_rounded, color: primaryColor),
@@ -958,7 +959,7 @@ class _ShakhaPustika extends State<ShakhaPustika> {
         ),
         const SizedBox(height: 6),
         DropdownButtonFormField<int>(
-          decoration: _boxedDecoration(hint: 'वर्ष'),
+          decoration: _boxedDecoration(hint: Statics.getLabel('SankalpCompletionYear')),
           isExpanded: true,
           value: _selectedYear,
           icon: Icon(Icons.keyboard_arrow_down_rounded, color: primaryColor),
@@ -979,7 +980,20 @@ class _ShakhaPustika extends State<ShakhaPustika> {
   }
 
   String _monthNameMarathi(int month) {
-    const months = ['जानेवारी', 'फेब्रुवारी', 'मार्च', 'एप्रिल', 'मे', 'जून', 'जुलै', 'ऑगस्ट', 'सप्टेंबर', 'ऑक्टोबर', 'नोव्हेंबर', 'डिसेंबर'];
+    var months = [
+      Statics.getLabel('Jan'),
+      Statics.getLabel('Feb'),
+      Statics.getLabel('Mar'),
+      Statics.getLabel('Apr'),
+      Statics.getLabel('May'),
+      Statics.getLabel('Jun'),
+      Statics.getLabel('Jul'),
+      Statics.getLabel('Aug'),
+      Statics.getLabel('Sept'),
+      Statics.getLabel('Oct'),
+      Statics.getLabel('Nov'),
+      Statics.getLabel('Dec'),
+    ];
     return months[month - 1];
   }
 
@@ -1119,10 +1133,10 @@ class _DownloadPlayCellState extends State<_DownloadPlayCell> {
           _isDownloaded = true;
         });
       } else {
-        _showMessage('डाउनलोड अयशस्वी झाले');
+        _showMessage(Statics.getLabel('DownloadFailed'));
       }
     } catch (e) {
-      _showMessage('डाउनलोड करताना त्रुटी आली');
+      _showMessage(Statics.getLabel('ProblemOccured'));
     } finally {
       if (mounted) setState(() => _isDownloading = false);
     }
@@ -1163,16 +1177,16 @@ class _DownloadPlayCellState extends State<_DownloadPlayCell> {
       context: context,
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('सूचना'),
-        content: const Text('फाईल डिलीट करायची आहे का?'),
+        title: Text(Statics.getLabel('Alert')),
+        content: Text(Statics.getLabel('ToDeleteFile')),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('रद्द करा'),
+            child: Text(Statics.getLabel('Cancel')),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('डिलीट करा', style: TextStyle(color: Colors.red)),
+            child: Text(Statics.getLabel('DeleteFile'), style: TextStyle(color: Colors.red)),
           ),
         ],
       ),
@@ -1191,9 +1205,9 @@ class _DownloadPlayCellState extends State<_DownloadPlayCell> {
       setState(() {
         _isDownloaded = false;
       });
-      _showMessage('फाईल डिलीट झाली');
+      _showMessage(Statics.getLabel('FileGetDeleted'));
     } catch (e) {
-      _showMessage('फाईल डिलीट करताना त्रुटी आली');
+      _showMessage(Statics.getLabel('ProblemMassage'));
     }
   }
 

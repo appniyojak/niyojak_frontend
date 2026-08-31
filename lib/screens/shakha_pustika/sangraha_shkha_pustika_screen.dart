@@ -319,8 +319,8 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
       // Convert selected audio file to base64 (only relevant for 'गीत')
       String? fileBase64;
       String? filePathName;
-
-      if (_karyakramValue == '310' && _selectedAudioFile != null) {
+      print("inside selected audio file:$_selectedAudioFile");
+      if (_selectedAudioFile != null) {
         filePathName = _selectedAudioFile!.name;
 
         if (_selectedAudioFile!.bytes != null) {
@@ -342,6 +342,13 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
         }
 
         log("Audio file encoded, base64 length: ${fileBase64.length}");
+      } else if (_existingAudioName != null && _existingAudioName!.isNotEmpty) {
+        // ── NEW: no new file picked, but an existing audio file is already
+        // attached to this record (edit flow) — keep referencing it so the
+        // update doesn't wipe it out. Don't send fileBase64 since there's
+        // nothing new to upload.
+        filePathName = _existingAudioName;
+        fileBase64 = null;
       }
       final quillFragmentHtml = delta_html.QuillDeltaToHtmlConverter(
         _topicQuillController.document.toDelta().toJson(),
@@ -586,12 +593,12 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _sectionTitle('कार्यक्रम तपशील', Icons.event_note_rounded, primaryColor),
+        _sectionTitle(Statics.getLabel('sanvaadKaryakramData'), Icons.event_note_rounded, primaryColor),
         const SizedBox(height: 16),
 
         // ── कार्यक्रम निवडा dropdown ──
         Text(
-          'कार्यक्रम निवडा',
+          Statics.getLabel('ChooseKaryakramTitle'),
           style: TextStyle(fontSize: 13, color: Colors.grey.shade700, fontWeight: FontWeight.w500),
         ),
         const SizedBox(height: 6),
@@ -620,7 +627,7 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
         const SizedBox(height: 20),
 
         Text(
-          'महिना निवडा',
+          Statics.getLabel('selectMonth'),
           style: TextStyle(fontSize: 13, color: Colors.grey.shade700, fontWeight: FontWeight.w500),
         ),
         // const SizedBox(height: 8),
@@ -660,78 +667,14 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
         //   const SizedBox(height: 16),
         // ],
 
-        const SizedBox(height: 6),
-        if (_karyakramValue == '308' || _karyakramValue == '309') ...[
-          Text(
-            'विषय',
-            style: TextStyle(fontSize: 13, color: Colors.grey.shade700, fontWeight: FontWeight.w500),
+        if (_karyakramValue == '311') ...[
+          TextFormField(
+            keyboardType: TextInputType.multiline,
+            controller: _remarkController,
+            decoration: _boxedDecoration(label: Statics.getLabel('OtherField')),
+            style: const TextStyle(fontSize: 15),
           ),
-          const SizedBox(height: 6),
-          if (!_isEditable) ...[
-            // ── VIEW MODE: render saved HTML as formatted rich text ──
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF9FAFC),
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.grey.shade300),
-              ),
-              child: flutter_html.Html(
-                data: _htmlToPlainText(_originalHtmlFromApi).isNotEmpty ? _originalHtmlFromApi : '—',
-                style: {
-                  "body": flutter_html.Style(
-                    margin: flutter_html.Margins.zero,
-                    padding: flutter_html.HtmlPaddings.zero,
-                    fontSize: flutter_html.FontSize(15),
-                  ),
-                },
-              ),
-              //_htmlToPlainText(_topicController.text).isNotEmpty ? _htmlToPlainText(_topicController.text) : '—',
-            ),
-          ] else ...[
-            // ── EDIT MODE: Quill rich text editor ──
-            Container(
-              decoration: BoxDecoration(
-                color: const Color(0xFFF9FAFC),
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.grey.shade300),
-              ),
-              clipBehavior: Clip.antiAlias,
-              child: Column(
-                children: [
-                  quill.QuillSimpleToolbar(
-                    configurations: quill.QuillSimpleToolbarConfigurations(
-                      controller: _topicQuillController,
-                      showFontFamily: false,
-                      showFontSize: false,
-                      showSubscript: false,
-                      showSuperscript: false,
-                      showSearchButton: false,
-                      showClearFormat: false,
-                      showCodeBlock: false,
-                      showQuote: false,
-                      showColorButton: false,
-                      showBackgroundColorButton: false,
-                    ),
-                  ),
-                  Container(
-                    height: 160,
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                    child: quill.QuillEditor.basic(
-                      configurations: quill.QuillEditorConfigurations(
-                        controller: _topicQuillController,
-                        placeholder: 'विषय लिहा',
-                        padding: EdgeInsets.zero,
-                        expands: true,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
         ],
         // if (_karyakramValue == '308' || _karyakramValue == '309') ...[
         //   Text(
@@ -797,7 +740,7 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
         // ── NEW: audio file picker ──
         if (_karyakramValue == '310' && _isEditable) ...[
           Text(
-            'ऑडिओ फाईल निवडा',
+            Statics.getLabel('ChooseAudioFile'),
             style: TextStyle(fontSize: 13, color: Colors.grey.shade700, fontWeight: FontWeight.w500),
           ),
           const SizedBox(height: 8),
@@ -818,7 +761,7 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text(
-                      _selectedAudioFile?.name ?? _existingAudioName ?? 'फाईल निवडण्यासाठी टॅप करा', // CHANGED
+                      _selectedAudioFile?.name ?? _existingAudioName ?? Statics.getLabel('TapToChooseFile'), // CHANGED
                       style: TextStyle(
                         fontSize: 14,
                         color: (_selectedAudioFile == null && _existingAudioName == null) ? Colors.grey.shade600 : Colors.black87,
@@ -833,7 +776,7 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
           ),
           const SizedBox(height: 8),
           Text(
-            Statics.getLabel('AddLinks'),
+            Statics.getLabel('AddAudioLink'),
             style: TextStyle(fontSize: 13, color: Colors.grey.shade700, fontWeight: FontWeight.w500),
           ),
           const SizedBox(height: 8),
@@ -842,7 +785,7 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
             decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.grey.shade100,
-                hintText: Statics.getLabel("url"),
+                hintText: Statics.getLabel("AudioUrl"),
                 hintStyle: TextStyle(color: Colors.grey.shade600, fontSize: 14),
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
@@ -857,12 +800,84 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
           ),
           const SizedBox(height: 26),
         ],
-
+        const SizedBox(height: 6),
+        if (_karyakramValue == '308' || _karyakramValue == '309' || _karyakramValue == '310') ...[
+          Text(
+            Statics.getLabel('SubjectTxt'),
+            style: TextStyle(fontSize: 13, color: Colors.grey.shade700, fontWeight: FontWeight.w500),
+          ),
+          const SizedBox(height: 6),
+          if (!_isEditable) ...[
+            // ── VIEW MODE: render saved HTML as formatted rich text ──
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF9FAFC),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.grey.shade300),
+              ),
+              child: flutter_html.Html(
+                data: _htmlToPlainText(_originalHtmlFromApi).isNotEmpty ? _originalHtmlFromApi : '—',
+                style: {
+                  "body": flutter_html.Style(
+                    margin: flutter_html.Margins.zero,
+                    padding: flutter_html.HtmlPaddings.zero,
+                    fontSize: flutter_html.FontSize(15),
+                  ),
+                },
+              ),
+              //_htmlToPlainText(_topicController.text).isNotEmpty ? _htmlToPlainText(_topicController.text) : '—',
+            ),
+          ] else ...[
+            // ── EDIT MODE: Quill rich text editor ──
+            Container(
+              decoration: BoxDecoration(
+                color: const Color(0xFFF9FAFC),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.grey.shade300),
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: Column(
+                children: [
+                  quill.QuillSimpleToolbar(
+                    configurations: quill.QuillSimpleToolbarConfigurations(
+                      controller: _topicQuillController,
+                      showFontFamily: false,
+                      showFontSize: false,
+                      showSubscript: false,
+                      showSuperscript: false,
+                      showSearchButton: false,
+                      showClearFormat: false,
+                      showCodeBlock: false,
+                      showQuote: false,
+                      showColorButton: false,
+                      showBackgroundColorButton: false,
+                    ),
+                  ),
+                  Container(
+                    height: 160,
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                    child: quill.QuillEditor.basic(
+                      configurations: quill.QuillEditorConfigurations(
+                        controller: _topicQuillController,
+                        placeholder: Statics.getLabel('SubjectTxtSubText'),
+                        padding: EdgeInsets.zero,
+                        expands: true,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+          const SizedBox(height: 16),
+        ],
         // ── Search / Reset buttons ──
         !_isEditable
             ? Center(
                 child: Text(
-                "माहिती बदलू शकत नाही",
+                Statics.getLabel('UnEditable'),
                 style: TextStyle(color: Colors.purple),
               ))
             : Row(
@@ -1014,7 +1029,7 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
     final uri = Uri.tryParse(link);
 
     if (uri == null || !uri.hasScheme || !(uri.scheme == 'http' || uri.scheme == 'https')) {
-      _showLinkErrorDialog('दिलेला दुवा अवैध आहे.');
+      _showLinkErrorDialog(Statics.getLabel('UrlNotValid'));
       return;
     }
 
@@ -1027,11 +1042,11 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
       );
 
       if (!launched && mounted) {
-        _showLinkErrorDialog('हा दुवा उघडता आला नाही, कृपया पुन्हा प्रयत्न करा.');
+        _showLinkErrorDialog(Statics.getLabel('UrlException'));
       }
     } catch (e) {
       if (mounted) {
-        _showLinkErrorDialog('हा दुवा उघडता आला नाही, कृपया पुन्हा प्रयत्न करा.');
+        _showLinkErrorDialog(Statics.getLabel('UrlException'));
       }
     } finally {
       if (mounted) {
@@ -1046,7 +1061,7 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
       builder: (dialogCtx) {
         return AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          title: const Text('त्रुटी'),
+          title: Text(Statics.getLabel('Problem')),
           content: Text(message),
           actions: [
             TextButton(
@@ -1065,8 +1080,8 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'दुवा',
+        Text(
+          Statics.getLabel('GeetUrl'),
           style: TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w600,
@@ -1096,7 +1111,7 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
-                  link.isNotEmpty ? link : 'दुवा उपलब्ध नाही',
+                  link.isNotEmpty ? link : Statics.getLabel('GeetUrlNotExist'),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
@@ -1142,7 +1157,7 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _sectionTitle('ऑडिओ फाईल', Icons.audiotrack_rounded, primaryColor),
+        _sectionTitle(Statics.getLabel('AudioFile'), Icons.audiotrack_rounded, primaryColor),
         const SizedBox(height: 16),
         Container(
           width: double.infinity,
@@ -1161,7 +1176,7 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
-                  hasAudio ? 'सेव्ह केलेली ऑडिओ फाईल ऐकण्यासाठी बटण दाबा' : 'ऑडिओ उपलब्ध नाही', // NEW — shown when there's no file
+                  hasAudio ? Statics.getLabel('ClickBtnToHearAudioFile') : Statics.getLabel('AudioFileNotAvailable'), // NEW — shown when there's no file
                   style: TextStyle(
                     fontSize: 14,
                     color: hasAudio ? Colors.black87 : Colors.grey.shade600,
@@ -1206,7 +1221,7 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
         ),
         const SizedBox(height: 6),
         DropdownButtonFormField<int>(
-          decoration: _boxedDecoration(hint: 'महिना'),
+          decoration: _boxedDecoration(hint: Statics.getLabel('SankalpCompletionMonth')),
           isExpanded: true,
           value: _selectedMonth,
           icon: Icon(Icons.keyboard_arrow_down_rounded, color: primaryColor),
@@ -1242,7 +1257,7 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
         ),
         const SizedBox(height: 6),
         DropdownButtonFormField<int>(
-          decoration: _boxedDecoration(hint: 'वर्ष'),
+          decoration: _boxedDecoration(hint: Statics.getLabel('SankalpCompletionYear')),
           isExpanded: true,
           value: _selectedYear,
           icon: Icon(Icons.keyboard_arrow_down_rounded, color: primaryColor),
@@ -1289,7 +1304,7 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
               children: [
                 Expanded(
                   child: Text(
-                    displayText.isEmpty ? 'निवडा' : displayText,
+                    displayText.isEmpty ? Statics.getLabel('Filters') : displayText,
                     style: TextStyle(
                       fontSize: 15,
                       color: displayText.isEmpty ? Colors.grey.shade600 : Colors.black87,
@@ -1380,7 +1395,20 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
   }
 
   String _monthNameMarathi(int month) {
-    const months = ['जानेवारी', 'फेब्रुवारी', 'मार्च', 'एप्रिल', 'मे', 'जून', 'जुलै', 'ऑगस्ट', 'सप्टेंबर', 'ऑक्टोबर', 'नोव्हेंबर', 'डिसेंबर'];
+    var months = [
+      Statics.getLabel('Jan'),
+      Statics.getLabel('Feb'),
+      Statics.getLabel('Mar'),
+      Statics.getLabel('Apr'),
+      Statics.getLabel('May'),
+      Statics.getLabel('Jun'),
+      Statics.getLabel('Jul'),
+      Statics.getLabel('Aug'),
+      Statics.getLabel('Sept'),
+      Statics.getLabel('Oct'),
+      Statics.getLabel('Nov'),
+      Statics.getLabel('Dec'),
+    ];
     return months[month - 1];
   }
 

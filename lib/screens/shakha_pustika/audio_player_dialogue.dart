@@ -1,6 +1,8 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
+import '../../helpers/static_data.dart' as Statics;
+
 /// Reusable "now playing" dialog. Works for a remote URL (isLocalFile:
 /// false) or a file already downloaded on disk (isLocalFile: true).
 ///
@@ -77,7 +79,7 @@ class _AudioPlayerDialogState extends State<AudioPlayerDialog> {
     } catch (e) {
       setState(() {
         _isLoading = false;
-        _error = 'फाईल प्ले करता आली नाही';
+        _error = Statics.getLabel('FileNotPlayed');
       });
     }
   }
