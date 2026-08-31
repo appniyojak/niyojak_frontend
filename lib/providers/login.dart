@@ -261,6 +261,17 @@ class LogIn {
         //       'GatividhiMaster', data);
         // }
       }
+
+      var dataList2 = body['LogInData']['offlineconfiglist'];
+      if (dataList2.length > 0) {
+        print("usrLogIn 17.5");
+
+        await dbh.DatabaseHelper.reCreate('OfflineConfigList', dataList2);
+        // for (var data in dataList) {
+        //   await dbh.DatabaseHelper.insertOrUpdateRecord(
+        //       'GatividhiMaster', data);
+        // }
+      }
       var userData = body['LogInData']['UserData'];
       print("swayamsevak Id - " + userData['SwayamsevakID'].toString());
       await pref.setString("DaayitvaNameforshow", "${body['LogInData']['UserData']['DaayitvaNameforshow']}");
@@ -435,6 +446,7 @@ class LogIn {
     if (await Statics.checkForTableExists("AayaamMaster")) await dbh.DatabaseHelper.executeQuery('DELETE FROM AayaamMaster');
     if (await Statics.checkForTableExists("UserDataMaster")) await dbh.DatabaseHelper.executeQuery('DELETE FROM UserDataMaster');
     if (await Statics.checkForTableExists("HomeScreenData")) await dbh.DatabaseHelper.executeQuery('DELETE FROM HomeScreenData');
+    if (await Statics.checkForTableExists("OfflineConfigList")) await dbh.DatabaseHelper.executeQuery('DELETE FROM OfflineConfigList');
     // if (await Statics.checkForTableExists("AbhiyaanVrutta"))
     //   await dbh.DatabaseHelper.executeQuery('DELETE FROM AbhiyaanVrutta');
     // if (await Statics.checkForTableExists("VisheshVyaktiMaster"))

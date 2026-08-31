@@ -288,8 +288,18 @@ class _HomeScreenState extends State<HomeScreen> {
     _populateDropdownSet2();
     _getGeoUnitID();
     await Future.wait([
-      _fetchSwayamsevakPanelData(),
-      _fetchAnyaPanelData(),
+      _fetchPanelData(
+        controller: _swayamsevakController,
+        setSearching: (v) => _isMySearching = v,
+        clearData: () => _clearPanelData((v) => _isMySearching = v, isAnya: false),
+      ),
+
+// Anya
+      _fetchPanelData(
+        controller: _anyaInfoController,
+        setSearching: (v) => _isTgSearching = v,
+        clearData: () => _clearPanelData((v) => _isTgSearching = v),
+      ),
       if ((userLevelId ?? 0) > 8) _getUpkhandUpnagarReport("0", "praant"),
       _fetchNotificationData(),
       _getShaakhaaVruttaReport(),
@@ -680,31 +690,36 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }*/
 
-  // ── Swayamsevak Panel data ──────────────────────────────────────────────────
-  Future<void> _fetchSwayamsevakPanelData() async {
-    _tgLevelID = _swayamsevakController.deepestSelectedLevelId ?? 0;
+// ── Shared Panel Data ──────────────────────────────────────────────────
+  Future<void> _fetchPanelData({
+    required GeoHierarchyController controller, // e.g. _swayamsevakController or _anyaInfoController
+    required void Function(bool) setSearching, // e.g. (v) => _isMySearching = v / _isTgSearching = v
+    required VoidCallback clearData, // _clearSwayamsevakPanelData / _clearAnyaPanelData
+  }) async {
+    _tgLevelID = controller.deepestSelectedLevelId ?? 0;
     _isTgSearched = false;
-    setState(() => _isMySearching = true);
-    final data = await Statics.getDashboardDataByGeoUnit(Statics.userDetails["userID"], _swayamsevakController.deepestSelectedGeoUnitId ?? "0");
-    if (data['Status'] != "Success") {
-      _clearSwayamsevakPanelData();
+    setState(() => setSearching(true));
 
+    final data = await Statics.getDashboardDataByGeoUnit(
+      Statics.userDetails["userID"],
+      controller.deepestSelectedGeoUnitId ?? "0",
+    );
+
+    if (data['Status'] != "Success") {
+      clearData();
       return;
     }
+
     _tgbloodgroup = [];
-
     _tgexpertieslist = [];
-
     _tginterestlist = [];
-
     _tgmothertonguelist = [];
-
     _tgsangayulist = [];
-
     _tgghoshwadlist = [];
 
     final sd = data["HomeScreenData"];
     final vd = sd["ShaakhaaVruttaSummaryData"];
+
     if (sd["BloodGroup"] != null) {
       sd["BloodGroup"].forEach((v) => _tgbloodgroup.add(GetCount.fromJson(v)));
     }
@@ -772,99 +787,6 @@ class _HomeScreenState extends State<HomeScreen> {
       tgAayaamKaaryakartaaCount = sd["AayaamKaaryakartaaCount"].toString();
       tgSanghaPreritSansthaaKaaryakartaaCount = sd["SanghaPreritSansthaaKaaryakartaaCount"].toString();
       tgSocialOrganizationKaaryakartaaCount = sd["SocialOrganizationKaaryakartaaCount"].toString();
-      notificationCount = sd["Notificationcount"].toString();
-
-      // Vrutta summary
-      tgMaasikEQ0 = vd["MaasikEQ0"].toString();
-      tgMaasikEQ1 = vd["MaasikEQ1"].toString();
-      tgSaaptaahikEQ0 = vd["SaaptaahikEQ0"].toString();
-      tgSaaptaahik1To3 = vd["Saaptaahik1To3"].toString();
-      tgSaaptaahikGTE4 = vd["SaaptaahikGTE4"].toString();
-      tgShaakhaaEQ0 = vd["ShaakhaaEQ0"].toString();
-      tgShaakhaa1To24 = vd["Shaakhaa1To24"].toString();
-      tgShaakhaaGTE25 = vd["ShaakhaaGTE25"].toString();
-      tgShaakhaaEQ30 = vd["ShaakhaaEQ30"].toString();
-      _isMySearching = false;
-      _isTgSearched = true;
-    });
-  }
-
-  void _clearSwayamsevakPanelData() {
-    setState(() {
-      tgTotalKaaryakartaaCount = tgPratidnyitCount = tgShaakhaaKaaryakartaaCount = '';
-      tgShishuCount = tgBaalCount = tgTarunVidyaarthiCount = '';
-      tgTarunVyavasaayeeCount = tgProudhaVyavasaayeeCount = tgUnknownAgeCount = '';
-      tgPraarambhikShikshitCount = tgPraathamikShikshitCount = '';
-      tgPrathamVarshaShikshitCount = tgDwitiyaVarshaShikshitCount = tgTrutiyaVarshaShikshitCount = '';
-      tgNoShikshanCount = tgDailyShaakhaaKaaryakartaaCount = '';
-      tgSaaptaahikMilanKaaryakartaaCount = tgMaasikMilanKaaryakartaaCount = '';
-      tgVastiKaaryakartaaCount = tgGraamKaaryakartaaCount = tgMandalKaaryakartaaCount = '';
-      tgNagarKaaryakartaaCount = tgShaharKaaryakartaaCount = tgBhaagKaaryakartaaCount = '';
-      tgVibhaagKaaryakartaaCount = tgMahaanagarKaaryakartaaCount = tgPraantKaaryakartaaCount = '';
-      tgKshetraKaaryakartaaCount = tgAkhilBhaaratiyaKaaryakartaaCount = tgPravaaseeKaaryakartaaCount = '';
-      tgGatividhiKaaryakartaaCount = tgAayaamKaaryakartaaCount = '';
-      tgSanghaPreritSansthaaKaaryakartaaCount = tgSocialOrganizationKaaryakartaaCount = '';
-      tgTotalSwayamsevakCount = tgMasikMilanCount = tgSanghaMandaliCount = '';
-      tgMaasikEQ0 = tgMaasikEQ1 = tgSaaptaahikEQ0 = tgSaaptaahik1To3 = tgSaaptaahikGTE4 = '';
-      tgShaakhaaEQ0 = tgShaakhaa1To24 = tgShaakhaaGTE25 = tgShaakhaaEQ30 = '';
-      _tgbloodgroup = _tgexpertieslist = _tginterestlist = _tgmothertonguelist = _tgsangayulist = _tgghoshwadlist = [];
-      _tgganveshData = null;
-      _tgvehicle = null;
-      tgLstGatividhiKaaryakartaa = [];
-      Statics.tgLstPreritKaaryakartaa.clear();
-      _isMySearching = false;
-    });
-  }
-
-  // ── Anya Panel data ──────────────────────────────────────────────────
-  Future<void> _fetchAnyaPanelData() async {
-    _tgLevelID = _anyaInfoController.deepestSelectedLevelId ?? 0;
-    _isTgSearched = false;
-    setState(() => _isTgSearching = true);
-    final data = await Statics.getDashboardDataByGeoUnit(Statics.userDetails["userID"], _anyaInfoController.deepestSelectedGeoUnitId ?? "0");
-    if (data['Status'] != "Success") {
-      _clearAnyaPanelData();
-      return;
-    }
-    final sd = data["HomeScreenData"];
-    final vd = sd["ShaakhaaVruttaSummaryData"];
-
-    setState(() {
-      /*tgTotalKaaryakartaaCount = sd["TotalKaaryakartaaCount"].toString();
-      tgTotalSwayamsevakCount = sd["TotalSwayamsevakCount"].toString();
-      tgPratidnyitCount = sd["PratidnyitCount"].toString();
-      tgShaakhaaKaaryakartaaCount = sd["ShaakhaaKaaryakartaaCount"].toString();
-      tgShishuCount = sd["ShishuCount"].toString();
-      tgBaalCount = sd["BaalCount"].toString();
-      tgTarunVidyaarthiCount = sd["TarunVidyaarthiCount"].toString();
-      tgTarunVyavasaayeeCount = sd["TarunVyavasaayeeCount"].toString();
-      tgProudhaVyavasaayeeCount = sd["ProudhaVyavasaayeeCount"].toString();
-      tgUnknownAgeCount = sd["UnknownAgeCount"].toString();
-      tgPraarambhikShikshitCount = sd["PrarambhikShikshitCount"].toString();
-      tgPraathamikShikshitCount = sd["PraathamikShikshitCount"].toString();
-      tgPrathamVarshaShikshitCount = sd["PrathamVarshaShikshitCount"].toString();
-      tgDwitiyaVarshaShikshitCount = sd["DwitiyaVarshaShikshitCount"].toString();
-      tgTrutiyaVarshaShikshitCount = sd["TrutiyaVarshaShikshitCount"].toString();
-      tgNoShikshanCount = sd["NoShikshanCount"].toString();
-      tgDailyShaakhaaKaaryakartaaCount = sd["DailyShaakhaaKaaryakartaaCount"].toString();
-      tgSaaptaahikMilanKaaryakartaaCount = sd["SaaptaahikMilanKaaryakartaaCount"].toString();
-      tgMaasikMilanKaaryakartaaCount = sd["MaasikMilanKaaryakartaaCount"].toString();
-      tgVastiKaaryakartaaCount = sd["VastiKaaryakartaaCount"].toString();
-      tgGraamKaaryakartaaCount = sd["GraamKaaryakartaaCount"].toString();
-      tgMandalKaaryakartaaCount = sd["MandalKaaryakartaaCount"].toString();
-      tgNagarKaaryakartaaCount = sd["NagarKaaryakartaaCount"].toString();
-      tgShaharKaaryakartaaCount = sd["ShaharKaaryakartaaCount"].toString();
-      tgBhaagKaaryakartaaCount = sd["BhaagKaaryakartaaCount"].toString();
-      tgVibhaagKaaryakartaaCount = sd["VibhaagKaaryakartaaCount"].toString();
-      tgMahaanagarKaaryakartaaCount = sd["MahaanagarKaaryakartaaCount"].toString();
-      tgPraantKaaryakartaaCount = sd["PraantKaaryakartaaCount"].toString();
-      tgKshetraKaaryakartaaCount = sd["KshetraKaaryakartaaCount"].toString();
-      tgAkhilBhaaratiyaKaaryakartaaCount = sd["AkhilBhaaratiyaKaaryakartaaCount"].toString();
-      tgPravaaseeKaaryakartaaCount = sd["PravaaseeKaaryakartaaCount"].toString();
-      tgGatividhiKaaryakartaaCount = sd["GatividhiKaaryakartaaCount"].toString();
-      tgAayaamKaaryakartaaCount = sd["AayaamKaaryakartaaCount"].toString();
-      tgSanghaPreritSansthaaKaaryakartaaCount = sd["SanghaPreritSansthaaKaaryakartaaCount"].toString();
-      tgSocialOrganizationKaaryakartaaCount = sd["SocialOrganizationKaaryakartaaCount"].toString();
       notificationCount = (sd["Notificationcount"] ?? 0).toString();
 
       // Vrutta summary
@@ -876,36 +798,39 @@ class _HomeScreenState extends State<HomeScreen> {
       tgShaakhaaEQ0 = vd["ShaakhaaEQ0"].toString();
       tgShaakhaa1To24 = vd["Shaakhaa1To24"].toString();
       tgShaakhaaGTE25 = vd["ShaakhaaGTE25"].toString();
-      tgShaakhaaEQ30 = vd["ShaakhaaEQ30"].toString();*/
+      tgShaakhaaEQ30 = vd["ShaakhaaEQ30"].toString();
 
-      _isTgSearching = false;
+      setSearching(false);
       _isTgSearched = true;
     });
   }
 
-  void _clearAnyaPanelData() {
+  void _clearPanelData(void Function(bool) setSearching, {bool isAnya = true}) {
     setState(() {
-      /*tgTotalKaaryakartaaCount = tgPratidnyitCount = tgShaakhaaKaaryakartaaCount = '';
-      tgShishuCount = tgBaalCount = tgTarunVidyaarthiCount = '';
-      tgTarunVyavasaayeeCount = tgProudhaVyavasaayeeCount = tgUnknownAgeCount = '';
-      tgPraarambhikShikshitCount = tgPraathamikShikshitCount = '';
-      tgPrathamVarshaShikshitCount = tgDwitiyaVarshaShikshitCount = tgTrutiyaVarshaShikshitCount = '';
-      tgNoShikshanCount = tgDailyShaakhaaKaaryakartaaCount = '';
-      tgSaaptaahikMilanKaaryakartaaCount = tgMaasikMilanKaaryakartaaCount = '';
-      tgVastiKaaryakartaaCount = tgGraamKaaryakartaaCount = tgMandalKaaryakartaaCount = '';
-      tgNagarKaaryakartaaCount = tgShaharKaaryakartaaCount = tgBhaagKaaryakartaaCount = '';
-      tgVibhaagKaaryakartaaCount = tgMahaanagarKaaryakartaaCount = tgPraantKaaryakartaaCount = '';
-      tgKshetraKaaryakartaaCount = tgAkhilBhaaratiyaKaaryakartaaCount = tgPravaaseeKaaryakartaaCount = '';
-      tgGatividhiKaaryakartaaCount = tgAayaamKaaryakartaaCount = '';
-      tgSanghaPreritSansthaaKaaryakartaaCount = tgSocialOrganizationKaaryakartaaCount = '';
-      tgTotalSwayamsevakCount = tgMasikMilanCount = tgSanghaMandaliCount = '';
-      tgMaasikEQ0 = tgMaasikEQ1 = tgSaaptaahikEQ0 = tgSaaptaahik1To3 = tgSaaptaahikGTE4 = '';
-      tgShaakhaaEQ0 = tgShaakhaa1To24 = tgShaakhaaGTE25 = tgShaakhaaEQ30 = '';
-      _tgbloodgroup = _tgexpertieslist = _tginterestlist = _tgmothertonguelist = _tgsangayulist = _tgghoshwadlist = [];
-      _tgganveshData = null;
-      _tgvehicle = null;
-      */
-      _isTgSearching = false;
+      if (!isAnya) {
+        tgTotalKaaryakartaaCount = tgPratidnyitCount = tgShaakhaaKaaryakartaaCount = '';
+        tgShishuCount = tgBaalCount = tgTarunVidyaarthiCount = '';
+        tgTarunVyavasaayeeCount = tgProudhaVyavasaayeeCount = tgUnknownAgeCount = '';
+        tgPraarambhikShikshitCount = tgPraathamikShikshitCount = '';
+        tgPrathamVarshaShikshitCount = tgDwitiyaVarshaShikshitCount = tgTrutiyaVarshaShikshitCount = '';
+        tgNoShikshanCount = tgDailyShaakhaaKaaryakartaaCount = '';
+        tgSaaptaahikMilanKaaryakartaaCount = tgMaasikMilanKaaryakartaaCount = '';
+        tgVastiKaaryakartaaCount = tgGraamKaaryakartaaCount = tgMandalKaaryakartaaCount = '';
+        tgNagarKaaryakartaaCount = tgShaharKaaryakartaaCount = tgBhaagKaaryakartaaCount = '';
+        tgVibhaagKaaryakartaaCount = tgMahaanagarKaaryakartaaCount = tgPraantKaaryakartaaCount = '';
+        tgKshetraKaaryakartaaCount = tgAkhilBhaaratiyaKaaryakartaaCount = tgPravaaseeKaaryakartaaCount = '';
+        tgGatividhiKaaryakartaaCount = tgAayaamKaaryakartaaCount = '';
+        tgSanghaPreritSansthaaKaaryakartaaCount = tgSocialOrganizationKaaryakartaaCount = '';
+        tgTotalSwayamsevakCount = tgMasikMilanCount = tgSanghaMandaliCount = '';
+        tgMaasikEQ0 = tgMaasikEQ1 = tgSaaptaahikEQ0 = tgSaaptaahik1To3 = tgSaaptaahikGTE4 = '';
+        tgShaakhaaEQ0 = tgShaakhaa1To24 = tgShaakhaaGTE25 = tgShaakhaaEQ30 = '';
+        _tgbloodgroup = _tgexpertieslist = _tginterestlist = _tgmothertonguelist = _tgsangayulist = _tgghoshwadlist = [];
+        _tgganveshData = null;
+        _tgvehicle = null;
+        tgLstGatividhiKaaryakartaa = [];
+      }
+      Statics.tgLstPreritKaaryakartaa.clear();
+      setSearching(false);
     });
   }
 
@@ -2799,7 +2724,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     alignment: Alignment.centerRight,
                     child: _clearButton(() async {
                       await ctrl.loadHierarchyForUser();
-                      isAnya ? _fetchAnyaPanelData() : _fetchSwayamsevakPanelData();
+                      _fetchPanelData(
+                        controller: isAnya ? _anyaInfoController : _swayamsevakController,
+                        setSearching: (v) => isAnya ? _isTgSearching = v : _isMySearching = v,
+                        clearData: () => _clearPanelData((v) => isAnya ? _isTgSearching = v : _isMySearching = v, isAnya: isAnya),
+                      );
                     }),
                   ),
 
@@ -2808,7 +2737,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     level: GeoLevel.Mahaanagar,
                     title: 'Mahaanagar',
                     controller: ctrl,
-                    onChanged: (p0) => isAnya ? _clearAnyaPanelData() : _clearSwayamsevakPanelData(),
+                    onChanged: (p0) => _clearPanelData((v) => isAnya ? _isTgSearching = v : _isMySearching = v, isAnya: isAnya),
                   ),
 
                   // if (ctrl.hasItems(GeoLevel.vibhaag))
@@ -2816,7 +2745,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     level: GeoLevel.Vibhaag,
                     title: 'Vibhaag',
                     controller: ctrl,
-                    onChanged: (p0) => isAnya ? _clearAnyaPanelData() : _clearSwayamsevakPanelData(),
+                    onChanged: (p0) => _clearPanelData((v) => isAnya ? _isTgSearching = v : _isMySearching = v, isAnya: isAnya),
                   ),
 
                   if (ctrl.hasItems(GeoLevel.Bhaag))
@@ -2824,7 +2753,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       level: GeoLevel.Bhaag,
                       title: 'Bhaag',
                       controller: ctrl,
-                      onChanged: (p0) => isAnya ? _clearAnyaPanelData() : _clearSwayamsevakPanelData(),
+                      onChanged: (p0) => _clearPanelData((v) => isAnya ? _isTgSearching = v : _isMySearching = v, isAnya: isAnya),
                     ),
 
                   if (ctrl.hasItems(GeoLevel.Nagar))
@@ -2832,7 +2761,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       level: GeoLevel.Nagar,
                       title: 'Nagar',
                       controller: ctrl,
-                      onChanged: (p0) => isAnya ? _clearAnyaPanelData() : _clearSwayamsevakPanelData(),
+                      onChanged: (p0) => _clearPanelData((v) => isAnya ? _isTgSearching = v : _isMySearching = v, isAnya: isAnya),
                     ),
 
                   /// CONDITIONAL
@@ -2841,7 +2770,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       level: GeoLevel.upnagarUpkhanda,
                       title: 'upnagarUpkhanda',
                       controller: ctrl,
-                      onChanged: (p0) => isAnya ? _clearAnyaPanelData() : _clearSwayamsevakPanelData(),
+                      onChanged: (p0) => _clearPanelData((v) => isAnya ? _isTgSearching = v : _isMySearching = v, isAnya: isAnya),
                     ),
 
                   if (ctrl.hasItems(GeoLevel.Mandal))
@@ -2849,7 +2778,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       level: GeoLevel.Mandal,
                       title: 'Mandal',
                       controller: ctrl,
-                      onChanged: (p0) => isAnya ? _clearAnyaPanelData() : _clearSwayamsevakPanelData(),
+                      onChanged: (p0) => _clearPanelData((v) => isAnya ? _isTgSearching = v : _isMySearching = v, isAnya: isAnya),
                     ),
 
                   if (ctrl.hasItems(GeoLevel.Graam))
@@ -2857,7 +2786,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       level: GeoLevel.Graam,
                       title: 'Graam',
                       controller: ctrl,
-                      onChanged: (p0) => isAnya ? _clearAnyaPanelData() : _clearSwayamsevakPanelData(),
+                      onChanged: (p0) => _clearPanelData((v) => isAnya ? _isTgSearching = v : _isMySearching = v, isAnya: isAnya),
                     ),
 
                   if (ctrl.hasItems(GeoLevel.Vasti))
@@ -2865,7 +2794,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       level: GeoLevel.Vasti,
                       title: 'Vasti',
                       controller: ctrl,
-                      onChanged: (p0) => isAnya ? _clearAnyaPanelData() : _clearSwayamsevakPanelData(),
+                      onChanged: (p0) => _clearPanelData((v) => isAnya ? _isTgSearching = v : _isMySearching = v, isAnya: isAnya),
                     ),
 
                   const SizedBox(height: 12),
@@ -2874,7 +2803,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                     color: Theme.of(context).primaryColor,
                     textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
-                    onPressed: isAnya ? _fetchAnyaPanelData : _fetchSwayamsevakPanelData,
+                    onPressed: () => _fetchPanelData(
+                      controller: isAnya ? _anyaInfoController : _swayamsevakController,
+                      setSearching: (v) => isAnya ? _isTgSearching = v : _isMySearching = v,
+                      clearData: () => _clearPanelData((v) => isAnya ? _isTgSearching = v : _isMySearching = v, isAnya: isAnya),
+                    ),
                     child: Text(
                       Statics.getLabel('Search'),
                       style: TextStyle(fontSize: 16),

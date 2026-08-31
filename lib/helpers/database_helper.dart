@@ -66,6 +66,17 @@ class DatabaseHelper {
           ' LinkedGeoUnitHierarchy VARCHAR(100), IsFirstLogin BOOL, LastLoginTimeStamp VARCHAR(30), ' +
           ' IsLoggedIn VARCHAR(10), IsPravaasiKaaryakartaa BOOL,ShowShakhaSaptaha INT,ShowPustika INT)');
 
+      // db.execute('DROP TABLE IF EXISTS UserDataMaster');
+      db.execute('CREATE TABLE IF NOT EXISTS OfflineConfigList(tablename VARCHAR(100),apiname VARCHAR(100),SyncVersion INT)');
+
+      db.execute('''
+  CREATE TABLE IF NOT EXISTS OfflineShaakhaPustika (
+    pkid INT PRIMARY KEY, yearno INT, monthno INT, canupdate INT, karyakramname TEXT, vayogatname TEXT,
+    subjecttext TEXT, filepath TEXT, karyakramid INT, urllink TEXT, vayogatid TEXT,
+    mdate TEXT
+  )
+''');
+
       if (oldVersion < 5) {
         await _ensureColumn(db, 'GeoUnitMaster', 'issankalpit', 'INT');
       }
@@ -122,6 +133,16 @@ class DatabaseHelper {
 
       db.execute('CREATE TABLE DropdownLevelMaster(LevelID INT,GeoUnitID INT,ParentMahaanagarID INT,ParentVibhaagID INT,ParentBhaagID INT,' +
           'ParentNagarID INT,ParentUpaNagarID INT,ParentMandalID INT,ParentGraamID INT,ParentVastiID INT,isvasti INT,ismandal INT)');
+
+      db.execute('CREATE TABLE IF NOT EXISTS OfflineConfigList(tablename VARCHAR(100),apiname VARCHAR(100),SyncVersion INT)');
+
+      db.execute('''
+  CREATE TABLE IF NOT EXISTS OfflineShaakhaPustika (
+    pkid INT PRIMARY KEY, yearno INT, monthno INT, canupdate INT, karyakramname TEXT, vayogatname TEXT,
+    subjecttext TEXT, filepath TEXT, karyakramid INT, urllink TEXT, vayogatid TEXT,
+    mdate TEXT
+  )
+''');
     });
     return database;
   }
@@ -249,6 +270,22 @@ class DatabaseHelper {
               data['showAnnualBaithak'].toString() +
               ',' +
               (data['myear'] == null || data['myear'].toString().isEmpty ? '\'-\'' : '\'' + data['myear'].toString() + '\'') +
+              ')';
+
+          // log(sqlStr + "sqlStrsqlStr");
+        }
+      } else if (tableName == 'OfflineConfigList') {
+        for (var data in dataList) {
+          cnt = cnt + 1;
+          sqlStr = sqlStr +
+              (cnt == 1 ? 'INSERT INTO OfflineConfigList(tablename, apiname, SyncVersion) VALUES ' : ',') +
+              '(' +
+              '\'' +
+              data['tablename'].toString() +
+              '\',\'' +
+              data['apiname'].toString() +
+              '\',' +
+              data['SyncVersion'].toString() +
               ')';
 
           // log(sqlStr + "sqlStrsqlStr");
@@ -721,6 +758,17 @@ class DatabaseHelper {
           data['showAnnualBaithak'].toString() +
           ',' +
           (data['myear'] == null || data['myear'].toString().isEmpty ? '\'-\'' : '\'' + data['myear'].toString() + '\'') +
+          ');';
+      // log(sqlStr + "sqlStrsqlStr 2222");
+      // }
+    } else if (tableName == 'OfflineConfigList') {
+      sqlStr = 'INSERT INTO OfflineConfigList(tablename, apiname, SyncVersion) VALUES (' +
+          '\'' +
+          data['tablename'].toString() +
+          '\',\'' +
+          data['apiname'].toString() +
+          '\',' +
+          data['SyncVersion'].toString() +
           ');';
       // log(sqlStr + "sqlStrsqlStr 2222");
       // }
@@ -1219,6 +1267,134 @@ class DatabaseHelper {
     }
 
     await db.execute(sqlStr);
+  }
+
+  static Future<List<T>> getAllOfflineData<T>({
+    required String tableName,
+    required T Function(Map<String, dynamic> map) fromMap,
+    String? orderBy,
+    String? where,
+    List<Object?>? whereArgs,
+  }) async {
+    Database db = await database;
+    final rows = await db.query(
+      tableName,
+      where: where,
+      whereArgs: whereArgs,
+      orderBy: orderBy,
+    );
+    return rows.map((row) => fromMap(row)).toList();
+  }
+
+  static Future<void> bulkUpsertPrimaryId<T>({
+    required String tableName,
+    required List<T> items,
+    required Map<String, dynamic> Function(T item) toMap,
+  }) async {
+    Database db = await database;
+    await db.transaction((txn) async {
+      final batch = txn.batch();
+
+      for (final item in items) {
+        batch.insert(
+          tableName,
+          toMap(item),
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+      }
+
+      await batch.commit(noResult: true);
+    });
+  }
+
+  static Future<void> bulkUpsertNonPrimaryId<T>({
+    required String tableName,
+    required List<T> items,
+    required Map<String, dynamic> Function(T item) toMap,
+    required List<String> keyColumns,
+  }) async {
+    Database db = await database;
+    await db.transaction((txn) async {
+      final batch = txn.batch();
+
+      for (final item in items) {
+        final map = toMap(item);
+
+        // Validate keys
+        for (final key in keyColumns) {
+          if (!map.containsKey(key) || map[key] == null) {
+            throw Exception(
+              '$key is required for table $tableName',
+            );
+          }
+        }
+
+        // Build WHERE dynamically
+        final where = keyColumns.map((key) => '$key = ?').join(' AND ');
+
+        final whereArgs = keyColumns.map((key) => map[key]).toList();
+
+        // Check if record exists
+        final existing = await txn.query(
+          tableName,
+          columns: keyColumns,
+          where: where,
+          whereArgs: whereArgs,
+          limit: 1,
+        );
+
+        if (existing.isNotEmpty) {
+          // UPDATE
+          batch.update(
+            tableName,
+            map,
+            where: where,
+            whereArgs: whereArgs,
+          );
+        } else {
+          // INSERT
+          batch.insert(
+            tableName,
+            map,
+          );
+        }
+      }
+
+      await batch.commit(noResult: true);
+    });
+  }
+
+  static Future<int> updateSyncVersion({
+    required String tableName,
+    required int syncVersion,
+  }) async {
+    Database db = await database;
+    return await db.update(
+      'OfflineConfigList',
+      {
+        'SyncVersion': syncVersion,
+      },
+      where: 'tablename = ?',
+      whereArgs: [tableName],
+    );
+  }
+
+  static Future<int> getLocalSyncVersion(String tableName) async {
+    final db = await database;
+
+    final result = await db.query(
+      'OfflineConfigList',
+      columns: ['SyncVersion'],
+      where: 'tablename = ?',
+      whereArgs: [tableName],
+      limit: 1,
+    );
+
+    if (result.isEmpty) {
+      return 0;
+    }
+
+    return (result.first['SyncVersion'] as int?) ?? 0;
   }
 
   static Future<void> dropCompleteDB() async {

@@ -41,6 +41,7 @@ import '../models/response_model/names_data_model.dart';
 import '../models/response_model/new_search_swayamsevak_model.dart';
 import '../models/response_model/nirikshan_baithak_vrutta.dart';
 import '../models/response_model/notification_list_model.dart';
+import '../models/response_model/offline_shaakhaa_pustika_resp_model.dart';
 import '../models/response_model/release_notes_model.dart';
 import '../models/response_model/sadbhav_baithak_report_model.dart';
 import '../models/response_model/sadbhav_baithak_resp_model.dart';
@@ -340,9 +341,11 @@ const String urlBulkExcelUploadSajjanAnya = baseUrlAPI + '/ExcelUploadsajjananya
 const String urlcreateupdateshaakhapustikaRequest = baseUrlAPI + '/createupdateshaakhapustika';
 const String urlgetshaakhapustikalist = baseUrlAPI + '/getshaakhapustikalist';
 const String urlgetshaakhapustikabyid = baseUrlAPI + '/getshaakhapustikabyid';
+
+const String urlGetOfflineShaakhaPustika = baseUrlAPI + '/offlineshaakhapustika';
 //////////////////////////////////////////////////////////////////////////////////////////
 const String patchSuffix = '';
-const String dbVersion = '5';
+const String dbVersion = '6';
 const int shaakhaaFrequencyDaily = 34;
 const int shaakhaaFrequencyWeekly = 35;
 const int shaakhaaFrequencyMonthly = 36;
@@ -2541,6 +2544,62 @@ Future<GetShaakhaPustikaByIdRespModel?> getShaakhaPustikaById(int pkid) async {
   return null;
 }
 
+Future<List<OfflineShaakhaPustika>?> syncOfflineShaakhaPustikaData(int syncVers, String tableName) async {
+  bool? connected = await isInternetConnected();
+
+  if (connected != true) {
+    // No internet — serve whatever we already have locally
+    log("No internet — falling back to local OfflineShaakhaPustika data");
+    return await DatabaseHelper.getAllOfflineData<OfflineShaakhaPustika>(
+      tableName: 'OfflineShaakhaPustika',
+      fromMap: OfflineShaakhaPustika.fromJson,
+      orderBy: 'mdate DESC', // optional, adjust to your needs
+    );
+  }
+
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  final _body = {"cuserid": userDetails['userID'], "date": ""}; //"date": DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())};
+
+  log("API >>>>>>>>>>>>>> $urlGetOfflineShaakhaPustika");
+  log("_body >>>>>>>>>>>>>> ${jsonEncode(_body)}");
+
+  var response = await http.post(
+    Uri.parse(urlGetOfflineShaakhaPustika),
+    headers: jHeaders,
+    body: json.encode(_body),
+  );
+  log("getOfflineShaakhaPustikaData response:${response.statusCode}");
+  if (response.statusCode == 200) {
+    var responseBody = json.decode(response.body);
+    final respData = OfflineShaakhaPustikaRespModel.fromJson(responseBody);
+    log("Print the body for urlGetOfflineShaakhaPustika >>>>>>>>>>>>>>>>> ${response.body}");
+
+    if (respData.list != null && respData.list!.isNotEmpty) {
+      await DatabaseHelper.bulkUpsertPrimaryId<OfflineShaakhaPustika>(
+        tableName: 'OfflineShaakhaPustika',
+        items: respData.list!,
+        toMap: (item) => item.toJson(),
+      );
+
+      final _syncRes = await DatabaseHelper.updateSyncVersion(syncVersion: syncVers, tableName: tableName);
+
+      log("Printing the _syncRes >>>>>>>>>>>> $_syncRes");
+    }
+
+    return respData.list;
+  }
+
+  // API call failed even though internet is available (server error, etc.)
+  // Fall back to local cache too, rather than showing nothing
+  log("API call failed with status ${response.statusCode} — falling back to local data");
+  return await DatabaseHelper.getAllOfflineData<OfflineShaakhaPustika>(
+    tableName: 'OfflineShaakhaPustika',
+    fromMap: OfflineShaakhaPustika.fromJson,
+    orderBy: 'mdate DESC',
+  );
+}
+
 Future<NagarVastiSampurnaModel?> vastisarvekshanAllReportData(context, String? userID, String? targetGeoUnitID, String? levelType) async {
   bool? connected = await isInternetConnected();
   if (connected != true) {
@@ -2845,9 +2904,27 @@ Future<dynamic> getDashboardDataByGeoUnit(String userID, String targetGeoUnitID)
   var listSankalpByAadhaar = responseBody['HomeScreenData']['ListSankalpByAadhaar'];
   var listBhaugolikVistaar = responseBody['HomeScreenData']['BhaugolikVistaarData'];
   // var listLastMonthBhaugolikVistaar = responseBody['HomeScreenData']['LastMonthBhaugolikVistaarData'];
+  final offline = responseBody['HomeScreenData']['offlineconfiglist'];
   var message = responseBody['Message'];
 
   if (message == "Home Screen Data Returned") {
+    for (final item in offline) {
+      final String tableName = item['tablename'];
+      final int apiSyncVersion = item['SyncVersion'] ?? 0;
+
+      // Get SyncVersion from local DB
+      final int localSyncVersion = await DatabaseHelper.getLocalSyncVersion(tableName);
+
+      log("printing >>>>>>>>>>>> $tableName >>>>>>>>>>>> ${localSyncVersion < apiSyncVersion}");
+
+      if (localSyncVersion < apiSyncVersion) {
+        await syncOfflineTable(
+          tableName: tableName,
+          apiSyncVersion: apiSyncVersion,
+        );
+      }
+    }
+
     tgLstdashboardSadyaSthitiData = [];
     if (listShaakhaaCountByVayogat.length > 0) {
       int shaakhaa = 0, mandali = 0, maasik = 0, saaptaa = 0, sankalpitShaakhaa = 0, sankalpitSaaptaa = 0;
@@ -3269,6 +3346,25 @@ Future<dynamic> getDashboardDataByGeoUnit(String userID, String targetGeoUnitID)
   }
   //return "Successfull";
   return responseBody;
+}
+
+Future<void> syncOfflineTable({required String tableName, required int apiSyncVersion}) async {
+  switch (tableName) {
+    case 'shaakhapustika':
+      await syncOfflineShaakhaPustikaData(apiSyncVersion, tableName);
+      break;
+
+    /*case 'shaakhavrutta':
+      await syncShaakhaVrutta(apiSyncVersion);
+      break;
+
+    case 'shaakhamaster':
+      await syncShaakhaMaster(apiSyncVersion);
+      break;*/
+
+    default:
+      print('No sync function found for table: $tableName');
+  }
 }
 
 Future<dynamic> getJoinRSSData(String strInputBody) async {

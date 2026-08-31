@@ -189,20 +189,20 @@ class _AppDrawerState extends State<AppDrawer> {
                 Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
               },
             ),
-            if (_toShowShakhaPustika) ...[
-              Divider(),
-              ListTile(
-                dense: true,
-                leading: Icon(FontAwesomeIcons.book),
-                title: Text(
-                  Statics.getLabel('ShakhaPustika'),
-                  style: TextStyle(fontSize: 18),
-                ),
-                onTap: () {
-                  Navigator.of(context).pushReplacementNamed(ShakhaPustika.routeName);
-                },
+            // if (_toShowShakhaPustika) ...[
+            Divider(),
+            ListTile(
+              dense: true,
+              leading: Icon(FontAwesomeIcons.book),
+              title: Text(
+                Statics.getLabel('ShakhaPustika'),
+                style: TextStyle(fontSize: 18),
               ),
-            ],
+              onTap: () {
+                Navigator.of(context).pushReplacementNamed(ShakhaPustika.routeName);
+              },
+            ),
+            // ],
             if (Statics.levelId != 1) Divider(),
             if (Statics.levelId != 1)
               ListTile(
