@@ -46,8 +46,8 @@ class OfflineShaakhaPustika {
 
   OfflineShaakhaPustika.fromJson(Map<String, dynamic> json) {
     pkid = json['pkid'];
-    yearno = json['yearno'];
-    monthno = json['monthno'];
+    yearno = json['yearno'] ?? 2020;
+    monthno = json['monthno'] ?? 1;
     canupdate = json['canupdate'];
     karyakramname = json['karyakramname'];
     vayogatname = json['vayogatname'];

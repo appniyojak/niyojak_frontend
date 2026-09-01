@@ -40,18 +40,3 @@ class CreateUpdateShaakhaPustikaRequest {
     };
   }
 }
-// models/shaakha_pustika_response_model.dart
-
-class CreateUpdateShaakhaPustikaRespModel {
-  final String? Status;
-  final String? Message;
-
-  CreateUpdateShaakhaPustikaRespModel({this.Status, this.Message});
-
-  factory CreateUpdateShaakhaPustikaRespModel.fromJson(Map<String, dynamic> json) {
-    return CreateUpdateShaakhaPustikaRespModel(
-      Status: json['Status']?.toString(),
-      Message: json['Message']?.toString(),
-    );
-  }
-}

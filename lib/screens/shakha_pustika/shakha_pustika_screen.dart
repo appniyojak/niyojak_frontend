@@ -8,7 +8,6 @@ import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:flutter_quill_delta_from_html/parser/html_to_delta.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
-import 'package:niyojak_prod/models/response_model/shakha_pustika_list_response_model.dart';
 import 'package:niyojak_prod/screens/home_screen/home_screen.dart';
 import 'package:niyojak_prod/screens/shakha_pustika/sangraha_shkha_pustika_screen.dart';
 import 'package:niyojak_prod/widgets/app_drawer.dart';
@@ -17,6 +16,7 @@ import 'package:provider/provider.dart';
 import '../../../utils/globals.dart';
 import '../../helpers/static_data.dart' as Statics;
 import '../../models/request_model/shakha_pustika_list_requestmodel.dart';
+import '../../models/response_model/offline_shaakhaa_pustika_resp_model.dart';
 import '../../providers/bals.dart';
 import '../../utils/stable_geounit_class.dart'; // NEW — shared "is this file downloaded / where does it live" logic
 import 'audio_helper.dart';
@@ -60,13 +60,14 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
 
   int? currentYear;
   int? currentMonth;
-  List<GetShaakhaPustikaListItem> _apiList = [];
+  List<OfflineShaakhaPustika> _apiList = [];
   bool _isSearching = false;
   int? geoUnitId;
   int cUserId = 0;
   List<StaticMasterBAL>? _karyakram;
   String kFileBaseUrl = Statics.baseUrl;
   TabController? _tabController;
+
 // ── Dummy result data for the table ──
 
   @override
@@ -243,11 +244,11 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
     bool isVibhagLevelUser = false;
     geoUnitId = int.tryParse(_controller.deepestSelectedGeoUnitId.toString());
     if (_karyakramValue == null && karyakramval != -1) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(Statics.getLabel('ChooseKaryakram'))));
+      Statics.showToast(Statics.getLabel('ChooseKaryakram'));
       return;
     }
     if (_selectedMonth == null || _selectedYear == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('ChooseMonthYearValidation')));
+      Statics.showToast(Statics.getLabel('ChooseMonthYearValidation'));
       return;
     }
 
@@ -264,30 +265,33 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
         yearno: _selectedYear!,
         vayogatid: int.tryParse(_vayogatValue ?? '') ?? 0,
       );
-      print("request model:${requestModel.toJson()}");
+
       final respData = await Statics.getUpdateShakhaPustikaList(requestModel);
 
       if (!mounted) return;
 
       if (respData != null) {
         setState(() {
-          _apiList = respData.list;
-          _isSearched = true;
+          _apiList = respData;
         });
         _tabController?.animateTo(1);
-        if (respData.list.isEmpty) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(Statics.getLabel('NoInfoText'))));
+        if (respData.isEmpty) {
+          Statics.showToast(Statics.getLabel('NoInfoText'));
         }
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(Statics.getLabel('ProblemGettingInfoMsg'))));
+        Statics.showToast(Statics.getLabel('ProblemGettingInfoMsg'));
       }
     } catch (e) {
       log("Error fetching shaakha pustika list: $e");
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(Statics.getLabel('SomethingWentWrong'))));
+        Statics.showToast(Statics.getLabel('SomethingWentWrong'));
       }
     } finally {
-      if (mounted) setState(() => _isSearching = false);
+      if (mounted)
+        setState(() {
+          _isSearching = false;
+          _isSearched = true;
+        });
     }
   }
 
@@ -311,37 +315,43 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
             Statics.getLabel('ShakhaPustika'),
             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
           ),
-          bottom: TabBar(controller: _tabController, tabs: [
-            Tab(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    FontAwesomeIcons.globe,
-                    size: 18,
+          bottom: TabBar(
+              controller: _tabController,
+              indicatorColor: Colors.white,
+              physics: NeverScrollableScrollPhysics(),
+              unselectedLabelStyle: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w500),
+              labelStyle: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700),
+              tabs: [
+                Tab(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        FontAwesomeIcons.globe,
+                        size: 18,
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        Statics.getLabel("Filters"),
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                      ),
+                    ],
                   ),
-                  SizedBox(width: 10),
-                  Text(
-                    Statics.getLabel("Filters"),
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                ),
+                Tab(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.event, size: 18),
+                      SizedBox(width: 10),
+                      Text(
+                        Statics.getLabel("Pustika"),
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-            Tab(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.event, size: 18),
-                  SizedBox(width: 10),
-                  Text(
-                    Statics.getLabel("searchEventsScreenLabel"),
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                  ),
-                ],
-              ),
-            ),
-          ]),
+                ),
+              ]),
           actions: [
             if (levelId == 7)
               IconButton(
@@ -559,13 +569,7 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     elevation: 0,
                   ),
-                  onPressed: () async {
-                    await _searchShaakhaPustika();
-                    // UI only — search logic to be wired later
-                    setState(() {
-                      _isSearched = true;
-                    });
-                  },
+                  onPressed: _searchShaakhaPustika,
                   child: _isSearching
                       ? const SizedBox(
                           height: 20,
@@ -618,78 +622,74 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
     ]);
   }
 
-  Widget _buildResultsTable(List<GetShaakhaPustikaListItem> karyakramList) {
+  Widget _buildResultsTable(List<OfflineShaakhaPustika> karyakramList) {
     final primaryColor = Theme.of(context).primaryColor;
     final _showDownloadColumn = levelId == 9 || levelId == 10 || levelId == 11;
 
     return Column(
+      spacing: 8,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         //_sectionTitle(Statics.getLabel('Result'), Icons.table_chart_rounded, primaryColor),
         const SizedBox(height: 12),
         if (karyakramList.isEmpty) ...[
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 20),
-            child: Center(
-                child: Column(
-              children: [
-                Text(Statics.getLabel('NoInfoText')),
-              ],
-            )),
+          Container(
+            alignment: Alignment.center,
+            height: MediaQuery.sizeOf(context).height * 0.75,
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: Text(Statics.getLabel('NoInfoText')),
           )
-        ],
-        ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minWidth: MediaQuery.of(context).size.width,
-              ),
-              child: DataTable(
-                border: TableBorder.all(color: Colors.grey.shade300),
-                headingRowColor: MaterialStateProperty.all(primaryColor),
-                dataRowColor: MaterialStateProperty.all(Colors.white),
-                columnSpacing: 14,
-                columns: [
-                  if (karyakramList.isNotEmpty) DataColumn(label: _tableHeaderCell(Statics.getLabel('ViewMenu'))),
-                  if (_karyakramValue == '310') DataColumn(label: _tableHeaderCell(Statics.getLabel('DoDownload'))),
-                  DataColumn(label: _tableHeaderCell(Statics.getLabel('month'))),
-                  DataColumn(label: _tableHeaderCell(Statics.getLabel('VayogatCode'))),
-                  DataColumn(label: _tableHeaderCell(Statics.getLabel('tapshil'))),
-                  // if (_showDownloadColumn) DataColumn(label: _tableHeaderCell(Statics.getLabel('downloadBtn'))),
-                ],
-                rows: karyakramList.map((item) {
-                  final monthLabel = (item.monthno >= 1 && item.monthno <= 12) ? _monthNameMarathi(item.monthno) : '-';
-                  final content = item.subjecttext ?? '-';
-                  final audioUrl = _resolveFileUrl(item.filepath ?? '-');
-                  print("Resolved file URL: ${_resolveFileUrl(item.filepath ?? '-')}");
-                  return DataRow(
-                    cells: [
-                      if (karyakramList.isNotEmpty) DataCell(_tableInfoCellFromItem(item)), // CHANGED — accepts item directly
-                      if (_karyakramValue == '310') DataCell(_DownloadPlayCell(remoteUrl: audioUrl, title: content)),
-                      DataCell(_tableDataCell(monthLabel)),
-                      DataCell(_tableDataCell(item.vayogatname ?? '-')),
+        ] else ...[
+          Padding(
+            padding: const EdgeInsets.only(left: 5),
+            child: Text(
+              Statics.getLabel('KeepScrolling'),
+              style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
+            ),
+          ),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minWidth: MediaQuery.of(context).size.width,
+                ),
+                child: DataTable(
+                  border: TableBorder.all(color: Colors.grey.shade300),
+                  headingRowColor: MaterialStateProperty.all(primaryColor),
+                  dataRowColor: MaterialStateProperty.all(Colors.white),
+                  columnSpacing: 14,
+                  columns: [
+                    if (karyakramList.isNotEmpty) DataColumn(label: _tableHeaderCell(Statics.getLabel('ViewMenu'))),
+                    if (_karyakramValue == '310') DataColumn(label: _tableHeaderCell(Statics.getLabel('DoDownload'))),
+                    DataColumn(label: _tableHeaderCell(Statics.getLabel('month'))),
+                    DataColumn(label: _tableHeaderCell(Statics.getLabel('VayogatCode'))),
+                    DataColumn(label: _tableHeaderCell(Statics.getLabel('tapshil'))),
+                    // if (_showDownloadColumn) DataColumn(label: _tableHeaderCell(Statics.getLabel('downloadBtn'))),
+                  ],
+                  rows: karyakramList.map((item) {
+                    final monthLabel = (item.monthno! >= 1 && item.monthno! <= 12) ? _monthNameMarathi(item.monthno!) : '-';
+                    final content = item.subjecttext ?? '-';
+                    final audioUrl = _resolveFileUrl(item.filepath ?? '-');
+                    // print("Resolved file URL: ${_resolveFileUrl(item.filepath ?? '-')}");
+                    return DataRow(
+                      cells: [
+                        if (karyakramList.isNotEmpty) DataCell(_tableInfoCellFromItem(item)), // CHANGED — accepts item directly
+                        if (_karyakramValue == '310') DataCell(_DownloadPlayCell(remoteUrl: audioUrl, title: content)),
+                        DataCell(_tableDataCell(monthLabel)),
+                        DataCell(_tableDataCell(item.vayogatname ?? '-')),
 
-                      DataCell(SizedBox(width: 100, child: _tableVishayCell(content))),
-                      //if (_showDownloadColumn) DataCell(_tableDownloadCell(audioUrl, true, content)),
-                    ],
-                  );
-                }).toList(),
+                        DataCell(SizedBox(width: 100, child: _tableVishayCell(content))),
+                        //if (_showDownloadColumn) DataCell(_tableDownloadCell(audioUrl, true, content)),
+                      ],
+                    );
+                  }).toList(),
+                ),
               ),
             ),
           ),
-        ),
-        SizedBox(
-          height: 5,
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 5),
-          child: Text(
-            Statics.getLabel('KeepScrolling'),
-            style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
-          ),
-        ),
+        ]
       ],
     );
   }
@@ -705,7 +705,7 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
     return '$base$rel';
   }
 
-  Widget _tableInfoCellFromItem(GetShaakhaPustikaListItem item) {
+  Widget _tableInfoCellFromItem(OfflineShaakhaPustika item) {
     final primaryColor = Theme.of(context).primaryColor;
     final bool isAudioKaryakram = _karyakramValue == '310';
     final String audioUrl = _resolveFileUrl(item.filepath ?? '');
@@ -945,11 +945,11 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
 
 // ── Year picker field ──
   Widget _yearPickerField(Color primaryColor) {
-    //final List<int> years = List.generate(15, (i) => DateTime.now().year - 10 + i);
-    final List<int> years = List.generate(
-      2028 - 2023 + 1,
-      (i) => 2023 + i,
-    );
+    final List<int> years = List.generate(15, (i) => DateTime.now().year - 10 + i);
+    // final List<int> years = List.generate(
+    //   2028 - 2023 + 1,
+    //   (i) => 2023 + i,
+    // );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1213,7 +1213,7 @@ class _DownloadPlayCellState extends State<_DownloadPlayCell> {
 
   void _showMessage(String msg) {
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+    Statics.showToast(msg);
   }
 
   // CHANGED — uses the shared public AudioPlayerDialog instead of a

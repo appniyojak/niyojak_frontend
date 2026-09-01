@@ -342,7 +342,7 @@ const String urlcreateupdateshaakhapustikaRequest = baseUrlAPI + '/createupdates
 const String urlgetshaakhapustikalist = baseUrlAPI + '/getshaakhapustikalist';
 const String urlgetshaakhapustikabyid = baseUrlAPI + '/getshaakhapustikabyid';
 
-const String urlGetOfflineShaakhaPustika = baseUrlAPI + '/offlineshaakhapustika';
+const String urlGetOfflineUserDataSync = baseUrlAPI + '/offlineuserdatasync';
 //////////////////////////////////////////////////////////////////////////////////////////
 const String patchSuffix = '';
 const String dbVersion = '6';
@@ -2464,7 +2464,7 @@ Future<VastiSurveyReportModel?> vastisarvekshanReportData(context, String? userI
   }
 }
 
-Future<CreateUpdateShaakhaPustikaRespModel?> createUpdateShaakhaPustika(CreateUpdateShaakhaPustikaRequest requestModel) async {
+Future<Map<String, dynamic>?> createUpdateShaakhaPustika(CreateUpdateShaakhaPustikaRequest requestModel) async {
   bool? connected = await isInternetConnected();
   if (connected != true) {
     return null;
@@ -2483,18 +2483,22 @@ Future<CreateUpdateShaakhaPustikaRespModel?> createUpdateShaakhaPustika(CreateUp
 
   if (response.statusCode == 200) {
     var responseBody = json.decode(response.body);
-    final respData = CreateUpdateShaakhaPustikaRespModel.fromJson(responseBody);
     log("Print the body for urlcreateupdateshaakhapustikaRequest >>>>>>>>>>>>>>>>> ${response.body}");
 
-    return respData; // return even on failure so you can show respData.message
+    return responseBody; // return even on failure so you can show respData.message
   }
   return null;
 }
 
-Future<GetShaakhaPustikaListRespModel?> getUpdateShakhaPustikaList(GetShaakhaPustikaListRequest ListRequestmodel) async {
+Future<List<OfflineShaakhaPustika>?> getUpdateShakhaPustikaList(GetShaakhaPustikaListRequest ListRequestmodel) async {
   bool? connected = await isInternetConnected();
   if (connected != true) {
-    return null;
+    // No internet — serve whatever we already have locally
+    log("No internet — falling back to local OfflineShaakhaPustika data");
+    return await DatabaseHelper.getAllOfflineData<OfflineShaakhaPustika>(
+      tableName: 'OfflineShaakhaPustika',
+      fromMap: OfflineShaakhaPustika.fromJson,
+    );
   }
 
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -2512,15 +2516,29 @@ Future<GetShaakhaPustikaListRespModel?> getUpdateShakhaPustikaList(GetShaakhaPus
     final respData = GetShaakhaPustikaListRespModel.fromJson(responseBody);
     log("Print the body for urlcreateupdateshaakhapustikaRequest >>>>>>>>>>>>>>>>> ${response.body}");
 
-    return respData; // return even on failure so you can show respData.message
+    return respData.list; // return even on failure so you can show respData.message
   }
-  return null;
+
+  // API call failed even though internet is available (server error, etc.)
+  // Fall back to local cache too, rather than showing nothing
+  log("API call failed with status ${response.statusCode} — falling back to local data");
+  return await DatabaseHelper.getAllOfflineData<OfflineShaakhaPustika>(
+    tableName: 'OfflineShaakhaPustika',
+    fromMap: OfflineShaakhaPustika.fromJson,
+  );
 }
 
-Future<GetShaakhaPustikaByIdRespModel?> getShaakhaPustikaById(int pkid) async {
+Future<OfflineShaakhaPustika?> getShaakhaPustikaById(int pkid) async {
   bool? connected = await isInternetConnected();
   if (connected != true) {
-    return null;
+    // No internet — serve whatever we already have locally
+    log("No internet — falling back to local OfflineShaakhaPustika data");
+    return await DatabaseHelper.getOneOfflineData<OfflineShaakhaPustika>(
+      tableName: 'OfflineShaakhaPustika',
+      fromMap: OfflineShaakhaPustika.fromJson,
+      where: 'pkid = ?',
+      whereArgs: [pkid],
+    );
   }
 
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -2539,65 +2557,134 @@ Future<GetShaakhaPustikaByIdRespModel?> getShaakhaPustikaById(int pkid) async {
     var responseBody = json.decode(response.body);
     final respData = GetShaakhaPustikaByIdRespModel.fromJson(responseBody);
     log("Print the body for urlGetShaakhaPustikaById >>>>>>>>>>>>>>>>> ${response.body}");
-    return respData; // Status may be null like your list API — caller checks data != null
+    return respData.data; // Status may be null like your list API — caller checks data != null
   }
-  return null;
+
+  // API call failed even though internet is available (server error, etc.)
+  // Fall back to local cache too, rather than showing nothing
+  log("API call failed with status ${response.statusCode} — falling back to local data");
+  return await DatabaseHelper.getOneOfflineData<OfflineShaakhaPustika>(
+    tableName: 'OfflineShaakhaPustika',
+    fromMap: OfflineShaakhaPustika.fromJson,
+    where: 'pkid = ?',
+    whereArgs: [pkid],
+  );
 }
 
-Future<List<OfflineShaakhaPustika>?> syncOfflineShaakhaPustikaData(int syncVers, String tableName) async {
+Future<void> syncOfflineUserSyncData(int syncVers, String tableName) async {
   bool? connected = await isInternetConnected();
 
   if (connected != true) {
-    // No internet — serve whatever we already have locally
-    log("No internet — falling back to local OfflineShaakhaPustika data");
-    return await DatabaseHelper.getAllOfflineData<OfflineShaakhaPustika>(
-      tableName: 'OfflineShaakhaPustika',
-      fromMap: OfflineShaakhaPustika.fromJson,
-      orderBy: 'mdate DESC', // optional, adjust to your needs
-    );
+    return;
   }
 
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   final _body = {"cuserid": userDetails['userID'], "date": ""}; //"date": DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())};
 
-  log("API >>>>>>>>>>>>>> $urlGetOfflineShaakhaPustika");
+  log("API >>>>>>>>>>>>>> $urlGetOfflineUserDataSync");
   log("_body >>>>>>>>>>>>>> ${jsonEncode(_body)}");
 
   var response = await http.post(
-    Uri.parse(urlGetOfflineShaakhaPustika),
+    Uri.parse(urlGetOfflineUserDataSync),
     headers: jHeaders,
     body: json.encode(_body),
   );
-  log("getOfflineShaakhaPustikaData response:${response.statusCode}");
+
   if (response.statusCode == 200) {
     var responseBody = json.decode(response.body);
-    final respData = OfflineShaakhaPustikaRespModel.fromJson(responseBody);
-    log("Print the body for urlGetOfflineShaakhaPustika >>>>>>>>>>>>>>>>> ${response.body}");
+    log("Print the body for syncOfflineUserSyncData >>>>>>>>>>>>>>>>> ${response.body}");
 
-    if (respData.list != null && respData.list!.isNotEmpty) {
-      await DatabaseHelper.bulkUpsertPrimaryId<OfflineShaakhaPustika>(
+    List<Map<String, dynamic>> dataList3 = (responseBody['list'] as List).map((item) => item as Map<String, dynamic>).toList();
+    if (dataList3.length > 0) {
+      print("usrLogIn 17.2");
+
+      // 1. Parse raw JSON into model instances
+
+// 2. Bulk upsert into the table
+      final result = await DatabaseHelper.bulkUpsert<Map<String, dynamic>>(
         tableName: 'OfflineShaakhaPustika',
-        items: respData.list!,
-        toMap: (item) => item.toJson(),
+        items: dataList3,
+        toMap: (item) => item,
+        keyColumns: ['pkid'],
+        hasUniqueConstraint: true, // pkid is your PRIMARY KEY
       );
-
-      final _syncRes = await DatabaseHelper.updateSyncVersion(syncVersion: syncVers, tableName: tableName);
-
-      log("Printing the _syncRes >>>>>>>>>>>> $_syncRes");
     }
 
-    return respData.list;
+    List<Map<String, dynamic>> dataList4 = (responseBody['vistarlist'] as List).map((item) => item as Map<String, dynamic>).toList();
+    if (dataList4.length > 0) {
+      print("usrLogIn 17.3");
+
+// 2. Bulk upsert into the table
+      final result = await DatabaseHelper.bulkUpsert<Map<String, dynamic>>(
+        tableName: 'VistarShaakhaListMaster',
+        items: dataList4,
+        toMap: (item) => item,
+        keyColumns: ['pkid'],
+        hasUniqueConstraint: false, // pkid is your PRIMARY KEY
+      );
+    }
+
+    List<Map<String, dynamic>> dataList5 = (responseBody['shaakhalist'] as List).map((item) => item as Map<String, dynamic>).toList();
+    if (dataList5.length > 0) {
+      print("usrLogIn 17.4");
+
+// 2. Bulk upsert into the table
+      final result = await DatabaseHelper.bulkUpsert<Map<String, dynamic>>(
+        tableName: 'ShaakhaListMaster',
+        items: dataList5,
+        toMap: (item) => item,
+        keyColumns: ['ShaakhaaID'],
+        hasUniqueConstraint: false, // pkid is your PRIMARY KEY
+      );
+    }
+
+    List<Map<String, dynamic>> dataList6 = (responseBody['vistarvruttalist'] as List).map((item) => item as Map<String, dynamic>).toList();
+    if (dataList6.length > 0) {
+      print("usrLogIn 17.5");
+
+// 2. Bulk upsert into the table
+      final result = await DatabaseHelper.bulkUpsert<Map<String, dynamic>>(
+        tableName: 'VistarShaakhaVruttaMaster',
+        items: dataList6,
+        toMap: (item) => item,
+        keyColumns: ['pkid'],
+        hasUniqueConstraint: false, // pkid is your PRIMARY KEY
+      );
+    }
+
+    List<Map<String, dynamic>> dataList7 = (responseBody['shaakhavruttalist'] as List).map((item) => item as Map<String, dynamic>).toList();
+    if (dataList7.length > 0) {
+      print("usrLogIn 17.6");
+
+// 2. Bulk upsert into the table
+      final result = await DatabaseHelper.bulkUpsert<Map<String, dynamic>>(
+        tableName: 'ShaakhaVruttaMaster',
+        items: dataList7,
+        toMap: (item) => item,
+        keyColumns: ['pkid'],
+        hasUniqueConstraint: false, // pkid is your PRIMARY KEY
+      );
+    }
+
+    /*var dataList8 = responseBody['mediaList'];
+    if (dataList8.length > 0) {
+      print("usrLogIn 17.7");
+
+// 2. Bulk upsert into the table
+      final result = await DatabaseHelper.bulkUpsert<Map<String, dynamic>>(
+        tableName: 'MediaMaster',
+        items: dataList8,
+        toMap: (item) => item,
+        keyColumns: ['pkid', 'tablename'],
+        hasUniqueConstraint: false, // pkid is your PRIMARY KEY
+      );
+    }*/
+
+    return;
   }
 
-  // API call failed even though internet is available (server error, etc.)
-  // Fall back to local cache too, rather than showing nothing
-  log("API call failed with status ${response.statusCode} — falling back to local data");
-  return await DatabaseHelper.getAllOfflineData<OfflineShaakhaPustika>(
-    tableName: 'OfflineShaakhaPustika',
-    fromMap: OfflineShaakhaPustika.fromJson,
-    orderBy: 'mdate DESC',
-  );
+  return;
 }
 
 Future<NagarVastiSampurnaModel?> vastisarvekshanAllReportData(context, String? userID, String? targetGeoUnitID, String? levelType) async {
@@ -2915,13 +3002,10 @@ Future<dynamic> getDashboardDataByGeoUnit(String userID, String targetGeoUnitID)
       // Get SyncVersion from local DB
       final int localSyncVersion = await DatabaseHelper.getLocalSyncVersion(tableName);
 
-      log("printing >>>>>>>>>>>> $tableName >>>>>>>>>>>> ${localSyncVersion < apiSyncVersion}");
+      log("printing >>>>>>>>>>>> $tableName >>>>>>>>>>>> ${apiSyncVersion}");
 
-      if (localSyncVersion < apiSyncVersion) {
-        await syncOfflineTable(
-          tableName: tableName,
-          apiSyncVersion: apiSyncVersion,
-        );
+      if (apiSyncVersion == 1) {
+        await syncOfflineUserSyncData(apiSyncVersion, tableName);
       }
     }
 
@@ -3346,25 +3430,6 @@ Future<dynamic> getDashboardDataByGeoUnit(String userID, String targetGeoUnitID)
   }
   //return "Successfull";
   return responseBody;
-}
-
-Future<void> syncOfflineTable({required String tableName, required int apiSyncVersion}) async {
-  switch (tableName) {
-    case 'shaakhapustika':
-      await syncOfflineShaakhaPustikaData(apiSyncVersion, tableName);
-      break;
-
-    /*case 'shaakhavrutta':
-      await syncShaakhaVrutta(apiSyncVersion);
-      break;
-
-    case 'shaakhamaster':
-      await syncShaakhaMaster(apiSyncVersion);
-      break;*/
-
-    default:
-      print('No sync function found for table: $tableName');
-  }
 }
 
 Future<dynamic> getJoinRSSData(String strInputBody) async {
@@ -4348,7 +4413,10 @@ Future<void> deleteUserToken() async {
 
     print(deleteUserDeviceToken);
 
-    var response = await http.post(Uri.parse(deleteUserDeviceToken), headers: jHeaders, body: json.encode({"swayamsevakid": userDetails["userID"]}));
+    final body = {"swayamsevakid": userDetails["userID"]};
+    print(body);
+
+    var response = await http.post(Uri.parse(deleteUserDeviceToken), headers: jHeaders, body: json.encode(body));
 
     print(response.body);
   } catch (e) {

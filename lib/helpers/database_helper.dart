@@ -8,6 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 import './static_data.dart' as Statics;
+import 'db_helper_ops.dart';
 
 class DatabaseHelper {
   static final _dbName = 'NiyojakProd.db';
@@ -77,6 +78,56 @@ class DatabaseHelper {
   )
 ''');
 
+      db.execute('''
+  CREATE TABLE IF NOT EXISTS ShaakhaListMaster (
+    ShaakhaaID INT , PraantID INT, GeoUnitID INT, GeoUnitName TEXT, FrequencyID INT, FrequencyCode TEXT, VayogatID INT,
+    VayogatCode TEXT, IsSankalpit INT, ParentVastiID INT, ParentGraamID INT, ParentMandalID INT, ParentNagarID INT,
+    ParentUpaNagarID INT, ParentBhaagID INT, DayNamesOfWeek TEXT, ModifiedDate TEXT,
+    DaysOfWeek TEXT, DayOfMonth TEXT, Location TEXT, StartTimeStr TEXT, EndTimeStr TEXT
+  )
+''');
+
+      db.execute('''
+  CREATE TABLE IF NOT EXISTS VistarShaakhaListMaster (
+    pkid INT, isnew INT, IsAnya INT, trail TEXT,
+    ShaakhaaID INT , PraantID INT, GeoUnitID INT, GeoUnitName TEXT, FrequencyID INT, FrequencyCode TEXT, VayogatID INT,
+    VayogatCode TEXT, IsSankalpit INT, ParentVastiID INT, ParentGraamID INT, ParentMandalID INT, ParentNagarID INT,
+    ParentUpaNagarID INT, ParentBhaagID INT, DayNamesOfWeek TEXT, ModifiedDate TEXT
+  )
+''');
+
+      db.execute('''
+  CREATE TABLE IF NOT EXISTS ShaakhaVruttaMaster (
+    pkid INT, ShaakhaaID INT, VruttaDate TEXT, ShishuCount INT, NewShishuCount INT, BaalVidyaarthiCount INT,
+    NewBaalVidyaarthiCount INT, TarunVidyaarthiCount INT, NewTarunVidyaarthiCount INT, TarunVyavasaayeeCount INT,
+    NewTarunVyavasaayeeCount INT, ProudhaVyavasaayeeCount INT, NewProudhaVyavasaayeeCount INT, matruskatiCount INT,
+    newmatruskatiCount INT, totalCount INT, newtotalCount INT, AbhyaagatCount INT, IsOptionalShaaririk INT, IsOptionalOther INT,
+    Remark TEXT, IsDoneDeepBreathing INT, IsDoneDandaPrahaar INT, IsDoneSooryaNamaskaar INT, IsDoneSanchalanAbhyaas INT,
+    IsDoneSaanghikGeet INT, IsDoneAmrutaVachan INT, IsDoneSubhaashit INT, BoudhikDaysId INT, SewaDaysId TEXT, IsDoneUrdhvapad INT,
+    IsDoneBoodhKatha INT, IsDoneBoudhikDays INT, IsDoneSewaDays INT, AnyaBoudhikDays TEXT, PravasiKaryakartaCount INT,
+    AnyaPravasiKaryakartaCount INT
+  )
+''');
+
+      db.execute('''
+  CREATE TABLE IF NOT EXISTS VistarShaakhaVruttaMaster (
+    pkid INT, ShaakhaaID INT, VruttaDate TEXT, ShishuCount INT, NewShishuCount INT, BaalVidyaarthiCount INT,
+    NewBaalVidyaarthiCount INT, TarunVidyaarthiCount INT, NewTarunVidyaarthiCount INT, TarunVyavasaayeeCount INT,
+    NewTarunVyavasaayeeCount INT, ProudhaVyavasaayeeCount INT, NewProudhaVyavasaayeeCount INT, matruskatiCount INT,
+    newmatruskatiCount INT, totalCount INT, newtotalCount INT, AbhyaagatCount INT, IsOptionalShaaririk INT, IsOptionalOther INT,
+    Remark TEXT, IsDoneDeepBreathing INT, IsDoneDandaPrahaar INT, IsDoneSooryaNamaskaar INT, IsDoneSanchalanAbhyaas INT,
+    IsDoneSaanghikGeet INT, IsDoneAmrutaVachan INT, IsDoneSubhaashit INT, BoudhikDaysId INT, SewaDaysId TEXT, IsDoneUrdhvapad INT,
+    IsDoneBoodhKatha INT, IsDoneBoudhikDays INT, IsDoneSewaDays INT, AnyaBoudhikDays TEXT, PravasiKaryakartaCount INT,
+    AnyaPravasiKaryakartaCount INT
+  )
+''');
+
+      db.execute('''
+  CREATE TABLE IF NOT EXISTS MediaMaster (
+    pkid INT, filepath TEXT, tablename TEXT
+  )
+''');
+
       if (oldVersion < 5) {
         await _ensureColumn(db, 'GeoUnitMaster', 'issankalpit', 'INT');
       }
@@ -141,6 +192,56 @@ class DatabaseHelper {
     pkid INT PRIMARY KEY, yearno INT, monthno INT, canupdate INT, karyakramname TEXT, vayogatname TEXT,
     subjecttext TEXT, filepath TEXT, karyakramid INT, urllink TEXT, vayogatid TEXT,
     mdate TEXT
+  )
+''');
+
+      db.execute('''
+  CREATE TABLE IF NOT EXISTS ShaakhaListMaster (
+    ShaakhaaID INT , PraantID INT, GeoUnitID INT, GeoUnitName TEXT, FrequencyID INT, FrequencyCode TEXT, VayogatID INT,
+    VayogatCode TEXT, IsSankalpit INT, ParentVastiID INT, ParentGraamID INT, ParentMandalID INT, ParentNagarID INT,
+    ParentUpaNagarID INT, ParentBhaagID INT, DayNamesOfWeek TEXT, ModifiedDate TEXT,
+    DaysOfWeek TEXT, DayOfMonth TEXT, Location TEXT, StartTimeStr TEXT, EndTimeStr TEXT
+  )
+''');
+
+      db.execute('''
+  CREATE TABLE IF NOT EXISTS VistarShaakhaListMaster (
+    pkid INT, isnew INT, IsAnya INT, trail TEXT,
+    ShaakhaaID INT , PraantID INT, GeoUnitID INT, GeoUnitName TEXT, FrequencyID INT, FrequencyCode TEXT, VayogatID INT,
+    VayogatCode TEXT, IsSankalpit INT, ParentVastiID INT, ParentGraamID INT, ParentMandalID INT, ParentNagarID INT,
+    ParentUpaNagarID INT, ParentBhaagID INT, DayNamesOfWeek TEXT, ModifiedDate TEXT
+  )
+''');
+
+      db.execute('''
+  CREATE TABLE IF NOT EXISTS ShaakhaVruttaMaster (
+    pkid INT, ShaakhaaID INT, VruttaDate TEXT, ShishuCount INT, NewShishuCount INT, BaalVidyaarthiCount INT,
+    NewBaalVidyaarthiCount INT, TarunVidyaarthiCount INT, NewTarunVidyaarthiCount INT, TarunVyavasaayeeCount INT,
+    NewTarunVyavasaayeeCount INT, ProudhaVyavasaayeeCount INT, NewProudhaVyavasaayeeCount INT, matruskatiCount INT,
+    newmatruskatiCount INT, totalCount INT, newtotalCount INT, AbhyaagatCount INT, IsOptionalShaaririk INT, IsOptionalOther INT,
+    Remark TEXT, IsDoneDeepBreathing INT, IsDoneDandaPrahaar INT, IsDoneSooryaNamaskaar INT, IsDoneSanchalanAbhyaas INT,
+    IsDoneSaanghikGeet INT, IsDoneAmrutaVachan INT, IsDoneSubhaashit INT, BoudhikDaysId INT, SewaDaysId TEXT, IsDoneUrdhvapad INT,
+    IsDoneBoodhKatha INT, IsDoneBoudhikDays INT, IsDoneSewaDays INT, AnyaBoudhikDays TEXT, PravasiKaryakartaCount INT,
+    AnyaPravasiKaryakartaCount INT
+  )
+''');
+
+      db.execute('''
+  CREATE TABLE IF NOT EXISTS VistarShaakhaVruttaMaster (
+    pkid INT, ShaakhaaID INT, VruttaDate TEXT, ShishuCount INT, NewShishuCount INT, BaalVidyaarthiCount INT,
+    NewBaalVidyaarthiCount INT, TarunVidyaarthiCount INT, NewTarunVidyaarthiCount INT, TarunVyavasaayeeCount INT,
+    NewTarunVyavasaayeeCount INT, ProudhaVyavasaayeeCount INT, NewProudhaVyavasaayeeCount INT, matruskatiCount INT,
+    newmatruskatiCount INT, totalCount INT, newtotalCount INT, AbhyaagatCount INT, IsOptionalShaaririk INT, IsOptionalOther INT,
+    Remark TEXT, IsDoneDeepBreathing INT, IsDoneDandaPrahaar INT, IsDoneSooryaNamaskaar INT, IsDoneSanchalanAbhyaas INT,
+    IsDoneSaanghikGeet INT, IsDoneAmrutaVachan INT, IsDoneSubhaashit INT, BoudhikDaysId INT, SewaDaysId TEXT, IsDoneUrdhvapad INT,
+    IsDoneBoodhKatha INT, IsDoneBoudhikDays INT, IsDoneSewaDays INT, AnyaBoudhikDays TEXT, PravasiKaryakartaCount INT,
+    AnyaPravasiKaryakartaCount INT
+  )
+''');
+
+      db.execute('''
+  CREATE TABLE IF NOT EXISTS MediaMaster (
+    pkid INT, filepath TEXT, tablename TEXT
   )
 ''');
     });
@@ -1269,6 +1370,24 @@ class DatabaseHelper {
     await db.execute(sqlStr);
   }
 
+  static Future<T?> getOneOfflineData<T>({
+    required String tableName,
+    required T Function(Map<String, dynamic> map) fromMap,
+    required String where,
+    required List<Object?> whereArgs,
+  }) async {
+    Database db = await database;
+    final rows = await db.query(
+      tableName,
+      where: where,
+      whereArgs: whereArgs,
+      limit: 1,
+    );
+
+    if (rows.isEmpty) return null;
+    return fromMap(rows.first);
+  }
+
   static Future<List<T>> getAllOfflineData<T>({
     required String tableName,
     required T Function(Map<String, dynamic> map) fromMap,
@@ -1284,6 +1403,25 @@ class DatabaseHelper {
       orderBy: orderBy,
     );
     return rows.map((row) => fromMap(row)).toList();
+  }
+
+  static Future<void> upsertByWhere<T>({
+    required String tableName,
+    required T item,
+    required Map<String, dynamic> Function(T item) toMap,
+    required String where,
+    required List<Object?> whereArgs,
+  }) async {
+    Database db = await database;
+    final map = toMap(item);
+
+    final existing = await db.query(tableName, where: where, whereArgs: whereArgs, limit: 1);
+
+    if (existing.isNotEmpty) {
+      await db.update(tableName, map, where: where, whereArgs: whereArgs);
+    } else {
+      await db.insert(tableName, map);
+    }
   }
 
   static Future<void> bulkUpsertPrimaryId<T>({
@@ -1444,5 +1582,372 @@ class DatabaseHelper {
     } catch (e) {
       print('Error while force-deleting database: $e');
     }
+  }
+
+  /// NEW FUNCTIONS
+  // ── internal helpers ─────────────────────────────────────────────────
+
+  static void _validateKeys(Map<String, dynamic> map, List<String> keyColumns, String tableName) {
+    for (final key in keyColumns) {
+      if (!map.containsKey(key) || map[key] == null) {
+        throw MissingKeyColumnException(key, tableName);
+      }
+    }
+  }
+
+  static String _buildWhere(List<String> keyColumns) => keyColumns.map((k) => '$k = ?').join(' AND ');
+
+  static List<Object?> _buildWhereArgs(Map<String, dynamic> map, List<String> keyColumns) => keyColumns.map((k) => map[k]).toList();
+
+  // ── SINGLE ROW OPS ──────────────────────────────────────────────────
+
+  /// Strict create. Throws (via sqflite) if a row with the same key(s)
+  /// already exists and `hasUniqueConstraint` is true. If
+  /// `hasUniqueConstraint` is false, this checks manually first and
+  /// throws a [StateError] on duplicate, since there's no DB-level
+  /// constraint to enforce it.
+  static Future<DbOperationResult> insertOne<T>({
+    required String tableName,
+    required T item,
+    required Map<String, dynamic> Function(T item) toMap,
+    required List<String> keyColumns,
+    required bool hasUniqueConstraint,
+  }) async {
+    final db = await database;
+    final map = toMap(item);
+    _validateKeys(map, keyColumns, tableName);
+
+    if (hasUniqueConstraint) {
+      await db.insert(tableName, map, conflictAlgorithm: ConflictAlgorithm.fail);
+      return const DbOperationResult(inserted: 1);
+    }
+
+    final where = _buildWhere(keyColumns);
+    final whereArgs = _buildWhereArgs(map, keyColumns);
+    final existing = await db.query(tableName, columns: keyColumns, where: where, whereArgs: whereArgs, limit: 1);
+    if (existing.isNotEmpty) {
+      throw StateError('Row already exists in $tableName for keys $keyColumns = $whereArgs');
+    }
+    await db.insert(tableName, map);
+    return const DbOperationResult(inserted: 1);
+  }
+
+  /// Insert only if not already present; no-op (skipped) if it exists.
+  /// Never overwrites existing data.
+  static Future<DbOperationResult> insertOrSkipOne<T>({
+    required String tableName,
+    required T item,
+    required Map<String, dynamic> Function(T item) toMap,
+    required List<String> keyColumns,
+    required bool hasUniqueConstraint,
+  }) async {
+    final db = await database;
+    final map = toMap(item);
+    _validateKeys(map, keyColumns, tableName);
+
+    if (hasUniqueConstraint) {
+      final rowId = await db.insert(tableName, map, conflictAlgorithm: ConflictAlgorithm.ignore);
+      // sqflite returns 0 (or the pre-existing rowid on some platforms)
+      // when ConflictAlgorithm.ignore skips a row — treat non-positive
+      // as "skipped" to be safe across platform differences.
+      return rowId > 0 ? const DbOperationResult(inserted: 1) : const DbOperationResult(skipped: 1);
+    }
+
+    final where = _buildWhere(keyColumns);
+    final whereArgs = _buildWhereArgs(map, keyColumns);
+    final existing = await db.query(tableName, columns: keyColumns, where: where, whereArgs: whereArgs, limit: 1);
+    if (existing.isNotEmpty) {
+      return const DbOperationResult(skipped: 1);
+    }
+    await db.insert(tableName, map);
+    return const DbOperationResult(inserted: 1);
+  }
+
+  /// Update only if the row exists; no-op (skipped) if it doesn't.
+  /// Never creates a new row.
+  static Future<DbOperationResult> updateOne<T>({
+    required String tableName,
+    required T item,
+    required Map<String, dynamic> Function(T item) toMap,
+    required List<String> keyColumns,
+  }) async {
+    final db = await database;
+    final map = toMap(item);
+    _validateKeys(map, keyColumns, tableName);
+
+    final where = _buildWhere(keyColumns);
+    final whereArgs = _buildWhereArgs(map, keyColumns);
+    final rowsAffected = await db.update(tableName, map, where: where, whereArgs: whereArgs);
+    return rowsAffected > 0 ? DbOperationResult(updated: rowsAffected) : const DbOperationResult(skipped: 1);
+  }
+
+  /// True upsert: insert if new, update if it already exists.
+  /// Works for both PK-backed and non-PK-backed (keyColumns-only) tables.
+  static Future<DbOperationResult> upsertOne<T>({
+    required String tableName,
+    required T item,
+    required Map<String, dynamic> Function(T item) toMap,
+    required List<String> keyColumns,
+    required bool hasUniqueConstraint,
+  }) async {
+    final db = await database;
+    final map = toMap(item);
+    _validateKeys(map, keyColumns, tableName);
+
+    if (hasUniqueConstraint) {
+      // Fast path — can't distinguish insert vs update without an extra
+      // query, so both are reported as `inserted` (agreed trade-off).
+      await db.insert(tableName, map, conflictAlgorithm: ConflictAlgorithm.replace);
+      return const DbOperationResult(inserted: 1);
+    }
+
+    final where = _buildWhere(keyColumns);
+    final whereArgs = _buildWhereArgs(map, keyColumns);
+    final existing = await db.query(tableName, columns: keyColumns, where: where, whereArgs: whereArgs, limit: 1);
+
+    if (existing.isNotEmpty) {
+      await db.update(tableName, map, where: where, whereArgs: whereArgs);
+      return const DbOperationResult(updated: 1);
+    }
+    await db.insert(tableName, map);
+    return const DbOperationResult(inserted: 1);
+  }
+
+  /// Delete a single row by its key column(s).
+  static Future<DbOperationResult> deleteOne({
+    required String tableName,
+    required List<String> keyColumns,
+    required List<Object?> keyValues,
+  }) async {
+    if (keyColumns.length != keyValues.length) {
+      throw ArgumentError('keyColumns and keyValues must be the same length for table $tableName');
+    }
+    final db = await database;
+    final where = _buildWhere(keyColumns);
+    final rowsAffected = await db.delete(tableName, where: where, whereArgs: keyValues);
+    return rowsAffected > 0 ? DbOperationResult(deleted: rowsAffected) : const DbOperationResult(skipped: 1);
+  }
+
+  // ── BULK OPS ─────────────────────────────────────────────────────────
+  //
+  // All bulk ops:
+  // - run inside one db.transaction
+  // - use Batch for the fast (hasUniqueConstraint = true) path
+  // - catch per-item errors and count them in `failed` rather than
+  //   aborting the whole transaction
+
+  /// Bulk insert-or-skip. Never overwrites existing rows.
+  static Future<DbOperationResult> bulkInsertOrSkip<T>({
+    required String tableName,
+    required List<T> items,
+    required Map<String, dynamic> Function(T item) toMap,
+    required List<String> keyColumns,
+    required bool hasUniqueConstraint,
+  }) async {
+    final db = await database;
+    var result = const DbOperationResult();
+
+    await db.transaction((txn) async {
+      if (hasUniqueConstraint) {
+        final batch = txn.batch();
+        var validCount = 0;
+        for (final item in items) {
+          try {
+            final map = toMap(item);
+            _validateKeys(map, keyColumns, tableName);
+            batch.insert(tableName, map, conflictAlgorithm: ConflictAlgorithm.ignore);
+            validCount++;
+          } catch (_) {
+            result += const DbOperationResult(failed: 1);
+          }
+        }
+        if (validCount > 0) {
+          final results = await batch.commit();
+          // Each result is the rowid inserted, or 0 when ignored (skip).
+          for (final r in results) {
+            final rowId = r as int? ?? 0;
+            result += rowId > 0 ? const DbOperationResult(inserted: 1) : const DbOperationResult(skipped: 1);
+          }
+        }
+        return;
+      }
+
+      // Manual path — no unique constraint to lean on.
+      for (final item in items) {
+        try {
+          final map = toMap(item);
+          _validateKeys(map, keyColumns, tableName);
+          final where = _buildWhere(keyColumns);
+          final whereArgs = _buildWhereArgs(map, keyColumns);
+          final existing = await txn.query(tableName, columns: keyColumns, where: where, whereArgs: whereArgs, limit: 1);
+          if (existing.isNotEmpty) {
+            result += const DbOperationResult(skipped: 1);
+          } else {
+            await txn.insert(tableName, map);
+            result += const DbOperationResult(inserted: 1);
+          }
+        } catch (_) {
+          result += const DbOperationResult(failed: 1);
+        }
+      }
+    });
+
+    return result;
+  }
+
+  /// Bulk update. Rows that don't already exist are skipped, not created.
+  static Future<DbOperationResult> bulkUpdate<T>({
+    required String tableName,
+    required List<T> items,
+    required Map<String, dynamic> Function(T item) toMap,
+    required List<String> keyColumns,
+  }) async {
+    final db = await database;
+    var result = const DbOperationResult();
+
+    await db.transaction((txn) async {
+      final batch = txn.batch();
+      final validItems = <Map<String, dynamic>>[];
+
+      for (final item in items) {
+        try {
+          final map = toMap(item);
+          _validateKeys(map, keyColumns, tableName);
+          validItems.add(map);
+        } catch (_) {
+          result += const DbOperationResult(failed: 1);
+        }
+      }
+
+      for (final map in validItems) {
+        final where = _buildWhere(keyColumns);
+        final whereArgs = _buildWhereArgs(map, keyColumns);
+        batch.update(tableName, map, where: where, whereArgs: whereArgs);
+      }
+
+      if (validItems.isNotEmpty) {
+        final results = await batch.commit();
+        for (final r in results) {
+          final rowsAffected = r as int? ?? 0;
+          result += rowsAffected > 0 ? DbOperationResult(updated: rowsAffected) : const DbOperationResult(skipped: 1);
+        }
+      }
+    });
+
+    return result;
+  }
+
+  /// Bulk true upsert. Works for both PK-backed and non-PK-backed tables.
+  /// See file header for the accuracy/speed trade-off between the two.
+  static Future<DbOperationResult> bulkUpsert<T>({
+    required String tableName,
+    required List<T> items,
+    required Map<String, dynamic> Function(T item) toMap,
+    required List<String> keyColumns,
+    required bool hasUniqueConstraint,
+  }) async {
+    final db = await database;
+    var result = const DbOperationResult();
+
+    await db.transaction((txn) async {
+      if (hasUniqueConstraint) {
+        final batch = txn.batch();
+        var queuedCount = 0;
+        for (final item in items) {
+          try {
+            final map = toMap(item);
+            _validateKeys(map, keyColumns, tableName);
+            batch.insert(tableName, map, conflictAlgorithm: ConflictAlgorithm.replace);
+            queuedCount++;
+          } catch (_) {
+            result += const DbOperationResult(failed: 1);
+          }
+        }
+        if (queuedCount > 0) {
+          await batch.commit(noResult: true);
+          // Fast path cannot distinguish insert vs update per row.
+          result += DbOperationResult(inserted: queuedCount);
+        }
+        return;
+      }
+
+      // Manual path — accurate inserted/updated split.
+      for (final item in items) {
+        try {
+          final map = toMap(item);
+          _validateKeys(map, keyColumns, tableName);
+          final where = _buildWhere(keyColumns);
+          final whereArgs = _buildWhereArgs(map, keyColumns);
+          final existing = await txn.query(tableName, columns: keyColumns, where: where, whereArgs: whereArgs, limit: 1);
+          if (existing.isNotEmpty) {
+            await txn.update(tableName, map, where: where, whereArgs: whereArgs);
+            result += const DbOperationResult(updated: 1);
+          } else {
+            await txn.insert(tableName, map);
+            result += const DbOperationResult(inserted: 1);
+          }
+        } catch (_) {
+          result += const DbOperationResult(failed: 1);
+        }
+      }
+    });
+
+    return result;
+  }
+
+  // ── DELETE / TRUNCATE ────────────────────────────────────────────────
+
+  /// Delete rows matching an arbitrary condition.
+  static Future<DbOperationResult> deleteWhere({
+    required String tableName,
+    required String where,
+    required List<Object?> whereArgs,
+  }) async {
+    final db = await database;
+    final rowsAffected = await db.delete(tableName, where: where, whereArgs: whereArgs);
+    return DbOperationResult(deleted: rowsAffected);
+  }
+
+  /// Delete all rows in a table. Does NOT reset AUTOINCREMENT sequence
+  /// (matches SQLite's own DELETE FROM semantics — SQLite has no TRUNCATE
+  /// statement; DELETE FROM without WHERE is the standard equivalent).
+  static Future<DbOperationResult> truncateTable({required String tableName}) async {
+    final db = await database;
+    final rowsAffected = await db.delete(tableName);
+    return DbOperationResult(deleted: rowsAffected);
+  }
+
+  /// Wipe the table and reload it from `items`, atomically. If the insert
+  /// half fails partway, the transaction rolls back entirely — you will
+  /// NOT end up with an empty table. This is the one operation in this
+  /// file where a failure aborts everything rather than being skipped,
+  /// because a partial reload (some old data deleted, only some new data
+  /// inserted) is worse than no reload at all.
+  static Future<DbOperationResult> replaceAllData<T>({
+    required String tableName,
+    required List<T> items,
+    required Map<String, dynamic> Function(T item) toMap,
+  }) async {
+    final db = await database;
+    var deletedCount = 0;
+    var insertedCount = 0;
+
+    await db.transaction((txn) async {
+      deletedCount = await txn.delete(tableName);
+
+      final batch = txn.batch();
+      for (final item in items) {
+        batch.insert(tableName, toMap(item));
+      }
+      if (items.isNotEmpty) {
+        await batch.commit(noResult: true);
+      }
+      insertedCount = items.length;
+    });
+    // If anything above throws, db.transaction rolls back automatically
+    // and the exception propagates to the caller — intentionally NOT
+    // caught here, per the all-or-nothing requirement for this op.
+
+    return DbOperationResult(deleted: deletedCount, inserted: insertedCount);
   }
 }

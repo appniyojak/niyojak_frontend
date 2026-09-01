@@ -2253,7 +2253,9 @@ Map<String, String> resEnglish = {
   'manshikCount1plus': 'More Than 1 Time',
   'sangaCount1plus': 'More Than 1 Time',
   ////////////////////////////////////// Shakha Pustika (New Keys) //////////////////////////////////////
+  'SearchToSeeResults': 'Search To See Results',
   'ShakhaPustika': 'Shakha Pustika',
+  'Pustika': 'Pustika',
   'Suchna': 'Notice',
   'DownloadFileValidation': 'Please download the audio file first, after that you can view the information.',
   'ChooseKaryakram': 'Please select a program',
@@ -4554,7 +4556,9 @@ Map<String, String> resMarathi = {
   "manshikCount1plus": "१ पेक्षा जास्त वेळा लागली",
   "sangaCount1plus": "१ पेक्षा जास्त वेळा लागली",
   ////////////////////////////////////// Shakha Pustika (New Keys) //////////////////////////////////////
+  'SearchToSeeResults': 'माहिती पाहण्यासाठी शोधा',
   'ShakhaPustika': 'शाखा पुस्तिका',
+  'Pustika': 'पुस्तिका',
   'Suchna': 'सूचना',
   'DownloadFileValidation': 'कृपया आधी ऑडिओ फाईल डाउनलोड करा, त्यानंतरच माहिती बघता येईल.',
   'ChooseKaryakram': 'कृपया कार्यक्रम निवडा',
@@ -6853,7 +6857,9 @@ Map<String, String> resHindi = {
   "manshikCount1plus": "१ से अधिक बार लगी",
   "sangaCount1plus": "१ से अधिक बार लगी",
   ////////////////////////////////////// Shakha Pustika (New Keys) //////////////////////////////////////
+  'SearchToSeeResults': 'जानकारी देखने के लिए खोजें',
   'ShakhaPustika': 'शाखा पुस्तिका',
+  'Pustika': 'पुस्तिका',
   'Suchna': 'सूचना',
   'DownloadFileValidation': 'कृपया पहले ऑडियो फ़ाइल डाउनलोड करें, उसके बाद ही जानकारी देखी जा सकती है।',
   'ChooseKaryakram': 'कृपया कार्यक्रम चुनें',

@@ -253,7 +253,7 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
     print("pkid:$_incomingPkId");
     final respData = await Statics.getShaakhaPustikaById(pkid);
     log("byidresponse:$respData");
-    final data = respData?.data;
+    final data = respData;
     if (data == null) return;
 
     _karyakramValue = data.karyakramid.toString();
@@ -295,21 +295,21 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
     print("inside save");
     // Basic validation
     if (_karyakramValue == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('कृपया कार्यक्रम निवडा')));
+      Statics.showToast(const SnackBar(content: Text('कृपया कार्यक्रम निवडा')));
       return;
     }
     if (_selectedMonth == null || _selectedYear == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('कृपया महिना व वर्ष निवडा')));
+      Statics.showToast(const SnackBar(content: Text('कृपया महिना व वर्ष निवडा')));
       return;
     }
     if (_selectedVayogat.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('कृपया वयोगट निवडा')));
+      Statics.showToast(const SnackBar(content: Text('कृपया वयोगट निवडा')));
       return;
     }
     if (_linkController.text.trim().isNotEmpty) {
       final valid = await isValidUrl(_linkController.text.trim());
       if (!valid) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(Statics.getLabel('urlValidation'))));
+        Statics.showToast(SnackBar(content: Text(Statics.getLabel('urlValidation'))));
         return;
       }
     }
@@ -333,7 +333,7 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
         } else {
           // neither bytes nor path available — bail out safely
           if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
+            Statics.showToast(
               const SnackBar(content: Text('निवडलेली ऑडिओ फाईल वाचता आली नाही, कृपया पुन्हा निवडा')),
             );
           }
@@ -375,20 +375,20 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
 
       if (!mounted) return;
 
-      if (respData != null && respData.Status == '200') {
+      if (respData != null && respData["Status"] == '200') {
         final messenger = ScaffoldMessenger.of(context); // capture BEFORE popping
-        final message = respData.Message ?? 'यशस्वीरित्या जतन झाले';
+        final message = respData["Message"] ?? 'यशस्वीरित्या जतन झाले';
         Navigator.of(context).pop(true); // return true to caller
         messenger.showSnackBar(SnackBar(content: Text(message)));
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(respData?.Message == 'Already Exists' ? 'माहिती उपलब्ध आहे' : 'जतन करताना त्रुटी आली')),
+        Statics.showToast(
+          SnackBar(content: Text(respData?["Message"] == 'Already Exists' ? 'माहिती उपलब्ध आहे' : 'जतन करताना त्रुटी आली')),
         );
       }
     } catch (e) {
       log("Error saving shaakha pustika: $e");
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('काहीतरी चूक झाली, पुन्हा प्रयत्न करा')));
+        Statics.showToast(const SnackBar(content: Text('काहीतरी चूक झाली, पुन्हा प्रयत्न करा')));
       }
     } finally {
       if (mounted) setState(() => _isSaving = false);

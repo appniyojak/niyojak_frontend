@@ -264,13 +264,102 @@ class LogIn {
 
       var dataList2 = body['LogInData']['offlineconfiglist'];
       if (dataList2.length > 0) {
-        print("usrLogIn 17.5");
+        print("usrLogIn 17.1");
 
         await dbh.DatabaseHelper.reCreate('OfflineConfigList', dataList2);
         // for (var data in dataList) {
         //   await dbh.DatabaseHelper.insertOrUpdateRecord(
         //       'GatividhiMaster', data);
         // }
+      }
+
+      debugPrint("STEP 1: got response, status=${response.statusCode}");
+      debugPrint("STEP 2: decoded body");
+      List<Map<String, dynamic>> dataList3 = (body['LogInData']['list'] as List).map((item) => item as Map<String, dynamic>).toList();
+      debugPrint("STEP 4: dataList3 length = ${dataList3.length}");
+      if (dataList3.length > 0) {
+        debugPrint("usrLogIn 17.2");
+
+        // 1. Parse raw JSON into model instances
+
+// 2. Bulk upsert into the table
+        final result = await DatabaseHelper.bulkUpsert<Map<String, dynamic>>(
+          tableName: 'OfflineShaakhaPustika',
+          items: dataList3,
+          toMap: (item) => item,
+          keyColumns: ['pkid'],
+          hasUniqueConstraint: true, // pkid is your PRIMARY KEY
+        );
+      }
+
+      List<Map<String, dynamic>> dataList4 = (body['LogInData']['vistarlist'] as List).map((item) => item as Map<String, dynamic>).toList();
+      if (dataList4.length > 0) {
+        print("usrLogIn 17.3");
+
+// 2. Bulk upsert into the table
+        final result = await DatabaseHelper.bulkUpsert<Map<String, dynamic>>(
+          tableName: 'VistarShaakhaListMaster',
+          items: dataList4,
+          toMap: (item) => item,
+          keyColumns: ['pkid'],
+          hasUniqueConstraint: false, // pkid is your PRIMARY KEY
+        );
+      }
+
+      List<Map<String, dynamic>> dataList5 = (body['LogInData']['shaakhalist'] as List).map((item) => item as Map<String, dynamic>).toList();
+      if (dataList5.length > 0) {
+        print("usrLogIn 17.4");
+
+// 2. Bulk upsert into the table
+        final result = await DatabaseHelper.bulkUpsert<Map<String, dynamic>>(
+          tableName: 'ShaakhaListMaster',
+          items: dataList5,
+          toMap: (item) => item,
+          keyColumns: ['ShaakhaaID'],
+          hasUniqueConstraint: false, // pkid is your PRIMARY KEY
+        );
+      }
+
+      List<Map<String, dynamic>> dataList6 = (body['LogInData']['vistarvruttalist'] as List).map((item) => item as Map<String, dynamic>).toList();
+      if (dataList6.length > 0) {
+        print("usrLogIn 17.5");
+
+// 2. Bulk upsert into the table
+        final result = await DatabaseHelper.bulkUpsert<Map<String, dynamic>>(
+          tableName: 'VistarShaakhaVruttaMaster',
+          items: dataList6,
+          toMap: (item) => item,
+          keyColumns: ['pkid'],
+          hasUniqueConstraint: false, // pkid is your PRIMARY KEY
+        );
+      }
+
+      List<Map<String, dynamic>> dataList7 = (body['LogInData']['shaakhavruttalist'] as List).map((item) => item as Map<String, dynamic>).toList();
+      if (dataList7.length > 0) {
+        print("usrLogIn 17.6");
+
+// 2. Bulk upsert into the table
+        final result = await DatabaseHelper.bulkUpsert<Map<String, dynamic>>(
+          tableName: 'ShaakhaVruttaMaster',
+          items: dataList7,
+          toMap: (item) => item,
+          keyColumns: ['pkid'],
+          hasUniqueConstraint: false, // pkid is your PRIMARY KEY
+        );
+      }
+
+      List<Map<String, dynamic>> dataList8 = (body['LogInData']['mediaList'] as List).map((item) => item as Map<String, dynamic>).toList();
+      if (dataList8.length > 0) {
+        print("usrLogIn 17.7");
+
+// 2. Bulk upsert into the table
+        final result = await DatabaseHelper.bulkUpsert<Map<String, dynamic>>(
+          tableName: 'MediaMaster',
+          items: dataList8,
+          toMap: (item) => item,
+          keyColumns: ['pkid', 'tablename'],
+          hasUniqueConstraint: false, // pkid is your PRIMARY KEY
+        );
       }
       var userData = body['LogInData']['UserData'];
       print("swayamsevak Id - " + userData['SwayamsevakID'].toString());
@@ -341,7 +430,7 @@ class LogIn {
   // }
   Future<void> logOut({bool isUpdate = false}) async {
     try {
-      Statics.deleteUserToken();
+      await Statics.deleteUserToken();
       print("logOut running");
 
       // Update user details
