@@ -18,6 +18,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart' as xls;
 
+import '../../helpers/media_downloader/download_queue_screen.dart';
 import '../../helpers/static_data.dart' as Statics;
 import '../../models/response_model/names_data_model.dart';
 import '../../models/response_model/notification_list_model.dart';
@@ -111,112 +112,49 @@ class _HomeScreenState extends State<HomeScreen> {
   //String _selctedGeoUnitId = "0";
 
   // ─── My – Shaakhaa Vrutta Summary ─────────────────────────────────────────
-  String? myMaasikEQ0 = '',
-      myMaasikEQ1 = '';
-  String? mySaaptaahik1To3 = '',
-      mySaaptaahikEQ0 = '',
-      mySaaptaahikGTE4 = '';
-  String? myShaakhaa1To24 = '',
-      myShaakhaaEQ0 = '',
-      myShaakhaaGTE25 = '',
-      myShaakhaaEQ30 = '';
+  String? myMaasikEQ0 = '', myMaasikEQ1 = '';
+  String? mySaaptaahik1To3 = '', mySaaptaahikEQ0 = '', mySaaptaahikGTE4 = '';
+  String? myShaakhaa1To24 = '', myShaakhaaEQ0 = '', myShaakhaaGTE25 = '', myShaakhaaEQ30 = '';
 
   // ─── Tg – Shaakhaa Vrutta Summary ─────────────────────────────────────────
-  String? tgMaasikEQ0 = '',
-      tgMaasikEQ1 = '';
-  String? tgSaaptaahik1To3 = '',
-      tgSaaptaahikEQ0 = '',
-      tgSaaptaahikGTE4 = '';
-  String? tgShaakhaa1To24 = '',
-      tgShaakhaaEQ0 = '',
-      tgShaakhaaGTE25 = '',
-      tgShaakhaaEQ30 = '';
+  String? tgMaasikEQ0 = '', tgMaasikEQ1 = '';
+  String? tgSaaptaahik1To3 = '', tgSaaptaahikEQ0 = '', tgSaaptaahikGTE4 = '';
+  String? tgShaakhaa1To24 = '', tgShaakhaaEQ0 = '', tgShaakhaaGTE25 = '', tgShaakhaaEQ30 = '';
 
   // ─── My – counts ───────────────────────────────────────────────────────────
-  String? myTotalKaaryakartaaCount = '',
-      myPratidnyitCount = '',
-      myTotalSwayamsevakCount = '';
-  String? myShishuCount = '',
-      myBaalCount = '',
-      myTarunVidyaarthiCount = '';
-  String? myTarunVyavasaayeeCount = '',
-      myProudhaVyavasaayeeCount = '',
-      myUnknownAgeCount = '';
-  String? myPraarambhikShikshitCount = '',
-      myPraathamikShikshitCount = '';
-  String? myPrathamVarshaShikshitCount = '',
-      myDwitiyaVarshaShikshitCount = '',
-      myTrutiyaVarshaShikshitCount = '';
+  String? myTotalKaaryakartaaCount = '', myPratidnyitCount = '', myTotalSwayamsevakCount = '';
+  String? myShishuCount = '', myBaalCount = '', myTarunVidyaarthiCount = '';
+  String? myTarunVyavasaayeeCount = '', myProudhaVyavasaayeeCount = '', myUnknownAgeCount = '';
+  String? myPraarambhikShikshitCount = '', myPraathamikShikshitCount = '';
+  String? myPrathamVarshaShikshitCount = '', myDwitiyaVarshaShikshitCount = '', myTrutiyaVarshaShikshitCount = '';
   String? myNoShikshanCount = '';
-  String? myDailyShaakhaaKaaryakartaaCount = '',
-      mySaaptaahikMilanKaaryakartaaCount = '',
-      myMaasikMilanKaaryakartaaCount = '';
-  String? myVastiKaaryakartaaCount = '',
-      myGraamKaaryakartaaCount = '',
-      myMandalKaaryakartaaCount = '';
-  String? myNagarKaaryakartaaCount = '',
-      myShaharKaaryakartaaCount = '',
-      myBhaagKaaryakartaaCount = '';
-  String? myVibhaagKaaryakartaaCount = '',
-      myMahaanagarKaaryakartaaCount = '',
-      myPraantKaaryakartaaCount = '';
-  String? myKshetraKaaryakartaaCount = '',
-      myAkhilBhaaratiyaKaaryakartaaCount = '',
-      myPravaaseeKaaryakartaaCount = '';
-  String? myGatividhiKaaryakartaaCount = '',
-      myAayaamKaaryakartaaCount = '';
-  String? mySanghaPreritSansthaaKaaryakartaaCount = '',
-      mySocialOrganizationKaaryakartaaCount = '';
+  String? myDailyShaakhaaKaaryakartaaCount = '', mySaaptaahikMilanKaaryakartaaCount = '', myMaasikMilanKaaryakartaaCount = '';
+  String? myVastiKaaryakartaaCount = '', myGraamKaaryakartaaCount = '', myMandalKaaryakartaaCount = '';
+  String? myNagarKaaryakartaaCount = '', myShaharKaaryakartaaCount = '', myBhaagKaaryakartaaCount = '';
+  String? myVibhaagKaaryakartaaCount = '', myMahaanagarKaaryakartaaCount = '', myPraantKaaryakartaaCount = '';
+  String? myKshetraKaaryakartaaCount = '', myAkhilBhaaratiyaKaaryakartaaCount = '', myPravaaseeKaaryakartaaCount = '';
+  String? myGatividhiKaaryakartaaCount = '', myAayaamKaaryakartaaCount = '';
+  String? mySanghaPreritSansthaaKaaryakartaaCount = '', mySocialOrganizationKaaryakartaaCount = '';
 
 //------ Blood Group - count-------------------------------------------------//
-  String? opos = '',
-      oneg = '',
-      apos = '',
-      aneg = '',
-      bpos = '',
-      bneg = '',
-      abpos = '',
-      abneg = '',
-      nivadlenahi = '';
+  String? opos = '', oneg = '', apos = '', aneg = '', bpos = '', bneg = '', abpos = '', abneg = '', nivadlenahi = '';
 
   // ─── Tg – counts ───────────────────────────────────────────────────────────
-  String? tgTotalKaaryakartaaCount = '',
-      tgPratidnyitCount = '',
-      tgTotalSwayamsevakCount = '';
+  String? tgTotalKaaryakartaaCount = '', tgPratidnyitCount = '', tgTotalSwayamsevakCount = '';
   String? tgShaakhaaKaaryakartaaCount = '';
-  String? tgShishuCount = '',
-      tgBaalCount = '',
-      tgTarunVidyaarthiCount = '';
-  String? tgTarunVyavasaayeeCount = '',
-      tgProudhaVyavasaayeeCount = '',
-      tgUnknownAgeCount = '';
-  String? tgPraarambhikShikshitCount = '',
-      tgPraathamikShikshitCount = '';
-  String? tgPrathamVarshaShikshitCount = '',
-      tgDwitiyaVarshaShikshitCount = '',
-      tgTrutiyaVarshaShikshitCount = '';
+  String? tgShishuCount = '', tgBaalCount = '', tgTarunVidyaarthiCount = '';
+  String? tgTarunVyavasaayeeCount = '', tgProudhaVyavasaayeeCount = '', tgUnknownAgeCount = '';
+  String? tgPraarambhikShikshitCount = '', tgPraathamikShikshitCount = '';
+  String? tgPrathamVarshaShikshitCount = '', tgDwitiyaVarshaShikshitCount = '', tgTrutiyaVarshaShikshitCount = '';
   String? tgNoShikshanCount = '';
-  String? tgDailyShaakhaaKaaryakartaaCount = '',
-      tgSaaptaahikMilanKaaryakartaaCount = '',
-      tgMaasikMilanKaaryakartaaCount = '';
-  String? tgVastiKaaryakartaaCount = '',
-      tgGraamKaaryakartaaCount = '',
-      tgMandalKaaryakartaaCount = '';
-  String? tgNagarKaaryakartaaCount = '',
-      tgShaharKaaryakartaaCount = '',
-      tgBhaagKaaryakartaaCount = '';
-  String? tgVibhaagKaaryakartaaCount = '',
-      tgMahaanagarKaaryakartaaCount = '',
-      tgPraantKaaryakartaaCount = '';
-  String? tgKshetraKaaryakartaaCount = '',
-      tgAkhilBhaaratiyaKaaryakartaaCount = '',
-      tgPravaaseeKaaryakartaaCount = '';
-  String? tgGatividhiKaaryakartaaCount = '',
-      tgAayaamKaaryakartaaCount = '';
-  String? tgSanghaPreritSansthaaKaaryakartaaCount = '',
-      tgSocialOrganizationKaaryakartaaCount = '';
-  String? tgMasikMilanCount = '',
-      tgSanghaMandaliCount = '';
+  String? tgDailyShaakhaaKaaryakartaaCount = '', tgSaaptaahikMilanKaaryakartaaCount = '', tgMaasikMilanKaaryakartaaCount = '';
+  String? tgVastiKaaryakartaaCount = '', tgGraamKaaryakartaaCount = '', tgMandalKaaryakartaaCount = '';
+  String? tgNagarKaaryakartaaCount = '', tgShaharKaaryakartaaCount = '', tgBhaagKaaryakartaaCount = '';
+  String? tgVibhaagKaaryakartaaCount = '', tgMahaanagarKaaryakartaaCount = '', tgPraantKaaryakartaaCount = '';
+  String? tgKshetraKaaryakartaaCount = '', tgAkhilBhaaratiyaKaaryakartaaCount = '', tgPravaaseeKaaryakartaaCount = '';
+  String? tgGatividhiKaaryakartaaCount = '', tgAayaamKaaryakartaaCount = '';
+  String? tgSanghaPreritSansthaaKaaryakartaaCount = '', tgSocialOrganizationKaaryakartaaCount = '';
+  String? tgMasikMilanCount = '', tgSanghaMandaliCount = '';
 
   // ─── Misc ──────────────────────────────────────────────────────────────────
   String? userDaayitvaNameforshow;
@@ -241,8 +179,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // ─── Dropdown data – set 2 (Bhaugolik rachana panel) ──────────────────────
   List<GeoUnitMasterBAL>? _linkedMahaanagar2, _linkedVibhaag2;
-  String? _linkedMahaanagarValue2 = "",
-      _linkedVibhaagValue2 = "";
+  String? _linkedMahaanagarValue2 = "", _linkedVibhaagValue2 = "";
 
   //-------Ganvesh data-------------//
 
@@ -352,7 +289,6 @@ class _HomeScreenState extends State<HomeScreen> {
     _populateDropdownSet2();
     _getGeoUnitID();
     await Future.wait([
-
       ///CALLING ONCE FOR PREVENT HITTING OFFLINE API TWICE
       _fetchPanelData(
         controller: _myAreaReportController,
@@ -1026,49 +962,47 @@ class _HomeScreenState extends State<HomeScreen> {
       if (noteData == null) return;
       setState(() {});
       final langText = (Statics.currentLang() == 1
-          ? noteData.hinditext
-          : Statics.currentLang() == 2
-          ? noteData.englishtext
-          : noteData.marathitext)
+              ? noteData.hinditext
+              : Statics.currentLang() == 2
+                  ? noteData.englishtext
+                  : noteData.marathitext)
           .toString()
           .split("-->");
 
       showDialog(
         context: context,
         useSafeArea: true,
-        builder: (ct) =>
-            PopScope(
-              canPop: false,
-              child: Dialog(
-                surfaceTintColor: Colors.transparent,
-                backgroundColor: Colors.white,
-                clipBehavior: Clip.antiAlias,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                insetPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
-                      decoration: const BoxDecoration(
-                        gradient: LinearGradient(colors: [Colors.purple, Colors.purpleAccent]),
-                      ),
-                      child: Text(
-                        "Release Notes - ${Statics.packageInfo['versionNumber']}",
-                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
-                      ),
-                    ),
-                    Flexible(
-                      child: SingleChildScrollView(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: langText
-                              .asMap()
-                              .entries
-                              .map((e) =>
-                              Container(
+        builder: (ct) => PopScope(
+          canPop: false,
+          child: Dialog(
+            surfaceTintColor: Colors.transparent,
+            backgroundColor: Colors.white,
+            clipBehavior: Clip.antiAlias,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            insetPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(colors: [Colors.purple, Colors.purpleAccent]),
+                  ),
+                  child: Text(
+                    "Release Notes - ${Statics.packageInfo['versionNumber']}",
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                  ),
+                ),
+                Flexible(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: langText
+                          .asMap()
+                          .entries
+                          .map((e) => Container(
                                 margin: const EdgeInsets.symmetric(vertical: 6),
                                 padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
                                 decoration: BoxDecoration(
@@ -1084,31 +1018,31 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ],
                                 ),
                               ))
-                              .toList(),
-                        ),
-                      ),
+                          .toList(),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.purpleAccent,
-                          minimumSize: const Size.fromHeight(45),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                        ),
-                        onPressed: () async {
-                          await pref.setBool("isRead", true);
-                          await pref.setString("appVer", Statics.packageInfo['versionNumber']);
-                          Navigator.pop(context);
-                        },
-                        icon: const Icon(Icons.check_circle, color: Colors.white),
-                        label: Text(Statics.getLabel('bandKara'), style: const TextStyle(fontSize: 16, color: Colors.white)),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.purpleAccent,
+                      minimumSize: const Size.fromHeight(45),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    ),
+                    onPressed: () async {
+                      await pref.setBool("isRead", true);
+                      await pref.setString("appVer", Statics.packageInfo['versionNumber']);
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(Icons.check_circle, color: Colors.white),
+                    label: Text(Statics.getLabel('bandKara'), style: const TextStyle(fontSize: 16, color: Colors.white)),
+                  ),
+                ),
+              ],
             ),
+          ),
+        ),
       );
     } catch (e) {
       print('Error fetching release notes: $e');
@@ -1202,19 +1136,13 @@ class _HomeScreenState extends State<HomeScreen> {
   // ═══════════════════════════════════════════════════════════════════════════
 
   /// Standard "no data" placeholder.
-  Widget _buildNoData({String? label}) =>
-      Padding(
+  Widget _buildNoData({String? label}) => Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Text(Statics.getLabel(label ?? 'NoDataFound'), style: const TextStyle(fontWeight: FontWeight.normal)),
       );
 
   /// Background colour for a total/summary row.
-  MaterialStateProperty<Color?> _totalRowColor() =>
-      MaterialStatePropertyAll(Theme
-          .of(context)
-          .colorScheme
-          .secondary
-          .withOpacity(0.2));
+  MaterialStateProperty<Color?> _totalRowColor() => MaterialStatePropertyAll(Theme.of(context).colorScheme.secondary.withOpacity(0.2));
 
   /// Shorthand for a plain text DataCell.
   // DataCell _cell(String text) => DataCell(Center(child: Text(text, textAlign: TextAlign.center, softWrap: true)));
@@ -1278,10 +1206,7 @@ class _HomeScreenState extends State<HomeScreen> {
       leftFixedHeaders: [
         Statics.getLabel('Vayogat'),
       ],
-      leftFixedRows: data
-          .asMap()
-          .entries
-          .map((e) {
+      leftFixedRows: data.asMap().entries.map((e) {
         final item = e.value;
         final isTotal = e.key == data.length - 1;
         final aadhaarLabel = item.sankalpAadhaar == '' ? '' : Statics.getLabel(item.sankalpAadhaar);
@@ -1299,10 +1224,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Statics.getLabel('SankalpitMasikMilan'),
         Statics.getLabel('SankalpitSanghMandali'),
       ],
-      rows: data
-          .asMap()
-          .entries
-          .map((e) {
+      rows: data.asMap().entries.map((e) {
         final item = e.value;
         final isTotal = e.key == data.length - 1;
         final aadhaarLabel = item.sankalpAadhaar == '' ? '' : Statics.getLabel(item.sankalpAadhaar);
@@ -1327,10 +1249,7 @@ class _HomeScreenState extends State<HomeScreen> {
       leftFixedHeaders: [
         Statics.getLabel('LevelName'),
       ],
-      leftFixedRows: data
-          .asMap()
-          .entries
-          .map((e) {
+      leftFixedRows: data.asMap().entries.map((e) {
         final item = e.value;
         final isTotal = e.key == data.length - 1;
         return DataRow(
@@ -1346,10 +1265,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Statics.getLabel('SaaptaahikSLabel'),
         Statics.getLabel('MaasikYuktaLabel'),
       ],
-      rows: data
-          .asMap()
-          .entries
-          .map((e) {
+      rows: data.asMap().entries.map((e) {
         final item = e.value;
         final isTotal = e.key == data.length - 1;
         return DataRow(color: isTotal ? _totalRowColor() : null, cells: [
@@ -1374,10 +1290,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (data.isEmpty) return _buildNoData();
     return ScrollableDataTable(
       headers: [nameHeader, countHeader],
-      rows: data
-          .asMap()
-          .entries
-          .map((e) {
+      rows: data.asMap().entries.map((e) {
         final isTotal = e.key == data.length - 1;
         return DataRow(
           color: isTotal ? _totalRowColor() : null,
@@ -1481,14 +1394,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       MaterialButton(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                        color: Theme
-                            .of(context)
-                            .primaryColor,
-                        textColor: Theme
-                            .of(context)
-                            .primaryTextTheme
-                            .labelMedium
-                            ?.color,
+                        color: Theme.of(context).primaryColor,
+                        textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                         onPressed: _getShaakhaaVruttaReport,
                         child: Text(
                           Statics.getLabel('Search'),
@@ -1503,79 +1410,77 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 12),
             if (_isReportSearching)
               const CircularProgressIndicator()
-            else
-              if (_isReportCleared)
-                const SizedBox(height: 120)
-              else
-                ...[
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade100,
-                      borderRadius: BorderRadius.circular(28),
-                    ),
-                    // 1. Wrap the Row in a SingleChildScrollView
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal, // 2. Enable horizontal scrolling
-                      physics: const BouncingScrollPhysics(), // Gives it a nice native bounce effect
-                      child: Row(
-                        // Removed mainAxisAlignment: spaceEvenly since the scrollable width is infinite
-                        children: List.generate(tabs.length, (index) {
-                          final isSelected = activeTabIndex == index;
+            else if (_isReportCleared)
+              const SizedBox(height: 120)
+            else ...[
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade100,
+                  borderRadius: BorderRadius.circular(28),
+                ),
+                // 1. Wrap the Row in a SingleChildScrollView
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal, // 2. Enable horizontal scrolling
+                  physics: const BouncingScrollPhysics(), // Gives it a nice native bounce effect
+                  child: Row(
+                    // Removed mainAxisAlignment: spaceEvenly since the scrollable width is infinite
+                    children: List.generate(tabs.length, (index) {
+                      final isSelected = activeTabIndex == index;
 
-                          return GestureDetector(
-                            onTap: () => onTabTapped(index),
-                            child: Container(
-                              // The margin here handles the spacing between tabs nicely
-                              margin: const EdgeInsets.symmetric(horizontal: 4),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(24),
-                                child: BackdropFilter(
-                                  filter: ImageFilter.blur(
-                                    sigmaX: isSelected ? 15.0 : 0.0,
-                                    sigmaY: isSelected ? 15.0 : 0.0,
+                      return GestureDetector(
+                        onTap: () => onTabTapped(index),
+                        child: Container(
+                          // The margin here handles the spacing between tabs nicely
+                          margin: const EdgeInsets.symmetric(horizontal: 4),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(24),
+                            child: BackdropFilter(
+                              filter: ImageFilter.blur(
+                                sigmaX: isSelected ? 15.0 : 0.0,
+                                sigmaY: isSelected ? 15.0 : 0.0,
+                              ),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(24),
+                                  border: Border.all(
+                                    color: isSelected ? Colors.white.withOpacity(0.4) : Colors.transparent,
+                                    width: 1.0,
                                   ),
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(24),
-                                      border: Border.all(
-                                        color: isSelected ? Colors.white.withOpacity(0.4) : Colors.transparent,
-                                        width: 1.0,
-                                      ),
-                                      gradient: isSelected
-                                          ? LinearGradient(
-                                        begin: Alignment.topLeft,
-                                        end: Alignment.bottomRight,
-                                        colors: [
-                                          Colors.white.withOpacity(0.4),
-                                          Colors.purple.withOpacity(0.1),
-                                          Colors.deepPurple.withOpacity(0.37),
-                                          Colors.deepPurple.withOpacity(0.7),
-                                        ],
-                                        stops: const [0.0, 0.3, 0.6, 1.0],
-                                      )
-                                          : null,
-                                      color: isSelected ? null : Colors.white.withOpacity(0.05),
-                                    ),
-                                    child: Text(
-                                      tabs[index],
-                                      style: TextStyle(
-                                        color: isSelected ? Colors.black : Colors.grey.shade700,
-                                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                                      ),
-                                    ),
+                                  gradient: isSelected
+                                      ? LinearGradient(
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight,
+                                          colors: [
+                                            Colors.white.withOpacity(0.4),
+                                            Colors.purple.withOpacity(0.1),
+                                            Colors.deepPurple.withOpacity(0.37),
+                                            Colors.deepPurple.withOpacity(0.7),
+                                          ],
+                                          stops: const [0.0, 0.3, 0.6, 1.0],
+                                        )
+                                      : null,
+                                  color: isSelected ? null : Colors.white.withOpacity(0.05),
+                                ),
+                                child: Text(
+                                  tabs[index],
+                                  style: TextStyle(
+                                    color: isSelected ? Colors.black : Colors.grey.shade700,
+                                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                                   ),
                                 ),
                               ),
                             ),
-                          );
-                        }),
-                      ),
-                    ),
+                          ),
+                        ),
+                      );
+                    }),
                   ),
-                  buildDataBody(),
-                ]
+                ),
+              ),
+              buildDataBody(),
+            ]
           ],
         );
       }),
@@ -2068,9 +1973,7 @@ class _HomeScreenState extends State<HomeScreen> {
           // ── Horizontal bar chart ─────────────────
           SizedBox(
             height: chartHeight,
-            width: MediaQuery
-                .sizeOf(context)
-                .width,
+            width: MediaQuery.sizeOf(context).width,
             child: HorizontalBarChart(
               data: data,
               showEditIcon: false,
@@ -2109,10 +2012,7 @@ class _HomeScreenState extends State<HomeScreen> {
       leftFixedHeaders: [
         fcHeader,
       ],
-      leftFixedRows: data
-          .asMap()
-          .entries
-          .map((e) {
+      leftFixedRows: data.asMap().entries.map((e) {
         final item = e.value;
         final isTotal = e.key == data.length - 1;
         return DataRow(
@@ -2128,10 +2028,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Statics.getLabel('SaaptaahikMilan'),
         Statics.getLabel('MilanMandali'),
       ],
-      rows: data
-          .asMap()
-          .entries
-          .map((e) {
+      rows: data.asMap().entries.map((e) {
         final item = e.value;
         final isTotal = e.key == data.length - 1;
         return DataRow(
@@ -2154,10 +2051,7 @@ class _HomeScreenState extends State<HomeScreen> {
       leftFixedHeaders: [
         Statics.getLabel('GeoUnitName'),
       ],
-      leftFixedRows: data
-          .asMap()
-          .entries
-          .map((e) {
+      leftFixedRows: data.asMap().entries.map((e) {
         final item = e.value;
         final isTotal = e.key == data.length - 1;
         return DataRow(
@@ -2177,10 +2071,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Statics.getLabel('ShishuCount'),
         Statics.getLabel('AbhyaagatCount'),
       ],
-      rows: data
-          .asMap()
-          .entries
-          .map((e) {
+      rows: data.asMap().entries.map((e) {
         final item = e.value;
         final isTotal = e.key == data.length - 1;
         return DataRow(
@@ -2216,37 +2107,36 @@ class _HomeScreenState extends State<HomeScreen> {
   void _showExcelDownloadDialog(UpkhandaDataList data) {
     showDialog(
       context: context,
-      builder: (ctx) =>
-          AlertDialog(
-            title: Text(Statics.getLabel('AskConfirmation')),
-            content: Text("${Statics.getLabel("selectedLevel")} -> ${data.goUnitName}"),
-            actions: [
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.purple),
-                child: Text(Statics.getLabel("downloadBtn"), style: const TextStyle(color: Colors.white)),
-                onPressed: () async {
-                  Navigator.of(ctx).pop();
-                  setState(() => bhougolikReportForExcel = null);
-                  bhougolikReportForExcel = await Statics.upkhandUpnagarReportForExcelData(
-                    userID: Statics.userDetails["userID"],
-                    targetGeoUnitID: data.geoUnitId,
-                    context: context,
-                  );
-                  setState(() {});
-                  final list = bhougolikReportForExcel?.datanameList;
-                  if (list != null && list.isNotEmpty) {
-                    await buildExcelFromData3(geoHierarchyData: bhougolikReportForExcel!.toJson()["GeoHierarchyData"]);
-                  } else {
-                    Fluttertoast.showToast(msg: Statics.getLabel("errorOccurred"), gravity: ToastGravity.BOTTOM);
-                  }
-                },
-              ),
-              TextButton(
-                child: Text(Statics.getLabel('clear')),
-                onPressed: () => Navigator.of(ctx).pop(),
-              ),
-            ],
+      builder: (ctx) => AlertDialog(
+        title: Text(Statics.getLabel('AskConfirmation')),
+        content: Text("${Statics.getLabel("selectedLevel")} -> ${data.goUnitName}"),
+        actions: [
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.purple),
+            child: Text(Statics.getLabel("downloadBtn"), style: const TextStyle(color: Colors.white)),
+            onPressed: () async {
+              Navigator.of(ctx).pop();
+              setState(() => bhougolikReportForExcel = null);
+              bhougolikReportForExcel = await Statics.upkhandUpnagarReportForExcelData(
+                userID: Statics.userDetails["userID"],
+                targetGeoUnitID: data.geoUnitId,
+                context: context,
+              );
+              setState(() {});
+              final list = bhougolikReportForExcel?.datanameList;
+              if (list != null && list.isNotEmpty) {
+                await buildExcelFromData3(geoHierarchyData: bhougolikReportForExcel!.toJson()["GeoHierarchyData"]);
+              } else {
+                Fluttertoast.showToast(msg: Statics.getLabel("errorOccurred"), gravity: ToastGravity.BOTTOM);
+              }
+            },
           ),
+          TextButton(
+            child: Text(Statics.getLabel('clear')),
+            onPressed: () => Navigator.of(ctx).pop(),
+          ),
+        ],
+      ),
     );
   }
 
@@ -2301,16 +2191,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
     /// Header row
     _sheet.getRangeByIndex(1, _colForSheet).setText('Sr No');
-    _sheet
-        .getRangeByIndex(1, _colForSheet, 2, _colForSheet)
-        .cellStyle = headerStyle;
+    _sheet.getRangeByIndex(1, _colForSheet, 2, _colForSheet).cellStyle = headerStyle;
     _colForSheet++;
 
     for (final header in headers) {
       _sheet.getRangeByIndex(1, _colForSheet).setText(Statics.getLabel(header));
-      _sheet
-          .getRangeByIndex(1, _colForSheet)
-          .cellStyle = headerStyle;
+      _sheet.getRangeByIndex(1, _colForSheet).cellStyle = headerStyle;
       _colForSheet++;
     }
 
@@ -2395,10 +2281,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     'MappedVastis': '--',
                     'UpkhandName': upkhandName,
                     'MandalName': mandalName,
-                    'GraamNames': g != null && g
-                        .toString()
-                        .trim()
-                        .isNotEmpty ? g.toString() : "--",
+                    'GraamNames': g != null && g.toString().trim().isNotEmpty ? g.toString() : "--",
                   });
                 }
               }
@@ -2435,9 +2318,7 @@ class _HomeScreenState extends State<HomeScreen> {
               nagarRows.add({
                 'NagarName': nagarName,
                 'UpnagarName': upnagarName,
-                'MappedVastis': vastiName != null && vastiName
-                    .trim()
-                    .isNotEmpty ? vastiName : "--",
+                'MappedVastis': vastiName != null && vastiName.trim().isNotEmpty ? vastiName : "--",
                 'UpkhandName': '--',
                 'MandalName': '--',
                 'GraamNames': '--',
@@ -2454,16 +2335,12 @@ class _HomeScreenState extends State<HomeScreen> {
         int writeCol = 1;
         // Only print Sr No on the first row of this block
         _sheet.getRangeByIndex(rowIndex, writeCol).setText(i == 0 ? srNo.toString() : '');
-        _sheet
-            .getRangeByIndex(rowIndex, writeCol)
-            .cellStyle = _cellStyle;
+        _sheet.getRangeByIndex(rowIndex, writeCol).cellStyle = _cellStyle;
         writeCol++;
 
         for (final key in headers) {
           _sheet.getRangeByIndex(rowIndex, writeCol).setText(nagarRows[i][key] ?? '--');
-          _sheet
-              .getRangeByIndex(rowIndex, writeCol)
-              .cellStyle = _cellStyle;
+          _sheet.getRangeByIndex(rowIndex, writeCol).cellStyle = _cellStyle;
           writeCol++;
         }
         rowIndex++;
@@ -2533,9 +2410,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       _sheet.getRangeByIndex(rowIndex, 1, rowIndex, 2).merge(); // Sr No & NagarName combined
       _sheet.getRangeByIndex(rowIndex, 1).setText('Total');
-      _sheet
-          .getRangeByIndex(rowIndex, 1, rowIndex, 2)
-          .cellStyle = boldCellStyle..backColor = '#D6E3BC';
+      _sheet.getRangeByIndex(rowIndex, 1, rowIndex, 2).cellStyle = boldCellStyle..backColor = '#D6E3BC';
 
       for (int i = 0; i < headers.length; i++) {
         final key = headers[i];
@@ -2547,9 +2422,7 @@ class _HomeScreenState extends State<HomeScreen> {
         } else {
           _sheet.getRangeByIndex(rowIndex, col).setText('');
         }
-        _sheet
-            .getRangeByIndex(rowIndex, col)
-            .cellStyle = blankRowStyle;
+        _sheet.getRangeByIndex(rowIndex, col).cellStyle = blankRowStyle;
       }
 
       rowIndex++; // leave one blank row space after total
@@ -2620,12 +2493,7 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       dir = await getApplicationDocumentsDirectory();
     }
-    final ts = DateTime
-        .now()
-        .toIso8601String()
-        .replaceAll(':', '-')
-        .split(".")
-        .first;
+    final ts = DateTime.now().toIso8601String().replaceAll(':', '-').split(".").first;
     final path = '${dir!.path}/${_selctedLevelName ?? "prant"}_${Statics.getLabel("bhougolikExcelReport")}_$ts.xlsx';
     log(path);
     return path;
@@ -2676,6 +2544,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
             actions: [
+              DownloadBadge(),
               // Notification bell with badge
               Stack(
                 children: [
@@ -2733,9 +2602,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.all(20),
-          width: Statics
-              .getDeviceSize(context)
-              .width,
+          width: Statics.getDeviceSize(context).width,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -2764,9 +2631,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.all(20),
-          width: Statics
-              .getDeviceSize(context)
-              .width,
+          width: Statics.getDeviceSize(context).width,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -2777,7 +2642,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(height: 24),
                 _cardTile(
                   Statics.getLabel('searchShaakhaaScreenLabel'),
-                      () => Navigator.of(context).pushNamed(ShaakhaMainTabScreen.routeName),
+                  () => Navigator.of(context).pushNamed(ShaakhaMainTabScreen.routeName),
                   makeHighlight: true,
                 ),
                 const SizedBox(height: 18),
@@ -2939,20 +2804,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   MaterialButton(
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                    color: Theme
-                        .of(context)
-                        .primaryColor,
-                    textColor: Theme
-                        .of(context)
-                        .primaryTextTheme
-                        .labelMedium
-                        ?.color,
-                    onPressed: () =>
-                        _fetchPanelData(
-                          controller: isAnya ? _anyaInfoController : _swayamsevakController,
-                          setSearching: (v) => isAnya ? _isTgSearching = v : _isMySearching = v,
-                          clearData: () => _clearPanelData((v) => isAnya ? _isTgSearching = v : _isMySearching = v, isAnya: isAnya),
-                        ),
+                    color: Theme.of(context).primaryColor,
+                    textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+                    onPressed: () => _fetchPanelData(
+                      controller: isAnya ? _anyaInfoController : _swayamsevakController,
+                      setSearching: (v) => isAnya ? _isTgSearching = v : _isMySearching = v,
+                      clearData: () => _clearPanelData((v) => isAnya ? _isTgSearching = v : _isMySearching = v, isAnya: isAnya),
+                    ),
                     child: Text(
                       Statics.getLabel('Search'),
                       style: TextStyle(fontSize: 16),
@@ -2960,12 +2818,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(height: 40),
                   if (isAnya)
-                    if (_isTgSearching) const CircularProgressIndicator() else
-                      _anyaInfoPanel(ctrl)
-                  else
-                    ...[if (_isMySearching) const CircularProgressIndicator() else
-                      _swayamsevakInfoPanel(ctrl)
-                    ],
+                    if (_isTgSearching) const CircularProgressIndicator() else _anyaInfoPanel(ctrl)
+                  else ...[if (_isMySearching) const CircularProgressIndicator() else _swayamsevakInfoPanel(ctrl)],
                 ]),
               ),
             ),
@@ -3087,11 +2941,7 @@ class _HomeScreenState extends State<HomeScreen> {
       //     countOf: (i) => '${i.kaaryakartaaCount}'),
       const SizedBox(height: 15),
       _buildNameCountList(
-          data: Statics.tgLstAayaamKaaryakartaa,
-          legendString: 'Aayaam',
-          type: 'Aayaam',
-          nameOf: (item) => item.aayaamName.toString(),
-          countOf: (item) => item.kaaryakartaaCount.toString()),
+          data: Statics.tgLstAayaamKaaryakartaa, legendString: 'Aayaam', type: 'Aayaam', nameOf: (item) => item.aayaamName.toString(), countOf: (item) => item.kaaryakartaaCount.toString()),
       //_aayamCount(aayamlist: Statics.tgLstAayaamKaaryakartaa, controller: controller, showListIcon: true),
       // Legend(legendString: "Aayaam", fontsize: 18),
       // _buildNameCountTable(
@@ -3673,37 +3523,30 @@ class _HomeScreenState extends State<HomeScreen> {
     bool showListIcon = true,
     GeoHierarchyController? controller,
   }) {
-    double normalwidth = MediaQuery
-        .sizeOf(context)
-        .width * 0.75;
-    double maxwidth = MediaQuery
-        .sizeOf(context)
-        .width * 0.35;
+    double normalwidth = MediaQuery.sizeOf(context).width * 0.75;
+    double maxwidth = MediaQuery.sizeOf(context).width * 0.35;
     return Column(
       children: [
         Legend(legendString: heading, fontsize: 18, onPressed: !showListIcon ? null : () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: heading)),
         infolist.isEmpty
             ? Center(child: Text(Statics.getLabel('NoDataFound')))
             : Wrap(
-            spacing: 15,
-            children: infolist
-                .asMap()
-                .entries
-                .map((entry) {
-              int index = entry.key;
-              GetCount e = entry.value;
-              bool islast = index == infolist.length - 1;
-              return Container(
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: islast ? normalwidth : maxwidth),
-                  child: Single1ColumnRow(
-                    txtString: e.codeForDisplay,
-                    value: e.cnt.toString(),
-                    valFlex: 3,
-                  ),
-                ),
-              );
-            }).toList()),
+                spacing: 15,
+                children: infolist.asMap().entries.map((entry) {
+                  int index = entry.key;
+                  GetCount e = entry.value;
+                  bool islast = index == infolist.length - 1;
+                  return Container(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: islast ? normalwidth : maxwidth),
+                      child: Single1ColumnRow(
+                        txtString: e.codeForDisplay,
+                        value: e.cnt.toString(),
+                        valFlex: 3,
+                      ),
+                    ),
+                  );
+                }).toList()),
       ],
     );
   }
@@ -3723,19 +3566,17 @@ class _HomeScreenState extends State<HomeScreen> {
           fontsize: 18,
           onPressed: !showListIcon
               ? null
-              : () =>
-              showNamesList(
-                geoUnitID: controller?.deepestSelectedGeoUnitId,
-                type: "Gatividhi",
-              ),
+              : () => showNamesList(
+                    geoUnitID: controller?.deepestSelectedGeoUnitId,
+                    type: "Gatividhi",
+                  ),
         ),
         ...gatividhiList.map(
-              (item) =>
-              Single1ColumnRow(
-                txtString: item.gatividhiName ?? '',
-                value: item.kaaryakartaaCount?.toString() ?? '0',
-                fontsize: 15,
-              ),
+          (item) => Single1ColumnRow(
+            txtString: item.gatividhiName ?? '',
+            value: item.kaaryakartaaCount?.toString() ?? '0',
+            fontsize: 15,
+          ),
         ),
       ],
     );
@@ -3755,19 +3596,17 @@ class _HomeScreenState extends State<HomeScreen> {
           fontsize: 18,
           onPressed: !showListIcon
               ? null
-              : () =>
-              showNamesList(
-                geoUnitID: controller?.deepestSelectedGeoUnitId,
-                type: "Aayaam",
-              ),
+              : () => showNamesList(
+                    geoUnitID: controller?.deepestSelectedGeoUnitId,
+                    type: "Aayaam",
+                  ),
         ),
         ...aayamlist.map(
-              (item) =>
-              Single1ColumnRow(
-                txtString: item.aayaamName ?? '',
-                value: item.kaaryakartaaCount?.toString() ?? '0',
-                fontsize: 15,
-              ),
+          (item) => Single1ColumnRow(
+            txtString: item.aayaamName ?? '',
+            value: item.kaaryakartaaCount?.toString() ?? '0',
+            fontsize: 15,
+          ),
         ),
       ],
     );
@@ -3786,19 +3625,17 @@ class _HomeScreenState extends State<HomeScreen> {
           fontsize: 18,
           onPressed: !showListIcon
               ? null
-              : () =>
-              showNamesList(
-                geoUnitID: controller?.deepestSelectedGeoUnitId,
-                type: "Sangha-PreritSansthaa",
-              ),
+              : () => showNamesList(
+                    geoUnitID: controller?.deepestSelectedGeoUnitId,
+                    type: "Sangha-PreritSansthaa",
+                  ),
         ),
         ...sanghaPreritlist.map(
-              (item) =>
-              Single1ColumnRow(
-                txtString: item.preritAOOName ?? '',
-                value: item.kaaryakartaaCount?.toString() ?? '0',
-                fontsize: 15,
-              ),
+          (item) => Single1ColumnRow(
+            txtString: item.preritAOOName ?? '',
+            value: item.kaaryakartaaCount?.toString() ?? '0',
+            fontsize: 15,
+          ),
         ),
       ],
     );
@@ -3820,19 +3657,17 @@ class _HomeScreenState extends State<HomeScreen> {
           fontsize: 18,
           onPressed: !showListIcon
               ? null
-              : () =>
-              showNamesList(
-                geoUnitID: controller?.deepestSelectedGeoUnitId,
-                type: type,
-              ),
+              : () => showNamesList(
+                    geoUnitID: controller?.deepestSelectedGeoUnitId,
+                    type: type,
+                  ),
         ),
         ...data.map(
-              (item) =>
-              Single1ColumnRow(
-                txtString: nameOf(item),
-                value: countOf(item),
-                fontsize: 15,
-              ),
+          (item) => Single1ColumnRow(
+            txtString: nameOf(item),
+            value: countOf(item),
+            fontsize: 15,
+          ),
         ),
       ],
     );
@@ -3877,19 +3712,19 @@ class _HomeScreenState extends State<HomeScreen> {
         expertieslist.isEmpty
             ? Center(child: Text(Statics.getLabel('NoDataFound')))
             : ListView.builder(
-          padding: EdgeInsets.zero,
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: expertieslist.length,
-          itemBuilder: (context, index) {
-            var experties = expertieslist[index];
-            return Single1ColumnRow(
-              txtString: experties.codeForDisplay,
-              value: experties.cnt.toString(),
-              fontsize: 15,
-            );
-          },
-        )
+                padding: EdgeInsets.zero,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: expertieslist.length,
+                itemBuilder: (context, index) {
+                  var experties = expertieslist[index];
+                  return Single1ColumnRow(
+                    txtString: experties.codeForDisplay,
+                    value: experties.cnt.toString(),
+                    fontsize: 15,
+                  );
+                },
+              )
       ],
     );
   }
@@ -3901,19 +3736,19 @@ class _HomeScreenState extends State<HomeScreen> {
         interestlist.isEmpty
             ? Center(child: Text(Statics.getLabel('NoDataFound')))
             : ListView.builder(
-          padding: EdgeInsets.zero,
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: interestlist.length,
-          itemBuilder: (context, index) {
-            var interest = interestlist[index];
-            return Single1ColumnRow(
-              txtString: interest.codeForDisplay,
-              value: interest.cnt.toString(),
-              fontsize: 15,
-            );
-          },
-        )
+                padding: EdgeInsets.zero,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: interestlist.length,
+                itemBuilder: (context, index) {
+                  var interest = interestlist[index];
+                  return Single1ColumnRow(
+                    txtString: interest.codeForDisplay,
+                    value: interest.cnt.toString(),
+                    fontsize: 15,
+                  );
+                },
+              )
       ],
     );
   }
@@ -3973,12 +3808,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _swayamsewakByBloodGroup({required List<GetCount> bloodgroup, bool showListIcon = true, GeoHierarchyController? controller}) {
-    double normalwidth = MediaQuery
-        .sizeOf(context)
-        .width * 0.75;
-    double maxwidth = MediaQuery
-        .sizeOf(context)
-        .width * 0.35;
+    double normalwidth = MediaQuery.sizeOf(context).width * 0.75;
+    double maxwidth = MediaQuery.sizeOf(context).width * 0.35;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -3989,25 +3820,22 @@ class _HomeScreenState extends State<HomeScreen> {
         bloodgroup.isEmpty
             ? Center(child: Text(Statics.getLabel('NoDataFound')))
             : Wrap(
-            spacing: 15,
-            children: bloodgroup
-                .asMap()
-                .entries
-                .map((entry) {
-              int index = entry.key;
-              GetCount e = entry.value;
-              bool islast = index == bloodgroup.length - 1;
-              return Container(
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: islast ? normalwidth : maxwidth),
-                  child: Single1ColumnRow(
-                    txtString: e.codeForDisplay,
-                    value: e.cnt.toString(),
-                    valFlex: 3,
-                  ),
-                ),
-              );
-            }).toList())
+                spacing: 15,
+                children: bloodgroup.asMap().entries.map((entry) {
+                  int index = entry.key;
+                  GetCount e = entry.value;
+                  bool islast = index == bloodgroup.length - 1;
+                  return Container(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: islast ? normalwidth : maxwidth),
+                      child: Single1ColumnRow(
+                        txtString: e.codeForDisplay,
+                        value: e.cnt.toString(),
+                        valFlex: 3,
+                      ),
+                    ),
+                  );
+                }).toList())
       ],
     );
   }
@@ -4086,46 +3914,14 @@ class _HomeScreenState extends State<HomeScreen> {
         fontsize: 18,
         onPressed: !showListIcon ? null : () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: "KaaryakartaaCountByLevel"),
       ),
-      TwoColumnRow(txtString: Statics.getLabel('Shaakhaa'),
-          value: shaakhaa,
-          txtString2: Statics.getLabel('SaaptaahikLabelShort'),
-          value2: saptahik,
-          fontsize: 15),
-      TwoColumnRow(txtString: Statics.getLabel('MilanMandali'),
-          value: milan,
-          txtString2: Statics.getLabel('VastiKaaryakartaaCount'),
-          value2: vasti,
-          fontsize: 15),
-      TwoColumnRow(txtString: Statics.getLabel('GraamKaaryakartaaCount'),
-          value: graam,
-          txtString2: Statics.getLabel('MandalKaaryakartaaCount'),
-          value2: mandal,
-          fontsize: 15),
-      TwoColumnRow(txtString: Statics.getLabel('NagarKaaryakartaaCount'),
-          value: nagar,
-          txtString2: Statics.getLabel('upnagarUpkhanda'),
-          value2: shahar,
-          fontsize: 15),
-      TwoColumnRow(txtString: Statics.getLabel('BhaagKaaryakartaaCount'),
-          value: bhaag,
-          txtString2: Statics.getLabel('VibhaagKaaryakartaaCount'),
-          value2: vibhaag,
-          fontsize: 15),
-      TwoColumnRow(txtString: Statics.getLabel('MahaanagarKaaryakartaaCount'),
-          value: mahaanagar,
-          txtString2: Statics.getLabel('PraantKaaryakartaaCount'),
-          value2: praant,
-          fontsize: 15),
-      TwoColumnRow(txtString: Statics.getLabel('KshetraKaaryakartaaCount'),
-          value: kshetra,
-          txtString2: Statics.getLabel('AkhilBhaaratiyaKaaryakartaaCount'),
-          value2: akhilBhaarat,
-          fontsize: 15),
-      TwoColumnRow(txtString: Statics.getLabel('PravaaseeKaaryakartaaCount'),
-          value: pravaasee,
-          txtString2: Statics.getLabel('TotalKaaryakartaaCount'),
-          value2: total,
-          fontsize: 15),
+      TwoColumnRow(txtString: Statics.getLabel('Shaakhaa'), value: shaakhaa, txtString2: Statics.getLabel('SaaptaahikLabelShort'), value2: saptahik, fontsize: 15),
+      TwoColumnRow(txtString: Statics.getLabel('MilanMandali'), value: milan, txtString2: Statics.getLabel('VastiKaaryakartaaCount'), value2: vasti, fontsize: 15),
+      TwoColumnRow(txtString: Statics.getLabel('GraamKaaryakartaaCount'), value: graam, txtString2: Statics.getLabel('MandalKaaryakartaaCount'), value2: mandal, fontsize: 15),
+      TwoColumnRow(txtString: Statics.getLabel('NagarKaaryakartaaCount'), value: nagar, txtString2: Statics.getLabel('upnagarUpkhanda'), value2: shahar, fontsize: 15),
+      TwoColumnRow(txtString: Statics.getLabel('BhaagKaaryakartaaCount'), value: bhaag, txtString2: Statics.getLabel('VibhaagKaaryakartaaCount'), value2: vibhaag, fontsize: 15),
+      TwoColumnRow(txtString: Statics.getLabel('MahaanagarKaaryakartaaCount'), value: mahaanagar, txtString2: Statics.getLabel('PraantKaaryakartaaCount'), value2: praant, fontsize: 15),
+      TwoColumnRow(txtString: Statics.getLabel('KshetraKaaryakartaaCount'), value: kshetra, txtString2: Statics.getLabel('AkhilBhaaratiyaKaaryakartaaCount'), value2: akhilBhaarat, fontsize: 15),
+      TwoColumnRow(txtString: Statics.getLabel('PravaaseeKaaryakartaaCount'), value: pravaasee, txtString2: Statics.getLabel('TotalKaaryakartaaCount'), value2: total, fontsize: 15),
       const SizedBox(height: 15),
     ]);
   }
@@ -4141,14 +3937,8 @@ class _HomeScreenState extends State<HomeScreen> {
       width: 80,
       child: MaterialButton(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-        color: Theme
-            .of(context)
-            .primaryColor,
-        textColor: Theme
-            .of(context)
-            .primaryTextTheme
-            .labelMedium
-            ?.color,
+        color: Theme.of(context).primaryColor,
+        textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
         onPressed: onPressed,
         child: Text(Statics.getLabel("clear"), style: const TextStyle(fontSize: 12)),
       ),
@@ -4192,9 +3982,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (data.isEmpty) {
       return SizedBox(
-        width: MediaQuery
-            .sizeOf(context)
-            .width,
+        width: MediaQuery.sizeOf(context).width,
         height: 150,
         child: Center(child: Text(Statics.getLabel('NoDataFound'), style: const TextStyle(fontWeight: FontWeight.normal))),
       );
@@ -4239,17 +4027,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
                 border: TableBorder(verticalInside: BorderSide(width: 0.7, color: Colors.grey.shade200)),
                 columns: headers
-                    .map((h) =>
-                    DataColumn(
-                      label: Container(
-                        constraints: const BoxConstraints(minWidth: 40, maxWidth: 100),
-                        child: Text(h, softWrap: true, maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.bold)),
-                      ),
-                    ))
+                    .map((h) => DataColumn(
+                          label: Container(
+                            constraints: const BoxConstraints(minWidth: 40, maxWidth: 100),
+                            child: Text(h, softWrap: true, maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.bold)),
+                          ),
+                        ))
                     .toList(),
                 rows: [
-                  ...data.map((l) =>
-                      DataRow(
+                  ...data.map((l) => DataRow(
                         color: const MaterialStatePropertyAll(Colors.white),
                         cells: [
                           DataCell(Center(child: Text(l.nagarCount.toString()))),

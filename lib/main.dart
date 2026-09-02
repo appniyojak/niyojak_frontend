@@ -67,6 +67,8 @@ import './screens/swayamsevak_module/edit_module/edit_swayamsevak_soochi.dart';
 import './screens/swayamsevak_module/edit_module/edit_swayamsevak_transfer.dart';
 import './screens/swayamsevak_module/swayamsevak_search.dart';
 import 'firebase_options.dart';
+import 'helpers/database_helper.dart';
+import 'helpers/media_downloader/media_downloader_service.dart';
 import 'helpers/static_data.dart' as Statics;
 import 'providers/sadbhav_provider.dart';
 import 'screens/event_attendance_screen.dart';
@@ -123,6 +125,11 @@ Future<void> main() async {
   // display, FCM token issuance/refresh + persistence, and tap-to-route
   // handling for all three app states (active/background/killed).
   await PushNotificationService.instance.init();
+
+  await DatabaseHelper.initDatabase();
+
+  MediaDownloadService.configure(Statics.baseUrl);
+  await MediaDownloadService.instance.start();
 
   runApp(NiyojakApp());
 }
@@ -331,7 +338,7 @@ class NiyojakAppState extends State<NiyojakApp> {
                 child: Container(
                   decoration: BoxDecoration(borderRadius: const BorderRadius.vertical(bottom: Radius.circular(5)), color: Colors.red.withValues(alpha: 0.7)),
                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                  child: Text(" Dev  -  1.0.42 ", style: const TextStyle(fontSize: 13, color: Colors.white, fontWeight: FontWeight.w600)),
+                  child: Text(" Dev  -  1.0.46 ", style: const TextStyle(fontSize: 13, color: Colors.white, fontWeight: FontWeight.w600)),
                 ),
               ),
           ],

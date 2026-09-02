@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
@@ -27,7 +26,7 @@ class DatabaseHelper {
   }
 
   static Future<Database> initDatabase() async {
-    WidgetsFlutterBinding.ensureInitialized();
+    // WidgetsFlutterBinding.ensureInitialized();
     var dataDir = "";
     if (Platform.isIOS) {
       var p = await getLibraryDirectory();
@@ -126,6 +125,15 @@ class DatabaseHelper {
   CREATE TABLE IF NOT EXISTS MediaMaster (
     pkid INT, filepath TEXT, tablename TEXT
   )
+''');
+
+      db.execute('''
+  CREATE TABLE IF NOT EXISTS MediaDownloadQueue (
+  id INTEGER PRIMARY KEY AUTOINCREMENT, pkid INTEGER NOT NULL, tablename TEXT NOT NULL, remoteFilepath TEXT NOT NULL, localFilepath TEXT,
+  taskId TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'pending', progress INTEGER NOT NULL DEFAULT 0, retryCount INTEGER NOT NULL DEFAULT 0,
+  errorMessage TEXT, createdAt TEXT NOT NULL, updatedAt TEXT,
+  UNIQUE(pkid, tablename)
+);
 ''');
 
       if (oldVersion < 5) {
@@ -243,6 +251,15 @@ class DatabaseHelper {
   CREATE TABLE IF NOT EXISTS MediaMaster (
     pkid INT, filepath TEXT, tablename TEXT
   )
+''');
+
+      db.execute('''
+  CREATE TABLE IF NOT EXISTS MediaDownloadQueue (
+  id INTEGER PRIMARY KEY AUTOINCREMENT, pkid INTEGER NOT NULL, tablename TEXT NOT NULL, remoteFilepath TEXT NOT NULL, localFilepath TEXT,
+  taskId TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'pending', progress INTEGER NOT NULL DEFAULT 0, retryCount INTEGER NOT NULL DEFAULT 0,
+  errorMessage TEXT, createdAt TEXT NOT NULL, updatedAt TEXT,
+  UNIQUE(pkid, tablename)
+);
 ''');
     });
     return database;
@@ -1452,11 +1469,22 @@ class DatabaseHelper {
     required List<String> keyColumns,
   }) async {
     Database db = await database;
+
+    final tableColumns = await _getTableColumns(db, tableName);
+
+    // Fail fast if the key columns you rely on for matching don't even exist.
+    for (final key in keyColumns) {
+      if (!tableColumns.contains(key)) {
+        // throw ArgumentError('Key column "$key" not found in table "$tableName".');
+        log('Key column "$key" not found in table "$tableName".');
+      }
+    }
+
     await db.transaction((txn) async {
       final batch = txn.batch();
 
       for (final item in items) {
-        final map = toMap(item);
+        final map = _filterToTableColumns(toMap(item), tableColumns);
 
         // Validate keys
         for (final key in keyColumns) {
@@ -1587,10 +1615,41 @@ class DatabaseHelper {
   /// NEW FUNCTIONS
   // ── internal helpers ─────────────────────────────────────────────────
 
+  static final Map<String, Set<String>> _tableColumnsCache = {};
+
+  static Future<Set<String>> _getTableColumns(Database db, String tableName) async {
+    final cached = _tableColumnsCache[tableName];
+    if (cached != null) return cached;
+
+    final rows = await db.rawQuery('PRAGMA table_info($tableName)');
+
+    final columns = rows.map((r) => r['name'] as String).toSet();
+    _tableColumnsCache[tableName] = columns;
+    return columns;
+  }
+
+  static Map<String, dynamic> _filterToTableColumns(
+    Map<String, dynamic> map,
+    Set<String> tableColumns,
+  ) {
+    final filtered = <String, dynamic>{};
+    for (final entry in map.entries) {
+      if (!tableColumns.contains(entry.key)) continue;
+      filtered[entry.key] = _coerceValue(entry.value);
+    }
+    // else: silently drop (or log if you want visibility into backend drift)
+    return filtered;
+  }
+
+  static dynamic _coerceValue(dynamic value) {
+    if (value is bool) return value ? 1 : 0;
+    return value; // int, String, null pass through unchanged
+  }
+
   static void _validateKeys(Map<String, dynamic> map, List<String> keyColumns, String tableName) {
     for (final key in keyColumns) {
       if (!map.containsKey(key) || map[key] == null) {
-        throw MissingKeyColumnException(key, tableName);
+        throw ArgumentError('Missing/null key "$key" for table "$tableName"');
       }
     }
   }
@@ -1614,7 +1673,18 @@ class DatabaseHelper {
     required bool hasUniqueConstraint,
   }) async {
     final db = await database;
-    final map = toMap(item);
+
+    final tableColumns = await _getTableColumns(db, tableName);
+
+    // Fail fast if the key columns you rely on for matching don't even exist.
+    for (final key in keyColumns) {
+      if (!tableColumns.contains(key)) {
+        // throw ArgumentError('Key column "$key" not found in table "$tableName".');
+        log('Key column "$key" not found in table "$tableName".');
+      }
+    }
+
+    final map = _filterToTableColumns(toMap(item), tableColumns);
     _validateKeys(map, keyColumns, tableName);
 
     if (hasUniqueConstraint) {
@@ -1642,7 +1712,18 @@ class DatabaseHelper {
     required bool hasUniqueConstraint,
   }) async {
     final db = await database;
-    final map = toMap(item);
+
+    final tableColumns = await _getTableColumns(db, tableName);
+
+    // Fail fast if the key columns you rely on for matching don't even exist.
+    for (final key in keyColumns) {
+      if (!tableColumns.contains(key)) {
+        // throw ArgumentError('Key column "$key" not found in table "$tableName".');
+        log('Key column "$key" not found in table "$tableName".');
+      }
+    }
+
+    final map = _filterToTableColumns(toMap(item), tableColumns);
     _validateKeys(map, keyColumns, tableName);
 
     if (hasUniqueConstraint) {
@@ -1672,7 +1753,18 @@ class DatabaseHelper {
     required List<String> keyColumns,
   }) async {
     final db = await database;
-    final map = toMap(item);
+
+    final tableColumns = await _getTableColumns(db, tableName);
+
+    // Fail fast if the key columns you rely on for matching don't even exist.
+    for (final key in keyColumns) {
+      if (!tableColumns.contains(key)) {
+        // throw ArgumentError('Key column "$key" not found in table "$tableName".');
+        log('Key column "$key" not found in table "$tableName".');
+      }
+    }
+
+    final map = _filterToTableColumns(toMap(item), tableColumns);
     _validateKeys(map, keyColumns, tableName);
 
     final where = _buildWhere(keyColumns);
@@ -1691,7 +1783,18 @@ class DatabaseHelper {
     required bool hasUniqueConstraint,
   }) async {
     final db = await database;
-    final map = toMap(item);
+
+    final tableColumns = await _getTableColumns(db, tableName);
+
+    // Fail fast if the key columns you rely on for matching don't even exist.
+    for (final key in keyColumns) {
+      if (!tableColumns.contains(key)) {
+        // throw ArgumentError('Key column "$key" not found in table "$tableName".');
+        log('Key column "$key" not found in table "$tableName".');
+      }
+    }
+
+    final map = _filterToTableColumns(toMap(item), tableColumns);
     _validateKeys(map, keyColumns, tableName);
 
     if (hasUniqueConstraint) {
@@ -1747,13 +1850,23 @@ class DatabaseHelper {
     final db = await database;
     var result = const DbOperationResult();
 
+    final tableColumns = await _getTableColumns(db, tableName);
+
+    // Fail fast if the key columns you rely on for matching don't even exist.
+    for (final key in keyColumns) {
+      if (!tableColumns.contains(key)) {
+        // throw ArgumentError('Key column "$key" not found in table "$tableName".');
+        log('Key column "$key" not found in table "$tableName".');
+      }
+    }
+
     await db.transaction((txn) async {
       if (hasUniqueConstraint) {
         final batch = txn.batch();
         var validCount = 0;
         for (final item in items) {
           try {
-            final map = toMap(item);
+            final map = _filterToTableColumns(toMap(item), tableColumns);
             _validateKeys(map, keyColumns, tableName);
             batch.insert(tableName, map, conflictAlgorithm: ConflictAlgorithm.ignore);
             validCount++;
@@ -1775,7 +1888,7 @@ class DatabaseHelper {
       // Manual path — no unique constraint to lean on.
       for (final item in items) {
         try {
-          final map = toMap(item);
+          final map = _filterToTableColumns(toMap(item), tableColumns);
           _validateKeys(map, keyColumns, tableName);
           final where = _buildWhere(keyColumns);
           final whereArgs = _buildWhereArgs(map, keyColumns);
@@ -1805,13 +1918,23 @@ class DatabaseHelper {
     final db = await database;
     var result = const DbOperationResult();
 
+    final tableColumns = await _getTableColumns(db, tableName);
+
+    // Fail fast if the key columns you rely on for matching don't even exist.
+    for (final key in keyColumns) {
+      if (!tableColumns.contains(key)) {
+        // throw ArgumentError('Key column "$key" not found in table "$tableName".');
+        log('Key column "$key" not found in table "$tableName".');
+      }
+    }
+
     await db.transaction((txn) async {
       final batch = txn.batch();
       final validItems = <Map<String, dynamic>>[];
 
       for (final item in items) {
         try {
-          final map = toMap(item);
+          final map = _filterToTableColumns(toMap(item), tableColumns);
           _validateKeys(map, keyColumns, tableName);
           validItems.add(map);
         } catch (_) {
@@ -1849,13 +1972,23 @@ class DatabaseHelper {
     final db = await database;
     var result = const DbOperationResult();
 
+    final tableColumns = await _getTableColumns(db, tableName);
+
+    // Fail fast if the key columns you rely on for matching don't even exist.
+    for (final key in keyColumns) {
+      if (!tableColumns.contains(key)) {
+        // throw ArgumentError('Key column "$key" not found in table "$tableName".');
+        log('Key column "$key" not found in table "$tableName".');
+      }
+    }
+
     await db.transaction((txn) async {
       if (hasUniqueConstraint) {
         final batch = txn.batch();
         var queuedCount = 0;
         for (final item in items) {
           try {
-            final map = toMap(item);
+            final map = _filterToTableColumns(toMap(item), tableColumns);
             _validateKeys(map, keyColumns, tableName);
             batch.insert(tableName, map, conflictAlgorithm: ConflictAlgorithm.replace);
             queuedCount++;
@@ -1874,7 +2007,7 @@ class DatabaseHelper {
       // Manual path — accurate inserted/updated split.
       for (final item in items) {
         try {
-          final map = toMap(item);
+          final map = _filterToTableColumns(toMap(item), tableColumns);
           _validateKeys(map, keyColumns, tableName);
           final where = _buildWhere(keyColumns);
           final whereArgs = _buildWhereArgs(map, keyColumns);

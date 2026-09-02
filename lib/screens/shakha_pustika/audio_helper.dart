@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
 
+import '../../helpers/media_downloader/media_downloader_service.dart';
+
 class AudioFileHelper {
   AudioFileHelper._();
 
@@ -13,7 +15,7 @@ class AudioFileHelper {
 
   static Future<String> getLocalFilePath(String remoteUrl) async {
     final dir = await getApplicationDocumentsDirectory();
-    final downloadsDir = Directory('${dir.path}/shakha_pustika_downloads');
+    final downloadsDir = Directory('${dir.path}/${MediaDownloadService.mediaSubdirectory}');
     if (!await downloadsDir.exists()) {
       await downloadsDir.create(recursive: true);
     }

@@ -71,6 +71,7 @@ import '../models/response_model/yuva_sangam_report_model.dart';
 import '../models/response_model/yuva_sangam_vrutta_resp.dart';
 import '../providers/bals.dart';
 import './database_helper.dart';
+import 'media_downloader/media_downloader_service.dart';
 
 const String _flavor = String.fromEnvironment('FLUTTER_APP_FLAVOR', defaultValue: 'dev');
 
@@ -2667,19 +2668,12 @@ Future<void> syncOfflineUserSyncData(int syncVers, String tableName) async {
       );
     }
 
-    /*var dataList8 = responseBody['mediaList'];
+    List<Map<String, dynamic>> dataList8 = (responseBody['mediaList'] as List).map((item) => item as Map<String, dynamic>).toList();
     if (dataList8.length > 0) {
       print("usrLogIn 17.7");
 
-// 2. Bulk upsert into the table
-      final result = await DatabaseHelper.bulkUpsert<Map<String, dynamic>>(
-        tableName: 'MediaMaster',
-        items: dataList8,
-        toMap: (item) => item,
-        keyColumns: ['pkid', 'tablename'],
-        hasUniqueConstraint: false, // pkid is your PRIMARY KEY
-      );
-    }*/
+      await MediaDownloadService.instance.enqueueFromApiMediaList(dataList8);
+    }
 
     return;
   }

@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../helpers/database_helper.dart' as dbh;
+import '../helpers/media_downloader/media_downloader_service.dart';
 import '../helpers/static_data.dart' as Statics;
 import '../models/response_model/AbhiyaanLoginDataResponse.dart';
 import '../providers/bals.dart';
@@ -352,14 +353,7 @@ class LogIn {
       if (dataList8.length > 0) {
         print("usrLogIn 17.7");
 
-// 2. Bulk upsert into the table
-        final result = await DatabaseHelper.bulkUpsert<Map<String, dynamic>>(
-          tableName: 'MediaMaster',
-          items: dataList8,
-          toMap: (item) => item,
-          keyColumns: ['pkid', 'tablename'],
-          hasUniqueConstraint: false, // pkid is your PRIMARY KEY
-        );
+        await MediaDownloadService.instance.enqueueFromApiMediaList(dataList8);
       }
       var userData = body['LogInData']['UserData'];
       print("swayamsevak Id - " + userData['SwayamsevakID'].toString());

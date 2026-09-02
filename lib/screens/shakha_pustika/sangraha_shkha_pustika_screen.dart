@@ -295,21 +295,21 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
     print("inside save");
     // Basic validation
     if (_karyakramValue == null) {
-      Statics.showToast(const SnackBar(content: Text('कृपया कार्यक्रम निवडा')));
+      Statics.showToast('कृपया कार्यक्रम निवडा');
       return;
     }
     if (_selectedMonth == null || _selectedYear == null) {
-      Statics.showToast(const SnackBar(content: Text('कृपया महिना व वर्ष निवडा')));
+      Statics.showToast('कृपया महिना व वर्ष निवडा');
       return;
     }
     if (_selectedVayogat.isEmpty) {
-      Statics.showToast(const SnackBar(content: Text('कृपया वयोगट निवडा')));
+      Statics.showToast('कृपया वयोगट निवडा');
       return;
     }
     if (_linkController.text.trim().isNotEmpty) {
       final valid = await isValidUrl(_linkController.text.trim());
       if (!valid) {
-        Statics.showToast(SnackBar(content: Text(Statics.getLabel('urlValidation'))));
+        Statics.showToast(Statics.getLabel('urlValidation'));
         return;
       }
     }
@@ -333,9 +333,7 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
         } else {
           // neither bytes nor path available — bail out safely
           if (mounted) {
-            Statics.showToast(
-              const SnackBar(content: Text('निवडलेली ऑडिओ फाईल वाचता आली नाही, कृपया पुन्हा निवडा')),
-            );
+            Statics.showToast('निवडलेली ऑडिओ फाईल वाचता आली नाही, कृपया पुन्हा निवडा');
           }
           setState(() => _isSaving = false);
           return;
@@ -381,14 +379,12 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
         Navigator.of(context).pop(true); // return true to caller
         messenger.showSnackBar(SnackBar(content: Text(message)));
       } else {
-        Statics.showToast(
-          SnackBar(content: Text(respData?["Message"] == 'Already Exists' ? 'माहिती उपलब्ध आहे' : 'जतन करताना त्रुटी आली')),
-        );
+        Statics.showToast(respData?["Message"] == 'Already Exists' ? 'माहिती उपलब्ध आहे' : 'जतन करताना त्रुटी आली');
       }
     } catch (e) {
       log("Error saving shaakha pustika: $e");
       if (mounted) {
-        Statics.showToast(const SnackBar(content: Text('काहीतरी चूक झाली, पुन्हा प्रयत्न करा')));
+        Statics.showToast('काहीतरी चूक झाली, पुन्हा प्रयत्न करा');
       }
     } finally {
       if (mounted) setState(() => _isSaving = false);

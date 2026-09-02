@@ -3,7 +3,7 @@ description: Niyojak Prod project.
 
 publish_to: 'none'
 
-version: 1.0.45+45
+version: 1.0.46+46
 
 environment:
   sdk: "^3.1.0"
@@ -74,6 +74,8 @@ dependencies:
 
   # charts / reports
   fl_chart: ^1.1.1
+
+  background_downloader: 9.4.0
 
 dependency_overrides:
   #  flutter_keyboard_visibility: 5.3.0 #NO PUSH
