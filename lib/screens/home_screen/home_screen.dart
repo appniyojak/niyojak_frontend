@@ -19,6 +19,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart' as xls;
 
 import '../../helpers/media_downloader/download_queue_screen.dart';
+import '../../helpers/once_per_day_check.dart';
 import '../../helpers/static_data.dart' as Statics;
 import '../../models/response_model/names_data_model.dart';
 import '../../models/response_model/notification_list_model.dart';
@@ -261,10 +262,17 @@ class _HomeScreenState extends State<HomeScreen> {
   callAllData() async {
     await initData();
     await _initScreen();
-    await Statics.populateUserDetailsMap;
+    await Statics.populateUserDetailsMap();
     log("toshowshakha------------------------------>${Statics.userDetails['ShowShakhaSaptaha']}");
     _showShakhaSaptaha = Statics.userDetails['ShowShakhaSaptaha'] == 1 ? true : false;
-    _getReleaseNotes();
+    await _getReleaseNotes();
+
+    OncePerDayGate.run(
+        'shaakhapustika_monthly',
+        () => Statics.checkCurrentMonthDataAndSyncIfMissing(
+              tableName: 'OfflineShaakhaPustika',
+              syncFn: Statics.syncOfflineShaakhaaPustikaCurrentMonthData,
+            ));
   }
 
   Future<void> initData() async {
@@ -1033,7 +1041,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onPressed: () async {
                       await pref.setBool("isRead", true);
                       await pref.setString("appVer", Statics.packageInfo['versionNumber']);
-                      Navigator.pop(context);
+                      Navigator.pop(ct);
                     },
                     icon: const Icon(Icons.check_circle, color: Colors.white),
                     label: Text(Statics.getLabel('bandKara'), style: const TextStyle(fontSize: 16, color: Colors.white)),
@@ -2544,6 +2552,16 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
             actions: [
+              /*IconButton(
+                  onPressed: () async {
+                    await DatabaseHelper.deleteWhere(
+                      tableName: 'OfflineShaakhaPustika',
+                      where: 'monthno = ? and yearno = ?',
+                      whereArgs: [9, 2026],
+                    );
+                    OncePerDayGate.deleteFun("shaakhapustika_monthly");
+                  },
+                  icon: Icon(Icons.delete_forever_outlined, color: Colors.red)),*/
               DownloadBadge(),
               // Notification bell with badge
               Stack(

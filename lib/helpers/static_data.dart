@@ -344,6 +344,7 @@ const String urlgetshaakhapustikalist = baseUrlAPI + '/getshaakhapustikalist';
 const String urlgetshaakhapustikabyid = baseUrlAPI + '/getshaakhapustikabyid';
 
 const String urlGetOfflineUserDataSync = baseUrlAPI + '/offlineuserdatasync';
+const String urlGetOfflineShaakhaaPustikaThisMonth = baseUrlAPI + '/getofflineshaakhapustikathismonth';
 //////////////////////////////////////////////////////////////////////////////////////////
 const String patchSuffix = '';
 const String dbVersion = '6';
@@ -2621,7 +2622,7 @@ Future<void> syncOfflineUserSyncData(int syncVers, String tableName) async {
         tableName: 'VistarShaakhaListMaster',
         items: dataList4,
         toMap: (item) => item,
-        keyColumns: ['pkid'],
+        keyColumns: ['ShaakhaaID', 'GeoUnitID'],
         hasUniqueConstraint: false, // pkid is your PRIMARY KEY
       );
     }
@@ -2679,6 +2680,83 @@ Future<void> syncOfflineUserSyncData(int syncVers, String tableName) async {
   }
 
   return;
+}
+
+Future<void> syncOfflineShaakhaaPustikaCurrentMonthData() async {
+  bool? connected = await isInternetConnected();
+
+  if (connected != true) {
+    return;
+  }
+
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  final _body = {"cuserid": userDetails['userID'], "date": ""}; //"date": DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())};
+
+  log("API >>>>>>>>>>>>>> $urlGetOfflineShaakhaaPustikaThisMonth");
+  log("_body >>>>>>>>>>>>>> ${jsonEncode(_body)}");
+
+  var response = await http.post(
+    Uri.parse(urlGetOfflineShaakhaaPustikaThisMonth),
+    headers: jHeaders,
+    body: json.encode(_body),
+  );
+
+  if (response.statusCode == 200) {
+    var responseBody = json.decode(response.body);
+    log("Print the body for syncOfflineShaakhaaPustikaCurrentMonthData >>>>>>>>>>>>>>>>> ${response.body}");
+
+    List<Map<String, dynamic>> dataList3 = (responseBody['list'] as List).map((item) => item as Map<String, dynamic>).toList();
+    if (dataList3.length > 0) {
+      print("usrLogIn 17.2");
+
+      // 1. Parse raw JSON into model instances
+
+// 2. Bulk upsert into the table
+      final result = await DatabaseHelper.bulkUpsert<Map<String, dynamic>>(
+        tableName: 'OfflineShaakhaPustika',
+        items: dataList3,
+        toMap: (item) => item,
+        keyColumns: ['pkid'],
+        hasUniqueConstraint: true, // pkid is your PRIMARY KEY
+      );
+    }
+
+    List<Map<String, dynamic>> dataList8 = (responseBody['mediaList'] as List).map((item) => item as Map<String, dynamic>).toList();
+    if (dataList8.length > 0) {
+      print("usrLogIn 17.7");
+
+      await MediaDownloadService.instance.enqueueFromApiMediaList(dataList8);
+    }
+
+    return;
+  }
+
+  return;
+}
+
+Future<void> checkCurrentMonthDataAndSyncIfMissing({
+  required String tableName,
+  required Future<void> Function() syncFn,
+  String yearColumn = 'yearno',
+  String monthColumn = 'monthno',
+}) async {
+  final now = DateTime.now();
+  final db = await DatabaseHelper.database;
+
+  final rows = await db.query(
+    tableName,
+    columns: ['pkid'],
+    where: '$yearColumn = ? AND $monthColumn = ?',
+    whereArgs: [now.year, now.month],
+    limit: 1,
+  );
+
+  if (rows.isNotEmpty) {
+    return; // current month's data already present locally — no API call needed
+  }
+
+  await syncFn();
 }
 
 Future<NagarVastiSampurnaModel?> vastisarvekshanAllReportData(context, String? userID, String? targetGeoUnitID, String? levelType) async {
@@ -7131,8 +7209,20 @@ Future<ShaakhaaVistaarReport?> getShaakhaaSaptahReportData(BuildContext context,
 
 Future<List<ShaakhaaList>?> getShaakhaaSaptahListData(BuildContext context, Map<String, dynamic> inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected != true) {
-    return null;
+  log(inputJson["GeoUnitID"].toString());
+  if (connected == true) {
+    // No internet — serve whatever we already have locally
+    //ParentMahanagarID = ? OR ParentVibhaagID = ? OR
+    log("No internet — falling back to local ShaakhaListMaster data");
+    return await DatabaseHelper.getAllOfflineData<ShaakhaaList>(
+      tableName: 'VistarShaakhaListMaster',
+      fromMap: ShaakhaaList.fromJson,
+      where: '''
+          ParentBhaagID = ? OR ParentNagarID = ? OR ParentUpaNagarID = ?
+          OR ParentMandalID = ? OR ParentGraamID = ? OR ParentVastiID = ? OR ? IS NULL
+      ''',
+      whereArgs: List.filled(7, inputJson["GeoUnitID"]),
+    );
   }
   showLoaderDialog(context);
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -7153,7 +7243,19 @@ Future<List<ShaakhaaList>?> getShaakhaaSaptahListData(BuildContext context, Map<
       return model.shaakhaaList ?? []; // ✅ return karna zaroori hai
     } else {
       print("Error: ${response.statusCode} - ${response.body}");
-      return null; // ✅ error case
+
+      // API call failed even though internet is available (server error, etc.)
+      // Fall back to local cache too, rather than showing nothing
+      log("API call failed with status ${response.statusCode} — falling back to local data");
+      return await DatabaseHelper.getAllOfflineData<ShaakhaaList>(
+        tableName: 'VistarShaakhaListMaster',
+        fromMap: ShaakhaaList.fromJson,
+        where: '''
+          ParentBhaagID = ? OR ParentNagarID = ? OR ParentUpaNagarID = ?
+          OR ParentMandalID = ? OR ParentGraamID = ? OR ParentVastiID = ? OR ? IS NULL
+      ''',
+        whereArgs: List.filled(7, inputJson["GeoUnitID"]),
+      );
     }
   } catch (e) {
     // Navigator.of(context, rootNavigator: true).pop();

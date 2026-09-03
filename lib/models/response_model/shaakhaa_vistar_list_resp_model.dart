@@ -70,9 +70,10 @@ class ShaakhaaList {
   int? parentVastiID;
   int? parentGraamID;
   int? parentMandalID;
-  int? parentShaharID;
+  int? parentUpaNagarID;
   int? parentNagarID;
   int? parentBhaagID;
+  String? modifiedDate;
 
   ShaakhaaList(
       {this.shaakhaaID,
@@ -117,9 +118,10 @@ class ShaakhaaList {
       this.parentVastiID,
       this.parentGraamID,
       this.parentMandalID,
-      this.parentShaharID,
+      this.parentUpaNagarID,
       this.parentNagarID,
-      this.parentBhaagID});
+      this.parentBhaagID,
+      this.modifiedDate});
 
   ShaakhaaList.fromJson(Map<String, dynamic> json) {
     shaakhaaID = json['ShaakhaaID'];
@@ -142,7 +144,7 @@ class ShaakhaaList {
     startTimeStr = json['StartTimeStr'];
     endTimeStr = json['EndTimeStr'];
     remark = json['Remark'];
-    isSankalpit = json['IsSankalpit'];
+    isSankalpit = json['IsSankalpit'] == true || json['IsSankalpit'] == 1;
     sankalpAadhaar = json['SankalpAadhaar'];
     sankalpAadhaarSwayamsevakID = json['SankalpAadhaarSwayamsevakID'];
     sankalpAadhaarSwayamsevakName = json['SankalpAadhaarSwayamsevakName'];
@@ -150,8 +152,8 @@ class ShaakhaaList {
     sankalpAadhaarShaakhaaName = json['SankalpAadhaarShaakhaaName'];
     sankalpCompletionMonth = json['SankalpCompletionMonth'];
     sankalpCompletionYear = json['SankalpCompletionYear'];
-    hasToli = json['HasToli'];
-    hasPaalak = json['HasPaalak'];
+    hasToli = json['HasToli'] == true || json['HasToli'] == 1;
+    hasPaalak = json['HasPaalak'] == true || json['HasPaalak'] == 1;
     optionalShaaririkVishayID = json['OptionalShaaririkVishayID'];
     optionalShaaririkVishayCode = json['OptionalShaaririkVishayCode'];
     otherOptionalVishay = json['OtherOptionalVishay'];
@@ -164,9 +166,10 @@ class ShaakhaaList {
     parentVastiID = json['ParentVastiID'];
     parentGraamID = json['ParentGraamID'];
     parentMandalID = json['ParentMandalID'];
-    parentShaharID = json['ParentShaharID'];
+    parentUpaNagarID = json['ParentUpaNagarID'];
     parentNagarID = json['ParentNagarID'];
     parentBhaagID = json['ParentBhaagID'];
+    modifiedDate = json['ModifiedDate'];
   }
 
   Map<String, dynamic> toJson() {
@@ -213,9 +216,10 @@ class ShaakhaaList {
     data['ParentVastiID'] = this.parentVastiID;
     data['ParentGraamID'] = this.parentGraamID;
     data['ParentMandalID'] = this.parentMandalID;
-    data['ParentShaharID'] = this.parentShaharID;
+    data['ParentUpaNagarID'] = this.parentUpaNagarID;
     data['ParentNagarID'] = this.parentNagarID;
     data['ParentBhaagID'] = this.parentBhaagID;
+    data['ModifiedDate'] = this.modifiedDate;
     return data;
   }
 }

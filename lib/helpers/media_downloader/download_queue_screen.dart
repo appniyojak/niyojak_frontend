@@ -36,11 +36,13 @@ class _DownloadsScreenState extends State<DownloadsScreen> with SingleTickerProv
         title: const Text('Downloads'),
         bottom: TabBar(
           controller: _tabController,
+          indicatorColor: Colors.white,
           tabs: const [Tab(text: 'Active'), Tab(text: 'Pending'), Tab(text: 'Failed')],
         ),
       ),
       body: TabBarView(
         controller: _tabController,
+        physics: NeverScrollableScrollPhysics(),
         children: const [
           _StatusList(status: 'downloading', showOverallHeader: true),
           _StatusList(status: 'pending'),

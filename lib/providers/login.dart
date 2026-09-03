@@ -296,13 +296,14 @@ class LogIn {
       List<Map<String, dynamic>> dataList4 = (body['LogInData']['vistarlist'] as List).map((item) => item as Map<String, dynamic>).toList();
       if (dataList4.length > 0) {
         print("usrLogIn 17.3");
+        print("dataList4.length >>>  ${dataList4.length}");
 
 // 2. Bulk upsert into the table
         final result = await DatabaseHelper.bulkUpsert<Map<String, dynamic>>(
           tableName: 'VistarShaakhaListMaster',
           items: dataList4,
           toMap: (item) => item,
-          keyColumns: ['pkid'],
+          keyColumns: ['ShaakhaaID', 'GeoUnitID'],
           hasUniqueConstraint: false, // pkid is your PRIMARY KEY
         );
       }

@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -123,6 +126,8 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
     };
 
     final _list = await Statics.getShaakhaaSaptahListData(context, formData) ?? [];
+
+    _list.forEach((e) => log(jsonEncode(e.toJson())));
 
     // _shaakhaaList = _getshaakhaaList(
     //     geoUnitID, _searchController.text, frequencyVal, vayogatVal);

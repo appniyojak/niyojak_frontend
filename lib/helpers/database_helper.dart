@@ -2038,6 +2038,7 @@ class DatabaseHelper {
   }) async {
     final db = await database;
     final rowsAffected = await db.delete(tableName, where: where, whereArgs: whereArgs);
+    log(rowsAffected.toString());
     return DbOperationResult(deleted: rowsAffected);
   }
 

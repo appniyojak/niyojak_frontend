@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
@@ -7,18 +8,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:flutter_quill_delta_from_html/parser/html_to_delta.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:http/http.dart' as http;
-import 'package:niyojak_prod/screens/home_screen/home_screen.dart';
 import 'package:niyojak_prod/screens/shakha_pustika/sangraha_shkha_pustika_screen.dart';
 import 'package:niyojak_prod/widgets/app_drawer.dart';
 import 'package:provider/provider.dart';
 
 import '../../../utils/globals.dart';
+import '../../helpers/media_downloader/media_downloader_helper.dart';
+import '../../helpers/media_downloader/media_downloader_service.dart';
 import '../../helpers/static_data.dart' as Statics;
 import '../../models/request_model/shakha_pustika_list_requestmodel.dart';
 import '../../models/response_model/offline_shaakhaa_pustika_resp_model.dart';
 import '../../providers/bals.dart';
 import '../../utils/stable_geounit_class.dart'; // NEW — shared "is this file downloaded / where does it live" logic
+import '../home_screen/home_screen.dart';
 import 'audio_helper.dart';
 import 'audio_player_dialogue.dart'; // NEW — shared public play dialog (same file used by SangrahaShkhaPustikaScreen)
 
@@ -183,10 +185,10 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
     }
   }
 
-  void _showVastiValidationPopup() {
+  void _showValidationPopup(String validationText) {
     showDialog(
       context: context,
-      builder: (context) {
+      builder: (ctx) {
         return AlertDialog(
           backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
@@ -197,41 +199,13 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.purple),
           ),
           content: Text(
-            Statics.getLabel('SelectBhaagValidationMessage'),
+            Statics.getLabel(validationText, returnKey: true),
             style: const TextStyle(fontSize: 15),
           ),
           actions: [
             TextButton(
               //style: ButtonStyle(backgroundColor: Colors.purple, foregroundColor: Colors.white),
-              onPressed: () => Navigator.pop(context),
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  // ── NEW: shown when the user taps "माहिती बघा" on a गीत row before the
-  // audio file has actually been downloaded via the download icon.
-  void _showDownloadFirstPopup() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          title: Text(
-            Statics.getLabel('Suchna'),
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.purple),
-          ),
-          content: Text(
-            Statics.getLabel('DownloadFileValidation'),
-            style: TextStyle(fontSize: 15),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => Navigator.pop(ctx),
               child: const Text('OK'),
             ),
           ],
@@ -242,6 +216,7 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
 
   Future<void> _searchShaakhaPustika({int? karyakramval}) async {
     bool isVibhagLevelUser = false;
+    _apiList = [];
     geoUnitId = int.tryParse(_controller.deepestSelectedGeoUnitId.toString());
     if (_karyakramValue == null && karyakramval != -1) {
       Statics.showToast(Statics.getLabel('ChooseKaryakram'));
@@ -272,7 +247,7 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
 
       if (respData != null) {
         setState(() {
-          _apiList = respData;
+          _apiList.addAll(respData);
         });
         _tabController?.animateTo(1);
         if (respData.isEmpty) {
@@ -299,12 +274,23 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
+    // 2. Determine if the system back button is allowed to close/pop the screen.
+    // It should pop normally if it's a single screen OR if the user is already on the first tab (index 0).
+    final bool canPopScreen = _tabController?.index == 0;
 
     return PopScope(
-      canPop: false,
+      canPop: canPopScreen,
       onPopInvokedWithResult: (didPop, result) {
+        // If the system already handled the pop (canPop was true), do nothing.
         if (didPop) return;
-        Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+
+        // If canPop was false, it means we are on the multi-tab layout and on the second tab (index 1).
+        // Move back to the first tab instead of exiting.
+        if (_tabController?.index == 1) {
+          _tabController?.animateTo(0);
+        } else {
+          Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+        }
       },
       child: Scaffold(
         backgroundColor: const Color(0xFFF5F6FA),
@@ -613,7 +599,7 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
         Positioned.fill(
           child: GestureDetector(
             behavior: HitTestBehavior.opaque,
-            onTap: _showVastiValidationPopup,
+            onTap: () => _showValidationPopup("SelectBhaagValidationMessage"),
             child: Container(
               color: Colors.transparent,
             ),
@@ -671,12 +657,20 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
                   rows: karyakramList.map((item) {
                     final monthLabel = (item.monthno! >= 1 && item.monthno! <= 12) ? _monthNameMarathi(item.monthno!) : '-';
                     final content = item.subjecttext ?? '-';
-                    final audioUrl = _resolveFileUrl(item.filepath ?? '-');
+                    final rawRelativePath = item.filepath ?? '';
+                    final audioUrl = _resolveFileUrl(rawRelativePath); // still used for the disk-check filename derivation
                     // print("Resolved file URL: ${_resolveFileUrl(item.filepath ?? '-')}");
                     return DataRow(
                       cells: [
                         if (karyakramList.isNotEmpty) DataCell(_tableInfoCellFromItem(item)), // CHANGED — accepts item directly
-                        if (_karyakramValue == '310') DataCell(_DownloadPlayCell(remoteUrl: audioUrl, title: content)),
+                        if (_karyakramValue == '310')
+                          DataCell(_DownloadPlayCell(
+                            pkid: item.pkid!,
+                            tablename: 'shaakhapustika',
+                            remoteRelativePath: rawRelativePath,
+                            resolvedUrlForDiskCheck: audioUrl,
+                            title: content,
+                          )),
                         DataCell(_tableDataCell(monthLabel)),
                         DataCell(_tableDataCell(item.vayogatname ?? '-')),
 
@@ -718,7 +712,7 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
         // गीत (audio) rows — check the shared helper before navigating.
         final downloaded = await AudioFileHelper.isDownloaded(audioUrl);
         if (!downloaded) {
-          _showDownloadFirstPopup();
+          _showValidationPopup("DownloadFileValidation");
           return;
         }
         final localPath = await AudioFileHelper.getLocalFilePath(audioUrl);
@@ -1082,96 +1076,129 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
   }
 }
 
+enum _CellState { checking, notDownloaded, queuedOrDownloading, downloaded, failed }
+
 class _DownloadPlayCell extends StatefulWidget {
-  final String remoteUrl;
+  final int pkid;
+  final String tablename;
+  final String remoteRelativePath; // raw path as returned by the search API, e.g. "Files/shaakhapustika/xxx.mp4"
+  final String resolvedUrlForDiskCheck; // _resolveFileUrl(remoteRelativePath) — only used to derive the local filename
   final String title;
 
-  const _DownloadPlayCell({required this.remoteUrl, required this.title});
+  const _DownloadPlayCell({
+    required this.pkid,
+    required this.tablename,
+    required this.remoteRelativePath,
+    required this.resolvedUrlForDiskCheck,
+    required this.title,
+  });
 
   @override
   State<_DownloadPlayCell> createState() => _DownloadPlayCellState();
 }
 
 class _DownloadPlayCellState extends State<_DownloadPlayCell> {
-  bool _isDownloaded = false;
-  bool _isDownloading = false;
+  _CellState _state = _CellState.checking;
   String? _localPath;
+  int _progress = 0;
+  String? _errorMessage;
+  StreamSubscription<DownloadLiveEvent>? _liveSub;
+
+  String get _taskId => '${widget.tablename}_${widget.pkid}';
 
   @override
   void initState() {
     super.initState();
-    if (widget.remoteUrl.isNotEmpty) {
-      _checkIfDownloaded();
-    }
+    _bootstrap();
+    _liveSub = MediaDownloadService.instance.liveEvents.listen(_onLiveEvent);
   }
 
-  // CHANGED — delegate path resolution to the shared helper so this
-  // widget and the "माहिती बघा" gate always agree on the same path.
-  Future<String> _getLocalFilePath() => AudioFileHelper.getLocalFilePath(widget.remoteUrl);
+  @override
+  void dispose() {
+    _liveSub?.cancel();
+    super.dispose();
+  }
 
-  Future<void> _checkIfDownloaded() async {
-    final path = await _getLocalFilePath();
-    final exists = await File(path).exists();
+  Future<void> _bootstrap() async {
+    if (widget.remoteRelativePath.isEmpty) {
+      setState(() => _state = _CellState.notDownloaded);
+      return;
+    }
+
+    // Fast path: check disk directly first — cheap, and correctly reflects
+    // a file downloaded by EITHER this screen or the background auto-sync,
+    // since both write to the same subdirectory with the same filename scheme.
+    final path = await AudioFileHelper.getLocalFilePath(widget.resolvedUrlForDiskCheck);
+    if (await File(path).exists()) {
+      if (!mounted) return;
+      setState(() {
+        _localPath = path;
+        _state = _CellState.downloaded;
+      });
+      return;
+    }
+
+    // Not on disk — check whether the background auto-sync already has this
+    // queued or in progress, so we don't show a plain "tap to download"
+    // icon for something that's already moving.
+    final queueItem = await MediaDownloadQueueDao.getByTaskId(_taskId);
     if (!mounted) return;
-    setState(() {
-      _localPath = path;
-      _isDownloaded = exists;
-    });
+    if (queueItem != null && (queueItem.status == 'downloading' || queueItem.status == 'pending')) {
+      setState(() {
+        _state = _CellState.queuedOrDownloading;
+        _progress = queueItem.progress;
+      });
+    } else if (queueItem != null && queueItem.status == 'failed') {
+      setState(() {
+        _state = _CellState.failed;
+        _errorMessage = queueItem.errorMessage;
+      });
+    } else {
+      setState(() => _state = _CellState.notDownloaded);
+    }
   }
 
-  Future<void> _downloadFile() async {
-    if (widget.remoteUrl.isEmpty) return;
-    setState(() => _isDownloading = true);
-    try {
-      final response = await http.get(Uri.parse(widget.remoteUrl));
-      if (response.statusCode == 200) {
-        final path = await _getLocalFilePath();
-        await File(path).writeAsBytes(response.bodyBytes);
-        if (!mounted) return;
+  void _onLiveEvent(DownloadLiveEvent event) {
+    if (event.taskId != _taskId || !mounted) return;
+
+    switch (event.type) {
+      case DownloadLiveEventType.progress:
         setState(() {
-          _localPath = path;
-          _isDownloaded = true;
+          _state = _CellState.queuedOrDownloading;
+          _progress = event.progress ?? _progress;
         });
-      } else {
-        _showMessage(Statics.getLabel('DownloadFailed'));
-      }
-    } catch (e) {
-      _showMessage(Statics.getLabel('ProblemOccured'));
-    } finally {
-      if (mounted) setState(() => _isDownloading = false);
+        break;
+      case DownloadLiveEventType.statusChanged:
+        setState(() => _state = _CellState.queuedOrDownloading);
+        break;
+      case DownloadLiveEventType.completed:
+        _bootstrap(); // re-check disk to pick up the final local path
+        break;
+      case DownloadLiveEventType.failed:
+        setState(() {
+          _state = _CellState.failed;
+          _errorMessage = event.errorMessage;
+        });
+        break;
     }
   }
 
-  String _htmlToPlainText(String? html) {
-    if (html == null || html.trim().isEmpty) return '';
-    print("html:$html");
-    try {
-      final bodyOnly = _extractBodyContent(html);
-      final delta = HtmlToDelta().convert(bodyOnly);
-      final doc = quill.Document.fromDelta(delta);
-      return doc.toPlainText().trim();
-    } catch (e) {
-      // Fallback: regex strip if Quill parsing fails for some reason
-      final bodyOnly = _extractBodyContent(html);
-      final stripped = bodyOnly
-          .replaceAll(RegExp(r'<[^>]*>'), ' ')
-          .replaceAll('&nbsp;', ' ')
-          .replaceAll('\u000a', ' ')
-          .replaceAll('&amp;', '&')
-          .replaceAll('&lt;', '<')
-          .replaceAll('&gt;', '>')
-          .replaceAll('&quot;', '"')
-          .replaceAll('&#39;', "'");
-      return stripped.replaceAll(RegExp(r'\s+'), ' ').trim();
+  Future<void> _startDownload() async {
+    setState(() => _state = _CellState.queuedOrDownloading);
+    final result = await MediaDownloadService.instance.requestDownload(
+      pkid: widget.pkid,
+      tablename: widget.tablename,
+      remoteFilepath: widget.remoteRelativePath,
+      existingLocalFilepath: _localPath,
+    );
+
+    if (!mounted) return;
+    if (result == RequestDownloadResult.alreadyDownloaded) {
+      await _bootstrap();
     }
+    // alreadyInProgress / startedNow: liveEvents will drive further updates
   }
 
-  String _extractBodyContent(String html) {
-    final match = RegExp(r'<body[^>]*>([\s\S]*)<\/body>', caseSensitive: false).firstMatch(html);
-    return match != null ? match.group(1)!.trim() : html;
-  }
-
-  // ── NEW: delete the local file ──
   Future<void> _deleteFile() async {
     final confirm = await showDialog<bool>(
       context: context,
@@ -1180,109 +1207,95 @@ class _DownloadPlayCellState extends State<_DownloadPlayCell> {
         title: Text(Statics.getLabel('Alert')),
         content: Text(Statics.getLabel('ToDeleteFile')),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: Text(Statics.getLabel('Cancel')),
-          ),
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(Statics.getLabel('Cancel'))),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: Text(Statics.getLabel('DeleteFile'), style: TextStyle(color: Colors.red)),
+            child: Text(Statics.getLabel('DeleteFile'), style: const TextStyle(color: Colors.red)),
           ),
         ],
       ),
     );
-
     if (confirm != true) return;
 
     try {
       if (_localPath != null) {
         final file = File(_localPath!);
-        if (await file.exists()) {
-          await file.delete();
-        }
+        if (await file.exists()) await file.delete();
+
+        // Keep the local DB in sync — if this pkid's row was pointing at
+        // the file we just deleted, clear it so other screens reading the
+        // local table don't serve a dangling path.
+        await MediaDownloadQueueDao.clearLocalFilepathIfMatches(
+          tablename: widget.tablename,
+          pkid: widget.pkid,
+          localPathToClear: _localPath!,
+        );
       }
       if (!mounted) return;
       setState(() {
-        _isDownloaded = false;
+        _state = _CellState.notDownloaded;
+        _localPath = null;
       });
-      _showMessage(Statics.getLabel('FileGetDeleted'));
+      Statics.showToast(Statics.getLabel('FileGetDeleted'));
     } catch (e) {
-      _showMessage(Statics.getLabel('ProblemMassage'));
+      Statics.showToast(Statics.getLabel('ProblemMassage'));
     }
   }
 
-  void _showMessage(String msg) {
-    if (!mounted) return;
-    Statics.showToast(msg);
-  }
-
-  // CHANGED — uses the shared public AudioPlayerDialog instead of a
-  // private, file-local one.
   void _playFile() {
     if (_localPath == null) return;
     showDialog(
       context: context,
-      builder: (_) => AudioPlayerDialog(
-        title: '🎧',
-        audioUrl: _localPath!,
-        isLocalFile: true,
-      ),
+      builder: (_) => AudioPlayerDialog(title: '🎧', audioUrl: _localPath!, isLocalFile: true),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.remoteUrl.isEmpty) {
+    if (widget.remoteRelativePath.isEmpty) {
       return const Center(child: Text('---'));
     }
 
-    if (_isDownloading) {
-      return const Center(
-        child: SizedBox(
-          height: 16,
-          width: 16,
-          child: CircularProgressIndicator(strokeWidth: 2),
-        ),
-      );
-    }
+    switch (_state) {
+      case _CellState.checking:
+        return const Center(
+          child: SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2)),
+        );
 
-    if (_isDownloaded) {
-      // ── eye + delete side by side ──
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        // mainAxisSize: MainAxisSize.min,
-        children: [
-          InkWell(
-            onTap: _playFile,
-            child: const Icon(
-              Icons.remove_red_eye_rounded,
-              color: Colors.green,
-              size: 19,
+      case _CellState.queuedOrDownloading:
+        return Center(
+          child: SizedBox(
+            height: 20,
+            width: 20,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              value: _progress > 0 ? _progress / 100 : null, // indeterminate while waiting, determinate once ticking
             ),
           ),
-          const SizedBox(width: 12),
-          InkWell(
-            onTap: _deleteFile,
-            child: const Icon(
-              Icons.delete_outline_rounded,
-              color: Colors.red,
-              size: 19,
-            ),
-          ),
-        ],
-      );
-    }
+        );
 
-    // ── not downloaded yet ──
-    return Center(
-      child: InkWell(
-        onTap: _downloadFile,
-        child: const Icon(
-          Icons.download,
-          color: Colors.blue,
-          size: 19,
-        ),
-      ),
-    );
+      case _CellState.downloaded:
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            InkWell(onTap: _playFile, child: const Icon(Icons.remove_red_eye_rounded, color: Colors.green, size: 19)),
+            const SizedBox(width: 12),
+            InkWell(onTap: _deleteFile, child: const Icon(Icons.delete_outline_rounded, color: Colors.red, size: 19)),
+          ],
+        );
+
+      case _CellState.failed:
+        return Center(
+          child: InkWell(
+            onTap: _startDownload,
+            child: const Icon(Icons.refresh, color: Colors.orange, size: 19),
+          ),
+        );
+
+      case _CellState.notDownloaded:
+        return Center(
+          child: InkWell(onTap: _startDownload, child: const Icon(Icons.download, color: Colors.blue, size: 19)),
+        );
+    }
   }
 }

@@ -5,6 +5,29 @@ const String kMediaQueueTable = 'MediaDownloadQueue';
 const int kMaxRetries = 3;
 
 class MediaDownloadQueueDao {
+  /// Batched status lookup for a screen showing many pustikas at once (e.g.
+  /// search results) — one query for the whole visible page, not one per
+  /// row. Returns a map of pkid -> queue row (only for pkids that ARE in
+  /// the queue; a missing key means "not queued" — the caller should then
+  /// check the parent table's own `filepath` column to tell apart
+  /// "already downloaded" from "never queued".
+  static Future<Map<int, MediaDownloadQueueItem>> getStatusForPkids(
+    String tablename,
+    List<int> pkids,
+  ) async {
+    if (pkids.isEmpty) return {};
+    final db = await DatabaseHelper.database;
+    final placeholders = List.filled(pkids.length, '?').join(',');
+    final rows = await db.query(
+      kMediaQueueTable,
+      where: 'tablename = ? AND pkid IN ($placeholders)',
+      whereArgs: [tablename, ...pkids],
+    );
+    return {
+      for (final row in rows) (row['pkid'] as int): MediaDownloadQueueItem.fromMap(row),
+    };
+  }
+
   /// Filters a raw API mediaList down to items worth queuing, then inserts
   /// them (insert-or-skip — never overwrites an in-flight/queued item).
   ///
@@ -185,6 +208,26 @@ class MediaDownloadQueueDao {
 
       await txn.delete(kMediaQueueTable, where: 'taskId = ?', whereArgs: [taskId]);
     });
+  }
+
+  /// Call this when the user manually deletes a downloaded file from disk
+  /// (e.g. from search_shaakhaa_pustika_screen's delete action). Clears the
+  /// parent table's `filepath` ONLY if it currently points at exactly this
+  /// local path — so we don't accidentally blank out a value that was
+  /// already something else (e.g. a fresh remote path from a later sync).
+  static Future<void> clearLocalFilepathIfMatches({
+    required String tablename,
+    required int pkid,
+    required String localPathToClear,
+  }) async {
+    final db = await DatabaseHelper.database;
+    final sqlTable = _resolveSqlTable(tablename);
+    await db.update(
+      sqlTable,
+      {'filepath': null},
+      where: 'pkid = ? AND filepath = ?',
+      whereArgs: [pkid, localPathToClear],
+    );
   }
 
   /// Paged + joined read for the Downloads screen, so each row can show

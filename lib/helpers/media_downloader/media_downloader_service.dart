@@ -1,9 +1,15 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:background_downloader/background_downloader.dart';
 
+import '../../models/response_model/media_download_master_model.dart';
 import 'media_downloader_helper.dart';
+
+/// What requestDownload() found/did — lets the caller update its UI
+/// immediately without waiting for a stream event.
+enum RequestDownloadResult { alreadyDownloaded, alreadyInProgress, startedNow }
 
 /// One live event per task update — pushed immediately, un-throttled, purely
 /// for driving smooth UI. Persistence to the DB is throttled separately;
@@ -100,6 +106,87 @@ class MediaDownloadService {
   Future<void> enqueueFromApiMediaList(List<Map<String, dynamic>> rawMediaList) async {
     await MediaDownloadQueueDao.enqueueNewMedia(rawMediaList);
     await _dispatchPendingToDownloader();
+  }
+
+  /// THE single entry point for starting a download — used by BOTH the
+  /// auto-sync loop (enqueueFromApiMediaList) internally in bulk, AND any
+  /// manual "download" tap from a screen like search_shaakhaa_pustika_screen.
+  /// Never call FileDownloader directly from a screen — always come through
+  /// here, or the two paths can race and duplicate work.
+  ///
+  /// Returns a status the caller can show immediately in the UI without
+  /// waiting for a stream event.
+  Future<RequestDownloadResult> requestDownload({
+    required int pkid,
+    required String tablename,
+    required String remoteFilepath,
+    String? existingLocalFilepath, // pass the row's current filepath from your search results, if any
+  }) async {
+    // 1. Already downloaded AND the file is still actually there?
+    if (existingLocalFilepath != null && existingLocalFilepath.isNotEmpty) {
+      final file = File(existingLocalFilepath);
+      if (await file.exists()) {
+        return RequestDownloadResult.alreadyDownloaded;
+      }
+      // Path was recorded but the file's gone (user cleared storage, etc.)
+      // — fall through and treat this as needing a fresh download.
+    }
+
+    final taskId = '${tablename}_$pkid';
+    final existing = await MediaDownloadQueueDao.getByTaskId(taskId);
+
+    if (existing != null) {
+      switch (existing.status) {
+        case 'downloading':
+          return RequestDownloadResult.alreadyInProgress; // don't duplicate — just let the UI watch it
+        case 'pending':
+          await _dispatchSingleImmediately(existing);
+          return RequestDownloadResult.startedNow;
+        case 'failed':
+          await retryNow(taskId);
+          return RequestDownloadResult.startedNow;
+        default:
+          return RequestDownloadResult.alreadyInProgress;
+      }
+    }
+
+    // Not in the queue at all — insert it, then dispatch immediately rather
+    // than waiting for the next bulk auto-sync cycle to pick it up.
+    final item = MediaDownloadQueueItem.fromApiJson({
+      'pkid': pkid,
+      'tablename': tablename,
+      'filepath': remoteFilepath,
+    });
+    await MediaDownloadQueueDao.enqueueNewMedia([
+      {'pkid': pkid, 'tablename': tablename, 'filepath': remoteFilepath},
+    ]);
+    await _dispatchSingleImmediately(item);
+    return RequestDownloadResult.startedNow;
+  }
+
+  /// Dispatches exactly one task right away, ahead of the normal bulk
+  /// dispatch loop — for user-initiated requests where they're actively
+  /// waiting. VERIFY: if your installed background_downloader version
+  /// supports a `priority` field on DownloadTask, set it here (lower value
+  /// = higher priority is the common convention, but confirm against your
+  /// version's docs) so it also jumps ahead within the native holding queue,
+  /// not just ahead of our own Dart-side dispatch loop.
+  Future<void> _dispatchSingleImmediately(MediaDownloadQueueItem item) async {
+    final task = DownloadTask(
+      taskId: item.taskId,
+      url: '$mediaBaseUrl/${item.remoteFilepath}',
+      filename: item.remoteFilepath.split('/').last,
+      directory: mediaSubdirectory,
+      baseDirectory: BaseDirectory.applicationDocuments,
+      updates: Updates.statusAndProgress,
+      // priority: 0, // VERIFY field name/semantics for your installed version
+    );
+    final accepted = await FileDownloader().enqueue(task);
+    if (accepted) {
+      await MediaDownloadQueueDao.updateStatus(item.taskId, status: 'downloading');
+      _liveEventsController.add(DownloadLiveEvent(taskId: item.taskId, type: DownloadLiveEventType.statusChanged, status: 'downloading'));
+      await _refreshCounts();
+    }
   }
 
   Future<void> retryNow(String taskId) async {
