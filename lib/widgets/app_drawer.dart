@@ -149,7 +149,7 @@ class _AppDrawerState extends State<AppDrawer> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _shakhaPustika = Statics.userDetails['ShowPustika'];
+    _shakhaPustika = Statics.userDetails['ShowPustika'] ?? 0;
     print('init seeingshkahapustika:$_shakhaPustika');
     if (_shakhaPustika == 1) {
       setState(() {

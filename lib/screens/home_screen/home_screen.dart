@@ -350,9 +350,10 @@ class _HomeScreenState extends State<HomeScreen> {
       userID: int.tryParse(Statics.userDetails["userID"] ?? "0") ?? 0,
       targetGeoUnitID: int.tryParse(_myAreaReportController.deepestSelectedGeoUnitId ?? "0") ?? 0,
     );
-    setState(() {
-      _isMyAreaReportExp = _isReportCleared = _isReportSearching = _isMySearching = false;
-    });
+    if (mounted)
+      setState(() {
+        _isMyAreaReportExp = _isReportCleared = _isReportSearching = _isMySearching = false;
+      });
     if (data != null) {
       shaakhaLevelData = data.shaakhadata;
       otherLevelData = data.otherdata;

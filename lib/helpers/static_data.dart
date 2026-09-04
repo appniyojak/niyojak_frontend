@@ -411,6 +411,7 @@ Map<String, dynamic> userDetails = {
   'IsPravaasiKaaryakartaa': false,
   'ShowShakhaSaptaha': '',
   'ShowPustika': '',
+  'isvistaruser': '',
   'can_edit': '',
   'DaayitvaNameforshow': '',
   'DaayitvaId': '',
@@ -749,6 +750,7 @@ Future<void> populateUserDetailsMap() async {
     userDetails['IsPravaasiKaaryakartaa'] = uData.isPravaasiKaaryakartaa;
     userDetails['ShowShakhaSaptaha'] = uData.showShakhaSaptaha;
     userDetails['ShowPustika'] = uData.showPustika;
+    userDetails['isvistaruser'] = uData.isvistaruser;
   });
 
   levelId = int.tryParse(Statics.userDetails["LevelID"]?.toString() ?? "0") ?? 0;
@@ -1020,6 +1022,10 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevel(String levelID) async {
       data['ParentGraamID'],
       data['ParentUpaNagarID'],
       data['issankalpit'],
+      data['canEdit'],
+      data['GeoUnitNameEnglish'],
+      data['GeoUnitNameMarathi'],
+      data['GeoUnitNameHindi'],
     );
     _geounitList.add(info);
   });
@@ -1097,6 +1103,10 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForVasti(String levelI
       data['ParentGraamID'],
       data['ParentUpaNagarID'],
       data['issankalpit'],
+      data['canEdit'],
+      data['GeoUnitNameEnglish'],
+      data['GeoUnitNameMarathi'],
+      data['GeoUnitNameHindi'],
     );
     _geounitList.add(info);
   });
@@ -1175,6 +1185,10 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForMandal(String level
       data['ParentGraamID'],
       data['ParentUpaNagarID'],
       data['issankalpit'],
+      data['canEdit'],
+      data['GeoUnitNameEnglish'],
+      data['GeoUnitNameMarathi'],
+      data['GeoUnitNameHindi'],
     );
     _geounitList.add(info);
   });
@@ -1253,6 +1267,10 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForUpnagar(String leve
       data['ParentGraamID'],
       data['ParentUpaNagarID'],
       data['issankalpit'],
+      data['canEdit'],
+      data['GeoUnitNameEnglish'],
+      data['GeoUnitNameMarathi'],
+      data['GeoUnitNameHindi'],
     );
     _geounitList.add(info);
   });
@@ -1321,6 +1339,10 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParent(String levelID, Strin
       data['ParentGraamID'],
       data['ParentUpaNagarID'],
       data['issankalpit'],
+      data['canEdit'],
+      data['GeoUnitNameEnglish'],
+      data['GeoUnitNameMarathi'],
+      data['GeoUnitNameHindi'],
     );
     _geounitList.add(info);
   });
@@ -1363,6 +1385,10 @@ Future<GeoUnitMasterBAL?> getGeoUnitsByID(String geoUnitID) async {
       result[0]['ParentGraamID'],
       result[0]['ParentUpaNagarID'],
       result[0]['issankalpit'],
+      result[0]['canEdit'],
+      result[0]['GeoUnitNameEnglish'],
+      result[0]['GeoUnitNameMarathi'],
+      result[0]['GeoUnitNameHindi'],
     );
     return _geounit;
   } else {
@@ -1806,39 +1832,6 @@ Future<String> resetPassword(String swayamSevakID) async {
   return responseBody['Message'];
 }
 
-Future<String> refreshData() async {
-  print("started");
-  try {
-    bool? connected = await isInternetConnected();
-    if (connected != true) {
-      return "";
-    }
-    Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
-
-    var response = await http.post(Uri.parse(urlResetDataForApp), headers: jHeaders, body: json.encode({"AppUserID": userDetails["userID"]}));
-
-    print(response.request!.url);
-
-    var responseBody = json.decode(response.body);
-    print(response.body);
-    var dataList = responseBody['ResetData']['GeoUnitList'];
-    var dataStaticMaster = responseBody['ResetData']['StaticMasterList'];
-
-    if (dataList.length > 0) {
-      print(dataList.length);
-      await DatabaseHelper.reCreate('GeoUnitMaster', dataList);
-    }
-
-    if (dataStaticMaster.length > 0) {
-      await DatabaseHelper.reCreate('StaticMaster', dataStaticMaster);
-    }
-    return "Successfull";
-  } catch (e) {
-    print(e);
-    return "Failed";
-  }
-}
-
 Future<HomeScreenData?> getDashboardData(Map<String, dynamic> inputJson, {BuildContext? context}) async {
   bool? connected = await isInternetConnected();
   if (connected != true) {
@@ -1888,7 +1881,7 @@ Future<dynamic> refreshDashboardData(String? userID, String? targetGeoUnitID) as
 
   var responseBody = json.decode(response.body);
 
-  log("REPONSE >>>>>>>>>>>>>> ${jsonEncode(responseBody)}");
+  // log("REPONSE >>>>>>>>>>>>>> ${jsonEncode(responseBody)}");
 
   var dataList = responseBody['HomeScreenData'];
   var listShaakhaaCountByVayogat = responseBody['HomeScreenData']['ListShaakhaaCountByVayogat'];
@@ -2352,7 +2345,7 @@ Future<dynamic> refreshDashboardData(String? userID, String? targetGeoUnitID) as
       }
     }
 
-    await DatabaseHelper.reCreate('HomeScreenData', dataList);
+    // await DatabaseHelper.reCreate('HomeScreenData', dataList);
   }
   //return "Successfull";
   return responseBody;
@@ -2674,6 +2667,30 @@ Future<void> syncOfflineUserSyncData(int syncVers, String tableName) async {
       print("usrLogIn 17.7");
 
       await MediaDownloadService.instance.enqueueFromApiMediaList(dataList8);
+    }
+
+    List<Map<String, dynamic>> dataList9 = (responseBody['GeoUnitList'] as List).map((item) => item as Map<String, dynamic>).toList();
+    if (dataList9.length > 0) {
+      print("usrLogIn 17.8");
+
+// 2. Bulk upsert into the table
+      final result = await DatabaseHelper.bulkUpsert<Map<String, dynamic>>(
+        tableName: 'GeoUnitMaster',
+        items: dataList9,
+        toMap: (item) => item,
+        keyColumns: ['GeoUnitID'],
+        hasUniqueConstraint: false, // pkid is your PRIMARY KEY
+      );
+    }
+
+    if (responseBody['deleteGeoUnitID'] != null && responseBody['deleteGeoUnitID'].toString().trim().isNotEmpty) {
+      final _geoDeleteList = responseBody['deleteGeoUnitID'].toString().split(",").toList();
+
+      await DatabaseHelper.deleteBulkByKeyIn(
+        tableName: 'GeoUnitMaster',
+        keyColumn: 'GeoUnitID',
+        keyValues: _geoDeleteList,
+      );
     }
 
     return;
@@ -3924,7 +3941,7 @@ Future<List<GeoUnitMasterBAL>?> getAbhiyaanGeoUnitMasterData(Map<String, dynamic
       final Map<String, dynamic> data = jsonDecode(response.body);
 
       if (data["Status"] == "200" || data["Status"] == "Success") {
-        var abhiyaanGeoUnitMaster = data['GeoUnitListforAbhiyaan'];
+        List<Map<String, dynamic>> abhiyaanGeoUnitMaster = (data['GeoUnitListforAbhiyaan'] as List).map((item) => item as Map<String, dynamic>).toList();
 
         if (abhiyaanGeoUnitMaster.length > 0) {
           log("deleting from AbhiyaanGeoUnitMaster db >>>>>>>>>>>>>> ");
@@ -3932,10 +3949,14 @@ Future<List<GeoUnitMasterBAL>?> getAbhiyaanGeoUnitMasterData(Map<String, dynamic
 
           log("inserting in AbhiyaanGeoUnitMaster db >>>>>>>>>>>>>> ");
 
-          //await dbh.DatabaseHelper.reCreate('GeoUnitMaster', geoUnitData);
-          for (var data in abhiyaanGeoUnitMaster) {
-            await DatabaseHelper.insertOrUpdateRecord('AbhiyaanGeoUnitMaster', data);
-          }
+// 2. Bulk upsert into the table
+          final result = await DatabaseHelper.bulkUpsert<Map<String, dynamic>>(
+            tableName: 'AbhiyaanGeoUnitMaster',
+            items: abhiyaanGeoUnitMaster,
+            toMap: (item) => item,
+            keyColumns: ['GeoUnitID'],
+            hasUniqueConstraint: true, // pkid is your PRIMARY KEY
+          );
         }
 
         // AbhiyaanGeoUnitListModel model = AbhiyaanGeoUnitListModel.fromJson(data);
@@ -5395,6 +5416,10 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitMasterForApp(
       data['ParentGraamID'],
       data['ParentUpaNagarID'],
       data['issankalpit'],
+      data['canEdit'],
+      data['GeoUnitNameEnglish'],
+      data['GeoUnitNameMarathi'],
+      data['GeoUnitNameHindi'],
     );
     geoUnitList.add(info);
   });
@@ -7150,6 +7175,10 @@ Future<List<GeoUnitMasterBAL>?> getGeoShaakhaaForReportData(BuildContext context
             data['ParentGraamID'],
             data['ParentUpaNagarID'],
             data['issankalpit'],
+            data['canEdit'],
+            data['GeoUnitNameEnglish'],
+            data['GeoUnitNameMarathi'],
+            data['GeoUnitNameHindi'],
           );
           geoUnitList.add(info);
         });
@@ -7268,8 +7297,21 @@ Future<List<ShaakhaaList>?> getShaakhaaSaptahListData(BuildContext context, Map<
 
 Future<VistaarVrutta?> getShaakhaaSaptahVruttaData(BuildContext context, Map<String, dynamic> inputJson) async {
   bool? connected = await isInternetConnected();
-  if (connected != true) {
-    return null;
+
+  final _offData = await DatabaseHelper.getAllOfflineData<VistaarVrutta>(
+    tableName: 'VruttaDraftMaster',
+    fromMap: VistaarVrutta.fromJson,
+    where: '''
+          ShaakhaaID = ? OR pkid = ?
+      ''',
+    whereArgs: [inputJson['ShaakhaaID'], inputJson['pkid']],
+  );
+
+  if (connected == true) {
+    // No internet — serve whatever we already have locally
+    //ParentMahanagarID = ? OR ParentVibhaagID = ? OR
+    log("No internet — falling back to local ShaakhaListMaster data");
+    return _offData.firstOrNull;
   }
   showLoaderDialog(context);
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -7290,7 +7332,7 @@ Future<VistaarVrutta?> getShaakhaaSaptahVruttaData(BuildContext context, Map<Str
       return model.vrutta; // ✅ return karna zaroori hai
     } else {
       print("Error: ${response.statusCode} - ${response.body}");
-      return null; // ✅ error case
+      return _offData.firstOrNull; // ✅ error case
     }
   } catch (e) {
     // Navigator.of(context, rootNavigator: true).pop();

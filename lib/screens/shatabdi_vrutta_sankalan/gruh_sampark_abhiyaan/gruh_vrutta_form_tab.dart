@@ -414,7 +414,13 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
 
             //await dbh.DatabaseHelper.reCreate('GeoUnitMaster', geoUnitData);
             // for (var data in result) {
-            await DatabaseHelper.insertOrUpdateRecord('AbhiyanSwayamsevakData', result.toJson());
+            final _res = await DatabaseHelper.upsertOne<AbhiyanSwayamsevakdata>(
+              tableName: 'AbhiyanSwayamsevakData',
+              item: result,
+              toMap: (item) => item.toJson(),
+              keyColumns: ['AbhiyaDaayitvaID', 'AbhiyanSwayamsevakID'],
+              hasUniqueConstraint: false,
+            );
             await Statics.populateUserAbhiyaanDetailsMap();
             // }
           }

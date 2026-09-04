@@ -505,7 +505,11 @@ class GeoUnitMasterBAL {
   int? parentUpaNagarID;
   int? issankalpit;
 
-  // bool? canEdit;
+  bool? canEdit;
+
+  String? geoUnitNameEnglish;
+  String? geoUnitNameMarathi;
+  String? geoUnitNameHindi;
 
   GeoUnitMasterBAL(
     this.geoUnitID,
@@ -532,7 +536,10 @@ class GeoUnitMasterBAL {
     this.parentGraamID,
     this.parentUpaNagarID,
     this.issankalpit,
-    // this.canEdit,
+    this.canEdit,
+    this.geoUnitNameEnglish,
+    this.geoUnitNameMarathi,
+    this.geoUnitNameHindi,
   );
 
   GeoUnitMasterBAL.fromJson(Map<String, dynamic> map) {
@@ -560,7 +567,10 @@ class GeoUnitMasterBAL {
     parentGraamID = map["ParentGraamID"];
     parentUpaNagarID = map["ParentUpaNagarID"] ?? map["parentUpaNagarID"];
     issankalpit = map["IsSankalpit"] ?? map["issankalpit"];
-    // canEdit = map["canEdit"];
+    canEdit = map["canEdit"].toString() == "1" || map["canEdit"] == true;
+    geoUnitNameEnglish = map["GeoUnitNameEnglish"];
+    geoUnitNameMarathi = map["GeoUnitNameMarathi"];
+    geoUnitNameHindi = map["GeoUnitNameHindi"];
   }
 
   Map<String, dynamic> toJson() {
@@ -568,7 +578,9 @@ class GeoUnitMasterBAL {
     data['DisplaySequence'] = this.displaySequence;
     data['GeoUnitID'] = this.geoUnitID;
     data['isnew'] = this.isnew;
+    data['IsNew'] = this.isnew;
     data['anya'] = this.isanya;
+    data['Anya'] = this.isanya;
     data['GeoUnitName'] = this.geoUnitName;
     data['HasGraaminKshetra'] = this.hasGraaminKshetra;
     data['LevelID'] = this.levelID;
@@ -585,7 +597,12 @@ class GeoUnitMasterBAL {
     data['ParentVibhaagID'] = this.parentVibhaagID;
     data['PraantID'] = this.praantID;
     data['ParentUpaNagarID'] = this.parentUpaNagarID;
-    // data['canEdit'] = this.canEdit;
+    data['issankalpit'] = this.issankalpit;
+    data['IsSankalpit'] = this.issankalpit;
+    data['canEdit'] = this.canEdit;
+    data['GeoUnitNameEnglish'] = this.geoUnitNameEnglish;
+    data['GeoUnitNameMarathi'] = this.geoUnitNameMarathi;
+    data['GeoUnitNameHindi'] = this.geoUnitNameHindi;
     return data;
   }
 }
@@ -671,6 +688,7 @@ class UserDataBAL {
   bool? isPravaasiKaaryakartaa;
   int? showShakhaSaptaha;
   int? showPustika;
+  int? isvistaruser;
   bool? canEdit;
 
   UserDataBAL(
@@ -706,6 +724,7 @@ class UserDataBAL {
       this.isPravaasiKaaryakartaa,
       this.showShakhaSaptaha,
       this.showPustika,
+      this.isvistaruser,
       this.canEdit);
 
   UserDataBAL.fromMap(Map<String, dynamic> map) {
@@ -740,8 +759,48 @@ class UserDataBAL {
     isLoggedIn = map['IsLoggedIn'];
     isPravaasiKaaryakartaa = map['IsPravaasiKaaryakartaa'] == 1 ? true : false;
     showShakhaSaptaha = map['ShowShakhaSaptaha'];
-    showPustika = map['ShowPustika'];
-    canEdit = map['can_edit'] == 1 ? true : false;
+    showPustika = map['showpustika'] ?? map['ShowPustika'];
+    isvistaruser = map['isvistaruser'];
+    canEdit = (map['can_edit'].toString() == "1" || map['can_edit'] == true);
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> map = new Map<String, dynamic>();
+
+    map["SwayamsevakID"] = this.swayamsevakID;
+    map["SwayamsevakDaayitvaID"] = this.swayamsevakDaayitvaID;
+    map["PreferredLanguageID"] = this.preferredLanguageID;
+    map["PreferredLanguageCode"] = this.preferredLanguageCode;
+    map["PraantID"] = this.praantID;
+    map["MobileNumber"] = this.mobileNumber;
+    map["LinkedVastiName"] = this.linkedVastiName;
+    map["LinkedVastiID"] = this.linkedVastiID;
+    map["LinkedShaakhaaName"] = this.linkedShaakhaaName;
+    map["LinkedShaakhaaID"] = this.linkedShaakhaaID;
+    map["LinkedGraamName"] = this.linkedGraamName;
+    map["LinkedGraamID"] = this.linkedGraamID;
+    map["LevelName"] = this.levelName;
+    map["LevelID"] = this.levelID;
+    map["FullName"] = this.fullName;
+    map["Email"] = this.email;
+    map["DaayitvaStartYear"] = this.daayitvaStartYear;
+    map["DaayitvaName"] = this.daayitvaName;
+    map["DaayitvaNameforshow"] = this.daayitvaNameforshow;
+    map["DaayitvaID"] = this.daayitvaID;
+    map["DaayitvaGeoUnitName"] = this.daayitvaGeoUnitName;
+    map["DaayitvaGeoUnitID"] = this.daayitvaGeoUnitID;
+    map["BhaagID"] = this.bhaagID;
+    map["BirthDate"] = this.birthDate;
+    map['LinkedGeoUnitHierarchy'] = this.linkedGeoUnitHierarchy;
+    map['IsFirstLogin'] = this.isFirstLogin == true ? 1 : 0;
+    map['LastLoginTimeStamp'] = this.lastLoginTimeStamp;
+    map['IsLoggedIn'] = this.isLoggedIn;
+    map['IsPravaasiKaaryakartaa'] = this.isPravaasiKaaryakartaa == true ? 1 : 0;
+    map['ShowShakhaSaptaha'] = this.showShakhaSaptaha;
+    map['ShowPustika'] = this.showPustika;
+    map['isvistaruser'] = this.isvistaruser;
+    map['can_edit'] = this.canEdit == true ? 1 : 0;
+    return map;
   }
 }
 

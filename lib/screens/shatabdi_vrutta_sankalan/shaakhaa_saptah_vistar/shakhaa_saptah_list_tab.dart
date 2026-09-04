@@ -67,24 +67,6 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) => initData());
-
-    print("_shaakhaaList_shaakhaaListttt  --->>> $_shaakhaaList");
-
-    // if(int.parse(Statics.userDetails['LevelID']) <= 2){
-    //   _shaakhaaList = _getshaakhaaList(-1, "get nothing", null, null);
-    //   print("_shaakhaaList_shaakhaaList  --->>> $_shaakhaaList");
-    // }
-    if ((int.parse(Statics.userDetails['LevelID']) > 1)) {
-      // &&
-      //   !(Statics.userDetails['DaayitvaName'] == 'Mukhya Shikshak' ||
-      //       Statics.userDetails['DaayitvaName'] == 'मुख्य शिक्षक' ||
-      //       Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' ||
-      //       Statics.userDetails['DaayitvaName'] == 'कार्यवाह')) {
-      print("jfhdjkfh asjkhjkfhd sjkahjkhk f shkjshfk f");
-    } else {
-      // _shaakhaaList = await _getshaakhaaList(-1, "get nothing", null, null);
-      // _shaakhaaList = await _getshaakhaaList(-1, "get nothing", null, null);
-    }
   }
 
   Future<void> initData() async {

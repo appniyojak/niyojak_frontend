@@ -146,48 +146,71 @@ class LogIn {
 
       SharedPreferences pref = await SharedPreferences.getInstance();
       await pref.setString("loggedIn", "true");
-      var levelList = body['LogInData']['LevelMasterList'];
+      List<Map<String, dynamic>> levelList = (body['LogInData']['LevelMasterList'] as List).map((item) => item as Map<String, dynamic>).toList();
       if (levelList.length > 0) {
         print("usrLogIn 10");
 
-        await dbh.DatabaseHelper.reCreate('LevelMaster', levelList);
-        // for (var data in levelList) {
-        //   await dbh.DatabaseHelper.insertOrUpdateRecord('LevelMaster', data);
-        // }
+// 2. Bulk upsert into the table
+        final result = await DatabaseHelper.bulkUpsert<Map<String, dynamic>>(
+          tableName: 'LevelMaster',
+          items: levelList,
+          toMap: (item) => item,
+          keyColumns: ['LevelID'],
+          hasUniqueConstraint: true, // pkid is your PRIMARY KEY
+        );
       }
       print("usrLogIn 11");
 
-      var dataList = body['LogInData']['StaticMasterList'];
+      List<Map<String, dynamic>> dataList = (body['LogInData']['StaticMasterList'] as List).map((item) => item as Map<String, dynamic>).toList();
       if (dataList.length > 0) {
         print("usrLogIn 12");
 
-        await dbh.DatabaseHelper.reCreate('StaticMaster', dataList);
-        // for (var data in dataList) {
-        //   await dbh.DatabaseHelper.insertOrUpdateRecord('StaticMaster', data);
-        // }
+// 2. Bulk upsert into the table
+        final result = await DatabaseHelper.bulkUpsert<Map<String, dynamic>>(
+          tableName: 'StaticMaster',
+          items: dataList,
+          toMap: (item) => item,
+          keyColumns: ['StaticID'],
+          hasUniqueConstraint: true, // pkid is your PRIMARY KEY
+        );
       }
+      dataList = [];
 
-      var abhiyanSwayamsevakData = body['LogInData']['AbhiyanSwayamsevakData'];
+      List<Map<String, dynamic>> abhiyanSwayamsevakData = (body['LogInData']['AbhiyanSwayamsevakData'] as List).map((item) => item as Map<String, dynamic>).toList();
       if (abhiyanSwayamsevakData.length > 0) {
         print("usrLogIn 12.5");
 
         Statics.abhiyaanUserDetails['AbhiyanSwayamsevakID'] = abhiyanSwayamsevakData.first["AbhiyanSwayamsevakID"];
         Statics.abhiyaanUserDetails['DaayityaName'] = abhiyanSwayamsevakData.first["DaayityaName"];
 
-        await dbh.DatabaseHelper.insertOrUpdateRecord('AbhiyanSwayamsevakData', abhiyanSwayamsevakData.first);
-        // for (var data in abhiyanSwayamsevakData) {
-        //   await dbh.DatabaseHelper.insertOrUpdateRecord('AbhiyanSwayamsevakData', data);
-        // }
+        final _res = await DatabaseHelper.upsertOne<Map<String, dynamic>>(
+          tableName: 'AbhiyanSwayamsevakData',
+          item: abhiyanSwayamsevakData.first,
+          toMap: (item) => item,
+          keyColumns: ['AbhiyaDaayitvaID', 'AbhiyanSwayamsevakID'],
+          hasUniqueConstraint: false,
+        );
       }
 
-      var geoUnitData = body['LogInData']['GeoUnitList'];
+      // var geoUnitData = body['LogInData']['GeoUnitList'];
+      // if (geoUnitData.length > 0) {
+      List<Map<String, dynamic>> geoUnitData = (body['LogInData']['GeoUnitList'] as List).map((item) => item as Map<String, dynamic>).toList();
       if (geoUnitData.length > 0) {
         print("usrLogIn 13");
 
-        //await dbh.DatabaseHelper.reCreate('GeoUnitMaster', geoUnitData);
-        for (var data in geoUnitData) {
-          await dbh.DatabaseHelper.insertOrUpdateRecord('GeoUnitMaster', data);
-        }
+// 2. Bulk upsert into the table
+        final result = await DatabaseHelper.bulkUpsert<Map<String, dynamic>>(
+          tableName: 'GeoUnitMaster',
+          items: geoUnitData,
+          toMap: (item) => item,
+          keyColumns: ['GeoUnitID'],
+          hasUniqueConstraint: true, // pkid is your PRIMARY KEY
+        );
+
+        // //await dbh.DatabaseHelper.reCreate('GeoUnitMaster', geoUnitData);
+        // for (var data in geoUnitData) {
+        //   await dbh.DatabaseHelper.insertOrUpdateRecord('GeoUnitMaster', data);
+        // }
 
         print("usrLogIn 13.5");
         await _db.transaction((txn) async {
@@ -205,77 +228,94 @@ class LogIn {
         });
       }
 
-      // var abhiyaanGeoUnitMaster = body['LogInData']['GeoUnitListforAbhiyaan'];
-      // if (abhiyaanGeoUnitMaster.length > 0) {
-      //   print("usrLogIn 13.5");
-      //
-      //   //await dbh.DatabaseHelper.reCreate('GeoUnitMaster', geoUnitData);
-      //   for (var data in abhiyaanGeoUnitMaster) {
-      //     await dbh.DatabaseHelper.insertOrUpdateRecord('AbhiyaanGeoUnitMaster', data);
-      //   }
-      // }
-
-      dataList = body['LogInData']['StateMasterList'];
+      dataList = (body['LogInData']['StateMasterList'] as List).map((item) => item as Map<String, dynamic>).toList();
       if (dataList.length > 0) {
         print("usrLogIn 14");
 
-        await dbh.DatabaseHelper.reCreate('StateMaster', dataList);
-        // for (var data in dataList) {
-        //   await dbh.DatabaseHelper.insertOrUpdateRecord('StateMaster', data);
-        // }
+// 2. Bulk upsert into the table
+        final result = await DatabaseHelper.bulkUpsert<Map<String, dynamic>>(
+          tableName: 'StateMaster',
+          items: levelList,
+          toMap: (item) => item,
+          keyColumns: ['StateID'],
+          hasUniqueConstraint: true, // pkid is your PRIMARY KEY
+        );
       }
 
-      dataList = body['LogInData']['DaayitvaMasterList'];
+      dataList = (body['LogInData']['DaayitvaMasterList'] as List).map((item) => item as Map<String, dynamic>).toList();
       if (dataList.length > 0) {
         print("usrLogIn 15");
 
-        await dbh.DatabaseHelper.reCreate('DaayitvaMaster', dataList);
-        // for (var data in dataList) {
-        //   await dbh.DatabaseHelper.insertOrUpdateRecord('DaayitvaMaster', data);
-        // }
+// 2. Bulk upsert into the table
+        final result = await DatabaseHelper.bulkUpsert<Map<String, dynamic>>(
+          tableName: 'DaayitvaMaster',
+          items: dataList,
+          toMap: (item) => item,
+          keyColumns: ['DaayitvaID'],
+          hasUniqueConstraint: true, // pkid is your PRIMARY KEY
+        );
       }
+      dataList = [];
 
-      dataList = body['LogInData']['AayaamMasterList'];
+      dataList = (body['LogInData']['AayaamMasterList'] as List).map((item) => item as Map<String, dynamic>).toList();
       if (dataList.length > 0) {
         print("usrLogIn 16");
 
-        await dbh.DatabaseHelper.reCreate('AayaamMaster', dataList);
-        // for (var data in dataList) {
-        //   await dbh.DatabaseHelper.insertOrUpdateRecord('AayaamMaster', data);
-        // }
+// 2. Bulk upsert into the table
+        final result = await DatabaseHelper.bulkUpsert<Map<String, dynamic>>(
+          tableName: 'AayaamMaster',
+          items: dataList,
+          toMap: (item) => item,
+          keyColumns: ['AayaamID'],
+          hasUniqueConstraint: true, // pkid is your PRIMARY KEY
+        );
       }
+      dataList = [];
 
-      dataList = body['LogInData']['ddldata'];
-      if (dataList != null) {
+      var _dataList = body['LogInData']['ddldata'];
+      if (_dataList != null) {
         print("usrLogIn 16.5");
 
-        await dbh.DatabaseHelper.reCreate('DropdownLevelMaster', dataList);
+        //await dbh.DatabaseHelper.insertOrUpdateRecord('UserDataMaster', userData);
+        final _res = await DatabaseHelper.upsertOne<Map<String, dynamic>>(
+          tableName: 'DropdownLevelMaster',
+          item: _dataList,
+          toMap: (item) => item,
+          keyColumns: ['GeoUnitID'],
+          hasUniqueConstraint: false,
+        );
       }
 
-      dataList = body['LogInData']['GatividhiMasterList'];
+      dataList = (body['LogInData']['GatividhiMasterList'] as List).map((item) => item as Map<String, dynamic>).toList();
       if (dataList.length > 0) {
         print("usrLogIn 17");
 
-        await dbh.DatabaseHelper.reCreate('GatividhiMaster', dataList);
-        // for (var data in dataList) {
-        //   await dbh.DatabaseHelper.insertOrUpdateRecord(
-        //       'GatividhiMaster', data);
-        // }
+// 2. Bulk upsert into the table
+        final result = await DatabaseHelper.bulkUpsert<Map<String, dynamic>>(
+          tableName: 'GatividhiMaster',
+          items: dataList,
+          toMap: (item) => item,
+          keyColumns: ['GatividhiID'],
+          hasUniqueConstraint: true, // pkid is your PRIMARY KEY
+        );
       }
 
-      var dataList2 = body['LogInData']['offlineconfiglist'];
-      if (dataList2.length > 0) {
+      dataList = [];
+
+      dataList = (body['LogInData']['offlineconfiglist'] as List).map((item) => item as Map<String, dynamic>).toList();
+      if (dataList.length > 0) {
         print("usrLogIn 17.1");
 
-        await dbh.DatabaseHelper.reCreate('OfflineConfigList', dataList2);
-        // for (var data in dataList) {
-        //   await dbh.DatabaseHelper.insertOrUpdateRecord(
-        //       'GatividhiMaster', data);
-        // }
+        //await dbh.DatabaseHelper.insertOrUpdateRecord('UserDataMaster', userData);
+        final result = await DatabaseHelper.bulkUpsert<Map<String, dynamic>>(
+          tableName: 'OfflineConfigList',
+          items: dataList,
+          toMap: (item) => item,
+          keyColumns: ['apiname'],
+          hasUniqueConstraint: true, // pkid is your PRIMARY KEY
+        );
       }
 
-      debugPrint("STEP 1: got response, status=${response.statusCode}");
-      debugPrint("STEP 2: decoded body");
       List<Map<String, dynamic>> dataList3 = (body['LogInData']['list'] as List).map((item) => item as Map<String, dynamic>).toList();
       debugPrint("STEP 4: dataList3 length = ${dataList3.length}");
       if (dataList3.length > 0) {
@@ -356,14 +396,22 @@ class LogIn {
 
         await MediaDownloadService.instance.enqueueFromApiMediaList(dataList8);
       }
-      var userData = body['LogInData']['UserData'];
+      Map<String, dynamic> userData = body['LogInData']['UserData'];
       print("swayamsevak Id - " + userData['SwayamsevakID'].toString());
       await pref.setString("DaayitvaNameforshow", "${body['LogInData']['UserData']['DaayitvaNameforshow']}");
       if (userData['SwayamsevakID'].toString() != "0") {
         print("usrLogIn 18");
         print("Saving to Db");
+
+        final _udata = UserDataBAL.fromMap(userData);
         //await dbh.DatabaseHelper.insertOrUpdateRecord('UserDataMaster', userData);
-        await dbh.DatabaseHelper.reCreate('UserDataMaster', userData);
+        final _res = await DatabaseHelper.upsertOne<UserDataBAL>(
+          tableName: 'UserDataMaster',
+          item: _udata,
+          toMap: (item) => _udata.toJson(),
+          keyColumns: ['SwayamsevakID'],
+          hasUniqueConstraint: false,
+        );
         await Statics.populateUserDetailsMap();
         await Statics.populateUserAbhiyaanDetailsMap();
         await Statics.refreshDashboardData(Statics.userDetails["userID"], null);
@@ -531,6 +579,13 @@ class LogIn {
     if (await Statics.checkForTableExists("UserDataMaster")) await dbh.DatabaseHelper.executeQuery('DELETE FROM UserDataMaster');
     if (await Statics.checkForTableExists("HomeScreenData")) await dbh.DatabaseHelper.executeQuery('DELETE FROM HomeScreenData');
     if (await Statics.checkForTableExists("OfflineConfigList")) await dbh.DatabaseHelper.executeQuery('DELETE FROM OfflineConfigList');
+    if (await Statics.checkForTableExists("OfflineShaakhaPustika")) await dbh.DatabaseHelper.executeQuery('DELETE FROM OfflineConfigList');
+    if (await Statics.checkForTableExists("ShaakhaListMaster")) await dbh.DatabaseHelper.executeQuery('DELETE FROM OfflineConfigList');
+    if (await Statics.checkForTableExists("VistarShaakhaListMaster")) await dbh.DatabaseHelper.executeQuery('DELETE FROM OfflineConfigList');
+    if (await Statics.checkForTableExists("ShaakhaVruttaMaster")) await dbh.DatabaseHelper.executeQuery('DELETE FROM OfflineConfigList');
+    if (await Statics.checkForTableExists("VistarShaakhaVruttaMaster")) await dbh.DatabaseHelper.executeQuery('DELETE FROM OfflineConfigList');
+    if (await Statics.checkForTableExists("MediaMaster")) await dbh.DatabaseHelper.executeQuery('DELETE FROM OfflineConfigList');
+    if (await Statics.checkForTableExists("MediaDownloadQueue")) await dbh.DatabaseHelper.executeQuery('DELETE FROM OfflineConfigList');
     // if (await Statics.checkForTableExists("AbhiyaanVrutta"))
     //   await dbh.DatabaseHelper.executeQuery('DELETE FROM AbhiyaanVrutta');
     // if (await Statics.checkForTableExists("VisheshVyaktiMaster"))
