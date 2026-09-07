@@ -3177,6 +3177,9 @@ Future<dynamic> getDashboardDataByGeoUnit(String userID, String targetGeoUnitID)
       tgLstAayaamKaaryakartaa.add(new AayaamKaaryakartaaCountBAL(0, getLabel('Total'), totalCount));
     }
 
+    tgLstAayaamKaaryakartaa.forEach((e) => log(jsonEncode(e.toJson())));
+    log(tgLstAayaamKaaryakartaa.length.toString());
+
     tgLstPreritKaaryakartaa = [];
     if (listKaaryakartaaCountByPreritSansthaa.length > 0) {
       int kartaaCount = 0, totalCount = 0;
@@ -7290,15 +7293,20 @@ Future<List<ShaakhaaList>?> getShaakhaaSaptahListData(BuildContext context, Map<
   if (connected == true) {
     // No internet — serve whatever we already have locally
     //ParentMahanagarID = ? OR ParentVibhaagID = ? OR
+
+    if (Statics.levelId > 7 && Statics.levelId != 13) return null;
+
     log("No internet — falling back to local ShaakhaListMaster data");
     return await DatabaseHelper.getAllOfflineData<ShaakhaaList>(
       tableName: 'VistarShaakhaListMaster',
       fromMap: ShaakhaaList.fromJson,
-      where: '''
+      where: inputJson["GeoUnitID"] == 0
+          ? null
+          : '''
           ParentBhaagID = ? OR ParentNagarID = ? OR ParentUpaNagarID = ?
           OR ParentMandalID = ? OR ParentGraamID = ? OR ParentVastiID = ? OR ? IS NULL
       ''',
-      whereArgs: List.filled(7, inputJson["GeoUnitID"]),
+      whereArgs: inputJson["GeoUnitID"] == 0 ? null : List.filled(7, inputJson["GeoUnitID"]),
     );
   }
   showLoaderDialog(context);
@@ -7321,17 +7329,20 @@ Future<List<ShaakhaaList>?> getShaakhaaSaptahListData(BuildContext context, Map<
     } else {
       print("Error: ${response.statusCode} - ${response.body}");
 
+      if (Statics.levelId > 7 && Statics.levelId != 13) return null;
       // API call failed even though internet is available (server error, etc.)
       // Fall back to local cache too, rather than showing nothing
       log("API call failed with status ${response.statusCode} — falling back to local data");
       return await DatabaseHelper.getAllOfflineData<ShaakhaaList>(
         tableName: 'VistarShaakhaListMaster',
         fromMap: ShaakhaaList.fromJson,
-        where: '''
+        where: inputJson["GeoUnitID"] == 0
+            ? null
+            : '''
           ParentBhaagID = ? OR ParentNagarID = ? OR ParentUpaNagarID = ?
           OR ParentMandalID = ? OR ParentGraamID = ? OR ParentVastiID = ? OR ? IS NULL
       ''',
-        whereArgs: List.filled(7, inputJson["GeoUnitID"]),
+        whereArgs: inputJson["GeoUnitID"] == 0 ? null : List.filled(7, inputJson["GeoUnitID"]),
       );
     }
   } catch (e) {
@@ -7346,20 +7357,9 @@ Future<List<ShaakhaaList>?> getShaakhaaSaptahListData(BuildContext context, Map<
 Future<VistaarVrutta?> getShaakhaaSaptahVruttaData(BuildContext context, Map<String, dynamic> inputJson) async {
   bool? connected = await isInternetConnected();
 
-  final _offData = await DatabaseHelper.getAllOfflineData<VistaarVrutta>(
-    tableName: 'VruttaDraftMaster',
-    fromMap: VistaarVrutta.fromJson,
-    where: '''
-          ShaakhaaID = ? OR pkid = ?
-      ''',
-    whereArgs: [inputJson['ShaakhaaID'], inputJson['pkid']],
-  );
-
-  if (connected == true) {
-    // No internet — serve whatever we already have locally
-    //ParentMahanagarID = ? OR ParentVibhaagID = ? OR
-    log("No internet — falling back to local ShaakhaListMaster data");
-    return _offData.firstOrNull;
+  if (connected != true) {
+    log("No internet");
+    return null;
   }
   showLoaderDialog(context);
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -7380,7 +7380,7 @@ Future<VistaarVrutta?> getShaakhaaSaptahVruttaData(BuildContext context, Map<Str
       return model.vrutta; // ✅ return karna zaroori hai
     } else {
       print("Error: ${response.statusCode} - ${response.body}");
-      return _offData.firstOrNull; // ✅ error case
+      return null; // ✅ error case
     }
   } catch (e) {
     // Navigator.of(context, rootNavigator: true).pop();

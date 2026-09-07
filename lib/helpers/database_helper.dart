@@ -289,7 +289,7 @@ class DatabaseHelper {
     IsDoneSubhaashit INT, IsOptionalShaaririk INT, IsOptionalOther INT, Remark TEXT, ModifiedBy INT, PravasiKaryakartaCount INT, 
     AnyaPravasiKaryakartaCount INT, BoudhikDaysId INT, SewaDaysId TEXT, AnyaBoudhikDays TEXT, IsDoneUrdhvapad INT, IsDoneBoodhKatha INT, 
     IsDoneBoudhikDays INT, IsDoneSewaDays INT, tablename TEXT NOT NULL, isdraft INTEGER NOT NULL DEFAULT 1
-    ,UNIQUE(UniqueKey, tablename)
+    ,UNIQUE(ShaakhaaID, VruttaDate, tablename)
 );
 ''');
     });

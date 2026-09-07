@@ -2353,6 +2353,14 @@ class AayaamKaaryakartaaCountBAL {
       json['KaaryakartaaCount'],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['AayaamID'] = this.aayaamID;
+    data['AayaamName'] = this.aayaamName;
+    data['KaaryakartaaCount'] = this.kaaryakartaaCount;
+    return data;
+  }
 }
 
 class PreritKaaryakartaaCountBAL {

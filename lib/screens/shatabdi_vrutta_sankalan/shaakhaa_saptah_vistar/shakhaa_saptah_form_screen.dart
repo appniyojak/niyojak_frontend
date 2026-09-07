@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
+import '../../../helpers/draft_service.dart';
 import '../../../helpers/static_data.dart' as Statics;
 import '../../../models/response_model/shaakhaa_vistaar_vrutta_resp_model.dart';
 import '../../../models/response_model/shaakhaa_vistar_list_resp_model.dart';
@@ -141,19 +142,36 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
     setState(() {
       _isFetchingData = true;
     });
-    bool isConnected = await Statics.isInternetConnected();
-    if (!isConnected) {
-      Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));
-    } else {
-      final data = await Statics.getShaakhaaSaptahVruttaData(context, {
-        "ShaakhaaID": widget.isNew ? 0 : widget.shaakhaaId ?? widget.shaakhaa?.shaakhaaID ?? 0,
-        "pkid": widget.isNew ? widget.shaakhaaId : widget.shaakhaa?.pkid,
-        "date": DateFormat("dd/MM/yyyy").format(DateFormat("dd-MMM-yyyy").parse(_vruttaDateCntrl.text)),
-        "appuserid": int.parse(Statics.userDetails['userID']),
-      });
+
+    final _shaakhaaId = widget.isNew ? 0 : widget.shaakhaaId ?? widget.shaakhaa?.shaakhaaID ?? 0;
+    final _vruttaDate = DateFormat("dd/MM/yyyy").format(DateFormat("dd-MMM-yyyy").parse(_vruttaDateCntrl.text));
+
+    final _body = {
+      "ShaakhaaID": _shaakhaaId,
+      "pkid": widget.isNew ? widget.shaakhaaId : widget.shaakhaa?.pkid,
+      "date": _vruttaDate,
+      "appuserid": int.parse(Statics.userDetails['userID']),
+    };
+
+    try {
+      VistaarVrutta? data;
+      final _res = await DraftSyncService.loadWithFallback(
+        masterTableName: 'VistarShaakhaVruttaMaster',
+        draftTableName: 'VruttaDraftMaster',
+        keyColumns: ['ShaakhaaID', 'VruttaDate'],
+        keyValues: [_shaakhaaId, _vruttaDate],
+        fetchFromApi: () async {
+          final vrutta = await Statics.getShaakhaaSaptahVruttaData(context, _body);
+          return vrutta?.toJson();
+        },
+      );
       if (!mounted) return;
+      if (_res.data == null)
+        data = VistaarVrutta();
+      else
+        data = VistaarVrutta.fromJson(_res.data!);
+      vrutta = data;
       setState(() {
-        vrutta = data;
         if (vrutta != null) {
           // _vruttaDate = ((vrutta!.vruttaDate != null && vrutta!.vruttaDate != "") ? vrutta!.vruttaDate! : null);
           // _vruttaDateCntrl.text = ((vrutta!.vruttaDate != null && vrutta!.vruttaDate != "") ? DateFormat('dd-MMM-yyyy').format(_vruttaDate!) : '');
@@ -202,11 +220,12 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
         }
       });
       // print(_vruttaDate);
+    } finally {
+      if (mounted)
+        setState(() {
+          _isFetchingData = false;
+        });
     }
-    if (mounted)
-      setState(() {
-        _isFetchingData = false;
-      });
   }
 
   _pickFromDate() async {
@@ -320,6 +339,16 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
       "ModifiedBy": Statics.userDetails["userID"],
       "appuserid": Statics.userDetails["userID"],
     };
+
+    // final outcome = await DraftSyncService.saveWithFallback(
+    //   masterTableName: 'VistarShaakhaVruttaMaster',
+    //   draftTableName: 'VruttaDraftMaster',
+    //   keyColumns: ['ShaakhaaID', 'VruttaDate'],
+    //   loadedSource: _currentRecordSource, // stored on screen state from the earlier loadWithFallback call
+    //   formData: formData,
+    //   saveToApi: () => Statics.saveShaakhaaSaptahVruttaData(context, formData),
+    // );
+
     var data = await Statics.saveShaakhaaSaptahVruttaData(context, inputData);
     setState(() {});
     if (data == "Success") {

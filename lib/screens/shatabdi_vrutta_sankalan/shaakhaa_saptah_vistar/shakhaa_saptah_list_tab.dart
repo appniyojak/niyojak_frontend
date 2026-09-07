@@ -109,7 +109,7 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
 
     final _list = await Statics.getShaakhaaSaptahListData(context, formData) ?? [];
 
-    _list.forEach((e) => log(jsonEncode(e.toJson())));
+    // _list.forEach((e) => log(jsonEncode(e.toJson())));
 
     // _shaakhaaList = _getshaakhaaList(
     //     geoUnitID, _searchController.text, frequencyVal, vayogatVal);

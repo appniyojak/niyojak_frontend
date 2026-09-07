@@ -758,9 +758,10 @@ class _HomeScreenState extends State<HomeScreen> {
     if (sd['ListKaaryakartaaCountByGatividhi'] != null) {
       sd['ListKaaryakartaaCountByGatividhi'].forEach((v) => tgLstGatividhiKaaryakartaa.add(GatividhiKaaryakartaa.fromJson(v)));
     }
-    if (sd['ListKaaryakartaaCountByAayaam'] != null) {
-      sd['ListKaaryakartaaCountByAayaam'].forEach((v) => Statics.tgLstAayaamKaaryakartaa.add(AayaamKaaryakartaaCountBAL.fromJson(v)));
-    }
+    // if (sd['ListKaaryakartaaCountByAayaam'] != null) {
+    //   Statics.tgLstAayaamKaaryakartaa = [];
+    //   sd['ListKaaryakartaaCountByAayaam'].forEach((v) => Statics.tgLstAayaamKaaryakartaa.add(AayaamKaaryakartaaCountBAL.fromJson(v)));
+    // }
 
     setState(() {
       tgTotalKaaryakartaaCount = sd["TotalKaaryakartaaCount"].toString();
