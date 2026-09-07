@@ -8,8 +8,9 @@ class Legend extends StatelessWidget {
   final double? fontsize;
   final void Function()? onPressed;
   final IconData? icon;
+  final TextStyle? style;
 
-  Legend({Key? key, this.legendString, this.extraString, this.fontsize, this.onPressed, this.icon}) : super(key: key);
+  Legend({Key? key, this.legendString, this.extraString, this.fontsize, this.onPressed, this.icon, this.style}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class Legend extends StatelessWidget {
               child: Text(
                 (legendString == null || legendString == "" ? "" : Statics.getLabel(legendString, returnKey: true)),
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.purple, fontSize: fontsize == 0 ? 18 : fontsize, fontWeight: FontWeight.w600),
+                style: style ?? TextStyle(color: Colors.purple, fontSize: fontsize == 0 ? 18 : fontsize, fontWeight: FontWeight.w600),
               ),
             ),
             if (onPressed != null)
