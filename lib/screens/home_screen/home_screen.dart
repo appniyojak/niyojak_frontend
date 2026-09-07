@@ -2922,7 +2922,10 @@ class _HomeScreenState extends State<HomeScreen> {
         controller: controller,
       ),
       const SizedBox(height: 15),
-      Legend(legendString: "GatividhiAayaamSansthaaKaaryakartaaCount", fontsize: 18),
+      Legend(
+          legendString: "GatividhiAayaamSansthaaKaaryakartaaCount",
+          fontsize: 18,
+          onPressed: !_isTgSearched ? null : () => showNamesList(geoUnitID: controller.deepestSelectedGeoUnitId, type: "GatividhiAayaamSansthaaKaaryakartaaCount")),
       SingleColumnRow(txtString: Statics.getLabel('GatividhiKaaryakartaaCount'), value: tgGatividhiKaaryakartaaCount, fontsize: 15),
       SingleColumnRow(txtString: Statics.getLabel('AayaamKaaryakartaaCount'), value: tgAayaamKaaryakartaaCount, fontsize: 15),
       SingleColumnRow(txtString: Statics.getLabel('SanghaPreritSansthaaKaaryakartaaCount'), value: tgSanghaPreritSansthaaKaaryakartaaCount, fontsize: 15),

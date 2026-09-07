@@ -142,8 +142,8 @@ class DatabaseHelper {
     IsDoneDandaPrahaar INT, IsDoneSooryaNamaskaar INT, IsDoneSanchalanAbhyaas INT, IsDoneSaanghikGeet INT, IsDoneAmrutaVachan INT, 
     IsDoneSubhaashit INT, IsOptionalShaaririk INT, IsOptionalOther INT, Remark TEXT, ModifiedBy INT, PravasiKaryakartaCount INT, 
     AnyaPravasiKaryakartaCount INT, BoudhikDaysId INT, SewaDaysId TEXT, AnyaBoudhikDays TEXT, IsDoneUrdhvapad INT, IsDoneBoodhKatha INT, 
-    IsDoneBoudhikDays INT, IsDoneSewaDays INT, tablename TEXT NOT NULL
-    ,UNIQUE(UniqueKey, tablename)
+    IsDoneBoudhikDays INT, IsDoneSewaDays INT, tablename TEXT NOT NULL, isdraft INTEGER NOT NULL DEFAULT 1
+    ,UNIQUE(ShaakhaaID, VruttaDate, tablename)
 );
 ''');
 
@@ -288,7 +288,7 @@ class DatabaseHelper {
     IsDoneDandaPrahaar INT, IsDoneSooryaNamaskaar INT, IsDoneSanchalanAbhyaas INT, IsDoneSaanghikGeet INT, IsDoneAmrutaVachan INT, 
     IsDoneSubhaashit INT, IsOptionalShaaririk INT, IsOptionalOther INT, Remark TEXT, ModifiedBy INT, PravasiKaryakartaCount INT, 
     AnyaPravasiKaryakartaCount INT, BoudhikDaysId INT, SewaDaysId TEXT, AnyaBoudhikDays TEXT, IsDoneUrdhvapad INT, IsDoneBoodhKatha INT, 
-    IsDoneBoudhikDays INT, IsDoneSewaDays INT, tablename TEXT NOT NULL
+    IsDoneBoudhikDays INT, IsDoneSewaDays INT, tablename TEXT NOT NULL, isdraft INTEGER NOT NULL DEFAULT 1
     ,UNIQUE(UniqueKey, tablename)
 );
 ''');

@@ -68,6 +68,7 @@ class VistaarVrutta {
   //FOR DB
   int? uniqueKey;
   String? tablename;
+  int? isdraft;
 
   VistaarVrutta(
       {this.shaakhaaVruttaID,
@@ -112,7 +113,8 @@ class VistaarVrutta {
       this.pravasiKaryakartaCount,
       this.anyaPravasiKaryakartaCount,
       this.uniqueKey,
-      this.tablename});
+      this.tablename,
+      this.isdraft});
 
   VistaarVrutta.fromJson(Map<String, dynamic> json) {
     shaakhaaVruttaID = json['ShaakhaaVruttaID'];
@@ -158,6 +160,7 @@ class VistaarVrutta {
     anyaPravasiKaryakartaCount = json['AnyaPravasiKaryakartaCount'];
     uniqueKey = json['UniqueKey'];
     tablename = json['tablename'];
+    isdraft = json['isdraft'];
   }
 
   Map<String, dynamic> toJson() {
@@ -205,6 +208,7 @@ class VistaarVrutta {
     data['AnyaPravasiKaryakartaCount'] = this.anyaPravasiKaryakartaCount;
     data['UniqueKey'] = this.uniqueKey;
     data['tablename'] = this.tablename;
+    data['isdraft'] = this.isdraft;
     return data;
   }
 }

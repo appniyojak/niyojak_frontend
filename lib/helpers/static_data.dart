@@ -2679,7 +2679,7 @@ Future<void> syncOfflineUserSyncData(int syncVers, String tableName) async {
         items: dataList9,
         toMap: (item) => item,
         keyColumns: ['GeoUnitID'],
-        hasUniqueConstraint: false, // pkid is your PRIMARY KEY
+        hasUniqueConstraint: true, // pkid is your PRIMARY KEY
       );
     }
 
