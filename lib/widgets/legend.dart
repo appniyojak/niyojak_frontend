@@ -26,7 +26,14 @@ class Legend extends StatelessWidget {
                 style: TextStyle(color: Colors.purple, fontSize: fontsize == 0 ? 18 : fontsize, fontWeight: FontWeight.w600),
               ),
             ),
-            if (onPressed != null) IconButton(onPressed: onPressed, icon: Icon(icon ?? Icons.list_rounded, color: Colors.purple))
+            if (onPressed != null)
+              IconButton(
+                  onPressed: onPressed,
+                  icon: Icon(
+                    icon ?? Icons.list_rounded,
+                    color: Colors.purple,
+                    size: 18,
+                  ))
           ],
         ),
         Divider(

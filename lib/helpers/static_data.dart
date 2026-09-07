@@ -345,6 +345,7 @@ const String urlgetshaakhapustikabyid = baseUrlAPI + '/getshaakhapustikabyid';
 
 const String urlGetOfflineUserDataSync = baseUrlAPI + '/offlineuserdatasync';
 const String urlGetOfflineShaakhaaPustikaThisMonth = baseUrlAPI + '/getofflineshaakhapustikathismonth';
+const String urlsevavastiexceldownload = baseUrlAPI + '/sevavastiexceldownload';
 //////////////////////////////////////////////////////////////////////////////////////////
 const String patchSuffix = '';
 const String dbVersion = '6';
@@ -5660,6 +5661,53 @@ Future<List<dynamic>> getSewaVastiForApp(String strInputBody) async {
   return responseBody['SewaVastiList'];
 }
 
+Future<List<Edata>> getSewawastiDownload({required int cuserid, required int geounitid}) async {
+  bool? connected = await isInternetConnected();
+  if (connected != true) return [];
+
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+  print(urlsevavastiexceldownload);
+
+  var response = await http.post(
+    Uri.parse(urlsevavastiexceldownload),
+    headers: jHeaders,
+    body: jsonEncode({"cuserid": cuserid, "geounitid": geounitid}),
+  );
+
+  if (response.statusCode != 200) {
+    print("sevavastiexceldownload failed: ${response.statusCode} ${response.body}");
+    return [];
+  }
+
+  final decoded = jsonDecode(response.body);
+
+  List<dynamic> rawList = [];
+  if (decoded is Map<String, dynamic>) {
+    final listField = decoded['elist'];
+    if (listField is List) rawList = listField;
+  } else if (decoded is List) {
+    rawList = decoded;
+  }
+
+  return rawList.map((e) => Edata.fromJson(e as Map<String, dynamic>)).toList();
+}
+//
+// Future<List<DownloadSewawastiResponse>?> getSewawastiDownload({required int cuserid, required int geounitid}) async {
+//   bool? connected = await isInternetConnected();
+//   var excelList = [];
+//   if (connected != true) {
+//     return [];
+//   }
+//   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+//   print(urlsevavastiexceldownload);
+//   var response = await http.post(Uri.parse(urlsevavastiexceldownload), headers: jHeaders, body: jsonEncode({"cuserid": cuserid, "geounitid": geounitid}));
+//   var responsebody = jsonDecode(response.body);
+//   if (responsebody != null) {
+//     excelList.addAll(responsebody);
+//   }
+//   return [];
+// }
+
 Future<String> saveSewaVastiForApp(String inputJson) async {
   bool? connected = await isInternetConnected();
   if (connected != true) {
@@ -7965,6 +8013,61 @@ class cLatLong {
   LatLng latlng;
 
   cLatLong(this.shaakhaID, this.shaakhaaName, this.description, this.latlng);
+}
+
+class DownloadSewawastiResponse {
+  final String status;
+  final String message;
+  final List<Edata> elist;
+  DownloadSewawastiResponse(this.status, this.message, this.elist);
+}
+
+class Edata {
+  final String mahanagar;
+  final String vibhag;
+  final String bhag;
+  final String nagar;
+  final String vasti;
+  final String mandal;
+  final String gram;
+  final String createdname;
+  final String sewaVastiName;
+  final String population;
+  final String remark;
+  final String garaj;
+
+  Edata({
+    required this.mahanagar,
+    required this.vibhag,
+    required this.bhag,
+    required this.nagar,
+    required this.vasti,
+    required this.mandal,
+    required this.gram,
+    required this.createdname,
+    required this.sewaVastiName,
+    required this.population,
+    required this.remark,
+    required this.garaj,
+  });
+
+  factory Edata.fromJson(Map<String, dynamic> json) {
+    String s(dynamic v) => v?.toString() ?? '-';
+    return Edata(
+      mahanagar: s(json['mahanagar'] ?? json['Mahanagar']),
+      vibhag: s(json['vibhag'] ?? json['Vibhag']),
+      bhag: s(json['bhag'] ?? json['Bhag']),
+      nagar: s(json['nagar'] ?? json['Nagar']),
+      vasti: s(json['vasti'] ?? json['Vasti']),
+      mandal: s(json['mandal'] ?? json['Mandal']),
+      gram: s(json['gram'] ?? json['Gram'] ?? json['graam'] ?? json['Graam']),
+      createdname: s(json['createdname'] ?? json['CreatedName']),
+      sewaVastiName: s(json['SewaVastiName'] ?? json['sewaVastiName']),
+      population: s(json['Population'] ?? json['population']),
+      remark: s(json['Remark'] ?? json['remark']),
+      garaj: s(json['garaj'] ?? json['Garaj']),
+    );
+  }
 }
 
 List<int> defColors = [

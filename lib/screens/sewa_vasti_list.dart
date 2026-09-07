@@ -1,9 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../helpers/static_data.dart' as Statics;
+import '../providers/bals.dart';
 import '../screens/edit_sewa_vasti.dart';
 import '../utils/globals.dart';
 import '../utils/stable_geounit_class.dart';
@@ -22,7 +24,8 @@ class _SearchSewaVastiState extends State<SearchSewaVasti> {
   List<dynamic>? _sewaVastiList;
   bool _isSearching = false;
   bool _isExpanded = false;
-
+  int? cUserId;
+  var geoUnitId;
   @override
   void initState() {
     super.initState();
@@ -33,7 +36,9 @@ class _SearchSewaVastiState extends State<SearchSewaVasti> {
     final dm = await MyAppGlobals.getLevelLDB();
 
     final controller = context.read<GeoHierarchyController>();
-
+    List<UserDataBAL> user = await Statics.getUserDataLDB();
+    print("userid:${user.map((e) => e.swayamsevakID)}");
+    cUserId = user.first.swayamsevakID ?? 0;
     await controller.initialize(dm);
 
     setState(() {});
@@ -82,6 +87,41 @@ class _SearchSewaVastiState extends State<SearchSewaVasti> {
       _isSearching = false;
       _isExpanded = false;
     });
+  }
+
+  Future<void> _getCsv() async {
+    final controller = context.read<GeoHierarchyController>();
+    int? geoUnitId = int.tryParse(controller.deepestSelectedGeoUnitId.toString());
+    if (geoUnitId == null || cUserId == null) {
+      Statics.showToast("Please apply a search filter first");
+      return;
+    }
+
+    setState(() => _isSearching = true);
+
+    List<Statics.Edata> apiRows = await Statics.getSewawastiDownload(cuserid: cUserId!, geounitid: geoUnitId);
+
+    if (apiRows.isEmpty) {
+      setState(() => _isSearching = false);
+      Statics.showToast("No data available");
+      return;
+    }
+
+    List<List<dynamic>> rows = [
+      ['mahanagar', 'vibhag', 'bhaag', 'nagar', 'vasti', 'mandal', 'graam', 'createdname', 'SewaVastiName', 'Population', 'Remark', 'garaj'],
+    ];
+
+    for (final e in apiRows) {
+      rows.add([e.mahanagar, e.vibhag, e.bhag, e.nagar, e.vasti, e.mandal, e.gram, e.createdname, e.sewaVastiName, e.population, e.remark, e.garaj]);
+    }
+
+    Statics.convertToCsv(
+      rows,
+      "SewaVasti_" + DateFormat('ddMMyyyyHHmmss').format(DateTime.now()),
+      context,
+    );
+
+    setState(() => _isSearching = false);
   }
 
   @override
@@ -183,6 +223,13 @@ class _SearchSewaVastiState extends State<SearchSewaVasti> {
                 },
               ),
           ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          mini: true,
+          tooltip: Statics.getLabel("ExportToExcel"),
+          onPressed: _getCsv,
+          child: Icon(Icons.download_sharp),
+          backgroundColor: Colors.green,
         ),
         drawer: AppDrawer(),
         body: SingleChildScrollView(
@@ -308,6 +355,9 @@ class _SearchSewaVastiState extends State<SearchSewaVasti> {
               ),
             ],
           ),
+          SizedBox(
+            height: 15,
+          ),
           if (_isSearching)
             CircularProgressIndicator()
           else
@@ -340,6 +390,9 @@ class _SearchSewaVastiState extends State<SearchSewaVasti> {
                     child: Text(Statics.getLabel('clear'))),
               ],
             ),
+          SizedBox(
+            height: 15,
+          ),
         ],
       );
     });
