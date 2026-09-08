@@ -9,8 +9,8 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 
 import '../../helpers/static_data.dart' as Statics;
+import '../../models/response_model/new_search_swayamsevak_model.dart';
 import '../../providers/bals.dart';
-import '../../providers/swayamsevak_provider.dart';
 import '../../utils/globals.dart';
 import '../../utils/stable_geounit_class.dart';
 
@@ -288,18 +288,17 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
     });
   }
 
-  Future<List<dynamic>> populateSankalpAadhaarSwayamsevak(String pattern) async {
+  Future<List<SwayamsevakNewData>> populateSankalpAadhaarSwayamsevak(String pattern) async {
     if (pattern.length <= 2) return [];
-    var swList = SwayamsevakProvider().getSwayamsevaks(json.encode({
+    var inputData = {
       'AppUserID': Statics.userDetails["userID"],
-      'GeoUnitID': context.read<GeoHierarchyController>().hierarchyTrail.bhaagId,
-      "SearchCriteria": pattern.isEmpty ? "" : pattern,
-    }));
-    for (var i in await swList) {
-      print(i);
-    }
+      'GeounitId': 0,
+      "SearchText": pattern.isEmpty ? "" : pattern,
+      "From": "sankalpa",
+    };
+    var swList = await Statics.searchSwayamsevakNewData(inputData);
 
-    return swList;
+    return swList ?? [];
   }
 
   Future<List<dynamic>> populateSankalpAadhaarShaakhaa(String pattern) async {
@@ -676,9 +675,8 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
                                         return populateSankalpAadhaarSwayamsevak(pattern);
                                       },
                                       itemBuilder: (context, suggestion) {
-                                        print(suggestion);
                                         return ListTile(
-                                          title: Text(suggestion["FullName"]),
+                                          title: Text(suggestion.fullName ?? "--"),
                                         );
                                       },
                                       // validator: (value) {
@@ -695,9 +693,13 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
                                       //   return suggestionsBox;
                                       // },
                                       onSelected: (suggestion) {
-                                        this._sankalpAadhaarSwayamsevakCtrl.text = suggestion["FullName"];
-                                        _sankalpAadhaarSwayamsevakValue = suggestion["SwayamsevakID"].toString();
-                                        shaakhaa!.sankalpAadhaarShaakhaaID = int.parse(suggestion["SwayamsevakID"].toString());
+                                        this._sankalpAadhaarSwayamsevakCtrl.text = suggestion.fullName ?? "";
+                                        _sankalpAadhaarSwayamsevakValue = suggestion.swayamSevakID.toString();
+                                        shaakhaa!.sankalpAadhaarSwayamsevakID = int.parse(suggestion.swayamSevakID.toString());
+
+                                        this._sankalpAadhaarShaakhaaCtrl.text = "";
+                                        _sankalpAadhaarShaakhaaValue = "";
+                                        shaakhaa!.sankalpAadhaarShaakhaaID = 0;
 
                                         print("_sankalpAadhaarSwayamsevakValue:- ${_sankalpAadhaarSwayamsevakValue}  --- ");
                                       },
@@ -721,6 +723,7 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
                                         setState(() {
                                           this._sankalpAadhaarSwayamsevakCtrl.text = "";
                                           _sankalpAadhaarSwayamsevakValue = "";
+                                          shaakhaa!.sankalpAadhaarSwayamsevakID = 0;
                                         });
                                       },
                                       icon: Icon(Icons.cancel)),
@@ -787,6 +790,10 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
                                         this._sankalpAadhaarShaakhaaCtrl.text = suggestion["GeoUnitName"];
                                         _sankalpAadhaarShaakhaaValue = suggestion["ShaakhaaID"].toString();
                                         shaakhaa!.sankalpAadhaarShaakhaaID = int.parse(suggestion["ShaakhaaID"].toString());
+
+                                        this._sankalpAadhaarSwayamsevakCtrl.text = '';
+                                        _sankalpAadhaarSwayamsevakValue = '';
+                                        shaakhaa!.sankalpAadhaarSwayamsevakID = 0;
                                         print("_sankalpAadhaarShaakhaaValue:--${_sankalpAadhaarShaakhaaValue}");
                                       },
                                       // onSaved: (value) {
@@ -810,6 +817,7 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
                                         setState(() {
                                           this._sankalpAadhaarShaakhaaCtrl.text = "";
                                           _sankalpAadhaarShaakhaaValue = "";
+                                          shaakhaa!.sankalpAadhaarShaakhaaID = 0;
                                         });
                                       },
                                       icon: Icon(Icons.cancel)),

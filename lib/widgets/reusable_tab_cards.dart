@@ -10,10 +10,12 @@ import '../helpers/static_data.dart' as Statics;
 
 class ReusableBarTabCard extends StatelessWidget {
   // final ShaakhaaVistaarReport report;
-  final int? totalshakhaa, yesterdayShakhaa, todayShakhaa;
-  final String? mainLabel, totalLabel, lastLabel, currentLabel, currentTotalLabel, note;
+  final int? totalshakhaa, yesterdayShakhaa, ereyesterdayShakhaa, todayShakhaa;
+  final String? mainLabel, totalLabel, lastLabel, lastToLastLabel, currentLabel, currentTotalLabel, note;
+  final String? lastToLastToolTip, lastToolTip, currentToolTip;
   final bool inRow;
   final bool isHighlighted;
+  final bool showEreyesterday;
   final List<BarRow>? rows;
   final void Function()? onListTap;
 
@@ -21,22 +23,29 @@ class ReusableBarTabCard extends StatelessWidget {
       {super.key,
       this.totalshakhaa,
       this.yesterdayShakhaa,
+      this.ereyesterdayShakhaa,
       this.todayShakhaa,
       this.mainLabel,
       this.totalLabel,
       this.lastLabel,
+      this.lastToLastLabel,
       this.currentLabel,
       this.currentTotalLabel,
+      this.lastToLastToolTip,
+      this.lastToolTip,
+      this.currentToolTip,
       this.rows,
       this.note,
       this.inRow = false,
       this.isHighlighted = false,
+      this.showEreyesterday = false,
       this.onListTap});
 
   @override
   Widget build(BuildContext context) {
     final total = totalshakhaa ?? 0;
     final previous = (yesterdayShakhaa ?? 0);
+    final previousToPrev = (ereyesterdayShakhaa ?? 0);
     final current = (todayShakhaa ?? 0);
     final calPrevious = yesterdayShakhaa == 0 ? 1 : (yesterdayShakhaa ?? 1);
     final calCurrent = todayShakhaa == 0 ? 1 : (todayShakhaa ?? 1);
@@ -110,7 +119,19 @@ class ReusableBarTabCard extends StatelessWidget {
                       color: const Color(0xFF1E90FF),
                     ),
                   ),
+                  if (showEreyesterday)
+                    BarRow(
+                      tooltipText: lastToLastToolTip,
+                      label: lastToLastLabel ?? Statics.getLabel('ereyesterdayShakhaa'),
+                      maxValue: total.toDouble(),
+                      mainSegment: BarSegment(
+                        label: lastToLastLabel ?? Statics.getLabel('ereyesterdayShakhaa'),
+                        value: previousToPrev.toDouble(),
+                        color: const Color(0xFFFF8C00),
+                      ),
+                    ),
                   BarRow(
+                    tooltipText: lastToolTip,
                     label: lastLabel ?? Statics.getLabel('yesterdaysShakhaa'),
                     maxValue: total.toDouble(),
                     mainSegment: BarSegment(
@@ -120,6 +141,7 @@ class ReusableBarTabCard extends StatelessWidget {
                     ),
                   ),
                   BarRow(
+                    tooltipText: currentToolTip,
                     label: currentLabel ?? Statics.getLabel('todaysShakhaa'),
                     maxValue: total.toDouble(),
                     mainSegment: BarSegment(
@@ -402,12 +424,14 @@ class BarSegment {
 // smaller "other" segments, all stacked into one bar.
 class BarRow {
   final String label;
+  final String? tooltipText;
   final double maxValue;
   final BarSegment mainSegment;
   final List<BarSegment> otherSegments;
 
   const BarRow({
     required this.label,
+    this.tooltipText,
     required this.maxValue,
     required this.mainSegment,
     this.otherSegments = const [],
@@ -527,8 +551,18 @@ class _BarRowWidget extends StatelessWidget {
       children: [
         // Label + total value (e.g. "875")
         Row(
-          spacing: 8,
+          spacing: 4,
           children: [
+            if (row.tooltipText != null && row.tooltipText!.isNotEmpty)
+              Tooltip(
+                message: row.tooltipText,
+                // whatever text field you want to show
+                triggerMode: TooltipTriggerMode.tap,
+                // show on tap, since info icons are usually tapped not long-pressed
+                preferBelow: false,
+                showDuration: const Duration(seconds: 2),
+                child: const Icon(Icons.info_outline, size: 18, color: Colors.blue),
+              ),
             Expanded(
               child: Text(
                 row.label,
@@ -542,6 +576,7 @@ class _BarRowWidget extends StatelessWidget {
                 ),
               ),
             ),
+            SizedBox(width: 4),
             Text(
               "${_formatValue(row.mainSegment.value)}" + (row.totalValueOfOther == 0 ? "" : " (${_formatValue(row.totalValueOfOther)})"),
               style: const TextStyle(

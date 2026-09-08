@@ -171,17 +171,19 @@ class MediaDownloadQueueDao {
     final willRetry = !permanent && newRetryCount <= kMaxRetries;
     final newStatus = willRetry ? 'pending' : 'failed';
 
-    await db.update(
-      kMediaQueueTable,
-      {
-        'status': newStatus,
-        'retryCount': newRetryCount,
-        'errorMessage': errorMessage,
-        'updatedAt': DateTime.now().toIso8601String(),
-      },
-      where: 'taskId = ?',
-      whereArgs: [taskId],
-    );
+    await DatabaseHelper.runExclusive(() async {
+      await db.update(
+        kMediaQueueTable,
+        {
+          'status': newStatus,
+          'retryCount': newRetryCount,
+          'errorMessage': errorMessage,
+          'updatedAt': DateTime.now().toIso8601String(),
+        },
+        where: 'taskId = ?',
+        whereArgs: [taskId],
+      );
+    });
     return newStatus;
   }
 
@@ -193,20 +195,22 @@ class MediaDownloadQueueDao {
   static Future<void> completeDownload(String taskId, String localFilepath) async {
     final db = await DatabaseHelper.database;
 
-    await db.transaction((txn) async {
-      final rows = await txn.query(kMediaQueueTable, where: 'taskId = ?', whereArgs: [taskId], limit: 1);
-      if (rows.isEmpty) return; // nothing to reconcile — already handled or stale update
+    await DatabaseHelper.runExclusive(() async {
+      await db.transaction((txn) async {
+        final rows = await txn.query(kMediaQueueTable, where: 'taskId = ?', whereArgs: [taskId], limit: 1);
+        if (rows.isEmpty) return; // nothing to reconcile — already handled or stale update
 
-      final item = MediaDownloadQueueItem.fromMap(rows.first);
+        final item = MediaDownloadQueueItem.fromMap(rows.first);
 
-      await txn.update(
-        _resolveSqlTable(item.tablename), // dynamic — supports future tables beyond OfflineShaakhaPustika
-        {'filepath': localFilepath},
-        where: 'pkid = ?',
-        whereArgs: [item.pkid],
-      );
+        await txn.update(
+          _resolveSqlTable(item.tablename), // dynamic — supports future tables beyond OfflineShaakhaPustika
+          {'filepath': localFilepath},
+          where: 'pkid = ?',
+          whereArgs: [item.pkid],
+        );
 
-      await txn.delete(kMediaQueueTable, where: 'taskId = ?', whereArgs: [taskId]);
+        await txn.delete(kMediaQueueTable, where: 'taskId = ?', whereArgs: [taskId]);
+      });
     });
   }
 

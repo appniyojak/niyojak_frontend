@@ -159,12 +159,15 @@ class Shaobj {
   int? todayShaakhaaCount;
   int? yesterdayShaakhaaCount;
 
-  Shaobj({this.shaakhaaCount, this.todayShaakhaaCount, this.yesterdayShaakhaaCount});
+  int? ereyesterdayShaakhaaCount;
+
+  Shaobj({this.shaakhaaCount, this.todayShaakhaaCount, this.yesterdayShaakhaaCount, this.ereyesterdayShaakhaaCount});
 
   Shaobj.fromJson(Map<String, dynamic> json) {
     shaakhaaCount = json['ShaakhaaCount'];
     todayShaakhaaCount = json['TodayShaakhaaCount'];
     yesterdayShaakhaaCount = json['YesterdayShaakhaaCount'];
+    ereyesterdayShaakhaaCount = json['EreyesterdayShaakhaaCount'];
   }
 
   Map<String, dynamic> toJson() {
@@ -172,6 +175,7 @@ class Shaobj {
     data['ShaakhaaCount'] = this.shaakhaaCount;
     data['TodayShaakhaaCount'] = this.todayShaakhaaCount;
     data['YesterdayShaakhaaCount'] = this.yesterdayShaakhaaCount;
+    data['EreyesterdayShaakhaaCount'] = this.ereyesterdayShaakhaaCount;
     return data;
   }
 }
@@ -183,8 +187,25 @@ class Weekobj {
   int? shaapthahikCount;
   int? thisWeekShaapthahikCount;
   int? lastWeekShaapthahikCount;
+  int? lastofLastWeekShaakhaaCount;
+  int? lastofLastWeekShaapthahikCount;
+  String? thisWeekRange;
+  String? lastWeekRange;
+  String? lastOfLastWeekRange;
 
-  Weekobj({this.shaakhaaCount, this.thisWeekShaakhaaCount, this.lastWeekShaakhaaCount, this.shaapthahikCount, this.thisWeekShaapthahikCount, this.lastWeekShaapthahikCount});
+  Weekobj({
+    this.shaakhaaCount,
+    this.thisWeekShaakhaaCount,
+    this.lastWeekShaakhaaCount,
+    this.shaapthahikCount,
+    this.thisWeekShaapthahikCount,
+    this.lastWeekShaapthahikCount,
+    this.lastofLastWeekShaakhaaCount,
+    this.lastofLastWeekShaapthahikCount,
+    this.thisWeekRange,
+    this.lastWeekRange,
+    this.lastOfLastWeekRange,
+  });
 
   Weekobj.fromJson(Map<String, dynamic> json) {
     shaakhaaCount = json['ShaakhaaCount'];
@@ -193,6 +214,11 @@ class Weekobj {
     shaapthahikCount = json['ShaapthahikCount'];
     thisWeekShaapthahikCount = json['ThisWeekShaapthahikCount'];
     lastWeekShaapthahikCount = json['LastWeekShaapthahikCount'];
+    lastofLastWeekShaakhaaCount = json['LastofLastWeekShaakhaaCount'];
+    lastofLastWeekShaapthahikCount = json['LastofLastWeekShaapthahikCount'];
+    thisWeekRange = json['ThisWeekRange'];
+    lastWeekRange = json['LastWeekRange'];
+    lastOfLastWeekRange = json['LastOfLastWeekRange'];
   }
 
   Map<String, dynamic> toJson() {
@@ -203,6 +229,11 @@ class Weekobj {
     data['ShaapthahikCount'] = this.shaapthahikCount;
     data['ThisWeekShaapthahikCount'] = this.thisWeekShaapthahikCount;
     data['LastWeekShaapthahikCount'] = this.lastWeekShaapthahikCount;
+    data['LastofLastWeekShaakhaaCount'] = this.lastofLastWeekShaakhaaCount;
+    data['LastofLastWeekShaapthahikCount'] = this.lastofLastWeekShaapthahikCount;
+    data['ThisWeekRange'] = this.thisWeekRange;
+    data['LastWeekRange'] = this.lastWeekRange;
+    data['LastOfLastWeekRange'] = this.lastOfLastWeekRange;
     return data;
   }
 }
@@ -235,6 +266,11 @@ class Monthobj {
   int? prevofprevmonthshakhaplusone;
   int? prevofprevmonthmilanplusone;
 
+  int? lastOfLastMonthShaakhaaCount;
+  int? lastOfLastMonthShaapthahikCount;
+  int? lastOfLastMonthmandaliCount;
+  int? lastOfLastMonthmasikCount;
+
   Monthobj({
     this.shaakhaaCount,
     this.thisMonthShaakhaaCount,
@@ -262,6 +298,10 @@ class Monthobj {
     this.prevofprevmonthmaansik,
     this.prevofprevmonthshakhaplusone,
     this.prevofprevmonthmilanplusone,
+    this.lastOfLastMonthShaakhaaCount,
+    this.lastOfLastMonthShaapthahikCount,
+    this.lastOfLastMonthmandaliCount,
+    this.lastOfLastMonthmasikCount,
   });
 
   Monthobj.fromJson(Map<String, dynamic> json) {
@@ -291,6 +331,10 @@ class Monthobj {
     prevofprevmonthmaansik = json['prevofprevmonthmaansik'];
     prevofprevmonthshakhaplusone = json['prevofprevmonthshakhaplusone'];
     prevofprevmonthmilanplusone = json['prevofprevmonthmilanplusone'];
+    lastOfLastMonthShaakhaaCount = json['LastOfLastMonthShaakhaaCount'];
+    lastOfLastMonthShaapthahikCount = json['LastOfLastMonthShaapthahikCount'];
+    lastOfLastMonthmandaliCount = json['LastOfLastMonthmandaliCount'];
+    lastOfLastMonthmasikCount = json['LastOfLastMonthmasikCount'];
   }
 
   Map<String, dynamic> toJson() {
@@ -321,6 +365,10 @@ class Monthobj {
     data['prevofprevmonthmaansik'] = this.prevofprevmonthmaansik;
     data['prevofprevmonthshakhaplusone'] = this.prevofprevmonthshakhaplusone;
     data['prevofprevmonthmilanplusone'] = this.prevofprevmonthmilanplusone;
+    data['LastOfLastMonthShaakhaaCount'] = this.lastOfLastMonthShaakhaaCount;
+    data['LastOfLastMonthShaapthahikCount'] = this.lastOfLastMonthShaapthahikCount;
+    data['LastOfLastMonthmandaliCount'] = this.lastOfLastMonthmandaliCount;
+    data['LastOfLastMonthmasikCount'] = this.lastOfLastMonthmasikCount;
     return data;
   }
 }

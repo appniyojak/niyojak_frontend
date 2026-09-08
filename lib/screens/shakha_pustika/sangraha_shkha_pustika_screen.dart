@@ -507,7 +507,7 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
                           ),
                         ),
 
-                        if (!_isEditable && (_karyakramValue != '308' && _karyakramValue != '309')) ...[
+                        if (!_isEditable && (_karyakramValue != '309')) ...[
                           _sectionCard(child: _audioPlaySection(primaryColor)),
                           const SizedBox(height: 10),
                           _sectionCard(child: _isOpeningLink ? Center(child: CircularProgressIndicator()) : _clickOnLink())
@@ -663,15 +663,15 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
         //   const SizedBox(height: 16),
         // ],
 
-        if (_karyakramValue == '311') ...[
-          TextFormField(
-            keyboardType: TextInputType.multiline,
-            controller: _remarkController,
-            decoration: _boxedDecoration(label: Statics.getLabel('OtherField')),
-            style: const TextStyle(fontSize: 15),
-          ),
-          const SizedBox(height: 20),
-        ],
+        // if (_karyakramValue == '311') ...[
+        //   TextFormField(
+        //     keyboardType: TextInputType.multiline,
+        //     controller: _remarkController,
+        //     decoration: _boxedDecoration(label: Statics.getLabel('OtherField')),
+        //     style: const TextStyle(fontSize: 15),
+        //   ),
+        //   const SizedBox(height: 20),
+        // ],
         // if (_karyakramValue == '308' || _karyakramValue == '309') ...[
         //   Text(
         //     'विषय',
@@ -734,7 +734,7 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
         // ],
 
         // ── NEW: audio file picker ──
-        if (_karyakramValue == '310' && _isEditable) ...[
+        if (["308", "310"].contains(_karyakramValue) && _isEditable) ...[
           Text(
             Statics.getLabel('ChooseAudioFile'),
             style: TextStyle(fontSize: 13, color: Colors.grey.shade700, fontWeight: FontWeight.w500),
@@ -797,78 +797,78 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
           const SizedBox(height: 26),
         ],
         const SizedBox(height: 6),
-        if (_karyakramValue == '308' || _karyakramValue == '309' || _karyakramValue == '310') ...[
-          Text(
-            Statics.getLabel('SubjectTxt'),
-            style: TextStyle(fontSize: 13, color: Colors.grey.shade700, fontWeight: FontWeight.w500),
+
+        Text(
+          Statics.getLabel('SubjectTxt'),
+          style: TextStyle(fontSize: 13, color: Colors.grey.shade700, fontWeight: FontWeight.w500),
+        ),
+        const SizedBox(height: 6),
+        if (!_isEditable) ...[
+          // ── VIEW MODE: render saved HTML as formatted rich text ──
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF9FAFC),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.grey.shade300),
+            ),
+            child: flutter_html.Html(
+              data: _htmlToPlainText(_originalHtmlFromApi).isNotEmpty ? _originalHtmlFromApi : '—',
+              style: {
+                "body": flutter_html.Style(
+                  margin: flutter_html.Margins.zero,
+                  padding: flutter_html.HtmlPaddings.zero,
+                  fontSize: flutter_html.FontSize(15),
+                ),
+              },
+            ),
+            //_htmlToPlainText(_topicController.text).isNotEmpty ? _htmlToPlainText(_topicController.text) : '—',
           ),
-          const SizedBox(height: 6),
-          if (!_isEditable) ...[
-            // ── VIEW MODE: render saved HTML as formatted rich text ──
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF9FAFC),
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.grey.shade300),
-              ),
-              child: flutter_html.Html(
-                data: _htmlToPlainText(_originalHtmlFromApi).isNotEmpty ? _originalHtmlFromApi : '—',
-                style: {
-                  "body": flutter_html.Style(
-                    margin: flutter_html.Margins.zero,
-                    padding: flutter_html.HtmlPaddings.zero,
-                    fontSize: flutter_html.FontSize(15),
-                  ),
-                },
-              ),
-              //_htmlToPlainText(_topicController.text).isNotEmpty ? _htmlToPlainText(_topicController.text) : '—',
+        ] else ...[
+          // ── EDIT MODE: Quill rich text editor ──
+          Container(
+            decoration: BoxDecoration(
+              color: const Color(0xFFF9FAFC),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.grey.shade300),
             ),
-          ] else ...[
-            // ── EDIT MODE: Quill rich text editor ──
-            Container(
-              decoration: BoxDecoration(
-                color: const Color(0xFFF9FAFC),
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.grey.shade300),
-              ),
-              clipBehavior: Clip.antiAlias,
-              child: Column(
-                children: [
-                  quill.QuillSimpleToolbar(
-                    configurations: quill.QuillSimpleToolbarConfigurations(
+            clipBehavior: Clip.antiAlias,
+            child: Column(
+              children: [
+                quill.QuillSimpleToolbar(
+                  configurations: quill.QuillSimpleToolbarConfigurations(
+                    controller: _topicQuillController,
+                    showFontFamily: false,
+                    showFontSize: false,
+                    showSubscript: false,
+                    showSuperscript: false,
+                    showSearchButton: false,
+                    showClearFormat: false,
+                    showCodeBlock: false,
+                    showQuote: false,
+                    showColorButton: false,
+                    showBackgroundColorButton: false,
+                  ),
+                ),
+                Container(
+                  height: 160,
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                  child: quill.QuillEditor.basic(
+                    configurations: quill.QuillEditorConfigurations(
                       controller: _topicQuillController,
-                      showFontFamily: false,
-                      showFontSize: false,
-                      showSubscript: false,
-                      showSuperscript: false,
-                      showSearchButton: false,
-                      showClearFormat: false,
-                      showCodeBlock: false,
-                      showQuote: false,
-                      showColorButton: false,
-                      showBackgroundColorButton: false,
+                      placeholder: Statics.getLabel('SubjectTxtSubText'),
+                      padding: EdgeInsets.zero,
+                      expands: true,
                     ),
                   ),
-                  Container(
-                    height: 160,
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                    child: quill.QuillEditor.basic(
-                      configurations: quill.QuillEditorConfigurations(
-                        controller: _topicQuillController,
-                        placeholder: Statics.getLabel('SubjectTxtSubText'),
-                        padding: EdgeInsets.zero,
-                        expands: true,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-          const SizedBox(height: 16),
+          ),
         ],
+        const SizedBox(height: 16),
+
         // ── Search / Reset buttons ──
         !_isEditable
             ? Center(
@@ -1224,7 +1224,7 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
           items: List.generate(12, (i) => i + 1)
               .map((m) => DropdownMenuItem<int>(
                     value: m,
-                    child: Text(_monthNameMarathi(m), style: const TextStyle(fontSize: 15)),
+                    child: Text(monthNameMarathi(m), style: const TextStyle(fontSize: 15)),
                   ))
               .toList(),
           onChanged: (v) {
@@ -1239,11 +1239,17 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
 
 // ── Year picker field ──
   Widget _yearPickerField(Color primaryColor) {
-    // final List<int> years = List.generate(15, (i) => DateTime.now().year - 13 + i);
+    final int startYear = 2023;
+    final int endYear = DateTime.now().year + 2;
     final List<int> years = List.generate(
-      2028 - 2023 + 1,
-      (i) => 2023 + i,
+      endYear - startYear + 1,
+      (i) => startYear + i,
     );
+    // final List<int> years = List.generate(15, (i) => DateTime.now().year - 13 + i);
+    // final List<int> years = List.generate(
+    //   2028 - 2023 + 1,
+    //   (i) => 2023 + i,
+    // );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1275,7 +1281,7 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
 
   // ── single Month-Year picker field ──
   Widget _monthYearPickerField(Color primaryColor) {
-    final displayText = _selectedMonthYear == null ? '' : '${_monthNameMarathi(_selectedMonthYear!.month)} ${_selectedMonthYear!.year}';
+    final displayText = _selectedMonthYear == null ? '' : '${monthNameMarathi(_selectedMonthYear!.month)} ${_selectedMonthYear!.year}';
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1342,7 +1348,7 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
                       items: List.generate(12, (i) => i + 1)
                           .map((m) => DropdownMenuItem<int>(
                                 value: m,
-                                child: Text(_monthNameMarathi(m)),
+                                child: Text(monthNameMarathi(m)),
                               ))
                           .toList(),
                       onChanged: (v) {
@@ -1388,24 +1394,6 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
         );
       },
     );
-  }
-
-  String _monthNameMarathi(int month) {
-    var months = [
-      Statics.getLabel('Jan'),
-      Statics.getLabel('Feb'),
-      Statics.getLabel('Mar'),
-      Statics.getLabel('Apr'),
-      Statics.getLabel('May'),
-      Statics.getLabel('Jun'),
-      Statics.getLabel('Jul'),
-      Statics.getLabel('Aug'),
-      Statics.getLabel('Sept'),
-      Statics.getLabel('Oct'),
-      Statics.getLabel('Nov'),
-      Statics.getLabel('Dec'),
-    ];
-    return months[month - 1];
   }
 
   // ─────────────────────────────────────────────────────────────────────

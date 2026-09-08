@@ -40,9 +40,23 @@ class OfflineShaakhaPustika {
   String? urllink;
   String? vayogatid;
   String? mdate;
+  int? orderby;
 
-  OfflineShaakhaPustika(
-      {this.pkid, this.yearno, this.monthno, this.canupdate, this.karyakramname, this.vayogatname, this.subjecttext, this.filepath, this.karyakramid, this.urllink, this.vayogatid, this.mdate});
+  OfflineShaakhaPustika({
+    this.pkid,
+    this.yearno,
+    this.monthno,
+    this.canupdate,
+    this.karyakramname,
+    this.vayogatname,
+    this.subjecttext,
+    this.filepath,
+    this.karyakramid,
+    this.urllink,
+    this.vayogatid,
+    this.mdate,
+    this.orderby,
+  });
 
   OfflineShaakhaPustika.fromJson(Map<String, dynamic> json) {
     pkid = json['pkid'];
@@ -57,6 +71,7 @@ class OfflineShaakhaPustika {
     urllink = json['urllink'];
     vayogatid = json['vayogatid'];
     mdate = json['mdate'];
+    orderby = json['orderby'];
   }
 
   Map<String, dynamic> toJson() {
@@ -73,6 +88,7 @@ class OfflineShaakhaPustika {
     data['urllink'] = '${this.urllink.toString()}';
     data['vayogatid'] = '${this.vayogatid.toString()}';
     data['mdate'] = '${this.mdate.toString()}';
+    data['orderby'] = this.orderby;
     return data;
   }
 }

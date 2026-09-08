@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:synchronized/synchronized.dart';
 
 import './static_data.dart' as Statics;
 import 'db_helper_ops.dart';
@@ -15,13 +16,15 @@ class DatabaseHelper {
   static Database? _database;
 
   static Future<Database> get database async {
-    if (_database == null) {
-      print("database null");
-      _database = await initDatabase();
-    } else {
-      // print("database not null");
-    }
+    if (_database != null) return _database!;
+    _database = await initDatabase();
     return _database!;
+  }
+
+  static final _lock = Lock();
+
+  static Future<T> runExclusive<T>(Future<T> Function() action) {
+    return _lock.synchronized(action);
   }
 
   static Future<Database> initDatabase() async {
@@ -35,7 +38,9 @@ class DatabaseHelper {
     }
     print(dataDir);
     var dbPath = dataDir + '/' + _dbName;
-    var database = await openDatabase(dbPath, version: _dbVersion, singleInstance: false, onUpgrade: (db, oldVersion, newVersion) async {
+    var database = await openDatabase(dbPath, version: _dbVersion, singleInstance: false, onConfigure: (db) async {
+      await db.rawQuery('PRAGMA busy_timeout = 3000'); // wait up to 3s
+    }, onUpgrade: (db, oldVersion, newVersion) async {
       log('initDatabase - database upgraded, oldVersion:' + oldVersion.toString() + '; newVersion:' + newVersion.toString());
       // db.execute('DROP TABLE UserDataMaster');
       // db.execute('DROP TABLE IF EXISTS AbhiyaanVrutta');
@@ -802,49 +807,51 @@ class DatabaseHelper {
       }
     }
 
-    await db.transaction((txn) async {
-      if (hasUniqueConstraint) {
-        final batch = txn.batch();
-        var validCount = 0;
+    await runExclusive(() async {
+      await db.transaction((txn) async {
+        if (hasUniqueConstraint) {
+          final batch = txn.batch();
+          var validCount = 0;
+          for (final item in items) {
+            try {
+              final map = _filterToTableColumns(toMap(item), tableColumns);
+              _validateKeys(map, keyColumns, tableName);
+              batch.insert(tableName, map, conflictAlgorithm: ConflictAlgorithm.ignore);
+              validCount++;
+            } catch (_) {
+              result += const DbOperationResult(failed: 1);
+            }
+          }
+          if (validCount > 0) {
+            final results = await batch.commit();
+            // Each result is the rowid inserted, or 0 when ignored (skip).
+            for (final r in results) {
+              final rowId = r as int? ?? 0;
+              result += rowId > 0 ? const DbOperationResult(inserted: 1) : const DbOperationResult(skipped: 1);
+            }
+          }
+          return;
+        }
+
+        // Manual path — no unique constraint to lean on.
         for (final item in items) {
           try {
             final map = _filterToTableColumns(toMap(item), tableColumns);
             _validateKeys(map, keyColumns, tableName);
-            batch.insert(tableName, map, conflictAlgorithm: ConflictAlgorithm.ignore);
-            validCount++;
+            final where = _buildWhere(keyColumns);
+            final whereArgs = _buildWhereArgs(map, keyColumns);
+            final existing = await txn.query(tableName, columns: keyColumns, where: where, whereArgs: whereArgs, limit: 1);
+            if (existing.isNotEmpty) {
+              result += const DbOperationResult(skipped: 1);
+            } else {
+              await txn.insert(tableName, map);
+              result += const DbOperationResult(inserted: 1);
+            }
           } catch (_) {
             result += const DbOperationResult(failed: 1);
           }
         }
-        if (validCount > 0) {
-          final results = await batch.commit();
-          // Each result is the rowid inserted, or 0 when ignored (skip).
-          for (final r in results) {
-            final rowId = r as int? ?? 0;
-            result += rowId > 0 ? const DbOperationResult(inserted: 1) : const DbOperationResult(skipped: 1);
-          }
-        }
-        return;
-      }
-
-      // Manual path — no unique constraint to lean on.
-      for (final item in items) {
-        try {
-          final map = _filterToTableColumns(toMap(item), tableColumns);
-          _validateKeys(map, keyColumns, tableName);
-          final where = _buildWhere(keyColumns);
-          final whereArgs = _buildWhereArgs(map, keyColumns);
-          final existing = await txn.query(tableName, columns: keyColumns, where: where, whereArgs: whereArgs, limit: 1);
-          if (existing.isNotEmpty) {
-            result += const DbOperationResult(skipped: 1);
-          } else {
-            await txn.insert(tableName, map);
-            result += const DbOperationResult(inserted: 1);
-          }
-        } catch (_) {
-          result += const DbOperationResult(failed: 1);
-        }
-      }
+      });
     });
 
     return result;

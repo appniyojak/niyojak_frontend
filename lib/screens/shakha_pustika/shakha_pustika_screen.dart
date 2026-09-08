@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:file_picker/file_picker.dart';
@@ -11,10 +10,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:niyojak_prod/screens/shakha_pustika/sangraha_shkha_pustika_screen.dart';
 import 'package:niyojak_prod/widgets/app_drawer.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../utils/globals.dart';
-import '../../helpers/media_downloader/media_downloader_helper.dart';
-import '../../helpers/media_downloader/media_downloader_service.dart';
 import '../../helpers/static_data.dart' as Statics;
 import '../../models/request_model/shakha_pustika_list_requestmodel.dart';
 import '../../models/response_model/offline_shaakhaa_pustika_resp_model.dart';
@@ -22,7 +20,8 @@ import '../../providers/bals.dart';
 import '../../utils/stable_geounit_class.dart'; // NEW — shared "is this file downloaded / where does it live" logic
 import '../home_screen/home_screen.dart';
 import 'audio_helper.dart';
-import 'audio_player_dialogue.dart'; // NEW — shared public play dialog (same file used by SangrahaShkhaPustikaScreen)
+import 'download_play_cell_widget.dart';
+import 'view_pustika_screen.dart'; // NEW — shared public play dialog (same file used by SangrahaShkhaPustikaScreen)
 
 class ShakhaPustika extends StatefulWidget {
   static var routeName = '/shakhapustika';
@@ -34,12 +33,12 @@ class ShakhaPustika extends StatefulWidget {
 class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin {
   bool _isExpanded = false;
   final _controller = createGeoController();
-  List<StaticMasterBAL>? _vayogat;
+  List<StaticMasterBAL?>? _vayogat;
   String? _vayogatValue;
   List<String> _selectedVayogat = [];
 
   // ── Karyakram dropdown state ─────────────────────────────────────
-  String? _karyakramValue;
+  // String? _karyakramValue;
 
   // ── single Month-Year picker state ─────────────────────────────
 
@@ -96,6 +95,9 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
   }
 
   Future<void> _initData() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    _vayogatValue = pref.getString("selectedVayogat");
+
     final dm = await MyAppGlobals.getLevelLDB();
     print("Printing levelid:${dm.levelID}");
     levelId = dm.levelID ?? 0;
@@ -111,7 +113,10 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
     //await Statics.populateUserDetailsMap();
     print("userid:${user.map((e) => e.swayamsevakID)}");
     cUserId = user.first.swayamsevakID ?? 0;
-    await _searchShaakhaPustika(karyakramval: -1);
+    if (_vayogatValue != null && _vayogatValue!.isNotEmpty)
+      await _searchShaakhaPustika(karyakramval: -1);
+    else
+      _tabController?.animateTo(1);
   }
 
   void _handleTabChange() {
@@ -130,6 +135,8 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
       _karyakram = data2;
       // _frequency = data1;
     });
+
+    log("_vayogat?.length >>>>>> ${_vayogat?.length.toString()}");
   }
 
   String _htmlToPlainText(String? html) {
@@ -232,6 +239,9 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
       isVibhagLevelUser = true;
     }
     try {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      await pref.setString("selectedVayogat", _vayogatValue!);
+
       final requestModel = GetShaakhaPustikaListRequest(
         cuserid: cUserId,
         geounitid: isVibhagLevelUser ? 0 : geoUnitId ?? 0,
@@ -277,10 +287,8 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
     final primaryColor = Theme.of(context).primaryColor;
     // 2. Determine if the system back button is allowed to close/pop the screen.
     // It should pop normally if it's a single screen OR if the user is already on the first tab (index 0).
-    final bool canPopScreen = _tabController?.index == 0;
 
     return PopScope(
-      canPop: canPopScreen,
       onPopInvokedWithResult: (didPop, result) {
         // If the system already handled the pop (canPop was true), do nothing.
         if (didPop) return;
@@ -407,66 +415,33 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
     );
   }
 
-  // Fixed palette — one color per karyakram, cycles if there are ever more than 4.
-  static const List<Color> _karyakramPalette = [
-    Color(0xFF5C6BC0), // indigo
-    Color(0xFF26A69A), // teal
-    Color(0xFFEF6C51), // deep orange
-    Color(0xFF8D6E63), // brown
+  static const List<Color> _karyakramHues = [
+    Color(0xFF3F51B5), // Indigo
+    Color(0xFF00897B), // Teal
+    Color(0xFF8E24AA), // Purple
+    Color(0xFFD84315), // Deep Orange
   ];
+
+  String _stripHtmlTags(String? htmlText) {
+    if (htmlText == null || htmlText.trim().isEmpty) return '-';
+    var text = htmlText
+        .replaceAll(RegExp(r'<[^>]*>'), ' ')
+        .replaceAll('&nbsp;', ' ')
+        .replaceAll('&amp;', '&')
+        .replaceAll('&lt;', '<')
+        .replaceAll('&gt;', '>')
+        .replaceAll('&quot;', '"')
+        .replaceAll('&#39;', "'");
+    text = text.replaceAll(RegExp(r'\s+'), ' ').trim();
+    return text.isEmpty ? '-' : text;
+  }
 
   /// Entry point — decides table vs card layout.
   Widget _buildResults(List<OfflineShaakhaPustika> karyakramList) {
     if (Statics.levelId != 7) {
-      return _buildResultsCards(karyakramList);
+      return ViewPustikaScreen(karyakramList: karyakramList, vayogatVal: _vayogat!.firstWhere((e) => e?.staticID.toString() == _vayogatValue)?.codeForDisplay ?? "--");
     }
     return _buildResultsTable(karyakramList);
-  }
-
-  Widget _buildResultsCards(List<OfflineShaakhaPustika> karyakramList) {
-    if (karyakramList.isEmpty) {
-      return Container(
-        alignment: Alignment.center,
-        height: MediaQuery.sizeOf(context).height * 0.75,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Text(Statics.getLabel('NoInfoText')),
-      );
-    }
-
-    // Group items by karyakramid, preserving first-seen order so colors stay stable.
-    final Map<int, List<OfflineShaakhaPustika>> grouped = {};
-    for (final item in karyakramList) {
-      final id = item.karyakramid ?? -1;
-      grouped.putIfAbsent(id, () => []).add(item);
-    }
-
-    final groupIds = grouped.keys.toList();
-    final Map<int, Color> colorForId = {
-      for (int i = 0; i < groupIds.length; i++) groupIds[i]: _karyakramPalette[i % _karyakramPalette.length],
-    };
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 5, bottom: 8),
-          child: Text(
-            Statics.getLabel('KeepScrolling'),
-            style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
-          ),
-        ),
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          padding: const EdgeInsets.only(bottom: 12),
-          itemCount: groupIds.length,
-          itemBuilder: (context, index) {
-            final id = groupIds[index];
-            return _buildKaryakramGroupCard(id, grouped[id]!, colorForId[id]!);
-          },
-        ),
-      ],
-    );
   }
 
   // ── Reusable card wrapper for each section ──────────────────────
@@ -483,7 +458,7 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
           ),
         ],
       ),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: child,
     );
   }
@@ -514,7 +489,7 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
       isDense: true,
       filled: true,
       fillColor: const Color(0xFFF9FAFC),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
         borderSide: BorderSide(color: Colors.grey.shade300),
@@ -591,9 +566,10 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
             DropdownButtonFormField(
               decoration: _boxedDecoration(label: Statics.getLabel('Vayogat')),
               isExpanded: true,
+              isDense: false,
               value: _vayogatValue == "" ? null : _vayogatValue,
               icon: Icon(Icons.keyboard_arrow_down_rounded, color: primaryColor),
-              items: _vayogat!.map((bg) => DropdownMenuItem(value: bg.staticID.toString(), child: Text(bg.codeForDisplay!))).toList(),
+              items: _vayogat!.map((bg) => DropdownMenuItem(value: bg?.staticID.toString(), child: Text(bg?.codeForDisplay ?? "--"))).toList(),
               onChanged: (value) {
                 setState(() {
                   _vayogatValue = value;
@@ -640,7 +616,7 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
                 ),
                 onPressed: () {
                   setState(() {
-                    _karyakramValue = null;
+                    // _karyakramValue = null;
                     _selectedMonth = DateTime.now().month;
                     _selectedYear = DateTime.now().year;
                     _vayogatValue = null;
@@ -671,95 +647,10 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
     ]);
   }
 
-  Widget _buildKaryakramGroupCard(int karyakramId, List<OfflineShaakhaPustika> items, Color color) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border(left: BorderSide(color: color, width: 5)),
-        boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 6, offset: const Offset(0, 2)),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-            decoration: BoxDecoration(
-              color: color.withOpacity(0.12),
-              borderRadius: const BorderRadius.only(topRight: Radius.circular(12), topLeft: Radius.circular(2)),
-            ),
-            child: Text(
-              items.first.karyakramname?.isNotEmpty == true ? items.first.karyakramname! : 'Karyakram $karyakramId',
-              style: TextStyle(fontWeight: FontWeight.bold, color: color, fontSize: 14),
-            ),
-          ),
-          ...items.map((item) => Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 0),
-                child: Column(
-                  children: [
-                    _buildItemTile(item, color),
-                    if (item != items.last) Divider(height: 1, color: Colors.grey.shade200, indent: 14, endIndent: 14),
-                  ],
-                ),
-              )),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildItemTile(OfflineShaakhaPustika item, Color accentColor) {
-    final monthLabel = (item.monthno != null && item.monthno! >= 1 && item.monthno! <= 12) ? _monthNameMarathi(item.monthno!) : '-';
-    final content = item.subjecttext ?? '-';
-    final rawRelativePath = item.filepath ?? '';
-    final audioUrl = _resolveFileUrl(rawRelativePath);
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(content, style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 13)),
-                const SizedBox(height: 4),
-                Wrap(
-                  spacing: 12,
-                  runSpacing: 4,
-                  children: [
-                    Text('${Statics.getLabel('month')}: $monthLabel', style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
-                    Text('${Statics.getLabel('VayogatCode')}: ${item.vayogatname ?? '-'}', style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          if (_karyakramValue == '310') ...[
-            const SizedBox(width: 8),
-            SizedBox(
-              width: 50,
-              child: _DownloadPlayCell(
-                pkid: item.pkid!,
-                tablename: 'shaakhapustika',
-                remoteRelativePath: rawRelativePath,
-                resolvedUrlForDiskCheck: audioUrl,
-                title: content,
-              ),
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-
   Widget _buildResultsTable(List<OfflineShaakhaPustika> karyakramList) {
     final primaryColor = Theme.of(context).primaryColor;
     final _showDownloadColumn = levelId == 9 || levelId == 10 || levelId == 11;
+    final containsGeet = karyakramList.any((e) => [308, 310].contains(e.karyakramid));
 
     return Column(
       spacing: 8,
@@ -792,35 +683,38 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
                 ),
                 child: DataTable(
                   border: TableBorder.all(color: Colors.grey.shade300),
+                  horizontalMargin: 8,
                   headingRowColor: MaterialStateProperty.all(primaryColor),
                   dataRowColor: MaterialStateProperty.all(Colors.white),
                   columnSpacing: 14,
                   columns: [
-                    if (karyakramList.isNotEmpty) DataColumn(label: _tableHeaderCell(Statics.getLabel('ViewMenu'))),
-                    if (_karyakramValue == '310') DataColumn(label: _tableHeaderCell(Statics.getLabel('DoDownload'))),
-                    DataColumn(label: _tableHeaderCell(Statics.getLabel('month'))),
+                    if (karyakramList.isNotEmpty) DataColumn(label: _tableHeaderCell(Statics.getLabel('Information'))),
+                    if (containsGeet) DataColumn(label: _tableHeaderCell(Statics.getLabel('Geet'))),
+                    DataColumn(label: _tableHeaderCell(Statics.getLabel('karyakramWiseSeq'))),
                     DataColumn(label: _tableHeaderCell(Statics.getLabel('VayogatCode'))),
                     DataColumn(label: _tableHeaderCell(Statics.getLabel('tapshil'))),
                     // if (_showDownloadColumn) DataColumn(label: _tableHeaderCell(Statics.getLabel('downloadBtn'))),
                   ],
                   rows: karyakramList.map((item) {
-                    final monthLabel = (item.monthno! >= 1 && item.monthno! <= 12) ? _monthNameMarathi(item.monthno!) : '-';
+                    final monthLabel = (item.monthno! >= 1 && item.monthno! <= 12) ? monthNameMarathi(item.monthno!) : '-';
                     final content = item.subjecttext ?? '-';
                     final rawRelativePath = item.filepath ?? '';
+                    final karyakramValuee = item.karyakramid ?? 0;
                     final audioUrl = _resolveFileUrl(rawRelativePath); // still used for the disk-check filename derivation
                     // print("Resolved file URL: ${_resolveFileUrl(item.filepath ?? '-')}");
                     return DataRow(
                       cells: [
-                        if (karyakramList.isNotEmpty) DataCell(_tableInfoCellFromItem(item)), // CHANGED — accepts item directly
-                        if (_karyakramValue == '310')
-                          DataCell(_DownloadPlayCell(
+                        if (karyakramList.isNotEmpty) DataCell(_tableInfoCellFromItem(item, karyakramList)), // CHANGED — accepts item directly
+                        if (containsGeet)
+                          DataCell(DownloadPlayCell(
                             pkid: item.pkid!,
                             tablename: 'shaakhapustika',
                             remoteRelativePath: rawRelativePath,
                             resolvedUrlForDiskCheck: audioUrl,
                             title: content,
+                            fromDataTable: true,
                           )),
-                        DataCell(_tableDataCell(monthLabel)),
+                        DataCell(_tableDataCell(item.karyakramname ?? '-')),
                         DataCell(_tableDataCell(item.vayogatname ?? '-')),
 
                         DataCell(SizedBox(width: 100, child: _tableVishayCell(content))),
@@ -848,14 +742,21 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
     return '$base$rel';
   }
 
-  Widget _tableInfoCellFromItem(OfflineShaakhaPustika item) {
+  Widget _tableInfoCellFromItem(OfflineShaakhaPustika item, List<OfflineShaakhaPustika> karyakramList) {
     final primaryColor = Theme.of(context).primaryColor;
-    final bool isAudioKaryakram = _karyakramValue == '310';
+    final bool isAudioKaryakram = [308, 310].contains(item.karyakramid);
     final String audioUrl = _resolveFileUrl(item.filepath ?? '');
     final bool hasAudioFile = isAudioKaryakram && audioUrl.isNotEmpty;
 
     Future<void> goToInfoScreen(String selectedAction) async {
       dynamic result; // NEW — capture what SangrahaShkhaPustikaScreen pops back
+
+      if (selectedAction == "view") {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>
+                ViewPustikaScreen(showAppBar: true, vayogatVal: _vayogat!.firstWhere((e) => e?.staticID.toString() == _vayogatValue)?.codeForDisplay ?? "--", karyakramList: karyakramList)));
+        return;
+      }
 
       if (hasAudioFile) {
         // गीत (audio) rows — check the shared helper before navigating.
@@ -924,7 +825,9 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
                 ],
               )
             : InkWell(
-                onTap: () => goToInfoScreen('view'),
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) =>
+                        ViewPustikaScreen(showAppBar: true, vayogatVal: _vayogat!.firstWhere((e) => e?.staticID.toString() == _vayogatValue)?.codeForDisplay ?? "--", karyakramList: karyakramList))),
                 child: Icon(Icons.info_outline, color: primaryColor, size: 20),
               ),
       ),
@@ -972,7 +875,7 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
 
 // ── Vayogat multi-select dropdown (native, stays open on tap) ──
   Widget _vayogatMultiSelectDropdown(Color primaryColor) {
-    final selectedLabels = _vayogat!.where((v) => _selectedVayogat.contains(v.staticID.toString())).map((v) => v.codeForDisplay ?? '').join(', ');
+    final selectedLabels = _vayogat!.where((v) => _selectedVayogat.contains(v?.staticID.toString())).map((v) => v?.codeForDisplay ?? '').join(', ');
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1001,7 +904,7 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
             }).toList();
           },
           items: _vayogat!.map((item) {
-            final id = item.staticID.toString();
+            final id = item?.staticID.toString();
 
             return DropdownMenuItem<String>(
               value: id,
@@ -1016,7 +919,7 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
                         if (isChecked) {
                           _selectedVayogat.remove(id);
                         } else {
-                          _selectedVayogat.add(id);
+                          _selectedVayogat.add(id!);
                         }
                       });
                       menuSetState(() {});
@@ -1029,7 +932,7 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
                           onChanged: (checked) {
                             setState(() {
                               if (checked == true) {
-                                _selectedVayogat.add(id);
+                                _selectedVayogat.add(id!);
                               } else {
                                 _selectedVayogat.remove(id);
                               }
@@ -1039,7 +942,7 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
                         ),
                         Flexible(
                           child: Text(
-                            item.codeForDisplay ?? '',
+                            item?.codeForDisplay ?? '',
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
@@ -1073,7 +976,7 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
           items: List.generate(12, (i) => i + 1)
               .map((m) => DropdownMenuItem<int>(
                     value: m,
-                    child: Text(_monthNameMarathi(m), style: const TextStyle(fontSize: 15)),
+                    child: Text(monthNameMarathi(m), style: const TextStyle(fontSize: 15)),
                   ))
               .toList(),
           onChanged: (v) {
@@ -1088,7 +991,13 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
 
 // ── Year picker field ──
   Widget _yearPickerField(Color primaryColor) {
-    final List<int> years = List.generate(15, (i) => DateTime.now().year - 10 + i);
+    final int startYear = 2023;
+    final int endYear = DateTime.now().year + 2;
+    final List<int> years = List.generate(
+      endYear - startYear + 1,
+      (i) => startYear + i,
+    );
+    // final List<int> years = List.generate(7, (i) => DateTime.now().year - 3 + i);
     // final List<int> years = List.generate(
     //   2028 - 2023 + 1,
     //   (i) => 2023 + i,
@@ -1120,24 +1029,6 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
         ),
       ],
     );
-  }
-
-  String _monthNameMarathi(int month) {
-    var months = [
-      Statics.getLabel('Jan'),
-      Statics.getLabel('Feb'),
-      Statics.getLabel('Mar'),
-      Statics.getLabel('Apr'),
-      Statics.getLabel('May'),
-      Statics.getLabel('Jun'),
-      Statics.getLabel('Jul'),
-      Statics.getLabel('Aug'),
-      Statics.getLabel('Sept'),
-      Statics.getLabel('Oct'),
-      Statics.getLabel('Nov'),
-      Statics.getLabel('Dec'),
-    ];
-    return months[month - 1];
   }
 
   // ─────────────────────────────────────────────────────────────────────
@@ -1175,6 +1066,7 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
                 body: Container(
                   padding: const EdgeInsets.only(top: 10, bottom: 6),
                   child: Column(
+                    spacing: 12,
                     children: [
                       GeoDropdownWidget(
                         level: GeoLevel.Mahaanagar,
@@ -1186,8 +1078,7 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
                           return null;
                         },
                       ),
-                      if (ctrl.hasItems(GeoLevel.Vibhaag)) ...[
-                        const SizedBox(height: 14),
+                      if (ctrl.hasItems(GeoLevel.Vibhaag))
                         GeoDropdownWidget(
                           level: GeoLevel.Vibhaag,
                           title: 'Vibhaag',
@@ -1198,9 +1089,7 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
                             return null;
                           },
                         ),
-                      ],
-                      if (ctrl.hasItems(GeoLevel.Bhaag)) ...[
-                        const SizedBox(height: 14),
+                      if (ctrl.hasItems(GeoLevel.Bhaag))
                         GeoDropdownWidget(
                           level: GeoLevel.Bhaag,
                           title: 'Bhaag',
@@ -1211,7 +1100,6 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
                             return null;
                           },
                         ),
-                      ],
                     ],
                   ),
                 ),
@@ -1222,229 +1110,5 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
         ),
       ],
     );
-  }
-}
-
-enum _CellState { checking, notDownloaded, queuedOrDownloading, downloaded, failed }
-
-class _DownloadPlayCell extends StatefulWidget {
-  final int pkid;
-  final String tablename;
-  final String remoteRelativePath; // raw path as returned by the search API, e.g. "Files/shaakhapustika/xxx.mp4"
-  final String resolvedUrlForDiskCheck; // _resolveFileUrl(remoteRelativePath) — only used to derive the local filename
-  final String title;
-
-  const _DownloadPlayCell({
-    required this.pkid,
-    required this.tablename,
-    required this.remoteRelativePath,
-    required this.resolvedUrlForDiskCheck,
-    required this.title,
-  });
-
-  @override
-  State<_DownloadPlayCell> createState() => _DownloadPlayCellState();
-}
-
-class _DownloadPlayCellState extends State<_DownloadPlayCell> {
-  _CellState _state = _CellState.checking;
-  String? _localPath;
-  int _progress = 0;
-  String? _errorMessage;
-  StreamSubscription<DownloadLiveEvent>? _liveSub;
-
-  String get _taskId => '${widget.tablename}_${widget.pkid}';
-
-  @override
-  void initState() {
-    super.initState();
-    _bootstrap();
-    _liveSub = MediaDownloadService.instance.liveEvents.listen(_onLiveEvent);
-  }
-
-  @override
-  void dispose() {
-    _liveSub?.cancel();
-    super.dispose();
-  }
-
-  Future<void> _bootstrap() async {
-    if (widget.remoteRelativePath.isEmpty) {
-      setState(() => _state = _CellState.notDownloaded);
-      return;
-    }
-
-    // Fast path: check disk directly first — cheap, and correctly reflects
-    // a file downloaded by EITHER this screen or the background auto-sync,
-    // since both write to the same subdirectory with the same filename scheme.
-    final path = await AudioFileHelper.getLocalFilePath(widget.resolvedUrlForDiskCheck);
-    if (await File(path).exists()) {
-      if (!mounted) return;
-      setState(() {
-        _localPath = path;
-        _state = _CellState.downloaded;
-      });
-      return;
-    }
-
-    // Not on disk — check whether the background auto-sync already has this
-    // queued or in progress, so we don't show a plain "tap to download"
-    // icon for something that's already moving.
-    final queueItem = await MediaDownloadQueueDao.getByTaskId(_taskId);
-    if (!mounted) return;
-    if (queueItem != null && (queueItem.status == 'downloading' || queueItem.status == 'pending')) {
-      setState(() {
-        _state = _CellState.queuedOrDownloading;
-        _progress = queueItem.progress;
-      });
-    } else if (queueItem != null && queueItem.status == 'failed') {
-      setState(() {
-        _state = _CellState.failed;
-        _errorMessage = queueItem.errorMessage;
-      });
-    } else {
-      setState(() => _state = _CellState.notDownloaded);
-    }
-  }
-
-  void _onLiveEvent(DownloadLiveEvent event) {
-    if (event.taskId != _taskId || !mounted) return;
-
-    switch (event.type) {
-      case DownloadLiveEventType.progress:
-        setState(() {
-          _state = _CellState.queuedOrDownloading;
-          _progress = event.progress ?? _progress;
-        });
-        break;
-      case DownloadLiveEventType.statusChanged:
-        setState(() => _state = _CellState.queuedOrDownloading);
-        break;
-      case DownloadLiveEventType.completed:
-        _bootstrap(); // re-check disk to pick up the final local path
-        break;
-      case DownloadLiveEventType.failed:
-        setState(() {
-          _state = _CellState.failed;
-          _errorMessage = event.errorMessage;
-        });
-        break;
-    }
-  }
-
-  Future<void> _startDownload() async {
-    setState(() => _state = _CellState.queuedOrDownloading);
-    final result = await MediaDownloadService.instance.requestDownload(
-      pkid: widget.pkid,
-      tablename: widget.tablename,
-      remoteFilepath: widget.remoteRelativePath,
-      existingLocalFilepath: _localPath,
-    );
-
-    if (!mounted) return;
-    if (result == RequestDownloadResult.alreadyDownloaded) {
-      await _bootstrap();
-    }
-    // alreadyInProgress / startedNow: liveEvents will drive further updates
-  }
-
-  Future<void> _deleteFile() async {
-    final confirm = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: Text(Statics.getLabel('Alert')),
-        content: Text(Statics.getLabel('ToDeleteFile')),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(Statics.getLabel('Cancel'))),
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            child: Text(Statics.getLabel('DeleteFile'), style: const TextStyle(color: Colors.red)),
-          ),
-        ],
-      ),
-    );
-    if (confirm != true) return;
-
-    try {
-      if (_localPath != null) {
-        final file = File(_localPath!);
-        if (await file.exists()) await file.delete();
-
-        // Keep the local DB in sync — if this pkid's row was pointing at
-        // the file we just deleted, clear it so other screens reading the
-        // local table don't serve a dangling path.
-        await MediaDownloadQueueDao.clearLocalFilepathIfMatches(
-          tablename: widget.tablename,
-          pkid: widget.pkid,
-          localPathToClear: _localPath!,
-        );
-      }
-      if (!mounted) return;
-      setState(() {
-        _state = _CellState.notDownloaded;
-        _localPath = null;
-      });
-      Statics.showToast(Statics.getLabel('FileGetDeleted'));
-    } catch (e) {
-      Statics.showToast(Statics.getLabel('ProblemMassage'));
-    }
-  }
-
-  void _playFile() {
-    if (_localPath == null) return;
-    showDialog(
-      context: context,
-      builder: (_) => AudioPlayerDialog(title: '🎧', audioUrl: _localPath!, isLocalFile: true),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (widget.remoteRelativePath.isEmpty) {
-      return const Center(child: Text('---'));
-    }
-
-    switch (_state) {
-      case _CellState.checking:
-        return const Center(
-          child: SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2)),
-        );
-
-      case _CellState.queuedOrDownloading:
-        return Center(
-          child: SizedBox(
-            height: 20,
-            width: 20,
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
-              value: _progress > 0 ? _progress / 100 : null, // indeterminate while waiting, determinate once ticking
-            ),
-          ),
-        );
-
-      case _CellState.downloaded:
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            InkWell(onTap: _playFile, child: const Icon(Icons.remove_red_eye_rounded, color: Colors.green, size: 19)),
-            const SizedBox(width: 12),
-            InkWell(onTap: _deleteFile, child: const Icon(Icons.delete_outline_rounded, color: Colors.red, size: 19)),
-          ],
-        );
-
-      case _CellState.failed:
-        return Center(
-          child: InkWell(
-            onTap: _startDownload,
-            child: const Icon(Icons.refresh, color: Colors.orange, size: 19),
-          ),
-        );
-
-      case _CellState.notDownloaded:
-        return Center(
-          child: InkWell(onTap: _startDownload, child: const Icon(Icons.download, color: Colors.blue, size: 19)),
-        );
-    }
   }
 }

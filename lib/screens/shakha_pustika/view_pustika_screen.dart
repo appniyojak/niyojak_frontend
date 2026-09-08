@@ -1,0 +1,295 @@
+import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../../helpers/static_data.dart' as Statics;
+import '../../models/response_model/offline_shaakhaa_pustika_resp_model.dart';
+import '../../utils/globals.dart';
+import 'download_play_cell_widget.dart';
+
+class ViewPustikaScreen extends StatefulWidget {
+  static var routeName = '/view-pustika-screen';
+
+  final List<OfflineShaakhaPustika> karyakramList;
+  final String vayogatVal;
+  final bool showAppBar;
+
+  const ViewPustikaScreen({required this.karyakramList, required this.vayogatVal, this.showAppBar = false, super.key});
+
+  @override
+  State<ViewPustikaScreen> createState() => _ViewPustikaScreenState();
+}
+
+class _ViewPustikaScreenState extends State<ViewPustikaScreen> {
+  String kFileBaseUrl = Statics.baseUrl;
+
+  static const List<Color> _karyakramHues = [
+    Color(0xFF3F51B5), // Indigo
+    Color(0xFF00897B), // Teal
+    Color(0xFF8E24AA), // Purple
+    Color(0xFFD84315), // Deep Orange
+  ];
+
+  String _stripHtmlTags(String? htmlText) {
+    if (htmlText == null || htmlText.trim().isEmpty) return '-';
+    var text = htmlText
+        .replaceAll(RegExp(r'<[^>]*>'), ' ')
+        .replaceAll('&nbsp;', ' ')
+        .replaceAll('&amp;', '&')
+        .replaceAll('&lt;', '<')
+        .replaceAll('&gt;', '>')
+        .replaceAll('&quot;', '"')
+        .replaceAll('&#39;', "'");
+    text = text.replaceAll(RegExp(r'\s+'), ' ').trim();
+    return text.isEmpty ? '-' : text;
+  }
+
+  String _resolveFileUrl(String path) {
+    if (path.isEmpty) return '';
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+      return path; // already absolute, leave as-is
+    }
+    // avoid double slashes when joining
+    final base = kFileBaseUrl.endsWith('/') ? kFileBaseUrl : '$kFileBaseUrl/';
+    final rel = path.startsWith('/') ? path.substring(1) : path;
+    return '$base$rel';
+  }
+
+  Future<void> _openLink(String url) async {
+    final uri = Uri.tryParse(url.trim());
+    if (uri == null) {
+      Statics.showToast(Statics.getLabel('ProblemMassage'));
+      return;
+    }
+    final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
+    if (!launched) {
+      Statics.showToast(Statics.getLabel('ProblemMassage'));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: widget.showAppBar
+          ? AppBar(
+              elevation: 1,
+              centerTitle: true,
+              title: Text(
+                '${Statics.getLabel('ShakhaPustika')} माहिती',
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+              ),
+            )
+          : null,
+      body: _buildResultsBook(widget.karyakramList),
+    );
+  }
+
+  static const Color _saffron = Color(0xFF8600D4); // Color(0xFFD45D00); // will use them for new design!
+  static const Color _saffron2 = Color(0xFFC320F0); // Color(0xFFF07020); // will use them for new design!
+  static const Color _gold = Color(0xFF8620A8); // Color(0xFFA87820); // will use them for new design!
+  static const Color _warmBg = Color(0xFFFCE5FF); // Color(0xFFFFF0E5); // will use them for new design!
+
+  Widget _buildResultsBook(List<OfflineShaakhaPustika> karyakramList) {
+    if (karyakramList.isEmpty) {
+      return Container(
+        alignment: Alignment.center,
+        height: MediaQuery.sizeOf(context).height * 0.75,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Text(Statics.getLabel('NoInfoText')),
+      );
+    }
+
+    final sorted = List<OfflineShaakhaPustika>.from(karyakramList)..sort((a, b) => (a.orderby ?? 0).compareTo(b.orderby ?? 0));
+
+    final Map<int, List<OfflineShaakhaPustika>> grouped = {};
+    for (final item in sorted) {
+      final id = item.karyakramid ?? -1;
+      grouped.putIfAbsent(id, () => []).add(item);
+    }
+
+    final headerItem = sorted.first;
+    final monthLabel = (headerItem.monthno != null && headerItem.monthno! >= 1 && headerItem.monthno! <= 12) ? monthNameMarathi(headerItem.monthno!) : '-';
+    final groups = grouped.entries.toList();
+
+    return Container(
+      margin: const EdgeInsets.fromLTRB(14, 10, 14, 14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 3, offset: const Offset(0, 1)),
+          BoxShadow(color: Colors.black.withOpacity(0.07), blurRadius: 14, offset: const Offset(0, 6)),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [_saffron, _saffron2],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    const Icon(Icons.calendar_month_rounded, color: Colors.white, size: 17),
+                    const SizedBox(width: 6),
+                    Text(
+                      '$monthLabel ${headerItem.yearno ?? ''}',
+                      style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700, color: Colors.white),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text(
+                      widget.vayogatVal,
+                      style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700, color: Colors.white),
+                    ),
+                    const SizedBox(width: 6),
+                    const Icon(Icons.groups_rounded, color: Colors.white, size: 17),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(18, 18, 18, 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                for (int i = 0; i < groups.length; i++) ...[
+                  _buildKaryakramSection(groups[i].value),
+                  if (i != groups.length - 1) ...[
+                    const SizedBox(height: 18),
+                    Row(
+                      children: [
+                        Expanded(child: Divider(color: _gold.withOpacity(0.35), thickness: 1)),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: Icon(Icons.circle, size: 4, color: _gold.withOpacity(0.6)),
+                        ),
+                        Expanded(child: Divider(color: _gold.withOpacity(0.35), thickness: 1)),
+                      ],
+                    ),
+                    const SizedBox(height: 18),
+                  ] else
+                    const SizedBox(height: 8),
+                ],
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildKaryakramSection(List<OfflineShaakhaPustika> items) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Center(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+            decoration: BoxDecoration(
+              color: _warmBg,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: _gold.withOpacity(0.4), width: 1),
+            ),
+            child: Text(
+              items.first.karyakramname ?? '-',
+              style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w700, color: _saffron, letterSpacing: 0.2),
+            ),
+          ),
+        ),
+        const SizedBox(height: 14),
+        for (int i = 0; i < items.length; i++) ...[
+          _buildKaryakramItem(items[i]),
+          if (i != items.length - 1) ...[
+            const SizedBox(height: 10),
+            Divider(color: Colors.grey.shade200, thickness: 1),
+            const SizedBox(height: 10),
+          ],
+        ],
+      ],
+    );
+  }
+
+  Widget _buildKaryakramItem(OfflineShaakhaPustika item) {
+    final rawRelativePath = item.filepath ?? '';
+    final hasAudio = rawRelativePath.isNotEmpty;
+    final audioUrl = _resolveFileUrl(rawRelativePath);
+    final subjectPlain = _stripHtmlTags(item.subjecttext);
+    final hasLink = (item.urllink ?? '').trim().isNotEmpty;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        if (hasAudio) ...[
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            decoration: BoxDecoration(
+              color: _warmBg.withOpacity(0.6),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: DownloadPlayCell(
+              pkid: item.pkid!,
+              tablename: 'shaakhapustika',
+              remoteRelativePath: rawRelativePath,
+              resolvedUrlForDiskCheck: audioUrl,
+              title: subjectPlain,
+            ),
+          ),
+          const SizedBox(height: 12),
+        ],
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              flex: 3,
+              child: Text(
+                subjectPlain,
+                style: const TextStyle(fontSize: 13.5, color: Color(0xFF3A3A3A), height: 1.55),
+              ),
+            ),
+            if (hasLink) ...[
+              const SizedBox(width: 14),
+              Expanded(
+                flex: 2,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(6),
+                  onTap: () => _openLink(item.urllink!),
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.link_rounded, size: 13, color: _saffron),
+                        const SizedBox(width: 3),
+                        Text(
+                          Statics.getLabel('GeetUrl'), // e.g. "लिंक उघडा" / "Link"
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: _saffron,
+                            fontWeight: FontWeight.w600,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
+      ],
+    );
+  }
+}

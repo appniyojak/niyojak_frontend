@@ -2494,6 +2494,8 @@ Future<List<OfflineShaakhaPustika>?> getUpdateShakhaPustikaList(GetShaakhaPustik
     return await DatabaseHelper.getAllOfflineData<OfflineShaakhaPustika>(
       tableName: 'OfflineShaakhaPustika',
       fromMap: OfflineShaakhaPustika.fromJson,
+      where: 'yearno = ? AND monthno = ? AND vayogatid LIKE ?',
+      whereArgs: [ListRequestmodel.yearno, ListRequestmodel.monthno, '%${ListRequestmodel.vayogatid}%'],
     );
   }
 
@@ -2521,6 +2523,8 @@ Future<List<OfflineShaakhaPustika>?> getUpdateShakhaPustikaList(GetShaakhaPustik
   return await DatabaseHelper.getAllOfflineData<OfflineShaakhaPustika>(
     tableName: 'OfflineShaakhaPustika',
     fromMap: OfflineShaakhaPustika.fromJson,
+    where: 'yearno = ? AND monthno = ? AND vayogatid LIKE ?',
+    whereArgs: [ListRequestmodel.yearno, ListRequestmodel.monthno, '%${ListRequestmodel.vayogatid}%'],
   );
 }
 
@@ -7290,7 +7294,7 @@ Future<ShaakhaaVistaarReport?> getShaakhaaSaptahReportData(BuildContext context,
 Future<List<ShaakhaaList>?> getShaakhaaSaptahListData(BuildContext context, Map<String, dynamic> inputJson) async {
   bool? connected = await isInternetConnected();
   log(inputJson["GeoUnitID"].toString());
-  if (connected == true) {
+  if (connected != true) {
     // No internet — serve whatever we already have locally
     //ParentMahanagarID = ? OR ParentVibhaagID = ? OR
 
@@ -8019,6 +8023,7 @@ class DownloadSewawastiResponse {
   final String status;
   final String message;
   final List<Edata> elist;
+
   DownloadSewawastiResponse(this.status, this.message, this.elist);
 }
 

@@ -136,6 +136,24 @@ Future<bool?> isInternetAvailable() async {
   }
 }
 
+String monthNameMarathi(int month) {
+  var months = [
+    Statics.getLabel('Jan'),
+    Statics.getLabel('Feb'),
+    Statics.getLabel('Mar'),
+    Statics.getLabel('Apr'),
+    Statics.getLabel('May'),
+    Statics.getLabel('Jun'),
+    Statics.getLabel('Jul'),
+    Statics.getLabel('Aug'),
+    Statics.getLabel('Sept'),
+    Statics.getLabel('Oct'),
+    Statics.getLabel('Nov'),
+    Statics.getLabel('Dec'),
+  ];
+  return months[month - 1];
+}
+
 class MyAppGlobals {
   static String checkTextNullEmpty(String? txt) {
     if (txt == null || txt.isEmpty) return "N/A";

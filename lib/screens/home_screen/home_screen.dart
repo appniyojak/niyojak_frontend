@@ -41,10 +41,10 @@ import '../AbhiyanScreen.dart';
 import '../levels_update_module/levels_manage_tabs.dart';
 import '../notification_list_page.dart';
 import '../profile_settings.dart';
-import '../search_event.dart';
 import '../search_join_rss.dart';
 import '../search_rjb_nidhi_sankalan.dart';
-import '../search_soochi_screen.dart';
+import '../search_swayamsevak_transfer.dart';
+import '../sewa_vasti_list.dart';
 import '../shaakhaa_milan_module/shaakha_main_tab_screen.dart';
 import '../shatabdi_vrutta_sankalan/gruh_sampark_abhiyaan/gruh_abhiyaan_main_tab_screen.dart';
 import '../shatabdi_vrutta_sankalan/hindu_sanmelan/hindu_sanmelan_main_tab.dart';
@@ -58,7 +58,6 @@ import '../survey_screen/mandal_reports_tabs.dart';
 import '../survey_screen/survey_form/mandal_survey_form_view.dart';
 import '../survey_screen/survey_form/vasti_survey_form_view.dart';
 import '../survey_screen/vasti_reports_tabs.dart';
-import '../swayamsevak_module/swayamsevak_search.dart';
 import 'data_details_screen.dart';
 
 enum OtherLevelSelection { daily, weekly, monthly, yearly }
@@ -1543,9 +1542,11 @@ class _HomeScreenState extends State<HomeScreen> {
       return ReusableBarTabCard(
         inRow: true,
         isHighlighted: true,
+        showEreyesterday: true,
         totalshakhaa: data.shaakhaaCount,
         todayShakhaa: data.todayShaakhaaCount,
         yesterdayShakhaa: data.yesterdayShaakhaaCount,
+        ereyesterdayShakhaa: data.ereyesterdayShaakhaaCount,
         mainLabel: Statics.getLabel("shakhaaTulna"),
         onListTap: () => showShaakhaaNamesList(title: Statics.getLabel("shakhaaTulna"), type: "daily"),
       );
@@ -1559,24 +1560,36 @@ class _HomeScreenState extends State<HomeScreen> {
           ReusableBarTabCard(
             inRow: true,
             isHighlighted: true,
+            showEreyesterday: true,
             totalshakhaa: data.shaakhaaCount,
             todayShakhaa: data.thisWeekShaakhaaCount,
             yesterdayShakhaa: data.lastWeekShaakhaaCount,
+            ereyesterdayShakhaa: data.lastofLastWeekShaakhaaCount,
+            currentToolTip: data.thisWeekRange,
+            lastToolTip: data.lastWeekRange,
+            lastToLastToolTip: data.lastOfLastWeekRange,
             mainLabel: Statics.getLabel("shakhaaTulna"),
             currentLabel: Statics.getLabel("currentWeekShakhaa"),
             lastLabel: Statics.getLabel("previousWeekShakhaa"),
+            lastToLastLabel: Statics.getLabel("previous2PrevWeekShakhaa"),
             currentTotalLabel: Statics.getLabel("thisWeekTotalShakhaa"),
             onListTap: () => showShaakhaaNamesList(title: Statics.getLabel("shakhaaTulna"), type: "weeklyshaakhaa"),
           ),
           ReusableBarTabCard(
             inRow: true,
             isHighlighted: true,
+            showEreyesterday: true,
             totalshakhaa: data.shaapthahikCount,
             todayShakhaa: data.thisWeekShaapthahikCount,
             yesterdayShakhaa: data.lastWeekShaapthahikCount,
+            ereyesterdayShakhaa: data.lastofLastWeekShaapthahikCount,
+            currentToolTip: data.thisWeekRange,
+            lastToolTip: data.lastWeekRange,
+            lastToLastToolTip: data.lastOfLastWeekRange,
             mainLabel: Statics.getLabel('weeklyShakhaaTulna'),
             currentLabel: Statics.getLabel("currentWeekMilan"),
             lastLabel: Statics.getLabel('previousWeekMilan'),
+            lastToLastLabel: Statics.getLabel('previous2PrevWeekMilan'),
             totalLabel: Statics.getLabel("totalMilanSampann"),
             onListTap: () => showShaakhaaNamesList(title: Statics.getLabel("weeklyShakhaaTulna"), type: "weeklysaaptaahik"),
           )
@@ -1592,12 +1605,15 @@ class _HomeScreenState extends State<HomeScreen> {
           ReusableBarTabCard(
             inRow: true,
             isHighlighted: true,
+            showEreyesterday: true,
             totalshakhaa: data.shaakhaaCount,
             todayShakhaa: data.thisMonthShaakhaaCount,
             yesterdayShakhaa: data.lastMonthShaakhaaCount,
+            ereyesterdayShakhaa: data.lastOfLastMonthShaakhaaCount,
             mainLabel: Statics.getLabel("shakhaaTulna"),
             currentLabel: "$thisMonthName ${Statics.getLabel('fromMonthShaakha')} ${Statics.getLabel("onBasisOfNityaVrutta")}",
             lastLabel: "$prevMonthName ${Statics.getLabel('fromMonthShaakha')} ${Statics.getLabel("onBasisOfNityaVrutta")}",
+            lastToLastLabel: "$prevofPrevMonthName ${Statics.getLabel('fromMonthShaakha')} ${Statics.getLabel("onBasisOfNityaVrutta")}",
             currentTotalLabel: Statics.getLabel("todayShaakhaaMonthCount"),
             note: Statics.getLabel("lessThan15Tip"),
             onListTap: () => showShaakhaaNamesList(title: Statics.getLabel("shakhaaTulna"), type: "monthlyshaakhaa"),
@@ -1639,12 +1655,15 @@ class _HomeScreenState extends State<HomeScreen> {
           ReusableBarTabCard(
             inRow: true,
             isHighlighted: true,
+            showEreyesterday: true,
             totalshakhaa: data.shaapthahikCount,
             todayShakhaa: data.thisMonthShaapthahikCount,
             yesterdayShakhaa: data.lastMonthShaapthahikCount,
+            ereyesterdayShakhaa: data.lastOfLastMonthShaapthahikCount,
             mainLabel: Statics.getLabel('weeklyShakhaaTulna'),
             currentLabel: "$thisMonthName ${Statics.getLabel("fromMonthSaptahik")} ${Statics.getLabel("onBasisOfNityaVrutta")}",
             lastLabel: "$prevMonthName ${Statics.getLabel('fromMonthSaptahik')} ${Statics.getLabel("onBasisOfNityaVrutta")}",
+            lastToLastLabel: "$prevofPrevMonthName ${Statics.getLabel('fromMonthSaptahik')} ${Statics.getLabel("onBasisOfNityaVrutta")}",
             totalLabel: Statics.getLabel("totalMilanSampann"),
             currentTotalLabel: Statics.getLabel("thisMonthTotalShaapthahikCount"),
             note: Statics.getLabel("lessThan3Tip"),
@@ -1687,12 +1706,15 @@ class _HomeScreenState extends State<HomeScreen> {
           ReusableBarTabCard(
             inRow: true,
             isHighlighted: true,
+            showEreyesterday: true,
             totalshakhaa: data.mandaliCount,
             todayShakhaa: data.thisMonthMandaliCount,
             yesterdayShakhaa: data.lastMonthMandaliCount,
+            ereyesterdayShakhaa: data.lastOfLastMonthmandaliCount,
             mainLabel: Statics.getLabel('shaakhaamandaliCount'),
             currentLabel: "$thisMonthName ${Statics.getLabel("fromMonthSangha")} ${Statics.getLabel("onBasisOfNityaVrutta")}",
             lastLabel: "$prevMonthName ${Statics.getLabel('fromMonthSangha')} ${Statics.getLabel("onBasisOfNityaVrutta")}",
+            lastToLastLabel: "$prevofPrevMonthName ${Statics.getLabel('fromMonthSangha')} ${Statics.getLabel("onBasisOfNityaVrutta")}",
             totalLabel: Statics.getLabel("totalshaakhaamandaliCount"),
             currentTotalLabel: Statics.getLabel("thisMonthTotalMandaliCount"),
             onListTap: () => showShaakhaaNamesList(title: Statics.getLabel("shaakhaamandaliCount"), type: "monthlysangha"),
@@ -1720,12 +1742,15 @@ class _HomeScreenState extends State<HomeScreen> {
           ReusableBarTabCard(
             inRow: true,
             isHighlighted: true,
+            showEreyesterday: true,
             totalshakhaa: data.masikCount,
             todayShakhaa: data.thisMonthMasikCount,
             yesterdayShakhaa: data.lastMonthMasikCount,
+            ereyesterdayShakhaa: data.lastOfLastMonthmasikCount,
             mainLabel: Statics.getLabel('masikCount'),
             currentLabel: "$thisMonthName ${Statics.getLabel("fromMonthMasik")} ${Statics.getLabel("onBasisOfNityaVrutta")}",
             lastLabel: "$prevMonthName ${Statics.getLabel('fromMonthMasik')} ${Statics.getLabel("onBasisOfNityaVrutta")}",
+            lastToLastLabel: "$prevofPrevMonthName ${Statics.getLabel('fromMonthMasik')} ${Statics.getLabel("onBasisOfNityaVrutta")}",
             totalLabel: Statics.getLabel("totalmasikCount"),
             currentTotalLabel: Statics.getLabel("thisMonthTotalMasikCount"),
             onListTap: () => showShaakhaaNamesList(title: Statics.getLabel("masikCount"), type: "monthlymaasik"),
@@ -4150,18 +4175,19 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         _cardRow([
           if (_joinRss) _cardTile(Statics.getLabel('searchJoinRSSScreenLabel'), () => Navigator.of(context).pushNamed(SearchJoinRss.routeName)),
-          _cardTile(Statics.getLabel('searchSwayamsevakScreenBanner'), () => Navigator.of(context).pushNamed(SwayamSevakSearch.routeName)),
+          if (_shouldShowGeoUnitChange(level, daayitva)) _cardTile(Statics.getLabel('masterdataupdate2'), () => Navigator.of(context).pushNamed(TabScreen.routeName)),
+        ]),
+        _cardRow([
+          if (Statics.levelId > 3) _cardTile(Statics.getLabel('searchSewaVastiScreenLabel'), () => Navigator.of(context).pushNamed(SearchSewaVasti.routeName)),
+          if (!((Statics.userDetails['LevelName'] == 'Shaakhaa' || Statics.userDetails["LevelName"] == "शाखा") &&
+              (Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' || Statics.userDetails["DaayitvaName"] == "कार्यवाह")))
+            _cardTile(Statics.getLabel('searchSwayamsevakTransferLabel'), () => Navigator.of(context).pushNamed(SearchSwayamsevakTransfer.routeName)),
         ]),
         _cardRow([
           _cardTile(Statics.getLabel('Abhiyaan'), () => Navigator.of(context).pushNamed(AbhiyanScreen.routeName)),
-          _cardTile(Statics.getLabel('searchSoochiScreenLabel'), () => Navigator.of(context).pushNamed(SearchSoochiScreen.routeName)),
+          if (_showRjbNidhiTile(level, daayitva))
+            _cardTile(Statics.getLabel('searchRamJanmabhoomiNidhiSankalanVrutta'), () => Navigator.of(context).pushNamed(SearchRamJanmaBhoomiNidhiSankalan.routeName)),
         ]),
-        _cardRow([
-          if (_shouldShowGeoUnitChange(level, daayitva)) _cardTile(Statics.getLabel('masterdataupdate2'), () => Navigator.of(context).pushNamed(TabScreen.routeName)),
-          _cardTile(Statics.getLabel('searchEventsScreenLabel'), () => Navigator.of(context).pushNamed(SearchEvent.routeName)),
-        ]),
-        if (_showRjbNidhiTile(level, daayitva))
-          _cardTile(Statics.getLabel('searchRamJanmabhoomiNidhiSankalanVrutta'), () => Navigator.of(context).pushNamed(SearchRamJanmaBhoomiNidhiSankalan.routeName)),
       ],
     );
   }
