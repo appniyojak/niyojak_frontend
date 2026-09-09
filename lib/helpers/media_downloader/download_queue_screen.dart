@@ -32,15 +32,16 @@ class _DownloadsScreenState extends State<DownloadsScreen> with SingleTickerProv
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Downloads'),
-        bottom: TabBar(
+        appBar: AppBar(
+          title: const Text('Downloads'),
+          /*bottom: TabBar(
           controller: _tabController,
           indicatorColor: Colors.white,
           tabs: const [Tab(text: 'Active'), Tab(text: 'Pending'), Tab(text: 'Failed')],
+        ),*/
         ),
-      ),
-      body: TabBarView(
+        body: _StatusList(status: 'downloading', showOverallHeader: true)
+        /*TabBarView(
         controller: _tabController,
         physics: NeverScrollableScrollPhysics(),
         children: const [
@@ -48,8 +49,8 @@ class _DownloadsScreenState extends State<DownloadsScreen> with SingleTickerProv
           _StatusList(status: 'pending'),
           _StatusList(status: 'failed'),
         ],
-      ),
-    );
+      ),*/
+        );
   }
 }
 

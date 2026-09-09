@@ -242,7 +242,7 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
     }
     try {
       SharedPreferences pref = await SharedPreferences.getInstance();
-      await pref.setString("selectedVayogat", _vayogatValue!);
+      await pref.setString("selectedVayogat", _vayogatValue ?? '');
 
       final requestModel = GetShaakhaPustikaListRequest(
         cuserid: cUserId,
@@ -438,8 +438,12 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
 
   /// Entry point — decides table vs card layout.
   Widget _buildResults(List<OfflineShaakhaPustika> karyakramList) {
+    final matches = _vayogat?.where((e) => e?.staticID.toString() == _vayogatValue);
+
+    final code = matches != null && matches.isNotEmpty ? matches.first?.codeForDisplay : null;
+
     if (Statics.levelId != 7) {
-      return ViewPustikaScreen(karyakramList: karyakramList, vayogatVal: _vayogat?.firstWhere((e) => e?.staticID.toString() == _vayogatValue)?.codeForDisplay);
+      return ViewPustikaScreen(karyakramList: karyakramList, vayogatVal: code);
     }
     return SingleChildScrollView(padding: EdgeInsets.all(14), child: _buildResultsTable(karyakramList));
   }
@@ -747,13 +751,14 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
     final bool isAudioKaryakram = [308, 310].contains(item.karyakramid);
     final String audioUrl = _resolveFileUrl(item.filepath ?? '');
     final bool hasAudioFile = isAudioKaryakram && audioUrl.isNotEmpty;
+    final matches = _vayogat?.where((e) => e?.staticID.toString() == _vayogatValue);
 
+    final code = matches != null && matches.isNotEmpty ? matches.first?.codeForDisplay : null;
     Future<void> goToInfoScreen(String selectedAction) async {
       dynamic result; // NEW — capture what SangrahaShkhaPustikaScreen pops back
 
       if (selectedAction == "view") {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => ViewPustikaScreen(showAppBar: true, vayogatVal: _vayogat?.firstWhere((e) => e?.staticID.toString() == _vayogatValue)?.codeForDisplay, karyakramList: karyakramList)));
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => ViewPustikaScreen(showAppBar: true, vayogatVal: code, karyakramList: karyakramList)));
         return;
       }
 
@@ -824,9 +829,7 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
                 ],
               )
             : InkWell(
-                onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) =>
-                        ViewPustikaScreen(showAppBar: true, vayogatVal: _vayogat?.firstWhere((e) => e?.staticID.toString() == _vayogatValue)?.codeForDisplay, karyakramList: karyakramList))),
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => ViewPustikaScreen(showAppBar: true, vayogatVal: code, karyakramList: karyakramList))),
                 child: Icon(Icons.info_outline, color: primaryColor, size: 20),
               ),
       ),

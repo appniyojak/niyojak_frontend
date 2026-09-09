@@ -19,6 +19,7 @@ class DownloadPlayCell extends StatefulWidget {
   final String resolvedUrlForDiskCheck; // _resolveFileUrl(remoteRelativePath) — only used to derive the local filename
   final String title;
   final bool fromDataTable;
+  final bool showDeleteIcon;
 
   const DownloadPlayCell({
     required this.pkid,
@@ -27,6 +28,7 @@ class DownloadPlayCell extends StatefulWidget {
     required this.resolvedUrlForDiskCheck,
     required this.title,
     this.fromDataTable = false,
+    this.showDeleteIcon = false,
   });
 
   @override
@@ -299,7 +301,7 @@ class DownloadPlayCellState extends State<DownloadPlayCell> {
             const SizedBox(width: 6),
             Text(_formatDuration(_position), style: const TextStyle(fontSize: 11, color: Colors.black54)),
             const SizedBox(width: 8),
-            InkWell(onTap: _deleteFile, child: const Icon(Icons.delete_outline_rounded, color: Colors.red, size: 19)),
+            if (widget.showDeleteIcon) InkWell(onTap: _deleteFile, child: const Icon(Icons.delete_outline_rounded, color: Colors.red, size: 19)),
           ],
         );
 
