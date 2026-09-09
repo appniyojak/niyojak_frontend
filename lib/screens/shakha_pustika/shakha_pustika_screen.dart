@@ -113,7 +113,9 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
     //await Statics.populateUserDetailsMap();
     print("userid:${user.map((e) => e.swayamsevakID)}");
     cUserId = user.first.swayamsevakID ?? 0;
-    if (_vayogatValue != null && _vayogatValue!.isNotEmpty)
+    if (levelId > 7 && levelId != 13)
+      _tabController?.animateTo(1);
+    else if (levelId == 1 || (_vayogatValue != null && _vayogatValue!.isNotEmpty))
       await _searchShaakhaPustika(karyakramval: -1);
     else
       _tabController?.animateTo(1);
@@ -225,7 +227,7 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
     bool isVibhagLevelUser = false;
     _apiList = [];
     geoUnitId = int.tryParse(_controller.deepestSelectedGeoUnitId.toString());
-    if (_vayogatValue == null || _vayogatValue == '') {
+    if (levelId != 1 && (_vayogatValue == null || _vayogatValue == '')) {
       Statics.showToast(Statics.getLabel('VayogatValidationMessage'));
       return;
     }
@@ -289,6 +291,7 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
     // It should pop normally if it's a single screen OR if the user is already on the first tab (index 0).
 
     return PopScope(
+      canPop: false,
       onPopInvokedWithResult: (didPop, result) {
         // If the system already handled the pop (canPop was true), do nothing.
         if (didPop) return;
@@ -409,10 +412,7 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
       );
     }
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(14),
-      child: _isSearching ? const Center(child: CircularProgressIndicator()) : _buildResults(_apiList),
-    );
+    return _isSearching ? const Center(child: CircularProgressIndicator()) : _buildResults(_apiList);
   }
 
   static const List<Color> _karyakramHues = [
@@ -439,9 +439,9 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
   /// Entry point — decides table vs card layout.
   Widget _buildResults(List<OfflineShaakhaPustika> karyakramList) {
     if (Statics.levelId != 7) {
-      return ViewPustikaScreen(karyakramList: karyakramList, vayogatVal: _vayogat!.firstWhere((e) => e?.staticID.toString() == _vayogatValue)?.codeForDisplay ?? "--");
+      return ViewPustikaScreen(karyakramList: karyakramList, vayogatVal: _vayogat?.firstWhere((e) => e?.staticID.toString() == _vayogatValue)?.codeForDisplay);
     }
-    return _buildResultsTable(karyakramList);
+    return SingleChildScrollView(padding: EdgeInsets.all(14), child: _buildResultsTable(karyakramList));
   }
 
   // ── Reusable card wrapper for each section ──────────────────────
@@ -486,7 +486,7 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
     return InputDecoration(
       labelText: label,
       hintText: hint,
-      isDense: true,
+      isDense: false,
       filled: true,
       fillColor: const Color(0xFFF9FAFC),
       contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
@@ -753,8 +753,7 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
 
       if (selectedAction == "view") {
         Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) =>
-                ViewPustikaScreen(showAppBar: true, vayogatVal: _vayogat!.firstWhere((e) => e?.staticID.toString() == _vayogatValue)?.codeForDisplay ?? "--", karyakramList: karyakramList)));
+            builder: (context) => ViewPustikaScreen(showAppBar: true, vayogatVal: _vayogat?.firstWhere((e) => e?.staticID.toString() == _vayogatValue)?.codeForDisplay, karyakramList: karyakramList)));
         return;
       }
 
@@ -827,7 +826,7 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
             : InkWell(
                 onTap: () => Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) =>
-                        ViewPustikaScreen(showAppBar: true, vayogatVal: _vayogat!.firstWhere((e) => e?.staticID.toString() == _vayogatValue)?.codeForDisplay ?? "--", karyakramList: karyakramList))),
+                        ViewPustikaScreen(showAppBar: true, vayogatVal: _vayogat?.firstWhere((e) => e?.staticID.toString() == _vayogatValue)?.codeForDisplay, karyakramList: karyakramList))),
                 child: Icon(Icons.info_outline, color: primaryColor, size: 20),
               ),
       ),

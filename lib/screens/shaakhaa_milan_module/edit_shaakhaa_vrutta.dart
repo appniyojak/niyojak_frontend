@@ -125,10 +125,14 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
     _vruttaDate = selectedDate;
     _vruttaDateCntrl.text = displayFormatter.format(selectedDate);
 
-    getSwDetails(
-      vruttaID,
-      dateSelected: inputFormatter.format(selectedDate),
-    );
+    if (vruttaID > 0) {
+      getSwDetails(widget.vruttaID);
+    } else {
+      getSwDetails(
+        vruttaID,
+        dateSelected: inputFormatter.format(selectedDate),
+      );
+    }
   }
 
   Future<void> populateShaakhaVayogat(shaakhaaID) async {
@@ -197,75 +201,95 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
     if (!isConnected) {
       Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));
     } else {
-      // dataList = theId == 0 || theId == null
-      dataList = await Statics.getShaakhaaVruttaDetailsByDateForApp(int.tryParse(widget.shaakhaaID == null ? "0" : widget.shaakhaaID.toString()) ?? 0, dateSelected);
-      // : await Statics.getShaakhaaVruttaListForApp(null, theId);
-      if (dataList != null && dataList.vruttaList.isNotEmpty) {
-        var data = ShaakhaaVruttaBAL.fromMap(dataList.vruttaList[0]);
+      //final dataList = await Statics.getShaakhaaVruttaDetailsByDateForApp(int.tryParse(widget.shaakhaaID == null ? "0" : widget.shaakhaaID.toString()) ?? 0, dateSelected);
 
-        final List<dynamic> rawData = dataList.data;
-        final apiItems = rawData.map((e) => SewaDaysGroupData.fromJson(e as Map<String, dynamic>)).toList();
-        _sewaDaysGroup = buildGroupedItemsFromApi(apiItems);
+      dataList = dateSelected != null
+          ? await Statics.getShaakhaaVruttaDetailsByDateForApp(
+              int.tryParse(widget.shaakhaaID?.toString() ?? "0") ?? 0,
+              dateSelected,
+            )
+          : await Statics.getShaakhaaVruttaListForApp(null, theId);
 
-        // var data = ShaakhaaVruttaBAL.fromMap(theId == 0 || theId == null ? dataList.vruttaList[0] : dataList[0]);
-        if (!mounted) return;
-        setState(() {
+      if (dataList != null) {
+        List<dynamic> vruttaList;
+
+        if (dataList is List<dynamic>) {
+          vruttaList = dataList;
+        } else {
+          vruttaList = dataList.vruttaList;
+        }
+
+        if (vruttaList.isNotEmpty) {
+          var data = ShaakhaaVruttaBAL.fromMap(vruttaList[0]);
+          // }
+          //
+          // if (dataList != null && dataList.vruttaList.isNotEmpty) {
+          //   var data = ShaakhaaVruttaBAL.fromMap(dataList.vruttaList[0]);
+
+          final List<dynamic> rawData = dataList.data;
+          final apiItems = rawData.map((e) => SewaDaysGroupData.fromJson(e as Map<String, dynamic>)).toList();
+          _sewaDaysGroup = buildGroupedItemsFromApi(apiItems);
+
+          // var data = ShaakhaaVruttaBAL.fromMap(theId == 0 || theId == null ? dataList.vruttaList[0] : dataList[0]);
+          if (!mounted) return;
           vrutta = data;
-          if (vrutta != null) {
-            final formattedDate = dateSelected != null ? DateFormat('dd/MM/yyyy').parse(dateSelected) : null;
-            final hasVruttaDate = vrutta?.vruttaDate?.isNotEmpty ?? false;
+          setState(() {
+            if (vrutta != null) {
+              final formattedDate = dateSelected != null ? DateFormat('dd/MM/yyyy').parse(dateSelected) : null;
+              final hasVruttaDate = vrutta?.vruttaDate?.isNotEmpty ?? false;
 
-            _vruttaDate = hasVruttaDate ? DateFormat('yyyy/MM/dd').parse(vrutta!.vruttaDate!) : formattedDate;
-            _vruttaDateCntrl.text = _vruttaDate != null ? DateFormat('dd-MMM-yyyy').format(_vruttaDate!) : '';
+              _vruttaDate = hasVruttaDate ? DateFormat('yyyy/MM/dd').parse(vrutta!.vruttaDate!) : formattedDate;
+              _vruttaDateCntrl.text = _vruttaDate != null ? DateFormat('dd-MMM-yyyy').format(_vruttaDate!) : '';
 
-            _shishuCtrl.text = vrutta!.shishuCount == null ? "" : vrutta!.shishuCount.toString();
-            _newshishuCtrl.text = vrutta!.newshishuCount == null ? "" : vrutta!.newshishuCount.toString();
-            _baalCtrl.text = vrutta!.baalVidyaarthiCount == null ? "" : vrutta!.baalVidyaarthiCount.toString();
-            _newbaalCtrl.text = vrutta!.newbaalVidyaarthiCount == null ? "" : vrutta!.newbaalVidyaarthiCount.toString();
-            _tarunVidhyaarthiCtrl.text = vrutta!.tarunVidyaarthiCount == null ? "" : vrutta!.tarunVidyaarthiCount.toString();
-            _newtarunVidhyaarthiCtrl.text = vrutta!.newtarunVidyaarthiCount == null ? "" : vrutta!.newtarunVidyaarthiCount.toString();
-            _tarunVyavsaayeeCtrl.text = vrutta!.tarunVyavasaayeeCount == null ? "" : vrutta!.tarunVyavasaayeeCount.toString();
-            _newtarunVyavsaayeeCtrl.text = vrutta!.newtarunVyavasaayeeCount == null ? "" : vrutta!.newtarunVyavasaayeeCount.toString();
-            _proudhaCtrl.text = vrutta!.proudhaVyavasaayeeCount == null ? "" : vrutta!.proudhaVyavasaayeeCount.toString();
-            _newproudhaCtrl.text = vrutta!.newproudhaVyavasaayeeCount == null ? "" : vrutta!.newproudhaVyavasaayeeCount.toString();
-            _matrushaktiCtrl.text = vrutta!.matruskatiCount == null ? "" : vrutta!.matruskatiCount.toString();
-            _newmatrushaktiCtrl.text = vrutta!.newmatruskatiCount == null ? "" : vrutta!.newmatruskatiCount.toString();
-            _abhyaagatCtrl.text = vrutta!.abhyaagatCount == null ? "" : vrutta!.abhyaagatCount.toString();
-            _pravasiKaryakartaCountCtrl.text = vrutta!.pravasiKaryakartaCount == null ? "" : vrutta!.pravasiKaryakartaCount.toString();
-            _anyaPravasiKaryakartaCountCtrl.text = vrutta!.anyaPravasiKaryakartaCount == null ? "" : vrutta!.anyaPravasiKaryakartaCount.toString();
-            _remarkCtrl.text = vrutta!.remark == null ? "" : vrutta!.remark.toString();
+              _shishuCtrl.text = vrutta!.shishuCount == null ? "" : vrutta!.shishuCount.toString();
+              _newshishuCtrl.text = vrutta!.newshishuCount == null ? "" : vrutta!.newshishuCount.toString();
+              _baalCtrl.text = vrutta!.baalVidyaarthiCount == null ? "" : vrutta!.baalVidyaarthiCount.toString();
+              _newbaalCtrl.text = vrutta!.newbaalVidyaarthiCount == null ? "" : vrutta!.newbaalVidyaarthiCount.toString();
+              _tarunVidhyaarthiCtrl.text = vrutta!.tarunVidyaarthiCount == null ? "" : vrutta!.tarunVidyaarthiCount.toString();
+              _newtarunVidhyaarthiCtrl.text = vrutta!.newtarunVidyaarthiCount == null ? "" : vrutta!.newtarunVidyaarthiCount.toString();
+              _tarunVyavsaayeeCtrl.text = vrutta!.tarunVyavasaayeeCount == null ? "" : vrutta!.tarunVyavasaayeeCount.toString();
+              _newtarunVyavsaayeeCtrl.text = vrutta!.newtarunVyavasaayeeCount == null ? "" : vrutta!.newtarunVyavasaayeeCount.toString();
+              _proudhaCtrl.text = vrutta!.proudhaVyavasaayeeCount == null ? "" : vrutta!.proudhaVyavasaayeeCount.toString();
+              _newproudhaCtrl.text = vrutta!.newproudhaVyavasaayeeCount == null ? "" : vrutta!.newproudhaVyavasaayeeCount.toString();
+              _matrushaktiCtrl.text = vrutta!.matruskatiCount == null ? "" : vrutta!.matruskatiCount.toString();
+              _newmatrushaktiCtrl.text = vrutta!.newmatruskatiCount == null ? "" : vrutta!.newmatruskatiCount.toString();
+              _abhyaagatCtrl.text = vrutta!.abhyaagatCount == null ? "" : vrutta!.abhyaagatCount.toString();
+              _pravasiKaryakartaCountCtrl.text = vrutta!.pravasiKaryakartaCount == null ? "" : vrutta!.pravasiKaryakartaCount.toString();
+              _anyaPravasiKaryakartaCountCtrl.text = vrutta!.anyaPravasiKaryakartaCount == null ? "" : vrutta!.anyaPravasiKaryakartaCount.toString();
+              _remarkCtrl.text = vrutta!.remark == null ? "" : vrutta!.remark.toString();
 
-            // _isMandatoryShaaririk =
-            //     vrutta!.isMandatoryShaaririk == true ? true : false;
+              // _isMandatoryShaaririk =
+              //     vrutta!.isMandatoryShaaririk == true ? true : false;
 
-            // _isMandatoryBouddhik =
-            //     vrutta!.isMandatoryBouddhik == true ? true : false;
+              // _isMandatoryBouddhik =
+              //     vrutta!.isMandatoryBouddhik == true ? true : false;
 
-            _isOptionalShaaririk = vrutta?.isOptionalShaaririk ?? false;
+              _isOptionalShaaririk = vrutta?.isOptionalShaaririk ?? false;
 
-            _isOptionalOther = vrutta?.isOptionalOther ?? false;
+              _isOptionalOther = vrutta?.isOptionalOther ?? false;
 
-            _isDoneDeepBreathing = vrutta?.isDoneDeepBreathing ?? false;
-            _isDoneDandaPrahaar = vrutta?.isDoneDandaPrahaar ?? false;
-            _isDoneSooryaNamaskaar = vrutta?.isDoneSooryaNamaskaar ?? false;
-            _isDoneSanchalanAbhyaas = vrutta?.isDoneSanchalanAbhyaas ?? false;
-            _isDoneSaanghikGeet = vrutta?.isDoneSaanghikGeet ?? false;
-            _isDoneAmrutaVachan = vrutta?.isDoneAmrutaVachan ?? false;
-            _isDoneSubhaashit = vrutta?.isDoneSubhaashit ?? false;
-            _isDoneUrdhvapad = vrutta?.isDoneUrdhvapad ?? false;
-            _isDoneBoodhKatha = vrutta?.isDoneBoodhKatha ?? false;
-            _isDoneBoudhikDays = vrutta?.isDoneBoudhikDays ?? false;
-            _isDoneSewaDays = vrutta?.isDoneSewaDays ?? false;
+              _isDoneDeepBreathing = vrutta?.isDoneDeepBreathing ?? false;
+              _isDoneDandaPrahaar = vrutta?.isDoneDandaPrahaar ?? false;
+              _isDoneSooryaNamaskaar = vrutta?.isDoneSooryaNamaskaar ?? false;
+              _isDoneSanchalanAbhyaas = vrutta?.isDoneSanchalanAbhyaas ?? false;
+              _isDoneSaanghikGeet = vrutta?.isDoneSaanghikGeet ?? false;
+              _isDoneAmrutaVachan = vrutta?.isDoneAmrutaVachan ?? false;
+              _isDoneSubhaashit = vrutta?.isDoneSubhaashit ?? false;
+              _isDoneUrdhvapad = vrutta?.isDoneUrdhvapad ?? false;
+              _isDoneBoodhKatha = vrutta?.isDoneBoodhKatha ?? false;
+              _isDoneBoudhikDays = vrutta?.isDoneBoudhikDays ?? false;
+              _isDoneSewaDays = vrutta?.isDoneSewaDays ?? false;
 
-            _selectedBoudhikDaysId = _isDoneBoudhikDays ? vrutta?.SelectedBoudhikDaysId : null;
-            _anyaBoudhikDaysCtrl.text = _isDoneBoudhikDays ? vrutta?.AnyaBoudhikDays ?? "" : "";
-            _selectedSewaDaysList = vrutta?.SelectedSewaDaysId?.split(',').map((e) => int.tryParse(e)).where((e) => e != null).cast<int>().toList() ?? [];
-          }
+              _selectedBoudhikDaysId = _isDoneBoudhikDays ? vrutta?.SelectedBoudhikDaysId : null;
+              _anyaBoudhikDaysCtrl.text = _isDoneBoudhikDays ? vrutta?.AnyaBoudhikDays ?? "" : "";
+              _selectedSewaDaysList = vrutta?.SelectedSewaDaysId?.split(',').map((e) => int.tryParse(e)).where((e) => e != null).cast<int>().toList() ?? [];
+            }
+          });
+        }
+        setState(() {
+          _isFetchingData = false;
         });
       }
-      setState(() {
-        _isFetchingData = false;
-      });
     }
   }
 

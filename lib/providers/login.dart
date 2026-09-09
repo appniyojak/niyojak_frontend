@@ -317,7 +317,6 @@ class LogIn {
       }
 
       List<Map<String, dynamic>> dataList3 = (body['LogInData']['list'] as List).map((item) => item as Map<String, dynamic>).toList();
-      debugPrint("STEP 4: dataList3 length = ${dataList3.length}");
       if (dataList3.length > 0) {
         debugPrint("usrLogIn 17.2");
 

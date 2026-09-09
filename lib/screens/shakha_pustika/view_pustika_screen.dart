@@ -10,10 +10,10 @@ class ViewPustikaScreen extends StatefulWidget {
   static var routeName = '/view-pustika-screen';
 
   final List<OfflineShaakhaPustika> karyakramList;
-  final String vayogatVal;
+  final String? vayogatVal;
   final bool showAppBar;
 
-  const ViewPustikaScreen({required this.karyakramList, required this.vayogatVal, this.showAppBar = false, super.key});
+  const ViewPustikaScreen({required this.karyakramList, this.vayogatVal, this.showAppBar = false, super.key});
 
   @override
   State<ViewPustikaScreen> createState() => _ViewPustikaScreenState();
@@ -79,7 +79,7 @@ class _ViewPustikaScreenState extends State<ViewPustikaScreen> {
               ),
             )
           : null,
-      body: _buildResultsBook(widget.karyakramList),
+      body: SingleChildScrollView(child: _buildResultsBook(widget.karyakramList)),
     );
   }
 
@@ -111,6 +111,7 @@ class _ViewPustikaScreenState extends State<ViewPustikaScreen> {
     final groups = grouped.entries.toList();
 
     return Container(
+      padding: EdgeInsets.only(bottom: 16),
       margin: const EdgeInsets.fromLTRB(14, 10, 14, 14),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -121,6 +122,7 @@ class _ViewPustikaScreenState extends State<ViewPustikaScreen> {
         ],
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
@@ -149,7 +151,7 @@ class _ViewPustikaScreenState extends State<ViewPustikaScreen> {
                 Row(
                   children: [
                     Text(
-                      widget.vayogatVal,
+                      widget.vayogatVal ?? headerItem.vayogatname ?? '--',
                       style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700, color: Colors.white),
                     ),
                     const SizedBox(width: 6),
@@ -192,6 +194,7 @@ class _ViewPustikaScreenState extends State<ViewPustikaScreen> {
 
   Widget _buildKaryakramSection(List<OfflineShaakhaPustika> items) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Center(
@@ -229,6 +232,7 @@ class _ViewPustikaScreenState extends State<ViewPustikaScreen> {
     final hasLink = (item.urllink ?? '').trim().isNotEmpty;
 
     return Column(
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         if (hasAudio) ...[
