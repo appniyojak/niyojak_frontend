@@ -8033,6 +8033,7 @@ class Edata {
   final String bhag;
   final String nagar;
   final String vasti;
+  final String upnagar;
   final String mandal;
   final String gram;
   final String createdname;
@@ -8047,6 +8048,7 @@ class Edata {
     required this.bhag,
     required this.nagar,
     required this.vasti,
+    required this.upnagar,
     required this.mandal,
     required this.gram,
     required this.createdname,
@@ -8064,6 +8066,7 @@ class Edata {
       bhag: s(json['bhag'] ?? json['Bhag']),
       nagar: s(json['nagar'] ?? json['Nagar']),
       vasti: s(json['vasti'] ?? json['Vasti']),
+      upnagar: s(json['upnagar'] ?? json['Upnagar']),
       mandal: s(json['mandal'] ?? json['Mandal']),
       gram: s(json['gram'] ?? json['Gram'] ?? json['graam'] ?? json['Graam']),
       createdname: s(json['createdname'] ?? json['CreatedName']),

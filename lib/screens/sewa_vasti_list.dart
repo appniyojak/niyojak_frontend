@@ -108,11 +108,24 @@ class _SearchSewaVastiState extends State<SearchSewaVasti> {
     }
 
     List<List<dynamic>> rows = [
-      ['mahanagar', 'vibhag', 'bhaag', 'nagar', 'vasti', 'mandal', 'graam', 'createdname', 'SewaVastiName', 'Population', 'Remark', 'garaj'],
+      [
+        Statics.getLabel('Mahaanagar'),
+        Statics.getLabel('Vibhaag'),
+        Statics.getLabel('Bhaag'),
+        Statics.getLabel('Nagar'),
+        Statics.getLabel('Vasti'),
+        Statics.getLabel('UpnagarName'),
+        Statics.getLabel('Mandal'),
+        Statics.getLabel('GraamNames'),
+        Statics.getLabel('SewaVastiName'),
+        Statics.getLabel('Population'),
+        Statics.getLabel('Remark'),
+        Statics.getLabel('garaj')
+      ],
     ];
 
     for (final e in apiRows) {
-      rows.add([e.mahanagar, e.vibhag, e.bhag, e.nagar, e.vasti, e.mandal, e.gram, e.createdname, e.sewaVastiName, e.population, e.remark, e.garaj]);
+      rows.add([e.mahanagar, e.vibhag, e.bhag, e.nagar, e.vasti, e.upnagar, e.mandal, e.gram, e.sewaVastiName, e.population, e.remark, e.garaj]);
     }
 
     Statics.convertToCsv(
