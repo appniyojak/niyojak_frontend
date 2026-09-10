@@ -2301,6 +2301,37 @@ Map<String, String> resEnglish = {
   'ClickBtnToHearAudioFile': 'Press the button to listen to the saved audio file',
   'AudioFileNotAvailable': 'Audio is not available',
   'FileNotPlayed': 'Unable to play the file',
+  //-------------------------------New Keys for sankalit baithak vrutta -------------------------
+  'EkunvastiCount': 'Total\n Vasti Count',
+  'EkunshaakhaaYuktaVasti': 'Total \nShakha-Yukta Vasti',
+  'EkunMandalYuktaVasti': 'Total \nMandali-Yukta Vasti',
+  'EkunsamparkYuktaVasti': 'Total \nSampark-Yukta Vasti',
+  'anyaNagarVastiCount': 'Other Nagar\n Vasti Count',
+  'anyaNagarshaakhaaYuktaVasti': 'Other Nagar\n Shakha-Yukta Vasti',
+  'anyaNagarMandaliYuktaVasti': 'Other Nagar\n Mandali-Yukta Vasti',
+  'anyaNagarsamparkYuktaVasti': 'Other Nagar\n Sampark-Yukta Vasti',
+  'mahaanagarVastiCount': 'Mahanagar\n Vasti Count',
+  'mahanagarshaakhaaYuktaVasti': 'Mahanagar\n Shakha-Yukta Vasti',
+  'mahanagarsamparkYuktaVasti': 'Mahanagar\n Sampark-Yukta Vasti',
+  'ekunnagarCount': 'Total\n Nagar Count',
+  'ekunshaakhaaYuktaNagar': 'Total\n Shakha-Yukta\n Nagar',
+  'ekunMilanyuktaNagar': 'Total\n Milan-Yukta\n Nagar',
+  'ekunnagarWithMin2Shaakhaa': 'Total\n Minimum 2\n Shakhas',
+  'ekunMandaliyuktaNagar': 'Total\n Mandali-Yukta\n Nagar',
+  'milanyuktaNagar': 'Milan-Yukta\n Nagar',
+  'mandaliyuktaNagar': 'Mandali-Yukta\n Nagar',
+
+  'mahanagriyaSthan': 'Metropolitan\n Location',
+  'anyaNagriyaSthan': 'Other Urban\n Location',
+  'ekunNagriyaSthan': 'Total\n Urban Location',
+  'graaminSthan': 'Rural\n Location',
+  'ekunSthan': 'Total\n Location',
+
+  'MandalSankhya': 'Mandal\n Count',
+  'shaakhaaYuktaMandal': 'Shakha-Yukta\n Mandal',
+
+  'NagarGraaminTaaluka': 'Taluka\n Count',
+  'shaakhaaYuktaTaaluka': 'Shakha-Yukta\n Taluka',
 };
 
 ///1,584
@@ -4617,6 +4648,37 @@ Map<String, String> resMarathi = {
   'ClickBtnToHearAudioFile': 'सेव्ह केलेली ऑडिओ फाईल ऐकण्यासाठी बटण दाबा',
   'AudioFileNotAvailable': 'ऑडिओ उपलब्ध नाही',
   'FileNotPlayed': 'फाईल प्ले करता आली नाही',
+  //-------------------------------New Keys for sankalit baithak vrutta -------------------------
+  'EkunvastiCount': 'एकूण\n वस्ती संख्या',
+  'EkunshaakhaaYuktaVasti': 'एकूण \nशाखायुक्त वस्ती',
+  'EkunMandalYuktaVasti': 'एकूण \nमंडळयुक्त वस्ती',
+  'EkunsamparkYuktaVasti': 'एकूण \nसंपर्कयुक्त वस्ती',
+  'anyaNagarVastiCount': 'अन्य नगर\n वस्ती संख्या',
+  'anyaNagarshaakhaaYuktaVasti': 'अन्य नगर\n शाखायुक्त वस्ती',
+  'anyaNagarMandaliYuktaVasti': 'अन्य नगर\n मंडळीयुक्त वस्ती',
+  'anyaNagarsamparkYuktaVasti': 'अन्य नगर\n संपर्कयुक्त वस्ती',
+  'mahaanagarVastiCount': 'महानगर\n वस्ती संख्या',
+  'mahanagarshaakhaaYuktaVasti': 'महानगर\n शाखायुक्त वस्ती',
+  'mahanagarsamparkYuktaVasti': 'महानगर\n संपर्कयुक्त वस्ती',
+  'ekunnagarCount': 'एकूण\n नगर संख्या',
+  'ekunshaakhaaYuktaNagar': 'एकूण\n शाखायुक्त\n नगर',
+  'ekunMilanyuktaNagar': 'एकूण\n मिलनयुक्त\nनगर',
+  'ekunnagarWithMin2Shaakhaa': 'एकूण\n किमान २\n शाखा',
+  'ekunMandaliyuktaNagar': 'एकूण\n मंडळी\n युक्त नगर',
+  'milanyuktaNagar': 'मिलनयुक्त\nनगर',
+  'mandaliyuktaNagar': 'मंडळी\n युक्त नगर',
+
+  'mahanagriyaSthan': 'महानगरीय\nस्थान',
+  'anyaNagriyaSthan': 'अन्य\nनगरीय स्थान',
+  'ekunNagriyaSthan': 'एकूण\nनगरीय स्थान',
+  'graaminSthan': 'ग्रामीण\n स्थान',
+  'ekunSthan': 'एकूण\n स्थान',
+
+  'MandalSankhya': 'मंडल\n संख्या',
+  'shaakhaaYuktaMandal': 'शाखायुक्त\n मंडल',
+
+  'NagarGraaminTaaluka': 'तालुका\n संख्या',
+  'shaakhaaYuktaTaaluka': 'शाखायुक्त\n तालुका',
 };
 
 ///1,583
@@ -6930,4 +6992,35 @@ Map<String, String> resHindi = {
   'ClickBtnToHearAudioFile': 'सेव की गई ऑडियो फ़ाइल सुनने के लिए बटन दबाएँ',
   'AudioFileNotAvailable': 'ऑडियो उपलब्ध नहीं है',
   'FileNotPlayed': 'फ़ाइल प्ले नहीं की जा सकी',
+  //-------------------------------New Keys for sankalit baithak vrutta -------------------------
+  'EkunvastiCount': 'कुल\n बस्ती संख्या',
+  'EkunshaakhaaYuktaVasti': 'कुल \nशाखायुक्त बस्ती',
+  'EkunMandalYuktaVasti': 'कुल \nमंडलयुक्त बस्ती',
+  'EkunsamparkYuktaVasti': 'कुल \nसंपर्कयुक्त बस्ती',
+  'anyaNagarVastiCount': 'अन्य नगर\n बस्ती संख्या',
+  'anyaNagarshaakhaaYuktaVasti': 'अन्य नगर\n शाखायुक्त बस्ती',
+  'anyaNagarMandaliYuktaVasti': 'अन्य नगर\n मंडलीयुक्त बस्ती',
+  'anyaNagarsamparkYuktaVasti': 'अन्य नगर\n संपर्कयुक्त बस्ती',
+  'mahaanagarVastiCount': 'महानगर\n बस्ती संख्या',
+  'mahanagarshaakhaaYuktaVasti': 'महानगर\n शाखायुक्त बस्ती',
+  'mahanagarsamparkYuktaVasti': 'महानगर\n संपर्कयुक्त बस्ती',
+  'ekunnagarCount': 'कुल\n नगर संख्या',
+  'ekunshaakhaaYuktaNagar': 'कुल\n शाखायुक्त\n नगर',
+  'ekunMilanyuktaNagar': 'कुल\n मिलनयुक्त\n नगर',
+  'ekunnagarWithMin2Shaakhaa': 'कुल\n न्यूनतम २\n शाखा',
+  'ekunMandaliyuktaNagar': 'कुल\n मंडलीयुक्त\n नगर',
+  'milanyuktaNagar': 'मिलनयुक्त\n नगर',
+  'mandaliyuktaNagar': 'मंडलीयुक्त\n नगर',
+
+  'mahanagriyaSthan': 'महानगरीय\n स्थान',
+  'anyaNagriyaSthan': 'अन्य\n नगरीय स्थान',
+  'ekunNagriyaSthan': 'कुल\n नगरीय स्थान',
+  'graaminSthan': 'ग्रामीण\n स्थान',
+  'ekunSthan': 'कुल\n स्थान',
+
+  'MandalSankhya': 'मंडल\n संख्या',
+  'shaakhaaYuktaMandal': 'शाखायुक्त\n मंडल',
+
+  'NagarGraaminTaaluka': 'तालुका\n संख्या',
+  'shaakhaaYuktaTaaluka': 'शाखायुक्त\n तालुका',
 };
