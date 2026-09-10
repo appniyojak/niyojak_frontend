@@ -26,6 +26,7 @@ class _SearchSewaVastiState extends State<SearchSewaVasti> {
   bool _isExpanded = false;
   int? cUserId;
   var geoUnitId;
+
   @override
   void initState() {
     super.initState();
@@ -103,7 +104,7 @@ class _SearchSewaVastiState extends State<SearchSewaVasti> {
 
     if (apiRows.isEmpty) {
       setState(() => _isSearching = false);
-      Statics.showToast("No data available");
+      Statics.showToast(Statics.getLabel("NoDataFound"));
       return;
     }
 
@@ -113,8 +114,8 @@ class _SearchSewaVastiState extends State<SearchSewaVasti> {
         Statics.getLabel('Vibhaag'),
         Statics.getLabel('Bhaag'),
         Statics.getLabel('Nagar'),
+        Statics.getLabel('upnagarUpkhanda'),
         Statics.getLabel('Vasti'),
-        Statics.getLabel('UpnagarName'),
         Statics.getLabel('Mandal'),
         Statics.getLabel('GraamNames'),
         Statics.getLabel('SewaVastiName'),
@@ -125,7 +126,7 @@ class _SearchSewaVastiState extends State<SearchSewaVasti> {
     ];
 
     for (final e in apiRows) {
-      rows.add([e.mahanagar, e.vibhag, e.bhag, e.nagar, e.vasti, e.upnagar, e.mandal, e.gram, e.sewaVastiName, e.population, e.remark, e.garaj]);
+      rows.add([e.mahanagar, e.vibhag, e.bhag, e.nagar, e.upnagar, e.vasti, e.mandal, e.gram, e.sewaVastiName, e.population, e.remark, e.garaj]);
     }
 
     Statics.convertToCsv(

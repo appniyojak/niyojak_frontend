@@ -6,8 +6,8 @@ import 'package:intl/intl.dart';
 
 import '../../helpers/static_data.dart' as Statics;
 import '../../providers/bals.dart';
-import 'edit_shaakhaa_vrutta.dart';
 import '../../widgets/legend.dart';
+import 'edit_shaakhaa_vrutta.dart';
 
 class ShaakhaaVrutta extends StatefulWidget {
   static const String routeName = '/shaakhaa-vrutta-screen';
@@ -23,9 +23,9 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
   var viewType;
   List<Widget>? _headerRow;
   List<ShaakhaaVruttaBAL> lstShaakhaaVrutta = [];
+  List<StaticMasterBAL> _frequency = [];
 
-  var vayogatCode = '',
-      shaakhaaName = '';
+  var vayogatCode = '', shaakhaaName = '';
 
   // List<String> lst1 = ['Bhaag', 'भाग/जिल्हा', 'Nagar', 'नगर/तालुका'];
   List<String> lst2 = [
@@ -115,13 +115,23 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
   var _isFirstCall = true;
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) => _initData());
+  }
+
+  _initData() async {
+    final data3 = await Statics.getStaticLDB('ShaakhaaFrequency');
+    setState(() {
+      _frequency = data3;
+    });
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (_isFirstCall == true) {
-      args = ModalRoute
-          .of(context)!
-          .settings
-          .arguments as Statics.ScreenArguments;
+      args = ModalRoute.of(context)!.settings.arguments as Statics.ScreenArguments;
       shaakhaaID = args!.itemID;
       viewType = args!.viewType;
 
@@ -167,6 +177,7 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
         _isFetchingData = false;
       });
     }
+    setState(() {});
   }
 
   Widget _shaakhaaVruttaFirstColumn(BuildContext context, int index) {
@@ -186,9 +197,11 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
       Statics.createWidgetFromString(context, lstShaakhaaVrutta[index].newtarunVyavasaayeeCount.toString(), 60, 52, Alignment.center, isTotalRow: false),
       Statics.createWidgetFromString(context, lstShaakhaaVrutta[index].proudhaVyavasaayeeCount.toString(), 60, 52, Alignment.center, isTotalRow: false),
       Statics.createWidgetFromString(context, lstShaakhaaVrutta[index].newproudhaVyavasaayeeCount.toString(), 60, 52, Alignment.center, isTotalRow: false),
-      Statics.createWidgetFromString(context, lstShaakhaaVrutta[index].matruskatiCount.toString(), 60, 52, Alignment.center, isTotalRow: false),
-      Statics.createWidgetFromString(context, lstShaakhaaVrutta[index].newmatruskatiCount.toString(), 60, 52, Alignment.center, isTotalRow: false),
     ];
+    if (_frequency.isNotEmpty && _frequency.firstWhere((e) => e.staticID == lstShaakhaaVrutta[0].FrequencyID).code == "Monthly") {
+      widgetArray.add(Statics.createWidgetFromString(context, lstShaakhaaVrutta[0].matruskatiCount.toString(), 60, 52, Alignment.center, isTotalRow: false));
+      widgetArray.add(Statics.createWidgetFromString(context, lstShaakhaaVrutta[index].newmatruskatiCount.toString(), 60, 52, Alignment.center, isTotalRow: false));
+    }
 
     widgetArray.add(Statics.createWidgetFromString(context, lstShaakhaaVrutta[index].pravasiKaryakartaCount.toString(), 60, 52, Alignment.center, isTotalRow: false));
     widgetArray.add(Statics.createWidgetFromString(context, lstShaakhaaVrutta[index].anyaPravasiKaryakartaCount.toString(), 60, 52, Alignment.center, isTotalRow: false));
@@ -262,7 +275,8 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
               icon: Icon(Icons.edit),
               iconSize: 20,
               color: Colors.purple,
-              onPressed: () => _onEditVrutta(lstShaakhaaVrutta[index].shaakhaaVruttaID.toString(), lstShaakhaaVrutta[index].shaakhaaID.toString()),
+              onPressed: () => _onEditVrutta(lstShaakhaaVrutta[index].shaakhaaVruttaID.toString(), lstShaakhaaVrutta[index].shaakhaaID.toString(),
+                  DateFormat("dd/MM/yyyy").format(DateFormat("yyyy/MM/dd").parse(lstShaakhaaVrutta[index].vruttaDate.toString())).toString()),
             ),
           ],
         )));
@@ -311,9 +325,11 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
     headerRow.add(Statics.createWidgetFromString(context, 'नवीन त.व्य.', 60, 56, Alignment.center, isTotalRow: false));
     headerRow.add(Statics.createWidgetFromString(context, 'प्रौ.', 60, 56, Alignment.center, isTotalRow: false));
     headerRow.add(Statics.createWidgetFromString(context, 'नवीन प्रौ.', 60, 56, Alignment.center, isTotalRow: false));
-    headerRow.add(Statics.createWidgetFromString(context, 'मातृ.', 60, 56, Alignment.center, isTotalRow: false));
-    headerRow.add(Statics.createWidgetFromString(context, 'नवीन मातृ.', 60, 56, Alignment.center, isTotalRow: false));
 
+    if (_frequency.isNotEmpty && _frequency.firstWhere((e) => e.staticID == lstShaakhaaVrutta[0].FrequencyID).code == "Monthly") {
+      headerRow.add(Statics.createWidgetFromString(context, 'मातृ.', 60, 56, Alignment.center, isTotalRow: false));
+      headerRow.add(Statics.createWidgetFromString(context, 'नवीन मातृ.', 60, 56, Alignment.center, isTotalRow: false));
+    }
     headerRow.add(Statics.createWidgetFromString(context, 'प्रवासी कार्य.', 60, 56, Alignment.center, isTotalRow: false));
     headerRow.add(Statics.createWidgetFromString(context, 'अन्य प्र. कार्य', 60, 56, Alignment.center, isTotalRow: false));
     headerRow.add(Statics.createWidgetFromString(context, 'अभ्यागत', 60, 56, Alignment.center, isTotalRow: false));
@@ -353,17 +369,17 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
     });
   }
 
-  void _onEditVrutta(vruttaID, shaakhaaid) async {
+  void _onEditVrutta(vruttaID, shaakhaaid, vruttadate) async {
     await Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                EditShaakhaaVrutta(
+            builder: (context) => EditShaakhaaVrutta(
                   shaakhaaID: shaakhaaid.toString(),
-                  vruttaID: vruttaID,
+                  vruttaID: null,
                   onSaveDetails: _getVruttaList,
                   viewType: "EditVrutta",
-                )));
+                  vruttadate: vruttadate,
+                ))).then((e) => _getVruttaList());
   }
 
   void _onDeleteVrutta(vruttaID) async {
@@ -375,33 +391,32 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
         var inputData = json.encode({"ShaakhaaVruttaID": vruttaID});
         showDialog(
           context: context,
-          builder: (ctx) =>
-              AlertDialog(
-                title: Text(Statics.getLabel('AskConfirmation')),
-                content: Text(Statics.getLabel('AreyouSureYouWantToDeleteVrutta')),
-                actions: <Widget>[
-                  MaterialButton(
-                    child: Text(Statics.getLabel('ConfirmationYes')),
-                    onPressed: () async {
-                      var data = await Statics.deleteShaakhaaVrutta(inputData);
-                      if (data == "Shaakhaa Vrutta Deleted Successfully ") {
-                        Statics.showToast(Statics.getLabel('ShaakhaaVruttaDeletedSuccessfully'));
+          builder: (ctx) => AlertDialog(
+            title: Text(Statics.getLabel('AskConfirmation')),
+            content: Text(Statics.getLabel('AreyouSureYouWantToDeleteVrutta')),
+            actions: <Widget>[
+              MaterialButton(
+                child: Text(Statics.getLabel('ConfirmationYes')),
+                onPressed: () async {
+                  var data = await Statics.deleteShaakhaaVrutta(inputData);
+                  if (data == "Shaakhaa Vrutta Deleted Successfully ") {
+                    Statics.showToast(Statics.getLabel('ShaakhaaVruttaDeletedSuccessfully'));
 
-                        _getVruttaList();
-                      } else
-                        Statics.showToast(Statics.getLabel('CouldnotDeleteVrutta'));
+                    _getVruttaList();
+                  } else
+                    Statics.showToast(Statics.getLabel('CouldnotDeleteVrutta'));
 
-                      Navigator.of(ctx).pop();
-                    },
-                  ),
-                  MaterialButton(
-                    child: Text(Statics.getLabel('ConfirmationNo')),
-                    onPressed: () {
-                      Navigator.of(ctx).pop();
-                    },
-                  )
-                ],
+                  Navigator.of(ctx).pop();
+                },
               ),
+              MaterialButton(
+                child: Text(Statics.getLabel('ConfirmationNo')),
+                onPressed: () {
+                  Navigator.of(ctx).pop();
+                },
+              )
+            ],
+          ),
         );
       }
     } on Exception catch (error) {
@@ -429,15 +444,13 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
           IconButton(
             padding: EdgeInsets.all(8),
             icon: const Icon(Icons.add),
-            onPressed: () => _onEditVrutta("0", shaakhaaID),
+            onPressed: () => _onEditVrutta("0", shaakhaaID, null),
           ),
         ],
       ),
       body: Container(
         padding: EdgeInsets.all(20),
-        width: Statics
-            .getDeviceSize(context)
-            .width,
+        width: Statics.getDeviceSize(context).width,
         child: Column(
           children: <Widget>[
             Legend(legendString: 'VruttaDetails', extraString: shaakhaaName, fontsize: 18),
@@ -445,31 +458,37 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
             Expanded(
               child: _isFetchingData == true
                   ? Center(
-                child: CircularProgressIndicator(),
-              )
+                      child: CircularProgressIndicator(),
+                    )
                   : _headerRow != null
-                  ? HorizontalDataTable(
-                leftHandSideColumnWidth: 100,
-                rightHandSideColumnWidth: ((vayogatCode == 'Proudh Vyavasaayee' || vayogatCode == "Baal") ? 1800 : 1950),
-                isFixedHeader: true,
-                headerWidgets: _headerRow,
-                leftSideItemBuilder: _shaakhaaVruttaFirstColumn,
-                rightSideItemBuilder: _shaakhaaVruttaOtherColumns,
-                itemCount: (lstShaakhaaVrutta == null ? 0 : lstShaakhaaVrutta.length),
-                rowSeparatorWidget: const Divider(
-                  color: Colors.black54,
-                  height: 1.0,
-                  thickness: 0.0,
-                ),
-                leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
-                rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
-              )
-                  : Center(
-                child: Text(
-                  Statics.getLabel('NoDataFound'),
-                  style: TextStyle(fontWeight: FontWeight.normal),
-                ),
-              ),
+                      ? HorizontalDataTable(
+                          leftHandSideColumnWidth: 100,
+                          rightHandSideColumnWidth: _frequency.firstWhere((e) => e.staticID == lstShaakhaaVrutta[0].FrequencyID).code == "Monthly"
+                              ? (vayogatCode == 'Proudh Vyavasaayee' || vayogatCode == "Baal")
+                                  ? 1800
+                                  : 1950
+                              : (vayogatCode == 'Proudh Vyavasaayee' || vayogatCode == "Baal")
+                                  ? 1660
+                                  : 1820,
+                          isFixedHeader: true,
+                          headerWidgets: _headerRow,
+                          leftSideItemBuilder: _shaakhaaVruttaFirstColumn,
+                          rightSideItemBuilder: _shaakhaaVruttaOtherColumns,
+                          itemCount: (lstShaakhaaVrutta == null ? 0 : lstShaakhaaVrutta.length),
+                          rowSeparatorWidget: const Divider(
+                            color: Colors.black54,
+                            height: 1.0,
+                            thickness: 0.0,
+                          ),
+                          leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
+                          rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
+                        )
+                      : Center(
+                          child: Text(
+                            Statics.getLabel('NoDataFound'),
+                            style: TextStyle(fontWeight: FontWeight.normal),
+                          ),
+                        ),
             ),
             SizedBox(
               height: 10,

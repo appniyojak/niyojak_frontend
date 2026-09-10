@@ -79,17 +79,17 @@ class _SplashScreenCheckState extends State<SplashScreenCheck> {
     }
     bool isConnected = await Statics.isInternetConnected();
     if (!isConnected) {
-      Statics.showMessageDialog(contx, Statics.getLabel('internetNotConnected'));
+      Statics.showToast(Statics.getLabel('internetNotConnected'));
       setState(() {
         isInternetAvl = false;
       });
       _refreshController.refreshCompleted();
-      return;
+      // return;
     }
     await isAuthorizedUser();
     print("user id >> " + Statics.userDetails['userID']);
     // if (Statics.userDetails['userID'].toString().isNotEmpty) {
-    await checkVersion();
+    if (isConnected) await checkVersion();
     // }
     var landingPage;
     if (isCompatible == false) {
@@ -167,11 +167,7 @@ class _SplashScreenCheckState extends State<SplashScreenCheck> {
       "ClientAppVersionNumber": Statics.packageInfo['versionNumber'],
       "devicetype": Platform.isAndroid ? 1 : 0,
     });
-    print({
-      "AppUserID": (Statics.userDetails['userID'] == '' ? null : Statics.userDetails['userID']),
-      "ClientAppVersionNumber": Statics.packageInfo['versionNumber'],
-      "devicetype": Platform.isAndroid ? 1 : 0,
-    });
+    print(inputData);
     //Statics.userDetails["isUpdatedVersion"] = await Statics.isCompatibleVersion(inputData);
     var resBody = await Statics.isCompatibleVersion(inputData);
     print(jsonEncode(resBody));
@@ -240,12 +236,11 @@ class _SplashScreenCheckState extends State<SplashScreenCheck> {
                     Statics.getLabel('versionLabel') + ' - ${Statics.packageInfo['versionNumber']}${Statics.patchSuffix}',
                     style: TextStyle(fontSize: 24),
                   ),
-                  if (isInternetAvl != null)
-                    if (!isInternetAvl)
+                  /*if (isInternetAvl != null && !isInternetAvl)
                       Text(
                         'Pull down to Refresh',
                         style: TextStyle(fontSize: 18),
-                      ),
+                      ),*/
                   SizedBox(
                     height: 50,
                   ),

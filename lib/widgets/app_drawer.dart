@@ -282,7 +282,8 @@ class _AppDrawerState extends State<AppDrawer> {
                 style: TextStyle(fontSize: 18),
               ),
               onTap: () {
-                Navigator.of(context).pushReplacementNamed(EditSwayamsevakScreen.routeName, arguments: Statics.ScreenArgumentsNew(0, 'EditMenu'));
+                Navigator.of(context).pop();
+                Navigator.of(context).pushNamed(EditSwayamsevakScreen.routeName, arguments: Statics.ScreenArgumentsNew(0, 'EditMenu'));
               },
             ),
             Divider(),
@@ -295,7 +296,8 @@ class _AppDrawerState extends State<AppDrawer> {
                 style: TextStyle(fontSize: 18),
               ),
               onTap: () {
-                Navigator.of(context).pushReplacementNamed(SwayamSevakSearch.routeName);
+                Navigator.of(context).pop();
+                Navigator.of(context).pushNamed(SwayamSevakSearch.routeName);
               },
             ),
             Divider(),
@@ -308,7 +310,8 @@ class _AppDrawerState extends State<AppDrawer> {
                 style: TextStyle(fontSize: 18),
               ),
               onTap: () {
-                Navigator.of(context).pushReplacementNamed(SearchSoochiScreen.routeName);
+                Navigator.of(context).pop();
+                Navigator.of(context).pushNamed(SearchSoochiScreen.routeName);
               },
             ),
             Divider(),
@@ -321,7 +324,8 @@ class _AppDrawerState extends State<AppDrawer> {
                 style: TextStyle(fontSize: 18),
               ),
               onTap: () {
-                Navigator.of(context).pushReplacementNamed(SearchEvent.routeName);
+                Navigator.of(context).pop();
+                Navigator.of(context).pushNamed(SearchEvent.routeName);
               },
             ),
             Divider(),
@@ -334,7 +338,8 @@ class _AppDrawerState extends State<AppDrawer> {
                 style: TextStyle(fontSize: 18),
               ),
               onTap: () {
-                Navigator.of(context).pushReplacementNamed(HelpScreen.routeName);
+                Navigator.of(context).pop();
+                Navigator.of(context).pushNamed(HelpScreen.routeName);
               },
             ),
 

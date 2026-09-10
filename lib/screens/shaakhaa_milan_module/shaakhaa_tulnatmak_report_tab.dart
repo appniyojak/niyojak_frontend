@@ -1062,11 +1062,11 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
     );
   }
 
-  Widget _emptyChartPlaceholder() {
+  Widget _emptyChartPlaceholder({String? val}) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 40),
       child: Center(
-        child: Text(Statics.getLabel("noDataFoundTryAnotherSearch"), style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
+        child: Text((val != null ? "$val " : "") + Statics.getLabel("noDataFoundTryAnotherSearch"), style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
       ),
     );
   }
@@ -1613,7 +1613,7 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
           Container(
             padding: const EdgeInsets.all(16),
             decoration: _cardDecoration,
-            child: _emptyChartPlaceholder(),
+            child: _emptyChartPlaceholder(val: Statics.getLabel(titleLabelKey, returnKey: true)),
           )
         else
           ...series.map((s) {

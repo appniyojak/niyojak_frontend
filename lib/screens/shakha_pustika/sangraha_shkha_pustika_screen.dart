@@ -295,15 +295,15 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
     print("inside save");
     // Basic validation
     if (_karyakramValue == null) {
-      Statics.showToast('कृपया कार्यक्रम निवडा');
+      Statics.showToast(Statics.getLabel("ChooseKaryakram"));
       return;
     }
     if (_selectedMonth == null || _selectedYear == null) {
-      Statics.showToast('कृपया महिना व वर्ष निवडा');
+      Statics.showToast(Statics.getLabel("ChooseMonthYearValidation"));
       return;
     }
     if (_selectedVayogat.isEmpty) {
-      Statics.showToast('कृपया वयोगट निवडा');
+      Statics.showToast(Statics.getLabel("selectVayogat"));
       return;
     }
     if (_linkController.text.trim().isNotEmpty) {
@@ -333,7 +333,7 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
         } else {
           // neither bytes nor path available — bail out safely
           if (mounted) {
-            Statics.showToast('निवडलेली ऑडिओ फाईल वाचता आली नाही, कृपया पुन्हा निवडा');
+            Statics.showToast(Statics.getLabel("FailedToReadFile"));
           }
           setState(() => _isSaving = false);
           return;
@@ -374,12 +374,11 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
       if (!mounted) return;
 
       if (respData != null && respData["Status"] == '200') {
-        final messenger = ScaffoldMessenger.of(context); // capture BEFORE popping
         final message = respData["Message"] ?? 'यशस्वीरित्या जतन झाले';
         Navigator.of(context).pop(true); // return true to caller
-        messenger.showSnackBar(SnackBar(content: Text(message)));
+        Statics.showToast(Statics.getLabel("dataSavedSuccessfully"));
       } else {
-        Statics.showToast(respData?["Message"] == 'Already Exists' ? 'माहिती उपलब्ध आहे' : 'जतन करताना त्रुटी आली');
+        Statics.showToast(respData?["Message"] == 'Already Exists' ? Statics.getLabel('dataAlreadyExists') : Statics.getLabel("ProblemGettingInfoMsg"));
       }
     } catch (e) {
       log("Error saving shaakha pustika: $e");

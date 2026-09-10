@@ -161,7 +161,8 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
       });
 
       // print("code >>>>>>>>>>>>>>>>>>>>>>>>>>>>> $code");
-      print("frequencyId >>>>>>>>>>>>>>>>>>>>>>>>>>>>> $frequencyId");
+      log("frequencyId >>>>>>>>>>>>>>>>>>>>>>>>>>>>> $frequencyId");
+      log("_sewaDaysList >>>>>>>>>>>>>>>>>>>>>>>>>>>>> ${_sewaDaysList.length}");
     }
 
     _boudhikDaysList.sort((a, b) => (a?.displaySequence ?? 0).compareTo(b?.displaySequence ?? 0));
@@ -201,23 +202,33 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
     if (!isConnected) {
       Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));
     } else {
-      //final dataList = await Statics.getShaakhaaVruttaDetailsByDateForApp(int.tryParse(widget.shaakhaaID == null ? "0" : widget.shaakhaaID.toString()) ?? 0, dateSelected);
+      final dataList = await Statics.getShaakhaaVruttaDetailsByDateForApp(int.tryParse(widget.shaakhaaID == null ? "0" : widget.shaakhaaID.toString()) ?? 0, dateSelected);
 
-      dataList = dateSelected != null
-          ? await Statics.getShaakhaaVruttaDetailsByDateForApp(
-              int.tryParse(widget.shaakhaaID?.toString() ?? "0") ?? 0,
-              dateSelected,
-            )
-          : await Statics.getShaakhaaVruttaListForApp(null, theId);
+      // dataList = dateSelected != null
+      //     ? await Statics.getShaakhaaVruttaDetailsByDateForApp(
+      //         int.tryParse(widget.shaakhaaID?.toString() ?? "0") ?? 0,
+      //         dateSelected,
+      //       )
+      //     : await Statics.getShaakhaaVruttaListForApp(null, theId);
 
       if (dataList != null) {
         List<dynamic> vruttaList;
+        //
+        // if (dataList is List<dynamic>) {
+        //   log("is list dynamic");
+        //   vruttaList = dataList;
+        //
+        //   List<Map<String, dynamic>> rawData = _sewaDaysList.where((e) => e != null).map((e) => e!.toJson()).toList();
+        //   final apiItems = rawData.map((e) => SewaDaysGroupData.fromJson(e)).toList();
+        //   _sewaDaysGroup = buildGroupedItemsFromApi(apiItems);
+        // } else {
+        log("list having data and vrutta list");
+        vruttaList = dataList.vruttaList;
 
-        if (dataList is List<dynamic>) {
-          vruttaList = dataList;
-        } else {
-          vruttaList = dataList.vruttaList;
-        }
+        final List<dynamic> rawData = dataList.data;
+        final apiItems = rawData.map((e) => SewaDaysGroupData.fromJson(e as Map<String, dynamic>)).toList();
+        _sewaDaysGroup = buildGroupedItemsFromApi(apiItems);
+        // }
 
         if (vruttaList.isNotEmpty) {
           var data = ShaakhaaVruttaBAL.fromMap(vruttaList[0]);
@@ -225,10 +236,6 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
           //
           // if (dataList != null && dataList.vruttaList.isNotEmpty) {
           //   var data = ShaakhaaVruttaBAL.fromMap(dataList.vruttaList[0]);
-
-          final List<dynamic> rawData = dataList.data;
-          final apiItems = rawData.map((e) => SewaDaysGroupData.fromJson(e as Map<String, dynamic>)).toList();
-          _sewaDaysGroup = buildGroupedItemsFromApi(apiItems);
 
           // var data = ShaakhaaVruttaBAL.fromMap(theId == 0 || theId == null ? dataList.vruttaList[0] : dataList[0]);
           if (!mounted) return;
@@ -358,9 +365,9 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
 
   saveVruttaDetails(BuildContext context) async {
     var inputData = json.encode({
-      "ShaakhaaVruttaID": int.parse(widget.vruttaID),
+      "ShaakhaaVruttaID": int.tryParse(widget.vruttaID ?? ""),
       "PraantID": 1,
-      "ShaakhaaID": int.parse(widget.shaakhaaID),
+      "ShaakhaaID": int.tryParse(widget.shaakhaaID ?? ""),
       "VruttaDateStr": (_vruttaDate != null ? DateFormat('dd-MM-yyyy').format(_vruttaDate!) : null),
       "ShishuCount": _shishuCtrl.text.trim() == "" ? null : int.parse(_shishuCtrl.text),
       "NewShishuCount": _newshishuCtrl.text.trim() == "" ? null : int.parse(_newshishuCtrl.text),

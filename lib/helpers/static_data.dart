@@ -4941,11 +4941,14 @@ Future<({List<dynamic> vruttaList, List<dynamic> data})?> getShaakhaaVruttaDetai
   if (connected != true) {
     return null;
   }
+
+  final _body = {"AppUserID": userDetails["userID"], "ShaakhaaID": shaakhaaID, "Vruttadate": vruttadate};
+
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
   log(urlGetShaakhaaVruttabydate);
-  log("getShaakhaaVruttaDetailsByDateForApp inputJson -> ${json.encode({"ShaakhaaID": shaakhaaID, "Vruttadate": vruttadate})}");
+  log("getShaakhaaVruttaDetailsByDateForApp inputJson -> ${json.encode(_body)}");
 
-  var response = await http.post(Uri.parse(urlGetShaakhaaVruttabydate), headers: jHeaders, body: json.encode({"ShaakhaaID": shaakhaaID, "Vruttadate": vruttadate}));
+  var response = await http.post(Uri.parse(urlGetShaakhaaVruttabydate), headers: jHeaders, body: json.encode(_body));
   log("getShaakhaaVruttaDetailsByDateForApp response.body -> ${response.body}");
   var responseBody = json.decode(response.body);
 

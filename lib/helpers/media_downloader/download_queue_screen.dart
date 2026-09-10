@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../static_data.dart' as Statics;
 import 'media_downloader_helper.dart';
 import 'media_downloader_service.dart';
 
@@ -33,7 +34,7 @@ class _DownloadsScreenState extends State<DownloadsScreen> with SingleTickerProv
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Downloads'),
+          title: Text(Statics.getLabel('downloads')),
           /*bottom: TabBar(
           controller: _tabController,
           indicatorColor: Colors.white,

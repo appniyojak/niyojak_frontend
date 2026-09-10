@@ -2597,7 +2597,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
           navigateBack();
           return false;
         }
-        Navigator.popAndPushNamed(context, HomeScreen.routeName);
+        Navigator.pushNamedAndRemoveUntil(context, HomeScreen.routeName, (route) => false);
         return true;
       },
       child: Scaffold(

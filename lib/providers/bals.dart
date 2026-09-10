@@ -2171,6 +2171,7 @@ class ShaakhaaVruttaBAL {
   String? AnyaBoudhikDays;
   bool? isDoneSewaDays = false;
   String? SelectedSewaDaysId;
+  int? FrequencyID;
 
   ShaakhaaVruttaBAL(
       this.shaakhaaVruttaID,
@@ -2210,7 +2211,8 @@ class ShaakhaaVruttaBAL {
       this.SelectedBoudhikDaysId,
       this.AnyaBoudhikDays,
       this.isDoneSewaDays,
-      this.SelectedSewaDaysId);
+      this.SelectedSewaDaysId,
+      this.FrequencyID);
 
   ShaakhaaVruttaBAL.fromMap(Map<String, dynamic> map) {
     shaakhaaVruttaID = map["ShaakhaaVruttaID"];
@@ -2251,6 +2253,7 @@ class ShaakhaaVruttaBAL {
     AnyaBoudhikDays = map["AnyaBoudhikDays"];
     isDoneSewaDays = map["IsDoneSewaDays"];
     SelectedSewaDaysId = map["SewaDaysId"].toString();
+    FrequencyID = map["FrequencyID"];
   }
 }
 

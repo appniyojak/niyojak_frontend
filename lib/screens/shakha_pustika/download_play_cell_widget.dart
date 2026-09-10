@@ -49,6 +49,7 @@ class DownloadPlayCellState extends State<DownloadPlayCell> {
   StreamSubscription<PlayerState>? _playerStateSub;
   StreamSubscription<Duration>? _durationSub;
   StreamSubscription<Duration>? _positionSub;
+  StreamSubscription<void>? _completeSub;
   bool _playerReady = false;
 
   String get _taskId => '${widget.tablename}_${widget.pkid}';
@@ -66,6 +67,7 @@ class DownloadPlayCellState extends State<DownloadPlayCell> {
     _playerStateSub?.cancel();
     _durationSub?.cancel();
     _positionSub?.cancel();
+    _completeSub?.cancel();
     _player.dispose();
     super.dispose();
   }
@@ -126,11 +128,22 @@ class DownloadPlayCellState extends State<DownloadPlayCell> {
     _positionSub = _player.onPositionChanged.listen((p) {
       if (mounted) setState(() => _position = p);
     });
+    _completeSub = _player.onPlayerComplete.listen((_) {
+      if (mounted) {
+        setState(() {
+          _playerState = PlayerState.completed;
+          _position = Duration.zero;
+        });
+      }
+    });
   }
 
   Future<void> _togglePlay() async {
     if (_playerState == PlayerState.playing) {
       await _player.pause();
+    } else if (_playerState == PlayerState.completed) {
+      await _player.seek(Duration.zero);
+      await _player.resume();
     } else {
       await _player.resume();
     }

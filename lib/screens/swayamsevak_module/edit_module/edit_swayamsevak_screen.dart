@@ -160,7 +160,7 @@ class EditSwayamsevakScreenState extends State<EditSwayamsevakScreen> with Singl
   Widget build(BuildContext context) {
     //theId = ModalRoute.of(context).settings.arguments as String;
     if (!_isReady) {
-      return const Center(child: CircularProgressIndicator());
+      return Container(color: Colors.white, child: const Center(child: CircularProgressIndicator()));
     }
 
     return Scaffold(

@@ -1816,6 +1816,7 @@ Map<String, String> resEnglish = {
   "bhougolikExcelReport": "Bhougolik Level Report",
   "selectedLevel": "Selected Level",
   "downloadBtn": "Download",
+  "downloads": "Downloads",
   ////////////////////////////////////// Gruh Block //////////////////////////////////////
   "abhiyaanKaryakartaList": "Abhiyaan Karyakarta List",
   "abhiyaanKaryakartaFormTitle": "Abhiyaan Karyakarta",
@@ -2301,6 +2302,7 @@ Map<String, String> resEnglish = {
   'ClickBtnToHearAudioFile': 'Press the button to listen to the saved audio file',
   'AudioFileNotAvailable': 'Audio is not available',
   'FileNotPlayed': 'Unable to play the file',
+  'FailedToReadFile': 'Failed to read the selected audio file, please try again',
   //-------------------------------New Keys for sankalit baithak vrutta -------------------------
   'EkunvastiCount': 'Total\n Vasti Count',
   'EkunshaakhaaYuktaVasti': 'Total \nShakha-Yukta Vasti',
@@ -4159,6 +4161,7 @@ Map<String, String> resMarathi = {
   "bhougolikExcelReport": "भौगोलिक रचना अहवाल",
   "selectedLevel": "निवडलेला स्तर",
   "downloadBtn": "डाउनलोड करा",
+  "downloads": "डाउनलोडस",
   ////////////////////////////////////// Gruh Block //////////////////////////////////////
   "abhiyaanKaryakartaList": "अभियान कार्यकर्ता यादी",
   "abhiyaanKaryakartaFormTitle": "अभियान कार्यकर्ता",
@@ -4648,6 +4651,7 @@ Map<String, String> resMarathi = {
   'ClickBtnToHearAudioFile': 'सेव्ह केलेली ऑडिओ फाईल ऐकण्यासाठी बटण दाबा',
   'AudioFileNotAvailable': 'ऑडिओ उपलब्ध नाही',
   'FileNotPlayed': 'फाईल प्ले करता आली नाही',
+  'FailedToReadFile': 'निवडलेली ऑडिओ फाईल वाचता आली नाही, कृपया पुन्हा निवडा',
   //-------------------------------New Keys for sankalit baithak vrutta -------------------------
   'EkunvastiCount': 'एकूण\n वस्ती संख्या',
   'EkunshaakhaaYuktaVasti': 'एकूण \nशाखायुक्त वस्ती',
@@ -6505,6 +6509,7 @@ Map<String, String> resHindi = {
   "bhougolikExcelReport": "भौगोलिक रचना अहवाल",
   "selectedLevel": "चयनित स्तर",
   "downloadBtn": "डाउनलोड करें",
+  "downloads": "डाउनलोडस",
   ////////////////////////////////////// Gruh Block //////////////////////////////////////
   "abhiyaanKaryakartaList": "अभियान कार्यकर्ता सूची",
   "abhiyaanKaryakartaFormTitle": "अभियान कार्यकर्ता",
@@ -6992,6 +6997,7 @@ Map<String, String> resHindi = {
   'ClickBtnToHearAudioFile': 'सेव की गई ऑडियो फ़ाइल सुनने के लिए बटन दबाएँ',
   'AudioFileNotAvailable': 'ऑडियो उपलब्ध नहीं है',
   'FileNotPlayed': 'फ़ाइल प्ले नहीं की जा सकी',
+  'FailedToReadFile': 'चयन की गई ऑडियो फ़ाइल पढ़ी नहीं जा सकी, कृपया इसे फिर से चुनें।',
   //-------------------------------New Keys for sankalit baithak vrutta -------------------------
   'EkunvastiCount': 'कुल\n बस्ती संख्या',
   'EkunshaakhaaYuktaVasti': 'कुल \nशाखायुक्त बस्ती',
