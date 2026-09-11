@@ -70,6 +70,7 @@ import '../models/response_model/yuva_sangam_model.dart';
 import '../models/response_model/yuva_sangam_report_model.dart';
 import '../models/response_model/yuva_sangam_vrutta_resp.dart';
 import '../providers/bals.dart';
+import '../utils/globals.dart';
 import './database_helper.dart';
 import 'media_downloader/media_downloader_service.dart';
 
@@ -2489,13 +2490,16 @@ Future<Map<String, dynamic>?> createUpdateShaakhaPustika(CreateUpdateShaakhaPust
 Future<List<OfflineShaakhaPustika>?> getUpdateShakhaPustikaList(GetShaakhaPustikaListRequest ListRequestmodel) async {
   bool? connected = await isInternetConnected(showToast: false);
   if (connected != true) {
+    final _userData = await MyAppGlobals.getUserDataDB();
+
     // No internet — serve whatever we already have locally
     log("No internet — falling back to local OfflineShaakhaPustika data");
+    // log("No internet — ${ListRequestmodel.yearno}, ${ListRequestmodel.monthno}, ${ListRequestmodel.vayogatid}");
     return await DatabaseHelper.getAllOfflineData<OfflineShaakhaPustika>(
       tableName: 'OfflineShaakhaPustika',
       fromMap: OfflineShaakhaPustika.fromJson,
       where: 'yearno = ? AND monthno = ? AND vayogatid LIKE ?',
-      whereArgs: [ListRequestmodel.yearno, ListRequestmodel.monthno, '%${ListRequestmodel.vayogatid}%'],
+      whereArgs: [ListRequestmodel.yearno, ListRequestmodel.monthno, '%${levelId == 1 ? _userData.vayogatid : ListRequestmodel.vayogatid}%'],
     );
   }
 
