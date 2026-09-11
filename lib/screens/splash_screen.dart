@@ -7,6 +7,7 @@ import 'package:horizontal_data_table/refresh/pull_to_refresh/src/smart_refreshe
 import 'package:niyojak_prod/helpers/database_helper.dart';
 import 'package:niyojak_prod/models/response_model/AbhiyaanLoginDataResponse.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+
 // import 'package:package_info/package_info.dart';
 // import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -86,7 +87,8 @@ class _SplashScreenCheckState extends State<SplashScreenCheck> {
       _refreshController.refreshCompleted();
       // return;
     }
-    await isAuthorizedUser();
+    final _isAuth = await isAuthorizedUser();
+    if (_isAuth == 2) loggedIn = "false";
     print("user id >> " + Statics.userDetails['userID']);
     // if (Statics.userDetails['userID'].toString().isNotEmpty) {
     if (isConnected) await checkVersion();
@@ -150,12 +152,13 @@ class _SplashScreenCheckState extends State<SplashScreenCheck> {
     }
   }
 
-  Future<void> isAuthorizedUser() async {
+  Future<int> isAuthorizedUser() async {
     var data = await LogIn().isAutorized();
-    if (!mounted) return;
+    if (!mounted) return 0;
     setState(() {
-      Statics.userDetails["isAuthorized"] = data;
+      Statics.userDetails["isAuthorized"] = data == 1;
     });
+    return data;
   }
 
   Future<void> checkVersion() async {

@@ -159,6 +159,8 @@ class DatabaseHelper {
         await _ensureColumn(db, 'GeoUnitMaster', 'GeoUnitNameMarathi', 'TEXT');
         await _ensureColumn(db, 'GeoUnitMaster', 'GeoUnitNameHindi', 'TEXT');
         await _ensureColumn(db, 'UserDataMaster', 'isvistaruser', 'INT');
+        await _ensureColumn(db, 'UserDataMaster', 'vayogatid', 'INT');
+        await _ensureColumn(db, 'UserDataMaster', 'vayogatname', 'TEXT');
       }
     }, onCreate: (db, version) {
       print('initDatabase - database created; version:' + version.toString());
@@ -175,7 +177,7 @@ class DatabaseHelper {
           '   ParentMandalID INT, ParentVastiID INT, ParentGraamID INT, ParentUpaNagarID INT, issankalpit INT, ' +
           '   canEdit INT, GeoUnitNameEnglish TEXT, GeoUnitNameMarathi TEXT, GeoUnitNameHindi TEXT)');
 
-      db.execute(' CREATE TABLE SwayamsevakMaster(SwayamsevakID INT, FullName VARCHAR(50), ' + '   MobileNumber VARCHAR(10), LinkedGeoUnitID INT, AppPassword VARCHAR(20), PreferredLanguageID INT)');
+      db.execute(' CREATE TABLE SwayamsevakMaster(SwayamsevakID INT, FullName VARCHAR(50), MobileNumber VARCHAR(10), LinkedGeoUnitID INT, AppPassword VARCHAR(20), PreferredLanguageID INT)');
       db.execute(' CREATE TABLE DaayitvaMaster(DaayitvaID INTEGER PRIMARY KEY, PraantID INT, DaayitvaName VARCHAR(50), DaayitvaForID INT, ' + '   IsPravaasiDaayitva BIT)');
       db.execute(' CREATE TABLE StateMaster(StateID INTEGER PRIMARY KEY, GSTStateCode VARCHAR(5), Code VARCHAR(10), StateName VARCHAR(50))');
       db.execute(' CREATE TABLE GatividhiMaster(GatividhiID INTEGER PRIMARY KEY, PraantID INT, GatividhiName VARCHAR(200))');
@@ -188,7 +190,7 @@ class DatabaseHelper {
           ' FullName VARCHAR(300),Email VARCHAR(500),DaayitvaStartYear INT,DaayitvaName VARCHAR(200),' +
           ' DaayitvaID INT,DaayitvaGeoUnitName VARCHAR(100),DaayitvaGeoUnitID INT,BirthDate VARCHAR(20), ' +
           ' LinkedGeoUnitHierarchy VARCHAR(100), IsFirstLogin BOOL, LastLoginTimeStamp VARCHAR(30), ' +
-          ' IsLoggedIn VARCHAR(10), IsPravaasiKaaryakartaa BOOL,ShowShakhaSaptaha INT,ShowPustika INT,isvistaruser INT)');
+          ' IsLoggedIn VARCHAR(10), IsPravaasiKaaryakartaa BOOL,ShowShakhaSaptaha INT,ShowPustika INT,isvistaruser INT,vayogatid INT,vayogatname TEXT)');
 
       db.execute(''' CREATE TABLE AbhiyanSwayamsevakData (
           AbhiyaDaayitvaID INT, AbhiyanSwayamsevakID INT, DaayityaName VARCHAR(256), Email VARCHAR(256), FullName VARCHAR(256),

@@ -20,7 +20,7 @@ import '../screens/swayamsevak_module/edit_module/edit_swayamsevak_screen.dart';
 import '../utils/hard_loader.dart';
 
 class LogIn {
-  Future<bool> isAutorized() async {
+  Future<int> isAutorized() async {
     List<UserDataBAL> user = await Statics.getUserDataLDB();
     String otpUser = '';
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -28,7 +28,25 @@ class LogIn {
     print("otpUser ==> $otpUser");
 
     if (user.isNotEmpty && user.length > 0 && otpUser == "false") {
-      SwayamsevakBAL userBasicInfo = await SwayamsevakProvider().getSwayamSevakByID(user[0].swayamsevakID.toString(), "BasicInfo");
+      late SwayamsevakBAL userBasicInfo;
+      bool isConnected = await Statics.isInternetConnected();
+      if (isConnected) {
+        userBasicInfo = await SwayamsevakProvider().getSwayamSevakByID(user[0].swayamsevakID.toString(), "BasicInfo");
+      } else {
+        final _data = await DatabaseHelper.getAllOfflineData<SwayamsevakBAL>(
+          tableName: 'UserDataMaster',
+          fromMap: SwayamsevakBAL.fromJson,
+          where: 'SwayamsevakID = ? ',
+          whereArgs: [user[0].swayamsevakID.toString()],
+        );
+
+        if (_data.isEmpty) {
+          return 2;
+        }
+
+        userBasicInfo = _data.first;
+        userBasicInfo!.canUseApp = true;
+      }
 
       await Statics.populateUserDetailsMap();
       await Statics.populateUserAbhiyaanDetailsMap();
@@ -45,7 +63,7 @@ class LogIn {
       Statics.userDetails['isLoggedIn'] = 'false';
       Statics.userDetails['LastLoginTimeStamp'] = '';
     }
-    return Statics.userDetails['isAuthorized'];
+    return Statics.userDetails['isAuthorized'] == true ? 1 : 0;
   }
 
   // checkLoginDate() async {

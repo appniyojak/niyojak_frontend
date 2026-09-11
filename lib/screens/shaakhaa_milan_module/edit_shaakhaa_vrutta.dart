@@ -125,14 +125,14 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
     _vruttaDate = selectedDate;
     _vruttaDateCntrl.text = displayFormatter.format(selectedDate);
 
-    if (vruttaID > 0) {
-      getSwDetails(widget.vruttaID);
-    } else {
-      getSwDetails(
-        vruttaID,
-        dateSelected: inputFormatter.format(selectedDate),
-      );
-    }
+    // if (vruttaID > 0) {
+    //   getSwDetails(widget.vruttaID);
+    // } else {
+    getSwDetails(
+      vruttaID,
+      dateSelected: inputFormatter.format(selectedDate),
+    );
+    // }
   }
 
   Future<void> populateShaakhaVayogat(shaakhaaID) async {
@@ -365,7 +365,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
 
   saveVruttaDetails(BuildContext context) async {
     var inputData = json.encode({
-      "ShaakhaaVruttaID": int.tryParse(widget.vruttaID ?? ""),
+      "ShaakhaaVruttaID": int.tryParse(widget.vruttaID ?? "") ?? 0,
       "PraantID": 1,
       "ShaakhaaID": int.tryParse(widget.shaakhaaID ?? ""),
       "VruttaDateStr": (_vruttaDate != null ? DateFormat('dd-MM-yyyy').format(_vruttaDate!) : null),

@@ -584,7 +584,7 @@ Size getDeviceSize(BuildContext context) {
   ).size;
 }
 
-Future<bool> isInternetConnected() async {
+Future<bool> isInternetConnected({bool showToast = true}) async {
   // final Connectivity _connectivity = Connectivity();
   // ConnectivityResult result = await _connectivity.checkConnectivity();
   // if (result == ConnectivityResult.mobile ||
@@ -598,11 +598,11 @@ Future<bool> isInternetConnected() async {
     if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
       return true;
     } else {
-      Statics.showToast(Statics.getLabel('internetNotConnected'));
+      if (showToast) Statics.showToast(Statics.getLabel('internetNotConnected'));
       return false;
     }
   } on SocketException catch (_) {
-    Statics.showToast(Statics.getLabel('internetNotConnected'));
+    if (showToast) Statics.showToast(Statics.getLabel('internetNotConnected'));
     return false;
   }
 }
@@ -2487,7 +2487,7 @@ Future<Map<String, dynamic>?> createUpdateShaakhaPustika(CreateUpdateShaakhaPust
 }
 
 Future<List<OfflineShaakhaPustika>?> getUpdateShakhaPustikaList(GetShaakhaPustikaListRequest ListRequestmodel) async {
-  bool? connected = await isInternetConnected();
+  bool? connected = await isInternetConnected(showToast: false);
   if (connected != true) {
     // No internet — serve whatever we already have locally
     log("No internet — falling back to local OfflineShaakhaPustika data");
@@ -5671,17 +5671,21 @@ Future<List<dynamic>> getSewaVastiForApp(String strInputBody) async {
   return responseBody['SewaVastiList'];
 }
 
-Future<List<Edata>> getSewawastiDownload({required int cuserid, required int geounitid}) async {
+Future<List<Edata>> getSewawastiDownload({required int? cuserid, required int? geounitid}) async {
   bool? connected = await isInternetConnected();
   if (connected != true) return [];
 
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  final _body = {"cuserid": cuserid, "geounitid": geounitid};
+
   print(urlsevavastiexceldownload);
+  log(jsonEncode(_body));
 
   var response = await http.post(
     Uri.parse(urlsevavastiexceldownload),
     headers: jHeaders,
-    body: jsonEncode({"cuserid": cuserid, "geounitid": geounitid}),
+    body: jsonEncode(_body),
   );
 
   if (response.statusCode != 200) {
@@ -5690,6 +5694,7 @@ Future<List<Edata>> getSewawastiDownload({required int cuserid, required int geo
   }
 
   final decoded = jsonDecode(response.body);
+  log("sevavastiexceldownload resp: ${decoded}");
 
   List<dynamic> rawList = [];
   if (decoded is Map<String, dynamic>) {

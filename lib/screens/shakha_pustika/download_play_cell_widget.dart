@@ -142,8 +142,9 @@ class DownloadPlayCellState extends State<DownloadPlayCell> {
     if (_playerState == PlayerState.playing) {
       await _player.pause();
     } else if (_playerState == PlayerState.completed) {
-      await _player.seek(Duration.zero);
-      await _player.resume();
+      // await _player.seek(Duration.zero);
+      // await _player.resume();
+      await _player.play(DeviceFileSource(_localPath!));
     } else {
       await _player.resume();
     }

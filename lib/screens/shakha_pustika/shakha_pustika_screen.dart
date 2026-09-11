@@ -99,6 +99,7 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
     _vayogatValue = pref.getString("selectedVayogat");
 
     final dm = await MyAppGlobals.getLevelLDB();
+    final _userData = await MyAppGlobals.getUserDataDB();
     print("Printing levelid:${dm.levelID}");
     levelId = dm.levelID ?? 0;
     await _controller.initialize(dm);
@@ -113,12 +114,14 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
     //await Statics.populateUserDetailsMap();
     print("userid:${user.map((e) => e.swayamsevakID)}");
     cUserId = user.first.swayamsevakID ?? 0;
-    if (levelId > 7 && levelId != 13)
+    if (levelId > 7 && levelId != 13) {
       _tabController?.animateTo(1);
-    else if (levelId == 1 || (_vayogatValue != null && _vayogatValue!.isNotEmpty))
+    } else if (levelId == 1 || (_vayogatValue != null && _vayogatValue!.isNotEmpty)) {
+      // _vayogatValue = (_userData.vayogatid ?? 0).toString();
       await _searchShaakhaPustika(karyakramval: -1);
-    else
+    } else {
       _tabController?.animateTo(1);
+    }
   }
 
   void _handleTabChange() {

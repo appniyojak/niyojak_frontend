@@ -93,14 +93,14 @@ class _SearchSewaVastiState extends State<SearchSewaVasti> {
   Future<void> _getCsv() async {
     final controller = context.read<GeoHierarchyController>();
     int? geoUnitId = int.tryParse(controller.deepestSelectedGeoUnitId.toString());
-    if (geoUnitId == null || cUserId == null) {
-      Statics.showToast("Please apply a search filter first");
-      return;
-    }
+    // if (geoUnitId == null || cUserId == null) {
+    //   Statics.showToast("Please apply a search filter first");
+    //   return;
+    // }
 
     setState(() => _isSearching = true);
 
-    List<Statics.Edata> apiRows = await Statics.getSewawastiDownload(cuserid: cUserId!, geounitid: geoUnitId);
+    List<Statics.Edata> apiRows = await Statics.getSewawastiDownload(cuserid: cUserId, geounitid: int.tryParse(controller.deepestSelectedGeoUnitId.toString()) ?? 0);
 
     if (apiRows.isEmpty) {
       setState(() => _isSearching = false);
@@ -238,48 +238,48 @@ class _SearchSewaVastiState extends State<SearchSewaVasti> {
               ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          mini: true,
-          tooltip: Statics.getLabel("ExportToExcel"),
-          onPressed: _getCsv,
-          child: Icon(Icons.download_sharp),
-          backgroundColor: Colors.green,
-        ),
+        floatingActionButton: (_sewaVastiList == null || _sewaVastiList!.isEmpty)
+            ? null
+            : FloatingActionButton(
+                mini: false,
+                tooltip: Statics.getLabel("ExportToExcel"),
+                onPressed: _getCsv,
+                child: Icon(Icons.download_sharp),
+                backgroundColor: Colors.green,
+              ),
         drawer: AppDrawer(),
         body: SingleChildScrollView(
-          child: Container(
-            margin: EdgeInsets.all(10),
-            child: Column(
-              children: <Widget>[
-                SizedBox(height: 10),
-                Text(
-                  Statics.getLabel('searchSewaVastiScreenBanner'),
-                  style: TextStyle(fontSize: 20),
-                ),
-                SizedBox(height: 10),
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          child: Column(
+            children: <Widget>[
+              SizedBox(height: 10),
+              Text(
+                Statics.getLabel('searchSewaVastiScreenBanner'),
+                style: TextStyle(fontSize: 20),
+              ),
+              SizedBox(height: 10),
 
-                ///
-                searchSection(),
+              ///
+              searchSection(),
 
-                ///
+              ///
 
-                SizedBox(
-                  height: MediaQuery.sizeOf(context).height * 0.75,
-                  child: _isSearching
-                      ? Center(child: CircularProgressIndicator())
-                      : _sewaVastiList != null && _sewaVastiList!.length > 0
-                          ? ListView.separated(
-                              separatorBuilder: (context, index) => SizedBox(height: 8),
-                              itemCount: _sewaVastiList!.length,
-                              itemBuilder: (context, index) => SewaVastiCard(_sewaVastiList![index], onSaveDetails),
-                            )
-                          : Padding(
-                              padding: const EdgeInsets.only(bottom: 178.0),
-                              child: Center(child: Text(Statics.getLabel('noDataFoundTryAnotherSearch'))),
-                            ),
-                ),
-              ],
-            ),
+              SizedBox(
+                height: MediaQuery.sizeOf(context).height * 0.75,
+                child: _isSearching
+                    ? Center(child: CircularProgressIndicator())
+                    : _sewaVastiList != null && _sewaVastiList!.length > 0
+                        ? ListView.separated(
+                            separatorBuilder: (context, index) => SizedBox(height: 8),
+                            itemCount: _sewaVastiList!.length,
+                            itemBuilder: (context, index) => SewaVastiCard(_sewaVastiList![index], onSaveDetails),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.only(bottom: 178.0),
+                            child: Center(child: Text(Statics.getLabel('noDataFoundTryAnotherSearch'))),
+                          ),
+              ),
+            ],
           ),
         ),
       ),
@@ -290,84 +290,87 @@ class _SearchSewaVastiState extends State<SearchSewaVasti> {
     return Consumer<GeoHierarchyController>(builder: (_, ctrl, __) {
       return Column(
         children: [
-          ExpansionPanelList(
-            expansionCallback: (int index, bool isExpanded) {
-              setState(() {
-                _isExpanded = isExpanded;
-              });
-            },
-            children: [
-              ExpansionPanel(
-                headerBuilder: (BuildContext context, bool isExpanded) {
-                  return ListTile(
-                    title: Text(Statics.getLabel('Filters')),
-                  );
-                },
-                body: Container(
-                  margin: EdgeInsets.all(20),
-                  child: Column(
-                    children: [
-                      GeoDropdownWidget(
-                        level: GeoLevel.Mahaanagar,
-                        title: 'Mahaanagar',
-                        controller: ctrl,
-                      ),
-
-                      // if (ctrl.hasItems(GeoLevel.vibhaag))
-                      GeoDropdownWidget(
-                        level: GeoLevel.Vibhaag,
-                        title: 'Vibhaag',
-                        controller: ctrl,
-                      ),
-
-                      if (ctrl.hasItems(GeoLevel.Bhaag))
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            child: ExpansionPanelList(
+              expansionCallback: (int index, bool isExpanded) {
+                setState(() {
+                  _isExpanded = isExpanded;
+                });
+              },
+              children: [
+                ExpansionPanel(
+                  headerBuilder: (BuildContext context, bool isExpanded) {
+                    return ListTile(
+                      title: Text(Statics.getLabel('Filters')),
+                    );
+                  },
+                  body: Container(
+                    margin: EdgeInsets.all(20),
+                    child: Column(
+                      children: [
                         GeoDropdownWidget(
-                          level: GeoLevel.Bhaag,
-                          title: 'Bhaag',
+                          level: GeoLevel.Mahaanagar,
+                          title: 'Mahaanagar',
                           controller: ctrl,
                         ),
 
-                      if (ctrl.hasItems(GeoLevel.Nagar))
+                        // if (ctrl.hasItems(GeoLevel.vibhaag))
                         GeoDropdownWidget(
-                          level: GeoLevel.Nagar,
-                          title: 'Nagar',
+                          level: GeoLevel.Vibhaag,
+                          title: 'Vibhaag',
                           controller: ctrl,
                         ),
 
-                      if (ctrl.hasItems(GeoLevel.upnagarUpkhanda))
-                        GeoDropdownWidget(
-                          level: GeoLevel.upnagarUpkhanda,
-                          title: 'upnagarUpkhanda',
-                          controller: ctrl,
-                        ),
+                        if (ctrl.hasItems(GeoLevel.Bhaag))
+                          GeoDropdownWidget(
+                            level: GeoLevel.Bhaag,
+                            title: 'Bhaag',
+                            controller: ctrl,
+                          ),
 
-                      if (ctrl.hasItems(GeoLevel.Mandal))
-                        GeoDropdownWidget(
-                          level: GeoLevel.Mandal,
-                          title: 'Mandal',
-                          controller: ctrl,
-                        ),
+                        if (ctrl.hasItems(GeoLevel.Nagar))
+                          GeoDropdownWidget(
+                            level: GeoLevel.Nagar,
+                            title: 'Nagar',
+                            controller: ctrl,
+                          ),
 
-                      if (ctrl.hasItems(GeoLevel.Graam))
-                        GeoDropdownWidget(
-                          level: GeoLevel.Graam,
-                          title: 'Graam',
-                          controller: ctrl,
-                        ),
+                        if (ctrl.hasItems(GeoLevel.upnagarUpkhanda))
+                          GeoDropdownWidget(
+                            level: GeoLevel.upnagarUpkhanda,
+                            title: 'upnagarUpkhanda',
+                            controller: ctrl,
+                          ),
 
-                      if (ctrl.hasItems(GeoLevel.Vasti))
-                        GeoDropdownWidget(
-                          level: GeoLevel.Vasti,
-                          title: 'Vasti',
-                          controller: ctrl,
-                        ),
-                      SizedBox(height: 12),
-                    ],
+                        if (ctrl.hasItems(GeoLevel.Mandal))
+                          GeoDropdownWidget(
+                            level: GeoLevel.Mandal,
+                            title: 'Mandal',
+                            controller: ctrl,
+                          ),
+
+                        if (ctrl.hasItems(GeoLevel.Graam))
+                          GeoDropdownWidget(
+                            level: GeoLevel.Graam,
+                            title: 'Graam',
+                            controller: ctrl,
+                          ),
+
+                        if (ctrl.hasItems(GeoLevel.Vasti))
+                          GeoDropdownWidget(
+                            level: GeoLevel.Vasti,
+                            title: 'Vasti',
+                            controller: ctrl,
+                          ),
+                        SizedBox(height: 12),
+                      ],
+                    ),
                   ),
+                  isExpanded: _isExpanded,
                 ),
-                isExpanded: _isExpanded,
-              ),
-            ],
+              ],
+            ),
           ),
           SizedBox(
             height: 15,

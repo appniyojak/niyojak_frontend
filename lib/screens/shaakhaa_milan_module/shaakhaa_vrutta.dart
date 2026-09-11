@@ -125,6 +125,7 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
     setState(() {
       _frequency = data3;
     });
+    await _getVruttaList();
   }
 
   @override
@@ -135,7 +136,7 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
       shaakhaaID = args!.itemID;
       viewType = args!.viewType;
 
-      _getVruttaList();
+      // _getVruttaList();
       print("DaayitvaName -> ${Statics.userDetails['DaayitvaName']} == LevelName -> ${Statics.userDetails['LevelName']}");
     }
     _isFirstCall = false;
@@ -375,11 +376,11 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
         MaterialPageRoute(
             builder: (context) => EditShaakhaaVrutta(
                   shaakhaaID: shaakhaaid.toString(),
-                  vruttaID: null,
+                  vruttaID: vruttaID,
                   onSaveDetails: _getVruttaList,
                   viewType: "EditVrutta",
                   vruttadate: vruttadate,
-                ))).then((e) => _getVruttaList());
+                )));
   }
 
   void _onDeleteVrutta(vruttaID) async {

@@ -136,6 +136,8 @@ class _ViewPustikaScreenState extends State<ViewPustikaScreen> {
               borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
             ),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              spacing: 24,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
@@ -144,19 +146,28 @@ class _ViewPustikaScreenState extends State<ViewPustikaScreen> {
                     const SizedBox(width: 6),
                     Text(
                       '$monthLabel ${headerItem.yearno ?? ''}',
-                      style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700, color: Colors.white),
+                      style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w700, color: Colors.white),
                     ),
                   ],
                 ),
-                Row(
-                  children: [
-                    Text(
-                      widget.vayogatVal ?? headerItem.vayogatname ?? '--',
-                      style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700, color: Colors.white),
-                    ),
-                    const SizedBox(width: 6),
-                    const Icon(Icons.groups_rounded, color: Colors.white, size: 17),
-                  ],
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          widget.vayogatVal ?? headerItem.vayogatname ?? '--',
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: true,
+                          maxLines: 2,
+                          textAlign: TextAlign.justify,
+                          style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w700, color: Colors.white),
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      const Icon(Icons.groups_rounded, color: Colors.white, size: 17),
+                    ],
+                  ),
                 ),
               ],
             ),

@@ -72,6 +72,7 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
 
   Future<void> getData(String? selectedGeoUnitId) async {
     var inputData = json.encode({
+      "AppUserID": Statics.userDetails['userID'],
       "GeoUnitID": selectedGeoUnitId,
     });
     print("getData" + inputData);

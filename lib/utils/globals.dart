@@ -9,6 +9,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../helpers/database_helper.dart';
 import '../helpers/static_data.dart' as Statics;
+import '../providers/bals.dart';
 
 //----------------From db----------------//
 DropDownModel? ddm;
@@ -219,6 +220,18 @@ class MyAppGlobals {
     var ddmodel;
     if (result.isNotEmpty) {
       ddmodel = DropDownModel.fromJson(result.first);
+    } else {
+      print("result is empty");
+    }
+    //List<DropDownModel> dropdownlist = result.map((e) => DropDownModel.fromJson(e)).toList();
+    return ddmodel;
+  }
+
+  static Future<UserDataBAL> getUserDataDB() async {
+    var result = await DatabaseHelper.getData("Select * from UserDataMaster;");
+    var ddmodel;
+    if (result.isNotEmpty) {
+      ddmodel = UserDataBAL.fromMap(result.first);
     } else {
       print("result is empty");
     }

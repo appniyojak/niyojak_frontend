@@ -19,6 +19,23 @@ class SwayamsevakBAL {
 
   SwayamsevakBAL(this.swayamsevakID, this.praantID, this.fullName, this.mobileNumber, this.email, this.birthDate, this.linkedGeoUnitID, this.linkedGeoUnitName, this.linkedShaakhaaID,
       this.linkedShaakhaaName, this.preferredLanguageID, this.preferredLanguageCode, this.canUseApp, this.canEdit);
+
+  SwayamsevakBAL.fromJson(Map<String, dynamic> json) {
+    swayamsevakID = json['SwayamsevakID'];
+    praantID = json['PraantID'];
+    fullName = json['FullName'];
+    mobileNumber = json['MobileNumber'];
+    email = json['Email'];
+    birthDate = json['BirthDate'];
+    linkedGeoUnitID = json['LinkedGeoUnitID'];
+    linkedGeoUnitName = json['linkedGeoUnitName'] ?? json['DaayitvaGeoUnitName'];
+    linkedShaakhaaID = json['LinkedShaakhaaID'];
+    linkedShaakhaaName = json['LinkedShaakhaaName'];
+    preferredLanguageID = json['PreferredLanguageID'];
+    preferredLanguageCode = json['PreferredLanguageCode'];
+    canUseApp = json['canUseApp'];
+    canEdit = json['can_edit'] ?? json['canEdit'];
+  }
 }
 
 class SwayamsevakOtherInfoBAL {
@@ -691,6 +708,9 @@ class UserDataBAL {
   int? isvistaruser;
   bool? canEdit;
 
+  int? vayogatid;
+  String? vayogatname;
+
   UserDataBAL(
       this.swayamsevakID,
       this.swayamsevakDaayitvaID,
@@ -725,7 +745,9 @@ class UserDataBAL {
       this.showShakhaSaptaha,
       this.showPustika,
       this.isvistaruser,
-      this.canEdit);
+      this.canEdit,
+      this.vayogatid,
+      this.vayogatname);
 
   UserDataBAL.fromMap(Map<String, dynamic> map) {
     swayamsevakID = map["SwayamsevakID"];
@@ -762,6 +784,8 @@ class UserDataBAL {
     showPustika = map['showpustika'] ?? map['ShowPustika'];
     isvistaruser = map['isvistaruser'];
     canEdit = (map['can_edit'].toString() == "1" || map['can_edit'] == true);
+    vayogatid = map['vayogatid'];
+    vayogatname = map['vayogatname'];
   }
 
   Map<String, dynamic> toJson() {
@@ -800,6 +824,8 @@ class UserDataBAL {
     map['ShowPustika'] = this.showPustika;
     map['isvistaruser'] = this.isvistaruser;
     map['can_edit'] = this.canEdit == true ? 1 : 0;
+    map['vayogatid'] = this.vayogatid;
+    map['vayogatname'] = this.vayogatname;
     return map;
   }
 }
