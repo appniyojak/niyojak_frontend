@@ -201,6 +201,7 @@ class _HomeScreenState extends State<HomeScreen> {
   GanveshData? _tgganveshData;
   Vehicle? _tgvehicle;
   static List<GatividhiKaaryakartaa> tgLstGatividhiKaaryakartaa = [];
+  final Map<String, bool> _expandedSections = {};
 
   // ─── Access-control lists ─────────────────────────────────────────────────
   final List<String> _deniedLevels = ["Shakha", "Saptahik Milan", "शाखा", "साप्ताहिक मिलन"];
@@ -2754,6 +2755,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // ═══════════════════════════════════════════════════════════════════════════
   // EXPANSION PANELS
   // ═══════════════════════════════════════════════════════════════════════════
+// Reusable helper — wraps any section content in a collapsible tile
 
   Widget _newInfoPanel({bool isAnya = false}) {
     return ChangeNotifierProvider.value(
@@ -2875,205 +2877,434 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _swayamsevakInfoPanel(GeoHierarchyController controller) {
+    VoidCallback? iconFor(String type) => !_isTgSearched ? null : () => showNamesList(geoUnitID: controller.deepestSelectedGeoUnitId, type: type);
+
     return Column(children: [
-      /*Legend(legendString: "yesterdayNews", fontsize: 18),
-      _buildYesterdaySummaryTable(Statics.tgLstYesterdayVruttaSummary),
-      if (_tgLevelID <= 6) _buildYesterdayDetailTable(Statics.tgLstYesterdayVruttaDetail),
-      const SizedBox(height: 15),
-      _vruttaSummarySection(
-        shaakhaaEQ0: _nullToZero(tgShaakhaaEQ0),
-        shaakhaa1To24: _nullToZero(tgShaakhaa1To24),
-        shaakhaaGTE25: _nullToZero(tgShaakhaaGTE25),
-        shaakhaaEQ30: _nullToZero(tgShaakhaaEQ30),
-        saaptaahikEQ0: _nullToZero(tgSaaptaahikEQ0),
-        saaptaahik1To3: _nullToZero(tgSaaptaahik1To3),
-        saaptaahikGTE4: _nullToZero(tgSaaptaahikGTE4),
-        maasikEQ0: _nullToZero(tgMaasikEQ0),
-        maasikEQ1: _nullToZero(tgMaasikEQ1),
+      ExpandableSection(
+        legendString: "SwayamsevakCount",
+        onIconPressed: iconFor("SwayamsevakCount"),
+        child: Column(children: [
+          SingleColumnRow(txtString: Statics.getLabel('TotalKaaryakartaaCount'), value: tgTotalSwayamsevakCount, fontsize: 15),
+          SingleColumnRow(txtString: Statics.getLabel('PratidnyitCount'), value: tgPratidnyitCount, fontsize: 15),
+          const SizedBox(height: 15),
+        ]),
+      ),
+      const SizedBox(height: 8),
+      ExpandableSection(
+        legendString: 'KaaryakartaaCountByLevel',
+        onIconPressed: () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: "KaaryakartaaCountByLevel"),
+        child: _kaaryakartaaByLevelSection(
+          shaakhaa: tgDailyShaakhaaKaaryakartaaCount,
+          saptahik: tgSaaptaahikMilanKaaryakartaaCount,
+          milan: tgMaasikMilanKaaryakartaaCount,
+          vasti: tgVastiKaaryakartaaCount,
+          graam: tgGraamKaaryakartaaCount,
+          mandal: tgMandalKaaryakartaaCount,
+          nagar: tgNagarKaaryakartaaCount,
+          shahar: tgShaharKaaryakartaaCount,
+          bhaag: tgBhaagKaaryakartaaCount,
+          vibhaag: tgVibhaagKaaryakartaaCount,
+          mahaanagar: tgMahaanagarKaaryakartaaCount,
+          praant: tgPraantKaaryakartaaCount,
+          kshetra: tgKshetraKaaryakartaaCount,
+          akhilBhaarat: tgAkhilBhaaratiyaKaaryakartaaCount,
+          pravaasee: tgPravaaseeKaaryakartaaCount,
+          total: tgTotalKaaryakartaaCount,
+          showListIcon: false, // icon now lives in ExpandableSection header
+          controller: controller,
+        ),
+      ),
+      const SizedBox(height: 8),
+      ExpandableSection(
+        legendString: "Gatividhi",
+        onIconPressed: iconFor("Gatividhi"),
+        child: _buildNameCountList(
+          data: Statics.tgLstGatividhiKaaryakartaa,
+          legendString: '', // suppress internal legend, see note below
+          type: 'Gatividhi',
+          nameOf: (item) => item.gatividhiName.toString(),
+          countOf: (item) => item.kaaryakartaaCount.toString(),
+          controller: controller,
+        ),
+      ),
+      const SizedBox(height: 8),
+      ExpandableSection(
+        legendString: "Aayaam",
+        onIconPressed: iconFor("Aayaam"),
+        child: _buildNameCountList(
+          data: Statics.tgLstAayaamKaaryakartaa,
+          legendString: '',
+          type: 'Aayaam',
+          nameOf: (item) => item.aayaamName.toString(),
+          countOf: (item) => item.kaaryakartaaCount.toString(),
+          controller: controller,
+        ),
+      ),
+      const SizedBox(height: 8),
+      ExpandableSection(
+        legendString: "GatividhiAayaamSansthaaKaaryakartaaCount",
+        onIconPressed: iconFor("GatividhiAayaamSansthaaKaaryakartaaCount"),
+        child: Column(children: [
+          SingleColumnRow(txtString: Statics.getLabel('GatividhiKaaryakartaaCount'), value: tgGatividhiKaaryakartaaCount, fontsize: 15),
+          SingleColumnRow(txtString: Statics.getLabel('AayaamKaaryakartaaCount'), value: tgAayaamKaaryakartaaCount, fontsize: 15),
+          SingleColumnRow(txtString: Statics.getLabel('SanghaPreritSansthaaKaaryakartaaCount'), value: tgSanghaPreritSansthaaKaaryakartaaCount, fontsize: 15),
+          SingleColumnRow(txtString: Statics.getLabel('SocialOrganizationKaaryakartaaCount'), value: tgSocialOrganizationKaaryakartaaCount, fontsize: 15),
+        ]),
+      ),
+      const SizedBox(height: 8),
+      ExpandableSection(
+        legendString: "SwayamsevakCountByAge",
+        onIconPressed: iconFor("SwayamsevakCountByAge"),
+        child: _swayamsevakCountByAge(
+          shishu: tgShishuCount,
+          baal: tgBaalCount,
+          tarunV: tgTarunVidyaarthiCount,
+          tarunVy: tgTarunVyavasaayeeCount,
+          proudha: tgProudhaVyavasaayeeCount,
+          unknown: tgUnknownAgeCount,
+          showListIcon: false,
+          controller: controller,
+        ),
+      ),
+      const SizedBox(height: 8),
+      ExpandableSection(
+        legendString: "ShikshitSwayamsevakCount",
+        onIconPressed: iconFor("ShikshitSwayamsevakCount"),
+        child: _shikshanSection(
+          prarambhik: _nullToZero(tgPraarambhikShikshitCount),
+          praathamik: _nullToZero(tgPraathamikShikshitCount),
+          prathamVarsha: _nullToZero(tgPrathamVarshaShikshitCount),
+          dwitiya: _nullToZero(tgDwitiyaVarshaShikshitCount),
+          trutiya: _nullToZero(tgTrutiyaVarshaShikshitCount),
+          noShikshan: tgNoShikshanCount,
+          showListIcon: false,
+          controller: controller,
+        ),
+      ),
+      const SizedBox(height: 8),
+      ExpandableSection(
+        legendString: "Sangayu",
+        onIconPressed: iconFor("Sangayu"),
+        child: _swayamsewakInfoWidget(infolist: _tgsangayulist, heading: '', showListIcon: false, controller: controller),
       ),
       const SizedBox(height: 15),
-      Legend(legendString: "SankalpTable", fontsize: 18),
-      _buildSadyasthitiTable(Statics.tgLstdashboardSadyaSthitiData),
-      const SizedBox(height: 15),
-      Legend(legendString: "NewSankalpTable", fontsize: 18),
-      _buildSankalpByAadhaarTable(Statics.tgLstSankalpByAadhaarData),
-      const SizedBox(height: 15),
-      Legend(legendString: "BhaugolikVistaar", fontsize: 18),
-      _buildBhaugolikTable(Statics.tgLstBhaugolikVistaar),
-      const SizedBox(height: 15),*/
-      Legend(legendString: "SwayamsevakCount", fontsize: 18, onPressed: !_isTgSearched ? null : () => showNamesList(geoUnitID: controller.deepestSelectedGeoUnitId, type: "SwayamsevakCount")),
-      SingleColumnRow(txtString: Statics.getLabel('TotalKaaryakartaaCount'), value: tgTotalSwayamsevakCount, fontsize: 15),
-      SingleColumnRow(txtString: Statics.getLabel('PratidnyitCount'), value: tgPratidnyitCount, fontsize: 15),
-      const SizedBox(height: 15),
-      _kaaryakartaaByLevelSection(
-        shaakhaa: tgDailyShaakhaaKaaryakartaaCount,
-        saptahik: tgSaaptaahikMilanKaaryakartaaCount,
-        milan: tgMaasikMilanKaaryakartaaCount,
-        vasti: tgVastiKaaryakartaaCount,
-        graam: tgGraamKaaryakartaaCount,
-        mandal: tgMandalKaaryakartaaCount,
-        nagar: tgNagarKaaryakartaaCount,
-        shahar: tgShaharKaaryakartaaCount,
-        bhaag: tgBhaagKaaryakartaaCount,
-        vibhaag: tgVibhaagKaaryakartaaCount,
-        mahaanagar: tgMahaanagarKaaryakartaaCount,
-        praant: tgPraantKaaryakartaaCount,
-        kshetra: tgKshetraKaaryakartaaCount,
-        akhilBhaarat: tgAkhilBhaaratiyaKaaryakartaaCount,
-        pravaasee: tgPravaaseeKaaryakartaaCount,
-        total: tgTotalKaaryakartaaCount,
-        showListIcon: _isTgSearched,
-        controller: controller,
+      ExpandableSection(
+        legendString: "Ghoshwadak",
+        onIconPressed: iconFor("Ghoshwadak"),
+        child: _swayamsewakInfoWidget(infolist: _tgghoshwadlist, heading: '', showListIcon: false, controller: controller),
       ),
-      const SizedBox(height: 15),
-      _swayamsevakCountByAge(
-        shishu: tgShishuCount,
-        baal: tgBaalCount,
-        tarunV: tgTarunVidyaarthiCount,
-        tarunVy: tgTarunVyavasaayeeCount,
-        proudha: tgProudhaVyavasaayeeCount,
-        unknown: tgUnknownAgeCount,
-        showListIcon: _isTgSearched,
-        controller: controller,
-      ),
-      const SizedBox(height: 15),
-      _shikshanSection(
-        prarambhik: _nullToZero(tgPraarambhikShikshitCount),
-        praathamik: _nullToZero(tgPraathamikShikshitCount),
-        prathamVarsha: _nullToZero(tgPrathamVarshaShikshitCount),
-        dwitiya: _nullToZero(tgDwitiyaVarshaShikshitCount),
-        trutiya: _nullToZero(tgTrutiyaVarshaShikshitCount),
-        noShikshan: tgNoShikshanCount,
-        showListIcon: _isTgSearched,
-        controller: controller,
-      ),
-      const SizedBox(height: 15),
-      Legend(
-          legendString: "GatividhiAayaamSansthaaKaaryakartaaCount",
-          fontsize: 18,
-          onPressed: !_isTgSearched ? null : () => showNamesList(geoUnitID: controller.deepestSelectedGeoUnitId, type: "GatividhiAayaamSansthaaKaaryakartaaCount")),
-      SingleColumnRow(txtString: Statics.getLabel('GatividhiKaaryakartaaCount'), value: tgGatividhiKaaryakartaaCount, fontsize: 15),
-      SingleColumnRow(txtString: Statics.getLabel('AayaamKaaryakartaaCount'), value: tgAayaamKaaryakartaaCount, fontsize: 15),
-      SingleColumnRow(txtString: Statics.getLabel('SanghaPreritSansthaaKaaryakartaaCount'), value: tgSanghaPreritSansthaaKaaryakartaaCount, fontsize: 15),
-      SingleColumnRow(txtString: Statics.getLabel('SocialOrganizationKaaryakartaaCount'), value: tgSocialOrganizationKaaryakartaaCount, fontsize: 15),
-      const SizedBox(height: 15),
-      _swayamsewakByBloodGroup(bloodgroup: _tgbloodgroup, showListIcon: _isTgSearched, controller: controller),
-      const SizedBox(height: 15),
-      _swayamsewakExperties(expertieslist: _tgexpertieslist, showListIcon: _isTgSearched, controller: controller),
-      const SizedBox(height: 15),
-      _swayamsewakInterests(interestlist: _tginterestlist, showListIcon: _isTgSearched, controller: controller),
-      const SizedBox(height: 15),
-      _swayamsewakInfoWidget(infolist: _tgmothertonguelist, heading: 'MotherTongue', showListIcon: _isTgSearched, controller: controller),
-      const SizedBox(height: 15),
-      _swayamsewakInfoWidget(infolist: _tgsangayulist, heading: 'Sangayu', showListIcon: _isTgSearched, controller: controller),
-      const SizedBox(height: 15),
-      _swayamsewakInfoWidget(infolist: _tgghoshwadlist, heading: 'Ghoshwadak', showListIcon: _isTgSearched, controller: controller),
-      const SizedBox(height: 15),
-      _tgganveshData == null ? SizedBox() : _swayamsewakUniform(ganvesh: _tgganveshData!, showListIcon: _isTgSearched, controller: controller),
-      const SizedBox(height: 15),
-      _tgvehicle == null ? SizedBox() : _swayamsewakVehicle(vehicle: _tgvehicle!, showListIcon: _isTgSearched, controller: controller),
-      const SizedBox(height: 15),
-      _buildNameCountList(
-        data: Statics.tgLstGatividhiKaaryakartaa,
-        legendString: 'Gatividhi',
-        type: 'Gatividhi',
-        nameOf: (item) => item.gatividhiName.toString(),
-        countOf: (item) => item.kaaryakartaaCount.toString(),
-        controller: controller,
-      ),
-      //Legend(legendString: "Gatividhi", fontsize: 18),
-      //_gatividhiKaaryakartaa(gatividhiList: tgLstGatividhiKaaryakartaa, controller: controller, showListIcon: true),
-      // _buildNameCountTable(
-      //     data: Statics.tgLstGatividhiKaaryakartaa,
-      //     nameHeader: Statics.getLabel('Gatividhi'),
-      //     countHeader: Statics.getLabel('KaaryakartaaCount'),
-      //     nameOf: (i) => i.gatividhiName ?? '',
-      //     countOf: (i) => '${i.kaaryakartaaCount}'),
-      const SizedBox(height: 15),
-      _buildNameCountList(
-        data: Statics.tgLstAayaamKaaryakartaa,
-        legendString: 'Aayaam',
-        type: 'Aayaam',
-        nameOf: (item) => item.aayaamName.toString(),
-        countOf: (item) => item.kaaryakartaaCount.toString(),
-        controller: controller,
-      ),
-      //_aayamCount(aayamlist: Statics.tgLstAayaamKaaryakartaa, controller: controller, showListIcon: true),
-      // Legend(legendString: "Aayaam", fontsize: 18),
-      // _buildNameCountTable(
-      //     data: Statics.tgLstAayaamKaaryakartaa,
-      //     nameHeader: Statics.getLabel('Aayaam'),
-      //     countHeader: Statics.getLabel('KaaryakartaaCount'),
-      //     nameOf: (i) => i.aayaamName ?? '',
-      //     countOf: (i) => '${i.kaaryakartaaCount}'),
-      const SizedBox(height: 15),
-      _buildNameCountList(
-        data: Statics.tgLstPreritKaaryakartaa,
-        legendString: 'Sangha-PreritSansthaa',
-        type: 'Sangha-PreritSansthaa',
-        nameOf: (item) => item.preritAOOName.toString(),
-        countOf: (item) => item.kaaryakartaaCount.toString(),
-        controller: controller,
-      ),
-      //_sanghapreritSanghatna(sanghaPreritlist: Statics.tgLstPreritKaaryakartaa, controller: controller, showListIcon: true),
-      // Legend(legendString: "Sangha-PreritSansthaa", fontsize: 18),
-      // _buildNameCountTable(
-      //     data: Statics.tgLstPreritKaaryakartaa,
-      //     nameHeader: Statics.getLabel('AreaOfOperations'),
-      //     countHeader: Statics.getLabel('KaaryakartaaCount'),
-      //     nameOf: (i) => i.preritAOOName ?? '',
-      //     countOf: (i) => '${i.kaaryakartaaCount}'),
-      const SizedBox(height: 15),
-      _buildNameCountList(
-        data: Statics.tgLstSocialOrgKaaryakartaa,
-        legendString: 'OtherSocialOrganization',
-        type: "OtherSocialOrganization",
-        nameOf: (item) => item.mainAOOName.toString(),
-        countOf: (item) => item.kaaryakartaaCount.toString(),
-        controller: controller,
-      ),
-      // Legend(legendString: "OtherSocialOrganization", fontsize: 18),
-      // _buildNameCountTable(
-      //     data: Statics.tgLstSocialOrgKaaryakartaa,
-      //     nameHeader: Statics.getLabel('AreaOfOperations'),
-      //     countHeader: Statics.getLabel('KaaryakartaaCount'),
-      //     nameOf: (i) => i.mainAOOName ?? '',
-      //     countOf: (i) => '${i.kaaryakartaaCount}'),
-      const SizedBox(height: 15),
-      _buildNameCountList(
-        data: Statics.tgLstStudentCategory,
+      const SizedBox(height: 8),
+      if (_tgganveshData != null)
+        ExpandableSection(
+          legendString: "GanveshDetails",
+          onIconPressed: iconFor("GanveshDetails"),
+          child: _swayamsewakUniform(ganvesh: _tgganveshData!, showListIcon: false, controller: controller),
+        ),
+      const SizedBox(height: 8),
+      ExpandableSection(
         legendString: "StudentCategory",
-        type: "StudentCategory",
-        nameOf: (item) => item.studentCategoryName.toString(),
-        countOf: (item) => item.countByStudentCategory.toString(),
-        controller: controller,
+        onIconPressed: iconFor("StudentCategory"),
+        child: _buildNameCountList(
+          data: Statics.tgLstStudentCategory,
+          legendString: '',
+          type: "StudentCategory",
+          nameOf: (item) => item.studentCategoryName.toString(),
+          countOf: (item) => item.countByStudentCategory.toString(),
+          controller: controller,
+        ),
       ),
-      // Legend(legendString: "StudentCategory", fontsize: 18),
-      // _buildNameCountTable(
-      //     data: Statics.tgLstStudentCategory,
-      //     nameHeader: Statics.getLabel('StudentCategory'),
-      //     countHeader: Statics.getLabel('SwayamsevakCount'),
-      //     nameOf: (i) => i.studentCategoryName ?? '',
-      //     countOf: (i) => '${i.countByStudentCategory}'),
-      const SizedBox(height: 15),
-      _buildNameCountList(
-        data: Statics.tgLstVyavasaayeeCategory,
+      const SizedBox(height: 8),
+      ExpandableSection(
         legendString: "VyavasaayeeCategory",
-        type: "VyavasaayeeCategory",
-        nameOf: (item) => item.vyavasaayeeCategoryName.toString(),
-        countOf: (item) => item.countByVyavasaayeeCategory.toString(),
-        controller: controller,
+        onIconPressed: iconFor("VyavasaayeeCategory"),
+        child: _buildNameCountList(
+          data: Statics.tgLstVyavasaayeeCategory,
+          legendString: '',
+          type: "VyavasaayeeCategory",
+          nameOf: (item) => item.vyavasaayeeCategoryName.toString(),
+          countOf: (item) => item.countByVyavasaayeeCategory.toString(),
+          controller: controller,
+        ),
       ),
-      // Legend(legendString: "VyavasaayeeCategory", fontsize: 18),
-      // _buildNameCountTable(
-      //     data: Statics.tgLstVyavasaayeeCategory,
-      //     nameHeader: Statics.getLabel('VyavasaayeeCategory'),
-      //     countHeader: Statics.getLabel('SwayamsevakCount'),
-      //     nameOf: (i) => i.vyavasaayeeCategoryName ?? '',
-      //     countOf: (i) => '${i.countByVyavasaayeeCategory}'),
-      const SizedBox(height: 15),
+      const SizedBox(height: 8),
+      ExpandableSection(
+        legendString: "SwayamsevakCountByBloodGroup",
+        onIconPressed: iconFor("SwayamsevakCountByBloodGroup"),
+        child: _swayamsewakByBloodGroup(bloodgroup: _tgbloodgroup, showListIcon: false, controller: controller),
+      ),
+      const SizedBox(height: 8),
+      ExpandableSection(
+        legendString: "Experties",
+        onIconPressed: iconFor("Experties"),
+        child: _swayamsewakExperties(expertieslist: _tgexpertieslist, showListIcon: false, controller: controller),
+      ),
+      const SizedBox(height: 8),
+      ExpandableSection(
+        legendString: "Interests",
+        onIconPressed: iconFor("Interests"),
+        child: _swayamsewakInterests(interestlist: _tginterestlist, showListIcon: false, controller: controller),
+      ),
+      const SizedBox(height: 8),
+      ExpandableSection(
+        legendString: "MotherTongue",
+        onIconPressed: iconFor("MotherTongue"),
+        child: _swayamsewakInfoWidget(infolist: _tgmothertonguelist, heading: '', showListIcon: false, controller: controller),
+      ),
+      const SizedBox(height: 8),
+      if (_tgvehicle != null)
+        ExpandableSection(
+          legendString: "VehicleInformation",
+          onIconPressed: iconFor("VehicleInformation"),
+          child: _swayamsewakVehicle(vehicle: _tgvehicle!, showListIcon: false, controller: controller),
+        ),
+      const SizedBox(height: 8),
+      ExpandableSection(
+        legendString: "Sangha-PreritSansthaa",
+        onIconPressed: iconFor("Sangha-PreritSansthaa"),
+        child: _buildNameCountList(
+          data: Statics.tgLstPreritKaaryakartaa,
+          legendString: '',
+          type: 'Sangha-PreritSansthaa',
+          nameOf: (item) => item.preritAOOName.toString(),
+          countOf: (item) => item.kaaryakartaaCount.toString(),
+          controller: controller,
+        ),
+      ),
+      const SizedBox(height: 8),
+      ExpandableSection(
+        legendString: "OtherSocialOrganization",
+        onIconPressed: iconFor("OtherSocialOrganization"),
+        child: _buildNameCountList(
+          data: Statics.tgLstSocialOrgKaaryakartaa,
+          legendString: '',
+          type: "OtherSocialOrganization",
+          nameOf: (item) => item.mainAOOName.toString(),
+          countOf: (item) => item.kaaryakartaaCount.toString(),
+          controller: controller,
+        ),
+      ),
+      const SizedBox(height: 8),
     ]);
   }
+  //
+  // Widget _swayamsevakInfoPanel(GeoHierarchyController controller) {
+  //   return Column(children: [
+  //     /*Legend(legendString: "yesterdayNews", fontsize: 18),
+  //     _buildYesterdaySummaryTable(Statics.tgLstYesterdayVruttaSummary),
+  //     if (_tgLevelID <= 6) _buildYesterdayDetailTable(Statics.tgLstYesterdayVruttaDetail),
+  //     const SizedBox(height: 15),
+  //     _vruttaSummarySection(
+  //       shaakhaaEQ0: _nullToZero(tgShaakhaaEQ0),
+  //       shaakhaa1To24: _nullToZero(tgShaakhaa1To24),
+  //       shaakhaaGTE25: _nullToZero(tgShaakhaaGTE25),
+  //       shaakhaaEQ30: _nullToZero(tgShaakhaaEQ30),
+  //       saaptaahikEQ0: _nullToZero(tgSaaptaahikEQ0),
+  //       saaptaahik1To3: _nullToZero(tgSaaptaahik1To3),
+  //       saaptaahikGTE4: _nullToZero(tgSaaptaahikGTE4),
+  //       maasikEQ0: _nullToZero(tgMaasikEQ0),
+  //       maasikEQ1: _nullToZero(tgMaasikEQ1),
+  //     ),
+  //     const SizedBox(height: 15),
+  //     Legend(legendString: "SankalpTable", fontsize: 18),
+  //     _buildSadyasthitiTable(Statics.tgLstdashboardSadyaSthitiData),
+  //     const SizedBox(height: 15),
+  //     Legend(legendString: "NewSankalpTable", fontsize: 18),
+  //     _buildSankalpByAadhaarTable(Statics.tgLstSankalpByAadhaarData),
+  //     const SizedBox(height: 15),
+  //     Legend(legendString: "BhaugolikVistaar", fontsize: 18),
+  //     _buildBhaugolikTable(Statics.tgLstBhaugolikVistaar),
+  //     const SizedBox(height: 15),*/
+  //     Legend(legendString: "SwayamsevakCount", fontsize: 18, onPressed: !_isTgSearched ? null : () => showNamesList(geoUnitID: controller.deepestSelectedGeoUnitId, type: "SwayamsevakCount")),
+  //     SingleColumnRow(txtString: Statics.getLabel('TotalKaaryakartaaCount'), value: tgTotalSwayamsevakCount, fontsize: 15),
+  //     SingleColumnRow(txtString: Statics.getLabel('PratidnyitCount'), value: tgPratidnyitCount, fontsize: 15),
+  //     const SizedBox(height: 15),
+  //     _kaaryakartaaByLevelSection(
+  //       shaakhaa: tgDailyShaakhaaKaaryakartaaCount,
+  //       saptahik: tgSaaptaahikMilanKaaryakartaaCount,
+  //       milan: tgMaasikMilanKaaryakartaaCount,
+  //       vasti: tgVastiKaaryakartaaCount,
+  //       graam: tgGraamKaaryakartaaCount,
+  //       mandal: tgMandalKaaryakartaaCount,
+  //       nagar: tgNagarKaaryakartaaCount,
+  //       shahar: tgShaharKaaryakartaaCount,
+  //       bhaag: tgBhaagKaaryakartaaCount,
+  //       vibhaag: tgVibhaagKaaryakartaaCount,
+  //       mahaanagar: tgMahaanagarKaaryakartaaCount,
+  //       praant: tgPraantKaaryakartaaCount,
+  //       kshetra: tgKshetraKaaryakartaaCount,
+  //       akhilBhaarat: tgAkhilBhaaratiyaKaaryakartaaCount,
+  //       pravaasee: tgPravaaseeKaaryakartaaCount,
+  //       total: tgTotalKaaryakartaaCount,
+  //       showListIcon: _isTgSearched,
+  //       controller: controller,
+  //     ),
+  //     const SizedBox(height: 15),
+  //     _buildNameCountList(
+  //       data: Statics.tgLstGatividhiKaaryakartaa,
+  //       legendString: 'Gatividhi',
+  //       type: 'Gatividhi',
+  //       nameOf: (item) => item.gatividhiName.toString(),
+  //       countOf: (item) => item.kaaryakartaaCount.toString(),
+  //       controller: controller,
+  //     ),
+  //     const SizedBox(height: 15),
+  //
+  //     _buildNameCountList(
+  //       data: Statics.tgLstAayaamKaaryakartaa,
+  //       legendString: 'Aayaam',
+  //       type: 'Aayaam',
+  //       nameOf: (item) => item.aayaamName.toString(),
+  //       countOf: (item) => item.kaaryakartaaCount.toString(),
+  //       controller: controller,
+  //     ),
+  //     const SizedBox(height: 15),
+  //     Legend(
+  //         legendString: "GatividhiAayaamSansthaaKaaryakartaaCount",
+  //         fontsize: 18,
+  //         onPressed: !_isTgSearched ? null : () => showNamesList(geoUnitID: controller.deepestSelectedGeoUnitId, type: "GatividhiAayaamSansthaaKaaryakartaaCount")),
+  //     SingleColumnRow(txtString: Statics.getLabel('GatividhiKaaryakartaaCount'), value: tgGatividhiKaaryakartaaCount, fontsize: 15),
+  //     SingleColumnRow(txtString: Statics.getLabel('AayaamKaaryakartaaCount'), value: tgAayaamKaaryakartaaCount, fontsize: 15),
+  //     SingleColumnRow(txtString: Statics.getLabel('SanghaPreritSansthaaKaaryakartaaCount'), value: tgSanghaPreritSansthaaKaaryakartaaCount, fontsize: 15),
+  //     SingleColumnRow(txtString: Statics.getLabel('SocialOrganizationKaaryakartaaCount'), value: tgSocialOrganizationKaaryakartaaCount, fontsize: 15),
+  //
+  //     const SizedBox(height: 15),
+  //     _swayamsevakCountByAge(
+  //       shishu: tgShishuCount,
+  //       baal: tgBaalCount,
+  //       tarunV: tgTarunVidyaarthiCount,
+  //       tarunVy: tgTarunVyavasaayeeCount,
+  //       proudha: tgProudhaVyavasaayeeCount,
+  //       unknown: tgUnknownAgeCount,
+  //       showListIcon: _isTgSearched,
+  //       controller: controller,
+  //     ),
+  //     const SizedBox(height: 15),
+  //     _shikshanSection(
+  //       prarambhik: _nullToZero(tgPraarambhikShikshitCount),
+  //       praathamik: _nullToZero(tgPraathamikShikshitCount),
+  //       prathamVarsha: _nullToZero(tgPrathamVarshaShikshitCount),
+  //       dwitiya: _nullToZero(tgDwitiyaVarshaShikshitCount),
+  //       trutiya: _nullToZero(tgTrutiyaVarshaShikshitCount),
+  //       noShikshan: tgNoShikshanCount,
+  //       showListIcon: _isTgSearched,
+  //       controller: controller,
+  //     ),
+  //     const SizedBox(height: 15),
+  //
+  //     _swayamsewakInfoWidget(infolist: _tgsangayulist, heading: 'Sangayu', showListIcon: _isTgSearched, controller: controller),
+  //     const SizedBox(height: 15),
+  //     _swayamsewakInfoWidget(infolist: _tgghoshwadlist, heading: 'Ghoshwadak', showListIcon: _isTgSearched, controller: controller),
+  //     const SizedBox(height: 15),
+  //     // Legend(
+  //     //     legendString: "GatividhiAayaamSansthaaKaaryakartaaCount",
+  //     //     fontsize: 18,
+  //     //     onPressed: !_isTgSearched ? null : () => showNamesList(geoUnitID: controller.deepestSelectedGeoUnitId, type: "GatividhiAayaamSansthaaKaaryakartaaCount")),
+  //     // SingleColumnRow(txtString: Statics.getLabel('GatividhiKaaryakartaaCount'), value: tgGatividhiKaaryakartaaCount, fontsize: 15),
+  //     // SingleColumnRow(txtString: Statics.getLabel('AayaamKaaryakartaaCount'), value: tgAayaamKaaryakartaaCount, fontsize: 15),
+  //     // SingleColumnRow(txtString: Statics.getLabel('SanghaPreritSansthaaKaaryakartaaCount'), value: tgSanghaPreritSansthaaKaaryakartaaCount, fontsize: 15),
+  //     // SingleColumnRow(txtString: Statics.getLabel('SocialOrganizationKaaryakartaaCount'), value: tgSocialOrganizationKaaryakartaaCount, fontsize: 15),
+  //     // const SizedBox(height: 15),
+  //
+  //     _tgganveshData == null ? SizedBox() : _swayamsewakUniform(ganvesh: _tgganveshData!, showListIcon: _isTgSearched, controller: controller),
+  //     const SizedBox(height: 15),
+  //     _buildNameCountList(
+  //       data: Statics.tgLstStudentCategory,
+  //       legendString: "StudentCategory",
+  //       type: "StudentCategory",
+  //       nameOf: (item) => item.studentCategoryName.toString(),
+  //       countOf: (item) => item.countByStudentCategory.toString(),
+  //       controller: controller,
+  //     ),
+  //     const SizedBox(height: 15),
+  //     _buildNameCountList(
+  //       data: Statics.tgLstVyavasaayeeCategory,
+  //       legendString: "VyavasaayeeCategory",
+  //       type: "VyavasaayeeCategory",
+  //       nameOf: (item) => item.vyavasaayeeCategoryName.toString(),
+  //       countOf: (item) => item.countByVyavasaayeeCategory.toString(),
+  //       controller: controller,
+  //     ),
+  //     const SizedBox(height: 15),
+  //     _swayamsewakByBloodGroup(bloodgroup: _tgbloodgroup, showListIcon: _isTgSearched, controller: controller),
+  //     const SizedBox(height: 15),
+  //     _swayamsewakExperties(expertieslist: _tgexpertieslist, showListIcon: _isTgSearched, controller: controller),
+  //     const SizedBox(height: 15),
+  //     _swayamsewakInterests(interestlist: _tginterestlist, showListIcon: _isTgSearched, controller: controller),
+  //     const SizedBox(height: 15),
+  //     _swayamsewakInfoWidget(infolist: _tgmothertonguelist, heading: 'MotherTongue', showListIcon: _isTgSearched, controller: controller),
+  //     const SizedBox(height: 15),
+  //     _tgvehicle == null ? SizedBox() : _swayamsewakVehicle(vehicle: _tgvehicle!, showListIcon: _isTgSearched, controller: controller),
+  //     const SizedBox(height: 15),
+  //
+  //     //Legend(legendString: "Gatividhi", fontsize: 18),
+  //     //_gatividhiKaaryakartaa(gatividhiList: tgLstGatividhiKaaryakartaa, controller: controller, showListIcon: true),
+  //     // _buildNameCountTable(
+  //     //     data: Statics.tgLstGatividhiKaaryakartaa,
+  //     //     nameHeader: Statics.getLabel('Gatividhi'),
+  //     //     countHeader: Statics.getLabel('KaaryakartaaCount'),
+  //     //     nameOf: (i) => i.gatividhiName ?? '',
+  //     //     countOf: (i) => '${i.kaaryakartaaCount}'),
+  //
+  //     //_aayamCount(aayamlist: Statics.tgLstAayaamKaaryakartaa, controller: controller, showListIcon: true),
+  //     // Legend(legendString: "Aayaam", fontsize: 18),
+  //     // _buildNameCountTable(
+  //     //     data: Statics.tgLstAayaamKaaryakartaa,
+  //     //     nameHeader: Statics.getLabel('Aayaam'),
+  //     //     countHeader: Statics.getLabel('KaaryakartaaCount'),
+  //     //     nameOf: (i) => i.aayaamName ?? '',
+  //     //     countOf: (i) => '${i.kaaryakartaaCount}'),
+  //     const SizedBox(height: 15),
+  //     _buildNameCountList(
+  //       data: Statics.tgLstPreritKaaryakartaa,
+  //       legendString: 'Sangha-PreritSansthaa',
+  //       type: 'Sangha-PreritSansthaa',
+  //       nameOf: (item) => item.preritAOOName.toString(),
+  //       countOf: (item) => item.kaaryakartaaCount.toString(),
+  //       controller: controller,
+  //     ),
+  //     //_sanghapreritSanghatna(sanghaPreritlist: Statics.tgLstPreritKaaryakartaa, controller: controller, showListIcon: true),
+  //     // Legend(legendString: "Sangha-PreritSansthaa", fontsize: 18),
+  //     // _buildNameCountTable(
+  //     //     data: Statics.tgLstPreritKaaryakartaa,
+  //     //     nameHeader: Statics.getLabel('AreaOfOperations'),
+  //     //     countHeader: Statics.getLabel('KaaryakartaaCount'),
+  //     //     nameOf: (i) => i.preritAOOName ?? '',
+  //     //     countOf: (i) => '${i.kaaryakartaaCount}'),
+  //     const SizedBox(height: 15),
+  //     _buildNameCountList(
+  //       data: Statics.tgLstSocialOrgKaaryakartaa,
+  //       legendString: 'OtherSocialOrganization',
+  //       type: "OtherSocialOrganization",
+  //       nameOf: (item) => item.mainAOOName.toString(),
+  //       countOf: (item) => item.kaaryakartaaCount.toString(),
+  //       controller: controller,
+  //     ),
+  //     // Legend(legendString: "OtherSocialOrganization", fontsize: 18),
+  //     // _buildNameCountTable(
+  //     //     data: Statics.tgLstSocialOrgKaaryakartaa,
+  //     //     nameHeader: Statics.getLabel('AreaOfOperations'),
+  //     //     countHeader: Statics.getLabel('KaaryakartaaCount'),
+  //     //     nameOf: (i) => i.mainAOOName ?? '',
+  //     //     countOf: (i) => '${i.kaaryakartaaCount}'),
+  //
+  //     // Legend(legendString: "StudentCategory", fontsize: 18),
+  //     // _buildNameCountTable(
+  //     //     data: Statics.tgLstStudentCategory,
+  //     //     nameHeader: Statics.getLabel('StudentCategory'),
+  //     //     countHeader: Statics.getLabel('SwayamsevakCount'),
+  //     //     nameOf: (i) => i.studentCategoryName ?? '',
+  //     //     countOf: (i) => '${i.countByStudentCategory}'),
+  //
+  //     // Legend(legendString: "VyavasaayeeCategory", fontsize: 18),
+  //     // _buildNameCountTable(
+  //     //     data: Statics.tgLstVyavasaayeeCategory,
+  //     //     nameHeader: Statics.getLabel('VyavasaayeeCategory'),
+  //     //     countHeader: Statics.getLabel('SwayamsevakCount'),
+  //     //     nameOf: (i) => i.vyavasaayeeCategoryName ?? '',
+  //     //     countOf: (i) => '${i.countByVyavasaayeeCategory}'),
+  //     const SizedBox(height: 15),
+  //   ]);
+  // }
 
   Widget _anyaInfoPanel(GeoHierarchyController controller) {
     return Column(children: [
@@ -3591,7 +3822,8 @@ class _HomeScreenState extends State<HomeScreen> {
     double maxwidth = MediaQuery.sizeOf(context).width * 0.35;
     return Column(
       children: [
-        Legend(legendString: heading, fontsize: 18, onPressed: !showListIcon ? null : () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: heading)),
+        // Legend(legendString: heading, fontsize: 18, onPressed: !showListIcon ? null : () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: heading)),
+        //
         infolist.isEmpty
             ? Center(child: Text(Statics.getLabel('NoDataFound')))
             : Wrap(
@@ -3716,16 +3948,16 @@ class _HomeScreenState extends State<HomeScreen> {
   }) {
     return Column(
       children: [
-        Legend(
-          legendString: legendString,
-          fontsize: 18,
-          onPressed: !showListIcon
-              ? null
-              : () => showNamesList(
-                    geoUnitID: controller?.deepestSelectedGeoUnitId,
-                    type: type,
-                  ),
-        ),
+        // Legend(
+        //   legendString: legendString,
+        //   fontsize: 18,
+        //   onPressed: !showListIcon
+        //       ? null
+        //       : () => showNamesList(
+        //             geoUnitID: controller?.deepestSelectedGeoUnitId,
+        //             type: type,
+        //           ),
+        // ),
         ...data.map(
           (item) => Single1ColumnRow(
             txtString: nameOf(item),
@@ -3740,11 +3972,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _swayamsewakVehicle({required Vehicle vehicle, bool showListIcon = true, GeoHierarchyController? controller}) {
     return Column(
       children: [
-        Legend(
-          legendString: "VehicleInformation",
-          fontsize: 18,
-          onPressed: !showListIcon ? null : () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: "VehicleInformation"),
-        ),
+        // Legend(
+        //   legendString: "VehicleInformation",
+        //   fontsize: 18,
+        //   onPressed: !showListIcon ? null : () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: "VehicleInformation"),
+        // ),
         Single1ColumnRow(
           txtString: Statics.getLabel('VehicleType2W'),
           value: vehicle.Has2wehicle.toString(),
@@ -3772,7 +4004,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _swayamsewakExperties({required List<GetCount> expertieslist, bool showListIcon = true, GeoHierarchyController? controller}) {
     return Column(
       children: [
-        Legend(legendString: "Experties", fontsize: 18, onPressed: !showListIcon ? null : () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: "Experties")),
+        // Legend(legendString: "Experties", fontsize: 18, onPressed: !showListIcon ? null : () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: "Experties")),
+        //
         expertieslist.isEmpty
             ? Center(child: Text(Statics.getLabel('NoDataFound')))
             : ListView.builder(
@@ -3796,7 +4029,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _swayamsewakInterests({required List<GetCount> interestlist, bool showListIcon = true, GeoHierarchyController? controller}) {
     return Column(
       children: [
-        Legend(legendString: "Interests", fontsize: 18, onPressed: !showListIcon ? null : () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: "Interests")),
+        // Legend(legendString: "Interests", fontsize: 18, onPressed: !showListIcon ? null : () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: "Interests")),
+        //
         interestlist.isEmpty
             ? Center(child: Text(Statics.getLabel('NoDataFound')))
             : ListView.builder(
@@ -3821,7 +4055,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Legend(legendString: "GanveshDetails", fontsize: 18, onPressed: !showListIcon ? null : () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: "GanveshDetails")),
+        // Legend(legendString: "GanveshDetails", fontsize: 18, onPressed: !showListIcon ? null : () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: "GanveshDetails")),
+        //
         Single1ColumnRow(
           txtString: Statics.getLabel('NoBelt'),
           value: ganvesh.Hasbelt.toString(),
@@ -3877,10 +4112,11 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Legend(
-            legendString: "SwayamsevakCountByBloodGroup",
-            fontsize: 18,
-            onPressed: !showListIcon ? null : () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: "SwayamsevakCountByBloodGroup")),
+        // Legend(
+        //     legendString: "SwayamsevakCountByBloodGroup",
+        //     fontsize: 18,
+        //     onPressed: !showListIcon ? null : () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: "SwayamsevakCountByBloodGroup")),
+        //
         bloodgroup.isEmpty
             ? Center(child: Text(Statics.getLabel('NoDataFound')))
             : Wrap(
@@ -3915,8 +4151,9 @@ class _HomeScreenState extends State<HomeScreen> {
     GeoHierarchyController? controller,
   }) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Legend(
-          legendString: "SwayamsevakCountByAge", fontsize: 18, onPressed: !showListIcon ? null : () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: "SwayamsevakCountByAge")),
+      // Legend(
+      //     legendString: "SwayamsevakCountByAge", fontsize: 18, onPressed: !showListIcon ? null : () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: "SwayamsevakCountByAge")),
+      //
       SingleColumnRow(txtString: Statics.getLabel('Shishu'), value: shishu, fontsize: 15),
       SingleColumnRow(txtString: Statics.getLabel('Baal'), value: baal, fontsize: 15),
       SingleColumnRow(txtString: Statics.getLabel('TarunVidyaarthi'), value: tarunV, fontsize: 15),
@@ -3938,10 +4175,11 @@ class _HomeScreenState extends State<HomeScreen> {
     GeoHierarchyController? controller,
   }) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Legend(
-          legendString: "ShikshitSwayamsevakCount",
-          fontsize: 18,
-          onPressed: !showListIcon ? null : () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: "ShikshitSwayamsevakCount")),
+      // Legend(
+      //     legendString: "ShikshitSwayamsevakCount",
+      //     fontsize: 18,
+      //     onPressed: !showListIcon ? null : () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: "ShikshitSwayamsevakCount")),
+      //
       SingleColumnRow(txtString: Statics.getLabel('PrarambhikShikshit'), value: prarambhik, fontsize: 15),
       SingleColumnRow(txtString: Statics.getLabel('PraathamikShikshit'), value: praathamik, fontsize: 15),
       SingleColumnRow(txtString: Statics.getLabel('PrathamVarshShikshit'), value: prathamVarsha, fontsize: 15),
@@ -3973,11 +4211,10 @@ class _HomeScreenState extends State<HomeScreen> {
     GeoHierarchyController? controller,
   }) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Legend(
-        legendString: "KaaryakartaaCountByLevel",
-        fontsize: 18,
-        onPressed: !showListIcon ? null : () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: "KaaryakartaaCountByLevel"),
-      ),
+      // Legend(
+      //   legendString: "KaaryakartaaCountByLevel",
+      //   fontsize: 18,
+      // ),
       TwoColumnRow(txtString: Statics.getLabel('Shaakhaa'), value: shaakhaa, txtString2: Statics.getLabel('SaaptaahikLabelShort'), value2: saptahik, fontsize: 15),
       TwoColumnRow(txtString: Statics.getLabel('MilanMandali'), value: milan, txtString2: Statics.getLabel('VastiKaaryakartaaCount'), value2: vasti, fontsize: 15),
       TwoColumnRow(txtString: Statics.getLabel('GraamKaaryakartaaCount'), value: graam, txtString2: Statics.getLabel('MandalKaaryakartaaCount'), value2: mandal, fontsize: 15),
