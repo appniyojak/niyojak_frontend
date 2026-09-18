@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart' as flutter_html;
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../helpers/static_data.dart' as Statics;
@@ -235,11 +236,18 @@ class _ViewPustikaScreenState extends State<ViewPustikaScreen> {
     );
   }
 
+  String _extractBodyContent(String? html) {
+    if (html == null || html.trim().isEmpty) return '';
+    final match = RegExp(r'<body[^>]*>([\s\S]*)<\/body>', caseSensitive: false).firstMatch(html);
+    return match != null ? match.group(1)!.trim() : html.trim();
+  }
+
   Widget _buildKaryakramItem(OfflineShaakhaPustika item) {
     final rawRelativePath = item.filepath ?? '';
     final hasAudio = rawRelativePath.isNotEmpty;
     final audioUrl = _resolveFileUrl(rawRelativePath);
-    final subjectPlain = _stripHtmlTags(item.subjecttext);
+    final subjectPlain = _stripHtmlTags(item.subjecttext); // keep — still used as title below
+    final subjectHtml = _extractBodyContent(item.subjecttext);
     final hasLink = (item.urllink ?? '').trim().isNotEmpty;
 
     return Column(
@@ -258,53 +266,136 @@ class _ViewPustikaScreenState extends State<ViewPustikaScreen> {
               tablename: 'shaakhapustika',
               remoteRelativePath: rawRelativePath,
               resolvedUrlForDiskCheck: audioUrl,
-              title: subjectPlain,
+              title: subjectPlain, // still plain text — fine for a title
             ),
           ),
           const SizedBox(height: 12),
         ],
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        Column(
+          //crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              flex: 3,
-              child: Text(
-                subjectPlain,
-                style: const TextStyle(fontSize: 13.5, color: Color(0xFF3A3A3A), height: 1.55),
-              ),
-            ),
             if (hasLink) ...[
               const SizedBox(width: 14),
-              Expanded(
-                flex: 2,
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(6),
-                  onTap: () => _openLink(item.urllink!),
-                  child: Align(
-                    alignment: Alignment.topRight,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.link_rounded, size: 13, color: _saffron),
-                        const SizedBox(width: 3),
-                        Text(
-                          Statics.getLabel('GeetUrl'), // e.g. "लिंक उघडा" / "Link"
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: _saffron,
-                            fontWeight: FontWeight.w600,
-                            decoration: TextDecoration.underline,
-                          ),
+              InkWell(
+                borderRadius: BorderRadius.circular(6),
+                onTap: () => _openLink(item.urllink!),
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.link_rounded, size: 13, color: _saffron),
+                      const SizedBox(width: 3),
+                      Text(
+                        Statics.getLabel('GeetUrl'),
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: _saffron,
+                          fontWeight: FontWeight.w600,
+                          decoration: TextDecoration.underline,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
             ],
+            subjectHtml.isEmpty
+                ? const Text(
+                    '-',
+                    style: TextStyle(fontSize: 13.5, color: Color(0xFF3A3A3A), height: 1.55),
+                  )
+                : flutter_html.Html(
+                    data: subjectHtml,
+                    style: {
+                      "body": flutter_html.Style(
+                        margin: flutter_html.Margins.zero,
+                        padding: flutter_html.HtmlPaddings.zero,
+                        fontSize: flutter_html.FontSize(13.5),
+                        color: const Color(0xFF3A3A3A),
+                        lineHeight: flutter_html.LineHeight(1.55),
+                      ),
+                      "p": flutter_html.Style(
+                        margin: flutter_html.Margins.zero,
+                        padding: flutter_html.HtmlPaddings.only(bottom: 6),
+                      ),
+                    },
+                  ),
           ],
         ),
       ],
     );
   }
+  // Widget _buildKaryakramItem(OfflineShaakhaPustika item) {
+  //   final rawRelativePath = item.filepath ?? '';
+  //   final hasAudio = rawRelativePath.isNotEmpty;
+  //   final audioUrl = _resolveFileUrl(rawRelativePath);
+  //   final subjectPlain = _stripHtmlTags(item.subjecttext);
+  //   final hasLink = (item.urllink ?? '').trim().isNotEmpty;
+  //
+  //   return Column(
+  //     mainAxisSize: MainAxisSize.min,
+  //     crossAxisAlignment: CrossAxisAlignment.stretch,
+  //     children: [
+  //       if (hasAudio) ...[
+  //         Container(
+  //           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+  //           decoration: BoxDecoration(
+  //             color: _warmBg.withOpacity(0.6),
+  //             borderRadius: BorderRadius.circular(12),
+  //           ),
+  //           child: DownloadPlayCell(
+  //             pkid: item.pkid!,
+  //             tablename: 'shaakhapustika',
+  //             remoteRelativePath: rawRelativePath,
+  //             resolvedUrlForDiskCheck: audioUrl,
+  //             title: subjectPlain,
+  //           ),
+  //         ),
+  //         const SizedBox(height: 12),
+  //       ],
+  //       Row(
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         children: [
+  //           Expanded(
+  //             flex: 3,
+  //             child: Text(
+  //               subjectPlain,
+  //               style: const TextStyle(fontSize: 13.5, color: Color(0xFF3A3A3A), height: 1.55),
+  //             ),
+  //           ),
+  //           if (hasLink) ...[
+  //             const SizedBox(width: 14),
+  //             Expanded(
+  //               flex: 2,
+  //               child: InkWell(
+  //                 borderRadius: BorderRadius.circular(6),
+  //                 onTap: () => _openLink(item.urllink!),
+  //                 child: Align(
+  //                   alignment: Alignment.topRight,
+  //                   child: Row(
+  //                     mainAxisSize: MainAxisSize.min,
+  //                     children: [
+  //                       Icon(Icons.link_rounded, size: 13, color: _saffron),
+  //                       const SizedBox(width: 3),
+  //                       Text(
+  //                         Statics.getLabel('GeetUrl'), // e.g. "लिंक उघडा" / "Link"
+  //                         style: TextStyle(
+  //                           fontSize: 14,
+  //                           color: _saffron,
+  //                           fontWeight: FontWeight.w600,
+  //                           decoration: TextDecoration.underline,
+  //                         ),
+  //                       ),
+  //                     ],
+  //                   ),
+  //                 ),
+  //               ),
+  //             ),
+  //           ],
+  //         ],
+  //       ),
+  //     ],
+  //   );
+  // }
 }

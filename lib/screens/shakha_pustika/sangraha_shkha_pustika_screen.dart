@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
@@ -72,7 +73,9 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
   bool get _hasPlayableAudio => _localAudioPath != null;
   bool _isLoading = true;
   bool _isOpeningLink = false;
-
+  final ScrollController _quillScrollController = ScrollController();
+  late FocusNode _quillFocusNode;
+  Timer? _scrollDebounce;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -137,12 +140,24 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
   void initState() {
     super.initState();
     //_topicQuillController = quill.QuillController.basic();
+    _quillFocusNode = FocusNode();
     _topicQuillController.addListener(_syncTopicControllerFromQuill);
+    _quillScrollController.addListener(_onQuillScroll); // NEW
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) => _initData());
+  }
+
+  void _onQuillScroll() {
+    _scrollDebounce?.cancel();
+    _scrollDebounce = Timer(const Duration(milliseconds: 8), () {
+      if (mounted) setState(() {});
+    });
   }
 
   @override
   void dispose() {
+    _quillScrollController.removeListener(_onQuillScroll); // NEW
+    _quillFocusNode.dispose();
+    _quillScrollController.dispose();
     _topicController.dispose();
     _remarkController.dispose();
     _linkController.dispose();
@@ -350,9 +365,15 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
       }
       final quillFragmentHtml = delta_html.QuillDeltaToHtmlConverter(
         _topicQuillController.document.toDelta().toJson(),
+        delta_html.ConverterOptions(
+          converterOptions: delta_html.OpConverterOptions(
+            inlineStylesFlag: true, // emit style="text-align:center" instead of class="ql-align-center"
+          ),
+        ),
       ).convert();
 
       final fullHtml = _wrapAsFullHtmlDocument(quillFragmentHtml);
+      log("full html:$fullHtml");
       //final int? currentUserId = int.tryParse(Statics.userDetails['UserID']!.toString());
       //print("karyakramid:${_karyakramIdMap[]}")
       final requestModel = CreateUpdateShaakhaPustikaRequest(
@@ -850,15 +871,57 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
                       showBackgroundColorButton: false,
                       showAlignmentButtons: true),
                 ),
+                // Container(
+                //   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                //   child: Listener(
+                //     behavior: HitTestBehavior.translucent,
+                //     onPointerDown: (event) {
+                //       // NEW — record where the drag starts, every time, regardless of focus
+                //       _topicDragStartY = event.position.dy;
+                //       _topicDragStartOffset = _topicEditorScrollController.hasClients ? _topicEditorScrollController.offset : 0;
+                //     },
+                //     onPointerMove: (event) {
+                //       if (_topicEditorFocusNode.hasFocus) return; // focused → let Quill's own scroll/selection handle it
+                //       if (!_topicEditorScrollController.hasClients) return;
+                //
+                //       final position = _topicEditorScrollController.position;
+                //       final dy = event.position.dy - _topicDragStartY;
+                //       print("dy: $dy, hasClients: ${_topicEditorScrollController.hasClients}");
+                //       final newOffset = (_topicDragStartOffset - dy).clamp(
+                //         position.minScrollExtent,
+                //         position.maxScrollExtent,
+                //       );
+                //       _topicEditorScrollController.jumpTo(newOffset);
+                //       print("maxScrollExtent: ${position.maxScrollExtent}, pixels after jump: ${_topicEditorScrollController.position.pixels}"); // NEW
+                //     },
+                //     child: quill.QuillEditor.basic(
+                //       focusNode: _topicEditorFocusNode,
+                //       scrollController: _topicEditorScrollController,
+                //       configurations: quill.QuillEditorConfigurations(
+                //         controller: _topicQuillController,
+                //         placeholder: Statics.getLabel('SubjectTxtSubText'),
+                //         padding: EdgeInsets.zero,
+                //         scrollable: true,
+                //         expands: false,
+                //         minHeight: 120,
+                //         maxHeight: 260,
+                //       ),
+                //     ),
+                //   ),
+                // ),
+
                 Container(
-                  height: 160,
+                  height: 300,
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                  child: quill.QuillEditor.basic(
-                    configurations: quill.QuillEditorConfigurations(
-                      controller: _topicQuillController,
-                      placeholder: Statics.getLabel('SubjectTxtSubText'),
-                      padding: EdgeInsets.zero,
-                      expands: true,
+                  child: Scrollbar(
+                    controller: _quillScrollController,
+                    interactive: true,
+                    thumbVisibility: true,
+                    child: quill.QuillEditor.basic(
+                      scrollController: _quillScrollController,
+                      focusNode: _quillFocusNode,
+                      configurations: quill.QuillEditorConfigurations(
+                          controller: _topicQuillController, placeholder: Statics.getLabel('SubjectTxtSubText'), padding: EdgeInsets.zero, expands: false, scrollable: true),
                     ),
                   ),
                 ),
