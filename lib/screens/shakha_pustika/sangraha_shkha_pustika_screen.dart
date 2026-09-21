@@ -76,6 +76,7 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
   final ScrollController _quillScrollController = ScrollController();
   late FocusNode _quillFocusNode;
   Timer? _scrollDebounce;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -404,7 +405,7 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
     } catch (e) {
       log("Error saving shaakha pustika: $e");
       if (mounted) {
-        Statics.showToast('काहीतरी चूक झाली, पुन्हा प्रयत्न करा');
+        Statics.showToast(Statics.getLabel("SomethingWentWrong"));
       }
     } finally {
       if (mounted) setState(() => _isSaving = false);
@@ -488,10 +489,10 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
         centerTitle: true,
         title: Text(
           _incomingPkId == null || !_isEditable
-              ? '${Statics.getLabel('ShakhaPustika')} संग्रह'
+              ? '${Statics.getLabel('ShakhaPustika')} ${Statics.getLabel('Submit')}'
               : _isEditable
-                  ? '${Statics.getLabel('ShakhaPustika')} सुधारणा'
-                  : '${Statics.getLabel('ShakhaPustika')} माहिती',
+                  ? '${Statics.getLabel('ShakhaPustika')} ${Statics.getLabel('Edit')}'
+                  : '${Statics.getLabel('ShakhaPustika')} ${Statics.getLabel('Information')}',
           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
         ),
       ),
@@ -792,7 +793,8 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
           ),
           const SizedBox(height: 8),
           Text(
-            Statics.getLabel('AddAudioLink'),
+            Statics.getLabel('AddAudioLink')
+                .replaceAll('{Audio}', _karyakram?.firstWhere((e) => e.staticID.toString() == _karyakramValue.toString()).codeForDisplay.toString().split(" ").last ?? Statics.getLabel("Geet")),
             style: TextStyle(fontSize: 13, color: Colors.grey.shade700, fontWeight: FontWeight.w500),
           ),
           const SizedBox(height: 8),
@@ -801,7 +803,8 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
             decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.grey.shade100,
-                hintText: Statics.getLabel("AudioUrl"),
+                hintText: Statics.getLabel("AudioUrl")
+                    .replaceAll('{Audio}', _karyakram?.firstWhere((e) => e.staticID.toString() == _karyakramValue.toString()).codeForDisplay.toString().split(" ").last ?? Statics.getLabel("Geet")),
                 hintStyle: TextStyle(color: Colors.grey.shade600, fontSize: 14),
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),

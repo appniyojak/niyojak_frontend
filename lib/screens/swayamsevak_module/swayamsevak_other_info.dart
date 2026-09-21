@@ -32,6 +32,8 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
   String? _curStateValue = "";
   bool _isPratidnyit = false;
 
+  bool _haveDesiGai = false;
+
   // bool _isGanaveshComplete = true;
   bool _has2Wheeler = false;
   bool _has3Wheeler = false;
@@ -92,9 +94,12 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
   var _othLangCntrl = TextEditingController();
   var _faceBookPageCntrl = TextEditingController();
 
+  var _otherInfoCntrl = TextEditingController();
+
   bool? _sameAsCurrentAddress = false;
 
   var _pratidnyaYearCtrl = TextEditingController();
+  var _desiGaiCountCtrl = TextEditingController();
 
   //var _shaakhaaExperienceCtrl = TextEditingController();
   List<StaticMasterBAL>? _shaakhaSanchalan;
@@ -216,6 +221,8 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
             false,
             null,
             false,
+            null,
+            false,
             false,
             false,
             false,
@@ -268,6 +275,7 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
             null,
             null,
             null,
+            "",
             "",
             null,
             "");
@@ -311,6 +319,8 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
     _txtPrimaryEmailCtrl.dispose();
     _txtSecondayEmailCtrl.dispose();
     _faceBookPageCntrl.dispose();
+    _otherInfoCntrl.dispose();
+    _desiGaiCountCtrl.dispose();
     _txtTwitterHandleCtrl.dispose();
     _txtInstagramHandleCtrl.dispose();
     _txtKooHandleCtrl.dispose();
@@ -377,6 +387,11 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
           _othLangCntrl.text = (swOtherInfo?.motherTongueCode ?? "").toString();
 
           _faceBookPageCntrl.text = (swOtherInfo?.facebookUsage ?? "").toString();
+
+          _otherInfoCntrl.text = (swOtherInfo?.otherInfoDesc ?? "").toString();
+
+          _haveDesiGai = swOtherInfo?.haveDesiGai ?? false;
+          _desiGaiCountCtrl.text = (swOtherInfo?.desiGaiCount == 0 ? "" : swOtherInfo?.desiGaiCount ?? "").toString();
 
           // _birthDate = ((swOtherInfo!.birthDate != null && swOtherInfo!.birthDate != "") ? DateTime.parse(swOtherInfo!.birthDate!) : null);
           // _birthDateCntrl.text = ((swOtherInfo!.birthDate != null && swOtherInfo!.birthDate != "") ? DateFormat('dd-MMM-yyyy').format(_birthDate!) : '');
@@ -592,6 +607,8 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
         "InstagramUsage": swOtherInfo?.instagramUsage,
         "IsPratidnyit": _isPratidnyit,
         "PratidnyaYear": swOtherInfo?.pratidnyaYear,
+        "haveDesiGai": _haveDesiGai,
+        "desiGaiCount": swOtherInfo?.desiGaiCount ?? int.tryParse(_desiGaiCountCtrl.text),
         //"IsGanaveshComplete": _isGanaveshComplete,
         "HasCap": _hasCap ?? false,
         "HasShirt": _hasShirt ?? false,
@@ -624,6 +641,7 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
         "HomePhoneNumber": swOtherInfo?.homePhoneNumber == "" ? null : swOtherInfo?.homePhoneNumber,
         "WhatsAppNumber": swOtherInfo?.whatsAppNumber == "" ? null : swOtherInfo?.whatsAppNumber,
         "FacebookPage": swOtherInfo?.facebookPage,
+        "otherInfoDesc": swOtherInfo?.otherInfoDesc ?? _otherInfoCntrl.text.trim(),
         "Email": swOtherInfo?.Email,
         "SecondaryEmail": swOtherInfo?.secondaryEmail,
         "swayamsevakShaakhaaFreq": swOtherInfo?.swayamsevakShaakhaaFreq,
@@ -1529,20 +1547,21 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
                             controller: _pratidnyaYearCtrl,
                             decoration: InputDecoration(labelText: Statics.getLabel('PratidnyaYear')),
                             keyboardType: TextInputType.number,
-                            enabled: _isPratidnyit == null ? false : _isPratidnyit,
+                            enabled: _isPratidnyit,
                             maxLength: 4,
                             validator: (value) {
-                              if (_isPratidnyit != null) {
-                                if (_isPratidnyit && value!.isEmpty)
-                                  return (Statics.getLabel('PratidnyaYearValidationMessage'));
-                                else if (!_isPratidnyit && value!.isNotEmpty) {
-                                  value = "";
-                                  return ('Pratidnya Year Not Required');
-                                } else if (_isPratidnyit && value!.length < 4)
-                                  return (Statics.getLabel('ValidYearValidationMessage'));
-                                else if (_isPratidnyit && (int.parse(value!) > int.parse(DateFormat('yyyy').format(DateTime.now())))) {
-                                  return Statics.getLabel('ValidYearValidationMessage');
-                                }
+                              // if (_isPratidnyit && value!.isEmpty)
+                              //   return (Statics.getLabel('PratidnyaYearValidationMessage'));
+                              // else
+                              if (!_isPratidnyit && value!.isNotEmpty) {
+                                value = "";
+                                _pratidnyaYearCtrl.clear();
+                                swOtherInfo!.pratidnyaYear = null;
+                                return null;
+                              } else if (_isPratidnyit && value!.isNotEmpty && value.length < 4)
+                                return (Statics.getLabel('ValidYearValidationMessage'));
+                              else if (_isPratidnyit && value!.isNotEmpty && (int.parse(value!) > int.parse(DateFormat('yyyy').format(DateTime.now())))) {
+                                return Statics.getLabel('ValidYearValidationMessage');
                               }
 
                               return null;
@@ -2018,9 +2037,7 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
                             swOtherInfo!.shaakhaaExperienceYearID = null;
                         },
                       ),
-                    SizedBox(
-                      height: 10,
-                    ),
+                    SizedBox(height: 10),
                     if (_hasShaakhaaExperience == true)
                       Column(
                         children: [
@@ -2112,6 +2129,47 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
                             ),
                         ],
                       ),
+
+                    SizedBox(height: 16),
+                    TextFormField(
+                      controller: _otherInfoCntrl,
+                      minLines: 5,
+                      maxLines: null,
+                      keyboardType: TextInputType.multiline,
+                      textInputAction: TextInputAction.newline,
+                      decoration: InputDecoration(
+                        // hintText: Statics.getLabel('OtherInfo'),
+                        labelText: Statics.getLabel('OtherInfo'),
+                        alignLabelWithHint: true,
+                        contentPadding: const EdgeInsets.all(16),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Colors.grey,
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Colors.grey,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Colors.blue,
+                            width: 1.5,
+                          ),
+                        ),
+                      ),
+                      onSaved: (value) {
+                        if (value != null && value.isNotEmpty)
+                          swOtherInfo!.otherInfoDesc = value;
+                        else
+                          swOtherInfo!.otherInfoDesc = null;
+                      },
+                    ),
+
                     // TextFormField(
                     //   textInputAction: TextInputAction.next,
                     //   controller: _txtMaxDaayitvaCtrl,
@@ -2246,6 +2304,58 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
                     //         swOtherInfo!.prachaarakYearCount = null;
                     //     },
                     //   ),
+                    SizedBox(
+                      height: 40,
+                    ),
+                    Legend(legendString: 'gosewa', fontsize: 18),
+                    Wrap(
+                      children: [
+                        SizedBox(
+                          width: Statics.getDeviceSize(context).width * 0.4,
+                          child: CheckboxListTile(
+                              contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                              controlAffinity: ListTileControlAffinity.leading,
+                              title: Text(Statics.getLabel('haveDesiGai'), style: TextStyle(fontSize: 15)),
+                              checkColor: Colors.white,
+                              activeColor: Colors.purple,
+                              value: _haveDesiGai,
+                              onChanged: (value) {
+                                setState(() {
+                                  _haveDesiGai = value!;
+                                });
+                              }),
+                        ),
+                        SizedBox(
+                          width: Statics.getDeviceSize(context).width * 0.4,
+                          child: TextFormField(
+                            textInputAction: TextInputAction.next,
+                            controller: _desiGaiCountCtrl,
+                            decoration: InputDecoration(labelText: Statics.getLabel('desiGaiCount')),
+                            keyboardType: TextInputType.number,
+                            enabled: _haveDesiGai,
+                            maxLength: 4,
+                            validator: (value) {
+                              if (_haveDesiGai && value!.isEmpty)
+                                return (Statics.getLabel('DesiGaiCountValidationMessage'));
+                              else if (!_haveDesiGai && value!.isNotEmpty) {
+                                value = "";
+                                _desiGaiCountCtrl.clear();
+                                swOtherInfo!.desiGaiCount = null;
+                                return null;
+                              }
+
+                              return null;
+                            },
+                            onSaved: (value) {
+                              if (value != null && value.isNotEmpty)
+                                swOtherInfo!.desiGaiCount = int.parse(value);
+                              else
+                                swOtherInfo!.desiGaiCount = null;
+                            },
+                          ),
+                        )
+                      ],
+                    ),
                     SizedBox(
                       height: 40,
                     ),

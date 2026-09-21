@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart' as flutter_html;
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../helpers/static_data.dart' as Statics;
 import '../../models/response_model/offline_shaakhaa_pustika_resp_model.dart';
 import '../../utils/globals.dart';
-import 'download_play_cell_widget.dart';
 
 class ViewPustikaScreen extends StatefulWidget {
   static var routeName = '/view-pustika-screen';
@@ -242,6 +242,22 @@ class _ViewPustikaScreenState extends State<ViewPustikaScreen> {
     return match != null ? match.group(1)!.trim() : html.trim();
   }
 
+  String _getPlainTextFromHtml(String htmlString) {
+    if (htmlString.isEmpty) return '';
+
+    // 1. Replace <br> and <p> tags with actual line breaks for the clipboard
+    String text = htmlString.replaceAll(RegExp(r'<br\s*/?>', caseSensitive: false), '\n');
+    text = text.replaceAll(RegExp(r'</(p|div|h[1-6])>', caseSensitive: false), '\n\n');
+
+    // 2. Remove all remaining HTML tags (like <body>, <span>, <strong>, etc.)
+    text = text.replaceAll(RegExp(r'<[^>]*>'), '');
+
+    // 3. Decode common HTML entities so they look normal
+    text = text.replaceAll('&nbsp;', ' ').replaceAll('&amp;', '&').replaceAll('&lt;', '<').replaceAll('&gt;', '>').replaceAll('&quot;', '"').replaceAll('&#39;', "'");
+
+    return text.trim();
+  }
+
   Widget _buildKaryakramItem(OfflineShaakhaPustika item) {
     final rawRelativePath = item.filepath ?? '';
     final hasAudio = rawRelativePath.isNotEmpty;
@@ -251,36 +267,50 @@ class _ViewPustikaScreenState extends State<ViewPustikaScreen> {
     final hasLink = (item.urllink ?? '').trim().isNotEmpty;
 
     return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      crossAxisAlignment: CrossAxisAlignment.stretch, // Ensures full width for proper alignment
       children: [
-        if (hasAudio) ...[
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-            decoration: BoxDecoration(
-              color: _warmBg.withOpacity(0.6),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: DownloadPlayCell(
-              pkid: item.pkid!,
-              tablename: 'shaakhapustika',
-              remoteRelativePath: rawRelativePath,
-              resolvedUrlForDiskCheck: audioUrl,
-              title: subjectPlain, // still plain text — fine for a title
-            ),
-          ),
-          const SizedBox(height: 12),
-        ],
-        Column(
-          //crossAxisAlignment: CrossAxisAlignment.start,
+        // --- ACTION BAR: Link and Copy Button ---
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween, // Aligns buttons to the right
           children: [
+            // --- NEW COPY BUTTON ---
+            if (subjectHtml.isNotEmpty)
+              InkWell(
+                borderRadius: BorderRadius.circular(6),
+                onTap: () async {
+                  // Convert HTML to clean plain text
+                  final plainText = _getPlainTextFromHtml(subjectHtml);
+
+                  // Copy to clipboard
+                  await Clipboard.setData(ClipboardData(text: plainText));
+
+                  // Optional: Show a little popup message to confirm it copied
+                  if (context.mounted) {
+                    Statics.showToast('Text copied to clipboard');
+                  }
+                },
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.copy_rounded, size: 13, color: Colors.grey[700]), // Change color as needed
+                    const SizedBox(width: 3),
+                    Text(
+                      'Copy',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey[700],
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             if (hasLink) ...[
-              const SizedBox(width: 14),
               InkWell(
                 borderRadius: BorderRadius.circular(6),
                 onTap: () => _openLink(item.urllink!),
-                child: Align(
-                  alignment: Alignment.topRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 16.0),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -300,102 +330,105 @@ class _ViewPustikaScreenState extends State<ViewPustikaScreen> {
                 ),
               ),
             ],
-            subjectHtml.isEmpty
-                ? const Text(
-                    '-',
-                    style: TextStyle(fontSize: 13.5, color: Color(0xFF3A3A3A), height: 1.55),
-                  )
-                : flutter_html.Html(
-                    data: subjectHtml,
-                    style: {
-                      "body": flutter_html.Style(
-                        margin: flutter_html.Margins.zero,
-                        padding: flutter_html.HtmlPaddings.zero,
-                        fontSize: flutter_html.FontSize(13.5),
-                        color: const Color(0xFF3A3A3A),
-                        lineHeight: flutter_html.LineHeight(1.55),
-                      ),
-                      "p": flutter_html.Style(
-                        margin: flutter_html.Margins.zero,
-                        padding: flutter_html.HtmlPaddings.only(bottom: 6),
-                      ),
-                    },
-                  ),
           ],
         ),
+        const SizedBox(height: 8), // Some spacing before the HTML text begins
+
+        // --- HTML CONTENT ---
+        subjectHtml.isEmpty
+            ? const Text(
+                '-',
+                style: TextStyle(fontSize: 13.5, color: Color(0xFF3A3A3A), height: 1.55),
+              )
+            : flutter_html.Html(
+                data: subjectHtml,
+                style: {
+                  "body": flutter_html.Style(
+                    margin: flutter_html.Margins.zero,
+                    padding: flutter_html.HtmlPaddings.zero,
+                    fontSize: flutter_html.FontSize(13.5),
+                    color: const Color(0xFF3A3A3A),
+                    lineHeight: flutter_html.LineHeight(1.55),
+                  ),
+                  "p": flutter_html.Style(
+                    margin: flutter_html.Margins.zero,
+                    padding: flutter_html.HtmlPaddings.only(bottom: 6),
+                  ),
+                },
+              ),
       ],
     );
   }
-  // Widget _buildKaryakramItem(OfflineShaakhaPustika item) {
-  //   final rawRelativePath = item.filepath ?? '';
-  //   final hasAudio = rawRelativePath.isNotEmpty;
-  //   final audioUrl = _resolveFileUrl(rawRelativePath);
-  //   final subjectPlain = _stripHtmlTags(item.subjecttext);
-  //   final hasLink = (item.urllink ?? '').trim().isNotEmpty;
-  //
-  //   return Column(
-  //     mainAxisSize: MainAxisSize.min,
-  //     crossAxisAlignment: CrossAxisAlignment.stretch,
-  //     children: [
-  //       if (hasAudio) ...[
-  //         Container(
-  //           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-  //           decoration: BoxDecoration(
-  //             color: _warmBg.withOpacity(0.6),
-  //             borderRadius: BorderRadius.circular(12),
-  //           ),
-  //           child: DownloadPlayCell(
-  //             pkid: item.pkid!,
-  //             tablename: 'shaakhapustika',
-  //             remoteRelativePath: rawRelativePath,
-  //             resolvedUrlForDiskCheck: audioUrl,
-  //             title: subjectPlain,
-  //           ),
-  //         ),
-  //         const SizedBox(height: 12),
-  //       ],
-  //       Row(
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         children: [
-  //           Expanded(
-  //             flex: 3,
-  //             child: Text(
-  //               subjectPlain,
-  //               style: const TextStyle(fontSize: 13.5, color: Color(0xFF3A3A3A), height: 1.55),
-  //             ),
-  //           ),
-  //           if (hasLink) ...[
-  //             const SizedBox(width: 14),
-  //             Expanded(
-  //               flex: 2,
-  //               child: InkWell(
-  //                 borderRadius: BorderRadius.circular(6),
-  //                 onTap: () => _openLink(item.urllink!),
-  //                 child: Align(
-  //                   alignment: Alignment.topRight,
-  //                   child: Row(
-  //                     mainAxisSize: MainAxisSize.min,
-  //                     children: [
-  //                       Icon(Icons.link_rounded, size: 13, color: _saffron),
-  //                       const SizedBox(width: 3),
-  //                       Text(
-  //                         Statics.getLabel('GeetUrl'), // e.g. "लिंक उघडा" / "Link"
-  //                         style: TextStyle(
-  //                           fontSize: 14,
-  //                           color: _saffron,
-  //                           fontWeight: FontWeight.w600,
-  //                           decoration: TextDecoration.underline,
-  //                         ),
-  //                       ),
-  //                     ],
-  //                   ),
-  //                 ),
-  //               ),
-  //             ),
-  //           ],
-  //         ],
-  //       ),
-  //     ],
-  //   );
-  // }
+// Widget _buildKaryakramItem(OfflineShaakhaPustika item) {
+//   final rawRelativePath = item.filepath ?? '';
+//   final hasAudio = rawRelativePath.isNotEmpty;
+//   final audioUrl = _resolveFileUrl(rawRelativePath);
+//   final subjectPlain = _stripHtmlTags(item.subjecttext);
+//   final hasLink = (item.urllink ?? '').trim().isNotEmpty;
+//
+//   return Column(
+//     mainAxisSize: MainAxisSize.min,
+//     crossAxisAlignment: CrossAxisAlignment.stretch,
+//     children: [
+//       if (hasAudio) ...[
+//         Container(
+//           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+//           decoration: BoxDecoration(
+//             color: _warmBg.withOpacity(0.6),
+//             borderRadius: BorderRadius.circular(12),
+//           ),
+//           child: DownloadPlayCell(
+//             pkid: item.pkid!,
+//             tablename: 'shaakhapustika',
+//             remoteRelativePath: rawRelativePath,
+//             resolvedUrlForDiskCheck: audioUrl,
+//             title: subjectPlain,
+//           ),
+//         ),
+//         const SizedBox(height: 12),
+//       ],
+//       Row(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           Expanded(
+//             flex: 3,
+//             child: Text(
+//               subjectPlain,
+//               style: const TextStyle(fontSize: 13.5, color: Color(0xFF3A3A3A), height: 1.55),
+//             ),
+//           ),
+//           if (hasLink) ...[
+//             const SizedBox(width: 14),
+//             Expanded(
+//               flex: 2,
+//               child: InkWell(
+//                 borderRadius: BorderRadius.circular(6),
+//                 onTap: () => _openLink(item.urllink!),
+//                 child: Align(
+//                   alignment: Alignment.topRight,
+//                   child: Row(
+//                     mainAxisSize: MainAxisSize.min,
+//                     children: [
+//                       Icon(Icons.link_rounded, size: 13, color: _saffron),
+//                       const SizedBox(width: 3),
+//                       Text(
+//                         Statics.getLabel('GeetUrl'), // e.g. "लिंक उघडा" / "Link"
+//                         style: TextStyle(
+//                           fontSize: 14,
+//                           color: _saffron,
+//                           fontWeight: FontWeight.w600,
+//                           decoration: TextDecoration.underline,
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//               ),
+//             ),
+//           ],
+//         ],
+//       ),
+//     ],
+//   );
+// }
 }

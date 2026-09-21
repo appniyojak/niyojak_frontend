@@ -183,7 +183,7 @@ class _StatusListState extends State<_StatusList> {
         if (widget.showOverallHeader) _OverallProgressHeader(items: _items),
         Expanded(
           child: _items.isEmpty && !_isLoading
-              ? Center(child: Text('No ${widget.status} downloads'))
+              ? Center(child: Text(Statics.getLabel('nodownloads', returnKey: true)))
               : RefreshIndicator(
                   onRefresh: _reload,
                   child: AnimatedList(

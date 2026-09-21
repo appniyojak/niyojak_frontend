@@ -940,7 +940,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                               redirctToList("sewaVrutta", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('sewaVrutta'));
                             }),
                         TwoColumnRow(
-                          txtString: 'सेवा वस्ती संख्या',
+                          txtString: Statics.getLabel('sewaVastiCount'),
                           value: _ekatritVrutta['SewaVastiCount'].toString() == "null" ? "0" : _ekatritVrutta['SewaVastiCount'].toString(),
                           txtString2: Statics.getLabel('shaakhaaYukta'),
                           value2: _ekatritVrutta['ShaakhaaYuktaSewaVastiCount'].toString() == "null" ? "0" : _ekatritVrutta['ShaakhaaYuktaSewaVastiCount'].toString(),
@@ -977,7 +977,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                         SingleColumnRow(txtString: Statics.getLabel('sewaVastiIdentifiedShaakhaaCount'), value: _ekatritVrutta['SewaVastiIdentifiedShaakhaaCount'].toString(), fontsize: 15),
                         SingleColumnRow(txtString: Statics.getLabel('sevaPramukhIdentifiedShaakhaaCount'), value: _ekatritVrutta['SewaPramukhIdentifiedShaakhaaCount'].toString(), fontsize: 15),
                         SingleColumnRow(
-                            txtString: (_baithakType == Statics.abPratinidhiSabhaa ? 'सेवा उपक्रम संख्या (२३ ऑक्टोबर-१८ फेब्रुवारी)' : 'सेवा उपक्रम संख्या (१९ फेब्रुवारी - २२ जून)'),
+                            txtString: Statics.getLabel('SewaUpakramCount') + " ${(_baithakType == Statics.abPratinidhiSabhaa ? '(२३ ऑक्टोबर-१८ फेब्रुवारी)' : '(१९ फेब्रुवारी - २२ जून)')}",
                             value: _ekatritVrutta['SewaUpakramCount'].toString() == "null" ? "0" : _ekatritVrutta['SewaUpakramCount'].toString(),
                             fontsize: 15),
                         // SizedBox(height: 20,),
@@ -1548,14 +1548,15 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                                 // }
                               ),
                               SingleColumnRow(
-                                  txtString: Statics.getLabel('prathamVarshGeneral') + ':-',
-                                  value: '',
-                                  fontsize: 18,
-                                  view: true,
-                                  btnAction: () {
-                                    redirctToList(
-                                        "prathamVarshGeneral", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('prathamVarshGeneral'));
-                                  }),
+                                txtString: Statics.getLabel('prathamVarshGeneral') + ':-',
+                                value: '',
+                                fontsize: 18,
+                                view: false,
+                                // btnAction: () {
+                                //   redirctToList(
+                                //       "prathamVarshGeneral", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('prathamVarshGeneral'));
+                                // },
+                              ),
                               SingleColumnRow(txtString: Statics.getLabel('prashikshitShikshaarthi'), value: _ekatritVrutta['PrathamGeneralShikshaarthiCount'].toString(), fontsize: 15),
                               SingleColumnRow(txtString: Statics.getLabel('sthaan'), value: _ekatritVrutta['PrathamGeneralSthaanCount'].toString(), fontsize: 15),
                               SingleColumnRow(txtString: Statics.getLabel('taalukaa'), value: _ekatritVrutta['PrathamGeneralTaalukaaCount'].toString(), fontsize: 15),
@@ -1563,14 +1564,15 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                                 height: 10,
                               ),
                               SingleColumnRow(
-                                  txtString: Statics.getLabel('dwitiyaVarshGeneral') + ':-',
-                                  value: '',
-                                  fontsize: 18,
-                                  view: true,
-                                  btnAction: () {
-                                    redirctToList(
-                                        "dwitiyaVarshGeneral", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('dwitiyaVarshGeneral'));
-                                  }),
+                                txtString: Statics.getLabel('dwitiyaVarshGeneral') + ':-',
+                                value: '',
+                                fontsize: 18,
+                                view: false,
+                                // btnAction: () {
+                                //   redirctToList(
+                                //       "dwitiyaVarshGeneral", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('dwitiyaVarshGeneral'));
+                                // },
+                              ),
                               SingleColumnRow(txtString: Statics.getLabel('prashikshitShikshaarthi'), value: _ekatritVrutta['DwitiyaGeneralShikshaarthiCount'].toString(), fontsize: 15),
                               SingleColumnRow(txtString: Statics.getLabel('sthaan'), value: _ekatritVrutta['DwitiyaGeneralSthaanCount'].toString(), fontsize: 15),
                               SingleColumnRow(txtString: Statics.getLabel('jilha'), value: _ekatritVrutta['DwitiyaGeneralJilhaCount'].toString(), fontsize: 15),
@@ -1578,14 +1580,15 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                                 height: 10,
                               ),
                               SingleColumnRow(
-                                  txtString: Statics.getLabel('trutiyaVarshGeneral') + ':-',
-                                  value: '',
-                                  fontsize: 18,
-                                  view: true,
-                                  btnAction: () {
-                                    redirctToList(
-                                        "trutiyaVarshGeneral", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('trutiyaVarshGeneral'));
-                                  }),
+                                txtString: Statics.getLabel('trutiyaVarshGeneral') + ':-',
+                                value: '',
+                                fontsize: 18,
+                                view: false,
+                                // btnAction: () {
+                                //   redirctToList(
+                                //       "trutiyaVarshGeneral", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('trutiyaVarshGeneral'));
+                                // },
+                              ),
                               SingleColumnRow(txtString: Statics.getLabel('prashikshitShikshaarthi'), value: _ekatritVrutta['TrutiyaGeneralShikshaarthiCount'].toString(), fontsize: 15),
                               SingleColumnRow(txtString: Statics.getLabel('sthaan'), value: _ekatritVrutta['TrutiyaGeneralSthaanCount'].toString(), fontsize: 15),
                               SingleColumnRow(txtString: Statics.getLabel('vibhaag'), value: _ekatritVrutta['TrutiyaGeneralVibhaagCount'].toString(), fontsize: 15),
@@ -1593,14 +1596,15 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                                 height: 10,
                               ),
                               SingleColumnRow(
-                                  txtString: Statics.getLabel('prathamVarshSpecial') + ':-',
-                                  value: '',
-                                  fontsize: 18,
-                                  view: true,
-                                  btnAction: () {
-                                    redirctToList(
-                                        "prathamVarshSpecial", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('prathamVarshSpecial'));
-                                  }),
+                                txtString: Statics.getLabel('prathamVarshSpecial') + ':-',
+                                value: '',
+                                fontsize: 18,
+                                view: false,
+                                // btnAction: () {
+                                //   redirctToList(
+                                //       "prathamVarshSpecial", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('prathamVarshSpecial'));
+                                // },
+                              ),
                               SingleColumnRow(txtString: Statics.getLabel('prashikshitShikshaarthi'), value: _ekatritVrutta['PrathamSpecialShikshaarthiCount'].toString(), fontsize: 15),
                               SingleColumnRow(txtString: Statics.getLabel('sthaan'), value: _ekatritVrutta['PrathamSpecialSthaanCount'].toString(), fontsize: 15),
                               SizedBox(
@@ -1720,14 +1724,15 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                         ),
                         // ==============================================================   average Upasthiti Shaakhaa  ======================================================================================================
                         SingleColumnRowLegend(
-                            txtString: Statics.getLabel('averageUpasthitiShaakhaa') + ' :',
-                            value: '',
-                            fontsize: 18,
-                            view: true,
-                            btnAction: () {
-                              redirctToList(
-                                  "averageUpasthitiShaakhaa", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('averageUpasthitiShaakhaa'));
-                            }),
+                          txtString: Statics.getLabel('averageUpasthitiShaakhaa') + ' :',
+                          value: '',
+                          fontsize: 18,
+                          view: false,
+                          // btnAction: () {
+                          //   redirctToList(
+                          //       "averageUpasthitiShaakhaa", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('averageUpasthitiShaakhaa'));
+                          // },
+                        ),
                         // Legend(legendString: "averageUpasthitiShaakhaa", fontsize: 18),
                         SizedBox(
                           height: 5,
@@ -2095,14 +2100,15 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                         ),
                         // ),
                         SingleColumnRowLegend(
-                            txtString: Statics.getLabel('averageUpasthitiNagareeySaaptaahik') + ' :',
-                            value: '',
-                            fontsize: 18,
-                            view: true,
-                            btnAction: () {
-                              redirctToList("averageUpasthitiNagareeySaaptaahik", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId,
-                                  Statics.getLabel('averageUpasthitiNagareeySaaptaahik'));
-                            }),
+                          txtString: Statics.getLabel('averageUpasthitiNagareeySaaptaahik') + ' :',
+                          value: '',
+                          fontsize: 18,
+                          view: false,
+                          // btnAction: () {
+                          //   redirctToList("averageUpasthitiNagareeySaaptaahik", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId,
+                          //       Statics.getLabel('averageUpasthitiNagareeySaaptaahik'));
+                          // },
+                        ),
                         // Legend(legendString: "averageUpasthitiNagareeySaaptaahik", fontsize: 18),
                         SingleColumnRow(
                             txtString: Statics.getLabel('averageBaal'),
@@ -2122,14 +2128,15 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                         //     child:
                         Column(children: [
                           SingleColumnRowLegend(
-                              txtString: Statics.getLabel('averageUpasthitiGraaminSaaptaahik') + ' :',
-                              value: '',
-                              fontsize: 18,
-                              view: true,
-                              btnAction: () {
-                                redirctToList("averageUpasthitiGraaminSaaptaahik", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId,
-                                    Statics.getLabel('averageUpasthitiGraaminSaaptaahik'));
-                              }),
+                            txtString: Statics.getLabel('averageUpasthitiGraaminSaaptaahik') + ' :',
+                            value: '',
+                            fontsize: 18,
+                            view: false,
+                            // btnAction: () {
+                            //   redirctToList("averageUpasthitiGraaminSaaptaahik", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId,
+                            //       Statics.getLabel('averageUpasthitiGraaminSaaptaahik'));
+                            // },
+                          ),
                           //Legend(legendString: "averageUpasthitiGraaminSaaptaahik", fontsize: 18),
                           SingleColumnRow(
                               txtString: Statics.getLabel('averageBaal'),
@@ -2771,7 +2778,8 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                           txtString: Statics.getLabel('SaaptaahikMilan') + ':-',
                           value: '',
                           fontsize: 18,
-                          view: true, //ProdhShaakhaa
+                          view: true,
+                          //ProdhShaakhaa
                           btnAction: () {
                             redirctToList("ProdhSaaptaahikMilan", _baithakType.toString(), context.read<GeoHierarchyController>().deepestSelectedGeoUnitId, Statics.getLabel('SaaptaahikMilan'));
                           },

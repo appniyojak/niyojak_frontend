@@ -263,11 +263,13 @@
 //     );
 //   }
 // }
+import 'dart:io';
+
 import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 import 'package:open_filex/open_filex.dart';
-import 'dart:io';
 import 'package:path_provider/path_provider.dart';
+
 import '../helpers/static_data.dart' as Statics;
 import '../models/response_model/sankalit_data_names_model.dart';
 
@@ -305,21 +307,10 @@ class _SankalitDataNamesViewState extends State<SankalitDataNamesView> {
     // print("Grouped Data: $groupedData");
   }
 
-
   Future<void> exportToExcel() async {
     var excel = Excel.createExcel();
     final sheet = excel['Sheet1'];
-    sheet.appendRow([
-      'Index',
-      'Title',
-      'Mahanagar',
-      'Vibhag',
-      'Bhaag',
-      'Nagar',
-      'Vasti',
-      'Gram',
-      'Mandal'
-    ]);
+    sheet.appendRow(['Index', 'Title', 'Mahanagar', 'Vibhag', 'Bhaag', 'Nagar', 'Vasti', 'Gram', 'Mandal']);
 
     int rowIndex = 1;
     for (var entry in groupedData.entries) {
@@ -327,7 +318,7 @@ class _SankalitDataNamesViewState extends State<SankalitDataNamesView> {
       for (var item in items) {
         final row = [
           rowIndex++,
-          item.title ?? '-',
+          Statics.getLabel(item.title ?? '-', returnKey: true),
           item.mahanagar ?? '-',
           item.vibhag ?? '-',
           item.bhaag ?? '-',
@@ -373,68 +364,68 @@ class _SankalitDataNamesViewState extends State<SankalitDataNamesView> {
       ),
       body: groupedData.isEmpty
           ? Center(
-        child: Text(
-          Statics.getLabel('NoDataAvailable'),
-          style: const TextStyle(fontSize: 16),
-        ),
-      )
-          : ListView.builder(
-        itemCount: groupedData.entries.length,
-        itemBuilder: (context, index) {
-          final entry = groupedData.entries.elementAt(index);
-          final title = entry.key;
-          final items = entry.value;
-
-          return Card(
-            margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            child: ExpansionTile(
-              initiallyExpanded: index == initiallyExpandedIndex,
-              title: Text(
-                "$title :  ${items.length}",
-                style: const TextStyle(fontWeight: FontWeight.bold),
+              child: Text(
+                Statics.getLabel('NoDataAvailable'),
+                style: const TextStyle(fontSize: 16),
               ),
-              children: [
-                ConstrainedBox(
-                  constraints: const BoxConstraints(maxHeight: 400),
-                  child: SingleChildScrollView(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: items.length,
-                      itemBuilder: (context, itemIndex) {
-                        final item = items[itemIndex];
-                        return ListTile(
-                          title: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("${itemIndex + 1}) "),
-                              Flexible(
-                                child: Text(
-                                  [
-                                    if (item.mahanagar != null && item.mahanagar!.isNotEmpty) '${item.mahanagar}',
-                                    if (item.vibhag != null && item.vibhag!.isNotEmpty) '${item.vibhag}',
-                                    if (item.bhaag != null && item.bhaag!.isNotEmpty) '${item.bhaag}',
-                                    if (item.nagar != null && item.nagar!.isNotEmpty) '${item.nagar}',
-                                    if (item.vasti != null && item.vasti!.isNotEmpty) '${item.vasti}',
-                                    if (item.mandal != null && item.mandal!.isNotEmpty) '${item.mandal}',
-                                    if (item.gram != null && item.gram!.isNotEmpty) '${item.gram}',
-                                    if (item.shakha != null && item.shakha!.isNotEmpty) '${item.shakha}',
-                                  ].join(' -> '),
-                                  maxLines: 2,
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
+            )
+          : ListView.builder(
+              itemCount: groupedData.entries.length,
+              itemBuilder: (context, index) {
+                final entry = groupedData.entries.elementAt(index);
+                final title = Statics.getLabel(entry.key, returnKey: true).replaceAll("\n", " ");
+                final items = entry.value;
+
+                return Card(
+                  margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  child: ExpansionTile(
+                    initiallyExpanded: index == initiallyExpandedIndex,
+                    title: Text(
+                      "$title :  ${items.length}",
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
+                    children: [
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(maxHeight: 400),
+                        child: SingleChildScrollView(
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: items.length,
+                            itemBuilder: (context, itemIndex) {
+                              final item = items[itemIndex];
+                              return ListTile(
+                                title: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("${itemIndex + 1}) "),
+                                    Flexible(
+                                      child: Text(
+                                        [
+                                          if (item.mahanagar != null && item.mahanagar!.isNotEmpty) '${item.mahanagar}',
+                                          if (item.vibhag != null && item.vibhag!.isNotEmpty) '${item.vibhag}',
+                                          if (item.bhaag != null && item.bhaag!.isNotEmpty) '${item.bhaag}',
+                                          if (item.nagar != null && item.nagar!.isNotEmpty) '${item.nagar}',
+                                          if (item.vasti != null && item.vasti!.isNotEmpty) '${item.vasti}',
+                                          if (item.mandal != null && item.mandal!.isNotEmpty) '${item.mandal}',
+                                          if (item.gram != null && item.gram!.isNotEmpty) '${item.gram}',
+                                          if (item.shakha != null && item.shakha!.isNotEmpty) '${item.shakha}',
+                                        ].join(' -> '),
+                                        maxLines: 2,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
+                );
+              },
             ),
-          );
-        },
-      ),
     );
   }
 }

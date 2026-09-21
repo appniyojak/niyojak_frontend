@@ -2891,6 +2891,46 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       const SizedBox(height: 8),
       ExpandableSection(
+        legendString: "Gatividhi",
+        onIconPressed: iconFor("Gatividhi"),
+        child: _buildNameCountList(
+          data: Statics.tgLstGatividhiKaaryakartaa,
+          legendString: '',
+          // suppress internal legend, see note below
+          type: 'Gatividhi',
+          nameOf: (item) => item.gatividhiName.toString(),
+          countOf: (item) => item.kaaryakartaaCount.toString(),
+          controller: controller,
+        ),
+      ),
+      const SizedBox(height: 8),
+      ExpandableSection(
+        legendString: "Aayaam",
+        onIconPressed: iconFor("Aayaam"),
+        child: _buildNameCountList(
+          data: Statics.tgLstAayaamKaaryakartaa,
+          legendString: '',
+          type: 'Aayaam',
+          nameOf: (item) => item.aayaamName.toString(),
+          countOf: (item) => item.kaaryakartaaCount.toString(),
+          controller: controller,
+        ),
+      ),
+      const SizedBox(height: 8),
+      ExpandableSection(
+        legendString: "Sangha-PreritSansthaa",
+        onIconPressed: iconFor("Sangha-PreritSansthaa"),
+        child: _buildNameCountList(
+          data: Statics.tgLstPreritKaaryakartaa,
+          legendString: '',
+          type: 'Sangha-PreritSansthaa',
+          nameOf: (item) => item.preritAOOName.toString(),
+          countOf: (item) => item.kaaryakartaaCount.toString(),
+          controller: controller,
+        ),
+      ),
+      const SizedBox(height: 8),
+      ExpandableSection(
         legendString: 'KaaryakartaaCountByLevel',
         onIconPressed: () => showNamesList(geoUnitID: controller?.deepestSelectedGeoUnitId, type: "KaaryakartaaCountByLevel"),
         child: _kaaryakartaaByLevelSection(
@@ -2910,33 +2950,8 @@ class _HomeScreenState extends State<HomeScreen> {
           akhilBhaarat: tgAkhilBhaaratiyaKaaryakartaaCount,
           pravaasee: tgPravaaseeKaaryakartaaCount,
           total: tgTotalKaaryakartaaCount,
-          showListIcon: false, // icon now lives in ExpandableSection header
-          controller: controller,
-        ),
-      ),
-      const SizedBox(height: 8),
-      ExpandableSection(
-        legendString: "Gatividhi",
-        onIconPressed: iconFor("Gatividhi"),
-        child: _buildNameCountList(
-          data: Statics.tgLstGatividhiKaaryakartaa,
-          legendString: '', // suppress internal legend, see note below
-          type: 'Gatividhi',
-          nameOf: (item) => item.gatividhiName.toString(),
-          countOf: (item) => item.kaaryakartaaCount.toString(),
-          controller: controller,
-        ),
-      ),
-      const SizedBox(height: 8),
-      ExpandableSection(
-        legendString: "Aayaam",
-        onIconPressed: iconFor("Aayaam"),
-        child: _buildNameCountList(
-          data: Statics.tgLstAayaamKaaryakartaa,
-          legendString: '',
-          type: 'Aayaam',
-          nameOf: (item) => item.aayaamName.toString(),
-          countOf: (item) => item.kaaryakartaaCount.toString(),
+          showListIcon: false,
+          // icon now lives in ExpandableSection header
           controller: controller,
         ),
       ),
@@ -3059,19 +3074,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       const SizedBox(height: 8),
       ExpandableSection(
-        legendString: "Sangha-PreritSansthaa",
-        onIconPressed: iconFor("Sangha-PreritSansthaa"),
-        child: _buildNameCountList(
-          data: Statics.tgLstPreritKaaryakartaa,
-          legendString: '',
-          type: 'Sangha-PreritSansthaa',
-          nameOf: (item) => item.preritAOOName.toString(),
-          countOf: (item) => item.kaaryakartaaCount.toString(),
-          controller: controller,
-        ),
-      ),
-      const SizedBox(height: 8),
-      ExpandableSection(
         legendString: "OtherSocialOrganization",
         onIconPressed: iconFor("OtherSocialOrganization"),
         child: _buildNameCountList(
@@ -3086,6 +3088,7 @@ class _HomeScreenState extends State<HomeScreen> {
       const SizedBox(height: 8),
     ]);
   }
+
   //
   // Widget _swayamsevakInfoPanel(GeoHierarchyController controller) {
   //   return Column(children: [

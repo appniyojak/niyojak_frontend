@@ -82,6 +82,8 @@ class SwayamsevakProvider {
           data['PermanentStateID'],
           data['IsPratidnyit'],
           data['PratidnyaYear'],
+          data['haveDesiGai'],
+          data['desiGaiCount'],
           data['IsGanaveshComplete'],
           data['HasCap'],
           data['HasShirt'],
@@ -136,6 +138,7 @@ class SwayamsevakProvider {
           data['VistaarakYearCount'],
           data['PrachaarakYearCount'],
           data['FacebookPage'],
+          data['otherInfoDesc'],
           data['swayamsevakShaakhaaFreq'],
           data['jagaranPatrikaTypes']);
     } else if (tab == 'SanghaShikshanSharirikVishay') {
@@ -189,8 +192,15 @@ class SwayamsevakProvider {
       List<GhoshVishayBAL> ghoshVishayList = [];
       if (ghoshVishay.length > 0) {
         for (var data in ghoshVishay) {
-          ghoshVishayList.add(new GhoshVishayBAL(data['SwayamsevakGhoshVishayID'], data['VaadyaID'], data['PraantID'], data['VaadyaCode'], data['VaadyaFamiliarity'], data['RachanaaCount'],
-              data['SwayamsevakID'], data['IsUnderstandLipi'] == true ? true : false));
+          ghoshVishayList.add(new GhoshVishayBAL(
+              data['SwayamsevakGhoshVishayID'],
+              data['VaadyaID'],
+              data['PraantID'],
+              data['VaadyaCode'],
+              data['VaadyaFamiliarity'],
+              data['RachanaaCount'],
+              data['SwayamsevakID'],
+              data['IsUnderstandLipi'] == true ? true : false));
         }
       }
 
@@ -205,8 +215,15 @@ class SwayamsevakProvider {
       var body = json.decode(response.body);
       var data = body['SwayamsevakBasicInfo'];
 
-      return SwayamsevakLinkedGeoUnitBAL(data['SwayamsevakID'], data['PraantID'], data['LinkedVastiID'], data['LinkedVastiName'], data['LinkedGraamID'], data['LinkedGraamName'],
-          data['LinkedShaakhaaID'], data['LinkedShaakhaaName']);
+      return SwayamsevakLinkedGeoUnitBAL(
+          data['SwayamsevakID'],
+          data['PraantID'],
+          data['LinkedVastiID'],
+          data['LinkedVastiName'],
+          data['LinkedGraamID'],
+          data['LinkedGraamName'],
+          data['LinkedShaakhaaID'],
+          data['LinkedShaakhaaName']);
     } else if (tab == 'OccupationDetails') {
       var response = await http.post(Uri.parse(Statics.urlGetSwayamsevakOccupationForApp),
           headers: jHeaders,
@@ -286,8 +303,18 @@ class SwayamsevakProvider {
       var data = body['PageData'];
       print("data-=-=-=->  $data");
       if (tab == 'DaayitvaPage') {
-        return SwayamsevakDaayitvaPageBAL(data["SwayamsevakID"], data["MaxPastDaayitva"], data["MaxPastDaayitvaFromYear"], data["MaxPastDaayitvaToYear"], data["HasBeenVistaarak"],
-            data["VistaarakWeekCount"], data["VistaarakMonthCount"], data["VistaarakYearCount"], data["HasBeenPrachaarak"], data["PrachaarakYearCount"], data["MaxDaayitvaWhenPrachaarak"]);
+        return SwayamsevakDaayitvaPageBAL(
+            data["SwayamsevakID"],
+            data["MaxPastDaayitva"],
+            data["MaxPastDaayitvaFromYear"],
+            data["MaxPastDaayitvaToYear"],
+            data["HasBeenVistaarak"],
+            data["VistaarakWeekCount"],
+            data["VistaarakMonthCount"],
+            data["VistaarakYearCount"],
+            data["HasBeenPrachaarak"],
+            data["PrachaarakYearCount"],
+            data["MaxDaayitvaWhenPrachaarak"]);
       } else if (tab == "DaayitvaList") {
         return body['PageData']['DaayitvaDataList'];
       }
@@ -356,8 +383,26 @@ class SwayamsevakProvider {
       //     data["IsCurrent"],
       //     "");
       var data = body["SwayamsevakDaayitva"] ?? {};
-      return SwayamsevakDaayitvaBAL(data["SwayamsevakID"] ?? 0, data["PraantID"] ?? 0, null, data["DaayitvaID"] ?? 0, data["DaayitvaName"] ?? "", data["LevelID"] ?? 0, data["DaayitvaGeoUnitID"] ?? 0,
-          data["GatividhiID"] ?? 0, data["AayaamID"] ?? 0, data["StartYear"] ?? 0, data["EndYear"] ?? 0, null, "", "", "", "", "", data["IsCurrent"] ?? false, "");
+      return SwayamsevakDaayitvaBAL(
+          data["SwayamsevakID"] ?? 0,
+          data["PraantID"] ?? 0,
+          null,
+          data["DaayitvaID"] ?? 0,
+          data["DaayitvaName"] ?? "",
+          data["LevelID"] ?? 0,
+          data["DaayitvaGeoUnitID"] ?? 0,
+          data["GatividhiID"] ?? 0,
+          data["AayaamID"] ?? 0,
+          data["StartYear"] ?? 0,
+          data["EndYear"] ?? 0,
+          null,
+          "",
+          "",
+          "",
+          "",
+          "",
+          data["IsCurrent"] ?? false,
+          "");
     }
   }
 
@@ -388,7 +433,10 @@ class SwayamsevakProvider {
     var body = json.decode(response.body);
 
     if (body['SwayamsevakList'].toString() == "[]") {
-      Statics.showToast(Statics.getLabel('noDataFoundTryAnotherSearch').split(",").first);
+      Statics.showToast(Statics
+          .getLabel('noDataFoundTryAnotherSearch')
+          .split(",")
+          .first);
     }
     print('getAbhiyanSwayamsevaks() Swayamsevaks - ' + body['SwayamsevakList'].toString());
     return body['SwayamsevakList'];

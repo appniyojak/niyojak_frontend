@@ -74,8 +74,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
       sanghaKaryaVastiPramukhNameController.text = vastiDataByIdModel!.vastisarvekshan!.vastiShakhaPramukhName ?? "";
       loksankhyaController.text = vastiDataByIdModel!.vastisarvekshan!.lokasankhya ?? "";
       vastiSamitiYesNo = int.parse(vastiDataByIdModel!.vastisarvekshan!.vastiShakhaSamiti == null ||
-              vastiDataByIdModel!.vastisarvekshan!.vastiShakhaSamiti! == "null" ||
-              vastiDataByIdModel!.vastisarvekshan!.vastiShakhaSamiti == ""
+          vastiDataByIdModel!.vastisarvekshan!.vastiShakhaSamiti! == "null" ||
+          vastiDataByIdModel!.vastisarvekshan!.vastiShakhaSamiti == ""
           ? "2"
           : vastiDataByIdModel!.vastisarvekshan!.vastiShakhaSamiti!);
       durjanShaktiYesNo = vastiDataByIdModel!.vastisarvekshan!.durjanShaktiYesNo!;
@@ -183,86 +183,87 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
     log("showPopupForVastiValidation is opened >>>>>>>>>>>>>> ");
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.white,
-        title: Text(
-          "${Statics.getLabel('suchana')}",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.red.shade700,
-            fontSize: 18,
-          ),
-        ),
-        content: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          child: Text(
-            "${Statics.getLabel('vastiSelectMandetoryValidation')}",
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.red.shade800,
+      builder: (context) =>
+          AlertDialog(
+            backgroundColor: Colors.white,
+            title: Text(
+              "${Statics.getLabel('suchana')}",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.red.shade700,
+                fontSize: 18,
+              ),
             ),
-          ),
-        ),
-        actions: [
-          TextButton(
-            style: TextButton.styleFrom(
-              backgroundColor: Colors.red.shade700,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            content: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Text(
+                "${Statics.getLabel('vastiSelectMandetoryValidation')}",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.red.shade800,
+                ),
+              ),
             ),
-            onPressed: () => Navigator.pop(context),
-            child: Text(
-              "${Statics.getLabel('okay')}",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
+            actions: [
+              TextButton(
+                style: TextButton.styleFrom(
+                  backgroundColor: Colors.red.shade700,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                ),
+                onPressed: () => Navigator.pop(context),
+                child: Text(
+                  "${Statics.getLabel('okay')}",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 
-  void showPopupForNaviagtetoOtherPage(
-    BuildContext context,
-    String pageName1,
-    String pageName2,
-  ) {
+  void showPopupForNaviagtetoOtherPage(BuildContext context,
+      String pageName1,
+      String pageName2,) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.white,
-        title: Text(
-          "${Statics.getLabel('suchana')}",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.red.shade700,
-            fontSize: 18,
-          ),
-        ),
-        content: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          child: Text(
-            "$pageName2 ${Statics.getLabel('bharnyaPurvi')} $pageName1 ${Statics.getLabel('bharneImportant')}\n $pageName1 ${Statics.getLabel('sangrahKelyaNantr')} $pageName2 ${Statics.getLabel('bhartaYeil')}",
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.red.shade800,
+      builder: (context) =>
+          AlertDialog(
+            backgroundColor: Colors.white,
+            title: Text(
+              "${Statics.getLabel('suchana')}",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.red.shade700,
+                fontSize: 18,
+              ),
             ),
-          ),
-        ),
-        actions: [
-          TextButton(
-            style: TextButton.styleFrom(
-              backgroundColor: Colors.red.shade700,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            content: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Text(
+                "$pageName2 ${Statics.getLabel('bharnyaPurvi')} $pageName1 ${Statics.getLabel('bharneImportant')}\n $pageName1 ${Statics.getLabel('sangrahKelyaNantr')} $pageName2 ${Statics.getLabel(
+                    'bhartaYeil')}",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.red.shade800,
+                ),
+              ),
             ),
-            onPressed: () => Navigator.pop(context),
-            child: Text(
-              "${Statics.getLabel('okay')}",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
+            actions: [
+              TextButton(
+                style: TextButton.styleFrom(
+                  backgroundColor: Colors.red.shade700,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                ),
+                onPressed: () => Navigator.pop(context),
+                child: Text(
+                  "${Statics.getLabel('okay')}",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 
@@ -505,13 +506,13 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             Expanded(
                               child: imageAdd == 1
                                   ? Image.file(
-                                      File(filePathOg!),
-                                      fit: BoxFit.contain,
-                                    )
+                                File(filePathOg!),
+                                fit: BoxFit.contain,
+                              )
                                   : Image.network(
-                                      '${Statics.baseUrl}/Files/Vastisarvekshanforms/$selectedFileName',
-                                      fit: BoxFit.contain,
-                                    ),
+                                '${Statics.baseUrl}/Files/Vastisarvekshanforms/$selectedFileName',
+                                fit: BoxFit.contain,
+                              ),
                             ),
                           ],
                         ),
@@ -572,17 +573,17 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                 ),
                 loadingNotifier != null
                     ? ValueListenableBuilder<bool>(
-                        valueListenable: loadingNotifier,
-                        builder: (context, isLoading, _) {
-                          return isLoading
-                              ? SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: CircularProgressIndicator(strokeWidth: 2),
-                                )
-                              : Icon(Icons.attach_file, color: Colors.blue);
-                        },
-                      )
+                  valueListenable: loadingNotifier,
+                  builder: (context, isLoading, _) {
+                    return isLoading
+                        ? SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                        : Icon(Icons.attach_file, color: Colors.blue);
+                  },
+                )
                     : Icon(Icons.attach_file, color: Colors.blue),
               ],
             ),
@@ -592,15 +593,14 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
     );
   }
 
-  Widget textControllerField2(
-      {required String name,
-      required TextEditingController controller,
-      double height = 50.0,
-      TextInputType keyboardType = TextInputType.text,
-      bool isEdit = false,
-      String? hintTextString,
-      String? imp,
-      int? maxInput}) {
+  Widget textControllerField2({required String name,
+    required TextEditingController controller,
+    double height = 50.0,
+    TextInputType keyboardType = TextInputType.text,
+    bool isEdit = false,
+    String? hintTextString,
+    String? imp,
+    int? maxInput}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -658,15 +658,16 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
   }
 
   //=======================================================================================================================================================================================================
-  Widget textControllerField(
-    String? hintText,
-    TextEditingController controller,
-    BuildContext context, {
-    int? questionNumber,
-    double? height,
-    TextInputType keyboardType = TextInputType.text,
-  }) {
-    Size size = MediaQuery.of(context).size;
+  Widget textControllerField(String? hintText,
+      TextEditingController controller,
+      BuildContext context, {
+        int? questionNumber,
+        double? height,
+        TextInputType keyboardType = TextInputType.text,
+      }) {
+    Size size = MediaQuery
+        .of(context)
+        .size;
 
     // Responsive height based on screen size
     double defaultHeight = size.height * 0.07;
@@ -782,8 +783,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
               onChanged: isDisable
                   ? null
                   : (value) {
-                      if (value != null) onChanged(value);
-                    },
+                if (value != null) onChanged(value);
+              },
               activeColor: Colors.purpleAccent,
             ),
             Text(
@@ -797,8 +798,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
               onChanged: isDisable
                   ? null
                   : (value) {
-                      if (value != null) onChanged(value);
-                    },
+                if (value != null) onChanged(value);
+              },
               activeColor: Colors.purpleAccent,
             ),
             Text(
@@ -813,7 +814,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
 
   //=======================================================================================================================================================================================================
   Widget mainContainer(String header, Widget child) {
-    Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery
+        .of(context)
+        .size;
     return Container(
       padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
       child: Column(
@@ -838,17 +841,16 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
   }
 
 //======================================================================================================================================================================================================
-  Widget vastisarvekshanDropdown(
-      {required String filterTypeName,
-      required String hintText,
-      required Function(int, String) onValueSelected,
-      Function(int, String)? onDependentValueSelected,
-      Function(int, String)? onThirdLevelValueSelected,
-      BoxDecoration? decoration,
-      Color? textColor,
-      Color? borderColor,
-      Color? iconColor,
-      bool? viewName}) {
+  Widget vastisarvekshanDropdown({required String filterTypeName,
+    required String hintText,
+    required Function(int, String) onValueSelected,
+    Function(int, String)? onDependentValueSelected,
+    Function(int, String)? onThirdLevelValueSelected,
+    BoxDecoration? decoration,
+    Color? textColor,
+    Color? borderColor,
+    Color? iconColor,
+    bool? viewName}) {
     List<Masterdata> masterDataList = vastisarvekshanDropDownDataModel!.masterdata!;
     Masterdata? selectedValue;
     Masterdata? selectedDependentValue;
@@ -951,16 +953,15 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
     );
   }
 
-  Widget _buildDropdown<T extends Masterdata>(
-      {required String hintText,
-      required T? value,
-      required List<T> items,
-      required Function(T?) onChanged,
-      BoxDecoration? decoration,
-      Color? textColor,
-      Color? borderColor,
-      Color? iconColor,
-      bool? viewName}) {
+  Widget _buildDropdown<T extends Masterdata>({required String hintText,
+    required T? value,
+    required List<T> items,
+    required Function(T?) onChanged,
+    BoxDecoration? decoration,
+    Color? textColor,
+    Color? borderColor,
+    Color? iconColor,
+    bool? viewName}) {
     return Container(
       height: 35,
       padding: EdgeInsets.symmetric(horizontal: 8),
@@ -980,13 +981,14 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
           value: value,
           isExpanded: true,
           items: items
-              .map((item) => DropdownMenuItem<T>(
-                    value: item,
-                    child: Text(
-                      item.value ?? "No Value",
-                      style: TextStyle(color: textColor ?? Colors.black), // Dropdown items color
-                    ),
-                  ))
+              .map((item) =>
+              DropdownMenuItem<T>(
+                value: item,
+                child: Text(
+                  item.value ?? "No Value",
+                  style: TextStyle(color: textColor ?? Colors.black), // Dropdown items color
+                ),
+              ))
               .toList(),
           onChanged: onChanged,
         ),
@@ -1145,7 +1147,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
 
 // ================================================   BASIC INFO FORM =================================================================================================================================
   Widget _buildStep1() {
-    Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery
+        .of(context)
+        .size;
     return SingleChildScrollView(
       controller: _scrollController,
       child: Column(
@@ -1327,7 +1331,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                     InkWell(
                       onTap: () {
                         // Filter out empty or whitespace-only strings
-                        final filteredDetails = step1pendingpoints!.split(',').where((item) => item.trim().isNotEmpty).toList();
+                        final filteredDetails = step1pendingpoints!.split(',').where((item) =>
+                        item
+                            .trim()
+                            .isNotEmpty).toList();
 
                         print("Filtered step1pendingpoints!.split(','): $filteredDetails");
 
@@ -1507,7 +1514,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                         ),
                       ),
                       SizedBox(height: 10),
-                      textControllerField2(name: "${Statics.getLabel('Population')}", controller: loksankhyaController, keyboardType: TextInputType.number, imp: "*"),
+                      textControllerField2(name: "${Statics.getLabel('Population')}", controller: loksankhyaController, keyboardType: TextInputType.number, imp: ""),
                       // Column(
                       //   children: [
                       //     Row(
@@ -1602,7 +1609,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                 padding: EdgeInsets.symmetric(vertical: 5),
                                 width: 100,
                                 decoration:
-                                    BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
+                                BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                                 child: Center(
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -1631,7 +1638,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                           child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: SizedBox(
-                              width: MediaQuery.of(context).size.width * 1,
+                              width: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width * 1,
                               child: DataTable(
                                 showCheckboxColumn: false,
                                 headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
@@ -1640,58 +1650,58 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                   DataColumn(
                                       label: Center(
                                           child: Text(
-                                    "${Statics.getLabel('Vayogat')}",
-                                  ))),
+                                            "${Statics.getLabel('Vayogat')}",
+                                          ))),
                                   DataColumn(
                                       label: Center(
                                           child: Text(
-                                    "${Statics.getLabel('SelectFrequency')}",
-                                  ))),
+                                            "${Statics.getLabel('SelectFrequency')}",
+                                          ))),
                                   DataColumn(
                                       label: Center(
                                           child: Text(
-                                    "${Statics.getLabel('SankalpCompletionYear')}",
-                                  ))),
+                                            "${Statics.getLabel('SankalpCompletionYear')}",
+                                          ))),
                                 ],
                                 rows: (kuthalaVarshiDataList != null && kuthalaVarshiDataList!.isNotEmpty)
                                     ? kuthalaVarshiDataList!.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
-                                        int index = entry.key;
-                                        var data = entry.value;
-                                        bool isSelected = selectedKuthalaVarshiIdIndex == index;
-                                        return DataRow(
-                                          selected: isSelected,
-                                          color: MaterialStateProperty.resolveWith<Color?>(
-                                            (Set<MaterialState> states) {
-                                              if (isSelected) return Colors.yellow.shade100;
-                                              return null;
-                                            },
-                                          ),
-                                          onSelectChanged: (bool? selected) {
-                                            if (selected != null && selected) {
-                                              setState(() {
-                                                selectedKuthalaVarshiIdIndex = index;
-                                                print(" selectedKuthalaVarshiIdIndex Data :- $data");
-                                              });
-                                            } else {
-                                              setState(() {
-                                                selectedKuthalaVarshiIdIndex = null;
-                                                print(" selectedKuthalaVarshiIdIndex Data :- $data");
-                                              });
-                                            }
-                                          },
-                                          cells: [
-                                            DataCell(Text(data.selectedDropdownValueName ?? '')),
-                                            DataCell(Text(data.prakarName ?? '')),
-                                            DataCell(Text(
-                                              data.isShaakhaa == 1
-                                                  ? data.shaakhaa ?? ''
-                                                  : data.isShaakhaa == 0
-                                                      ? data.saptahik ?? ''
-                                                      : '',
-                                            )),
-                                          ],
-                                        );
-                                      }).toList()
+                                  int index = entry.key;
+                                  var data = entry.value;
+                                  bool isSelected = selectedKuthalaVarshiIdIndex == index;
+                                  return DataRow(
+                                    selected: isSelected,
+                                    color: MaterialStateProperty.resolveWith<Color?>(
+                                          (Set<MaterialState> states) {
+                                        if (isSelected) return Colors.yellow.shade100;
+                                        return null;
+                                      },
+                                    ),
+                                    onSelectChanged: (bool? selected) {
+                                      if (selected != null && selected) {
+                                        setState(() {
+                                          selectedKuthalaVarshiIdIndex = index;
+                                          print(" selectedKuthalaVarshiIdIndex Data :- $data");
+                                        });
+                                      } else {
+                                        setState(() {
+                                          selectedKuthalaVarshiIdIndex = null;
+                                          print(" selectedKuthalaVarshiIdIndex Data :- $data");
+                                        });
+                                      }
+                                    },
+                                    cells: [
+                                      DataCell(Text(data.selectedDropdownValueName ?? '')),
+                                      DataCell(Text(data.prakarName ?? '')),
+                                      DataCell(Text(
+                                        data.isShaakhaa == 1
+                                            ? data.shaakhaa ?? ''
+                                            : data.isShaakhaa == 0
+                                            ? data.saptahik ?? ''
+                                            : '',
+                                      )),
+                                    ],
+                                  );
+                                }).toList()
                                     : [],
                               ),
                             ),
@@ -1743,8 +1753,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                                   selectedData.isShaakhaa == 1
                                                       ? selectedData.shaakhaa
                                                       : selectedData.isShaakhaa == 2
-                                                          ? selectedData.saptahik
-                                                          : ""),
+                                                      ? selectedData.saptahik
+                                                      : ""),
                                             ],
                                           ),
                                           actionsAlignment: MainAxisAlignment.center,
@@ -1790,62 +1800,63 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                   }
                                   final shouldDelete = await showDialog<bool>(
                                     context: context,
-                                    builder: (context) => AlertDialog(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      backgroundColor: Colors.white,
-                                      title: Center(
-                                        child: Text(
-                                          "${Statics.getLabel('pusthikarn')}",
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18,
-                                            color: Colors.redAccent,
+                                    builder: (context) =>
+                                        AlertDialog(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(20),
                                           ),
-                                        ),
-                                      ),
-                                      content: Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                        child: Text(
-                                          "${Statics.getLabel('deleteconfirmText')}",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.black87,
-                                          ),
-                                        ),
-                                      ),
-                                      actionsAlignment: MainAxisAlignment.spaceEvenly,
-                                      actions: [
-                                        ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.grey.shade300,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(12),
+                                          backgroundColor: Colors.white,
+                                          title: Center(
+                                            child: Text(
+                                              "${Statics.getLabel('pusthikarn')}",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18,
+                                                color: Colors.redAccent,
+                                              ),
                                             ),
                                           ),
-                                          onPressed: () => Navigator.pop(context, false),
-                                          child: Text(
-                                            "${Statics.getLabel('ConfirmationNo')}",
-                                            style: TextStyle(color: Colors.black),
-                                          ),
-                                        ),
-                                        ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.redAccent,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(12),
+                                          content: Padding(
+                                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                            child: Text(
+                                              "${Statics.getLabel('deleteconfirmText')}",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.black87,
+                                              ),
                                             ),
                                           ),
-                                          onPressed: () => Navigator.pop(context, true),
-                                          child: Text(
-                                            "${Statics.getLabel('ConfirmationYes')}",
-                                            style: TextStyle(color: Colors.white),
-                                          ),
+                                          actionsAlignment: MainAxisAlignment.spaceEvenly,
+                                          actions: [
+                                            ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Colors.grey.shade300,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(12),
+                                                ),
+                                              ),
+                                              onPressed: () => Navigator.pop(context, false),
+                                              child: Text(
+                                                "${Statics.getLabel('ConfirmationNo')}",
+                                                style: TextStyle(color: Colors.black),
+                                              ),
+                                            ),
+                                            ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Colors.redAccent,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(12),
+                                                ),
+                                              ),
+                                              onPressed: () => Navigator.pop(context, true),
+                                              child: Text(
+                                                "${Statics.getLabel('ConfirmationYes')}",
+                                                style: TextStyle(color: Colors.white),
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
                                   );
 
                                   if (shouldDelete == true && selectedKuthalaVarshiIdIndex != null) {
@@ -1946,7 +1957,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: SizedBox(
-                      width: MediaQuery.of(context).size.width,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width,
                       child: DataTable(
                         showCheckboxColumn: false,
                         headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
@@ -1956,16 +1970,16 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                         columns: [
                           DataColumn(
                               label: Text(
-                            "${Statics.getLabel('Category')}",
-                          )),
+                                "${Statics.getLabel('Category')}",
+                              )),
                           DataColumn(
                               label: Text(
-                            "${Statics.getLabel('upkram')}",
-                          )),
+                                "${Statics.getLabel('upkram')}",
+                              )),
                           DataColumn(
                               label: Text(
-                            "${Statics.getLabel('varamvarita')}",
-                          )),
+                                "${Statics.getLabel('varamvarita')}",
+                              )),
                         ],
                         rows: jagranShreniEnteredDataList!.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                           int index = entry.key;
@@ -1975,7 +1989,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                           return DataRow(
                             selected: isSelected,
                             color: MaterialStateProperty.resolveWith<Color?>(
-                              (Set<MaterialState> states) {
+                                  (Set<MaterialState> states) {
                                 if (isSelected) return Colors.yellow.shade100;
                                 return null;
                               },
@@ -2103,62 +2117,63 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                           }
                           final shouldDelete = await showDialog<bool>(
                             context: context,
-                            builder: (context) => AlertDialog(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              backgroundColor: Colors.white,
-                              title: Center(
-                                child: Text(
-                                  "${Statics.getLabel('pusthikarn')}",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                    color: Colors.redAccent,
+                            builder: (context) =>
+                                AlertDialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
                                   ),
-                                ),
-                              ),
-                              content: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                child: Text(
-                                  "${Statics.getLabel('deleteconfirmText')}",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black87,
-                                  ),
-                                ),
-                              ),
-                              actionsAlignment: MainAxisAlignment.spaceEvenly,
-                              actions: [
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.grey.shade300,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
+                                  backgroundColor: Colors.white,
+                                  title: Center(
+                                    child: Text(
+                                      "${Statics.getLabel('pusthikarn')}",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                        color: Colors.redAccent,
+                                      ),
                                     ),
                                   ),
-                                  onPressed: () => Navigator.pop(context, false),
-                                  child: Text(
-                                    "${Statics.getLabel('ConfirmationNo')}",
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                ),
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.redAccent,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
+                                  content: Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                    child: Text(
+                                      "${Statics.getLabel('deleteconfirmText')}",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black87,
+                                      ),
                                     ),
                                   ),
-                                  onPressed: () => Navigator.pop(context, true),
-                                  child: Text(
-                                    "${Statics.getLabel('ConfirmationYes')}",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
+                                  actionsAlignment: MainAxisAlignment.spaceEvenly,
+                                  actions: [
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.grey.shade300,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                      ),
+                                      onPressed: () => Navigator.pop(context, false),
+                                      child: Text(
+                                        "${Statics.getLabel('ConfirmationNo')}",
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                    ),
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.redAccent,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                      ),
+                                      onPressed: () => Navigator.pop(context, true),
+                                      child: Text(
+                                        "${Statics.getLabel('ConfirmationYes')}",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
                           );
 
                           if (shouldDelete == true && selectedJagranShreniStithiRowIndex != null) {
@@ -2228,8 +2243,14 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                     scrollDirection: Axis.horizontal,
                     child: ConstrainedBox(
                       constraints: BoxConstraints(
-                        minWidth: MediaQuery.of(context).size.width,
-                        maxWidth: MediaQuery.of(context).size.width * 1.5,
+                        minWidth: MediaQuery
+                            .of(context)
+                            .size
+                            .width,
+                        maxWidth: MediaQuery
+                            .of(context)
+                            .size
+                            .width * 1.5,
                       ),
                       child: DataTable(
                         showCheckboxColumn: false,
@@ -2240,25 +2261,29 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                         columns: [
                           DataColumn(
                               label: Text(
-                            "${Statics.getLabel('Gatividhi')}",
-                          )),
+                                "${Statics.getLabel('Gatividhi')}",
+                              )),
                           DataColumn(
                               label: Text(
-                            "${Statics.getLabel('niyamitUpkram')}",
-                          )),
+                                "${Statics.getLabel('niyamitUpkram')}",
+                              )),
                           DataColumn(
                               label: Text(
-                            "${Statics.getLabel('varamvarita')}",
-                          )),
+                                "${Statics.getLabel('varamvarita')}",
+                              )),
                         ],
-                        rows: enteredDataListGatividhi.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
+                        rows: enteredDataListGatividhi
+                            .asMap()
+                            .entries
+                            .where((entry) => entry.value.isactive == 1)
+                            .map((entry) {
                           int index = entry.key;
                           var data = entry.value;
                           bool isSelected = selectedGatividhiKaryaStithiRowIndex == index;
                           return DataRow(
                             selected: isSelected,
                             color: MaterialStateProperty.resolveWith<Color?>(
-                              (Set<MaterialState> states) {
+                                  (Set<MaterialState> states) {
                                 if (isSelected) return Colors.yellow.shade100;
                                 return null;
                               },
@@ -2389,62 +2414,63 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                           if (selectedGatividhiKaryaStithiRowIndex == null) return;
                           final shouldDelete = await showDialog<bool>(
                             context: context,
-                            builder: (context) => AlertDialog(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              backgroundColor: Colors.white,
-                              title: Center(
-                                child: Text(
-                                  "${Statics.getLabel('pusthikarn')}",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                    color: Colors.redAccent,
+                            builder: (context) =>
+                                AlertDialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
                                   ),
-                                ),
-                              ),
-                              content: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                child: Text(
-                                  "${Statics.getLabel('deleteconfirmText')}",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black87,
-                                  ),
-                                ),
-                              ),
-                              actionsAlignment: MainAxisAlignment.spaceEvenly,
-                              actions: [
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.grey.shade300,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
+                                  backgroundColor: Colors.white,
+                                  title: Center(
+                                    child: Text(
+                                      "${Statics.getLabel('pusthikarn')}",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                        color: Colors.redAccent,
+                                      ),
                                     ),
                                   ),
-                                  onPressed: () => Navigator.pop(context, false),
-                                  child: Text(
-                                    "${Statics.getLabel('ConfirmationNo')}",
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                ),
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.redAccent,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
+                                  content: Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                    child: Text(
+                                      "${Statics.getLabel('deleteconfirmText')}",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black87,
+                                      ),
                                     ),
                                   ),
-                                  onPressed: () => Navigator.pop(context, true),
-                                  child: Text(
-                                    "${Statics.getLabel('ConfirmationYes')}",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
+                                  actionsAlignment: MainAxisAlignment.spaceEvenly,
+                                  actions: [
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.grey.shade300,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                      ),
+                                      onPressed: () => Navigator.pop(context, false),
+                                      child: Text(
+                                        "${Statics.getLabel('ConfirmationNo')}",
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                    ),
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.redAccent,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                      ),
+                                      onPressed: () => Navigator.pop(context, true),
+                                      child: Text(
+                                        "${Statics.getLabel('ConfirmationYes')}",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
                           );
 
                           if (shouldDelete == true && selectedGatividhiKaryaStithiRowIndex != null) {
@@ -2514,7 +2540,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                       scrollDirection: Axis.horizontal,
                       child: ConstrainedBox(
                         constraints: BoxConstraints(
-                          minWidth: MediaQuery.of(context).size.width * 1.1, // Ensure min width
+                          minWidth: MediaQuery
+                              .of(context)
+                              .size
+                              .width * 1.1, // Ensure min width
                         ),
                         child: DataTable(
                           showCheckboxColumn: false,
@@ -2522,16 +2551,25 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                           headingTextStyle: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.black87,
-                            fontSize: MediaQuery.of(context).size.width < 400 ? 12 : 14,
+                            fontSize: MediaQuery
+                                .of(context)
+                                .size
+                                .width < 400 ? 12 : 14,
                           ),
-                          dataRowHeight: MediaQuery.of(context).size.width < 400 ? 40 : 48,
+                          dataRowHeight: MediaQuery
+                              .of(context)
+                              .size
+                              .width < 400 ? 40 : 48,
                           // smaller rows on mobile
                           columnSpacing: 16,
                           // spacing between columns
                           columns: [
                             DataColumn(
                               label: SizedBox(
-                                width: MediaQuery.of(context).size.width < 400 ? 120 : 160,
+                                width: MediaQuery
+                                    .of(context)
+                                    .size
+                                    .width < 400 ? 120 : 160,
                                 child: Text(
                                   "${Statics.getLabel('SelectFrequency')}",
                                   overflow: TextOverflow.ellipsis,
@@ -2540,7 +2578,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             ),
                             DataColumn(
                               label: SizedBox(
-                                width: MediaQuery.of(context).size.width < 400 ? 100 : 140,
+                                width: MediaQuery
+                                    .of(context)
+                                    .size
+                                    .width < 400 ? 100 : 140,
                                 child: Text(
                                   "${Statics.getLabel('bhavanachenav')}",
                                   overflow: TextOverflow.ellipsis,
@@ -2549,7 +2590,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             ),
                             DataColumn(
                               label: SizedBox(
-                                width: MediaQuery.of(context).size.width < 400 ? 120 : 160,
+                                width: MediaQuery
+                                    .of(context)
+                                    .size
+                                    .width < 400 ? 120 : 160,
                                 child: Text(
                                   "${Statics.getLabel('samparkStithi')}",
                                   overflow: TextOverflow.ellipsis,
@@ -2557,7 +2601,11 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                               ),
                             ),
                           ],
-                          rows: enteredVasahatPrakarDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
+                          rows: enteredVasahatPrakarDataList
+                              .asMap()
+                              .entries
+                              .where((entry) => entry.value.isactive == 1)
+                              .map((entry) {
                             int index = entry.key;
                             var data = entry.value;
                             bool isSelected = selectedvsahatPrakarIdRowIndex == index;
@@ -2565,7 +2613,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             return DataRow(
                               selected: isSelected,
                               color: MaterialStateProperty.resolveWith<Color?>(
-                                (Set<MaterialState> states) {
+                                    (Set<MaterialState> states) {
                                   if (isSelected) return Colors.yellow.shade100;
                                   return null;
                                 },
@@ -2584,7 +2632,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                               cells: [
                                 DataCell(
                                   SizedBox(
-                                    width: MediaQuery.of(context).size.width < 400 ? 120 : 160,
+                                    width: MediaQuery
+                                        .of(context)
+                                        .size
+                                        .width < 400 ? 120 : 160,
                                     child: Text(
                                       data.selectedDropdownValueName ?? "",
                                       overflow: TextOverflow.ellipsis,
@@ -2593,7 +2644,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                 ),
                                 DataCell(
                                   SizedBox(
-                                    width: MediaQuery.of(context).size.width < 400 ? 100 : 140,
+                                    width: MediaQuery
+                                        .of(context)
+                                        .size
+                                        .width < 400 ? 100 : 140,
                                     child: Text(
                                       data.bhavanachenav ?? "",
                                       overflow: TextOverflow.ellipsis,
@@ -2602,7 +2656,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                 ),
                                 DataCell(
                                   SizedBox(
-                                    width: MediaQuery.of(context).size.width < 400 ? 120 : 160,
+                                    width: MediaQuery
+                                        .of(context)
+                                        .size
+                                        .width < 400 ? 120 : 160,
                                     child: Text(
                                       data.selectedDropdownValueName1 ?? "",
                                       overflow: TextOverflow.ellipsis,
@@ -2704,62 +2761,63 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             if (selectedvsahatPrakarIdRowIndex == null) return;
                             final shouldDelete = await showDialog<bool>(
                               context: context,
-                              builder: (context) => AlertDialog(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                backgroundColor: Colors.white,
-                                title: Center(
-                                  child: Text(
-                                    "${Statics.getLabel('pusthikarn')}",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18,
-                                      color: Colors.redAccent,
+                              builder: (context) =>
+                                  AlertDialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
                                     ),
-                                  ),
-                                ),
-                                content: Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                  child: Text(
-                                    "${Statics.getLabel('deleteconfirmText')}",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                ),
-                                actionsAlignment: MainAxisAlignment.spaceEvenly,
-                                actions: [
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.grey.shade300,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
+                                    backgroundColor: Colors.white,
+                                    title: Center(
+                                      child: Text(
+                                        "${Statics.getLabel('pusthikarn')}",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
+                                          color: Colors.redAccent,
+                                        ),
                                       ),
                                     ),
-                                    onPressed: () => Navigator.pop(context, false),
-                                    child: Text(
-                                      "${Statics.getLabel('ConfirmationNo')}",
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                  ),
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.redAccent,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
+                                    content: Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                      child: Text(
+                                        "${Statics.getLabel('deleteconfirmText')}",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.black87,
+                                        ),
                                       ),
                                     ),
-                                    onPressed: () => Navigator.pop(context, true),
-                                    child: Text(
-                                      "${Statics.getLabel('ConfirmationYes')}",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
+                                    actionsAlignment: MainAxisAlignment.spaceEvenly,
+                                    actions: [
+                                      ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.grey.shade300,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(12),
+                                          ),
+                                        ),
+                                        onPressed: () => Navigator.pop(context, false),
+                                        child: Text(
+                                          "${Statics.getLabel('ConfirmationNo')}",
+                                          style: TextStyle(color: Colors.black),
+                                        ),
+                                      ),
+                                      ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.redAccent,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(12),
+                                          ),
+                                        ),
+                                        onPressed: () => Navigator.pop(context, true),
+                                        child: Text(
+                                          "${Statics.getLabel('ConfirmationYes')}",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
                             );
 
                             if (shouldDelete == true && selectedvsahatPrakarIdRowIndex != null) {
@@ -2809,7 +2867,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                     padding: EdgeInsets.symmetric(vertical: 5),
                                     width: 100,
                                     decoration:
-                                        BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
+                                    BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                                     child: Center(
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.center,
@@ -2847,23 +2905,27 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                       columns: [
                                         DataColumn(
                                             label: Text(
-                                          "${Statics.getLabel('onlyBhasha')}",
-                                        )),
+                                              "${Statics.getLabel('onlyBhasha')}",
+                                            )),
                                         DataColumn(
                                             label: Center(
-                                          child: Text(
-                                            "${Statics.getLabel('avgPersent')}",
-                                          ),
-                                        )),
+                                              child: Text(
+                                                "${Statics.getLabel('avgPersent')}",
+                                              ),
+                                            )),
                                       ],
-                                      rows: enteredVividhBhashaBolnareDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
+                                      rows: enteredVividhBhashaBolnareDataList
+                                          .asMap()
+                                          .entries
+                                          .where((entry) => entry.value.isactive == 1)
+                                          .map((entry) {
                                         int index = entry.key;
                                         var data = entry.value;
                                         bool isSelected = selectedVividhBhashaBolnarerIdRowIndex == index;
                                         return DataRow(
                                             selected: isSelected,
                                             color: MaterialStateProperty.resolveWith<Color?>(
-                                              (Set<MaterialState> states) {
+                                                  (Set<MaterialState> states) {
                                                 if (isSelected) return Colors.yellow.shade100;
                                                 return null;
                                               },
@@ -2973,62 +3035,63 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                       if (selectedVividhBhashaBolnarerIdRowIndex == null) return;
                                       final shouldDelete = await showDialog<bool>(
                                         context: context,
-                                        builder: (context) => AlertDialog(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(20),
-                                          ),
-                                          backgroundColor: Colors.white,
-                                          title: Center(
-                                            child: Text(
-                                              "${Statics.getLabel('pusthikarn')}",
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 18,
-                                                color: Colors.redAccent,
+                                        builder: (context) =>
+                                            AlertDialog(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(20),
                                               ),
-                                            ),
-                                          ),
-                                          content: Padding(
-                                            padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                            child: Text(
-                                              "${Statics.getLabel('deleteconfirmText')}",
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.black87,
-                                              ),
-                                            ),
-                                          ),
-                                          actionsAlignment: MainAxisAlignment.spaceEvenly,
-                                          actions: [
-                                            ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor: Colors.grey.shade300,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(12),
+                                              backgroundColor: Colors.white,
+                                              title: Center(
+                                                child: Text(
+                                                  "${Statics.getLabel('pusthikarn')}",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 18,
+                                                    color: Colors.redAccent,
+                                                  ),
                                                 ),
                                               ),
-                                              onPressed: () => Navigator.pop(context, false),
-                                              child: Text(
-                                                "${Statics.getLabel('ConfirmationNo')}",
-                                                style: TextStyle(color: Colors.black),
-                                              ),
-                                            ),
-                                            ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor: Colors.redAccent,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(12),
+                                              content: Padding(
+                                                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                                child: Text(
+                                                  "${Statics.getLabel('deleteconfirmText')}",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: Colors.black87,
+                                                  ),
                                                 ),
                                               ),
-                                              onPressed: () => Navigator.pop(context, true),
-                                              child: Text(
-                                                "${Statics.getLabel('ConfirmationYes')}",
-                                                style: TextStyle(color: Colors.white),
-                                              ),
+                                              actionsAlignment: MainAxisAlignment.spaceEvenly,
+                                              actions: [
+                                                ElevatedButton(
+                                                  style: ElevatedButton.styleFrom(
+                                                    backgroundColor: Colors.grey.shade300,
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(12),
+                                                    ),
+                                                  ),
+                                                  onPressed: () => Navigator.pop(context, false),
+                                                  child: Text(
+                                                    "${Statics.getLabel('ConfirmationNo')}",
+                                                    style: TextStyle(color: Colors.black),
+                                                  ),
+                                                ),
+                                                ElevatedButton(
+                                                  style: ElevatedButton.styleFrom(
+                                                    backgroundColor: Colors.redAccent,
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(12),
+                                                    ),
+                                                  ),
+                                                  onPressed: () => Navigator.pop(context, true),
+                                                  child: Text(
+                                                    "${Statics.getLabel('ConfirmationYes')}",
+                                                    style: TextStyle(color: Colors.white),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                          ],
-                                        ),
                                       );
 
                                       if (shouldDelete == true && selectedVividhBhashaBolnarerIdRowIndex != null) {
@@ -3081,7 +3144,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                     padding: EdgeInsets.symmetric(vertical: 5),
                                     width: 100,
                                     decoration:
-                                        BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
+                                    BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                                     child: Center(
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.center,
@@ -3110,7 +3173,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                 child: SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
                                   child: SizedBox(
-                                    width: MediaQuery.of(context).size.width * 0.6,
+                                    width: MediaQuery
+                                        .of(context)
+                                        .size
+                                        .width * 0.6,
                                     child: DataTable(
                                       showCheckboxColumn: false,
                                       headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
@@ -3119,21 +3185,25 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                       columns: [
                                         DataColumn(
                                             label: Text(
-                                          "${Statics.getLabel('Praant')}",
-                                        )),
+                                              "${Statics.getLabel('Praant')}",
+                                            )),
                                         DataColumn(
                                             label: Text(
-                                          "${Statics.getLabel('avgPersent')}",
-                                        )),
+                                              "${Statics.getLabel('avgPersent')}",
+                                            )),
                                       ],
-                                      rows: enteredKontyaPraantacheDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
+                                      rows: enteredKontyaPraantacheDataList
+                                          .asMap()
+                                          .entries
+                                          .where((entry) => entry.value.isactive == 1)
+                                          .map((entry) {
                                         int index = entry.key;
                                         var data = entry.value;
                                         bool isSelected = selectedKontyaPraantacheIdRowIndex == index;
                                         return DataRow(
                                             selected: isSelected,
                                             color: MaterialStateProperty.resolveWith<Color?>(
-                                              (Set<MaterialState> states) {
+                                                  (Set<MaterialState> states) {
                                                 if (isSelected) return Colors.yellow.shade100;
                                                 return null;
                                               },
@@ -3243,62 +3313,63 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                       if (selectedKontyaPraantacheIdRowIndex == null) return;
                                       final shouldDelete = await showDialog<bool>(
                                         context: context,
-                                        builder: (context) => AlertDialog(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(20),
-                                          ),
-                                          backgroundColor: Colors.white,
-                                          title: Center(
-                                            child: Text(
-                                              "${Statics.getLabel('pusthikarn')}",
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 18,
-                                                color: Colors.redAccent,
+                                        builder: (context) =>
+                                            AlertDialog(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(20),
                                               ),
-                                            ),
-                                          ),
-                                          content: Padding(
-                                            padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                            child: Text(
-                                              "${Statics.getLabel('deleteconfirmText')}",
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.black87,
-                                              ),
-                                            ),
-                                          ),
-                                          actionsAlignment: MainAxisAlignment.spaceEvenly,
-                                          actions: [
-                                            ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor: Colors.grey.shade300,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(12),
+                                              backgroundColor: Colors.white,
+                                              title: Center(
+                                                child: Text(
+                                                  "${Statics.getLabel('pusthikarn')}",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 18,
+                                                    color: Colors.redAccent,
+                                                  ),
                                                 ),
                                               ),
-                                              onPressed: () => Navigator.pop(context, false),
-                                              child: Text(
-                                                "${Statics.getLabel('ConfirmationNo')}",
-                                                style: TextStyle(color: Colors.black),
-                                              ),
-                                            ),
-                                            ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor: Colors.redAccent,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(12),
+                                              content: Padding(
+                                                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                                child: Text(
+                                                  "${Statics.getLabel('deleteconfirmText')}",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: Colors.black87,
+                                                  ),
                                                 ),
                                               ),
-                                              onPressed: () => Navigator.pop(context, true),
-                                              child: Text(
-                                                "${Statics.getLabel('ConfirmationYes')}",
-                                                style: TextStyle(color: Colors.white),
-                                              ),
+                                              actionsAlignment: MainAxisAlignment.spaceEvenly,
+                                              actions: [
+                                                ElevatedButton(
+                                                  style: ElevatedButton.styleFrom(
+                                                    backgroundColor: Colors.grey.shade300,
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(12),
+                                                    ),
+                                                  ),
+                                                  onPressed: () => Navigator.pop(context, false),
+                                                  child: Text(
+                                                    "${Statics.getLabel('ConfirmationNo')}",
+                                                    style: TextStyle(color: Colors.black),
+                                                  ),
+                                                ),
+                                                ElevatedButton(
+                                                  style: ElevatedButton.styleFrom(
+                                                    backgroundColor: Colors.redAccent,
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(12),
+                                                    ),
+                                                  ),
+                                                  onPressed: () => Navigator.pop(context, true),
+                                                  child: Text(
+                                                    "${Statics.getLabel('ConfirmationYes')}",
+                                                    style: TextStyle(color: Colors.white),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                          ],
-                                        ),
                                       );
 
                                       if (shouldDelete == true && selectedKontyaPraantacheIdRowIndex != null) {
@@ -3351,7 +3422,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                     padding: EdgeInsets.symmetric(vertical: 5),
                                     width: 100,
                                     decoration:
-                                        BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
+                                    BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                                     child: Center(
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.center,
@@ -3380,7 +3451,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                 child: SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
                                   child: SizedBox(
-                                    width: MediaQuery.of(context).size.width * 0.8,
+                                    width: MediaQuery
+                                        .of(context)
+                                        .size
+                                        .width * 0.8,
                                     child: DataTable(
                                       showCheckboxColumn: false,
                                       headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
@@ -3389,21 +3463,25 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                       columns: [
                                         DataColumn(
                                             label: Text(
-                                          '${Statics.getLabel('konteReligion')}',
-                                        )),
+                                              '${Statics.getLabel('konteReligion')}',
+                                            )),
                                         DataColumn(
                                             label: Text(
-                                          '${Statics.getLabel('avgPersent')}',
-                                        )),
+                                              '${Statics.getLabel('avgPersent')}',
+                                            )),
                                       ],
-                                      rows: enteredreligionDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
+                                      rows: enteredreligionDataList
+                                          .asMap()
+                                          .entries
+                                          .where((entry) => entry.value.isactive == 1)
+                                          .map((entry) {
                                         int index = entry.key;
                                         var data = entry.value;
                                         bool isSelected = selectedReligionIdRowIndex == index;
                                         return DataRow(
                                             selected: isSelected,
                                             color: MaterialStateProperty.resolveWith<Color?>(
-                                              (Set<MaterialState> states) {
+                                                  (Set<MaterialState> states) {
                                                 if (isSelected) return Colors.yellow.shade100;
                                                 return null;
                                               },
@@ -3511,62 +3589,63 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                       if (selectedReligionIdRowIndex == null) return;
                                       final shouldDelete = await showDialog<bool>(
                                         context: context,
-                                        builder: (context) => AlertDialog(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(20),
-                                          ),
-                                          backgroundColor: Colors.white,
-                                          title: Center(
-                                            child: Text(
-                                              "${Statics.getLabel('pusthikarn')}",
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 18,
-                                                color: Colors.redAccent,
+                                        builder: (context) =>
+                                            AlertDialog(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(20),
                                               ),
-                                            ),
-                                          ),
-                                          content: Padding(
-                                            padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                            child: Text(
-                                              "${Statics.getLabel('deleteconfirmText')}",
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.black87,
-                                              ),
-                                            ),
-                                          ),
-                                          actionsAlignment: MainAxisAlignment.spaceEvenly,
-                                          actions: [
-                                            ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor: Colors.grey.shade300,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(12),
+                                              backgroundColor: Colors.white,
+                                              title: Center(
+                                                child: Text(
+                                                  "${Statics.getLabel('pusthikarn')}",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 18,
+                                                    color: Colors.redAccent,
+                                                  ),
                                                 ),
                                               ),
-                                              onPressed: () => Navigator.pop(context, false),
-                                              child: Text(
-                                                "${Statics.getLabel('ConfirmationNo')}",
-                                                style: TextStyle(color: Colors.black),
-                                              ),
-                                            ),
-                                            ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor: Colors.redAccent,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(12),
+                                              content: Padding(
+                                                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                                child: Text(
+                                                  "${Statics.getLabel('deleteconfirmText')}",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: Colors.black87,
+                                                  ),
                                                 ),
                                               ),
-                                              onPressed: () => Navigator.pop(context, true),
-                                              child: Text(
-                                                "${Statics.getLabel('ConfirmationYes')}",
-                                                style: TextStyle(color: Colors.white),
-                                              ),
+                                              actionsAlignment: MainAxisAlignment.spaceEvenly,
+                                              actions: [
+                                                ElevatedButton(
+                                                  style: ElevatedButton.styleFrom(
+                                                    backgroundColor: Colors.grey.shade300,
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(12),
+                                                    ),
+                                                  ),
+                                                  onPressed: () => Navigator.pop(context, false),
+                                                  child: Text(
+                                                    "${Statics.getLabel('ConfirmationNo')}",
+                                                    style: TextStyle(color: Colors.black),
+                                                  ),
+                                                ),
+                                                ElevatedButton(
+                                                  style: ElevatedButton.styleFrom(
+                                                    backgroundColor: Colors.redAccent,
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(12),
+                                                    ),
+                                                  ),
+                                                  onPressed: () => Navigator.pop(context, true),
+                                                  child: Text(
+                                                    "${Statics.getLabel('ConfirmationYes')}",
+                                                    style: TextStyle(color: Colors.white),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                          ],
-                                        ),
                                       );
                                       if (shouldDelete == true && selectedReligionIdRowIndex != null) {
                                         setState(() {
@@ -3639,7 +3718,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                     child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: SizedBox(
-                          width: MediaQuery.of(context).size.width * 1,
+                          width: MediaQuery
+                              .of(context)
+                              .size
+                              .width * 1,
                           child: DataTable(
                             showCheckboxColumn: false,
                             headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
@@ -3648,25 +3730,29 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             columns: [
                               DataColumn(
                                   label: Text(
-                                "${Statics.getLabel('UpasanaSthal')}",
-                              )),
+                                    "${Statics.getLabel('UpasanaSthal')}",
+                                  )),
                               DataColumn(
                                   label: Text(
-                                "${Statics.getLabel('SelectFrequency')}",
-                              )),
+                                    "${Statics.getLabel('SelectFrequency')}",
+                                  )),
                               DataColumn(
                                   label: Text(
-                                "${Statics.getLabel('count')}",
-                              )),
+                                    "${Statics.getLabel('count')}",
+                                  )),
                             ],
-                            rows: upasnaSthalDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
+                            rows: upasnaSthalDataList
+                                .asMap()
+                                .entries
+                                .where((entry) => entry.value.isactive == 1)
+                                .map((entry) {
                               int index = entry.key;
                               var data = entry.value;
                               bool isSelected = selectedUpasnaSthalRowIndex == index;
                               return DataRow(
                                   selected: isSelected,
                                   color: MaterialStateProperty.resolveWith<Color?>(
-                                    (Set<MaterialState> states) {
+                                        (Set<MaterialState> states) {
                                       if (isSelected) return Colors.yellow.shade100;
                                       return null;
                                     },
@@ -3777,62 +3863,63 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             if (selectedUpasnaSthalRowIndex == null) return;
                             final shouldDelete = await showDialog<bool>(
                               context: context,
-                              builder: (context) => AlertDialog(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                backgroundColor: Colors.white,
-                                title: Center(
-                                  child: Text(
-                                    "${Statics.getLabel('pusthikarn')}",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18,
-                                      color: Colors.redAccent,
+                              builder: (context) =>
+                                  AlertDialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
                                     ),
-                                  ),
-                                ),
-                                content: Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                  child: Text(
-                                    "${Statics.getLabel('deleteconfirmText')}",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                ),
-                                actionsAlignment: MainAxisAlignment.spaceEvenly,
-                                actions: [
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.grey.shade300,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
+                                    backgroundColor: Colors.white,
+                                    title: Center(
+                                      child: Text(
+                                        "${Statics.getLabel('pusthikarn')}",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
+                                          color: Colors.redAccent,
+                                        ),
                                       ),
                                     ),
-                                    onPressed: () => Navigator.pop(context, false),
-                                    child: Text(
-                                      "${Statics.getLabel('ConfirmationNo')}",
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                  ),
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.redAccent,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
+                                    content: Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                      child: Text(
+                                        "${Statics.getLabel('deleteconfirmText')}",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.black87,
+                                        ),
                                       ),
                                     ),
-                                    onPressed: () => Navigator.pop(context, true),
-                                    child: Text(
-                                      "${Statics.getLabel('ConfirmationYes')}",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
+                                    actionsAlignment: MainAxisAlignment.spaceEvenly,
+                                    actions: [
+                                      ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.grey.shade300,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(12),
+                                          ),
+                                        ),
+                                        onPressed: () => Navigator.pop(context, false),
+                                        child: Text(
+                                          "${Statics.getLabel('ConfirmationNo')}",
+                                          style: TextStyle(color: Colors.black),
+                                        ),
+                                      ),
+                                      ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.redAccent,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(12),
+                                          ),
+                                        ),
+                                        onPressed: () => Navigator.pop(context, true),
+                                        child: Text(
+                                          "${Statics.getLabel('ConfirmationYes')}",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
                             );
 
                             if (shouldDelete == true && selectedUpasnaSthalRowIndex != null) {
@@ -4230,7 +4317,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: SizedBox(
-                      width: MediaQuery.of(context).size.width * 1,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width * 1,
                       child: DataTable(
                         showCheckboxColumn: false,
                         headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
@@ -4239,25 +4329,29 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                         columns: [
                           DataColumn(
                               label: Text(
-                            "${Statics.getLabel('Name')}",
-                          )),
+                                "${Statics.getLabel('Name')}",
+                              )),
                           DataColumn(
                               label: Text(
-                            "${Statics.getLabel('Category')}",
-                          )),
+                                "${Statics.getLabel('Category')}",
+                              )),
                           DataColumn(
                               label: Text(
-                            "${Statics.getLabel('samparkStithi')}",
-                          )),
+                                "${Statics.getLabel('samparkStithi')}",
+                              )),
                         ],
-                        rows: sajjanShaktiDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
+                        rows: sajjanShaktiDataList
+                            .asMap()
+                            .entries
+                            .where((entry) => entry.value.isactive == 1)
+                            .map((entry) {
                           int index = entry.key;
                           var data = entry.value;
                           bool isSelected = selectedsajjanShaktiRowIndex == index;
                           return DataRow(
                               selected: isSelected,
                               color: MaterialStateProperty.resolveWith<Color?>(
-                                (Set<MaterialState> states) {
+                                    (Set<MaterialState> states) {
                                   if (isSelected) return Colors.yellow.shade100;
                                   return null;
                                 },
@@ -4391,62 +4485,63 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                           if (selectedsajjanShaktiRowIndex == null) return;
                           final shouldDelete = await showDialog<bool>(
                             context: context,
-                            builder: (context) => AlertDialog(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              backgroundColor: Colors.white,
-                              title: Center(
-                                child: Text(
-                                  "${Statics.getLabel('pusthikarn')}",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                    color: Colors.redAccent,
+                            builder: (context) =>
+                                AlertDialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
                                   ),
-                                ),
-                              ),
-                              content: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                child: Text(
-                                  "${Statics.getLabel('deleteconfirmText')}",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black87,
-                                  ),
-                                ),
-                              ),
-                              actionsAlignment: MainAxisAlignment.spaceEvenly,
-                              actions: [
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.grey.shade300,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
+                                  backgroundColor: Colors.white,
+                                  title: Center(
+                                    child: Text(
+                                      "${Statics.getLabel('pusthikarn')}",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                        color: Colors.redAccent,
+                                      ),
                                     ),
                                   ),
-                                  onPressed: () => Navigator.pop(context, false),
-                                  child: Text(
-                                    "${Statics.getLabel('ConfirmationNo')}",
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                ),
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.redAccent,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
+                                  content: Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                    child: Text(
+                                      "${Statics.getLabel('deleteconfirmText')}",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black87,
+                                      ),
                                     ),
                                   ),
-                                  onPressed: () => Navigator.pop(context, true),
-                                  child: Text(
-                                    "${Statics.getLabel('ConfirmationYes')}",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
+                                  actionsAlignment: MainAxisAlignment.spaceEvenly,
+                                  actions: [
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.grey.shade300,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                      ),
+                                      onPressed: () => Navigator.pop(context, false),
+                                      child: Text(
+                                        "${Statics.getLabel('ConfirmationNo')}",
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                    ),
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.redAccent,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                      ),
+                                      onPressed: () => Navigator.pop(context, true),
+                                      child: Text(
+                                        "${Statics.getLabel('ConfirmationYes')}",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
                           );
 
                           if (shouldDelete == true && selectedsajjanShaktiRowIndex != null) {
@@ -4514,7 +4609,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: SizedBox(
-                      width: MediaQuery.of(context).size.width * 1,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width * 1,
                       child: DataTable(
                         showCheckboxColumn: false,
                         headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
@@ -4523,25 +4621,29 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                         columns: [
                           DataColumn(
                               label: Text(
-                            "${Statics.getLabel('Name')}",
-                          )),
+                                "${Statics.getLabel('Name')}",
+                              )),
                           DataColumn(
                               label: Text(
-                            "${Statics.getLabel('special')}",
-                          )),
+                                "${Statics.getLabel('special')}",
+                              )),
                           DataColumn(
                               label: Text(
-                            "${Statics.getLabel('prabhavKshetra')}",
-                          )),
+                                "${Statics.getLabel('prabhavKshetra')}",
+                              )),
                         ],
-                        rows: anyaPrabhaviLokDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
+                        rows: anyaPrabhaviLokDataList
+                            .asMap()
+                            .entries
+                            .where((entry) => entry.value.isactive == 1)
+                            .map((entry) {
                           int index = entry.key;
                           var data = entry.value;
                           bool isSelected = selectedanyaPrabhaviLokRowIndex == index;
                           return DataRow(
                               selected: isSelected,
                               color: MaterialStateProperty.resolveWith<Color?>(
-                                (Set<MaterialState> states) {
+                                    (Set<MaterialState> states) {
                                   if (isSelected) return Colors.yellow.shade100;
                                   return null;
                                 },
@@ -4662,62 +4764,63 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                           if (selectedanyaPrabhaviLokRowIndex == null) return;
                           final shouldDelete = await showDialog<bool>(
                             context: context,
-                            builder: (context) => AlertDialog(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              backgroundColor: Colors.white,
-                              title: Center(
-                                child: Text(
-                                  "${Statics.getLabel('pusthikarn')}",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                    color: Colors.redAccent,
+                            builder: (context) =>
+                                AlertDialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
                                   ),
-                                ),
-                              ),
-                              content: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                child: Text(
-                                  "${Statics.getLabel('deleteconfirmText')}",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black87,
-                                  ),
-                                ),
-                              ),
-                              actionsAlignment: MainAxisAlignment.spaceEvenly,
-                              actions: [
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.grey.shade300,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
+                                  backgroundColor: Colors.white,
+                                  title: Center(
+                                    child: Text(
+                                      "${Statics.getLabel('pusthikarn')}",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                        color: Colors.redAccent,
+                                      ),
                                     ),
                                   ),
-                                  onPressed: () => Navigator.pop(context, false),
-                                  child: Text(
-                                    "${Statics.getLabel('ConfirmationNo')}",
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                ),
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.redAccent,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
+                                  content: Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                    child: Text(
+                                      "${Statics.getLabel('deleteconfirmText')}",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black87,
+                                      ),
                                     ),
                                   ),
-                                  onPressed: () => Navigator.pop(context, true),
-                                  child: Text(
-                                    "${Statics.getLabel('ConfirmationYes')}",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
+                                  actionsAlignment: MainAxisAlignment.spaceEvenly,
+                                  actions: [
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.grey.shade300,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                      ),
+                                      onPressed: () => Navigator.pop(context, false),
+                                      child: Text(
+                                        "${Statics.getLabel('ConfirmationNo')}",
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                    ),
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.redAccent,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                      ),
+                                      onPressed: () => Navigator.pop(context, true),
+                                      child: Text(
+                                        "${Statics.getLabel('ConfirmationYes')}",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
                           );
                           if (shouldDelete == true && selectedanyaPrabhaviLokRowIndex != null) {
                             setState(() {
@@ -4784,7 +4887,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                   child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: SizedBox(
-                        width: MediaQuery.of(context).size.width * 1.5,
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width * 1.5,
                         child: DataTable(
                           showCheckboxColumn: false,
                           headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
@@ -4792,29 +4898,33 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                           columns: [
                             DataColumn(
                                 label: Text(
-                              "${Statics.getLabel('festivals')}",
-                            )),
+                                  "${Statics.getLabel('festivals')}",
+                                )),
                             DataColumn(
                                 label: Text(
-                              "${Statics.getLabel('aayojakSansthachiNave')}",
-                            )),
+                                  "${Statics.getLabel('aayojakSansthachiNave')}",
+                                )),
                             DataColumn(
                                 label: Text(
-                              "${Statics.getLabel('aayojakNaav')}",
-                            )),
+                                  "${Statics.getLabel('aayojakNaav')}",
+                                )),
                             DataColumn(
                                 label: Text(
-                              "${Statics.getLabel('Sampark')}",
-                            )),
+                                  "${Statics.getLabel('Sampark')}",
+                                )),
                           ],
-                          rows: vastitSajarHonareSanDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
+                          rows: vastitSajarHonareSanDataList
+                              .asMap()
+                              .entries
+                              .where((entry) => entry.value.isactive == 1)
+                              .map((entry) {
                             int index = entry.key;
                             var data = entry.value;
                             bool isSelected = selectedSanIdIndex == index;
                             return DataRow(
                                 selected: isSelected,
                                 color: MaterialStateProperty.resolveWith<Color?>(
-                                  (Set<MaterialState> states) {
+                                      (Set<MaterialState> states) {
                                     if (isSelected) return Colors.yellow.shade100;
                                     return null;
                                   },
@@ -4832,7 +4942,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                 },
                                 cells: [
                                   DataCell(Text(
-                                      /*data['sanName'] == "अन्य"? "${data['sanName']} - ${data['vastitSajarHonareAnyaSan']}" :*/
+                                    /*data['sanName'] == "अन्य"? "${data['sanName']} - ${data['vastitSajarHonareAnyaSan']}" :*/
                                       data.selectedDropdownValueName ?? '')),
                                   DataCell(Text(data.ayojakasansthacinave ?? '')),
                                   DataCell(Text(data.ayojakancinave ?? '')),
@@ -4928,62 +5038,63 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                           if (selectedSanIdIndex == null) return;
                           final shouldDelete = await showDialog<bool>(
                             context: context,
-                            builder: (context) => AlertDialog(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              backgroundColor: Colors.white,
-                              title: Center(
-                                child: Text(
-                                  "${Statics.getLabel('pusthikarn')}",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                    color: Colors.redAccent,
+                            builder: (context) =>
+                                AlertDialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
                                   ),
-                                ),
-                              ),
-                              content: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                child: Text(
-                                  "${Statics.getLabel('deleteconfirmText')}",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black87,
-                                  ),
-                                ),
-                              ),
-                              actionsAlignment: MainAxisAlignment.spaceEvenly,
-                              actions: [
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.grey.shade300,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
+                                  backgroundColor: Colors.white,
+                                  title: Center(
+                                    child: Text(
+                                      "${Statics.getLabel('pusthikarn')}",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                        color: Colors.redAccent,
+                                      ),
                                     ),
                                   ),
-                                  onPressed: () => Navigator.pop(context, false),
-                                  child: Text(
-                                    "${Statics.getLabel('ConfirmationNo')}",
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                ),
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.redAccent,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
+                                  content: Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                    child: Text(
+                                      "${Statics.getLabel('deleteconfirmText')}",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black87,
+                                      ),
                                     ),
                                   ),
-                                  onPressed: () => Navigator.pop(context, true),
-                                  child: Text(
-                                    "${Statics.getLabel('ConfirmationYes')}",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
+                                  actionsAlignment: MainAxisAlignment.spaceEvenly,
+                                  actions: [
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.grey.shade300,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                      ),
+                                      onPressed: () => Navigator.pop(context, false),
+                                      child: Text(
+                                        "${Statics.getLabel('ConfirmationNo')}",
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                    ),
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.redAccent,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                      ),
+                                      onPressed: () => Navigator.pop(context, true),
+                                      child: Text(
+                                        "${Statics.getLabel('ConfirmationYes')}",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
                           );
                           if (shouldDelete == true && selectedSanIdIndex != null) {
                             setState(() {
@@ -5057,7 +5168,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                   child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: SizedBox(
-                        width: MediaQuery.of(context).size.width * 1.5,
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width * 1.5,
                         child: DataTable(
                           showCheckboxColumn: false,
                           headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
@@ -5065,29 +5179,33 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                           columns: [
                             DataColumn(
                                 label: Text(
-                              "${Statics.getLabel('samajikKaryakram')}",
-                            )),
+                                  "${Statics.getLabel('samajikKaryakram')}",
+                                )),
                             DataColumn(
                                 label: Text(
-                              "${Statics.getLabel('aayojakSansthachiNave')}",
-                            )),
+                                  "${Statics.getLabel('aayojakSansthachiNave')}",
+                                )),
                             DataColumn(
                                 label: Text(
-                              "${Statics.getLabel('aayojakNaav')}",
-                            )),
+                                  "${Statics.getLabel('aayojakNaav')}",
+                                )),
                             DataColumn(
                                 label: Text(
-                              "${Statics.getLabel('Sampark')}",
-                            )),
+                                  "${Statics.getLabel('Sampark')}",
+                                )),
                           ],
-                          rows: vastitSajarHonareSamajikKaryakramDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
+                          rows: vastitSajarHonareSamajikKaryakramDataList
+                              .asMap()
+                              .entries
+                              .where((entry) => entry.value.isactive == 1)
+                              .map((entry) {
                             int index = entry.key;
                             var data = entry.value;
                             bool isSelected = selectedSamajikKaryakramIdIndex == index;
                             return DataRow(
                                 selected: isSelected,
                                 color: MaterialStateProperty.resolveWith<Color?>(
-                                  (Set<MaterialState> states) {
+                                      (Set<MaterialState> states) {
                                     if (isSelected) return Colors.yellow.shade100;
                                     return null;
                                   },
@@ -5199,62 +5317,63 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                           if (selectedSamajikKaryakramIdIndex == null) return;
                           final shouldDelete = await showDialog<bool>(
                             context: context,
-                            builder: (context) => AlertDialog(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              backgroundColor: Colors.white,
-                              title: Center(
-                                child: Text(
-                                  "${Statics.getLabel('pusthikarn')}",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                    color: Colors.redAccent,
+                            builder: (context) =>
+                                AlertDialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
                                   ),
-                                ),
-                              ),
-                              content: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                child: Text(
-                                  "${Statics.getLabel('deleteconfirmText')}",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black87,
-                                  ),
-                                ),
-                              ),
-                              actionsAlignment: MainAxisAlignment.spaceEvenly,
-                              actions: [
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.grey.shade300,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
+                                  backgroundColor: Colors.white,
+                                  title: Center(
+                                    child: Text(
+                                      "${Statics.getLabel('pusthikarn')}",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                        color: Colors.redAccent,
+                                      ),
                                     ),
                                   ),
-                                  onPressed: () => Navigator.pop(context, false),
-                                  child: Text(
-                                    "${Statics.getLabel('ConfirmationNo')}",
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                ),
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.redAccent,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
+                                  content: Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                    child: Text(
+                                      "${Statics.getLabel('deleteconfirmText')}",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black87,
+                                      ),
                                     ),
                                   ),
-                                  onPressed: () => Navigator.pop(context, true),
-                                  child: Text(
-                                    "${Statics.getLabel('ConfirmationYes')}",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
+                                  actionsAlignment: MainAxisAlignment.spaceEvenly,
+                                  actions: [
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.grey.shade300,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                      ),
+                                      onPressed: () => Navigator.pop(context, false),
+                                      child: Text(
+                                        "${Statics.getLabel('ConfirmationNo')}",
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                    ),
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.redAccent,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                      ),
+                                      onPressed: () => Navigator.pop(context, true),
+                                      child: Text(
+                                        "${Statics.getLabel('ConfirmationYes')}",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
                           );
                           if (shouldDelete == true && selectedSamajikKaryakramIdIndex != null) {
                             setState(() {
@@ -5277,46 +5396,48 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                 InkWell(
                   onTap: () {
                     if (isVastiSearch) {
-                      if (loksankhyaController.text != "" && vastiSamitiYesNo == 0 || vastiSamitiYesNo == 1) {
+                      // if (loksankhyaController.text != "" && vastiSamitiYesNo == 0 || vastiSamitiYesNo == 1) {
+                      if (vastiSamitiYesNo == 0 || vastiSamitiYesNo == 1) {
                         submitStep1Form();
                       } else {
                         showDialog(
                           context: context,
-                          builder: (context) => AlertDialog(
-                            backgroundColor: Colors.white,
-                            title: Text(
-                              "${Statics.getLabel('suchana')}",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.red.shade700,
-                                fontSize: 18,
-                              ),
-                            ),
-                            content: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                              child: Text(
-                                "${Statics.getLabel('vastiSamitiAndLoksankhyaValidation')}",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.red.shade800,
+                          builder: (context) =>
+                              AlertDialog(
+                                backgroundColor: Colors.white,
+                                title: Text(
+                                  "${Statics.getLabel('suchana')}",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.red.shade700,
+                                    fontSize: 18,
+                                  ),
                                 ),
-                              ),
-                            ),
-                            actions: [
-                              TextButton(
-                                style: TextButton.styleFrom(
-                                  backgroundColor: Colors.red.shade700,
-                                  foregroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                content: Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 10),
+                                  child: Text(
+                                    "${Statics.getLabel('vastiSamitiValidation')}",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.red.shade800,
+                                    ),
+                                  ),
                                 ),
-                                onPressed: () => Navigator.pop(context),
-                                child: Text(
-                                  "${Statics.getLabel('okay')}",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
+                                actions: [
+                                  TextButton(
+                                    style: TextButton.styleFrom(
+                                      backgroundColor: Colors.red.shade700,
+                                      foregroundColor: Colors.white,
+                                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                    ),
+                                    onPressed: () => Navigator.pop(context),
+                                    child: Text(
+                                      "${Statics.getLabel('okay')}",
+                                      style: TextStyle(fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
                         );
                       }
                     } else {
@@ -5367,7 +5488,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
     log("Selected File Name: $selectedFileName");
     Map<String, dynamic> formData = {
       "cuserid": int.parse(Statics.userDetails['userID']),
-      "vastiid": int.parse(context.read<GeoHierarchyController>().deepestSelectedGeoUnitId ?? "0"),
+      "vastiid": int.parse(context
+          .read<GeoHierarchyController>()
+          .deepestSelectedGeoUnitId ?? "0"),
       "vastiShakhaPramukhName": sanghaKaryaVastiPramukhNameController.text,
       "vastiShakhaSamiti": vastiSamitiYesNo,
       "Lokasankhya": loksankhyaController.text,
@@ -5444,7 +5567,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
         hinduVeerYadiDataList = [];
       });
       await Future.delayed(Duration(seconds: 2));
-      searchVastiData(context.read<GeoHierarchyController>().deepestSelectedGeoUnitId);
+      searchVastiData(context
+          .read<GeoHierarchyController>()
+          .deepestSelectedGeoUnitId);
       _scrollController.animateTo(
         0.0,
         duration: Duration(milliseconds: 500),
@@ -5507,7 +5632,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
 
     if (anyaPrabhaviLokShreniId != null && selectedValue == null) {
       selectedValue = filteredItems.firstWhere(
-        (e) => e.id == anyaPrabhaviLokShreniId,
+            (e) => e.id == anyaPrabhaviLokShreniId,
         orElse: () => filteredItems.isNotEmpty ? filteredItems.first : Masterdata(),
       );
       selectedShreni = selectedValue;
@@ -5517,7 +5642,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
 
     if (anyaPrabhaviLokUpShreniId != null && selectedDependentValue == null) {
       selectedDependentValue = dependentItems.firstWhere(
-        (e) => e.id == anyaPrabhaviLokUpShreniId,
+            (e) => e.id == anyaPrabhaviLokUpShreniId,
         orElse: () => dependentItems.isNotEmpty ? dependentItems.first : Masterdata(),
       );
 
@@ -5528,7 +5653,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
 
     if (anyaPrabhaviLokUpShreni1Id != null && selectedThirdLevelValue == null) {
       selectedThirdLevelValue = thirdLevelItems.firstWhere(
-        (e) => e.id == anyaPrabhaviLokUpShreni1Id,
+            (e) => e.id == anyaPrabhaviLokUpShreni1Id,
         orElse: () => thirdLevelItems.isNotEmpty ? thirdLevelItems.first : Masterdata(),
       );
 
@@ -5651,13 +5776,14 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
           value: items.any((e) => e.id == value?.id) ? value : null,
           isExpanded: true,
           items: items
-              .map((item) => DropdownMenuItem<T>(
-                    value: item,
-                    child: Text(
-                      item.value ?? "",
-                      style: TextStyle(color: textColor ?? Colors.black),
-                    ),
-                  ))
+              .map((item) =>
+              DropdownMenuItem<T>(
+                value: item,
+                child: Text(
+                  item.value ?? "",
+                  style: TextStyle(color: textColor ?? Colors.black),
+                ),
+              ))
               .toList(),
           onChanged: onChanged,
         ),
@@ -5793,8 +5919,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
   TextEditingController kuthalaVarshiVayogatShaakhaYearController = TextEditingController();
   TextEditingController kuthalaVarshiVayogatSaptahikYearController = TextEditingController();
 
-  void showKuthalaVarshiPopup(
-    BuildContext context, {
+  void showKuthalaVarshiPopup(BuildContext context, {
     int? editIndex,
     VoidCallback? onDataChanged,
   }) {
@@ -5848,22 +5973,22 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                   children: [
                     vastisarvekshanDropDownDataModel?.masterdata != null
                         ? vastisarvekshanDropdown2(
-                            dataModel: vastisarvekshanDropDownDataModel!,
-                            filterTypeName: "कुठल्या वर्षी",
-                            hintText: "${Statics.getLabel('selectVayogat')}",
-                            onItemSelected: (id, value, isOther) {
-                              selectedKuthalaVarshiId = id;
-                              selectedKuthalaVarshiName = value;
-                            },
-                            width: double.infinity,
-                            selectedValue: selectedMasterKuthalaVarshiName,
-                            onSelectionChanged: (newValue) {
-                              setState(() {
-                                selectedMasterKuthalaVarshiName = newValue;
-                              });
-                            },
-                            editId: selectedKuthalaVarshiIdEdit,
-                          )
+                      dataModel: vastisarvekshanDropDownDataModel!,
+                      filterTypeName: "कुठल्या वर्षी",
+                      hintText: "${Statics.getLabel('selectVayogat')}",
+                      onItemSelected: (id, value, isOther) {
+                        selectedKuthalaVarshiId = id;
+                        selectedKuthalaVarshiName = value;
+                      },
+                      width: double.infinity,
+                      selectedValue: selectedMasterKuthalaVarshiName,
+                      onSelectionChanged: (newValue) {
+                        setState(() {
+                          selectedMasterKuthalaVarshiName = newValue;
+                        });
+                      },
+                      editId: selectedKuthalaVarshiIdEdit,
+                    )
                         : Container(),
                     SizedBox(height: 16),
                     Row(
@@ -5930,8 +6055,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                     int currentType = selectedYearType == "shaakha"
                         ? 1
                         : selectedYearType == "saptahikMilan"
-                            ? 0
-                            : 2;
+                        ? 0
+                        : 2;
 
                     var matchedEntries = kuthalaVarshiDataList!.where((e) => e.id == selectedKuthalaVarshiId).toList();
 
@@ -5956,11 +6081,13 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                       prakarName: currentType == 1
                           ? "शाखा"
                           : currentType == 0
-                              ? "साप्ताहिक मिलन"
-                              : "-",
+                          ? "साप्ताहिक मिलन"
+                          : "-",
                       isShaakhaa: currentType,
                       pkid: selectedPkId,
-                      vastiid: int.parse(context.read<GeoHierarchyController>().deepestSelectedGeoUnitId ?? "0"),
+                      vastiid: int.parse(context
+                          .read<GeoHierarchyController>()
+                          .deepestSelectedGeoUnitId ?? "0"),
                       shaakhaa: currentType == 1 ? kuthalaVarshiVayogatShaakhaYearController.text.trim() : "",
                       saptahik: currentType == 0 ? kuthalaVarshiVayogatSaptahikYearController.text.trim() : "",
                       isactive: selectedisActive,
@@ -6081,22 +6208,22 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                       // 🔹 Dropdowns and fields
                       vastisarvekshanDropDownDataModel != null
                           ? vastisarvekshanDropdown2(
-                              dataModel: vastisarvekshanDropDownDataModel!,
-                              filterTypeName: "जागरण श्रेणी",
-                              onItemSelected: (id, value, isOther) {
-                                selectedShreniID = id;
-                                selectedShreniName = value;
-                              },
-                              hintText: "${Statics.getLabel('otherUpshreni')}",
-                              question: "${Statics.getLabel('otherUpshreni')}",
-                              editId: selectedShreniIDEdit,
-                              selectedValue: selectedJagranShreni,
-                              onSelectionChanged: (newValue) {
-                                setState(() {
-                                  selectedJagranShreni = newValue;
-                                });
-                              },
-                            )
+                        dataModel: vastisarvekshanDropDownDataModel!,
+                        filterTypeName: "जागरण श्रेणी",
+                        onItemSelected: (id, value, isOther) {
+                          selectedShreniID = id;
+                          selectedShreniName = value;
+                        },
+                        hintText: "${Statics.getLabel('otherUpshreni')}",
+                        question: "${Statics.getLabel('otherUpshreni')}",
+                        editId: selectedShreniIDEdit,
+                        selectedValue: selectedJagranShreni,
+                        onSelectionChanged: (newValue) {
+                          setState(() {
+                            selectedJagranShreni = newValue;
+                          });
+                        },
+                      )
                           : Container(),
 
                       const SizedBox(height: 10),
@@ -6112,23 +6239,23 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
 
                       vastisarvekshanDropDownDataModel != null
                           ? vastisarvekshanDropdown2(
-                              dataModel: vastisarvekshanDropDownDataModel!,
-                              filterTypeName: "जागरण वारंवारिता",
-                              onItemSelected: (id, value, isOther) {
-                                selectedVaramvaritaID = id;
-                                selectedVaramvaritaName = value;
-                                isOtherJaganVaramvaritaConroller.clear();
-                              },
-                              hintText: "${Statics.getLabel('varamvarita')}",
-                              question: "${Statics.getLabel('selectVaramvarita')}",
-                              editId: selectedVaramvaritaIDEdit,
-                              selectedValue: selectedVaramvarita,
-                              onSelectionChanged: (newValue) {
-                                setState(() {
-                                  selectedVaramvarita = newValue;
-                                });
-                              },
-                            )
+                        dataModel: vastisarvekshanDropDownDataModel!,
+                        filterTypeName: "जागरण वारंवारिता",
+                        onItemSelected: (id, value, isOther) {
+                          selectedVaramvaritaID = id;
+                          selectedVaramvaritaName = value;
+                          isOtherJaganVaramvaritaConroller.clear();
+                        },
+                        hintText: "${Statics.getLabel('varamvarita')}",
+                        question: "${Statics.getLabel('selectVaramvarita')}",
+                        editId: selectedVaramvaritaIDEdit,
+                        selectedValue: selectedVaramvarita,
+                        onSelectionChanged: (newValue) {
+                          setState(() {
+                            selectedVaramvarita = newValue;
+                          });
+                        },
+                      )
                           : Container(),
 
                       const SizedBox(height: 10),
@@ -6152,7 +6279,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             } else {
                               final data = VastisarJaagaranshreneesthiti(
                                 pkid: jagranShreniPkId,
-                                vastiid: int.parse(context.read<GeoHierarchyController>().deepestSelectedGeoUnitId ?? "0"),
+                                vastiid: int.parse(context
+                                    .read<GeoHierarchyController>()
+                                    .deepestSelectedGeoUnitId ?? "0"),
                                 shreneeid: selectedShreniID,
                                 niyamitacalanareupakrama: niyamitChalnareUpkramController.text.trim(),
                                 varanvaritaid: selectedVaramvaritaID,
@@ -6269,45 +6398,45 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                       SizedBox(height: 10),
                       vastisarvekshanDropDownDataModel != null
                           ? vastisarvekshanDropdown2(
-                              dataModel: vastisarvekshanDropDownDataModel!,
-                              filterTypeName: "गतिविधी कार्य",
-                              onItemSelected: (id, value, isOther) {
-                                selectedShreniIDGatividhi = id;
-                                selectedShreniNameGatividhi = value;
-                              },
-                              hintText: "${Statics.getLabel('gatividhiNivada')}",
-                              question: "${Statics.getLabel('gatividhiNivada')}",
-                              editId: selectedShreniIDGatividhi,
-                              selectedValue: selectedShreniGatividhi,
-                              onSelectionChanged: (newValue) {
-                                setState(() {
-                                  selectedShreniGatividhi = newValue;
-                                });
-                              },
-                            )
+                        dataModel: vastisarvekshanDropDownDataModel!,
+                        filterTypeName: "गतिविधी कार्य",
+                        onItemSelected: (id, value, isOther) {
+                          selectedShreniIDGatividhi = id;
+                          selectedShreniNameGatividhi = value;
+                        },
+                        hintText: "${Statics.getLabel('gatividhiNivada')}",
+                        question: "${Statics.getLabel('gatividhiNivada')}",
+                        editId: selectedShreniIDGatividhi,
+                        selectedValue: selectedShreniGatividhi,
+                        onSelectionChanged: (newValue) {
+                          setState(() {
+                            selectedShreniGatividhi = newValue;
+                          });
+                        },
+                      )
                           : Container(),
                       SizedBox(height: 10),
                       textControllerField("${Statics.getLabel('niyamitUpkram')}", niyamitChalnareUpkramGatividhiController, context, height: 100),
                       SizedBox(height: 10),
                       vastisarvekshanDropDownDataModel != null
                           ? vastisarvekshanDropdown2(
-                              dataModel: vastisarvekshanDropDownDataModel!,
-                              filterTypeName: "गतिविधी वारंवारिता",
-                              onItemSelected: (id, value, isOther) {
-                                selectedVaramvaritaIDGatividhi = id;
-                                selectedVaramvaritaNameGatividhi = value;
-                              },
-                              hintText: "${Statics.getLabel('varamvarita')}",
-                              question: "${Statics.getLabel('selectVaramvarita')}",
-                              editId: selectedVaramvaritaIDGatividhi,
-                              selectedValue: selectedVaramvaritaGatividhi,
-                              onSelectionChanged: (newValue) {
-                                setState(() {
-                                  selectedVaramvaritaGatividhi = newValue;
-                                  anyaGatividhiVaramvaritaController.clear();
-                                });
-                              },
-                            )
+                        dataModel: vastisarvekshanDropDownDataModel!,
+                        filterTypeName: "गतिविधी वारंवारिता",
+                        onItemSelected: (id, value, isOther) {
+                          selectedVaramvaritaIDGatividhi = id;
+                          selectedVaramvaritaNameGatividhi = value;
+                        },
+                        hintText: "${Statics.getLabel('varamvarita')}",
+                        question: "${Statics.getLabel('selectVaramvarita')}",
+                        editId: selectedVaramvaritaIDGatividhi,
+                        selectedValue: selectedVaramvaritaGatividhi,
+                        onSelectionChanged: (newValue) {
+                          setState(() {
+                            selectedVaramvaritaGatividhi = newValue;
+                            anyaGatividhiVaramvaritaController.clear();
+                          });
+                        },
+                      )
                           : Container(),
                       SizedBox(height: 10),
                       if (selectedVaramvaritaGatividhi?.isOther == 1)
@@ -6332,7 +6461,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                               }
                               var data = VastisarGatividhikaryasthiti(
                                 pkid: gatividhiPkId ?? 0,
-                                vastiid: int.parse(context.read<GeoHierarchyController>().deepestSelectedGeoUnitId ?? "0"),
+                                vastiid: int.parse(context
+                                    .read<GeoHierarchyController>()
+                                    .deepestSelectedGeoUnitId ?? "0"),
                                 gatividhiid: selectedShreniIDGatividhi!,
                                 selectedDropdownValueName: selectedShreniNameGatividhi,
                                 niyamitacalanareupakrama: niyamitChalnareUpkramGatividhiController.text.trim(),
@@ -6556,7 +6687,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             } else {
                               final data = VastisarVasahatprakara(
                                 pkid: pkIdVsahatPrakar,
-                                vastiid: int.parse(context.read<GeoHierarchyController>().deepestSelectedGeoUnitId ?? "0"),
+                                vastiid: int.parse(context
+                                    .read<GeoHierarchyController>()
+                                    .deepestSelectedGeoUnitId ?? "0"),
                                 prakarid: vsahatPrakarId ?? 0,
                                 selectedDropdownValueName: vsahatPrakarName ?? '',
                                 bhavanachenav: vsahatPrakarBhavnacheNavController.text.trim(),
@@ -6724,7 +6857,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             }
 
                             bool isDuplicate =
-                                enteredVividhBhashaBolnareDataList.any((item) => item.bhaashaid == bhashaId && (editIndex == null || enteredVividhBhashaBolnareDataList.indexOf(item) != editIndex));
+                            enteredVividhBhashaBolnareDataList.any((item) => item.bhaashaid == bhashaId && (editIndex == null || enteredVividhBhashaBolnareDataList.indexOf(item) != editIndex));
 
                             if (isDuplicate) {
                               Statics.showToast("${Statics.getLabel('bhashaValidation')}");
@@ -6744,7 +6877,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
 
                             final newData = VastisarVividhaprakara(
                               pkid: pkIdVividhBhasha,
-                              vastiid: int.parse(context.read<GeoHierarchyController>().deepestSelectedGeoUnitId ?? "0"),
+                              vastiid: int.parse(context
+                                  .read<GeoHierarchyController>()
+                                  .deepestSelectedGeoUnitId ?? "0"),
                               bhaashaid: bhashaId,
                               selectedDropdownValueName: bhashaName,
                               andaje: bhashaPersentCount.text.trim(),
@@ -7271,7 +7406,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             } else {
                               final item = VastisarKonatyaprantache(
                                 pkid: pkIdKontyaPrantache ?? 0,
-                                vastiid: int.parse(context.read<GeoHierarchyController>().deepestSelectedGeoUnitId ?? "0"),
+                                vastiid: int.parse(context
+                                    .read<GeoHierarchyController>()
+                                    .deepestSelectedGeoUnitId ?? "0"),
                                 praantid: KontyaPraantacheId,
                                 andaje: input,
                                 anyaPraantName: anyaKontyaPrantacheNameController.text.trim(),
@@ -7413,7 +7550,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
 
                             VastisarReligion newReligion = VastisarReligion(
                               pkid: pkIdReligion ?? 0,
-                              vastiid: int.parse(context.read<GeoHierarchyController>().deepestSelectedGeoUnitId ?? "0"),
+                              vastiid: int.parse(context
+                                  .read<GeoHierarchyController>()
+                                  .deepestSelectedGeoUnitId ?? "0"),
                               konatyarilijanaceid: religionId,
                               selectedDropdownValueName: religionName,
                               andaje: religionAveragePersentCount.text.trim(),
@@ -7589,7 +7728,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                     Statics.showToast("${Statics.getLabel('upasanaSthalMandetory')}");
                   } else if (selectedUpasnaSthal?.isOther == 1 && anyaName.isEmpty) {
                     Statics.showToast("${Statics.getLabel('anyaInfoMandetory')}");
-                  } else if (selectedUpasnaSthalTypeId == null || selectedUpasnaSthalTypeId.toString().trim().isEmpty) {
+                  } else if (selectedUpasnaSthalTypeId == null || selectedUpasnaSthalTypeId
+                      .toString()
+                      .trim()
+                      .isEmpty) {
                     Statics.showToast("${Statics.getLabel('PrakarSelectMandetory')}");
                   } else if (upasnaCount.isEmpty) {
                     Statics.showToast("${Statics.getLabel('sankhyaFillMandetory')}");
@@ -7603,7 +7745,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                       sankhya: upasnaCount,
                       isactive: isActiveUpasanaSthal,
                       otherupaasanasthala: anyaName,
-                      vastiid: int.parse(context.read<GeoHierarchyController>().deepestSelectedGeoUnitId ?? "0"),
+                      vastiid: int.parse(context
+                          .read<GeoHierarchyController>()
+                          .deepestSelectedGeoUnitId ?? "0"),
                       pkid: upasnaSthalPkid,
                     );
 
@@ -7758,9 +7902,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             title: Text("${Statics.getLabel('Male')}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
                             value: 0,
                             groupValue: isFemale,
-                            onChanged: (value) => setState(() {
-                              isFemale = value;
-                            }),
+                            onChanged: (value) =>
+                                setState(() {
+                                  isFemale = value;
+                                }),
                           ),
                         ),
                         Expanded(
@@ -7770,9 +7915,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             title: Text("${Statics.getLabel('Female')}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
                             value: 1,
                             groupValue: isFemale,
-                            onChanged: (value) => setState(() {
-                              isFemale = value;
-                            }),
+                            onChanged: (value) =>
+                                setState(() {
+                                  isFemale = value;
+                                }),
                           ),
                         ),
                       ],
@@ -7961,7 +8107,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                       samparkasutranava: sajjanShaktiContactPersonNameController.text.trim(),
                       samparkasutraMobileNumber: sajjanShaktiContactPersonDoorbhashController.text.trim(),
                       isactive: isActiveSajjanShakti,
-                      vastiid: int.parse(context.read<GeoHierarchyController>().deepestSelectedGeoUnitId ?? "0"),
+                      vastiid: int.parse(context
+                          .read<GeoHierarchyController>()
+                          .deepestSelectedGeoUnitId ?? "0"),
                       pkid: pkidSajjanShakti,
                       isfemale: isFemale,
                     );
@@ -8128,9 +8276,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             title: Text("${Statics.getLabel('Male')}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
                             value: 0,
                             groupValue: isFemale,
-                            onChanged: (value) => setState(() {
-                              isFemale = value;
-                            }),
+                            onChanged: (value) =>
+                                setState(() {
+                                  isFemale = value;
+                                }),
                           ),
                         ),
                         Expanded(
@@ -8140,9 +8289,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             title: Text("${Statics.getLabel('Female')}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
                             value: 1,
                             groupValue: isFemale,
-                            onChanged: (value) => setState(() {
-                              isFemale = value;
-                            }),
+                            onChanged: (value) =>
+                                setState(() {
+                                  isFemale = value;
+                                }),
                           ),
                         ),
                       ],
@@ -8159,37 +8309,37 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                     SizedBox(height: 5),
                     vastisarvekshanDropDownDataModel != null
                         ? vastisarvekshanDropdown3(
-                            filterTypeName: "श्रेणी",
-                            hintText: "${Statics.getLabel('otherUpshreni')}",
-                            anyaPrabhaviLokShreniId: anyaPrabhaviLokShreniIdEdit,
-                            anyaPrabhaviLokUpShreniId: anyaPrabhaviLokUpShreniIdEdit,
-                            anyaPrabhaviLokUpShreni1Id: anyaPrabhaviLokUpShreni1IdEdit,
-                            onValueSelected: (id, name, value) {
-                              anyaPrabhaviLokShreniId = id;
-                              anyaPrabhaviLokShreniName = name;
-                              setState(() {
-                                selectedShreni = value;
-                                selectedUpShreni = null;
-                                selectedUpShreni2 = null;
-                              });
-                            },
-                            onDependentValueSelected: (id, name, value) {
-                              anyaPrabhaviLokUpShreniId = id;
-                              anyaPrabhaviLokUpShreniName = name;
-                              setState(() {
-                                selectedUpShreni = value;
-                                selectedUpShreni2 = null;
-                              });
-                            },
-                            onThirdLevelValueSelected: (id, name, value) {
-                              anyaPrabhaviLokUpShreni1Id = id;
-                              anyaPrabhaviLokUpShreni1Name = name;
-                              setState(() {
-                                selectedUpShreni2 = value;
-                              });
-                            },
-                            viewName: true,
-                          )
+                      filterTypeName: "श्रेणी",
+                      hintText: "${Statics.getLabel('otherUpshreni')}",
+                      anyaPrabhaviLokShreniId: anyaPrabhaviLokShreniIdEdit,
+                      anyaPrabhaviLokUpShreniId: anyaPrabhaviLokUpShreniIdEdit,
+                      anyaPrabhaviLokUpShreni1Id: anyaPrabhaviLokUpShreni1IdEdit,
+                      onValueSelected: (id, name, value) {
+                        anyaPrabhaviLokShreniId = id;
+                        anyaPrabhaviLokShreniName = name;
+                        setState(() {
+                          selectedShreni = value;
+                          selectedUpShreni = null;
+                          selectedUpShreni2 = null;
+                        });
+                      },
+                      onDependentValueSelected: (id, name, value) {
+                        anyaPrabhaviLokUpShreniId = id;
+                        anyaPrabhaviLokUpShreniName = name;
+                        setState(() {
+                          selectedUpShreni = value;
+                          selectedUpShreni2 = null;
+                        });
+                      },
+                      onThirdLevelValueSelected: (id, name, value) {
+                        anyaPrabhaviLokUpShreni1Id = id;
+                        anyaPrabhaviLokUpShreni1Name = name;
+                        setState(() {
+                          selectedUpShreni2 = value;
+                        });
+                      },
+                      viewName: true,
+                    )
                         : Container(),
                     if (selectedUpShreni?.isOther == 1)
                       SizedBox(
@@ -8206,46 +8356,46 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                     ),
                     vastisarvekshanDropDownDataModel != null
                         ? vastisarvekshanDropdown2(
-                            hintText: "${Statics.getLabel('selectVishesh')}",
-                            filterTypeName: "अन्यप्रभावीलोकंविशेष",
-                            onItemSelected: (valueId, valueName, isOther) {
-                              anyaPrabhaviLokVisheshId = valueId;
-                              anyaPrabhaviLokVisheshName = valueName;
-                              print("id = $valueId --- Name = $valueName");
-                            },
-                            dataModel: vastisarvekshanDropDownDataModel!,
-                            question: "${Statics.getLabel('special')}",
-                            editId: selectedAnyaPrabhaviLokVisheshIDEdit,
-                            selectedValue: selectedAnyaPrabhaviLokVishesh,
-                            onSelectionChanged: (newValue) {
-                              setState(() {
-                                selectedAnyaPrabhaviLokVishesh = newValue;
-                              });
-                            },
-                          )
+                      hintText: "${Statics.getLabel('selectVishesh')}",
+                      filterTypeName: "अन्यप्रभावीलोकंविशेष",
+                      onItemSelected: (valueId, valueName, isOther) {
+                        anyaPrabhaviLokVisheshId = valueId;
+                        anyaPrabhaviLokVisheshName = valueName;
+                        print("id = $valueId --- Name = $valueName");
+                      },
+                      dataModel: vastisarvekshanDropDownDataModel!,
+                      question: "${Statics.getLabel('special')}",
+                      editId: selectedAnyaPrabhaviLokVisheshIDEdit,
+                      selectedValue: selectedAnyaPrabhaviLokVishesh,
+                      onSelectionChanged: (newValue) {
+                        setState(() {
+                          selectedAnyaPrabhaviLokVishesh = newValue;
+                        });
+                      },
+                    )
                         : Container(),
                     SizedBox(
                       height: 10,
                     ),
                     vastisarvekshanDropDownDataModel != null
                         ? vastisarvekshanDropdown2(
-                            hintText: "${Statics.getLabel('prabhavKshetraSelect')}",
-                            filterTypeName: "अन्यप्रभावीलोकंप्रभावक्षेत्र",
-                            onItemSelected: (valueId, valueName, isOther) {
-                              anyaPrabhaviLokPrabhavKshetraId = valueId;
-                              anyaPrabhaviLokPrabhavKshetraName = valueName;
-                              print("id = $valueId --- Name = $valueName");
-                            },
-                            dataModel: vastisarvekshanDropDownDataModel!,
-                            question: "${Statics.getLabel('prabhavKshetra')}",
-                            editId: selectedAnyaPrabhaviLokPrabhavKshetraIDEdit,
-                            selectedValue: selectedAnyaPrabhaviLokPrabhavKshetra,
-                            onSelectionChanged: (newValue) {
-                              setState(() {
-                                selectedAnyaPrabhaviLokPrabhavKshetra = newValue;
-                              });
-                            },
-                          )
+                      hintText: "${Statics.getLabel('prabhavKshetraSelect')}",
+                      filterTypeName: "अन्यप्रभावीलोकंप्रभावक्षेत्र",
+                      onItemSelected: (valueId, valueName, isOther) {
+                        anyaPrabhaviLokPrabhavKshetraId = valueId;
+                        anyaPrabhaviLokPrabhavKshetraName = valueName;
+                        print("id = $valueId --- Name = $valueName");
+                      },
+                      dataModel: vastisarvekshanDropDownDataModel!,
+                      question: "${Statics.getLabel('prabhavKshetra')}",
+                      editId: selectedAnyaPrabhaviLokPrabhavKshetraIDEdit,
+                      selectedValue: selectedAnyaPrabhaviLokPrabhavKshetra,
+                      onSelectionChanged: (newValue) {
+                        setState(() {
+                          selectedAnyaPrabhaviLokPrabhavKshetra = newValue;
+                        });
+                      },
+                    )
                         : Container(),
                     SizedBox(
                       height: 10,
@@ -8256,23 +8406,23 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                     ),
                     vastisarvekshanDropDownDataModel != null
                         ? vastisarvekshanDropdown2(
-                            hintText: "${Statics.getLabel('samparkSthitiSelect')}",
-                            filterTypeName: "अन्यप्रभावीलोकंसंपर्कस्थिति",
-                            onItemSelected: (valueId, valueName, isOther) {
-                              anyaPrabhaviLokSamparkStithiId = valueId;
-                              anyaPrabhaviLokSamparkStithiName = valueName;
-                              print("id = $valueId --- Name = $valueName");
-                            },
-                            dataModel: vastisarvekshanDropDownDataModel!,
-                            question: "${Statics.getLabel('samparkStithi')}",
-                            editId: selectedAnyaPrabhaviLokSamparkStithiIDEdit,
-                            selectedValue: selectedAnyaPrabhaviLokSamparkStithi,
-                            onSelectionChanged: (newValue) {
-                              setState(() {
-                                selectedAnyaPrabhaviLokSamparkStithi = newValue;
-                              });
-                            },
-                          )
+                      hintText: "${Statics.getLabel('samparkSthitiSelect')}",
+                      filterTypeName: "अन्यप्रभावीलोकंसंपर्कस्थिति",
+                      onItemSelected: (valueId, valueName, isOther) {
+                        anyaPrabhaviLokSamparkStithiId = valueId;
+                        anyaPrabhaviLokSamparkStithiName = valueName;
+                        print("id = $valueId --- Name = $valueName");
+                      },
+                      dataModel: vastisarvekshanDropDownDataModel!,
+                      question: "${Statics.getLabel('samparkStithi')}",
+                      editId: selectedAnyaPrabhaviLokSamparkStithiIDEdit,
+                      selectedValue: selectedAnyaPrabhaviLokSamparkStithi,
+                      onSelectionChanged: (newValue) {
+                        setState(() {
+                          selectedAnyaPrabhaviLokSamparkStithi = newValue;
+                        });
+                      },
+                    )
                         : Container(),
                     SizedBox(
                       height: 10,
@@ -8333,7 +8483,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                       otherupshrenee: anyaPrabhaviLokAnyaUppshreniController.text,
                       otherupshrenee2: anyaPrabhaviLokAnyaUppshreni1Controller.text,
                       isactive: isActiveAnyaPrabhavilok,
-                      vastiid: int.parse(context.read<GeoHierarchyController>().deepestSelectedGeoUnitId ?? "0"),
+                      vastiid: int.parse(context
+                          .read<GeoHierarchyController>()
+                          .deepestSelectedGeoUnitId ?? "0"),
                       isfemale: isFemale,
                     );
                     if (editIndex != null) {
@@ -8474,7 +8626,11 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                     textControllerField("${Statics.getLabel('aayojakSansthachiNave')}", vastitSajarHonareSanAyojakSansthaNameController, context, height: 50),
                     textControllerField("${Statics.getLabel('aayojakNaav')}", vastitSajarHonareSanAyojakNameController, context, height: 80),
                     textControllerField2(
-                        name: "${Statics.getLabel('aayojakSamparkSootra')}", controller: vastitSajarHonareSanAyojakSamparkController, keyboardType: TextInputType.number, maxInput: 10, height: 50),
+                        name: "${Statics.getLabel('aayojakSamparkSootra')}",
+                        controller: vastitSajarHonareSanAyojakSamparkController,
+                        keyboardType: TextInputType.number,
+                        maxInput: 10,
+                        height: 50),
                     const SizedBox(height: 10),
                   ],
                 ),
@@ -8539,7 +8695,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                       otherSajareSan: vastitSajarHonareAnyaSanController.text,
                       isactive: isActiveSajareHonareSan,
                       pkid: pkidSajareHonareSan ?? 0,
-                      vastiid: int.parse(context.read<GeoHierarchyController>().deepestSelectedGeoUnitId ?? "0"),
+                      vastiid: int.parse(context
+                          .read<GeoHierarchyController>()
+                          .deepestSelectedGeoUnitId ?? "0"),
                     );
                     if (editIndex != null) {
                       vastitSajarHonareSanDataList[editIndex] = data;
@@ -8716,7 +8874,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                   } else {
                     VastisarVastitasajaraSamajikkaryakram data = VastisarVastitasajaraSamajikkaryakram(
                       id: selectedSamajikKaryakramId,
-                      vastiid: int.parse(context.read<GeoHierarchyController>().deepestSelectedGeoUnitId ?? "0"),
+                      vastiid: int.parse(context
+                          .read<GeoHierarchyController>()
+                          .deepestSelectedGeoUnitId ?? "0"),
                       pkid: pkidSamajikKaryakram,
                       isactive: isActiveSamajikKaryakram,
                       selectedDropdownValueName: selectedSamajikKaryakramName,
@@ -8781,7 +8941,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                     InkWell(
                       onTap: () {
                         // Filter out empty or whitespace-only strings
-                        final filteredDetails = step2pendingpoints!.split(',').where((item) => item.trim().isNotEmpty).toList();
+                        final filteredDetails = step2pendingpoints!.split(',').where((item) =>
+                        item
+                            .trim()
+                            .isNotEmpty).toList();
 
                         print("Filtered step1pendingpoints!.split(','): $filteredDetails");
 
@@ -8934,7 +9097,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                   child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: SizedBox(
-                        width: MediaQuery.of(context).size.width * 1.2,
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width * 1.2,
                         child: DataTable(
                           showCheckboxColumn: false,
                           headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
@@ -8942,25 +9108,29 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                           columns: [
                             DataColumn(
                                 label: Text(
-                              "${Statics.getLabel('balopasanaOnly')}",
-                            )),
+                                  "${Statics.getLabel('balopasanaOnly')}",
+                                )),
                             DataColumn(
                                 label: Text(
-                              "${Statics.getLabel('Name')}",
-                            )),
+                                  "${Statics.getLabel('Name')}",
+                                )),
                             DataColumn(
                                 label: Text(
-                              "${Statics.getLabel('konasathi')}",
-                            )),
+                                  "${Statics.getLabel('konasathi')}",
+                                )),
                           ],
-                          rows: vastitBalopasanaKendraDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
+                          rows: vastitBalopasanaKendraDataList
+                              .asMap()
+                              .entries
+                              .where((entry) => entry.value.isactive == 1)
+                              .map((entry) {
                             int index = entry.key;
                             var data = entry.value;
                             bool isSelected = selectedVastitBalopasanaKendraIdIndex == index;
                             return DataRow(
                                 selected: isSelected,
                                 color: MaterialStateProperty.resolveWith<Color?>(
-                                  (Set<MaterialState> states) {
+                                      (Set<MaterialState> states) {
                                     if (isSelected) return Colors.yellow.shade100;
                                     return null;
                                   },
@@ -9070,62 +9240,63 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                           if (selectedVastitBalopasanaKendraIdIndex == null) return;
                           final shouldDelete = await showDialog<bool>(
                             context: context,
-                            builder: (context) => AlertDialog(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              backgroundColor: Colors.white,
-                              title: Center(
-                                child: Text(
-                                  "${Statics.getLabel('pusthikarn')}",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                    color: Colors.redAccent,
+                            builder: (context) =>
+                                AlertDialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
                                   ),
-                                ),
-                              ),
-                              content: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                child: Text(
-                                  "${Statics.getLabel('deleteconfirmText')}",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black87,
-                                  ),
-                                ),
-                              ),
-                              actionsAlignment: MainAxisAlignment.spaceEvenly,
-                              actions: [
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.grey.shade300,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
+                                  backgroundColor: Colors.white,
+                                  title: Center(
+                                    child: Text(
+                                      "${Statics.getLabel('pusthikarn')}",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                        color: Colors.redAccent,
+                                      ),
                                     ),
                                   ),
-                                  onPressed: () => Navigator.pop(context, false),
-                                  child: Text(
-                                    "${Statics.getLabel('ConfirmationNo')}",
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                ),
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.redAccent,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
+                                  content: Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                    child: Text(
+                                      "${Statics.getLabel('deleteconfirmText')}",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black87,
+                                      ),
                                     ),
                                   ),
-                                  onPressed: () => Navigator.pop(context, true),
-                                  child: Text(
-                                    "${Statics.getLabel('ConfirmationYes')}",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
+                                  actionsAlignment: MainAxisAlignment.spaceEvenly,
+                                  actions: [
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.grey.shade300,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                      ),
+                                      onPressed: () => Navigator.pop(context, false),
+                                      child: Text(
+                                        "${Statics.getLabel('ConfirmationNo')}",
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                    ),
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.redAccent,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                      ),
+                                      onPressed: () => Navigator.pop(context, true),
+                                      child: Text(
+                                        "${Statics.getLabel('ConfirmationYes')}",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
                           );
                           if (shouldDelete == true && selectedVastitBalopasanaKendraIdIndex != null) {
                             setState(() {
@@ -9190,7 +9361,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                     child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: SizedBox(
-                          width: MediaQuery.of(context).size.width,
+                          width: MediaQuery
+                              .of(context)
+                              .size
+                              .width,
                           child: DataTable(
                             showCheckboxColumn: false,
                             headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
@@ -9198,21 +9372,25 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             columns: [
                               DataColumn(
                                   label: Text(
-                                "${Statics.getLabel('MotheVyasaayiKendra')}",
-                              )),
+                                    "${Statics.getLabel('MotheVyasaayiKendra')}",
+                                  )),
                               DataColumn(
                                   label: Text(
-                                "${Statics.getLabel('Name')}",
-                              )),
+                                    "${Statics.getLabel('Name')}",
+                                  )),
                             ],
-                            rows: motheVyasayikKendraDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
+                            rows: motheVyasayikKendraDataList
+                                .asMap()
+                                .entries
+                                .where((entry) => entry.value.isactive == 1)
+                                .map((entry) {
                               int index = entry.key;
                               var data = entry.value;
                               bool isSelected = selectedMotheVyasayikKendraIdIndex == index;
                               return DataRow(
                                   selected: isSelected,
                                   color: MaterialStateProperty.resolveWith<Color?>(
-                                    (Set<MaterialState> states) {
+                                        (Set<MaterialState> states) {
                                       if (isSelected) return Colors.yellow.shade100;
                                       return null;
                                     },
@@ -9319,62 +9497,63 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             if (selectedMotheVyasayikKendraIdIndex == null) return;
                             final shouldDelete = await showDialog<bool>(
                               context: context,
-                              builder: (context) => AlertDialog(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                backgroundColor: Colors.white,
-                                title: Center(
-                                  child: Text(
-                                    "${Statics.getLabel('pusthikarn')}",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18,
-                                      color: Colors.redAccent,
+                              builder: (context) =>
+                                  AlertDialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
                                     ),
-                                  ),
-                                ),
-                                content: Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                  child: Text(
-                                    "${Statics.getLabel('deleteconfirmText')}",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                ),
-                                actionsAlignment: MainAxisAlignment.spaceEvenly,
-                                actions: [
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.grey.shade300,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
+                                    backgroundColor: Colors.white,
+                                    title: Center(
+                                      child: Text(
+                                        "${Statics.getLabel('pusthikarn')}",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
+                                          color: Colors.redAccent,
+                                        ),
                                       ),
                                     ),
-                                    onPressed: () => Navigator.pop(context, false),
-                                    child: Text(
-                                      "${Statics.getLabel('ConfirmationNo')}",
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                  ),
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.redAccent,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
+                                    content: Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                      child: Text(
+                                        "${Statics.getLabel('deleteconfirmText')}",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.black87,
+                                        ),
                                       ),
                                     ),
-                                    onPressed: () => Navigator.pop(context, true),
-                                    child: Text(
-                                      "${Statics.getLabel('ConfirmationYes')}",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
+                                    actionsAlignment: MainAxisAlignment.spaceEvenly,
+                                    actions: [
+                                      ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.grey.shade300,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(12),
+                                          ),
+                                        ),
+                                        onPressed: () => Navigator.pop(context, false),
+                                        child: Text(
+                                          "${Statics.getLabel('ConfirmationNo')}",
+                                          style: TextStyle(color: Colors.black),
+                                        ),
+                                      ),
+                                      ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.redAccent,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(12),
+                                          ),
+                                        ),
+                                        onPressed: () => Navigator.pop(context, true),
+                                        child: Text(
+                                          "${Statics.getLabel('ConfirmationYes')}",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
                             );
                             if (shouldDelete == true && selectedMotheVyasayikKendraIdIndex != null) {
                               setState(() {
@@ -9438,7 +9617,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                     child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: SizedBox(
-                          width: MediaQuery.of(context).size.width,
+                          width: MediaQuery
+                              .of(context)
+                              .size
+                              .width,
                           child: DataTable(
                             showCheckboxColumn: false,
                             headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
@@ -9446,21 +9628,25 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             columns: [
                               DataColumn(
                                   label: Text(
-                                "${Statics.getLabel('Name')}",
-                              )),
+                                    "${Statics.getLabel('Name')}",
+                                  )),
                               DataColumn(
                                   label: Text(
-                                "${Statics.getLabel('prakalpaOnly')}",
-                              )),
+                                    "${Statics.getLabel('prakalpaOnly')}",
+                                  )),
                             ],
-                            rows: nirmandhinMothePrakalpaDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
+                            rows: nirmandhinMothePrakalpaDataList
+                                .asMap()
+                                .entries
+                                .where((entry) => entry.value.isactive == 1)
+                                .map((entry) {
                               int index = entry.key;
                               var data = entry.value;
                               bool isSelected = selectednirmandhinMothePrakalpaIdIndex == index;
                               return DataRow(
                                   selected: isSelected,
                                   color: MaterialStateProperty.resolveWith<Color?>(
-                                    (Set<MaterialState> states) {
+                                        (Set<MaterialState> states) {
                                       if (isSelected) return Colors.yellow.shade100;
                                       return null;
                                     },
@@ -9567,62 +9753,63 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             if (selectednirmandhinMothePrakalpaIdIndex == null) return;
                             final shouldDelete = await showDialog<bool>(
                               context: context,
-                              builder: (context) => AlertDialog(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                backgroundColor: Colors.white,
-                                title: Center(
-                                  child: Text(
-                                    "${Statics.getLabel('pusthikarn')}",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18,
-                                      color: Colors.redAccent,
+                              builder: (context) =>
+                                  AlertDialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
                                     ),
-                                  ),
-                                ),
-                                content: Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                  child: Text(
-                                    "${Statics.getLabel('deleteconfirmText')}",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                ),
-                                actionsAlignment: MainAxisAlignment.spaceEvenly,
-                                actions: [
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.grey.shade300,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
+                                    backgroundColor: Colors.white,
+                                    title: Center(
+                                      child: Text(
+                                        "${Statics.getLabel('pusthikarn')}",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
+                                          color: Colors.redAccent,
+                                        ),
                                       ),
                                     ),
-                                    onPressed: () => Navigator.pop(context, false),
-                                    child: Text(
-                                      "${Statics.getLabel('ConfirmationNo')}",
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                  ),
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.redAccent,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
+                                    content: Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                      child: Text(
+                                        "${Statics.getLabel('deleteconfirmText')}",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.black87,
+                                        ),
                                       ),
                                     ),
-                                    onPressed: () => Navigator.pop(context, true),
-                                    child: Text(
-                                      "${Statics.getLabel('ConfirmationYes')}",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
+                                    actionsAlignment: MainAxisAlignment.spaceEvenly,
+                                    actions: [
+                                      ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.grey.shade300,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(12),
+                                          ),
+                                        ),
+                                        onPressed: () => Navigator.pop(context, false),
+                                        child: Text(
+                                          "${Statics.getLabel('ConfirmationNo')}",
+                                          style: TextStyle(color: Colors.black),
+                                        ),
+                                      ),
+                                      ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.redAccent,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(12),
+                                          ),
+                                        ),
+                                        onPressed: () => Navigator.pop(context, true),
+                                        child: Text(
+                                          "${Statics.getLabel('ConfirmationYes')}",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
                             );
                             if (shouldDelete == true && selectednirmandhinMothePrakalpaIdIndex != null) {
                               setState(() {
@@ -9686,7 +9873,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                     child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: SizedBox(
-                          width: MediaQuery.of(context).size.width,
+                          width: MediaQuery
+                              .of(context)
+                              .size
+                              .width,
                           child: DataTable(
                             showCheckboxColumn: false,
                             headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
@@ -9694,21 +9884,25 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             columns: [
                               DataColumn(
                                   label: Text(
-                                "${Statics.getLabel('hospital')}",
-                              )),
+                                    "${Statics.getLabel('hospital')}",
+                                  )),
                               DataColumn(
                                   label: Text(
-                                "${Statics.getLabel('Name')}",
-                              )),
+                                    "${Statics.getLabel('Name')}",
+                                  )),
                             ],
-                            rows: motheRugnalayDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
+                            rows: motheRugnalayDataList
+                                .asMap()
+                                .entries
+                                .where((entry) => entry.value.isactive == 1)
+                                .map((entry) {
                               int index = entry.key;
                               var data = entry.value;
                               bool isSelected = selectedmotheRugnalayIdIndex == index;
                               return DataRow(
                                   selected: isSelected,
                                   color: MaterialStateProperty.resolveWith<Color?>(
-                                    (Set<MaterialState> states) {
+                                        (Set<MaterialState> states) {
                                       if (isSelected) return Colors.yellow.shade100;
                                       return null;
                                     },
@@ -9815,62 +10009,63 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             if (selectedmotheRugnalayIdIndex == null) return;
                             final shouldDelete = await showDialog<bool>(
                               context: context,
-                              builder: (context) => AlertDialog(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                backgroundColor: Colors.white,
-                                title: Center(
-                                  child: Text(
-                                    "${Statics.getLabel('pusthikarn')}",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18,
-                                      color: Colors.redAccent,
+                              builder: (context) =>
+                                  AlertDialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
                                     ),
-                                  ),
-                                ),
-                                content: Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                  child: Text(
-                                    "${Statics.getLabel('deleteconfirmText')}",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                ),
-                                actionsAlignment: MainAxisAlignment.spaceEvenly,
-                                actions: [
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.grey.shade300,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
+                                    backgroundColor: Colors.white,
+                                    title: Center(
+                                      child: Text(
+                                        "${Statics.getLabel('pusthikarn')}",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
+                                          color: Colors.redAccent,
+                                        ),
                                       ),
                                     ),
-                                    onPressed: () => Navigator.pop(context, false),
-                                    child: Text(
-                                      "${Statics.getLabel('ConfirmationNo')}",
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                  ),
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.redAccent,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
+                                    content: Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                      child: Text(
+                                        "${Statics.getLabel('deleteconfirmText')}",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.black87,
+                                        ),
                                       ),
                                     ),
-                                    onPressed: () => Navigator.pop(context, true),
-                                    child: Text(
-                                      "${Statics.getLabel('ConfirmationYes')}",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
+                                    actionsAlignment: MainAxisAlignment.spaceEvenly,
+                                    actions: [
+                                      ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.grey.shade300,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(12),
+                                          ),
+                                        ),
+                                        onPressed: () => Navigator.pop(context, false),
+                                        child: Text(
+                                          "${Statics.getLabel('ConfirmationNo')}",
+                                          style: TextStyle(color: Colors.black),
+                                        ),
+                                      ),
+                                      ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.redAccent,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(12),
+                                          ),
+                                        ),
+                                        onPressed: () => Navigator.pop(context, true),
+                                        child: Text(
+                                          "${Statics.getLabel('ConfirmationYes')}",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
                             );
                             if (shouldDelete == true && selectedmotheRugnalayIdIndex != null) {
                               setState(() {
@@ -9983,7 +10178,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                         child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: SizedBox(
-                              width: MediaQuery.of(context).size.width * 1.3,
+                              width: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width * 1.3,
                               child: DataTable(
                                 showCheckboxColumn: false,
                                 headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
@@ -9991,21 +10189,25 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                 columns: [
                                   DataColumn(
                                       label: Text(
-                                    "${Statics.getLabel('shaikshnikSansthaPrakar')}",
-                                  )),
+                                        "${Statics.getLabel('shaikshnikSansthaPrakar')}",
+                                      )),
                                   DataColumn(
                                       label: Text(
-                                    "${Statics.getLabel('shaikshnikSansthaNaav')}",
-                                  )),
+                                        "${Statics.getLabel('shaikshnikSansthaNaav')}",
+                                      )),
                                 ],
-                                rows: allShaikshanikPrakarDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
+                                rows: allShaikshanikPrakarDataList
+                                    .asMap()
+                                    .entries
+                                    .where((entry) => entry.value.isactive == 1)
+                                    .map((entry) {
                                   int index = entry.key;
                                   var data = entry.value;
                                   bool isSelected = selectedShaikshanikSansthaIdIndex == index;
                                   return DataRow(
                                       selected: isSelected,
                                       color: MaterialStateProperty.resolveWith<Color?>(
-                                        (Set<MaterialState> states) {
+                                            (Set<MaterialState> states) {
                                           if (isSelected) return Colors.yellow.shade100;
                                           return null;
                                         },
@@ -10121,62 +10323,63 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                 if (selectedShaikshanikSansthaIdIndex == null) return;
                                 final shouldDelete = await showDialog<bool>(
                                   context: context,
-                                  builder: (context) => AlertDialog(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    backgroundColor: Colors.white,
-                                    title: Center(
-                                      child: Text(
-                                        "${Statics.getLabel('pusthikarn')}",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18,
-                                          color: Colors.redAccent,
+                                  builder: (context) =>
+                                      AlertDialog(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(20),
                                         ),
-                                      ),
-                                    ),
-                                    content: Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                      child: Text(
-                                        "${Statics.getLabel('deleteconfirmText')}",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.black87,
-                                        ),
-                                      ),
-                                    ),
-                                    actionsAlignment: MainAxisAlignment.spaceEvenly,
-                                    actions: [
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.grey.shade300,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(12),
+                                        backgroundColor: Colors.white,
+                                        title: Center(
+                                          child: Text(
+                                            "${Statics.getLabel('pusthikarn')}",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
+                                              color: Colors.redAccent,
+                                            ),
                                           ),
                                         ),
-                                        onPressed: () => Navigator.pop(context, false),
-                                        child: Text(
-                                          "${Statics.getLabel('ConfirmationNo')}",
-                                          style: TextStyle(color: Colors.black),
-                                        ),
-                                      ),
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.redAccent,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(12),
+                                        content: Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                          child: Text(
+                                            "${Statics.getLabel('deleteconfirmText')}",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black87,
+                                            ),
                                           ),
                                         ),
-                                        onPressed: () => Navigator.pop(context, true),
-                                        child: Text(
-                                          "${Statics.getLabel('ConfirmationYes')}",
-                                          style: TextStyle(color: Colors.white),
-                                        ),
+                                        actionsAlignment: MainAxisAlignment.spaceEvenly,
+                                        actions: [
+                                          ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.grey.shade300,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(12),
+                                              ),
+                                            ),
+                                            onPressed: () => Navigator.pop(context, false),
+                                            child: Text(
+                                              "${Statics.getLabel('ConfirmationNo')}",
+                                              style: TextStyle(color: Colors.black),
+                                            ),
+                                          ),
+                                          ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.redAccent,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(12),
+                                              ),
+                                            ),
+                                            onPressed: () => Navigator.pop(context, true),
+                                            child: Text(
+                                              "${Statics.getLabel('ConfirmationYes')}",
+                                              style: TextStyle(color: Colors.white),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
                                 );
                                 if (shouldDelete == true && selectedShaikshanikSansthaIdIndex != null) {
                                   setState(() {
@@ -10246,7 +10449,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                         child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: SizedBox(
-                              width: MediaQuery.of(context).size.width,
+                              width: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width,
                               child: DataTable(
                                 columnSpacing: 20,
                                 showCheckboxColumn: false,
@@ -10255,21 +10461,25 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                 columns: [
                                   DataColumn(
                                       label: Text(
-                                    "${Statics.getLabel('serialNo')}",
-                                  )),
+                                        "${Statics.getLabel('serialNo')}",
+                                      )),
                                   DataColumn(
                                       label: Text(
-                                    "${Statics.getLabel('Name')}",
-                                  )),
+                                        "${Statics.getLabel('Name')}",
+                                      )),
                                 ],
-                                rows: maidanUddyanDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
+                                rows: maidanUddyanDataList
+                                    .asMap()
+                                    .entries
+                                    .where((entry) => entry.value.isactive == 1)
+                                    .map((entry) {
                                   int index = entry.key;
                                   var data = entry.value;
                                   bool isSelected = selectedMaidanUdyanIdIndex == index;
                                   return DataRow(
                                       selected: isSelected,
                                       color: MaterialStateProperty.resolveWith<Color?>(
-                                        (Set<MaterialState> states) {
+                                            (Set<MaterialState> states) {
                                           if (isSelected) return Colors.yellow.shade100;
                                           return null;
                                         },
@@ -10375,62 +10585,63 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                 if (selectedMaidanUdyanIdIndex == null) return;
                                 final shouldDelete = await showDialog<bool>(
                                   context: context,
-                                  builder: (context) => AlertDialog(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    backgroundColor: Colors.white,
-                                    title: Center(
-                                      child: Text(
-                                        "${Statics.getLabel('pusthikarn')}",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18,
-                                          color: Colors.redAccent,
+                                  builder: (context) =>
+                                      AlertDialog(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(20),
                                         ),
-                                      ),
-                                    ),
-                                    content: Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                      child: Text(
-                                        "${Statics.getLabel('deleteconfirmText')}",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.black87,
-                                        ),
-                                      ),
-                                    ),
-                                    actionsAlignment: MainAxisAlignment.spaceEvenly,
-                                    actions: [
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.grey.shade300,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(12),
+                                        backgroundColor: Colors.white,
+                                        title: Center(
+                                          child: Text(
+                                            "${Statics.getLabel('pusthikarn')}",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
+                                              color: Colors.redAccent,
+                                            ),
                                           ),
                                         ),
-                                        onPressed: () => Navigator.pop(context, false),
-                                        child: Text(
-                                          "${Statics.getLabel('ConfirmationNo')}",
-                                          style: TextStyle(color: Colors.black),
-                                        ),
-                                      ),
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.redAccent,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(12),
+                                        content: Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                          child: Text(
+                                            "${Statics.getLabel('deleteconfirmText')}",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black87,
+                                            ),
                                           ),
                                         ),
-                                        onPressed: () => Navigator.pop(context, true),
-                                        child: Text(
-                                          "${Statics.getLabel('ConfirmationYes')}",
-                                          style: TextStyle(color: Colors.white),
-                                        ),
+                                        actionsAlignment: MainAxisAlignment.spaceEvenly,
+                                        actions: [
+                                          ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.grey.shade300,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(12),
+                                              ),
+                                            ),
+                                            onPressed: () => Navigator.pop(context, false),
+                                            child: Text(
+                                              "${Statics.getLabel('ConfirmationNo')}",
+                                              style: TextStyle(color: Colors.black),
+                                            ),
+                                          ),
+                                          ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.redAccent,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(12),
+                                              ),
+                                            ),
+                                            onPressed: () => Navigator.pop(context, true),
+                                            child: Text(
+                                              "${Statics.getLabel('ConfirmationYes')}",
+                                              style: TextStyle(color: Colors.white),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
                                 );
                                 if (shouldDelete == true && selectedMaidanUdyanIdIndex != null) {
                                   setState(() {
@@ -10500,7 +10711,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                         child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: SizedBox(
-                              width: MediaQuery.of(context).size.width * 1.5,
+                              width: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width * 1.5,
                               child: DataTable(
                                 columnSpacing: 20,
                                 showCheckboxColumn: false,
@@ -10509,33 +10723,37 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                 columns: [
                                   DataColumn(
                                       label: Text(
-                                    "${Statics.getLabel('SelectFrequency')}",
-                                  )),
+                                        "${Statics.getLabel('SelectFrequency')}",
+                                      )),
                                   DataColumn(
                                       label: Text(
-                                    "${Statics.getLabel('Name')}",
-                                  )),
+                                        "${Statics.getLabel('Name')}",
+                                      )),
                                   DataColumn(
                                       label: Text(
-                                    "${Statics.getLabel('shamta')}",
-                                  )),
+                                        "${Statics.getLabel('shamta')}",
+                                      )),
                                   DataColumn(
                                       label: Text(
-                                    "${Statics.getLabel('NnivaasAvailable')}",
-                                  )),
+                                        "${Statics.getLabel('NnivaasAvailable')}",
+                                      )),
                                   DataColumn(
                                       label: Text(
-                                    "${Statics.getLabel('nivaasShamta')}",
-                                  )),
+                                        "${Statics.getLabel('nivaasShamta')}",
+                                      )),
                                 ],
-                                rows: jahirKaryakramDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
+                                rows: jahirKaryakramDataList
+                                    .asMap()
+                                    .entries
+                                    .where((entry) => entry.value.isactive == 1)
+                                    .map((entry) {
                                   int index = entry.key;
                                   var data = entry.value;
                                   bool isSelected = selectedjahirKaryakramIdIndex == index;
                                   return DataRow(
                                       selected: isSelected,
                                       color: MaterialStateProperty.resolveWith<Color?>(
-                                        (Set<MaterialState> states) {
+                                            (Set<MaterialState> states) {
                                           if (isSelected) return Colors.yellow.shade100;
                                           return null;
                                         },
@@ -10558,8 +10776,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                         DataCell(Text(data.nivasasathiupalabdha == 1
                                             ? "${Statics.getLabel('ConfirmationYes')}"
                                             : data.nivasasathiupalabdha == 0
-                                                ? "${Statics.getLabel('ConfirmationNo')}"
-                                                : "-")),
+                                            ? "${Statics.getLabel('ConfirmationNo')}"
+                                            : "-")),
                                         DataCell(Text(data.nivaaskshamata ?? '')),
                                       ]);
                                 }).toList(),
@@ -10611,8 +10829,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                                   selectedData.nivasasathiupalabdha == 1
                                                       ? "${Statics.getLabel('ConfirmationYes')}"
                                                       : selectedData.nivasasathiupalabdha == 0
-                                                          ? "${Statics.getLabel('ConfirmationNo')}"
-                                                          : "-"),
+                                                      ? "${Statics.getLabel('ConfirmationNo')}"
+                                                      : "-"),
                                               _buildInfoRow("${Statics.getLabel('nivaasShamta')}", selectedData.nivaaskshamata),
                                             ],
                                           ),
@@ -10658,62 +10876,63 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                 if (selectedjahirKaryakramIdIndex == null) return;
                                 final shouldDelete = await showDialog<bool>(
                                   context: context,
-                                  builder: (context) => AlertDialog(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    backgroundColor: Colors.white,
-                                    title: Center(
-                                      child: Text(
-                                        "${Statics.getLabel('pusthikarn')}",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18,
-                                          color: Colors.redAccent,
+                                  builder: (context) =>
+                                      AlertDialog(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(20),
                                         ),
-                                      ),
-                                    ),
-                                    content: Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                      child: Text(
-                                        "${Statics.getLabel('deleteconfirmText')}",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.black87,
-                                        ),
-                                      ),
-                                    ),
-                                    actionsAlignment: MainAxisAlignment.spaceEvenly,
-                                    actions: [
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.grey.shade300,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(12),
+                                        backgroundColor: Colors.white,
+                                        title: Center(
+                                          child: Text(
+                                            "${Statics.getLabel('pusthikarn')}",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
+                                              color: Colors.redAccent,
+                                            ),
                                           ),
                                         ),
-                                        onPressed: () => Navigator.pop(context, false),
-                                        child: Text(
-                                          "${Statics.getLabel('ConfirmationNo')}",
-                                          style: TextStyle(color: Colors.black),
-                                        ),
-                                      ),
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.redAccent,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(12),
+                                        content: Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                          child: Text(
+                                            "${Statics.getLabel('deleteconfirmText')}",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black87,
+                                            ),
                                           ),
                                         ),
-                                        onPressed: () => Navigator.pop(context, true),
-                                        child: Text(
-                                          "${Statics.getLabel('ConfirmationYes')}",
-                                          style: TextStyle(color: Colors.white),
-                                        ),
+                                        actionsAlignment: MainAxisAlignment.spaceEvenly,
+                                        actions: [
+                                          ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.grey.shade300,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(12),
+                                              ),
+                                            ),
+                                            onPressed: () => Navigator.pop(context, false),
+                                            child: Text(
+                                              "${Statics.getLabel('ConfirmationNo')}",
+                                              style: TextStyle(color: Colors.black),
+                                            ),
+                                          ),
+                                          ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.redAccent,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(12),
+                                              ),
+                                            ),
+                                            onPressed: () => Navigator.pop(context, true),
+                                            child: Text(
+                                              "${Statics.getLabel('ConfirmationYes')}",
+                                              style: TextStyle(color: Colors.white),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
                                 );
                                 if (shouldDelete == true && selectedjahirKaryakramIdIndex != null) {
                                   setState(() {
@@ -10775,7 +10994,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
       _isStep2Completed = true;
     });
     Map<String, dynamic> formData = {
-      "vastiid": int.parse(context.read<GeoHierarchyController>().deepestSelectedGeoUnitId ?? "0"),
+      "vastiid": int.parse(context
+          .read<GeoHierarchyController>()
+          .deepestSelectedGeoUnitId ?? "0"),
       "cuserid": int.parse(Statics.userDetails['userID']),
       "VastisarVastitilabalopasanakendra": vastitBalopasanaKendraDataList,
       "VastisarMothevyavasayikakendra": motheVyasayikKendraDataList,
@@ -10792,7 +11013,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
     log("Step 2 Form Data (JSON):\n$formattedJson");
     Statics.vastiSarvekshanStep2FormSubmit(context, jsonEncode(formData));
     await Future.delayed(Duration(seconds: 2));
-    searchVastiData(context.read<GeoHierarchyController>().deepestSelectedGeoUnitId);
+    searchVastiData(context
+        .read<GeoHierarchyController>()
+        .deepestSelectedGeoUnitId);
     _scrollController.animateTo(
       0.0,
       duration: Duration(milliseconds: 500),
@@ -10863,7 +11086,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
               };
               int? getGenderIndexFromLabel(String? label) {
                 if (label == null) return null;
-                return genderMap.entries.firstWhere((entry) => entry.value == label, orElse: () => const MapEntry(-1, '')).key;
+                return genderMap.entries
+                    .firstWhere((entry) => entry.value == label, orElse: () => const MapEntry(-1, ''))
+                    .key;
               }
 
               selectedGenderIndex = getGenderIndexFromLabel(_selectedGender);
@@ -10941,7 +11166,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                         selectedDropdownValueName: selectedVastitBalopasanaKendraName,
                         isactive: isActiveBalopasanakendra,
                         pkid: pkidBalopasanakendra,
-                        vastiid: int.parse(context.read<GeoHierarchyController>().deepestSelectedGeoUnitId ?? "0"),
+                        vastiid: int.parse(context
+                            .read<GeoHierarchyController>()
+                            .deepestSelectedGeoUnitId ?? "0"),
                         name: vastitBalopasanaKendraNaavController.text,
                         konasathi: _selectedGender,
                         otherBalopasanaShreniName: vastitBalopasanaKendraAnyaNameController.text);
@@ -11069,7 +11296,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                 onPressed: () {
                   VastisarMothevyavasayikakendra data = VastisarMothevyavasayikakendra(
                     name: motheVyasayikKendraNaavController.text,
-                    vastiid: int.parse(context.read<GeoHierarchyController>().deepestSelectedGeoUnitId ?? "0"),
+                    vastiid: int.parse(context
+                        .read<GeoHierarchyController>()
+                        .deepestSelectedGeoUnitId ?? "0"),
                     pkid: pkidMotheVyasayikKendra,
                     isactive: isActiveMotheVyasayikKendra,
                     selectedDropdownValueName: selectedMotheVyasayikKendraName,
@@ -11199,7 +11428,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                     name: nirmandhinMothePrakalpaNaavController.text,
                     pkid: nirmandhinMothePrakalpaPkid,
                     isactive: nirmandhinMothePrakalpaIsActive,
-                    vastiid: int.parse(context.read<GeoHierarchyController>().deepestSelectedGeoUnitId ?? "0"),
+                    vastiid: int.parse(context
+                        .read<GeoHierarchyController>()
+                        .deepestSelectedGeoUnitId ?? "0"),
                   );
                   if (editIndex != null) {
                     nirmandhinMothePrakalpaDataList[editIndex] = data;
@@ -11325,7 +11556,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                 ),
                 onPressed: () {
                   VastisarMotherugnalaya data = VastisarMotherugnalaya(
-                    vastiid: int.parse(context.read<GeoHierarchyController>().deepestSelectedGeoUnitId ?? "0"),
+                    vastiid: int.parse(context
+                        .read<GeoHierarchyController>()
+                        .deepestSelectedGeoUnitId ?? "0"),
                     isactive: selectedmotheRugnalayIsActive,
                     pkid: selectedmotheRugnalayPkId,
                     selectedDropdownValueName: selectedmotheRugnalayName,
@@ -11402,8 +11635,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
   int? isActiveSchool = 1;
   int? pkidSchool = 0;
 
-  void showShaikshanikSansthaPopup(
-    BuildContext context, {
+  void showShaikshanikSansthaPopup(BuildContext context, {
     int? editIndex,
     VoidCallback? onDataChanged,
   }) {
@@ -11463,230 +11695,230 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                   mainAxisSize: MainAxisSize.min,
                   children: selectedShaikshanikSansthaId == 315
                       ? [
-                          vastisarvekshanDropDownDataModel != null
-                              ? vastisarvekshanDropdown2(
-                                  dataModel: vastisarvekshanDropDownDataModel!,
-                                  filterTypeName: "शैक्षणिकसंस्थान",
-                                  hintText: "${Statics.getLabel('selectShaikshanikSanstha')}",
-                                  onItemSelected: (id, value, isOther) {
-                                    selectedShaikshanikSansthaId = id;
-                                    selectedShaikshanikSansthaName = value;
-                                    print("id = $selectedShaikshanikSansthaId //////  name = $selectedShaikshanikSansthaName//////  iD Edit = $selectedShaikshanikSansthaIdEdit");
-                                  },
-                                  width: 250,
-                                  selectedValue: selectedMasterShaikshanikSansthaName,
-                                  onSelectionChanged: (newValue) {
-                                    setState(() {
-                                      selectedMasterShaikshanikSansthaName = newValue;
-                                    });
-                                  },
-                                  editId: selectedShaikshanikSansthaIdEdit,
-                                )
-                              : Container(),
-                          const SizedBox(height: 5),
-                          vastisarvekshanDropdown2(
-                            dataModel: vastisarvekshanDropDownDataModel!,
-                            filterTypeName: "शाळाप्रकार",
-                            hintText: "${Statics.getLabel('schoolPrakar')}",
-                            onItemSelected: (id, value, isOther) {
-                              selectedShalaPrakarId = id;
-                              selectedShalaPrakarName = value;
-                            },
-                            width: 250,
-                            selectedValue: selectedMasterShalaPrakarName,
-                            onSelectionChanged: (newValue) {
-                              setState(() {
-                                selectedMasterShalaPrakarName = newValue;
-                              });
-                            },
-                            editId: selectedShalaPrakarIdEdit,
-                          ),
-                          const SizedBox(height: 5),
-                          vastisarvekshanDropdown2(
-                            dataModel: vastisarvekshanDropDownDataModel!,
-                            filterTypeName: "शिक्षणाचेमाध्यम",
-                            hintText: "${Statics.getLabel('madhyamPrakaar')}",
-                            onItemSelected: (id, value, isOther) {
-                              selectedShikshanacheMadhyamId = id;
-                              selectedShikshanacheMadhyamName = value;
-                            },
-                            width: 250,
-                            selectedValue: selectedMasterShikshanacheMadhyamName,
-                            onSelectionChanged: (newValue) {
-                              setState(() {
-                                selectedMasterShikshanacheMadhyamName = newValue;
-                              });
-                            },
-                            editId: selectedShikshanacheMadhyamIdEdit,
-                          ),
-                          const SizedBox(height: 5),
-                          vastisarvekshanDropdown2(
-                            dataModel: vastisarvekshanDropDownDataModel!,
-                            filterTypeName: "संस्थाचालकप्रकार",
-                            hintText: "${Statics.getLabel('sansthaCHalakPrakar')}",
-                            onItemSelected: (id, value, isOther) {
-                              selectedSansthaChalakPrakarId = id;
-                              selectedSansthaChalakPrakarName = value;
-                            },
-                            width: 250,
-                            selectedValue: selectedMasterSansthaChalakPrakarName,
-                            onSelectionChanged: (newValue) {
-                              setState(() {
-                                selectedMasterSansthaChalakPrakarName = newValue;
-                              });
-                            },
-                            editId: selectedSansthaChalakPrakarIdEdit,
-                          ),
-                          const SizedBox(height: 5),
-                          textControllerField("${Statics.getLabel('Name')}", allShaikshanikPrakarNaavController, context, height: 50),
-                          vastisarvekshanDropdown2(
-                            dataModel: vastisarvekshanDropDownDataModel!,
-                            filterTypeName: "शाळातपशीलमिळकत",
-                            hintText: "${Statics.getLabel('milkat')}",
-                            onItemSelected: (id, value, isOther) {
-                              selectedAllShaikshanikPrakarTapshilMilkatId = id;
-                              selectedAllShaikshanikPrakarTapshilMilkatName = value;
-                            },
-                            width: 250,
-                            selectedValue: selectedMasterAllShaikshanikPrakarTapshilMilkatName,
-                            onSelectionChanged: (newValue) {
-                              setState(() {
-                                selectedMasterAllShaikshanikPrakarTapshilMilkatName = newValue;
-                              });
-                            },
-                            editId: selectedAllShaikshanikPrakarTapshilMilkatIdEdit,
-                          ),
-                          const SizedBox(height: 5),
-                        ]
+                    vastisarvekshanDropDownDataModel != null
+                        ? vastisarvekshanDropdown2(
+                      dataModel: vastisarvekshanDropDownDataModel!,
+                      filterTypeName: "शैक्षणिकसंस्थान",
+                      hintText: "${Statics.getLabel('selectShaikshanikSanstha')}",
+                      onItemSelected: (id, value, isOther) {
+                        selectedShaikshanikSansthaId = id;
+                        selectedShaikshanikSansthaName = value;
+                        print("id = $selectedShaikshanikSansthaId //////  name = $selectedShaikshanikSansthaName//////  iD Edit = $selectedShaikshanikSansthaIdEdit");
+                      },
+                      width: 250,
+                      selectedValue: selectedMasterShaikshanikSansthaName,
+                      onSelectionChanged: (newValue) {
+                        setState(() {
+                          selectedMasterShaikshanikSansthaName = newValue;
+                        });
+                      },
+                      editId: selectedShaikshanikSansthaIdEdit,
+                    )
+                        : Container(),
+                    const SizedBox(height: 5),
+                    vastisarvekshanDropdown2(
+                      dataModel: vastisarvekshanDropDownDataModel!,
+                      filterTypeName: "शाळाप्रकार",
+                      hintText: "${Statics.getLabel('schoolPrakar')}",
+                      onItemSelected: (id, value, isOther) {
+                        selectedShalaPrakarId = id;
+                        selectedShalaPrakarName = value;
+                      },
+                      width: 250,
+                      selectedValue: selectedMasterShalaPrakarName,
+                      onSelectionChanged: (newValue) {
+                        setState(() {
+                          selectedMasterShalaPrakarName = newValue;
+                        });
+                      },
+                      editId: selectedShalaPrakarIdEdit,
+                    ),
+                    const SizedBox(height: 5),
+                    vastisarvekshanDropdown2(
+                      dataModel: vastisarvekshanDropDownDataModel!,
+                      filterTypeName: "शिक्षणाचेमाध्यम",
+                      hintText: "${Statics.getLabel('madhyamPrakaar')}",
+                      onItemSelected: (id, value, isOther) {
+                        selectedShikshanacheMadhyamId = id;
+                        selectedShikshanacheMadhyamName = value;
+                      },
+                      width: 250,
+                      selectedValue: selectedMasterShikshanacheMadhyamName,
+                      onSelectionChanged: (newValue) {
+                        setState(() {
+                          selectedMasterShikshanacheMadhyamName = newValue;
+                        });
+                      },
+                      editId: selectedShikshanacheMadhyamIdEdit,
+                    ),
+                    const SizedBox(height: 5),
+                    vastisarvekshanDropdown2(
+                      dataModel: vastisarvekshanDropDownDataModel!,
+                      filterTypeName: "संस्थाचालकप्रकार",
+                      hintText: "${Statics.getLabel('sansthaCHalakPrakar')}",
+                      onItemSelected: (id, value, isOther) {
+                        selectedSansthaChalakPrakarId = id;
+                        selectedSansthaChalakPrakarName = value;
+                      },
+                      width: 250,
+                      selectedValue: selectedMasterSansthaChalakPrakarName,
+                      onSelectionChanged: (newValue) {
+                        setState(() {
+                          selectedMasterSansthaChalakPrakarName = newValue;
+                        });
+                      },
+                      editId: selectedSansthaChalakPrakarIdEdit,
+                    ),
+                    const SizedBox(height: 5),
+                    textControllerField("${Statics.getLabel('Name')}", allShaikshanikPrakarNaavController, context, height: 50),
+                    vastisarvekshanDropdown2(
+                      dataModel: vastisarvekshanDropDownDataModel!,
+                      filterTypeName: "शाळातपशीलमिळकत",
+                      hintText: "${Statics.getLabel('milkat')}",
+                      onItemSelected: (id, value, isOther) {
+                        selectedAllShaikshanikPrakarTapshilMilkatId = id;
+                        selectedAllShaikshanikPrakarTapshilMilkatName = value;
+                      },
+                      width: 250,
+                      selectedValue: selectedMasterAllShaikshanikPrakarTapshilMilkatName,
+                      onSelectionChanged: (newValue) {
+                        setState(() {
+                          selectedMasterAllShaikshanikPrakarTapshilMilkatName = newValue;
+                        });
+                      },
+                      editId: selectedAllShaikshanikPrakarTapshilMilkatIdEdit,
+                    ),
+                    const SizedBox(height: 5),
+                  ]
                       : selectedShaikshanikSansthaId == 316
-                          ? [
-                              vastisarvekshanDropDownDataModel != null
-                                  ? vastisarvekshanDropdown2(
-                                      dataModel: vastisarvekshanDropDownDataModel!,
-                                      filterTypeName: "शैक्षणिकसंस्थान",
-                                      hintText: "${Statics.getLabel('selectShaikshanikSanstha')}",
-                                      onItemSelected: (id, value, isOther) {
-                                        selectedShaikshanikSansthaId = id;
-                                        selectedShaikshanikSansthaName = value;
-                                        print("id = $selectedShaikshanikSansthaId //////  name = $selectedShaikshanikSansthaName//////  iD Edit = $selectedShaikshanikSansthaIdEdit");
-                                      },
-                                      width: 250,
-                                      selectedValue: selectedMasterShaikshanikSansthaName,
-                                      onSelectionChanged: (newValue) {
-                                        setState(() {
-                                          selectedMasterShaikshanikSansthaName = newValue;
-                                        });
-                                      },
-                                      editId: selectedShaikshanikSansthaIdEdit,
-                                    )
-                                  : Container(),
-                              const SizedBox(height: 5),
-                              vastisarvekshanDropDownDataModel != null
-                                  ? vastisarvekshanDropdown2(
-                                      dataModel: vastisarvekshanDropDownDataModel!,
-                                      filterTypeName: "महाविद्यालयीनप्रकार",
-                                      hintText: "महाविद्यालयीन प्रकार",
-                                      onItemSelected: (id, value, isOther) {
-                                        selectedMahavidyalayinPrakarId = id;
-                                        selectedMahavidyalayinPrakarName = value;
-                                        print("id = $selectedMahavidyalayinPrakarId //////  name = $selectedMahavidyalayinPrakarName");
-                                      },
-                                      width: 250,
-                                      selectedValue: selectedMasterMahavidyalayinPrakarName,
-                                      onSelectionChanged: (newValue) {
-                                        setState(() {
-                                          selectedMasterMahavidyalayinPrakarName = newValue;
-                                        });
-                                      },
-                                      editId: selectedMahavidyalayinPrakarIdEdit,
-                                    )
-                                  : Container(),
-                              textControllerField("${Statics.getLabel('Name')}", allShaikshanikPrakarNaavController, context, height: 50),
-                              vastisarvekshanDropdown2(
-                                dataModel: vastisarvekshanDropDownDataModel!,
-                                filterTypeName: "महाविद्यालयीनतपशीलमिळकत",
-                                hintText: "${Statics.getLabel('milkat')}",
-                                onItemSelected: (id, value, isOther) {
-                                  selectedAllShaikshanikPrakarTapshilMilkatId = id;
-                                  selectedAllShaikshanikPrakarTapshilMilkatName = value;
-                                },
-                                width: 250,
-                                selectedValue: selectedMasterAllShaikshanikPrakarTapshilMilkatName,
-                                onSelectionChanged: (newValue) {
-                                  setState(() {
-                                    selectedMasterAllShaikshanikPrakarTapshilMilkatName = newValue;
-                                  });
-                                },
-                                editId: selectedAllShaikshanikPrakarTapshilMilkatIdEdit,
-                              ),
-                              const SizedBox(height: 5),
-                            ]
-                          : selectedShaikshanikSansthaId == 317
-                              ? [
-                                  vastisarvekshanDropDownDataModel != null
-                                      ? vastisarvekshanDropdown2(
-                                          dataModel: vastisarvekshanDropDownDataModel!,
-                                          filterTypeName: "शैक्षणिकसंस्थान",
-                                          hintText: "${Statics.getLabel('selectShaikshanikSanstha')}",
-                                          onItemSelected: (id, value, isOther) {
-                                            selectedShaikshanikSansthaId = id;
-                                            selectedShaikshanikSansthaName = value;
-                                            print("id = $selectedShaikshanikSansthaId //////  name = $selectedShaikshanikSansthaName//////  iD Edit = $selectedShaikshanikSansthaIdEdit");
-                                          },
-                                          width: 250,
-                                          selectedValue: selectedMasterShaikshanikSansthaName,
-                                          onSelectionChanged: (newValue) {
-                                            setState(() {
-                                              selectedMasterShaikshanikSansthaName = newValue;
-                                            });
-                                          },
-                                          editId: selectedShaikshanikSansthaIdEdit,
-                                        )
-                                      : Container(),
-                                  textControllerField("${Statics.getLabel('Name')}", allShaikshanikPrakarNaavController, context, height: 50),
-                                  vastisarvekshanDropdown2(
-                                    dataModel: vastisarvekshanDropDownDataModel!,
-                                    filterTypeName: "विशिष्टसंस्थामिळकत",
-                                    hintText: "${Statics.getLabel('milkat')}",
-                                    onItemSelected: (id, value, isOther) {
-                                      selectedAllShaikshanikPrakarTapshilMilkatId = id;
-                                      selectedAllShaikshanikPrakarTapshilMilkatName = value;
-                                    },
-                                    width: 250,
-                                    selectedValue: selectedMasterAllShaikshanikPrakarTapshilMilkatName,
-                                    onSelectionChanged: (newValue) {
-                                      setState(() {
-                                        selectedMasterAllShaikshanikPrakarTapshilMilkatName = newValue;
-                                      });
-                                    },
-                                    editId: selectedAllShaikshanikPrakarTapshilMilkatIdEdit,
-                                  ),
-                                  const SizedBox(height: 5),
-                                ]
-                              : [
-                                  vastisarvekshanDropDownDataModel != null
-                                      ? vastisarvekshanDropdown2(
-                                          dataModel: vastisarvekshanDropDownDataModel!,
-                                          filterTypeName: "शैक्षणिकसंस्थान",
-                                          hintText: "${Statics.getLabel('selectShaikshanikSanstha')}",
-                                          onItemSelected: (id, value, isOther) {
-                                            selectedShaikshanikSansthaId = id;
-                                            selectedShaikshanikSansthaName = value;
-                                            print("id = $selectedShaikshanikSansthaId //////  name = $selectedShaikshanikSansthaName");
-                                          },
-                                          width: 250,
-                                          selectedValue: selectedMasterShaikshanikSansthaName,
-                                          onSelectionChanged: (newValue) {
-                                            setState(() {
-                                              selectedMasterShaikshanikSansthaName = newValue;
-                                            });
-                                          },
-                                          editId: selectedShaikshanikSansthaIdEdit,
-                                        )
-                                      : Container(),
-                                  SizedBox(height: 10),
-                                  Text("${Statics.getLabel('selectShaikshanikSanstha')}")
-                                ],
+                      ? [
+                    vastisarvekshanDropDownDataModel != null
+                        ? vastisarvekshanDropdown2(
+                      dataModel: vastisarvekshanDropDownDataModel!,
+                      filterTypeName: "शैक्षणिकसंस्थान",
+                      hintText: "${Statics.getLabel('selectShaikshanikSanstha')}",
+                      onItemSelected: (id, value, isOther) {
+                        selectedShaikshanikSansthaId = id;
+                        selectedShaikshanikSansthaName = value;
+                        print("id = $selectedShaikshanikSansthaId //////  name = $selectedShaikshanikSansthaName//////  iD Edit = $selectedShaikshanikSansthaIdEdit");
+                      },
+                      width: 250,
+                      selectedValue: selectedMasterShaikshanikSansthaName,
+                      onSelectionChanged: (newValue) {
+                        setState(() {
+                          selectedMasterShaikshanikSansthaName = newValue;
+                        });
+                      },
+                      editId: selectedShaikshanikSansthaIdEdit,
+                    )
+                        : Container(),
+                    const SizedBox(height: 5),
+                    vastisarvekshanDropDownDataModel != null
+                        ? vastisarvekshanDropdown2(
+                      dataModel: vastisarvekshanDropDownDataModel!,
+                      filterTypeName: "महाविद्यालयीनप्रकार",
+                      hintText: "महाविद्यालयीन प्रकार",
+                      onItemSelected: (id, value, isOther) {
+                        selectedMahavidyalayinPrakarId = id;
+                        selectedMahavidyalayinPrakarName = value;
+                        print("id = $selectedMahavidyalayinPrakarId //////  name = $selectedMahavidyalayinPrakarName");
+                      },
+                      width: 250,
+                      selectedValue: selectedMasterMahavidyalayinPrakarName,
+                      onSelectionChanged: (newValue) {
+                        setState(() {
+                          selectedMasterMahavidyalayinPrakarName = newValue;
+                        });
+                      },
+                      editId: selectedMahavidyalayinPrakarIdEdit,
+                    )
+                        : Container(),
+                    textControllerField("${Statics.getLabel('Name')}", allShaikshanikPrakarNaavController, context, height: 50),
+                    vastisarvekshanDropdown2(
+                      dataModel: vastisarvekshanDropDownDataModel!,
+                      filterTypeName: "महाविद्यालयीनतपशीलमिळकत",
+                      hintText: "${Statics.getLabel('milkat')}",
+                      onItemSelected: (id, value, isOther) {
+                        selectedAllShaikshanikPrakarTapshilMilkatId = id;
+                        selectedAllShaikshanikPrakarTapshilMilkatName = value;
+                      },
+                      width: 250,
+                      selectedValue: selectedMasterAllShaikshanikPrakarTapshilMilkatName,
+                      onSelectionChanged: (newValue) {
+                        setState(() {
+                          selectedMasterAllShaikshanikPrakarTapshilMilkatName = newValue;
+                        });
+                      },
+                      editId: selectedAllShaikshanikPrakarTapshilMilkatIdEdit,
+                    ),
+                    const SizedBox(height: 5),
+                  ]
+                      : selectedShaikshanikSansthaId == 317
+                      ? [
+                    vastisarvekshanDropDownDataModel != null
+                        ? vastisarvekshanDropdown2(
+                      dataModel: vastisarvekshanDropDownDataModel!,
+                      filterTypeName: "शैक्षणिकसंस्थान",
+                      hintText: "${Statics.getLabel('selectShaikshanikSanstha')}",
+                      onItemSelected: (id, value, isOther) {
+                        selectedShaikshanikSansthaId = id;
+                        selectedShaikshanikSansthaName = value;
+                        print("id = $selectedShaikshanikSansthaId //////  name = $selectedShaikshanikSansthaName//////  iD Edit = $selectedShaikshanikSansthaIdEdit");
+                      },
+                      width: 250,
+                      selectedValue: selectedMasterShaikshanikSansthaName,
+                      onSelectionChanged: (newValue) {
+                        setState(() {
+                          selectedMasterShaikshanikSansthaName = newValue;
+                        });
+                      },
+                      editId: selectedShaikshanikSansthaIdEdit,
+                    )
+                        : Container(),
+                    textControllerField("${Statics.getLabel('Name')}", allShaikshanikPrakarNaavController, context, height: 50),
+                    vastisarvekshanDropdown2(
+                      dataModel: vastisarvekshanDropDownDataModel!,
+                      filterTypeName: "विशिष्टसंस्थामिळकत",
+                      hintText: "${Statics.getLabel('milkat')}",
+                      onItemSelected: (id, value, isOther) {
+                        selectedAllShaikshanikPrakarTapshilMilkatId = id;
+                        selectedAllShaikshanikPrakarTapshilMilkatName = value;
+                      },
+                      width: 250,
+                      selectedValue: selectedMasterAllShaikshanikPrakarTapshilMilkatName,
+                      onSelectionChanged: (newValue) {
+                        setState(() {
+                          selectedMasterAllShaikshanikPrakarTapshilMilkatName = newValue;
+                        });
+                      },
+                      editId: selectedAllShaikshanikPrakarTapshilMilkatIdEdit,
+                    ),
+                    const SizedBox(height: 5),
+                  ]
+                      : [
+                    vastisarvekshanDropDownDataModel != null
+                        ? vastisarvekshanDropdown2(
+                      dataModel: vastisarvekshanDropDownDataModel!,
+                      filterTypeName: "शैक्षणिकसंस्थान",
+                      hintText: "${Statics.getLabel('selectShaikshanikSanstha')}",
+                      onItemSelected: (id, value, isOther) {
+                        selectedShaikshanikSansthaId = id;
+                        selectedShaikshanikSansthaName = value;
+                        print("id = $selectedShaikshanikSansthaId //////  name = $selectedShaikshanikSansthaName");
+                      },
+                      width: 250,
+                      selectedValue: selectedMasterShaikshanikSansthaName,
+                      onSelectionChanged: (newValue) {
+                        setState(() {
+                          selectedMasterShaikshanikSansthaName = newValue;
+                        });
+                      },
+                      editId: selectedShaikshanikSansthaIdEdit,
+                    )
+                        : Container(),
+                    SizedBox(height: 10),
+                    Text("${Statics.getLabel('selectShaikshanikSanstha')}")
+                  ],
                 ),
               );
             },
@@ -11704,7 +11936,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                     name: allShaikshanikPrakarNaavController.text,
                     pkid: pkidSchool,
                     isactive: isActiveSchool,
-                    vastiid: int.parse(context.read<GeoHierarchyController>().deepestSelectedGeoUnitId ?? "0"),
+                    vastiid: int.parse(context
+                        .read<GeoHierarchyController>()
+                        .deepestSelectedGeoUnitId ?? "0"),
                     selectedDropdownValueName: selectedShaikshanikSansthaName,
                     prakaarid: selectedShaikshanikSansthaId == 315 ? (selectedShalaPrakarId ?? selectedMahavidyalayinPrakarId) : (selectedMahavidyalayinPrakarId ?? selectedShalaPrakarId),
                     selectedDropdownValueName3: selectedShalaPrakarName ?? selectedMahavidyalayinPrakarName,
@@ -11773,8 +12007,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
   int? isActiveMaidanUdyan = 1;
   TextEditingController maidanUdyanNameControler = TextEditingController();
 
-  void showMaidanUdyanPopup(
-    BuildContext context, {
+  void showMaidanUdyanPopup(BuildContext context, {
     int? editIndex,
     VoidCallback? onDataChanged,
   }) {
@@ -11843,7 +12076,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                     name: maidanUdyanNameControler.text.trim(),
                     pkid: pkidMaidanUdyan,
                     isactive: isActiveMaidanUdyan,
-                    vastiid: int.parse(context.read<GeoHierarchyController>().deepestSelectedGeoUnitId ?? "0"),
+                    vastiid: int.parse(context
+                        .read<GeoHierarchyController>()
+                        .deepestSelectedGeoUnitId ?? "0"),
                   );
                   if (editIndex != null) {
                     maidanUddyanDataList[editIndex] = data;
@@ -11879,8 +12114,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
   int? isActiveJahirKaryakram = 1;
   int? pkidJahirKaryakram = 0;
 
-  void showjahirKaryakramPopup(
-    BuildContext context, {
+  void showjahirKaryakramPopup(BuildContext context, {
     int? editIndex,
     VoidCallback? onDataChanged,
   }) {
@@ -11979,7 +12213,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                 ),
                 onPressed: () {
                   VastisarJahirakaryakramasambandhi data = VastisarJahirakaryakramasambandhi(
-                    vastiid: int.parse(context.read<GeoHierarchyController>().deepestSelectedGeoUnitId ?? "0"),
+                    vastiid: int.parse(context
+                        .read<GeoHierarchyController>()
+                        .deepestSelectedGeoUnitId ?? "0"),
                     isactive: isActiveJahirKaryakram,
                     pkid: pkidJahirKaryakram,
                     name: jahirKaryakramNaavControler.text,
@@ -12039,8 +12275,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
   int? isActiveVastiPrashnaGarjaName = 1;
   TextEditingController vastiPrashnaGarjaTapshilController = TextEditingController();
 
-  void showVastiPrashnaGarjaPopup(
-    BuildContext context, {
+  void showVastiPrashnaGarjaPopup(BuildContext context, {
     int? editIndex,
     VoidCallback? onDataChanged,
   }) {
@@ -12115,7 +12350,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                     selectedDropdownValueName: selectedVastiPrashnaGarjaName,
                     pkid: pkidVastiPrashnaGarjaName,
                     isactive: isActiveVastiPrashnaGarjaName,
-                    vastiid: int.parse(context.read<GeoHierarchyController>().deepestSelectedGeoUnitId ?? "0"),
+                    vastiid: int.parse(context
+                        .read<GeoHierarchyController>()
+                        .deepestSelectedGeoUnitId ?? "0"),
                     id: selectedVastiPrashnaGarjaId,
                   );
                   if (editIndex != null) {
@@ -12163,8 +12400,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
   TextEditingController dharmikNetrutvaController = TextEditingController();
   TextEditingController dharmikNetrutvaAnyaNameController = TextEditingController();
 
-  void showDharmikNetrutvaPopup(
-    BuildContext context, {
+  void showDharmikNetrutvaPopup(BuildContext context, {
     int? editIndex,
     VoidCallback? onDataChanged,
   }) {
@@ -12242,7 +12478,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                   } else {
                     Vastisardhaarmiknetrtav data = Vastisardhaarmiknetrtav(
                       id: selectedDharmikNetrutvaId,
-                      vastiid: int.parse(context.read<GeoHierarchyController>().deepestSelectedGeoUnitId ?? "0"),
+                      vastiid: int.parse(context
+                          .read<GeoHierarchyController>()
+                          .deepestSelectedGeoUnitId ?? "0"),
                       isactive: isActiveDharmikNetrutva,
                       pkid: pkidDharmikNetrutva,
                       selectedDropdownValueName: selectedDharmikNetrutvaName,
@@ -12308,8 +12546,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
   int? pkidDurjanShaktiGunha = 0;
   int? isActivedDurjanShaktiGunha = 1;
 
-  void showDurjanShaktiPopup(
-    BuildContext context, {
+  void showDurjanShaktiPopup(BuildContext context, {
     int? editIndex,
     VoidCallback? onDataChanged,
   }) {
@@ -12433,7 +12670,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                         name: durjanShaktiNaavController.text,
                         pkid: pkidDurjanShaktiGunha,
                         isactive: isActivedDurjanShaktiGunha,
-                        vastiid: int.parse(context.read<GeoHierarchyController>().deepestSelectedGeoUnitId ?? "0"),
+                        vastiid: int.parse(context
+                            .read<GeoHierarchyController>()
+                            .deepestSelectedGeoUnitId ?? "0"),
                         selectedDropdownValueName: selectedDurjanShaktiPrakarName,
                         selectedDropdownValueName1: selectedDurjanShaktiShikashaName,
                         selectedDropdownValueName2: selectedDurjanShaktiGunhaName,
@@ -12488,8 +12727,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
   int? isActiveHinduVeerYadi = 1;
   TextEditingController hinduVeerYadiNameControler = TextEditingController();
 
-  void showHinduVeerYadiPopup(
-    BuildContext context, {
+  void showHinduVeerYadiPopup(BuildContext context, {
     int? editIndex,
     VoidCallback? onDataChanged,
   }) {
@@ -12556,7 +12794,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                   //   'hinduVeerYadiName': hinduVeerYadiNameControler.text.trim(), // ✅ fixed this line
                   // };
                   VastisarHinduvirayadi data = VastisarHinduvirayadi(
-                    vastiid: int.parse(context.read<GeoHierarchyController>().deepestSelectedGeoUnitId ?? '0'),
+                    vastiid: int.parse(context
+                        .read<GeoHierarchyController>()
+                        .deepestSelectedGeoUnitId ?? '0'),
                     isactive: isActiveHinduVeerYadi,
                     pkid: pkidHinduVeerYadi,
                     name: hinduVeerYadiNameControler.text,
@@ -12721,9 +12961,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             title: Text("${Statics.getLabel('Male')}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
                             value: 0,
                             groupValue: isFemale,
-                            onChanged: (value) => set(() {
-                              isFemale = value;
-                            }),
+                            onChanged: (value) =>
+                                set(() {
+                                  isFemale = value;
+                                }),
                           ),
                         ),
                         Expanded(
@@ -12733,9 +12974,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             title: Text("${Statics.getLabel('Female')}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
                             value: 1,
                             groupValue: isFemale,
-                            onChanged: (value) => set(() {
-                              isFemale = value;
-                            }),
+                            onChanged: (value) =>
+                                set(() {
+                                  isFemale = value;
+                                }),
                           ),
                         ),
                       ],
@@ -13021,7 +13263,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                     if (_result == 0) {
                       final newData = AbhiyaanKaryakartaModel(
                         pkid: editIndex == null ? 0 : abhiyaanKaryakartaList[editIndex].pkid,
-                        geounitid: int.parse(context.read<GeoHierarchyController>().deepestSelectedGeoUnitId ?? "0"),
+                        geounitid: int.parse(context
+                            .read<GeoHierarchyController>()
+                            .deepestSelectedGeoUnitId ?? "0"),
                         isvasti: 1,
                         name: _fullNameCntrl.text.trim(),
                         mobileno: _mobileCntrl.text.trim(),
@@ -13043,18 +13287,19 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                     } else if (_result == 1) {
                       await showDialog(
                         context: context,
-                        builder: (ctx) => AlertDialog(
-                          title: Text(Statics.getLabel('alert')),
-                          content: Text(Statics.getLabel("karyakartaAlreadyExists")),
-                          actions: <Widget>[
-                            TextButton(
-                              child: Text(Statics.getLabel('okay')),
-                              onPressed: () {
-                                Navigator.of(ctx).pop();
-                              },
+                        builder: (ctx) =>
+                            AlertDialog(
+                              title: Text(Statics.getLabel('alert')),
+                              content: Text(Statics.getLabel("karyakartaAlreadyExists")),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: Text(Statics.getLabel('okay')),
+                                  onPressed: () {
+                                    Navigator.of(ctx).pop();
+                                  },
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
                       );
                       return;
                     } else {
@@ -13105,7 +13350,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                     InkWell(
                       onTap: () {
                         // Filter out empty or whitespace-only strings
-                        final filteredDetails = step3pendingpoints!.split(',').where((item) => item.trim().isNotEmpty).toList();
+                        final filteredDetails = step3pendingpoints!.split(',').where((item) =>
+                        item
+                            .trim()
+                            .isNotEmpty).toList();
 
                         print("Filtered step3pendingpoints!.split(','): $filteredDetails");
 
@@ -13265,23 +13513,27 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                               columns: [
                                 DataColumn(
                                     label: Text(
-                                  "${Statics.getLabel('VastiSamajikGarja')}",
-                                )),
+                                      "${Statics.getLabel('VastiSamajikGarja')}",
+                                    )),
                                 DataColumn(
                                     label: Center(
-                                  child: Text(
-                                    "${Statics.getLabel('tapshil')}",
-                                  ),
-                                )),
+                                      child: Text(
+                                        "${Statics.getLabel('tapshil')}",
+                                      ),
+                                    )),
                               ],
-                              rows: vastiPrashnaGarjaDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
+                              rows: vastiPrashnaGarjaDataList
+                                  .asMap()
+                                  .entries
+                                  .where((entry) => entry.value.isactive == 1)
+                                  .map((entry) {
                                 int index = entry.key;
                                 var data = entry.value;
                                 bool isSelected = selectedVastiPrashnaGarjaIdIndex == index;
                                 return DataRow(
                                     selected: isSelected,
                                     color: MaterialStateProperty.resolveWith<Color?>(
-                                      (Set<MaterialState> states) {
+                                          (Set<MaterialState> states) {
                                         if (isSelected) return Colors.yellow.shade100;
                                         return null;
                                       },
@@ -13387,62 +13639,63 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                 if (selectedVastiPrashnaGarjaIdIndex == null) return;
                                 final shouldDelete = await showDialog<bool>(
                                   context: context,
-                                  builder: (context) => AlertDialog(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    backgroundColor: Colors.white,
-                                    title: Center(
-                                      child: Text(
-                                        "${Statics.getLabel('pusthikarn')}",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18,
-                                          color: Colors.redAccent,
+                                  builder: (context) =>
+                                      AlertDialog(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(20),
                                         ),
-                                      ),
-                                    ),
-                                    content: Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                      child: Text(
-                                        "${Statics.getLabel('deleteconfirmText')}",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.black87,
-                                        ),
-                                      ),
-                                    ),
-                                    actionsAlignment: MainAxisAlignment.spaceEvenly,
-                                    actions: [
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.grey.shade300,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(12),
+                                        backgroundColor: Colors.white,
+                                        title: Center(
+                                          child: Text(
+                                            "${Statics.getLabel('pusthikarn')}",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
+                                              color: Colors.redAccent,
+                                            ),
                                           ),
                                         ),
-                                        onPressed: () => Navigator.pop(context, false),
-                                        child: Text(
-                                          "${Statics.getLabel('ConfirmationNo')}",
-                                          style: TextStyle(color: Colors.black),
-                                        ),
-                                      ),
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.redAccent,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(12),
+                                        content: Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                          child: Text(
+                                            "${Statics.getLabel('deleteconfirmText')}",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black87,
+                                            ),
                                           ),
                                         ),
-                                        onPressed: () => Navigator.pop(context, true),
-                                        child: Text(
-                                          "${Statics.getLabel('ConfirmationYes')}",
-                                          style: TextStyle(color: Colors.white),
-                                        ),
+                                        actionsAlignment: MainAxisAlignment.spaceEvenly,
+                                        actions: [
+                                          ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.grey.shade300,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(12),
+                                              ),
+                                            ),
+                                            onPressed: () => Navigator.pop(context, false),
+                                            child: Text(
+                                              "${Statics.getLabel('ConfirmationNo')}",
+                                              style: TextStyle(color: Colors.black),
+                                            ),
+                                          ),
+                                          ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.redAccent,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(12),
+                                              ),
+                                            ),
+                                            onPressed: () => Navigator.pop(context, true),
+                                            child: Text(
+                                              "${Statics.getLabel('ConfirmationYes')}",
+                                              style: TextStyle(color: Colors.white),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
                                 );
                                 if (shouldDelete == true && selectedVastiPrashnaGarjaIdIndex != null) {
                                   setState(() {
@@ -13512,7 +13765,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                         child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: SizedBox(
-                              width: MediaQuery.of(context).size.width,
+                              width: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width,
                               child: DataTable(
                                 columnSpacing: 20,
                                 showCheckboxColumn: false,
@@ -13521,21 +13777,25 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                 columns: [
                                   DataColumn(
                                       label: Text(
-                                    "${Statics.getLabel('DharmikNetrutwa')}",
-                                  )),
+                                        "${Statics.getLabel('DharmikNetrutwa')}",
+                                      )),
                                   DataColumn(
                                       label: Text(
-                                    "${Statics.getLabel('Name')}",
-                                  )),
+                                        "${Statics.getLabel('Name')}",
+                                      )),
                                 ],
-                                rows: dharmikNetrutvaDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
+                                rows: dharmikNetrutvaDataList
+                                    .asMap()
+                                    .entries
+                                    .where((entry) => entry.value.isactive == 1)
+                                    .map((entry) {
                                   int index = entry.key;
                                   var data = entry.value;
                                   bool isSelected = selectedDharmikNetrutvaIdIndex == index;
                                   return DataRow(
                                       selected: isSelected,
                                       color: MaterialStateProperty.resolveWith<Color?>(
-                                        (Set<MaterialState> states) {
+                                            (Set<MaterialState> states) {
                                           if (isSelected) return Colors.yellow.shade100;
                                           return null;
                                         },
@@ -13643,62 +13903,63 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                 if (selectedDharmikNetrutvaIdIndex == null) return;
                                 final shouldDelete = await showDialog<bool>(
                                   context: context,
-                                  builder: (context) => AlertDialog(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    backgroundColor: Colors.white,
-                                    title: Center(
-                                      child: Text(
-                                        "${Statics.getLabel('pusthikarn')}",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18,
-                                          color: Colors.redAccent,
+                                  builder: (context) =>
+                                      AlertDialog(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(20),
                                         ),
-                                      ),
-                                    ),
-                                    content: Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                      child: Text(
-                                        "${Statics.getLabel('deleteconfirmText')}",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.black87,
-                                        ),
-                                      ),
-                                    ),
-                                    actionsAlignment: MainAxisAlignment.spaceEvenly,
-                                    actions: [
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.grey.shade300,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(12),
+                                        backgroundColor: Colors.white,
+                                        title: Center(
+                                          child: Text(
+                                            "${Statics.getLabel('pusthikarn')}",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
+                                              color: Colors.redAccent,
+                                            ),
                                           ),
                                         ),
-                                        onPressed: () => Navigator.pop(context, false),
-                                        child: Text(
-                                          "${Statics.getLabel('ConfirmationNo')}",
-                                          style: TextStyle(color: Colors.black),
-                                        ),
-                                      ),
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.redAccent,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(12),
+                                        content: Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                          child: Text(
+                                            "${Statics.getLabel('deleteconfirmText')}",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black87,
+                                            ),
                                           ),
                                         ),
-                                        onPressed: () => Navigator.pop(context, true),
-                                        child: Text(
-                                          "${Statics.getLabel('ConfirmationYes')}",
-                                          style: TextStyle(color: Colors.white),
-                                        ),
+                                        actionsAlignment: MainAxisAlignment.spaceEvenly,
+                                        actions: [
+                                          ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.grey.shade300,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(12),
+                                              ),
+                                            ),
+                                            onPressed: () => Navigator.pop(context, false),
+                                            child: Text(
+                                              "${Statics.getLabel('ConfirmationNo')}",
+                                              style: TextStyle(color: Colors.black),
+                                            ),
+                                          ),
+                                          ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.redAccent,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(12),
+                                              ),
+                                            ),
+                                            onPressed: () => Navigator.pop(context, true),
+                                            child: Text(
+                                              "${Statics.getLabel('ConfirmationYes')}",
+                                              style: TextStyle(color: Colors.white),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
                                 );
                                 if (shouldDelete == true && selectedDharmikNetrutvaIdIndex != null) {
                                   setState(() {
@@ -13784,7 +14045,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                           child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: SizedBox(
-                                width: MediaQuery.of(context).size.width,
+                                width: MediaQuery
+                                    .of(context)
+                                    .size
+                                    .width,
                                 child: DataTable(
                                   columnSpacing: 20,
                                   showCheckboxColumn: false,
@@ -13793,29 +14057,33 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                   columns: [
                                     DataColumn(
                                         label: Text(
-                                      "${Statics.getLabel('Name')}",
-                                    )),
+                                          "${Statics.getLabel('Name')}",
+                                        )),
                                     DataColumn(
                                         label: Text(
-                                      "${Statics.getLabel('SelectFrequency')}",
-                                    )),
+                                          "${Statics.getLabel('SelectFrequency')}",
+                                        )),
                                     DataColumn(
                                         label: Text(
-                                      "${Statics.getLabel('shiksha')}",
-                                    )),
+                                          "${Statics.getLabel('shiksha')}",
+                                        )),
                                     DataColumn(
                                         label: Text(
-                                      "${Statics.getLabel('crime')}",
-                                    )),
+                                          "${Statics.getLabel('crime')}",
+                                        )),
                                   ],
-                                  rows: durjanShaktiDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
+                                  rows: durjanShaktiDataList
+                                      .asMap()
+                                      .entries
+                                      .where((entry) => entry.value.isactive == 1)
+                                      .map((entry) {
                                     int index = entry.key;
                                     var data = entry.value;
                                     bool isSelected = selectedDurjanShaktiIdIndex == index;
                                     return DataRow(
                                         selected: isSelected,
                                         color: MaterialStateProperty.resolveWith<Color?>(
-                                          (Set<MaterialState> states) {
+                                              (Set<MaterialState> states) {
                                             if (isSelected) return Colors.yellow.shade100;
                                             return null;
                                           },
@@ -13927,62 +14195,63 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                   if (selectedDurjanShaktiIdIndex == null) return;
                                   final shouldDelete = await showDialog<bool>(
                                     context: context,
-                                    builder: (context) => AlertDialog(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      backgroundColor: Colors.white,
-                                      title: Center(
-                                        child: Text(
-                                          "${Statics.getLabel('pusthikarn')}",
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18,
-                                            color: Colors.redAccent,
+                                    builder: (context) =>
+                                        AlertDialog(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(20),
                                           ),
-                                        ),
-                                      ),
-                                      content: Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                        child: Text(
-                                          "${Statics.getLabel('deleteconfirmText')}",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.black87,
-                                          ),
-                                        ),
-                                      ),
-                                      actionsAlignment: MainAxisAlignment.spaceEvenly,
-                                      actions: [
-                                        ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.grey.shade300,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(12),
+                                          backgroundColor: Colors.white,
+                                          title: Center(
+                                            child: Text(
+                                              "${Statics.getLabel('pusthikarn')}",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18,
+                                                color: Colors.redAccent,
+                                              ),
                                             ),
                                           ),
-                                          onPressed: () => Navigator.pop(context, false),
-                                          child: Text(
-                                            "${Statics.getLabel('ConfirmationNo')}",
-                                            style: TextStyle(color: Colors.black),
-                                          ),
-                                        ),
-                                        ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.redAccent,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(12),
+                                          content: Padding(
+                                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                            child: Text(
+                                              "${Statics.getLabel('deleteconfirmText')}",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.black87,
+                                              ),
                                             ),
                                           ),
-                                          onPressed: () => Navigator.pop(context, true),
-                                          child: Text(
-                                            "${Statics.getLabel('ConfirmationYes')}",
-                                            style: TextStyle(color: Colors.white),
-                                          ),
+                                          actionsAlignment: MainAxisAlignment.spaceEvenly,
+                                          actions: [
+                                            ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Colors.grey.shade300,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(12),
+                                                ),
+                                              ),
+                                              onPressed: () => Navigator.pop(context, false),
+                                              child: Text(
+                                                "${Statics.getLabel('ConfirmationNo')}",
+                                                style: TextStyle(color: Colors.black),
+                                              ),
+                                            ),
+                                            ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Colors.redAccent,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(12),
+                                                ),
+                                              ),
+                                              onPressed: () => Navigator.pop(context, true),
+                                              child: Text(
+                                                "${Statics.getLabel('ConfirmationYes')}",
+                                                style: TextStyle(color: Colors.white),
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
                                   );
                                   if (shouldDelete == true && selectedDurjanShaktiIdIndex != null) {
                                     setState(() {
@@ -14052,7 +14321,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                         child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: SizedBox(
-                              width: MediaQuery.of(context).size.width,
+                              width: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width,
                               child: DataTable(
                                 columnSpacing: 20,
                                 showCheckboxColumn: false,
@@ -14061,21 +14333,25 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                 columns: [
                                   DataColumn(
                                       label: Text(
-                                    "${Statics.getLabel('serialNo')}",
-                                  )),
+                                        "${Statics.getLabel('serialNo')}",
+                                      )),
                                   DataColumn(
                                       label: Text(
-                                    "${Statics.getLabel('Name')}",
-                                  )),
+                                        "${Statics.getLabel('Name')}",
+                                      )),
                                 ],
-                                rows: hinduVeerYadiDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
+                                rows: hinduVeerYadiDataList
+                                    .asMap()
+                                    .entries
+                                    .where((entry) => entry.value.isactive == 1)
+                                    .map((entry) {
                                   int index = entry.key;
                                   var data = entry.value;
                                   bool isSelected = selectedHinduVeerYadiIdIndex == index;
                                   return DataRow(
                                       selected: isSelected,
                                       color: MaterialStateProperty.resolveWith<Color?>(
-                                        (Set<MaterialState> states) {
+                                            (Set<MaterialState> states) {
                                           if (isSelected) return Colors.yellow.shade100;
                                           return null;
                                         },
@@ -14179,62 +14455,63 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                               onTap: () async {
                                 final shouldDelete = await showDialog<bool>(
                                   context: context,
-                                  builder: (context) => AlertDialog(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    backgroundColor: Colors.white,
-                                    title: Center(
-                                      child: Text(
-                                        "${Statics.getLabel('pusthikarn')}",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18,
-                                          color: Colors.redAccent,
+                                  builder: (context) =>
+                                      AlertDialog(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(20),
                                         ),
-                                      ),
-                                    ),
-                                    content: Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                      child: Text(
-                                        "${Statics.getLabel('deleteconfirmText')}",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.black87,
-                                        ),
-                                      ),
-                                    ),
-                                    actionsAlignment: MainAxisAlignment.spaceEvenly,
-                                    actions: [
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.grey.shade300,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(12),
+                                        backgroundColor: Colors.white,
+                                        title: Center(
+                                          child: Text(
+                                            "${Statics.getLabel('pusthikarn')}",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
+                                              color: Colors.redAccent,
+                                            ),
                                           ),
                                         ),
-                                        onPressed: () => Navigator.pop(context, false),
-                                        child: Text(
-                                          "${Statics.getLabel('ConfirmationNo')}",
-                                          style: TextStyle(color: Colors.black),
-                                        ),
-                                      ),
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.redAccent,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(12),
+                                        content: Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                          child: Text(
+                                            "${Statics.getLabel('deleteconfirmText')}",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black87,
+                                            ),
                                           ),
                                         ),
-                                        onPressed: () => Navigator.pop(context, true),
-                                        child: Text(
-                                          "${Statics.getLabel('ConfirmationYes')}",
-                                          style: TextStyle(color: Colors.white),
-                                        ),
+                                        actionsAlignment: MainAxisAlignment.spaceEvenly,
+                                        actions: [
+                                          ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.grey.shade300,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(12),
+                                              ),
+                                            ),
+                                            onPressed: () => Navigator.pop(context, false),
+                                            child: Text(
+                                              "${Statics.getLabel('ConfirmationNo')}",
+                                              style: TextStyle(color: Colors.black),
+                                            ),
+                                          ),
+                                          ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.redAccent,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(12),
+                                              ),
+                                            ),
+                                            onPressed: () => Navigator.pop(context, true),
+                                            child: Text(
+                                              "${Statics.getLabel('ConfirmationYes')}",
+                                              style: TextStyle(color: Colors.white),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
                                 );
                                 if (shouldDelete == true && selectedHinduVeerYadiIdIndex != null) {
                                   setState(() {
@@ -14293,7 +14570,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
 
   Future<void> submitStep3Form() async {
     Map<String, dynamic> formData = {
-      "vastiid": int.parse(context.read<GeoHierarchyController>().deepestSelectedGeoUnitId ?? "0"),
+      "vastiid": int.parse(context
+          .read<GeoHierarchyController>()
+          .deepestSelectedGeoUnitId ?? "0"),
       "cuserid": int.parse(Statics.userDetails['userID']),
       "VastisarVastitilasamajika": vastiPrashnaGarjaDataList,
       "Vastisardhaarmiknetrtav": dharmikNetrutvaDataList,
@@ -14312,7 +14591,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
       duration: Duration(milliseconds: 500),
       curve: Curves.easeInOut,
     );
-    searchVastiData(context.read<GeoHierarchyController>().deepestSelectedGeoUnitId);
+    searchVastiData(context
+        .read<GeoHierarchyController>()
+        .deepestSelectedGeoUnitId);
   }
 
   // Widget dynamicProgressBar(double value) {

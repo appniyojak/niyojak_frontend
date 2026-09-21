@@ -58,6 +58,8 @@ class SwayamsevakOtherInfoBAL {
   int? permanentDistrictID;
   bool? isPratidnyit;
   int? pratidnyaYear;
+  bool? haveDesiGai;
+  int? desiGaiCount;
   bool? isGanaveshComplete;
   bool? hasCap;
   bool? hasShirt;
@@ -115,6 +117,7 @@ class SwayamsevakOtherInfoBAL {
   int? vistaarakYearCount;
   int? prachaarakYearCount;
   String? facebookPage;
+  String? otherInfoDesc;
   int? swayamsevakShaakhaaFreq;
   String? jagaranPatrikaTypes;
 
@@ -138,6 +141,8 @@ class SwayamsevakOtherInfoBAL {
       this.permanentStateID,
       this.isPratidnyit,
       this.pratidnyaYear,
+      this.haveDesiGai,
+      this.desiGaiCount,
       this.isGanaveshComplete,
       this.hasCap,
       this.hasShirt,
@@ -192,6 +197,7 @@ class SwayamsevakOtherInfoBAL {
       this.vistaarakYearCount,
       this.prachaarakYearCount,
       this.facebookPage,
+      this.otherInfoDesc,
       this.swayamsevakShaakhaaFreq,
       this.jagaranPatrikaTypes);
 }

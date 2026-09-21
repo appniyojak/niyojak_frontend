@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../helpers/static_data.dart' as Statics;
+import '../../../models/response_model/names_data_model.dart';
 import '../../../models/response_model/shaakhaa_vistar_report_repo_model.dart';
 import '../../../utils/geo_unit_memory_cache.dart';
 import '../../../utils/globals.dart';
 import '../../../utils/stable_geounit_class.dart';
 import '../../../widgets/horizontal_graph_bar_widget.dart';
 import '../../../widgets/reusable_tab_cards.dart';
+import '../../home_screen/data_details_screen.dart';
 import 'shakhaa_saptah_form_screen.dart';
 
 // ─────────────────────────────────────────────
@@ -163,6 +165,57 @@ class ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Aut
     setState(() {});
   }
 
+  showShaakhaaNamesList({required String type, required String title}) async {
+    setState(() {
+      // isLoading = true;
+      // errorMessage = null;
+    });
+    try {
+      final req = {
+        "AppUserID": int.tryParse(Statics.userDetails['userID'] ?? "0") ?? 0,
+        "TargetGeoUnitID": int.tryParse((controller.deepestSelectedGeoUnitId ?? userGeoUnitId ?? 0).toString()),
+        "type": type,
+      };
+
+      final response = await Statics.homeShaakhaaReportNamesData(req, context: context);
+
+      if (response == null) {
+        Statics.showToast(Statics.getLabel("NoDataFound"));
+        return;
+      }
+
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => DataDetailsScreen(infoName: title, icon: Icons.location_on, groupedData: _getGroupedDataModels(response), from: "shaakhaaNames"),
+        ),
+      );
+
+      return;
+    } catch (e) {
+      print(e);
+      return null;
+    } finally {}
+  }
+
+  List<DataDetailsGroup> _getGroupedDataModels(List<DataDetails> response) {
+    List<DataDetailsGroup> groupedList = [];
+
+    for (var item in response) {
+      // Check if this groupType already exists in our list
+      int existingGroupIndex = groupedList.indexWhere((group) => group.groupType == item.type);
+
+      if (existingGroupIndex == -1) {
+        // If it doesn't exist, create a new group and add it to the list
+        groupedList.add(DataDetailsGroup(groupType: item.type.toString(), items: [item]));
+      } else {
+        // If it does exist, add the item to the existing group's list
+        groupedList[existingGroupIndex].items.add(item);
+      }
+    }
+
+    return groupedList;
+  }
+
   ///////////////////////////////////////////////////////////////////////
 
   @override
@@ -210,6 +263,7 @@ class ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Aut
                           todayShakhaa: report?.todayShakhaa,
                           totalshakhaa: report?.totalshakhaa,
                           yesterdayShakhaa: report?.yesterdayShakhaa,
+                          onListTap: () => showShaakhaaNamesList(title: Statics.getLabel("shakhaaTulna"), type: "vistardaily"),
                         )
                       : ReusableBarTabCard(
                           todayShakhaa: report?.thisWeekShakhaa,
@@ -220,6 +274,7 @@ class ShakhaaSaptahReportTabState extends State<ShakhaaSaptahReportTab> with Aut
                           currentLabel: Statics.getLabel("currentWeekShakhaa"),
                           lastLabel: Statics.getLabel('previousWeekShakhaa'),
                           totalLabel: Statics.getLabel("totalShakhaaSampann"),
+                          onListTap: () => showShaakhaaNamesList(title: Statics.getLabel("shakhaaTulna"), type: "vistarweekly"),
                         )
                 else ...[
                   _attendanceCard(title: "${Statics.getLabel('Total')} ${Statics.getLabel('upastithi')}", data: isDailySelected ? _dailyPresent : _weeklyPresent, isDaily: isDailySelected),

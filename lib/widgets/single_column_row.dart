@@ -139,9 +139,11 @@ class SingleColumnRowLegend extends StatelessWidget {
                           color: Colors.purpleAccent,
                           size: 20,
                         ))
-                    : Flexible(
-                        child: Text(value == "null" || value == null ? "0" : value, style: TextStyle(fontSize: fontsize, fontWeight: FontWeight.w600)),
-                      ),
+                    : value.toString().trim().isNotEmpty
+                        ? Flexible(
+                            child: Text(value == "null" || value == null ? "0" : value, style: TextStyle(fontSize: fontsize, fontWeight: FontWeight.w600)),
+                          )
+                        : Offstage(),
               ],
             ),
           ),
@@ -165,6 +167,7 @@ class Single1ColumnRow extends StatelessWidget {
   double? fontsize = 0;
   int? valFlex;
   EdgeInsets? padding;
+
   Single1ColumnRow({
     Key? key,
     this.txtString,

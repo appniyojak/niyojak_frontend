@@ -941,14 +941,14 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                                     color: Colors.black,
                                   ),
                                 ),
-                                TextSpan(
+                                /*TextSpan(
                                   text: " *",
                                   style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.red,
                                   ),
-                                ),
+                                ),*/
                               ],
                             ),
                           ),
@@ -1234,7 +1234,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                               );
                             }
                           },
-                          imp: "*"),
+                          imp: ""),
                       SizedBox(
                         height: 10,
                       ),
@@ -1253,14 +1253,14 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                                       color: Colors.black,
                                     ),
                                   ),
-                                  TextSpan(
+                                  /*TextSpan(
                                     text: "*",
                                     style: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.red,
                                     ),
-                                  ),
+                                  ),*/
                                 ],
                               ),
                             ),
@@ -1327,7 +1327,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                               );
                             }
                           },
-                          imp: "*"),
+                          imp: ""),
                       if (beforsanghaonnowisoff == 1)
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1888,7 +1888,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                         );
                       }
                     },
-                    imp: "*"),
+                    imp: ""),
                 if (anyaVividhKshetracheKame == 1)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -2426,7 +2426,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                         );
                       }
                     },
-                    imp: "*"),
+                    imp: ""),
                 if (gavatilMumbaikar == 1)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -2683,281 +2683,270 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
           mainContainer(
               "${Statics.getLabel('religion')}",
               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
-                    child: Column(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      // Text(
+                      //   "${Statics.getLabel('religion')}",
+                      //   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.purpleAccent),
+                      // ),
+                      InkWell(
+                        onTap: () {
+                          if (isVastiSearch) {
+                            showReligionPopup(
+                              context,
+                              onDataChanged: () {
+                                setState(() {});
+                              },
+                            );
+                          } else {
+                            showPopupForVastiValidation(context);
+                          }
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(vertical: 5),
+                          width: 100,
+                          decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
+                          child: Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
+                                Icon(Icons.add, color: Colors.white, size: 15),
                                 Text(
-                                  "${Statics.getLabel('religion')}",
-                                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.purpleAccent),
+                                  "${Statics.getLabel('AddButton')}",
+                                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                 ),
-                                InkWell(
-                                  onTap: () {
-                                    if (isVastiSearch) {
-                                      showReligionPopup(
-                                        context,
-                                        onDataChanged: () {
-                                          setState(() {});
-                                        },
-                                      );
-                                    } else {
-                                      showPopupForVastiValidation(context);
-                                    }
-                                  },
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(vertical: 5),
-                                    width: 100,
-                                    decoration:
-                                        BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
-                                    child: Center(
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Icon(Icons.add, color: Colors.white, size: 15),
-                                          Text(
-                                            "${Statics.getLabel('AddButton')}",
-                                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                )
                               ],
                             ),
-                            SizedBox(height: 10),
-                            Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.black54),
-                                borderRadius: const BorderRadius.all(Radius.circular(15)),
-                              ),
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: SizedBox(
-                                  width: MediaQuery.of(context).size.width * 1,
-                                  child: DataTable(
-                                    showCheckboxColumn: false,
-                                    headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
-                                    columnSpacing: 1,
-                                    headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
-                                    columns: [
-                                      DataColumn(
-                                          label: Text(
-                                        '${Statics.getLabel('konteReligion')}',
-                                      )),
-                                      DataColumn(
-                                          label: Text(
-                                        '${Statics.getLabel('avgPersent')}',
-                                      )),
-                                    ],
-                                    rows: enteredreligionDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
-                                      int index = entry.key;
-                                      var data = entry.value;
-                                      bool isSelected = selectedReligionIdRowIndex == index;
-                                      return DataRow(
-                                          selected: isSelected,
-                                          color: MaterialStateProperty.resolveWith<Color?>(
-                                            (Set<MaterialState> states) {
-                                              if (isSelected) return Colors.yellow.shade100;
-                                              return null;
-                                            },
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black54),
+                      borderRadius: const BorderRadius.all(Radius.circular(15)),
+                    ),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width * 1,
+                        child: DataTable(
+                          showCheckboxColumn: false,
+                          headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
+                          columnSpacing: 1,
+                          headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
+                          columns: [
+                            DataColumn(
+                                label: Text(
+                              '${Statics.getLabel('konteReligion')}',
+                            )),
+                            DataColumn(
+                                label: Text(
+                              '${Statics.getLabel('avgPersent')}',
+                            )),
+                          ],
+                          rows: enteredreligionDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
+                            int index = entry.key;
+                            var data = entry.value;
+                            bool isSelected = selectedReligionIdRowIndex == index;
+                            return DataRow(
+                                selected: isSelected,
+                                color: MaterialStateProperty.resolveWith<Color?>(
+                                  (Set<MaterialState> states) {
+                                    if (isSelected) return Colors.yellow.shade100;
+                                    return null;
+                                  },
+                                ),
+                                onSelectChanged: (bool? selected) {
+                                  if (selected != null && selected) {
+                                    setState(() {
+                                      selectedReligionIdRowIndex = index;
+                                    });
+                                  }
+                                },
+                                cells: [
+                                  DataCell(Text(data.selectedDropdownValueName ?? "")),
+                                  DataCell(Text(data.andaje ?? "")),
+                                ]);
+                          }).toList(),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 6,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            if (selectedReligionIdRowIndex != null) {
+                              var selectedData = enteredreligionDataList[selectedReligionIdRowIndex!];
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    backgroundColor: Colors.white,
+                                    title: Center(
+                                      child: Text(
+                                        "${Statics.getLabel('religion')}",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20,
+                                          color: Colors.purpleAccent,
+                                        ),
+                                      ),
+                                    ),
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Divider(thickness: 1, color: Colors.purpleAccent.shade100),
+                                        SizedBox(height: 12),
+                                        _buildInfoRow("${Statics.getLabel('konteReligion')}", selectedData.selectedDropdownValueName),
+                                        SizedBox(height: 12),
+                                        _buildInfoRow("${Statics.getLabel('avgPersent')}", selectedData.andaje),
+                                      ],
+                                    ),
+                                    actionsAlignment: MainAxisAlignment.center,
+                                    actions: [
+                                      ElevatedButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.purpleAccent,
+                                          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(12),
                                           ),
-                                          onSelectChanged: (bool? selected) {
-                                            if (selected != null && selected) {
-                                              setState(() {
-                                                selectedReligionIdRowIndex = index;
-                                              });
-                                            }
-                                          },
-                                          cells: [
-                                            DataCell(Text(data.selectedDropdownValueName ?? "")),
-                                            DataCell(Text(data.andaje ?? "")),
-                                          ]);
-                                    }).toList(),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            }
+                          },
+                          child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            if (selectedReligionIdRowIndex == null) return;
+                            showReligionPopup(context, editIndex: selectedReligionIdRowIndex, onDataChanged: () {
+                              setState(() {});
+                            });
+                          },
+                          child: Icon(Icons.edit, color: Colors.blue, size: 20),
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        InkWell(
+                          onTap: () async {
+                            if (selectedReligionIdRowIndex == null) return;
+                            final shouldDelete = await showDialog<bool>(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                backgroundColor: Colors.white,
+                                title: Center(
+                                  child: Text(
+                                    "${Statics.getLabel('pusthikarn')}",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                      color: Colors.redAccent,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 6,
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  InkWell(
-                                    onTap: () {
-                                      if (selectedReligionIdRowIndex != null) {
-                                        var selectedData = enteredreligionDataList[selectedReligionIdRowIndex!];
-                                        showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return AlertDialog(
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(20),
-                                              ),
-                                              backgroundColor: Colors.white,
-                                              title: Center(
-                                                child: Text(
-                                                  "${Statics.getLabel('religion')}",
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 20,
-                                                    color: Colors.purpleAccent,
-                                                  ),
-                                                ),
-                                              ),
-                                              content: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Divider(thickness: 1, color: Colors.purpleAccent.shade100),
-                                                  SizedBox(height: 12),
-                                                  _buildInfoRow("${Statics.getLabel('konteReligion')}", selectedData.selectedDropdownValueName),
-                                                  SizedBox(height: 12),
-                                                  _buildInfoRow("${Statics.getLabel('avgPersent')}", selectedData.andaje),
-                                                ],
-                                              ),
-                                              actionsAlignment: MainAxisAlignment.center,
-                                              actions: [
-                                                ElevatedButton(
-                                                  onPressed: () => Navigator.pop(context),
-                                                  child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
-                                                  style: ElevatedButton.styleFrom(
-                                                    backgroundColor: Colors.purpleAccent,
-                                                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                                                    shape: RoundedRectangleBorder(
-                                                      borderRadius: BorderRadius.circular(12),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            );
-                                          },
-                                        );
-                                      }
-                                    },
-                                    child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
+                                content: Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                  child: Text(
+                                    "${Statics.getLabel('deleteconfirmText')}",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.black87,
+                                    ),
                                   ),
-                                  SizedBox(
-                                    width: 20,
+                                ),
+                                actionsAlignment: MainAxisAlignment.spaceEvenly,
+                                actions: [
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.grey.shade300,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                    ),
+                                    onPressed: () => Navigator.pop(context, false),
+                                    child: Text(
+                                      "${Statics.getLabel('ConfirmationNo')}",
+                                      style: TextStyle(color: Colors.black),
+                                    ),
                                   ),
-                                  InkWell(
-                                    onTap: () {
-                                      if (selectedReligionIdRowIndex == null) return;
-                                      showReligionPopup(context, editIndex: selectedReligionIdRowIndex, onDataChanged: () {
-                                        setState(() {});
-                                      });
-                                    },
-                                    child: Icon(Icons.edit, color: Colors.blue, size: 20),
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  InkWell(
-                                    onTap: () async {
-                                      if (selectedReligionIdRowIndex == null) return;
-                                      final shouldDelete = await showDialog<bool>(
-                                        context: context,
-                                        builder: (context) => AlertDialog(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(20),
-                                          ),
-                                          backgroundColor: Colors.white,
-                                          title: Center(
-                                            child: Text(
-                                              "${Statics.getLabel('pusthikarn')}",
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 18,
-                                                color: Colors.redAccent,
-                                              ),
-                                            ),
-                                          ),
-                                          content: Padding(
-                                            padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                            child: Text(
-                                              "${Statics.getLabel('deleteconfirmText')}",
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.black87,
-                                              ),
-                                            ),
-                                          ),
-                                          actionsAlignment: MainAxisAlignment.spaceEvenly,
-                                          actions: [
-                                            ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor: Colors.grey.shade300,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(12),
-                                                ),
-                                              ),
-                                              onPressed: () => Navigator.pop(context, false),
-                                              child: Text(
-                                                "${Statics.getLabel('ConfirmationNo')}",
-                                                style: TextStyle(color: Colors.black),
-                                              ),
-                                            ),
-                                            ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor: Colors.redAccent,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(12),
-                                                ),
-                                              ),
-                                              onPressed: () => Navigator.pop(context, true),
-                                              child: Text(
-                                                "${Statics.getLabel('ConfirmationYes')}",
-                                                style: TextStyle(color: Colors.white),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                      if (shouldDelete == true && selectedReligionIdRowIndex != null) {
-                                        // setState(() {
-                                        //   enteredreligionDataList
-                                        //       .removeAt(selectedReligionIdRowIndex!);
-                                        //   selectedReligionIdRowIndex = null;
-                                        // });
-                                        setState(() {
-                                          enteredreligionDataList[selectedReligionIdRowIndex!].isactive = 0;
-                                          selectedReligionIdRowIndex = null;
-                                        });
-                                      }
-                                    },
-                                    child: Icon(Icons.delete, color: Colors.red, size: 20),
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.redAccent,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                    ),
+                                    onPressed: () => Navigator.pop(context, true),
+                                    child: Text(
+                                      "${Statics.getLabel('ConfirmationYes')}",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
                                   ),
                                 ],
                               ),
-                            ),
-                          ],
+                            );
+                            if (shouldDelete == true && selectedReligionIdRowIndex != null) {
+                              // setState(() {
+                              //   enteredreligionDataList
+                              //       .removeAt(selectedReligionIdRowIndex!);
+                              //   selectedReligionIdRowIndex = null;
+                              // });
+                              setState(() {
+                                enteredreligionDataList[selectedReligionIdRowIndex!].isactive = 0;
+                                selectedReligionIdRowIndex = null;
+                              });
+                            }
+                          },
+                          child: Icon(Icons.delete, color: Colors.red, size: 20),
                         ),
                       ],
                     ),
                   ),
-
+                ],
+              )),
+          // ===================================== रिलीजन ==================================================================================
+          mainContainer(
+              "${Statics.getLabel('UpasanaSthal')}",
+              Column(
+                children: [
                   //======================================  UPASNA Sthal =====================================================
-                  SizedBox(height: 10),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(
-                        "${Statics.getLabel('UpasanaSthal')}",
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.purpleAccent),
-                      ),
                       InkWell(
                         onTap: () {
                           if (isVastiSearch) {
@@ -4099,15 +4088,21 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                     ],
                   ),
                 ),
+              ],
+            ),
+          ),
+          //==========================  GavatsajareHonareSan  ==============================================================
+          SizedBox(
+            height: 20,
+          ),
+          mainContainer(
+            "${Statics.getLabel('GavatsajareHonareSan')} )",
+            Column(
+              children: [
                 //=================================================== VASTIT SAJAR HONARE SAN FORM ====================================================================================
-                SizedBox(height: 20),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text(
-                      "${Statics.getLabel('GavatsajareHonareSan')}",
-                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.purpleAccent),
-                    ),
                     InkWell(
                       onTap: () {
                         if (isVastiSearch) {
@@ -4366,20 +4361,22 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                     ],
                   ),
                 ),
+              ],
+            ),
+          ),
+          //==========================  ANYA PRABHAVI LOK  ==============================================================
+          SizedBox(
+            height: 20,
+          ),
+          mainContainer(
+            "${Statics.getLabel('GavatHonareKaryakram')} )",
+            Column(
+              children: [
                 //=================================================== VASTIT SAJAR HONARE samajik karyakyram FORM ====================================================================================
-                SizedBox(height: 20),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Flexible(
-                      child: Text(
-                        "${Statics.getLabel('GavatHonareKaryakram')}",
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.purpleAccent),
-                        softWrap: true,
-                        overflow: TextOverflow.visible,
-                      ),
-                    ),
                     const SizedBox(width: 10),
                     InkWell(
                       onTap: () {
@@ -4643,55 +4640,55 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                 InkWell(
                   onTap: () {
                     if (isVastiSearch) {
-                      if (gaavSamitiYesNo == 0 || gaavSamitiYesNo == 1) {
-                        print("1");
+                      // if (gaavSamitiYesNo == 0 || gaavSamitiYesNo == 1) {
+                      //   print("1");
 
-                        String sarpanchName = sarpanchNameController.text.trim();
-                        if (sarpanchName.isEmpty) {
-                          print("2");
+                      String sarpanchName = sarpanchNameController.text.trim();
+                      if (sarpanchName.isEmpty) {
+                        print("2");
 
-                          Statics.showToast("${Statics.getLabel('sarpanchNavValidation')}");
-                          return;
-                        }
-                        if (beforsanghaonnowisoff != 0 && beforsanghaonnowisoff != 1) {
-                          print("3");
-
-                          Statics.showToast("${Statics.getLabel('purviShakhaValidation')}");
-                          return;
-                        }
-                        if (anyaVividhKshetracheKame != 0 && anyaVividhKshetracheKame != 1) {
-                          print("4");
-
-                          Statics.showToast("${Statics.getLabel('anyaVividhValidation')}");
-                          return;
-                        }
-                        if (gavatilMumbaikar != 0 && gavatilMumbaikar != 1) {
-                          print("5");
-
-                          Statics.showToast("${Statics.getLabel('mumbaikarValidation')}");
-                          return;
-                        }
-                        if (vadiGharLoksankhyaEnteredDataList!.isEmpty) {
-                          print("6");
-
-                          Statics.showToast("${Statics.getLabel('vadipadyachiInfoValidation')}");
-                          return;
-                        }
-                        if (maleController.text == "" && femaleController.text == "") {
-                          print(maleController.text);
-                          print(femaleController.text);
-                          print("7");
-
-                          Statics.showToast("${Statics.getLabel('maleFemaleCountValidation')}");
-                          return;
-                        }
-                        print("8");
-                        if (sarpanchDoorbhasController.text.length != 10) {
-                          Statics.showToast("${Statics.getLabel('mobileNumberLimit')}");
-                          return;
-                        }
-                        submitStep1Form();
-                      } else {
+                        Statics.showToast("${Statics.getLabel('sarpanchNavValidation')}");
+                        return;
+                      }
+                      // if (beforsanghaonnowisoff != 0 && beforsanghaonnowisoff != 1) {
+                      //   print("3");
+                      //
+                      //   Statics.showToast("${Statics.getLabel('purviShakhaValidation')}");
+                      //   return;
+                      // }
+                      // if (anyaVividhKshetracheKame != 0 && anyaVividhKshetracheKame != 1) {
+                      //   print("4");
+                      //
+                      //   Statics.showToast("${Statics.getLabel('anyaVividhValidation')}");
+                      //   return;
+                      // }
+                      // if (gavatilMumbaikar != 0 && gavatilMumbaikar != 1) {
+                      //   print("5");
+                      //
+                      //   Statics.showToast("${Statics.getLabel('mumbaikarValidation')}");
+                      //   return;
+                      // }
+                      // if (vadiGharLoksankhyaEnteredDataList!.isEmpty) {
+                      //   print("6");
+                      //
+                      //   Statics.showToast("${Statics.getLabel('vadipadyachiInfoValidation')}");
+                      //   return;
+                      // }
+                      // if (maleController.text == "" && femaleController.text == "") {
+                      //   print(maleController.text);
+                      //   print(femaleController.text);
+                      //   print("7");
+                      //
+                      //   Statics.showToast("${Statics.getLabel('maleFemaleCountValidation')}");
+                      //   return;
+                      // }
+                      // print("8");
+                      if (sarpanchDoorbhasController.text.trim().isNotEmpty && sarpanchDoorbhasController.text.length != 10) {
+                        Statics.showToast("${Statics.getLabel('mobileNumberLimit')}");
+                        return;
+                      }
+                      submitStep1Form();
+                      /*} else {
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
@@ -4730,7 +4727,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                             ],
                           ),
                         );
-                      }
+                      }*/
                     } else {
                       showPopupForVastiValidation(context);
                     }

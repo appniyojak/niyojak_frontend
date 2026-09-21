@@ -249,7 +249,7 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
             emailController.text = swDetails!.email.toString();
 
             _birthDate = ((swDetails!.birthDate != null && swDetails!.birthDate != "") ? (DateFormat('dd/MM/yyyy').parse(swDetails!.birthDate!.split(" ").first)) : null);
-            birthDateController.text = ((swDetails!.birthDate != null && swDetails!.birthDate != "") ? DateFormat('dd-MMM-yyyy').format(_birthDate!) : '');
+            birthDateController.text = ((swDetails!.birthDate != null && swDetails!.birthDate != "") ? DateFormat('dd/MM/yyyy').format(_birthDate!).toString() : '');
 
             var _geoUnitID = swDetails!.linkedGeoUnitID == null ? null : swDetails!.linkedGeoUnitID.toString();
 
@@ -338,7 +338,7 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
       if (mounted)
         setState(() {
           _birthDate = date;
-          birthDateController.text = DateFormat('dd-MMM-yyyy').format(date);
+          birthDateController.text = DateFormat('dd/MM/yyyy').format(date);
         });
     }
   }

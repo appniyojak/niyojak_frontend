@@ -308,7 +308,7 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(Statics.getLabel('EditShaakhaa')),
+        title: Text(Statics.getLabel('EditShaakhaaVistar')),
       ),
       body: ModalProgressHUD(
           child: SingleChildScrollView(
@@ -322,10 +322,10 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
                     TextFormField(
                       textInputAction: TextInputAction.next,
                       controller: _shaakhaanameCtrl,
-                      decoration: InputDecoration(labelText: Statics.getLabel('ShaakhaaName')),
+                      decoration: InputDecoration(labelText: Statics.getLabel('ShaakhaaNameVistar')),
                       keyboardType: TextInputType.text,
                       validator: (value) {
-                        if (value!.isEmpty) return (Statics.getLabel('ShaakhaaNameValidationMessage'));
+                        if (value!.isEmpty) return (Statics.getLabel('ShaakhaaNameVistarValidationMessage'));
                         return null;
                       },
                       onSaved: (value) {
@@ -579,7 +579,7 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
   void _addNameOnlyKaryakarta() {
     final name = _nameOnlyCtrl.text.trim();
     if (name.isEmpty) {
-      Statics.showToast(Statics.getLabel('ShaakhaaNameValidationMessage'));
+      Statics.showToast(Statics.getLabel('ShaakhaaNameVistarValidationMessage'));
       return;
     }
 
