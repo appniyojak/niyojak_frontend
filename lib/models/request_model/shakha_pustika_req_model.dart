@@ -9,8 +9,10 @@ class CreateUpdateShaakhaPustikaRequest {
   final String vayogatid;
   final String? subjecttext;
   final String? filepath;
+  final String? anyapath;
   final String? urllink;
   final String? filebase64;
+  final String? anyabase64;
 
   CreateUpdateShaakhaPustikaRequest({
     this.pkid = 0,
@@ -21,8 +23,10 @@ class CreateUpdateShaakhaPustikaRequest {
     required this.vayogatid,
     required this.subjecttext,
     this.filepath,
+    this.anyapath,
     this.urllink,
     this.filebase64,
+    this.anyabase64,
   });
 
   Map<String, dynamic> toJson() {
@@ -35,8 +39,10 @@ class CreateUpdateShaakhaPustikaRequest {
       'vayogatid': vayogatid,
       'subjecttext': subjecttext ?? '',
       'filepath': filepath ?? '',
+      'anyapath': anyapath ?? '',
       'urllink': urllink ?? '',
       'filebase64': filebase64 ?? '',
+      'anyabase64': anyabase64 ?? '',
     };
   }
 }

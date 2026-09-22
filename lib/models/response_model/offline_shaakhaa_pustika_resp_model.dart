@@ -36,6 +36,7 @@ class OfflineShaakhaPustika {
   String? vayogatname;
   String? subjecttext;
   String? filepath;
+  String? anyapath;
   int? karyakramid;
   String? urllink;
   String? vayogatid;
@@ -51,6 +52,7 @@ class OfflineShaakhaPustika {
     this.vayogatname,
     this.subjecttext,
     this.filepath,
+    this.anyapath,
     this.karyakramid,
     this.urllink,
     this.vayogatid,
@@ -67,6 +69,7 @@ class OfflineShaakhaPustika {
     vayogatname = json['vayogatname'];
     subjecttext = json['subjecttext'];
     filepath = json['filepath'];
+    anyapath = json['anyapath'];
     karyakramid = json['karyakramid'];
     urllink = json['urllink'];
     vayogatid = json['vayogatid'];
@@ -84,6 +87,7 @@ class OfflineShaakhaPustika {
     data['vayogatname'] = '${this.vayogatname.toString()}';
     data['subjecttext'] = '${this.subjecttext.toString()}';
     data['filepath'] = '${this.filepath.toString()}';
+    data['anyapath'] = '${this.anyapath.toString()}';
     data['karyakramid'] = this.karyakramid;
     data['urllink'] = '${this.urllink.toString()}';
     data['vayogatid'] = '${this.vayogatid.toString()}';

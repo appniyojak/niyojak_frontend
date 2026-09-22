@@ -75,7 +75,7 @@ class DatabaseHelper {
   CREATE TABLE IF NOT EXISTS OfflineShaakhaPustika (
     pkid INT PRIMARY KEY, yearno INT, monthno INT, canupdate INT, karyakramname TEXT, vayogatname TEXT,
     subjecttext TEXT, filepath TEXT, karyakramid INT, urllink TEXT, vayogatid TEXT,
-    mdate TEXT
+    mdate TEXT, anyapath TEXT
   )
 ''');
 
@@ -223,7 +223,7 @@ class DatabaseHelper {
   CREATE TABLE IF NOT EXISTS OfflineShaakhaPustika (
     pkid INT PRIMARY KEY, yearno INT, monthno INT, canupdate INT, karyakramname TEXT, vayogatname TEXT,
     subjecttext TEXT, filepath TEXT, karyakramid INT, urllink TEXT, vayogatid TEXT,
-    mdate TEXT
+    mdate TEXT, anyapath TEXT
   )
 ''');
 

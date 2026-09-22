@@ -11,6 +11,7 @@ import 'package:niyojak_prod/screens/shakha_pustika/sangraha_shkha_pustika_scree
 import 'package:niyojak_prod/widgets/app_drawer.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../utils/globals.dart';
 import '../../helpers/static_data.dart' as Statics;
@@ -698,7 +699,7 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
                   columnSpacing: 14,
                   columns: [
                     if (karyakramList.isNotEmpty) DataColumn(label: _tableHeaderCell(Statics.getLabel('Information'))),
-                    if (containsGeet) DataColumn(label: _tableHeaderCell(Statics.getLabel('Geet'))),
+                    if (containsGeet) DataColumn(label: _tableHeaderCell(Statics.getLabel('GeetOrFile'))),
                     DataColumn(label: _tableHeaderCell(Statics.getLabel('karyakramWiseSeq'))),
                     DataColumn(label: _tableHeaderCell(Statics.getLabel('VayogatCode'))),
                     DataColumn(label: _tableHeaderCell(Statics.getLabel('tapshil'))),
@@ -707,25 +708,43 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
                   rows: karyakramList.map((item) {
                     final monthLabel = (item.monthno! >= 1 && item.monthno! <= 12) ? monthNameMarathi(item.monthno!) : '-';
                     final content = item.subjecttext ?? '-';
-                    final rawRelativePath = item.filepath ?? '';
+
+                    // NEW — fallback: use filepath if present, else anyapath (for karyakram 311)
+                    final hasFilepath = (item.filepath ?? '').trim().isNotEmpty;
+                    final rawRelativePath = hasFilepath ? item.filepath! : (item.anyapath ?? '');
+                    final isFromAnyapath = !hasFilepath && rawRelativePath.isNotEmpty;
+                    final isAnyaMp4 = isFromAnyapath && rawRelativePath.toLowerCase().endsWith('.mp4');
+
                     final karyakramValuee = item.karyakramid ?? 0;
-                    final audioUrl = _resolveFileUrl(rawRelativePath); // still used for the disk-check filename derivation
-                    // print("Resolved file URL: ${_resolveFileUrl(item.filepath ?? '-')}");
+                    final audioUrl = _resolveFileUrl(rawRelativePath);
+
                     return DataRow(
                       cells: [
-                        if (karyakramList.isNotEmpty) DataCell(_tableInfoCellFromItem(item, karyakramList)), // CHANGED — accepts item directly
+                        if (karyakramList.isNotEmpty) DataCell(_tableInfoCellFromItem(item, karyakramList)),
                         if (containsGeet)
-                          DataCell(DownloadPlayCell(
-                            pkid: item.pkid!,
-                            tablename: 'shaakhapustika',
-                            remoteRelativePath: rawRelativePath,
-                            resolvedUrlForDiskCheck: audioUrl,
-                            title: content,
-                            fromDataTable: true,
-                          )),
+                          DataCell(
+                            rawRelativePath.isEmpty
+                                ? const Center(child: Text('---'))
+                                : (isFromAnyapath && !isAnyaMp4)
+                                    // non-mp4 "any file" — plain open-link icon instead of DownloadPlayCell
+                                    ? Center(
+                                        child: InkWell(
+                                          onTap: () => _openAnyaFile(audioUrl, item.anyapath),
+                                          child: const Icon(Icons.insert_drive_file_rounded, color: Colors.blue, size: 19),
+                                        ),
+                                      )
+                                    // audio (filepath) OR mp4-from-anyapath — same DownloadPlayCell as before
+                                    : DownloadPlayCell(
+                                        pkid: item.pkid!,
+                                        tablename: 'shaakhapustika',
+                                        remoteRelativePath: rawRelativePath,
+                                        resolvedUrlForDiskCheck: audioUrl,
+                                        title: content,
+                                        fromDataTable: true,
+                                      ),
+                          ),
                         DataCell(_tableDataCell(item.karyakramname ?? '-')),
                         DataCell(_tableDataCell(item.vayogatname ?? '-')),
-
                         DataCell(SizedBox(width: 100, child: _tableVishayCell(content))),
                         //if (_showDownloadColumn) DataCell(_tableDownloadCell(audioUrl, true, content)),
                       ],
@@ -738,6 +757,23 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
         ]
       ],
     );
+  }
+
+  Future<void> _openAnyaFile(String url, name) async {
+    log("clicked anya file >>>>>>>>>>>>> $url");
+    log("clicked anya file name >>>>>>>>>>>>> $name");
+
+    final uri = Uri.tryParse(url.trim());
+    if (uri == null) {
+      Statics.showToast(Statics.getLabel('ProblemMassage'));
+      return;
+    }
+
+    try {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } catch (e) {
+      Statics.showToast(Statics.getLabel('ProblemMassage'));
+    }
   }
 
   String _resolveFileUrl(String path) {

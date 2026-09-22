@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -53,6 +54,7 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
 
   // ── NEW: audio file picker state ────────────────────────────────
   PlatformFile? _selectedAudioFile;
+  PlatformFile? _selectedAnyaFile;
 
   // ── UI constants ─────────────────────────────────────────────────
   static const double _cardRadius = 16;
@@ -70,6 +72,7 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
   bool _isSaving = false; // NEW — loading state for save button
   String? _existingAudioName; // NEW — shows previously saved audio file name
   String? _localAudioPath; // NEW — path of the already-downloaded audio file
+  String? _existingAnyaFileName; // NEW — shows previously saved "any file" (karyakram 311) name
   bool get _hasPlayableAudio => _localAudioPath != null;
   bool _isLoading = true;
   bool _isOpeningLink = false;
@@ -284,6 +287,7 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
 
     _linkController.text = data.urllink ?? '';
     _existingAudioName = data.filepath; // NEW field, see below
+    _existingAnyaFileName = data.anyapath; // NEW
   }
 
   Future<void> populateDropdown({bool fromClear = false}) async {
@@ -335,7 +339,10 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
       // Convert selected audio file to base64 (only relevant for 'गीत')
       String? fileBase64;
       String? filePathName;
-      print("inside selected audio file:$_selectedAudioFile");
+      String? anyabase64;
+      String? anyapathName;
+      // print("inside selected audio file:$_selectedAudioFile");
+      // print("inside selected anya file:$_selectedAnyaFile");
       if (_selectedAudioFile != null) {
         filePathName = _selectedAudioFile!.name;
 
@@ -356,6 +363,40 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
         }
 
         log("Audio file encoded, base64 length: ${fileBase64.length}");
+      }
+      if (_selectedAnyaFile != null) {
+        anyapathName = _selectedAnyaFile!.name;
+
+        // NEW — extension from the picked file, falls back to 'dat' to match
+        // the backend's own fallback (".dat") if somehow empty/unknown.
+        final rawExt = (_selectedAnyaFile!.extension ?? '').trim();
+        final ext = rawExt.isEmpty ? 'dat' : rawExt;
+
+        Uint8List? rawBytes;
+        if (_selectedAnyaFile!.bytes != null) {
+          rawBytes = _selectedAnyaFile!.bytes!;
+        } else if (_selectedAnyaFile!.path != null) {
+          rawBytes = await File(_selectedAnyaFile!.path!).readAsBytes();
+        } else {
+          if (mounted) {
+            Statics.showToast(Statics.getLabel("FailedToReadFile"));
+          }
+          setState(() => _isSaving = false);
+          return;
+        }
+
+        // NEW — prefix as a Data URL so the .NET API can extract the extension:
+        // header is everything before the first comma; it looks for "/" then ";"
+        // and takes what's between them as the extension. "file/<ext>;base64,"
+        // satisfies that regardless of the file's real MIME type.
+        final encoded = base64Encode(rawBytes);
+        anyabase64 = 'data:file/$ext;base64,$encoded';
+
+        log("Anya file encoded, base64 length: ${anyabase64.length}, extension: $ext");
+      } else if (_existingAnyaFileName != null && _existingAnyaFileName!.isNotEmpty) {
+        // edit flow — no new file picked, keep referencing the existing one
+        anyapathName = _existingAnyaFileName;
+        anyabase64 = null;
       } else if (_existingAudioName != null && _existingAudioName!.isNotEmpty) {
         // ── NEW: no new file picked, but an existing audio file is already
         // attached to this record (edit flow) — keep referencing it so the
@@ -386,11 +427,13 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
         vayogatid: _selectedVayogat.join(','),
         subjecttext: fullHtml,
         filepath: filePathName,
+        anyapath: anyapathName,
         urllink: _linkController.text.trim(),
         filebase64: fileBase64,
+        anyabase64: anyabase64,
       );
 
-      log("request model:${requestModel.toJson()}");
+      // log("request model:${requestModel.toJson()}");
       final respData = await Statics.createUpdateShaakhaPustika(requestModel);
 
       if (!mounted) return;
@@ -442,9 +485,8 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
 
       if (picked.size > maxSizeBytes) {
         log("Rejected audio file — size: ${pickedSizeMb.toStringAsFixed(2)} MB");
-        if (mounted) {
-          await _showFileSizeExceededDialog(pickedSizeMb);
-        }
+        if (mounted) await _showFileSizeExceededDialog(pickedSizeMb);
+
         return; // reject — don't set _selectedAudioFile
       }
       setState(() {
@@ -454,6 +496,33 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
       log("Audio size: ${_selectedAudioFile?.size}");
       log("Audio bytes: ${_selectedAudioFile?.bytes != null}");
       //log("Audio selected: ${_selectedAudioFile?.name}, size: ${_selectedAudioFile?.size}, hasBytes: ${_selectedAudioFile?.bytes != null}");
+    }
+  }
+
+  Future<void> _pickAnyaFile() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.any,
+      withData: true,
+    );
+
+    if (result != null && result.files.isNotEmpty) {
+      final picked = result.files.first;
+
+      const maxSizeBytes = 25 * 1024 * 1024; // 25 MB — same limit as audio
+      final pickedSizeMb = picked.size / (1024 * 1024);
+
+      if (picked.size > maxSizeBytes) {
+        log("Rejected anya file — size: ${pickedSizeMb.toStringAsFixed(2)} MB");
+        if (mounted) await _showFileSizeExceededDialog(pickedSizeMb);
+        return; // reject — don't set _selectedAnyaFile
+      }
+
+      setState(() {
+        _selectedAnyaFile = picked;
+      });
+      log("Anya name: ${_selectedAnyaFile?.name}");
+      log("Anya size: ${_selectedAnyaFile?.size}");
+      log("Anya bytes: ${_selectedAnyaFile?.bytes != null}");
     }
   }
 
@@ -755,7 +824,7 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
         // ],
 
         // ── NEW: audio file picker ──
-        if (_karyakramValue != "309" && _isEditable) ...[
+        if (["308", "310"].contains(_karyakramValue) && _isEditable) ...[
           Text(
             Statics.getLabel('ChooseAudioFile'),
             style: TextStyle(fontSize: 13, color: Colors.grey.shade700, fontWeight: FontWeight.w500),
@@ -825,6 +894,71 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
           ),
           const SizedBox(height: 26),
         ],
+
+        // ── NEW: generic "any file" picker — only for karyakram 311 ──
+        if (_karyakramValue == '311' && _isEditable) ...[
+          Text(
+            Statics.getLabel('chooseFile'), // NEW LABEL — please add to your labels source
+            style: TextStyle(fontSize: 13, color: Colors.grey.shade700, fontWeight: FontWeight.w500),
+          ),
+          const SizedBox(height: 8),
+          InkWell(
+            borderRadius: BorderRadius.circular(10),
+            onTap: _pickAnyaFile,
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF9FAFC),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.grey.shade300),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.attach_file_rounded, color: primaryColor),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      _selectedAnyaFile?.name ?? _existingAnyaFileName ?? Statics.getLabel('TapToChooseFile'),
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: (_selectedAnyaFile == null && _existingAnyaFileName == null) ? Colors.grey.shade600 : Colors.black87,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  Icon(Icons.upload_file_rounded, color: primaryColor, size: 20),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            Statics.getLabel('AddAudioLink').replaceAll('{Audio}', Statics.getLabel('File')),
+            style: TextStyle(fontSize: 13, color: Colors.grey.shade700, fontWeight: FontWeight.w500),
+          ),
+          const SizedBox(height: 8),
+          TextFormField(
+            controller: _linkController,
+            decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.grey.shade100,
+                hintText: Statics.getLabel("AudioUrl").replaceAll('{Audio}', Statics.getLabel('File')),
+                hintStyle: TextStyle(color: Colors.grey.shade600, fontSize: 14),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide(
+                      color: Colors.grey.shade300,
+                    )),
+                enabledBorder: UnderlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide(
+                      color: Colors.grey.shade300,
+                    ))),
+          ),
+          const SizedBox(height: 26),
+        ],
+
         const SizedBox(height: 6),
 
         Text(

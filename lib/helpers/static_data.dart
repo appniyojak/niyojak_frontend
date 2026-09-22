@@ -2470,7 +2470,7 @@ Future<Map<String, dynamic>?> createUpdateShaakhaPustika(CreateUpdateShaakhaPust
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   log("API >>>>>>>>>>>>>> $urlcreateupdateshaakhapustikaRequest");
-  print(json.encode(requestModel.toJson()));
+  log("REQ >>>>>>>>>>>>>> ${json.encode(requestModel.toJson())}");
 
   var response = await http.post(
     Uri.parse(urlcreateupdateshaakhapustikaRequest),

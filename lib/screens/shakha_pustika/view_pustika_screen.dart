@@ -267,9 +267,9 @@ class _ViewPustikaScreenState extends State<ViewPustikaScreen> {
     final uri = Uri.tryParse(finalUrl);
     if (uri == null) return;
 
-    if (await canLaunchUrl(uri)) {
+    try {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } else if (context.mounted) {
+    } catch (e) {
       Statics.showToast(Statics.getLabel('ProblemMassage'));
     }
   }
@@ -281,6 +281,11 @@ class _ViewPustikaScreenState extends State<ViewPustikaScreen> {
     final subjectPlain = _stripHtmlTags(item.subjecttext); // keep — still used as title below
     final subjectHtml = _extractBodyContent(item.subjecttext);
     final hasLink = (item.urllink ?? '').trim().isNotEmpty;
+
+    final rawAnyaPath = item.anyapath ?? '';
+    final hasAnyaFile = rawAnyaPath.isNotEmpty;
+    final anyaUrl = _resolveFileUrl(rawAnyaPath);
+    final isAnyaMp4 = rawAnyaPath.toLowerCase().endsWith('.mp4');
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch, // Ensures full width for proper alignment
@@ -302,6 +307,48 @@ class _ViewPustikaScreenState extends State<ViewPustikaScreen> {
           ),
           const SizedBox(height: 12),
         ],
+
+        if (hasAnyaFile) ...[
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            decoration: BoxDecoration(
+              color: _warmBg.withOpacity(0.6),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: isAnyaMp4
+                ? DownloadPlayCell(
+                    pkid: item.pkid!,
+                    tablename: 'shaakhapustika',
+                    remoteRelativePath: rawAnyaPath,
+                    resolvedUrlForDiskCheck: anyaUrl,
+                    title: subjectPlain,
+                  )
+                : InkWell(
+                    onTap: () => _openLink(anyaUrl),
+                    child: Row(
+                      children: [
+                        Icon(Icons.insert_drive_file_rounded, size: 18, color: _saffron),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            rawAnyaPath.split('/').last,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 13.5,
+                              color: _saffron,
+                              fontWeight: FontWeight.w600,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ),
+                        const Icon(Icons.open_in_new, size: 16, color: _saffron),
+                      ],
+                    ),
+                  ),
+          ),
+          const SizedBox(height: 12),
+        ],
+
         // --- ACTION BAR: Link and Copy Button ---
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween, // Aligns buttons to the right
