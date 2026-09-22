@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:niyojak_prod/providers/sankalp_screen_provider.dart';
 import 'package:niyojak_prod/screens/AbhiyaanSwayamsevak.dart';
 import 'package:niyojak_prod/screens/AbhiyanAddSwayamsevak.dart';
@@ -178,7 +179,7 @@ class NiyojakAppState extends State<NiyojakApp> {
         requiresDeviceIdle: false,
         requiredNetworkType: NetworkType.NONE,
       ),
-      (String taskId) async {
+          (String taskId) async {
         log('[BackgroundFetch] Event: $taskId at ${DateTime.now()}');
         BackgroundFetch.finish(taskId);
       },
@@ -201,6 +202,14 @@ class NiyojakAppState extends State<NiyojakApp> {
         child: Stack(
           children: [
             MaterialApp(
+              localizationsDelegates: const [
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: const [
+                Locale('en', 'GB'),
+              ],
               // Critical: without this, PushNotificationService can never
               // resolve a NavigatorState, and every notification-tap route
               // (active/background/killed) silently no-ops.
@@ -208,6 +217,10 @@ class NiyojakAppState extends State<NiyojakApp> {
               debugShowCheckedModeBanner: false,
               title: 'Niyojak',
               theme: ThemeData(
+                textSelectionTheme: TextSelectionThemeData(
+                  selectionColor: Colors.purple.withOpacity(0.3),
+                  selectionHandleColor: Colors.purple,
+                ),
                 colorScheme: ColorScheme.fromSeed(seedColor: Colors.purple),
                 floatingActionButtonTheme: FloatingActionButtonThemeData(
                   foregroundColor: Colors.white,
@@ -223,15 +236,16 @@ class NiyojakAppState extends State<NiyojakApp> {
                 fontFamily: 'Lato',
                 visualDensity: VisualDensity.adaptivePlatformDensity,
               ),
-              builder: (c, child) => SafeArea(
-                top: false,
-                child: GestureDetector(
-                  onTap: () {
-                    FocusScope.of(context).unfocus();
-                  },
-                  child: child,
-                ),
-              ),
+              builder: (c, child) =>
+                  SafeArea(
+                    top: false,
+                    child: GestureDetector(
+                      onTap: () {
+                        FocusScope.of(context).unfocus();
+                      },
+                      child: child,
+                    ),
+                  ),
               home: SplashScreenCheck(),
               routes: {
                 LogInScreen.routeName: (ctx) => LogInScreen(),
@@ -338,7 +352,7 @@ class NiyojakAppState extends State<NiyojakApp> {
                 child: Container(
                   decoration: BoxDecoration(borderRadius: const BorderRadius.vertical(bottom: Radius.circular(5)), color: Colors.red.withValues(alpha: 0.7)),
                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                  child: Text(" Dev  -  1.0.52 ", style: const TextStyle(fontSize: 13, color: Colors.white, fontWeight: FontWeight.w600)),
+                  child: Text(" Dev  -  1.0.53 ", style: const TextStyle(fontSize: 13, color: Colors.white, fontWeight: FontWeight.w600)),
                 ),
               ),
           ],

@@ -131,10 +131,10 @@ class LogIn {
       print("Failed to retrieve device token");
     }
 
-    log(json.encode({"MobileNumber": mobileNumber, "Password": password, "LastSyncTimeStamp": lastLoginTimeStamp, "otplogin": otplogin, "token": token}));
+    log(json.encode({"MobileNumber": mobileNumber, "Password": password, "LastSyncTimeStamp": "", "otplogin": otplogin, "token": token}));
 
     var response = await http.post(Uri.parse(Statics.urlValidateUser),
-        headers: jHeaders, body: json.encode({"MobileNumber": mobileNumber, "Password": password, "LastSyncTimeStamp": lastLoginTimeStamp, "otplogin": otplogin, "token": token}));
+        headers: jHeaders, body: json.encode({"MobileNumber": mobileNumber, "Password": password, "LastSyncTimeStamp": "", "otplogin": otplogin, "token": token}));
 
     // log(response.body);
     print("usrLogIn 6");

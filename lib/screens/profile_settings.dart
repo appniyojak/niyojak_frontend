@@ -109,7 +109,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             style: TextStyle(fontSize: 24),
           ),
         ),
-        drawer: _otpUser == "true" ? Container() : AppDrawer(),
+        drawer: _otpUser == "true" ? null : AppDrawer(),
         body: SingleChildScrollView(
           child: Container(
             padding: EdgeInsets.all(20),

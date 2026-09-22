@@ -40,6 +40,7 @@ class EditSwayamsevakScreenState extends State<EditSwayamsevakScreen> with Singl
   String? preFilledEmail;
 
   int get _tabLength {
+    if (_otpUser == "true" && isSoochiAvailable == true) return 5;
     if (_otpUser == "true") return 4;
     if (isSoochiAvailable == true) return 7;
     return 6;
@@ -139,14 +140,16 @@ class EditSwayamsevakScreenState extends State<EditSwayamsevakScreen> with Singl
     var data1 = membersData == null ? null : membersData["SharedSoochi"];
     if ((data != null && data.length > 0) || (data1 != null && data1.length > 0)) {
       if (!mounted) return;
-      setState(() {
-        isSoochiAvailable = true;
-      });
+      if (mounted)
+        setState(() {
+          isSoochiAvailable = true;
+        });
     } else {
       if (!mounted) return;
-      setState(() {
-        isSoochiAvailable = false;
-      });
+      if (mounted)
+        setState(() {
+          isSoochiAvailable = false;
+        });
     }
   }
 

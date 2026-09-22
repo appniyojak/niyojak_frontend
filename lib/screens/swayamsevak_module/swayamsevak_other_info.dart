@@ -2130,46 +2130,6 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
                         ],
                       ),
 
-                    SizedBox(height: 16),
-                    TextFormField(
-                      controller: _otherInfoCntrl,
-                      minLines: 5,
-                      maxLines: null,
-                      keyboardType: TextInputType.multiline,
-                      textInputAction: TextInputAction.newline,
-                      decoration: InputDecoration(
-                        // hintText: Statics.getLabel('OtherInfo'),
-                        labelText: Statics.getLabel('OtherInfo'),
-                        alignLabelWithHint: true,
-                        contentPadding: const EdgeInsets.all(16),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                            color: Colors.grey,
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                            color: Colors.grey,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                            color: Colors.blue,
-                            width: 1.5,
-                          ),
-                        ),
-                      ),
-                      onSaved: (value) {
-                        if (value != null && value.isNotEmpty)
-                          swOtherInfo!.otherInfoDesc = value;
-                        else
-                          swOtherInfo!.otherInfoDesc = null;
-                      },
-                    ),
-
                     // TextFormField(
                     //   textInputAction: TextInputAction.next,
                     //   controller: _txtMaxDaayitvaCtrl,
@@ -2708,9 +2668,47 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
                     //       swOtherInfo!.otherSocialOrganizationRemark = null;
                     //   },
                     // ),
-                    SizedBox(
-                      height: 10,
+
+                    SizedBox(height: 16),
+                    TextFormField(
+                      controller: _otherInfoCntrl,
+                      minLines: 5,
+                      maxLines: null,
+                      keyboardType: TextInputType.multiline,
+                      textInputAction: TextInputAction.newline,
+                      decoration: InputDecoration(
+                        // hintText: Statics.getLabel('OtherInfo'),
+                        labelText: Statics.getLabel('OtherInfo'),
+                        alignLabelWithHint: true,
+                        contentPadding: const EdgeInsets.all(16),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Colors.grey,
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Colors.grey,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Colors.blue,
+                            width: 1.5,
+                          ),
+                        ),
+                      ),
+                      onSaved: (value) {
+                        if (value != null && value.isNotEmpty)
+                          swOtherInfo!.otherInfoDesc = value;
+                        else
+                          swOtherInfo!.otherInfoDesc = null;
+                      },
                     ),
+                    SizedBox(height: 21),
                     if (_isLoading)
                       CircularProgressIndicator()
                     else if (int.parse(widget.swId) == 0)

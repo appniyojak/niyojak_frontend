@@ -755,7 +755,7 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
         // ],
 
         // ── NEW: audio file picker ──
-        if (["308", "310"].contains(_karyakramValue) && _isEditable) ...[
+        if (_karyakramValue != "309" && _isEditable) ...[
           Text(
             Statics.getLabel('ChooseAudioFile'),
             style: TextStyle(fontSize: 13, color: Colors.grey.shade700, fontWeight: FontWeight.w500),
@@ -793,8 +793,11 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
           ),
           const SizedBox(height: 8),
           Text(
-            Statics.getLabel('AddAudioLink')
-                .replaceAll('{Audio}', _karyakram?.firstWhere((e) => e.staticID.toString() == _karyakramValue.toString()).codeForDisplay.toString().split(" ").last ?? Statics.getLabel("Geet")),
+            Statics.getLabel('AddAudioLink').replaceAll(
+                '{Audio}',
+                _karyakram?.any((e) => e.staticID == 309) == true
+                    ? Statics.getLabel('File')
+                    : (_karyakram?.firstWhere((e) => e.staticID.toString() == _karyakramValue.toString()).codeForDisplay.toString().split(" ").last ?? Statics.getLabel("Geet"))),
             style: TextStyle(fontSize: 13, color: Colors.grey.shade700, fontWeight: FontWeight.w500),
           ),
           const SizedBox(height: 8),
@@ -803,8 +806,11 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
             decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.grey.shade100,
-                hintText: Statics.getLabel("AudioUrl")
-                    .replaceAll('{Audio}', _karyakram?.firstWhere((e) => e.staticID.toString() == _karyakramValue.toString()).codeForDisplay.toString().split(" ").last ?? Statics.getLabel("Geet")),
+                hintText: Statics.getLabel("AudioUrl").replaceAll(
+                    '{Audio}',
+                    _karyakram?.any((e) => e.staticID == 309) == true
+                        ? Statics.getLabel('File')
+                        : (_karyakram?.firstWhere((e) => e.staticID.toString() == _karyakramValue.toString()).codeForDisplay.toString().split(" ").last ?? Statics.getLabel("Geet"))),
                 hintStyle: TextStyle(color: Colors.grey.shade600, fontSize: 14),
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),

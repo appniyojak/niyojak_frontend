@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../helpers/static_data.dart' as Statics;
 import '../../models/response_model/offline_shaakhaa_pustika_resp_model.dart';
 import '../../utils/globals.dart';
+import 'download_play_cell_widget.dart';
 
 class ViewPustikaScreen extends StatefulWidget {
   static var routeName = '/view-pustika-screen';
@@ -55,17 +56,17 @@ class _ViewPustikaScreenState extends State<ViewPustikaScreen> {
     return '$base$rel';
   }
 
-  Future<void> _openLink(String url) async {
-    final uri = Uri.tryParse(url.trim());
-    if (uri == null) {
-      Statics.showToast(Statics.getLabel('ProblemMassage'));
-      return;
-    }
-    final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
-    if (!launched) {
-      Statics.showToast(Statics.getLabel('ProblemMassage'));
-    }
-  }
+  // Future<void> _openLink(String url) async {
+  //   final uri = Uri.tryParse(url.trim());
+  //   if (uri == null) {
+  //     Statics.showToast(Statics.getLabel('ProblemMassage'));
+  //     return;
+  //   }
+  //   final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
+  //   if (!launched) {
+  //     Statics.showToast(Statics.getLabel('ProblemMassage'));
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -258,6 +259,21 @@ class _ViewPustikaScreenState extends State<ViewPustikaScreen> {
     return text.trim();
   }
 
+  Future<void> _openLink(String url) async {
+    String finalUrl = url.trim();
+    if (!finalUrl.startsWith('http://') && !finalUrl.startsWith('https://')) {
+      finalUrl = 'https://$finalUrl';
+    }
+    final uri = Uri.tryParse(finalUrl);
+    if (uri == null) return;
+
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else if (context.mounted) {
+      Statics.showToast(Statics.getLabel('ProblemMassage'));
+    }
+  }
+
   Widget _buildKaryakramItem(OfflineShaakhaPustika item) {
     final rawRelativePath = item.filepath ?? '';
     final hasAudio = rawRelativePath.isNotEmpty;
@@ -269,6 +285,23 @@ class _ViewPustikaScreenState extends State<ViewPustikaScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch, // Ensures full width for proper alignment
       children: [
+        if (hasAudio) ...[
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            decoration: BoxDecoration(
+              color: _warmBg.withOpacity(0.6),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: DownloadPlayCell(
+              pkid: item.pkid!,
+              tablename: 'shaakhapustika',
+              remoteRelativePath: rawRelativePath,
+              resolvedUrlForDiskCheck: audioUrl,
+              title: subjectPlain,
+            ),
+          ),
+          const SizedBox(height: 12),
+        ],
         // --- ACTION BAR: Link and Copy Button ---
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween, // Aligns buttons to the right
@@ -295,7 +328,7 @@ class _ViewPustikaScreenState extends State<ViewPustikaScreen> {
                     Icon(Icons.copy_rounded, size: 13, color: Colors.grey[700]), // Change color as needed
                     const SizedBox(width: 3),
                     Text(
-                      'Copy',
+                      Statics.getLabel('copy'),
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.grey[700],
@@ -314,7 +347,7 @@ class _ViewPustikaScreenState extends State<ViewPustikaScreen> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.link_rounded, size: 13, color: _saffron),
+                      Icon(Icons.link_rounded, size: 15, color: _saffron),
                       const SizedBox(width: 3),
                       Text(
                         Statics.getLabel('GeetUrl'),
@@ -340,21 +373,28 @@ class _ViewPustikaScreenState extends State<ViewPustikaScreen> {
                 '-',
                 style: TextStyle(fontSize: 13.5, color: Color(0xFF3A3A3A), height: 1.55),
               )
-            : flutter_html.Html(
-                data: subjectHtml,
-                style: {
-                  "body": flutter_html.Style(
-                    margin: flutter_html.Margins.zero,
-                    padding: flutter_html.HtmlPaddings.zero,
-                    fontSize: flutter_html.FontSize(13.5),
-                    color: const Color(0xFF3A3A3A),
-                    lineHeight: flutter_html.LineHeight(1.55),
-                  ),
-                  "p": flutter_html.Style(
-                    margin: flutter_html.Margins.zero,
-                    padding: flutter_html.HtmlPaddings.only(bottom: 6),
-                  ),
-                },
+            : SelectionArea(
+                child: flutter_html.Html(
+                  data: subjectHtml,
+                  onLinkTap: (url, attributes, element) {
+                    if (url != null && url.trim().isNotEmpty) {
+                      _openLink(url);
+                    }
+                  },
+                  style: {
+                    "body": flutter_html.Style(
+                      margin: flutter_html.Margins.zero,
+                      padding: flutter_html.HtmlPaddings.zero,
+                      fontSize: flutter_html.FontSize(13.5),
+                      color: const Color(0xFF3A3A3A),
+                      lineHeight: flutter_html.LineHeight(1.55),
+                    ),
+                    "p": flutter_html.Style(
+                      margin: flutter_html.Margins.zero,
+                      padding: flutter_html.HtmlPaddings.only(bottom: 6),
+                    ),
+                  },
+                ),
               ),
       ],
     );

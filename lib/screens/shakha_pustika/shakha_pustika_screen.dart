@@ -659,7 +659,7 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
   Widget _buildResultsTable(List<OfflineShaakhaPustika> karyakramList) {
     final primaryColor = Theme.of(context).primaryColor;
     final _showDownloadColumn = levelId == 9 || levelId == 10 || levelId == 11;
-    final containsGeet = karyakramList.any((e) => [308, 310].contains(e.karyakramid));
+    final containsGeet = karyakramList.any((e) => e.karyakramid != 309);
 
     return Column(
       spacing: 8,
@@ -753,7 +753,7 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
 
   Widget _tableInfoCellFromItem(OfflineShaakhaPustika item, List<OfflineShaakhaPustika> karyakramList) {
     final primaryColor = Theme.of(context).primaryColor;
-    final bool isAudioKaryakram = [308, 310].contains(item.karyakramid);
+    final bool isAudioKaryakram = item.karyakramid != 309;
     final String audioUrl = _resolveFileUrl(item.filepath ?? '');
     final bool hasAudioFile = isAudioKaryakram && audioUrl.isNotEmpty;
     final matches = _vayogat?.where((e) => e?.staticID.toString() == _vayogatValue);
