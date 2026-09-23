@@ -4092,11 +4092,9 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
             ),
           ),
           //==========================  GavatsajareHonareSan  ==============================================================
-          SizedBox(
-            height: 20,
-          ),
+          SizedBox(height: 20),
           mainContainer(
-            "${Statics.getLabel('GavatsajareHonareSan')} )",
+            Statics.getLabel('GavatsajareHonareSan'),
             Column(
               children: [
                 //=================================================== VASTIT SAJAR HONARE SAN FORM ====================================================================================
@@ -4369,7 +4367,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
             height: 20,
           ),
           mainContainer(
-            "${Statics.getLabel('GavatHonareKaryakram')} )",
+            Statics.getLabel('GavatHonareKaryakram'),
             Column(
               children: [
                 //=================================================== VASTIT SAJAR HONARE samajik karyakyram FORM ====================================================================================
@@ -7193,6 +7191,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                     textControllerField2(
                       name: "${Statics.getLabel('Name')}",
                       controller: sajjanShaktiNameController,
+                      imp: " *",
                     ),
                     textControllerField2(name: "${Statics.getLabel('Address')}", controller: sajjanShaktiAddressController),
                     textControllerField2(
@@ -7200,6 +7199,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                       controller: sajjanShaktiPhoneController,
                       keyboardType: TextInputType.number,
                       maxInput: 10,
+                      imp: " *",
                     ),
                     Row(
                       children: [
@@ -7313,13 +7313,18 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                       editId: sajjanShaktiPrabhavKeshtraEditId,
                     ),
                     const SizedBox(height: 5),
-                    textControllerField2(name: "${Statics.getLabel('samparkSootraNaav')}", controller: sajjanShaktiContactPersonNameController),
+                    textControllerField2(
+                      name: "${Statics.getLabel('samparkSootraNaav')}",
+                      controller: sajjanShaktiContactPersonNameController,
+                      imp: " *",
+                    ),
                     const SizedBox(height: 5),
                     textControllerField2(
                       name: "${Statics.getLabel('samparakSootraDoorbhash')}",
                       controller: sajjanShaktiContactPersonDoorbhashController,
                       keyboardType: TextInputType.number,
                       maxInput: 10,
+                      imp: " *",
                     ),
                   ],
                 ),

@@ -3,7 +3,7 @@ description: Niyojak Prod project.
 
 publish_to: 'none'
 
-version: 1.0.54+54
+version: 3.8.1+120
 
 environment:
   sdk: "^3.1.0"

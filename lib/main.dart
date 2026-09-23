@@ -351,7 +351,7 @@ class NiyojakAppState extends State<NiyojakApp> {
                 child: Container(
                   decoration: BoxDecoration(borderRadius: const BorderRadius.vertical(bottom: Radius.circular(5)), color: Colors.red.withValues(alpha: 0.7)),
                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                  child: Text(" Dev  -  1.0.54 ", style: const TextStyle(fontSize: 13, color: Colors.white, fontWeight: FontWeight.w600)),
+                  child: Text(" Dev  -  1.0.55 ", style: const TextStyle(fontSize: 13, color: Colors.white, fontWeight: FontWeight.w600)),
                 ),
               ),
           ],

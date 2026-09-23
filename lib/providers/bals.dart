@@ -675,6 +675,17 @@ class DaayitvaMasterBAL {
     daayitvaName = map["DaayitvaName"];
     isPravaasiDaayitva = map["IsPravaasiDaayitva"];
   }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> map = new Map<String, dynamic>();
+
+    map["DaayitvaID"] = this.daayitvaID;
+    map["PraantID"] = this.praantID;
+    map["DaayitvaForID"] = this.daayitvaForID;
+    map["DaayitvaName"] = this.daayitvaName;
+    map["IsPravaasiDaayitva"] = this.isPravaasiDaayitva;
+    return map;
+  }
 }
 
 class UserDataBAL {

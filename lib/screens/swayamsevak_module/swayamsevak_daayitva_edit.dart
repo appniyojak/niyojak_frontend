@@ -46,6 +46,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
 
   List<GeoUnitMasterBAL>? _geoUnits;
   TextEditingController _typeAheadController = TextEditingController();
+  final SuggestionsController<DaayitvaMasterBAL> _daayitvaSuggestionsController = SuggestionsController<DaayitvaMasterBAL>();
 
   SwayamsevakDaayitvaBAL? swDaayitva;
 
@@ -155,6 +156,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
   @override
   void dispose() {
     super.dispose();
+    _daayitvaSuggestionsController.dispose();
     _typeAheadController.dispose();
     _startYearCtrl.dispose();
     _endYearCtrl.dispose();
@@ -642,7 +644,10 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
   }
 
   Future<List<DaayitvaMasterBAL>> populateDaayitva(String daayitvaId, String pattern) async {
+    // log("daayitvaId >>>>>>>> $daayitvaId");
+    // log("pattern >>>>>>>> $pattern");
     var data3 = await Statics.getDaayitvaLDB(daayitvaId, pattern, "");
+    // data3.forEach((e) => log("pattern >>>>>>>> ${e.toJson()}"));
     return data3;
   }
 
@@ -671,10 +676,25 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
                                   isExpanded: true,
                                   value: _daayitvaForValue == null ? null : _daayitvaForValue,
                                   items: _daayitvaFor!.map((bg) => DropdownMenuItem(value: bg, child: Text(bg.codeForDisplay!))).toList(),
-                                  onChanged: (value) {
+                                  onChanged: (value) async {
                                     setState(() {
                                       _daayitvaForValue = value;
+
+                                      // Clear previous selection
+                                      _daayitvaController.clear();
+                                      _daayitvaValue = "";
+                                      _selectedDaayitvaID = "";
                                     });
+                                    await populateDaayitva(
+                                      value == null || value!.code == "SanghaPreritSansthaa" || value!.code == "OtherSocialOrganization" ? "" : value!.staticID.toString(),
+                                      "",
+                                    );
+                                    setState(() {});
+
+                                    // NEW — force TypeAheadField to re-run suggestionsCallback with the
+                                    // (now empty) current text, against the freshly selected daayitvaFor.
+                                    _daayitvaSuggestionsController.refresh();
+
                                     print(_daayitvaForValue!.ViewOnly);
                                   },
                                   validator: (value) {
@@ -847,6 +867,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
                                             width: Statics.getDeviceSize(context).width * 0.63,
                                             child: TypeAheadField<DaayitvaMasterBAL>(
                                               controller: _daayitvaController,
+                                              suggestionsController: _daayitvaSuggestionsController,
                                               builder: (ctx, controller, focusNode) {
                                                 return TextFormField(
                                                   controller: _daayitvaController,
