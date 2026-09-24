@@ -54,18 +54,18 @@ String _monthLabel(dynamic monthValue) {
   }
   if (monthNum < 1 || monthNum > 12) return monthValue.toString();
   List<String> _monthNames = [
-    Statics.getLabel('Jan'),
-    Statics.getLabel('Feb'),
-    Statics.getLabel('Mar'),
-    Statics.getLabel('Apr'),
-    Statics.getLabel('May'),
-    Statics.getLabel('Jun'),
-    Statics.getLabel('Jul'),
-    Statics.getLabel('Aug'),
-    Statics.getLabel('Sept'),
-    Statics.getLabel('Oct'),
-    Statics.getLabel('Nov'),
-    Statics.getLabel('Dec'),
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
   return _monthNames[monthNum - 1];
 }
@@ -1480,7 +1480,8 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
                 if (idx < 0 || idx >= months.length) return const SizedBox();
                 return Padding(
                   padding: const EdgeInsets.only(top: 6),
-                  child: Text(_monthLabel(months[idx]), style: const TextStyle(fontSize: 11, color: Color(0xFF6B7280))),
+                  child: Text(Statics.getLabel(_monthLabel(months[idx]).length > 3 ? _monthLabel(months[idx]).substring(0, 3) : _monthLabel(months[idx])),
+                      style: const TextStyle(fontSize: 11, color: Color(0xFF6B7280))),
                 );
               },
               // getTitlesWidget: (value, meta) {
@@ -1517,7 +1518,7 @@ class _ShaakhaaTulnatmakReportTabState extends State<ShaakhaaTulnatmakReportTab>
               if (spots.isEmpty) return [];
               final monthIdx = spots.first.x.toInt();
               final rawMonth = (monthIdx >= 0 && monthIdx < months.length) ? months[monthIdx] : monthIdx + 1;
-              final monthLabel = _monthLabel(rawMonth);
+              final monthLabel = Statics.getLabel(_monthLabel(rawMonth));
               // final monthIdx = spots.first.x.toInt();
               // final monthNum = (monthIdx >= 0 && monthIdx < months.length) ? months[monthIdx] : monthIdx + 1;
 
