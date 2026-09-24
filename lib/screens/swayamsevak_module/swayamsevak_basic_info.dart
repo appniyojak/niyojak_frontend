@@ -331,7 +331,7 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
     DateTime? date = await showDatePicker(
       context: context,
       initialDate: _birthDate == null ? DateTime.now() : _birthDate!,
-      firstDate: DateTime((_birthDate == null ? DateTime.now().year : _birthDate!.year) - 150),
+      firstDate: DateTime((DateTime.now().year) - 150),
       lastDate: DateTime.now(),
       locale: const Locale('en', 'GB'),
     );
