@@ -371,18 +371,18 @@ Map<String, String> months = {'1': 'Jan', '2': 'Feb', '3': 'Mar', '4': 'Apr', '5
 
 Map<String, String> vaarshikotsavMonths = {
   '0': 'NotConducted',
-  '1': 'Jan',
-  '2': 'Feb',
-  '3': 'Mar',
-  '4': 'Apr',
+  '1': 'January',
+  '2': 'February',
+  '3': 'March',
+  '4': 'April',
   '5': 'May',
-  '6': 'Jun',
-  '7': 'Jul',
-  '8': 'Aug',
-  '9': 'Sept',
-  '10': 'Oct',
-  '11': 'Nov',
-  '12': 'Dec',
+  '6': 'June',
+  '7': 'July',
+  '8': 'August',
+  '9': 'September',
+  '10': 'October',
+  '11': 'November',
+  '12': 'December',
 };
 
 int levelId = int.tryParse(Statics.userDetails["LevelID"]?.toString() ?? "0") ?? 0;
@@ -562,20 +562,31 @@ int currentLang() {
 }
 
 String getLabel(String key, {bool returnKey = false}) {
-  String language = userDetails['languagePreference'];
+  // final language = "English";
+  // final language = "Hindi";
+  // final language = "Marathi";
+  final language = userDetails['languagePreference'].toString();
 
-  if (language == 'English') {
-    return resEnglish[key] ?? (returnKey ? key : "");
-  }
-  if (language == 'Marathi') {
-    return resMarathi[key] ?? (returnKey ? key : "");
-  }
-  if (language == 'Hindi') {
-    return resHindi[key] ?? (returnKey ? key : "");
+  final resources = switch (language) {
+    'English' => resEnglish,
+    'Hindi' => resHindi,
+    'Marathi' => resMarathi,
+    _ => resMarathi,
+  };
+
+  final label = resources[key]?.trim();
+
+  if (label != null && label.isNotEmpty) {
+    return label;
   }
 
-  // Default to Marathi if language not matched
-  return resMarathi[key] ?? (returnKey ? key : "");
+  final marathiLabel = resMarathi[key]?.trim();
+
+  if (marathiLabel != null && marathiLabel.isNotEmpty) {
+    return marathiLabel;
+  }
+
+  return returnKey ? key : '--';
 }
 
 Size getDeviceSize(BuildContext context) {

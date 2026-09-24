@@ -139,18 +139,18 @@ Future<bool?> isInternetAvailable() async {
 
 String monthNameMarathi(int month) {
   var months = [
-    Statics.getLabel('Jan'),
-    Statics.getLabel('Feb'),
-    Statics.getLabel('Mar'),
-    Statics.getLabel('Apr'),
+    Statics.getLabel('January'),
+    Statics.getLabel('February'),
+    Statics.getLabel('March'),
+    Statics.getLabel('April'),
     Statics.getLabel('May'),
-    Statics.getLabel('Jun'),
-    Statics.getLabel('Jul'),
-    Statics.getLabel('Aug'),
-    Statics.getLabel('Sept'),
-    Statics.getLabel('Oct'),
-    Statics.getLabel('Nov'),
-    Statics.getLabel('Dec'),
+    Statics.getLabel('June'),
+    Statics.getLabel('July'),
+    Statics.getLabel('August'),
+    Statics.getLabel('September'),
+    Statics.getLabel('October'),
+    Statics.getLabel('November'),
+    Statics.getLabel('December'),
   ];
   return months[month - 1];
 }
