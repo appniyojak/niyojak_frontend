@@ -2,10 +2,16 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>com.transistorsoft.fetch</string>
+	</array>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>$(APP_DISPLAY_NAME)</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -14,12 +20,8 @@
 	<string>6.0</string>
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
-	<key>CFBundleDisplayName</key>
-    <string>$(APP_DISPLAY_NAME)</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
-	<key>MinimumOSVersion</key>
-    <string>14.0</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
@@ -41,16 +43,18 @@
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>MinimumOSVersion</key>
+	<string>14.0</string>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>App needs access to play audio files in app</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>App needs access to current location for showing map</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Can I haz location always?</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Older devices need location.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>App needs access to current location for showing map</string>
-	<key>NSLocationUsageDescription</key>
-    <string>Older devices need location.</string>
-    <key>NSLocationAlwaysUsageDescription</key>
-    <string>Can I haz location always?</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>App needs access to photo library for pick images</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
@@ -67,22 +71,18 @@
 	<string>Main</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
-		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
+		<string>UIInterfaceOrientationPortrait</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>BGTaskSchedulerPermittedIdentifiers</key>
-	<array>
-		<string>com.transistorsoft.fetch</string>
-	</array>
 </dict>
 </plist>
