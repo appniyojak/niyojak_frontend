@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -6,9 +7,7 @@ import 'package:horizontal_data_table/refresh/pull_to_refresh/src/indicator/wate
 import 'package:horizontal_data_table/refresh/pull_to_refresh/src/smart_refresher.dart';
 import 'package:niyojak_prod/helpers/database_helper.dart';
 import 'package:niyojak_prod/models/response_model/AbhiyaanLoginDataResponse.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-
-// import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart'; // import 'package:package_info/package_info.dart';
 // import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
@@ -57,11 +56,16 @@ class _SplashScreenCheckState extends State<SplashScreenCheck> {
   }
 
   Future<void> _updateDatabaseLanguagePreference() async {
-    Database db = await DatabaseHelper.database;
-    String sqlStr = 'UPDATE UserDataMaster SET PreferredLanguageID=6;';
-    String sqlStr1 = 'UPDATE UserDataMaster SET PreferredLanguageCode=\'Marathi\';';
-    await db.execute(sqlStr);
-    await db.execute(sqlStr1);
+    try {
+      Database db = await DatabaseHelper.database;
+      String sqlStr = 'UPDATE UserDataMaster SET PreferredLanguageID=6;';
+      String sqlStr1 = 'UPDATE UserDataMaster SET PreferredLanguageCode=\'Marathi\';';
+      await db.execute(sqlStr);
+      await db.execute(sqlStr1);
+    } catch (e, stack) {
+      log("Exception at the _updateDatabaseLanguagePreference >>> $e \n $stack");
+      // }finally{
+    }
   }
 
   void switchScreens(contx) async {

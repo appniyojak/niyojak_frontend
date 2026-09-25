@@ -471,9 +471,31 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
   // ── NEW: pick an audio file from the device ─────────────────────
   Future<void> _pickAudioFile() async {
     final result = await FilePicker.platform.pickFiles(
-      type: FileType.audio,
+      type: FileType.any,
+      allowMultiple: false,
       withData: true, // CHANGED — ensures bytes are loaded into memory
     );
+
+    if (result == null) return;
+
+    final file = result.files.first;
+
+    final extension = file.extension?.toLowerCase();
+
+    const allowedAudioExtensions = {
+      'mp3',
+      'wav',
+      'm4a',
+      'aac',
+      'ogg',
+      'flac',
+      'amr',
+    };
+
+    if (!allowedAudioExtensions.contains(extension)) {
+      Statics.showToast('Please select an audio file');
+      return;
+    }
 
     if (result != null && result.files.isNotEmpty) {
       final picked = result.files.first;

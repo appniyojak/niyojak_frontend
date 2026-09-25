@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -8,11 +9,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:flutter_quill_delta_from_html/parser/html_to_delta.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:http/http.dart' as http;
 import 'package:niyojak_prod/screens/shakha_pustika/sangraha_shkha_pustika_screen.dart';
 import 'package:niyojak_prod/widgets/app_drawer.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../utils/globals.dart';
 import '../../helpers/static_data.dart' as Statics;
@@ -38,6 +41,9 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
   List<StaticMasterBAL?>? _vayogat;
   String? _vayogatValue;
   List<String> _selectedVayogat = [];
+
+  bool _isDownloading = false;
+  int? _selecteditemid;
 
   // ── Karyakram dropdown state ─────────────────────────────────────
   // String? _karyakramValue;
@@ -97,6 +103,8 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
   }
 
   Future<void> _initData() async {
+    await AudioPlayer.global.setAudioContext(AudioContextConfig().build());
+
     SharedPreferences pref = await SharedPreferences.getInstance();
     _vayogatValue = pref.getString("selectedVayogat");
 
@@ -389,7 +397,7 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        if (levelId > 8 && levelId != 13) _sectionCard(child: _dropDownSection(ctrl)),
+                        if (levelId > 7 && levelId != 13) _sectionCard(child: _dropDownSection(ctrl)),
                         const SizedBox(height: 16),
                         _sectionCard(child: _karyakramSection(primaryColor, ctrl, bhaagSelected)),
                         const SizedBox(height: 20),
@@ -724,25 +732,34 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
                         if (karyakramList.isNotEmpty) DataCell(_tableInfoCellFromItem(item, karyakramList)),
                         if (containsGeet)
                           DataCell(
-                            rawRelativePath.isEmpty
-                                ? const Center(child: Text('---'))
-                                : (isFromAnyapath && !isAnyaMp4)
-                                    // non-mp4 "any file" — plain open-link icon instead of DownloadPlayCell
-                                    ? Center(
-                                        child: InkWell(
-                                          onTap: () => _openAnyaFile(audioUrl, item.anyapath, "${item.karyakramname}_${Statics.getLabel('karyakramWiseSeq')}_${monthLabel}_${item.yearno}"),
-                                          child: const Icon(Icons.insert_drive_file_rounded, color: Colors.blue, size: 19),
-                                        ),
-                                      )
-                                    // audio (filepath) OR mp4-from-anyapath — same DownloadPlayCell as before
-                                    : DownloadPlayCell(
-                                        pkid: item.pkid!,
-                                        tablename: 'shaakhapustika',
-                                        remoteRelativePath: rawRelativePath,
-                                        resolvedUrlForDiskCheck: audioUrl,
-                                        title: content,
-                                        fromDataTable: true,
-                                      ),
+                            _isDownloading && _selecteditemid == item.pkid
+                                ? Center(
+                                    child: SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(strokeWidth: 2, color: Colors.purple),
+                                    ),
+                                  )
+                                : rawRelativePath.isEmpty
+                                    ? const Center(child: Text('---'))
+                                    : (isFromAnyapath && !isAnyaMp4)
+                                        // non-mp4 "any file" — plain open-link icon instead of DownloadPlayCell
+                                        ? Center(
+                                            child: InkWell(
+                                              onTap: () => _openAnyaFile(item.pkid ?? 0, audioUrl, "${item.karyakramname}_${monthLabel}_${item.yearno}"),
+                                              //${item.filepath != null && item.filepath!.isNotEmpty ? "_${item.filepath.toString().split("/").last.split(".").first}" : ""}
+                                              child: const Icon(Icons.insert_drive_file_rounded, color: Colors.blue, size: 19),
+                                            ),
+                                          )
+                                        // audio (filepath) OR mp4-from-anyapath — same DownloadPlayCell as before
+                                        : DownloadPlayCell(
+                                            pkid: item.pkid!,
+                                            tablename: 'shaakhapustika',
+                                            remoteRelativePath: rawRelativePath,
+                                            resolvedUrlForDiskCheck: audioUrl,
+                                            title: content,
+                                            fromDataTable: true,
+                                          ),
                           ),
                         DataCell(_tableDataCell(item.karyakramname ?? '-')),
                         DataCell(_tableDataCell(item.vayogatname ?? '-')),
@@ -760,9 +777,9 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
     );
   }
 
-  Future<void> _openAnyaFile(String url, name, filenameSave) async {
+  Future<void> _openAnyaFile(int id, String url, filenameSave) async {
     log("clicked anya file >>>>>>>>>>>>> $url");
-    log("clicked anya file name >>>>>>>>>>>>> $name");
+    // log("clicked anya file name >>>>>>>>>>>>> $name");
 
     final uri = Uri.tryParse(url.trim());
     if (uri == null) {
@@ -776,21 +793,50 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
     final lowerPath = uri.path.toLowerCase();
     final isImage = imageExtensions.any((ext) => lowerPath.endsWith(ext));
 
+    final filename = "${filenameSave}_${url.split("/").last}";
+
     if (isImage) {
-      _showGalleryDialog(url, "$filenameSave${imageExtensions.firstWhere((ext) => lowerPath.endsWith(ext))}");
+      _showGalleryDialog(url, filename);
       return;
     }
+    // final filename = "$filenameSave${url.split(".").last}";
 
     try {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
+      // await launchUrl(uri, mode: LaunchMode.externalApplication);
+      await downloadExcelTemplate(id, url, filename);
     } catch (e) {
       Statics.showToast(Statics.getLabel('ProblemMassage'));
     }
   }
 
+  Future<void> downloadExcelTemplate(int id, String url, String fileName) async {
+    _selecteditemid = id;
+    setState(() => _isDownloading = true);
+
+    try {
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        final Directory dir = await getApplicationDocumentsDirectory();
+        final String savePath = "${dir.path}/$fileName";
+        final File file = File(savePath);
+        await file.writeAsBytes(response.bodyBytes);
+
+        await OpenFilex.open(savePath);
+      } else {
+        Statics.showToast("${Statics.getLabel('templateDownloadFailed')}");
+      }
+    } catch (e) {
+      print("Error downloading template: $e");
+      Statics.showToast("${Statics.getLabel('templateDownloadFailed')}");
+    } finally {
+      _selecteditemid = null;
+      setState(() => _isDownloading = false);
+    }
+  }
+
   // ─── Gallery / view-all dialog ─────────────────────────────────────────────
   void _showGalleryDialog(String baseUrl, String filename) {
-    bool _isDownloading = false;
     showDialog(
       context: context,
       builder: (ctx) => Dialog(

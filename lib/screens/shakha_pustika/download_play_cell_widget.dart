@@ -57,6 +57,7 @@ class DownloadPlayCellState extends State<DownloadPlayCell> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async => await AudioPlayer.global.setAudioContext(AudioContextConfig().build()));
     _bootstrap();
     _liveSub = MediaDownloadService.instance.liveEvents.listen(_onLiveEvent);
   }
@@ -115,7 +116,7 @@ class DownloadPlayCellState extends State<DownloadPlayCell> {
   Future<void> _setupPlayerIfNeeded() async {
     if (_playerReady || _localPath == null) return;
     _playerReady = true;
-    await _player.setSourceDeviceFile(_localPath!);
+    await _player.setSourceDeviceFile(_localPath!, mimeType: 'audio/mp3'); //'audio/${_localPath.toString().split(".").last}');
     final dur = await _player.getDuration();
     if (dur != null && mounted) setState(() => _duration = dur);
 
@@ -144,7 +145,7 @@ class DownloadPlayCellState extends State<DownloadPlayCell> {
     } else if (_playerState == PlayerState.completed) {
       // await _player.seek(Duration.zero);
       // await _player.resume();
-      await _player.play(DeviceFileSource(_localPath!));
+      await _player.play(DeviceFileSource(_localPath!, mimeType: 'audio/mp3')); //'audio/${_localPath.toString().split(".").last}'));
     } else {
       await _player.resume();
     }

@@ -1,3 +1,4 @@
+// import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart' as flutter_html;
@@ -54,6 +55,13 @@ class _ViewPustikaScreenState extends State<ViewPustikaScreen> {
     final base = kFileBaseUrl.endsWith('/') ? kFileBaseUrl : '$kFileBaseUrl/';
     final rel = path.startsWith('/') ? path.substring(1) : path;
     return '$base$rel';
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) async => await AudioPlayer.global.setAudioContext(AudioContextConfig().build()));
   }
 
   // Future<void> _openLink(String url) async {

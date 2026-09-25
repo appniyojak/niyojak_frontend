@@ -274,13 +274,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -383,12 +379,12 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
-				CURRENT_PROJECT_VERSION = 121;
+				CURRENT_PROJECT_VERSION = 122;
 				DART_DEFINES = "RkxVVFRFUl9BUFBfRkxBVk9SPWRldg==";
 				DEVELOPMENT_TEAM = J9US6Y7R59;
 				ENABLE_BITCODE = NO;
-				FLUTTER_BUILD_NAME = 3.8.1;
-				FLUTTER_BUILD_NUMBER = 121;
+				FLUTTER_BUILD_NAME = 3.8.2;
+				FLUTTER_BUILD_NUMBER = 122;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Niyojak;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -396,7 +392,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.8.1;
+				MARKETING_VERSION = 3.8.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.app.niyojakProd;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -532,12 +528,12 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
-				CURRENT_PROJECT_VERSION = 121;
+				CURRENT_PROJECT_VERSION = 122;
 				DART_DEFINES = "RkxVVFRFUl9BUFBfRkxBVk9SPWRldg==";
 				DEVELOPMENT_TEAM = J9US6Y7R59;
 				ENABLE_BITCODE = NO;
-				FLUTTER_BUILD_NAME = 3.8.1;
-				FLUTTER_BUILD_NUMBER = 121;
+				FLUTTER_BUILD_NAME = 3.8.2;
+				FLUTTER_BUILD_NUMBER = 122;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Niyojak;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -545,7 +541,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.8.1;
+				MARKETING_VERSION = 3.8.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.app.niyojakProd;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -569,12 +565,12 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
-				CURRENT_PROJECT_VERSION = 121;
+				CURRENT_PROJECT_VERSION = 122;
 				DART_DEFINES = "RkxVVFRFUl9BUFBfRkxBVk9SPWRldg==";
 				DEVELOPMENT_TEAM = J9US6Y7R59;
 				ENABLE_BITCODE = NO;
-				FLUTTER_BUILD_NAME = 3.8.1;
-				FLUTTER_BUILD_NUMBER = 121;
+				FLUTTER_BUILD_NAME = 3.8.2;
+				FLUTTER_BUILD_NUMBER = 122;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Niyojak;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -582,7 +578,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.8.1;
+				MARKETING_VERSION = 3.8.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.app.niyojakProd;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -663,12 +659,12 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
-				CURRENT_PROJECT_VERSION = 121;
+				CURRENT_PROJECT_VERSION = 122;
 				DART_DEFINES = "RkxVVFRFUl9BUFBfRkxBVk9SPXByb2Q=";
 				DEVELOPMENT_TEAM = J9US6Y7R59;
 				ENABLE_BITCODE = NO;
-				FLUTTER_BUILD_NAME = 3.8.1;
-				FLUTTER_BUILD_NUMBER = 121;
+				FLUTTER_BUILD_NAME = 3.8.2;
+				FLUTTER_BUILD_NUMBER = 122;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Niyojak;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -676,7 +672,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.8.1;
+				MARKETING_VERSION = 3.8.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.app.niyojakProd;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -755,12 +751,12 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
-				CURRENT_PROJECT_VERSION = 121;
+				CURRENT_PROJECT_VERSION = 122;
 				DART_DEFINES = "RkxVVFRFUl9BUFBfRkxBVk9SPXByb2Q=";
 				DEVELOPMENT_TEAM = J9US6Y7R59;
 				ENABLE_BITCODE = NO;
-				FLUTTER_BUILD_NAME = 3.8.1;
-				FLUTTER_BUILD_NUMBER = 121;
+				FLUTTER_BUILD_NAME = 3.8.2;
+				FLUTTER_BUILD_NUMBER = 122;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Niyojak;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -768,7 +764,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.8.1;
+				MARKETING_VERSION = 3.8.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.app.niyojakProd;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -844,12 +840,12 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
-				CURRENT_PROJECT_VERSION = 121;
+				CURRENT_PROJECT_VERSION = 122;
 				DART_DEFINES = "RkxVVFRFUl9BUFBfRkxBVk9SPXByb2Q=";
 				DEVELOPMENT_TEAM = J9US6Y7R59;
 				ENABLE_BITCODE = NO;
-				FLUTTER_BUILD_NAME = 3.8.1;
-				FLUTTER_BUILD_NUMBER = 121;
+				FLUTTER_BUILD_NAME = 3.8.2;
+				FLUTTER_BUILD_NUMBER = 122;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Niyojak;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -857,7 +853,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.8.1;
+				MARKETING_VERSION = 3.8.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.app.niyojakProd;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

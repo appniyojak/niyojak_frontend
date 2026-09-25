@@ -72,7 +72,9 @@ class _AudioPlayerDialogState extends State<AudioPlayerDialog> {
 
     try {
       // NEW — build and hold the Source once, reused for both first play and replay
-      _source = widget.isLocalFile ? DeviceFileSource(widget.audioUrl) : UrlSource(widget.audioUrl);
+      _source = widget.isLocalFile
+          ? DeviceFileSource(widget.audioUrl, mimeType: 'audio/mp3') //'audio/${widget.audioUrl.split(".").last}')
+          : UrlSource(widget.audioUrl, mimeType: 'audio/mp3'); //'audio/${widget.audioUrl.split(".").last}');
 
       await _player.play(_source); // CHANGED — play(source) instead of setSourceX + resume
       setState(() => _isLoading = false);
