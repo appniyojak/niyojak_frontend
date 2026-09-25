@@ -608,7 +608,7 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                if (levelId > 8 && levelId != 13) const SizedBox(height: 16),
+                                if (levelId > 7 && levelId != 13) const SizedBox(height: 16),
                                 _sectionCard(
                                   child: _karyakramSection(primaryColor, ctrl),
                                 ),
