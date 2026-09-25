@@ -363,8 +363,7 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
         }
 
         log("Audio file encoded, base64 length: ${fileBase64.length}");
-      }
-      if (_selectedAnyaFile != null) {
+      } else if (_selectedAnyaFile != null) {
         anyapathName = _selectedAnyaFile!.name;
 
         // NEW — extension from the picked file, falls back to 'dat' to match
@@ -426,11 +425,11 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
         cuserid: cUserId,
         vayogatid: _selectedVayogat.join(','),
         subjecttext: fullHtml,
-        filepath: filePathName,
-        anyapath: anyapathName,
+        filepath: filePathName ?? "",
+        anyapath: anyapathName ?? "",
         urllink: _linkController.text.trim(),
-        filebase64: fileBase64,
-        anyabase64: anyabase64,
+        filebase64: fileBase64 ?? "",
+        anyabase64: anyabase64 ?? "",
       );
 
       // log("request model:${requestModel.toJson()}");
@@ -830,35 +829,65 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
             style: TextStyle(fontSize: 13, color: Colors.grey.shade700, fontWeight: FontWeight.w500),
           ),
           const SizedBox(height: 8),
-          InkWell(
-            borderRadius: BorderRadius.circular(10),
-            onTap: _pickAudioFile,
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF9FAFC),
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.grey.shade300),
-              ),
-              child: Row(
-                children: [
-                  Icon(Icons.audiotrack_rounded, color: primaryColor),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Text(
-                      _selectedAudioFile?.name ?? _existingAudioName ?? Statics.getLabel('TapToChooseFile'), // CHANGED
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: (_selectedAudioFile == null && _existingAudioName == null) ? Colors.grey.shade600 : Colors.black87,
-                      ),
-                      overflow: TextOverflow.ellipsis,
+          Row(
+            children: [
+              Expanded(
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(10),
+                  onTap: _pickAudioFile,
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF9FAFC),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Colors.grey.shade300),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(Icons.audiotrack_rounded, color: primaryColor),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            _selectedAudioFile?.name ?? _existingAudioName ?? Statics.getLabel('TapToChooseFile'), // CHANGED
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: (_selectedAudioFile == null && _existingAudioName == null) ? Colors.grey.shade600 : Colors.black87,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Icon(Icons.upload_file_rounded, color: primaryColor, size: 20),
+                      ],
                     ),
                   ),
-                  Icon(Icons.upload_file_rounded, color: primaryColor, size: 20),
-                ],
+                ),
               ),
-            ),
+              if (_selectedAudioFile != null || _existingAudioName != null)
+                IconButton(
+                    onPressed: () async {
+                      final _res = await showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text(Statics.getLabel("alert")),
+                            content: Text(Statics.getLabel("ToDeleteFile")),
+                            actions: [
+                              TextButton(onPressed: () => Navigator.of(context).pop(true), child: Text(Statics.getLabel("ConfirmationYes"))),
+                              TextButton(onPressed: () => Navigator.of(context).pop(false), child: Text(Statics.getLabel("ConfirmationNo"))),
+                            ],
+                          );
+                        },
+                      );
+
+                      if (_res) {
+                        _selectedAudioFile = null;
+                        _existingAudioName = null;
+                      }
+                      setState(() {});
+                    },
+                    icon: Icon(Icons.delete_forever_rounded, color: Colors.red))
+            ],
           ),
           const SizedBox(height: 8),
           Text(
@@ -902,35 +931,65 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
             style: TextStyle(fontSize: 13, color: Colors.grey.shade700, fontWeight: FontWeight.w500),
           ),
           const SizedBox(height: 8),
-          InkWell(
-            borderRadius: BorderRadius.circular(10),
-            onTap: _pickAnyaFile,
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF9FAFC),
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.grey.shade300),
-              ),
-              child: Row(
-                children: [
-                  Icon(Icons.attach_file_rounded, color: primaryColor),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Text(
-                      _selectedAnyaFile?.name ?? _existingAnyaFileName ?? Statics.getLabel('TapToChooseFile'),
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: (_selectedAnyaFile == null && _existingAnyaFileName == null) ? Colors.grey.shade600 : Colors.black87,
-                      ),
-                      overflow: TextOverflow.ellipsis,
+          Row(
+            children: [
+              Expanded(
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(10),
+                  onTap: _pickAnyaFile,
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF9FAFC),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Colors.grey.shade300),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(Icons.attach_file_rounded, color: primaryColor),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            _selectedAnyaFile?.name ?? _existingAnyaFileName ?? Statics.getLabel('TapToChooseFile'),
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: (_selectedAnyaFile == null && _existingAnyaFileName == null) ? Colors.grey.shade600 : Colors.black87,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Icon(Icons.upload_file_rounded, color: primaryColor, size: 20),
+                      ],
                     ),
                   ),
-                  Icon(Icons.upload_file_rounded, color: primaryColor, size: 20),
-                ],
+                ),
               ),
-            ),
+              if (_selectedAnyaFile != null || _existingAnyaFileName != null)
+                IconButton(
+                    onPressed: () async {
+                      final _res = await showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text(Statics.getLabel("alert")),
+                            content: Text(Statics.getLabel("ToDeleteFile")),
+                            actions: [
+                              TextButton(onPressed: () => Navigator.of(context).pop(true), child: Text(Statics.getLabel("ConfirmationYes"))),
+                              TextButton(onPressed: () => Navigator.of(context).pop(false), child: Text(Statics.getLabel("ConfirmationNo"))),
+                            ],
+                          );
+                        },
+                      );
+
+                      if (_res) {
+                        _selectedAnyaFile = null;
+                        _existingAnyaFileName = null;
+                      }
+                      setState(() {});
+                    },
+                    icon: Icon(Icons.delete_forever_rounded, color: Colors.red))
+            ],
           ),
           const SizedBox(height: 8),
           Text(
@@ -1417,7 +1476,7 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          Statics.getLabel('SelectMonth'),
+          Statics.getLabel('selectMonth'),
           style: TextStyle(fontSize: 13, color: Colors.grey.shade700, fontWeight: FontWeight.w500),
         ),
         const SizedBox(height: 6),
@@ -1459,7 +1518,7 @@ class _SangrahaShkhaPustikaScreen extends State<SangrahaShkhaPustikaScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          Statics.getLabel('SelectYear'),
+          Statics.getLabel('selectYear'),
           style: TextStyle(fontSize: 13, color: Colors.grey.shade700, fontWeight: FontWeight.w500),
         ),
         const SizedBox(height: 6),

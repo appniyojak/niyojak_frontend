@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
@@ -729,7 +730,7 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
                                     // non-mp4 "any file" — plain open-link icon instead of DownloadPlayCell
                                     ? Center(
                                         child: InkWell(
-                                          onTap: () => _openAnyaFile(audioUrl, item.anyapath),
+                                          onTap: () => _openAnyaFile(audioUrl, item.anyapath, "${item.karyakramname}_${Statics.getLabel('karyakramWiseSeq')}_${monthLabel}_${item.yearno}"),
                                           child: const Icon(Icons.insert_drive_file_rounded, color: Colors.blue, size: 19),
                                         ),
                                       )
@@ -759,7 +760,7 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
     );
   }
 
-  Future<void> _openAnyaFile(String url, name) async {
+  Future<void> _openAnyaFile(String url, name, filenameSave) async {
     log("clicked anya file >>>>>>>>>>>>> $url");
     log("clicked anya file name >>>>>>>>>>>>> $name");
 
@@ -769,11 +770,86 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
       return;
     }
 
+    // NEW — image extensions check (case-insensitive), matched against the
+    // path portion of the URL so query params (?x=1) don't interfere.
+    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp'];
+    final lowerPath = uri.path.toLowerCase();
+    final isImage = imageExtensions.any((ext) => lowerPath.endsWith(ext));
+
+    if (isImage) {
+      _showGalleryDialog(url, "$filenameSave${imageExtensions.firstWhere((ext) => lowerPath.endsWith(ext))}");
+      return;
+    }
+
     try {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     } catch (e) {
       Statics.showToast(Statics.getLabel('ProblemMassage'));
     }
+  }
+
+  // ─── Gallery / view-all dialog ─────────────────────────────────────────────
+  void _showGalleryDialog(String baseUrl, String filename) {
+    bool _isDownloading = false;
+    showDialog(
+      context: context,
+      builder: (ctx) => Dialog(
+        child: Container(
+          // margin: EdgeInsets.symmetric(horizontal: 18, vertical: 24),
+          color: Colors.transparent,
+          padding: const EdgeInsets.all(20),
+          child: StatefulBuilder(builder: (context, set) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              spacing: 12,
+              children: [
+                Align(
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () => Navigator.pop(ctx),
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        Statics.getLabel("DoDownload"),
+                        style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: _isDownloading
+                          ? null
+                          : () async {
+                              set(() => _isDownloading = true);
+                              await MyAppGlobals.downloadFile(baseUrl, (filename).toString());
+                              set(() => _isDownloading = false);
+                            },
+                      icon: _isDownloading
+                          ? const SizedBox(
+                              width: 17,
+                              height: 17,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          : const Icon(Icons.download, color: Colors.purple),
+                    ),
+                  ],
+                ),
+                CachedNetworkImage(
+                  imageUrl: baseUrl,
+                  errorWidget: (_, __, ___) => SizedBox(width: double.infinity, height: 120, child: Center(child: Text(Statics.getLabel("errorOccurred")))),
+                  progressIndicatorBuilder: (_, __, ___) => const SizedBox(width: double.infinity, height: 120, child: Center(child: CircularProgressIndicator())),
+                  fit: BoxFit.contain,
+                ),
+              ],
+            );
+          }),
+        ),
+      ),
+    );
   }
 
   String _resolveFileUrl(String path) {
@@ -1007,7 +1083,7 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          Statics.getLabel('SelectMonth'),
+          Statics.getLabel('selectMonth'),
           style: TextStyle(fontSize: 13, color: Colors.grey.shade700, fontWeight: FontWeight.w500),
         ),
         const SizedBox(height: 6),
@@ -1049,7 +1125,7 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          Statics.getLabel('SelectYear'),
+          Statics.getLabel('selectYear'),
           style: TextStyle(fontSize: 13, color: Colors.grey.shade700, fontWeight: FontWeight.w500),
         ),
         const SizedBox(height: 6),

@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -169,10 +170,11 @@ class MyAppGlobals {
 
   static Future<void> downloadFile(String url, String fileName) async {
     try {
+      log('downloadFile >>>>>>>>>>>> ');
       // LoadingDialog.show(Get.context!);
       final status = await Permission.storage.request();
       if (!status.isGranted) {
-        print('Permission denied');
+        log('Permission denied');
         return;
       }
 
@@ -198,12 +200,12 @@ class MyAppGlobals {
       Dio dio = Dio();
       await dio.download(url, filePath);
       // LoadingDialog.dismiss(Get.context!);
-      print('Downloaded to: $filePath');
+      log('Downloaded to: $filePath');
       // showSuccess("Success!", "Receipt downloaded to $filePath");
       await OpenFilex.open(filePath);
     } catch (e) {
       // LoadingDialog.dismiss(Get.context!);
-      print('Download failed: $e');
+      log('Download failed: $e');
       // showError("Error!", "Failed to downloaded Receipt");
     }
   }
