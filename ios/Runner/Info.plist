@@ -50,9 +50,9 @@
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>App needs access to current location for showing map</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Can I haz location always?</string>
+	<string>App needs access to current location for showing map</string>
 	<key>NSLocationUsageDescription</key>
-	<string>Older devices need location.</string>
+	<string>App needs access to current location for showing map</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>App needs access to current location for showing map</string>
 	<key>NSPhotoLibraryUsageDescription</key>

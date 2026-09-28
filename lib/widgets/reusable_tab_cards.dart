@@ -127,7 +127,7 @@ class ReusableBarTabCard extends StatelessWidget {
                       mainSegment: BarSegment(
                         label: lastToLastLabel ?? Statics.getLabel('ereyesterdayShakhaa'),
                         value: previousToPrev.toDouble(),
-                        color: const Color(0xFFFF8C00),
+                        color: const Color(0xFF8400FF),
                       ),
                     ),
                   BarRow(

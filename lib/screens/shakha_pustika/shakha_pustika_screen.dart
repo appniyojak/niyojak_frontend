@@ -71,9 +71,11 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
   int? currentMonth;
   List<OfflineShaakhaPustika> _apiList = [];
   bool _isSearching = false;
-  int? geoUnitId;
+
+  // int? geoUnitId;
   int cUserId = 0;
-  List<StaticMasterBAL>? _karyakram;
+
+  // List<StaticMasterBAL>? _karyakram;
   String kFileBaseUrl = Statics.baseUrl;
   TabController? _tabController;
 
@@ -142,12 +144,12 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
 
   Future<void> populateDropdown({bool fromClear = false}) async {
     var data = await Statics.getStaticLDB('ShaakhaaVayogat');
-    var data1 = await Statics.getStaticLDB('ShaakhaaFrequency');
-    var data2 = await Statics.getKrayakramList();
+    // var data1 = await Statics.getStaticLDB('ShaakhaaFrequency');
+    // var data2 = await Statics.getKrayakramList();
     if (!mounted) return;
     setState(() {
       _vayogat = data;
-      _karyakram = data2;
+      // _karyakram = data2;
       // _frequency = data1;
     });
 
@@ -239,7 +241,7 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
   Future<void> _searchShaakhaPustika({int? karyakramval}) async {
     bool isVibhagLevelUser = false;
     _apiList = [];
-    geoUnitId = int.tryParse(_controller.deepestSelectedGeoUnitId.toString());
+    final geoUnitId = int.tryParse(_controller.deepestSelectedGeoUnitId.toString());
     if (levelId != 1 && (_vayogatValue == null || _vayogatValue == '')) {
       Statics.showToast(Statics.getLabel('VayogatValidationMessage'));
       return;
@@ -250,7 +252,7 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
     }
 
     setState(() => _isSearching = true);
-    if (levelId <= 8 || levelId == 13) {
+    if (levelId < 8 || levelId == 13) {
       isVibhagLevelUser = true;
     }
     try {
