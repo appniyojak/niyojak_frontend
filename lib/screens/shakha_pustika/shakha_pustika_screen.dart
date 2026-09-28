@@ -886,11 +886,13 @@ class _ShakhaPustika extends State<ShakhaPustika> with TickerProviderStateMixin 
                     ),
                   ],
                 ),
-                CachedNetworkImage(
-                  imageUrl: baseUrl,
-                  errorWidget: (_, __, ___) => SizedBox(width: double.infinity, height: 120, child: Center(child: Text(Statics.getLabel("errorOccurred")))),
-                  progressIndicatorBuilder: (_, __, ___) => const SizedBox(width: double.infinity, height: 120, child: Center(child: CircularProgressIndicator())),
-                  fit: BoxFit.contain,
+                Flexible(
+                  child: CachedNetworkImage(
+                    imageUrl: baseUrl,
+                    errorWidget: (_, __, ___) => SizedBox(width: double.infinity, height: 120, child: Center(child: Text(Statics.getLabel("errorOccurred")))),
+                    progressIndicatorBuilder: (_, __, ___) => const SizedBox(width: double.infinity, height: 120, child: Center(child: CircularProgressIndicator())),
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ],
             );
