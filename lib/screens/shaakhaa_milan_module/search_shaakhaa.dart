@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
@@ -7,6 +5,7 @@ import 'package:niyojak_prod/screens/home_screen/home_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../../helpers/static_data.dart' as Statics;
+import '../../models/response_model/shaakhaa_vistar_list_resp_model.dart';
 import '../../providers/bals.dart';
 import '../../utils/globals.dart';
 import '../../utils/stable_geounit_class.dart';
@@ -35,7 +34,7 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
 
   bool _isExpanded = false;
 
-  List<dynamic>? _shaakhaaList;
+  List<ShaakhaaList>? _shaakhaaList;
   List<Statics.cLatLong> _latLng = [];
 
   final controller = createGeoController();
@@ -79,7 +78,13 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
       //       Statics.userDetails['DaayitvaName'] == 'कार्यवाह')) {
       print("jfhdjkfh asjkhjkfhd sjkahjkhk f shkjshfk f");
     } else {
-      _shaakhaaList = await _getshaakhaaList(-1, "get nothing", null, null);
+      final strInput = {
+        "AppUserID": Statics.userDetails['userID'],
+        "GeoUnitID": -1,
+        "FrequencyID": null,
+        "VayogatID": null,
+      };
+      _shaakhaaList = await Statics.getShaakhaaListData(strInput);
     }
     setState(() {});
   }
@@ -170,19 +175,23 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
 
     int? vayogatVal = _vayogatValue == null || _vayogatValue == "" ? null : int.parse(_vayogatValue!);
 
+    final strInput = {
+      "AppUserID": Statics.userDetails['userID'],
+      "GeoUnitID": int.parse(controller.deepestSelectedGeoUnitId ?? "0"),
+      "FrequencyID": frequencyVal,
+      "VayogatID": vayogatVal,
+    };
+    final dataList = await Statics.getShaakhaaListData(strInput);
+
     if (strType == "Search") {
-      _shaakhaaList = await _getshaakhaaList(int.parse(controller.deepestSelectedGeoUnitId ?? "0"), _searchController.text, frequencyVal, vayogatVal);
       setState(() {
-        // _shaakhaaList = _getshaakhaaList(
-        //     geoUnitID, _searchController.text, frequencyVal, vayogatVal);
+        _shaakhaaList = dataList;
         _isSearching = false;
         _isExpanded = false;
-        print(_shaakhaaList);
       });
     } else {
-      var dataList = await _getshaakhaaList(int.parse(controller.deepestSelectedGeoUnitId ?? "0"), _searchController.text, frequencyVal, vayogatVal);
-      print("dataList $dataList");
-      if (dataList.isEmpty) {
+      print("dataList.length >>>>>>>>>>>  ${dataList?.length}");
+      if (dataList?.isEmpty == true) {
         Statics.showErrorDialog(context, Statics.getLabel("noDataFoundTryAnotherSearch"));
         setState(() {
           _isSearching = false;
@@ -292,17 +301,17 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
       Statics.showErrorDialog(ctx, Statics.getLabel("LocationNotAvailableForSearch"));
   }
 
-  Future<List<dynamic>> _getshaakhaaList(int? geoUnitID, String searchString, int? frequencyID, int? vayogatID) async {
-    bool isConnected = await Statics.isInternetConnected();
-    if (isConnected) {
-      String strInput = json.encode({"AppUserID": Statics.userDetails['userID'], "GeoUnitID": geoUnitID, "FrequencyID": frequencyID, "VayogatID": vayogatID});
-      print("strInput:- $strInput");
-      return Statics.getShaakhaaList(strInput);
-    } else {
-      Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));
-      return [];
-    }
-  }
+  // Future<List<dynamic>> _getshaakhaaList(int? geoUnitID, String searchString, int? frequencyID, int? vayogatID) async {
+  //   bool isConnected = await Statics.isInternetConnected();
+  //   if (isConnected) {
+  //     String strInput = json.encode({"AppUserID": Statics.userDetails['userID'], "GeoUnitID": geoUnitID, "FrequencyID": frequencyID, "VayogatID": vayogatID});
+  //     print("strInput:- $strInput");
+  //     return Statics.getShaakhaaList(strInput);
+  //   } else {
+  //     Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));
+  //     return [];
+  //   }
+  // }
 
   // Future<List<dynamic>> _getshaakhaaList(int? geoUnitID, String searchString, int? frequencyID, int? vayogatID) async {
   //   bool isConnected = await Statics.isInternetConnected();
@@ -371,13 +380,14 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          FloatingActionButton(
-            mini: true,
-            tooltip: Statics.getLabel("ExportToExcel"),
-            onPressed: _getCsv,
-            child: Icon(Icons.download_sharp),
-            backgroundColor: Colors.green,
-          ),
+          if (_shaakhaaList != null && _shaakhaaList!.isNotEmpty)
+            FloatingActionButton(
+              mini: true,
+              tooltip: Statics.getLabel("ExportToExcel"),
+              onPressed: _getCsv,
+              child: Icon(Icons.download_sharp),
+              backgroundColor: Colors.green,
+            ),
           FloatingActionButton(
             mini: true,
             tooltip: Statics.getLabel("fillNewRecord"),
@@ -427,8 +437,8 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
                   separatorBuilder: (context, index) => const SizedBox(height: 8),
                   itemBuilder: (context, index) {
                     return ShaakhaaCard(
-                      _shaakhaaList?[index],
-                      _shaakhaaList?[index]["IsSankalpit"],
+                      _shaakhaaList![index],
+                      _shaakhaaList?[index].isSankalpit,
                       _search,
                     );
                   },

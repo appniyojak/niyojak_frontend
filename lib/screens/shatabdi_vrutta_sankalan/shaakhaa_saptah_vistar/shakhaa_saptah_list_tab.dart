@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -220,7 +217,7 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
                           separatorBuilder: (context, index) => SizedBox(height: 8),
                           itemCount: _shaakhaaList?.length ?? 0,
                           itemBuilder: (context, index) {
-                            return ShaakhaaCard(_shaakhaaList?[index].toJson(), false, _search,
+                            return ShaakhaaCard(_shaakhaaList![index], false, _search,
                                 showOther: false,
                                 traillingIcon: IconButton(
                                     onPressed: () => Navigator.push(
@@ -253,7 +250,7 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
                             itemCount: _sankalpitShaakhaaList.length ?? 0,
                             padding: EdgeInsets.only(bottom: 80, top: 16),
                             itemBuilder: (context, index) {
-                              return ShaakhaaCard(_sankalpitShaakhaaList[index].toJson(), _sankalpitShaakhaaList[index].isSankalpit, _search,
+                              return ShaakhaaCard(_sankalpitShaakhaaList[index], _sankalpitShaakhaaList[index].isSankalpit, _search,
                                   showOther: false,
                                   traillingIcon: IconButton(
                                       onPressed: () => Navigator.push(
@@ -293,7 +290,7 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
                               itemCount: _newShaakhaaList.length ?? 0,
                               itemBuilder: (context, index) {
                                 return ShaakhaaCard(
-                                  _newShaakhaaList[index].toJson(), false, _search,
+                                  _newShaakhaaList[index], false, _search,
                                   IsNew: true,
                                   showOther: false,
                                   traillingIcon: PopupMenuButton(
@@ -378,7 +375,7 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
                                 itemBuilder: (context, i) {
                                   final shaakhaa = itemsInTrail[i];
                                   return ShaakhaaCard(
-                                    shaakhaa.toJson(),
+                                    shaakhaa,
                                     false,
                                     _search,
                                     showOther: false,

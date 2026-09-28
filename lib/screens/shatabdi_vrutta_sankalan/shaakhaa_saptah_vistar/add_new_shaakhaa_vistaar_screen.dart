@@ -193,16 +193,6 @@ class _AddNewShaakhaaVistaarScreenState extends State<AddNewShaakhaaVistaarScree
     return swList ?? [];
   }
 
-  Future<List<dynamic>> populateSankalpAadhaarShaakhaa(String pattern) async {
-    if (pattern.length <= 2) return [];
-    var shList = Statics.getShaakhaaList(json.encode({
-      'AppUserID': Statics.userDetails["userID"],
-      'GeoUnitID': controller.hierarchyTrail.bhaagId,
-      "ShaakhaaName": pattern.isEmpty ? null : pattern,
-    }));
-    return shList;
-  }
-
   saveShaakhaaDetails() async {
     var inputData = {
       "PraantID": 1,

@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 
 import '../../helpers/static_data.dart' as Statics;
 import '../../models/response_model/new_search_swayamsevak_model.dart';
+import '../../models/response_model/shaakhaa_vistar_list_resp_model.dart';
 import '../../providers/bals.dart';
 import '../../utils/globals.dart';
 import '../../utils/stable_geounit_class.dart';
@@ -301,14 +302,14 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
     return swList ?? [];
   }
 
-  Future<List<dynamic>> populateSankalpAadhaarShaakhaa(String pattern) async {
+  Future<List<ShaakhaaList>> populateSankalpAadhaarShaakhaa(String pattern) async {
     if (pattern.length <= 2) return [];
-    var shList = Statics.getShaakhaaList(json.encode({
+    var shList = await Statics.getShaakhaaListData({
       'AppUserID': Statics.userDetails["userID"],
       'GeoUnitID': context.read<GeoHierarchyController>().hierarchyTrail.bhaagId,
       "ShaakhaaName": pattern.isEmpty ? null : pattern,
-    }));
-    return shList;
+    });
+    return shList ?? [];
   }
 
   saveShaakhaaDetails() async {
@@ -770,7 +771,7 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
                                       },
                                       itemBuilder: (context, suggestion) {
                                         return ListTile(
-                                          title: Text(suggestion["GeoUnitName"]),
+                                          title: Text(suggestion.geoUnitName ?? "--"),
                                         );
                                       },
                                       // validator: (value) {
@@ -787,9 +788,9 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
                                       //   return suggestionsBox;
                                       // },
                                       onSelected: (suggestion) {
-                                        this._sankalpAadhaarShaakhaaCtrl.text = suggestion["GeoUnitName"];
-                                        _sankalpAadhaarShaakhaaValue = suggestion["ShaakhaaID"].toString();
-                                        shaakhaa!.sankalpAadhaarShaakhaaID = int.parse(suggestion["ShaakhaaID"].toString());
+                                        this._sankalpAadhaarShaakhaaCtrl.text = suggestion.geoUnitName ?? "--";
+                                        _sankalpAadhaarShaakhaaValue = suggestion.shaakhaaID.toString();
+                                        shaakhaa!.sankalpAadhaarShaakhaaID = int.parse(suggestion.shaakhaaID.toString());
 
                                         this._sankalpAadhaarSwayamsevakCtrl.text = '';
                                         _sankalpAadhaarSwayamsevakValue = '';

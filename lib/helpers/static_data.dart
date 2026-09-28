@@ -72,6 +72,7 @@ import '../models/response_model/yuva_sangam_vrutta_resp.dart';
 import '../providers/bals.dart';
 import '../utils/globals.dart';
 import './database_helper.dart';
+import 'api_offline_repo.dart';
 import 'media_downloader/media_downloader_service.dart';
 
 const String _flavor = String.fromEnvironment('FLUTTER_APP_FLAVOR', defaultValue: 'dev');
@@ -1452,16 +1453,119 @@ Future<List<dynamic>> getHelpVideoList(String strInput) async {
   return responseBody['HelpVideoList'];
 }
 
-Future<List<dynamic>> getShaakhaaList(String strInput) async {
-  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+// Future<List<ShaakhaaList>> getShaakhaaListData(Map<String, dynamic> inputJson) async {
+//   bool? connected = await isInternetConnected();
+//   bool isSelected(dynamic v) => v != null && v != -1 && v != 0;
+//
+//   final geoUnitId = inputJson["GeoUnitID"];
+//   final frequencyId = inputJson["FrequencyID"];
+//   final vayogatId = inputJson["VayogatID"];
+//
+//   final conditions = <String>[];
+//   final args = <Object>[];
+//
+//   if (isSelected(geoUnitId)) {
+//     conditions.add('''(
+//     ParentBhaagID = ? OR ParentNagarID = ? OR ParentUpaNagarID = ?
+//     OR ParentMandalID = ? OR ParentGraamID = ? OR ParentVastiID = ?
+//   )''');
+//     args.addAll(List.filled(6, geoUnitId as Object));
+//   }
+//
+//   if (isSelected(frequencyId)) {
+//     conditions.add('FrequencyID = ?');
+//     args.add(frequencyId as Object);
+//   }
+//
+//   if (isSelected(vayogatId)) {
+//     conditions.add('VayogatID = ?');
+//     args.add(vayogatId as Object);
+//   }
+//
+//   // log(inputJson["GeoUnitID"].toString());
+//   if (connected == true) {
+//     // No internet — serve whatever we already have locally
+//     //ParentMahanagarID = ? OR ParentVibhaagID = ? OR
+//
+//     if (Statics.levelId > 7 && Statics.levelId != 13) return [];
+//
+//     log("No internet — falling back to local ShaakhaListMaster data");
+//
+//     return await DatabaseHelper.getAllOfflineData<ShaakhaaList>(
+//       tableName: 'ShaakhaListMaster',
+//       fromMap: ShaakhaaList.fromJson,
+//       where: conditions.isEmpty ? null : conditions.join(' AND '),
+//       whereArgs: conditions.isEmpty ? null : args,
+//     );
+//   }
+//   // showLoaderDialog(context);
+//   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+//
+//   print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+//   log(urlGetShaakhaasForAppGrid);
+//   try {
+//     var response = await http.post(Uri.parse(urlGetShaakhaasForAppGrid), headers: jHeaders, body: jsonEncode(inputJson));
+//
+//     // Navigator.of(context, rootNavigator: true).pop();
+//
+//     if (response.statusCode == 200) {
+//       final Map<String, dynamic> data = jsonDecode(response.body);
+//
+//       ShaakhaaVistarListRespModel model = ShaakhaaVistarListRespModel.fromJson(data);
+//       log("ShaakhaaVistarListRespModel >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+//
+//       return model.shaakhaaList ?? []; // ✅ return karna zaroori hai
+//     } else {
+//       print("Error: ${response.statusCode} - ${response.body}");
+//
+//       if (Statics.levelId > 7 && Statics.levelId != 13) return [];
+//       // API call failed even though internet is available (server error, etc.)
+//       // Fall back to local cache too, rather than showing nothing
+//       log("API call failed with status ${response.statusCode} — falling back to local data");
+//       return await DatabaseHelper.getAllOfflineData<ShaakhaaList>(
+//         tableName: 'ShaakhaListMaster',
+//         fromMap: ShaakhaaList.fromJson,
+//         where: conditions.isEmpty ? null : conditions.join(' AND '),
+//         whereArgs: conditions.isEmpty ? null : args,
+//       );
+//     }
+//   } catch (e) {
+//     // Navigator.of(context, rootNavigator: true).pop();
+//     print("Exception: $e");
+//     return [];
+//   } finally {
+//     // Navigator.of(context, rootNavigator: true).pop();
+//   }
+// }
 
-  var response = await http.post(Uri.parse(urlGetShaakhaasForAppGrid), headers: jHeaders, body: strInput);
+Future<List<ShaakhaaList>?> getShaakhaaListData(Map<String, dynamic> inputJson) {
+  int norm(dynamic v) => (v == null || v == 0) ? -1 : v as int;
+  final geo = norm(inputJson["GeoUnitID"]);
+  final freq = norm(inputJson["FrequencyID"]);
+  final vay = norm(inputJson["VayogatID"]);
 
-  var responseBody = json.decode(response.body);
-  log("url  ==> $urlGetShaakhaasForAppGrid");
-  log("strInput  ==> $strInput");
-  log("responseBody ===>  $responseBody");
-  return responseBody['ShaakhaaList'];
+  const whereCnd = '''
+    (? = -1 OR (
+      ParentBhaagID = ? OR ParentNagarID = ? OR ParentUpaNagarID = ?
+      OR ParentMandalID = ? OR ParentGraamID = ? OR ParentVastiID = ?
+    ))
+    AND (? = -1 OR FrequencyID = ?)
+    AND (? = -1 OR VayogatID = ?)
+  ''';
+  final whereArgs = [geo, ...List.filled(6, geo), freq, freq, vay, vay];
+
+  return ApiRepository.getList<ShaakhaaList>(
+    url: urlGetShaakhaasForAppGrid,
+    body: inputJson,
+    parse: (json) => ShaakhaaVistarListRespModel.fromJson(json).shaakhaaList ?? [],
+    fromLocal: () => DatabaseHelper.getAllOfflineData<ShaakhaaList>(
+      tableName: 'ShaakhaListMaster',
+      fromMap: ShaakhaaList.fromJson,
+      where: whereCnd,
+      whereArgs: whereArgs,
+    ),
+    skipLocalFallback: () => Statics.levelId > 7 && Statics.levelId != 13,
+  );
 }
 
 Future<dynamic> getShaakhaaByID(String shaakhaaID) async {
@@ -7314,71 +7418,95 @@ Future<ShaakhaaVistaarReport?> getShaakhaaSaptahReportData(BuildContext context,
   }
 }
 
-Future<List<ShaakhaaList>?> getShaakhaaSaptahListData(BuildContext context, Map<String, dynamic> inputJson) async {
-  bool? connected = await isInternetConnected();
-  log(inputJson["GeoUnitID"].toString());
-  if (connected != true) {
-    // No internet — serve whatever we already have locally
-    //ParentMahanagarID = ? OR ParentVibhaagID = ? OR
+// Future<List<ShaakhaaList>?> getShaakhaaSaptahListData(BuildContext context, Map<String, dynamic> inputJson) async {
+//   bool? connected = await isInternetConnected();
+//   log(inputJson["GeoUnitID"].toString());
+//   if (connected != true) {
+//     // No internet — serve whatever we already have locally
+//     //ParentMahanagarID = ? OR ParentVibhaagID = ? OR
+//
+//     if (Statics.levelId > 7 && Statics.levelId != 13) return null;
+//
+//     log("No internet — falling back to local ShaakhaListMaster data");
+//     return await DatabaseHelper.getAllOfflineData<ShaakhaaList>(
+//       tableName: 'VistarShaakhaListMaster',
+//       fromMap: ShaakhaaList.fromJson,
+//       where: inputJson["GeoUnitID"] == 0
+//           ? null
+//           : '''
+//           ParentBhaagID = ? OR ParentNagarID = ? OR ParentUpaNagarID = ?
+//           OR ParentMandalID = ? OR ParentGraamID = ? OR ParentVastiID = ? OR ? IS NULL
+//       ''',
+//       whereArgs: inputJson["GeoUnitID"] == 0 ? null : List.filled(7, inputJson["GeoUnitID"]),
+//     );
+//   }
+//   showLoaderDialog(context);
+//   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+//
+//   print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+//   log(urlGetShaakhaaVistarList);
+//   try {
+//     var response = await http.post(Uri.parse(urlGetShaakhaaVistarList), headers: jHeaders, body: jsonEncode(inputJson));
+//
+//     // Navigator.of(context, rootNavigator: true).pop();
+//
+//     if (response.statusCode == 200) {
+//       final Map<String, dynamic> data = jsonDecode(response.body);
+//
+//       ShaakhaaVistarListRespModel model = ShaakhaaVistarListRespModel.fromJson(data);
+//       log("ShaakhaaVistarListRespModel >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+//
+//       return model.shaakhaaList ?? []; // ✅ return karna zaroori hai
+//     } else {
+//       print("Error: ${response.statusCode} - ${response.body}");
+//
+//       if (Statics.levelId > 7 && Statics.levelId != 13) return null;
+//       // API call failed even though internet is available (server error, etc.)
+//       // Fall back to local cache too, rather than showing nothing
+//       log("API call failed with status ${response.statusCode} — falling back to local data");
+//       return await DatabaseHelper.getAllOfflineData<ShaakhaaList>(
+//         tableName: 'VistarShaakhaListMaster',
+//         fromMap: ShaakhaaList.fromJson,
+//         where: inputJson["GeoUnitID"] == 0
+//             ? null
+//             : '''
+//           ParentBhaagID = ? OR ParentNagarID = ? OR ParentUpaNagarID = ?
+//           OR ParentMandalID = ? OR ParentGraamID = ? OR ParentVastiID = ? OR ? IS NULL
+//       ''',
+//         whereArgs: inputJson["GeoUnitID"] == 0 ? null : List.filled(7, inputJson["GeoUnitID"]),
+//       );
+//     }
+//   } catch (e) {
+//     // Navigator.of(context, rootNavigator: true).pop();
+//     print("Exception: $e");
+//     return null;
+//   } finally {
+//     Navigator.of(context, rootNavigator: true).pop();
+//   }
+// }
 
-    if (Statics.levelId > 7 && Statics.levelId != 13) return null;
+Future<List<ShaakhaaList>?> getShaakhaaSaptahListData(BuildContext context, Map<String, dynamic> inputJson) {
+  final geo = inputJson["GeoUnitID"];
 
-    log("No internet — falling back to local ShaakhaListMaster data");
-    return await DatabaseHelper.getAllOfflineData<ShaakhaaList>(
+  return ApiRepository.getList<ShaakhaaList>(
+    url: urlGetShaakhaaVistarList,
+    body: inputJson,
+    context: context,
+    // shows/pops loader
+    parse: (json) => ShaakhaaVistarListRespModel.fromJson(json).shaakhaaList ?? [],
+    fromLocal: () => DatabaseHelper.getAllOfflineData<ShaakhaaList>(
       tableName: 'VistarShaakhaListMaster',
       fromMap: ShaakhaaList.fromJson,
-      where: inputJson["GeoUnitID"] == 0
+      where: geo == 0
           ? null
           : '''
           ParentBhaagID = ? OR ParentNagarID = ? OR ParentUpaNagarID = ?
           OR ParentMandalID = ? OR ParentGraamID = ? OR ParentVastiID = ? OR ? IS NULL
       ''',
-      whereArgs: inputJson["GeoUnitID"] == 0 ? null : List.filled(7, inputJson["GeoUnitID"]),
-    );
-  }
-  showLoaderDialog(context);
-  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
-
-  print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
-  log(urlGetShaakhaaVistarList);
-  try {
-    var response = await http.post(Uri.parse(urlGetShaakhaaVistarList), headers: jHeaders, body: jsonEncode(inputJson));
-
-    // Navigator.of(context, rootNavigator: true).pop();
-
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> data = jsonDecode(response.body);
-
-      ShaakhaaVistarListRespModel model = ShaakhaaVistarListRespModel.fromJson(data);
-      log("ShaakhaaVistarListRespModel >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
-
-      return model.shaakhaaList ?? []; // ✅ return karna zaroori hai
-    } else {
-      print("Error: ${response.statusCode} - ${response.body}");
-
-      if (Statics.levelId > 7 && Statics.levelId != 13) return null;
-      // API call failed even though internet is available (server error, etc.)
-      // Fall back to local cache too, rather than showing nothing
-      log("API call failed with status ${response.statusCode} — falling back to local data");
-      return await DatabaseHelper.getAllOfflineData<ShaakhaaList>(
-        tableName: 'VistarShaakhaListMaster',
-        fromMap: ShaakhaaList.fromJson,
-        where: inputJson["GeoUnitID"] == 0
-            ? null
-            : '''
-          ParentBhaagID = ? OR ParentNagarID = ? OR ParentUpaNagarID = ?
-          OR ParentMandalID = ? OR ParentGraamID = ? OR ParentVastiID = ? OR ? IS NULL
-      ''',
-        whereArgs: inputJson["GeoUnitID"] == 0 ? null : List.filled(7, inputJson["GeoUnitID"]),
-      );
-    }
-  } catch (e) {
-    // Navigator.of(context, rootNavigator: true).pop();
-    print("Exception: $e");
-    return null;
-  } finally {
-    Navigator.of(context, rootNavigator: true).pop();
-  }
+      whereArgs: geo == 0 ? null : List.filled(7, geo),
+    ),
+    skipLocalFallback: () => Statics.levelId > 7 && Statics.levelId != 13,
+  );
 }
 
 Future<VistaarVrutta?> getShaakhaaSaptahVruttaData(BuildContext context, Map<String, dynamic> inputJson) async {

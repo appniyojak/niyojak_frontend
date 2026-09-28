@@ -127,7 +127,7 @@ class ShaakhaaList {
     shaakhaaID = json['ShaakhaaID'];
     praantID = json['PraantID'];
     isnew = json['isnew'];
-    isanya = json['IsAnya'];
+    isanya = json['isanya'] ?? json['IsAnya'];
     pkid = json['pkid'];
     geoUnitID = json['GeoUnitID'];
     geoUnitName = json['GeoUnitName'];

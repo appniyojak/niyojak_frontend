@@ -367,9 +367,9 @@ class _HomeScreenState extends State<HomeScreen> {
       laststarttoendname = data.laststarttoendname;
       tabs = getTabTitles(data);
     }
-    setState(() {});
+    if (mounted) setState(() {});
     onTabTapped(0);
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   /// Call this function inside your TabBar's onTap or custom Tab onTap

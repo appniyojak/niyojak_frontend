@@ -7,6 +7,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../helpers/static_data.dart' as Statics;
+import '../models/response_model/shaakhaa_vistar_list_resp_model.dart';
 import '../screens/maps_display.dart';
 import '../screens/shaakhaa_milan_module/edit_shaakhaa.dart';
 import '../screens/shaakhaa_milan_module/shaakhaa_pat.dart';
@@ -15,7 +16,7 @@ import '../screens/shaakhaa_milan_module/shaakhaa_toli.dart';
 import '../screens/shaakhaa_milan_module/shaakhaa_vrutta.dart';
 
 class ShaakhaaCard extends StatelessWidget {
-  final shaakhaaItem;
+  final ShaakhaaList shaakhaaItem;
   final IsSankalpit;
   final IsNew;
   final IsAnya;
@@ -94,7 +95,7 @@ class ShaakhaaCard extends StatelessWidget {
       if (!isConnected) {
         Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));
       } else {
-        if (shaakhaaItem["ShaakhaaLatitude"] != null && shaakhaaItem["ShaakhaaLatitude"].toString() != "") {
+        if (shaakhaaItem.shaakhaaLatitude != null && shaakhaaItem.shaakhaaLatitude.toString() != "") {
           showDialog(
             context: context,
             builder: (ctx) => AlertDialog(
@@ -152,7 +153,7 @@ class ShaakhaaCard extends StatelessWidget {
     // if (await Permission.location.request().isGranted) {
     var position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     var inputData = json
-        .encode({"PraantID": 1, "ShaakhaaID": shaakhaaItem["ShaakhaaID"], "ShaakhaaLatitude": position.latitude, "ShaakhaaLongitude": position.longitude, "ModifiedBy": Statics.userDetails["userID"]});
+        .encode({"PraantID": 1, "ShaakhaaID": shaakhaaItem.shaakhaaID, "ShaakhaaLatitude": position.latitude, "ShaakhaaLongitude": position.longitude, "ModifiedBy": Statics.userDetails["userID"]});
     var data = await Statics.saveShaakhaaCoordinatesForApp(inputData);
     if (data == "Shaakhaa Coordinates Saved Successfully ") {
       Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
@@ -235,7 +236,7 @@ class ShaakhaaCard extends StatelessWidget {
                 children: [
                   // Title
                   Text(
-                    shaakhaaItem["GeoUnitName"],
+                    shaakhaaItem.geoUnitName ?? "--",
                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                   ),
                   const SizedBox(height: 5),
@@ -245,14 +246,14 @@ class ShaakhaaCard extends StatelessWidget {
                     spacing: 10, // Replaces your hardcoded SizedBoxes! Much cleaner.
                     runSpacing: 4, // Space between lines if it drops to a new line
                     children: [
-                      Text(shaakhaaItem["VayogatCode"].toString(), style: ListTileThemeData().subtitleTextStyle),
+                      Text(shaakhaaItem.vayogatCode.toString(), style: ListTileThemeData().subtitleTextStyle),
                       if (showOther) ...[
-                        Text(shaakhaaItem["FrequencyCode"].toString(), style: ListTileThemeData().subtitleTextStyle),
-                        if (shaakhaaItem["FrequencyID"].toString() == Statics.shaakhaaFrequencyWeekly.toString())
-                          Text(shaakhaaItem["DayNamesOfWeek"].toString(), style: ListTileThemeData().subtitleTextStyle)
-                        else if (shaakhaaItem["FrequencyCode"].toString() == "Monthly")
-                          Text(shaakhaaItem["DayOfMonth"].toString(), style: ListTileThemeData().subtitleTextStyle),
-                        Text("${shaakhaaItem["StartTimeStr"]}${shaakhaaItem["StartTimeStr"].toString().isEmpty ? "" : "-"}${shaakhaaItem["EndTimeStr"]}", style: ListTileThemeData().subtitleTextStyle),
+                        Text(shaakhaaItem.frequencyCode.toString(), style: ListTileThemeData().subtitleTextStyle),
+                        if (shaakhaaItem.frequencyID.toString() == Statics.shaakhaaFrequencyWeekly.toString())
+                          Text(shaakhaaItem.dayNamesOfWeek.toString(), style: ListTileThemeData().subtitleTextStyle)
+                        else if (shaakhaaItem.frequencyCode.toString() == "Monthly")
+                          Text(shaakhaaItem.dayOfMonth.toString(), style: ListTileThemeData().subtitleTextStyle),
+                        Text("${shaakhaaItem.startTimeStr}${shaakhaaItem.startTimeStr.toString().isEmpty ? "" : "-"}${shaakhaaItem.endTimeStr}", style: ListTileThemeData().subtitleTextStyle),
                       ]
                     ],
                   ),
@@ -269,7 +270,7 @@ class ShaakhaaCard extends StatelessWidget {
                 PopupMenuButton(
                   onSelected: (value) {
                     if (value == 'ShaakhaaPat')
-                      Navigator.of(context).pushNamed(ShaakhaaPat.routeName, arguments: Statics.ScreenArguments(shaakhaaItem["ShaakhaaID"], value));
+                      Navigator.of(context).pushNamed(ShaakhaaPat.routeName, arguments: Statics.ScreenArguments(shaakhaaItem.shaakhaaID ?? 0, value));
                     else if (value == 'Vrutta')
                       /*Navigator.push(
                           context,
@@ -280,25 +281,25 @@ class ShaakhaaCard extends StatelessWidget {
                                     onSaveDetails: null,
                                     viewType: "EditVrutta",
                                   )));*/
-                      Navigator.of(context).pushNamed(ShaakhaaVrutta.routeName, arguments: Statics.ScreenArguments(shaakhaaItem["ShaakhaaID"], value));
+                      Navigator.of(context).pushNamed(ShaakhaaVrutta.routeName, arguments: Statics.ScreenArguments(shaakhaaItem.shaakhaaID ?? 0, value));
                     else if (value == 'ViewLocation') {
-                      if (shaakhaaItem["ShaakhaaLatitude"] != null && shaakhaaItem["ShaakhaaLatitude"].toString() != "") {
-                        _latLng.add(Statics.cLatLong(shaakhaaItem["ShaakhaaID"], shaakhaaItem["GeoUnitName"].toString(), shaakhaaItem["FrequencyCode"].toString(),
-                            LatLng(shaakhaaItem["ShaakhaaLatitude"], shaakhaaItem["ShaakhaaLongitude"])));
+                      if (shaakhaaItem.shaakhaaLatitude != null && shaakhaaItem.shaakhaaLatitude.toString() != "") {
+                        _latLng.add(Statics.cLatLong(shaakhaaItem.shaakhaaID ?? 0, shaakhaaItem.geoUnitName.toString(), shaakhaaItem.frequencyCode.toString(),
+                            LatLng(shaakhaaItem.shaakhaaLatitude ?? 0, shaakhaaItem.shaakhaaLongitude ?? 0)));
                         Navigator.of(context).pushNamed(MapDisplay.routeName, arguments: _latLng);
                       } else {
                         Statics.showMessageDialog(context, "Co-Ordinates Not present");
                       }
                     } else if (value == 'SewaVasti') {
-                      Navigator.of(context).pushNamed(ShaakhaaSevaVastiLink.routeName, arguments: Statics.ScreenArguments(shaakhaaItem["ShaakhaaID"], shaakhaaItem["GeoUnitName"].toString()));
+                      Navigator.of(context).pushNamed(ShaakhaaSevaVastiLink.routeName, arguments: Statics.ScreenArguments(shaakhaaItem.shaakhaaID ?? 0, shaakhaaItem.geoUnitName.toString()));
                     } else if (value == 'Delete') {
-                      _deleteShaakhaa(context, shaakhaaItem["ShaakhaaID"].toString());
+                      _deleteShaakhaa(context, shaakhaaItem.shaakhaaID.toString());
                     } else if (value == 'RecordLocation') {
                       _recordLocation(context);
                     } else if (value == 'ShaakhaaToli') {
-                      Navigator.of(context).pushNamed(ShaakhaaToli.routeName, arguments: Statics.ScreenArguments(shaakhaaItem["ShaakhaaID"], shaakhaaItem["GeoUnitName"].toString()));
+                      Navigator.of(context).pushNamed(ShaakhaaToli.routeName, arguments: Statics.ScreenArguments(shaakhaaItem.shaakhaaID ?? 0, shaakhaaItem.geoUnitName.toString()));
                     } else
-                      Navigator.of(context).pushNamed(EditShaakhaaScreen.routeName, arguments: Statics.ScreenArguments(shaakhaaItem["ShaakhaaID"], value));
+                      Navigator.of(context).pushNamed(EditShaakhaaScreen.routeName, arguments: Statics.ScreenArguments(shaakhaaItem.shaakhaaID ?? 0, value));
                   },
                   icon: const Icon(
                     FontAwesomeIcons.ellipsisV,
