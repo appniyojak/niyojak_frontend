@@ -95,6 +95,14 @@
                 <key>NSIncludesSubdomains</key>
                 <true/>
             </dict>
+
+            <key>94.136.191.127</key>
+            <dict>
+                <key>NSExceptionAllowsInsecureHTTPLoads</key>
+                <true/>
+                <key>NSIncludesSubdomains</key>
+                <true/>
+            </dict>
         </dict>
     </dict>
 

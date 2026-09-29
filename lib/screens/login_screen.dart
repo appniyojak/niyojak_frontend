@@ -77,44 +77,38 @@ class _LogInScreenState extends State<LogInScreen> {
                 ),
               ),
             ),
-            SingleChildScrollView(
-              child: Container(
-                height: deviceSize.height,
-                width: deviceSize.width,
+            Center(
+              child: SingleChildScrollView(
                 child: Column(
+                  spacing: 24,
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Flexible(
-                      child: Container(
-                        margin: EdgeInsets.only(bottom: 20.0),
-                        padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 60.0),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Colors.deepOrange.shade900,
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 8,
-                              color: Colors.black26,
-                              offset: Offset(0, 2),
-                            )
-                          ],
-                        ),
-                        child: Text(
-                          Statics.getLabel('logInBanner'),
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 50,
-                            fontFamily: 'Anton',
-                            fontWeight: FontWeight.normal,
-                          ),
+                    Container(
+                      // margin: EdgeInsets.only(bottom: 20.0),
+                      padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 60.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.deepOrange.shade900,
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 8,
+                            color: Colors.black26,
+                            offset: Offset(0, 2),
+                          )
+                        ],
+                      ),
+                      child: Text(
+                        Statics.getLabel('logInBanner'),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 50,
+                          fontFamily: 'Anton',
+                          fontWeight: FontWeight.normal,
                         ),
                       ),
                     ),
-                    Flexible(
-                      flex: deviceSize.width > 600 ? 2 : 1,
-                      child: showOTPCard ? LogInOTPCard(switchCard) : LogInCard(switchCard),
-                    ),
+                    showOTPCard ? LogInOTPCard(switchCard) : LogInCard(switchCard),
                     Text(
                       'Version - ${Statics.packageInfo['versionNumber']}${Statics.patchSuffix}',
                       style: TextStyle(fontSize: 22),
@@ -678,7 +672,7 @@ class _LogInCardState extends State<LogInCard> {
       ),
       elevation: 8.0,
       child: Container(
-        height: deviceSize.height * 0.75,
+        // height: deviceSize.height * 0.75,
         width: deviceSize.width * 0.75,
         padding: EdgeInsets.only(left: 16.0, top: 16.0, bottom: 0, right: 16.0),
         child: Form(
