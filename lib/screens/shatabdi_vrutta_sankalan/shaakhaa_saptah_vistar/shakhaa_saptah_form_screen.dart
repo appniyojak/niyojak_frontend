@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
-import '../../../helpers/draft_service.dart';
 import '../../../helpers/static_data.dart' as Statics;
 import '../../../models/response_model/shaakhaa_vistaar_vrutta_resp_model.dart';
 import '../../../models/response_model/shaakhaa_vistar_list_resp_model.dart';
@@ -155,21 +154,25 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
 
     try {
       VistaarVrutta? data;
-      final _res = await DraftSyncService.loadWithFallback(
-        masterTableName: 'VistarShaakhaVruttaMaster',
-        draftTableName: 'VruttaDraftMaster',
-        keyColumns: ['ShaakhaaID', 'VruttaDate'],
-        keyValues: [_shaakhaaId, _vruttaDate],
-        fetchFromApi: () async {
-          final vrutta = await Statics.getShaakhaaSaptahVruttaData(context, _body);
-          return vrutta?.toJson();
-        },
-      );
+      // final _res = await DraftSyncService.loadWithFallback(
+      //   masterTableName: 'VistarShaakhaVruttaMaster',
+      //   draftTableName: 'VruttaDraftMaster',
+      //   keyColumns: ['ShaakhaaID', 'VruttaDate'],
+      //   keyValues: [_shaakhaaId, _vruttaDate],
+      //   fetchFromApi: () async {
+      //     final vrutta = await Statics.getShaakhaaSaptahVruttaData(context, _body);
+      //     return vrutta?.toJson();
+      //   },
+      // );
+
+      final _vrutta = await Statics.getShaakhaaSaptahVruttaData(context, _body);
+      // final _res = _vrutta?.toJson();
+
       if (!mounted) return;
-      if (_res.data == null)
+      if (_vrutta == null)
         data = VistaarVrutta();
       else
-        data = VistaarVrutta.fromJson(_res.data!);
+        data = _vrutta;
       vrutta = data;
       setState(() {
         if (vrutta != null) {

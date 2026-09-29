@@ -2173,6 +2173,35 @@ class AnnualBaithakGraamVikasBAL {
   }
 }
 
+class ShaakhaaVruttaBALRespModel {
+  String? status;
+  String? message;
+  List<ShaakhaaVruttaBAL>? shaakhaaList;
+
+  ShaakhaaVruttaBALRespModel({this.status, this.message, this.shaakhaaList});
+
+  ShaakhaaVruttaBALRespModel.fromJson(Map<String, dynamic> json) {
+    status = json['Status'];
+    message = json['Message'];
+    if (json['ShaakhaaVruttaList'] != null) {
+      shaakhaaList = <ShaakhaaVruttaBAL>[];
+      json['ShaakhaaVruttaList'].forEach((v) {
+        shaakhaaList!.add(new ShaakhaaVruttaBAL.fromMap(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['Status'] = this.status;
+    data['Message'] = this.message;
+    if (this.shaakhaaList != null) {
+      data['ShaakhaaVruttaList'] = this.shaakhaaList!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
 class ShaakhaaVruttaBAL {
   int? shaakhaaVruttaID;
   int? praantID;
@@ -2297,6 +2326,52 @@ class ShaakhaaVruttaBAL {
     isDoneSewaDays = map["IsDoneSewaDays"];
     SelectedSewaDaysId = map["SewaDaysId"].toString();
     FrequencyID = map["FrequencyID"];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['ShaakhaaVruttaID'] = this.shaakhaaVruttaID;
+    data["PraantID"] = this.praantID;
+    data["ShaakhaaID"] = this.shaakhaaID;
+    data["VruttaDateStr"] = this.vruttaDate;
+    data["ShishuCount"] = this.shishuCount;
+    data["NewShishuCount"] = this.newshishuCount;
+    data["BaalVidyaarthiCount"] = this.baalVidyaarthiCount;
+    data["NewBaalVidyaarthiCount"] = this.newbaalVidyaarthiCount;
+    data["TarunVidyaarthiCount"] = this.tarunVidyaarthiCount;
+    data["NewTarunVidyaarthiCount"] = this.newtarunVidyaarthiCount;
+    data["TarunVyavasaayeeCount"] = this.tarunVyavasaayeeCount;
+    data["NewTarunVyavasaayeeCount"] = this.newtarunVyavasaayeeCount;
+    data["ProudhaVyavasaayeeCount"] = this.proudhaVyavasaayeeCount;
+    data["NewProudhaVyavasaayeeCount"] = this.newproudhaVyavasaayeeCount;
+    data["matruskatiCount"] = this.matruskatiCount;
+    data["MatruskatiCountCount"] = this.matruskatiCount;
+    data["newmatruskatiCount"] = this.newmatruskatiCount;
+    data["NewMatruskatiCountCount"] = this.newmatruskatiCount;
+    data["AbhyaagatCount"] = this.abhyaagatCount;
+    data["PravasiKaryakartaCount"] = this.pravasiKaryakartaCount;
+    data["AnyaPravasiKaryakartaCount"] = this.anyaPravasiKaryakartaCount;
+    data["IsMandatoryShaaririk"] = this.isMandatoryShaaririk;
+    data["IsMandatoryBouddhik"] = this.isMandatoryBouddhik;
+    data["IsOptionalShaaririk"] = this.isOptionalShaaririk;
+    data["IsOptionalOther"] = this.isOptionalOther;
+    data["Remark"] = this.remark;
+    data["IsDoneAmrutaVachan"] = this.isDoneAmrutaVachan;
+    data["IsDoneDandaPrahaar"] = this.isDoneDandaPrahaar;
+    data["IsDoneDeepBreathing"] = this.isDoneDeepBreathing;
+    data["IsDoneSaanghikGeet"] = this.isDoneSaanghikGeet;
+    data["IsDoneSanchalanAbhyaas"] = this.isDoneSanchalanAbhyaas;
+    data["IsDoneSooryaNamaskaar"] = this.isDoneSooryaNamaskaar;
+    data["IsDoneSubhaashit"] = this.isDoneSubhaashit;
+    data["IsDoneUrdhvapad"] = this.isDoneUrdhvapad;
+    data["IsDoneBoodhKatha"] = this.isDoneBoodhKatha;
+    data["IsDoneBoudhikDays"] = this.isDoneBoudhikDays;
+    data["BoudhikDaysId"] = this.SelectedBoudhikDaysId?.toString();
+    data["AnyaBoudhikDays"] = this.AnyaBoudhikDays;
+    data["IsDoneSewaDays"] = this.isDoneSewaDays;
+    data["SewaDaysId"] = this.SelectedSewaDaysId.toString();
+    data["FrequencyID"] = this.FrequencyID;
+    return data;
   }
 }
 

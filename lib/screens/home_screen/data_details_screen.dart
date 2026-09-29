@@ -22,8 +22,9 @@ class DataDetailsScreen extends StatelessWidget {
   final IconData? icon;
   final String from;
   final List<DataDetailsGroup> groupedData;
+  final void Function(DataDetails val)? onTap;
 
-  const DataDetailsScreen({super.key, required this.groupedData, required this.from, this.icon, required this.infoName});
+  const DataDetailsScreen({super.key, required this.groupedData, required this.from, this.icon, this.onTap, required this.infoName});
 
   int get _totalEntries => groupedData.fold(0, (sum, g) => sum + g.items.length);
 
@@ -129,7 +130,7 @@ class DataDetailsScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 10),
               itemCount: groupedData.length,
               itemBuilder: (context, index) {
-                return _DataGroupTile(group: groupedData[index], icon: icon, from: from);
+                return _DataGroupTile(group: groupedData[index], icon: icon, from: from, onTap: onTap);
               },
             ),
           ),
@@ -143,8 +144,9 @@ class _DataGroupTile extends StatelessWidget {
   final DataDetailsGroup group;
   final IconData? icon;
   final String from;
+  final void Function(DataDetails val)? onTap;
 
-  const _DataGroupTile({required this.group, required this.from, this.icon});
+  const _DataGroupTile({required this.group, required this.from, this.icon, this.onTap});
 
   static const double _maxItemsHeight = 240;
 
@@ -317,22 +319,47 @@ class _DataGroupTile extends StatelessWidget {
               itemCount: group.items.length,
               itemBuilder: (context, i) {
                 final person = group.items[i];
+
                 final hasValidId = person.id != null && person.id != 0;
+                final isShaakhaa = from == "shaakhaaNames";
+
+                // For shaakhaaNames:
+                // - Valid ID  -> Open EditShaakhaaVrutta
+                // - Invalid ID + onTap -> Use external onTap
+                // - Otherwise -> No action
+                final VoidCallback? itemTap = isShaakhaa
+                    ? hasValidId
+                        ? () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => EditShaakhaaVrutta(
+                                  shaakhaaID: person.id.toString(),
+                                  vruttaID: null,
+                                  onSaveDetails: null,
+                                  viewType: "EditVrutta",
+                                  vruttadate: person.vdate != null && person.vdate!.isNotEmpty
+                                      ? DateFormat('dd/MM/yyyy').format(
+                                          DateFormat('yyyy-MM-dd').parse(person.vdate!),
+                                        )
+                                      : null,
+                                ),
+                              ),
+                            );
+                          }
+                        : onTap != null
+                            ? () => onTap!(person)
+                            : null
+                    : onTap != null
+                        ? () => onTap!(person)
+                        : null;
+
+                final bool showArrow = isShaakhaa && (hasValidId || onTap != null);
+
                 return ListTile(
                   dense: true,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                  onTap: (from == "shaakhaaNames" && hasValidId)
-                      ? () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => EditShaakhaaVrutta(
-                                    shaakhaaID: person.id.toString(),
-                                    vruttaID: null,
-                                    onSaveDetails: null,
-                                    viewType: "EditVrutta",
-                                    vruttadate: person.vdate != null && (person.vdate?.isNotEmpty == true) ? DateFormat('dd/MM/yyyy').format(DateFormat('yyyy-MM-dd').parse(person.vdate!)) : null,
-                                  )))
-                      : null,
+                  onTap: itemTap,
                   leading: CircleAvatar(
                     radius: 14,
                     backgroundColor: Colors.indigo.shade50,
@@ -342,8 +369,8 @@ class _DataGroupTile extends StatelessWidget {
                     person.value ?? '—',
                     style: const TextStyle(fontSize: 13, color: Colors.black87),
                   ),
-                  trailing: from == "shaakhaaNames"
-                      ? hasValidId
+                  trailing: isShaakhaa
+                      ? showArrow
                           ? const Icon(Icons.keyboard_arrow_right_rounded)
                           : null
                       : _buildMenuButton(context, person.id ?? 0, _getPermissions()),

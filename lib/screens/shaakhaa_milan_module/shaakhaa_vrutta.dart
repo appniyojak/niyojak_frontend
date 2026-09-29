@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:horizontal_data_table/horizontal_data_table.dart';
@@ -159,13 +160,14 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
     if (!isConnected) {
       Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));
     } else {
-      var data = await Statics.getShaakhaaVruttaListForApp(shaakhaaID, null);
+      log(shaakhaaID.toString());
+      var data = await Statics.getShaakhaaVruttaListForApp(context, shaakhaaID);
+
+      log("data.length >>>> ${data?.length}");
 
       await populateShaakhaVayogat(shaakhaaID.toString());
-      if (data.length > 0) {
-        for (var dataItem in data) {
-          lstShaakhaaVrutta.add(ShaakhaaVruttaBAL.fromMap(dataItem));
-        }
+      if (data != null && data.length > 0) {
+        lstShaakhaaVrutta.addAll(data);
         await getDetailsColumnsandRows(data);
       } else {
         if (!mounted) return;

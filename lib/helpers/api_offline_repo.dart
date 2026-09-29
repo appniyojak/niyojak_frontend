@@ -53,8 +53,12 @@ class ApiRepository {
     BuildContext? context,
   }) async {
     Future<R?> local() async {
+      log("skipLocalFallback >> ${skipLocalFallback?.call()}");
       if (skipLocalFallback?.call() ?? false) return null;
-      return await fromLocal();
+      log("No internet — falling back to local data");
+      final _list = await fromLocal();
+      log("local response >>>>>>>> ${_list is List ? _list.length : _list}");
+      return _list;
     }
 
     final connected = await isInternetConnected();
@@ -64,10 +68,12 @@ class ApiRepository {
     if (showLoader) showLoaderDialog(context);
 
     try {
-      log("req >>> $url ${jsonEncode(body)}");
+      log("api >>> $url");
+      log("req >>> ${jsonEncode(body)}");
       final response = await http.post(Uri.parse(url), headers: _headers, body: jsonEncode(body));
 
       if (response.statusCode == 200) {
+        log("response.body >>>>>>>> ${(((response.body)))}");
         return parse(jsonDecode(response.body) as Map<String, dynamic>);
       }
       log("API failed ${response.statusCode} - ${response.body}, falling back to local");
