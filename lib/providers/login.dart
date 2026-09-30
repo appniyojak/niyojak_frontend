@@ -389,7 +389,7 @@ class LogIn {
           items: dataList6,
           toMap: (item) => item,
           keyColumns: ['pkid'],
-          hasUniqueConstraint: false, // pkid is your PRIMARY KEY
+          hasUniqueConstraint: true, // pkid is your PRIMARY KEY
         );
       }
 
@@ -403,15 +403,29 @@ class LogIn {
           items: dataList7,
           toMap: (item) => item,
           keyColumns: ['pkid'],
+          hasUniqueConstraint: true, // pkid is your PRIMARY KEY
+        );
+      }
+
+      List<Map<String, dynamic>> dataList8 = (body['LogInData']['Data'] as List).map((item) => item as Map<String, dynamic>).toList();
+      if (dataList8.length > 0) {
+        print("usrLogIn 17.7");
+
+// 2. Bulk upsert into the table
+        final result = await DatabaseHelper.bulkUpsert<Map<String, dynamic>>(
+          tableName: 'SewaSanskarData',
+          items: dataList8,
+          toMap: (item) => item,
+          keyColumns: ['StaticID'],
           hasUniqueConstraint: false, // pkid is your PRIMARY KEY
         );
       }
 
-      List<Map<String, dynamic>> dataList8 = (body['LogInData']['mediaList'] as List).map((item) => item as Map<String, dynamic>).toList();
-      if (dataList8.length > 0) {
-        print("usrLogIn 17.7");
+      List<Map<String, dynamic>> dataList9 = (body['LogInData']['mediaList'] as List).map((item) => item as Map<String, dynamic>).toList();
+      if (dataList9.length > 0) {
+        print("usrLogIn 17.8");
 
-        await MediaDownloadService.instance.enqueueFromApiMediaList(dataList8);
+        await MediaDownloadService.instance.enqueueFromApiMediaList(dataList9);
       }
       Map<String, dynamic> userData = body['LogInData']['UserData'];
       print("swayamsevak Id - " + userData['SwayamsevakID'].toString());

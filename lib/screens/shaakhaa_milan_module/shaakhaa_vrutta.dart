@@ -24,7 +24,7 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
   var viewType;
   List<Widget>? _headerRow;
   List<ShaakhaaVruttaBAL> lstShaakhaaVrutta = [];
-  List<StaticMasterBAL> _frequency = [];
+  List<StaticMasterBAL?> _frequency = [];
 
   var vayogatCode = '', shaakhaaName = '';
 
@@ -155,36 +155,32 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
       _headerRow = null;
       lstShaakhaaVrutta = [];
     });
-    bool isConnected = await Statics.isInternetConnected();
 
-    if (!isConnected) {
-      Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));
+    log(shaakhaaID.toString());
+    var data = await Statics.getShaakhaaVruttaListForApp(context, shaakhaaID);
+
+    log("data.length >>>> ${data?.length}");
+
+    await populateShaakhaVayogat(shaakhaaID.toString());
+    if (data != null && data.length > 0) {
+      lstShaakhaaVrutta.addAll(data);
+      log("_frequency and lstShaakhaaVrutta bool >>>>>> ${_frequency.isNotEmpty}");
+      log("_frequency and lstShaakhaaVrutta bool >>>>>> ${_frequency.any((e) => e?.staticID == lstShaakhaaVrutta[0].FrequencyID && e?.code == "Monthly")}");
+      await getDetailsColumnsandRows(data);
     } else {
-      log(shaakhaaID.toString());
-      var data = await Statics.getShaakhaaVruttaListForApp(context, shaakhaaID);
-
-      log("data.length >>>> ${data?.length}");
-
-      await populateShaakhaVayogat(shaakhaaID.toString());
-      if (data != null && data.length > 0) {
-        lstShaakhaaVrutta.addAll(data);
-        await getDetailsColumnsandRows(data);
-      } else {
-        if (!mounted) return;
-        // setState(() {
-        //   _detailscolumns = null;
-        // });
-      }
       if (!mounted) return;
-      setState(() {
-        _isFetchingData = false;
-      });
+      // setState(() {
+      //   _detailscolumns = null;
+      // });
     }
-    setState(() {});
+    if (!mounted) return;
+    setState(() {
+      _isFetchingData = false;
+    });
   }
 
   Widget _shaakhaaVruttaFirstColumn(BuildContext context, int index) {
-    return Statics.createWidgetFromString(context, DateFormat('dd-MMM-yyyy').format(DateFormat("yyyy/MM/dd").parse(lstShaakhaaVrutta[index].vruttaDate!)), 100, 52, Alignment.centerLeft,
+    return Statics.createWidgetFromString(context, DateFormat('dd-MMM-yyyy').format(DateFormat("dd/MM/yyyy").parse(lstShaakhaaVrutta[index].vruttaDate!)), 100, 52, Alignment.centerLeft,
         isTotalRow: false);
   }
 
@@ -201,7 +197,7 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
       Statics.createWidgetFromString(context, lstShaakhaaVrutta[index].proudhaVyavasaayeeCount.toString(), 60, 52, Alignment.center, isTotalRow: false),
       Statics.createWidgetFromString(context, lstShaakhaaVrutta[index].newproudhaVyavasaayeeCount.toString(), 60, 52, Alignment.center, isTotalRow: false),
     ];
-    if (_frequency.isNotEmpty && _frequency.firstWhere((e) => e.staticID == lstShaakhaaVrutta[0].FrequencyID).code == "Monthly") {
+    if (_frequency.any((e) => e?.staticID == lstShaakhaaVrutta[0].FrequencyID && e?.code == "Monthly")) {
       widgetArray.add(Statics.createWidgetFromString(context, lstShaakhaaVrutta[0].matruskatiCount.toString(), 60, 52, Alignment.center, isTotalRow: false));
       widgetArray.add(Statics.createWidgetFromString(context, lstShaakhaaVrutta[index].newmatruskatiCount.toString(), 60, 52, Alignment.center, isTotalRow: false));
     }
@@ -279,7 +275,7 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
               iconSize: 20,
               color: Colors.purple,
               onPressed: () => _onEditVrutta(lstShaakhaaVrutta[index].shaakhaaVruttaID.toString(), lstShaakhaaVrutta[index].shaakhaaID.toString(),
-                  DateFormat("dd/MM/yyyy").format(DateFormat("yyyy/MM/dd").parse(lstShaakhaaVrutta[index].vruttaDate.toString())).toString()),
+                  DateFormat("dd/MM/yyyy").format(DateFormat("dd/MM/yyyy").parse(lstShaakhaaVrutta[index].vruttaDate.toString())).toString()),
             ),
           ],
         )));
@@ -329,7 +325,7 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
     headerRow.add(Statics.createWidgetFromString(context, 'प्रौ.', 60, 56, Alignment.center, isTotalRow: false));
     headerRow.add(Statics.createWidgetFromString(context, 'नवीन प्रौ.', 60, 56, Alignment.center, isTotalRow: false));
 
-    if (_frequency.isNotEmpty && _frequency.firstWhere((e) => e.staticID == lstShaakhaaVrutta[0].FrequencyID).code == "Monthly") {
+    if (_frequency.any((e) => e?.staticID == lstShaakhaaVrutta[0].FrequencyID && e?.code == "Monthly")) {
       headerRow.add(Statics.createWidgetFromString(context, 'मातृ.', 60, 56, Alignment.center, isTotalRow: false));
       headerRow.add(Statics.createWidgetFromString(context, 'नवीन मातृ.', 60, 56, Alignment.center, isTotalRow: false));
     }
@@ -466,7 +462,7 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
                   : _headerRow != null
                       ? HorizontalDataTable(
                           leftHandSideColumnWidth: 100,
-                          rightHandSideColumnWidth: _frequency.firstWhere((e) => e.staticID == lstShaakhaaVrutta[0].FrequencyID).code == "Monthly"
+                          rightHandSideColumnWidth: _frequency.any((e) => e?.staticID == lstShaakhaaVrutta[0].FrequencyID && e?.code == "Monthly")
                               ? (vayogatCode == 'Proudh Vyavasaayee' || vayogatCode == "Baal")
                                   ? 1800
                                   : 1950

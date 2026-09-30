@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
+import '../../../helpers/offline_data_api_repo.dart';
 import '../../../helpers/static_data.dart' as Statics;
 import '../../../models/response_model/shaakhaa_vistaar_vrutta_resp_model.dart';
 import '../../../models/response_model/shaakhaa_vistar_list_resp_model.dart';
@@ -30,6 +31,8 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey();
 
   VistaarVrutta? vrutta;
+  DraftRecordSource? _loadedSource;
+
   var _isLoading = false;
 
   bool _isFetchingData = false;
@@ -154,26 +157,27 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
 
     try {
       VistaarVrutta? data;
-      // final _res = await DraftSyncService.loadWithFallback(
-      //   masterTableName: 'VistarShaakhaVruttaMaster',
-      //   draftTableName: 'VruttaDraftMaster',
-      //   keyColumns: ['ShaakhaaID', 'VruttaDate'],
-      //   keyValues: [_shaakhaaId, _vruttaDate],
-      //   fetchFromApi: () async {
-      //     final vrutta = await Statics.getShaakhaaSaptahVruttaData(context, _body);
-      //     return vrutta?.toJson();
-      //   },
-      // );
+      final _res = await OfflineDataApiRepo.loadWithFallback(
+        masterTableName: 'VistarShaakhaVruttaMaster',
+        draftTableName: 'VruttaDraftMaster',
+        keyColumns: ['ShaakhaaID', 'VruttaDate'],
+        keyValues: [_shaakhaaId, _vruttaDate],
+        fetchFromApi: () async {
+          final vrutta = await Statics.getShaakhaaSaptahVruttaData(context, _body);
+          return vrutta?.toJson();
+        },
+      );
 
-      final _vrutta = await Statics.getShaakhaaSaptahVruttaData(context, _body);
+      // final _vrutta = await Statics.getShaakhaaSaptahVruttaData(context, _body);
       // final _res = _vrutta?.toJson();
 
       if (!mounted) return;
-      if (_vrutta == null)
+      if (_res.data == null)
         data = VistaarVrutta();
       else
-        data = _vrutta;
+        data = VistaarVrutta.fromJson(_res.data!);
       vrutta = data;
+      _loadedSource = _res.source;
       setState(() {
         if (vrutta != null) {
           // _vruttaDate = ((vrutta!.vruttaDate != null && vrutta!.vruttaDate != "") ? vrutta!.vruttaDate! : null);
@@ -343,13 +347,15 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
       "appuserid": Statics.userDetails["userID"],
     };
 
-    // final outcome = await DraftSyncService.saveWithFallback(
-    //   masterTableName: 'VistarShaakhaVruttaMaster',
+    // final outcome = await OfflineDataApiRepo.saveWithFallback(
+    //   masterTableName: 'ShaakhaVruttaMaster',
     //   draftTableName: 'VruttaDraftMaster',
     //   keyColumns: ['ShaakhaaID', 'VruttaDate'],
-    //   loadedSource: _currentRecordSource, // stored on screen state from the earlier loadWithFallback call
-    //   formData: formData,
-    //   saveToApi: () => Statics.saveShaakhaaSaptahVruttaData(context, formData),
+    //   loadedSource: _loadedSource!,
+    //   // from loadRecord — required to check blockedMasterOffline
+    //   formData: formData!,
+    //   // must include ShaakhaaID and VruttaDate
+    //   saveToApi: () => saveShaakhaVruttaApi(formData!),
     // );
 
     var data = await Statics.saveShaakhaaSaptahVruttaData(context, inputData);

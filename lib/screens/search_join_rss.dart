@@ -102,7 +102,7 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
     // _status?.forEach((e) => log(jsonEncode(e.toJson())));
 
     _status!.add(StaticMasterBAL(
-      0,
+      9999,
       1,
       "JoinRSSStatus",
       "StartedgoingtoShakha",

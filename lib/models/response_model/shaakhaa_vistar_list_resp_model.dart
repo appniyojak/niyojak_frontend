@@ -1,3 +1,5 @@
+import '../value_converter.dart';
+
 class ShaakhaaVistarListRespModel {
   String? status;
   String? message;
@@ -144,7 +146,7 @@ class ShaakhaaList {
     startTimeStr = json['StartTimeStr'];
     endTimeStr = json['EndTimeStr'];
     remark = json['Remark'];
-    isSankalpit = json['IsSankalpit'] == true || json['IsSankalpit'] == 1;
+    isSankalpit = toBool(json['IsSankalpit']);
     sankalpAadhaar = json['SankalpAadhaar'];
     sankalpAadhaarSwayamsevakID = json['SankalpAadhaarSwayamsevakID'];
     sankalpAadhaarSwayamsevakName = json['SankalpAadhaarSwayamsevakName'];
@@ -152,8 +154,8 @@ class ShaakhaaList {
     sankalpAadhaarShaakhaaName = json['SankalpAadhaarShaakhaaName'];
     sankalpCompletionMonth = json['SankalpCompletionMonth'];
     sankalpCompletionYear = json['SankalpCompletionYear'];
-    hasToli = json['HasToli'] == true || json['HasToli'] == 1;
-    hasPaalak = json['HasPaalak'] == true || json['HasPaalak'] == 1;
+    hasToli = toBool(json['HasToli']);
+    hasPaalak = toBool(json['HasPaalak']);
     optionalShaaririkVishayID = json['OptionalShaaririkVishayID'];
     optionalShaaririkVishayCode = json['OptionalShaaririkVishayCode'];
     otherOptionalVishay = json['OtherOptionalVishay'];
@@ -194,7 +196,7 @@ class ShaakhaaList {
     data['StartTimeStr'] = this.startTimeStr;
     data['EndTimeStr'] = this.endTimeStr;
     data['Remark'] = this.remark;
-    data['IsSankalpit'] = this.isSankalpit;
+    data['IsSankalpit'] = this.isSankalpit == true ? 1 : 0;
     data['SankalpAadhaar'] = this.sankalpAadhaar;
     data['SankalpAadhaarSwayamsevakID'] = this.sankalpAadhaarSwayamsevakID;
     data['SankalpAadhaarSwayamsevakName'] = this.sankalpAadhaarSwayamsevakName;
@@ -202,8 +204,8 @@ class ShaakhaaList {
     data['SankalpAadhaarShaakhaaName'] = this.sankalpAadhaarShaakhaaName;
     data['SankalpCompletionMonth'] = this.sankalpCompletionMonth;
     data['SankalpCompletionYear'] = this.sankalpCompletionYear;
-    data['HasToli'] = this.hasToli;
-    data['HasPaalak'] = this.hasPaalak;
+    data['HasToli'] = this.hasToli == true ? 1 : 0;
+    data['HasPaalak'] = this.hasPaalak == true ? 1 : 0;
     data['OptionalShaaririkVishayID'] = this.optionalShaaririkVishayID;
     data['OptionalShaaririkVishayCode'] = this.optionalShaaririkVishayCode;
     data['OtherOptionalVishay'] = this.otherOptionalVishay;

@@ -42,14 +42,7 @@ class DatabaseHelper {
       await db.rawQuery('PRAGMA busy_timeout = 3000'); // wait up to 3s
     }, onUpgrade: (db, oldVersion, newVersion) async {
       log('initDatabase - database upgraded, oldVersion:' + oldVersion.toString() + '; newVersion:' + newVersion.toString());
-      // db.execute('DROP TABLE UserDataMaster');
-      // db.execute('DROP TABLE IF EXISTS AbhiyaanVrutta');
-      // db.execute('DROP TABLE IF EXISTS AbhiyaanParticipant');
-      // db.execute('DROP TABLE IF EXISTS AbhiyaanAttendance');
-      // db.execute('DROP TABLE IF EXISTS VisheshVyaktiMaster');
-      // db.execute('DROP TABLE IF EXISTS TempDates');
-      //
-      // db.execute('DROP TABLE IF EXISTS HomeScreenData');
+
       db.execute('CREATE TABLE IF NOT EXISTS HomeScreenData(ShishuCount INT, BaalCount INT, TarunVidyaarthiCount INT,' +
           ' TarunVyavasayeeCount INT, ProudhaVyavasayeeCount INT, UnknownAgeCount INT, TrutiyaVarshaShikshitCount INT,' +
           ' DwitiyaVarshaShikshitCount INT, PrathamVarshaShikshitCount INT, PraathamikShikshitCount INT, NoShikshanCount INT, ' +
@@ -99,7 +92,7 @@ class DatabaseHelper {
 
       db.execute('''
   CREATE TABLE IF NOT EXISTS ShaakhaVruttaMaster (
-    pkid INT, ShaakhaaID INT, VruttaDate TEXT, ShishuCount INT, NewShishuCount INT, BaalVidyaarthiCount INT,
+    pkid INT PRIMARY KEY, ShaakhaaID INT, VruttaDate TEXT, ShishuCount INT, NewShishuCount INT, BaalVidyaarthiCount INT,
     NewBaalVidyaarthiCount INT, TarunVidyaarthiCount INT, NewTarunVidyaarthiCount INT, TarunVyavasaayeeCount INT,
     NewTarunVyavasaayeeCount INT, ProudhaVyavasaayeeCount INT, NewProudhaVyavasaayeeCount INT, matruskatiCount INT,
     newmatruskatiCount INT, totalCount INT, newtotalCount INT, AbhyaagatCount INT, IsOptionalShaaririk INT, IsOptionalOther INT,
@@ -112,7 +105,7 @@ class DatabaseHelper {
 
       db.execute('''
   CREATE TABLE IF NOT EXISTS VistarShaakhaVruttaMaster (
-    pkid INT, ShaakhaaID INT, VruttaDate TEXT, ShishuCount INT, NewShishuCount INT, BaalVidyaarthiCount INT,
+    pkid INT PRIMARY KEY, ShaakhaaID INT, VruttaDate TEXT, ShishuCount INT, NewShishuCount INT, BaalVidyaarthiCount INT,
     NewBaalVidyaarthiCount INT, TarunVidyaarthiCount INT, NewTarunVidyaarthiCount INT, TarunVyavasaayeeCount INT,
     NewTarunVyavasaayeeCount INT, ProudhaVyavasaayeeCount INT, NewProudhaVyavasaayeeCount INT, matruskatiCount INT,
     newmatruskatiCount INT, totalCount INT, newtotalCount INT, AbhyaagatCount INT, IsOptionalShaaririk INT, IsOptionalOther INT,
@@ -126,6 +119,12 @@ class DatabaseHelper {
       db.execute('''
   CREATE TABLE IF NOT EXISTS MediaMaster (
     pkid INT, filepath TEXT, tablename TEXT
+  )
+''');
+
+      db.execute('''
+  CREATE TABLE IF NOT EXISTS SewaSanskarData (
+    GroupId INT, StaticID INT, name TEXT
   )
 ''');
 
@@ -278,6 +277,12 @@ class DatabaseHelper {
 ''');
 
       db.execute('''
+  CREATE TABLE IF NOT EXISTS SewaSanskarData (
+    GroupId INT, StaticID INT, name TEXT
+  )
+''');
+
+      db.execute('''
   CREATE TABLE IF NOT EXISTS MediaDownloadQueue (
   id INTEGER PRIMARY KEY AUTOINCREMENT, pkid INTEGER NOT NULL, tablename TEXT NOT NULL, remoteFilepath TEXT NOT NULL, localFilepath TEXT,
   taskId TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'pending', progress INTEGER NOT NULL DEFAULT 0, retryCount INTEGER NOT NULL DEFAULT 0,
@@ -362,12 +367,16 @@ class DatabaseHelper {
     List<Object?>? whereArgs,
   }) async {
     Database db = await database;
+    log("calling from the table >>>>>> $tableName");
+    if (where != null) log("with following conditions >>>>>>> $where");
+    if (whereArgs != null) log("with following args >>>>>>> $whereArgs");
     final rows = await db.query(
       tableName,
       where: where,
       whereArgs: whereArgs,
       orderBy: orderBy,
     );
+    log("rows.firstOrNull >>>>> ${rows.firstOrNull}");
     return rows.map((row) => fromMap(row)).toList();
   }
 

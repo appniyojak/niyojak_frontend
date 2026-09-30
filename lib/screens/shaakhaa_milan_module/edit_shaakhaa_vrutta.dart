@@ -7,6 +7,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
+import '../../helpers/database_helper.dart';
+import '../../helpers/offline_data_api_repo.dart';
 import '../../helpers/static_data.dart' as Statics;
 import '../../providers/bals.dart';
 import '../../utils/globals.dart';
@@ -30,6 +32,14 @@ class SewaDaysGroupData {
       name: json['name'] as String,
     );
   }
+
+  Map<String?, dynamic> toJson() {
+    return {
+      'GroupId': groupId,
+      'StaticID': staticId,
+      'name': name,
+    };
+  }
 }
 
 class EditShaakhaaVrutta extends StatefulWidget {
@@ -50,6 +60,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
   final GlobalKey<FormState> _formKey = GlobalKey();
 
   ShaakhaaVruttaBAL? vrutta;
+  DraftRecordSource? _loadedSource;
   var _isLoading = false;
 
   bool _isFetchingData = false;
@@ -136,9 +147,10 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
   }
 
   Future<void> populateShaakhaVayogat(shaakhaaID) async {
+    final _data = await Statics.getShaakhaaByID(shaakhaaID);
     // 1. Group all your futures into a single list
     final results = await Future.wait([
-      Statics.getShaakhaaByID(shaakhaaID), // index 0
+      // index 0
       Statics.getStaticLDB('ShaakhaaVayogat'), // index 1
       Statics.getStaticLDB('ShaakhaaFrequency'), // index 2
       Statics.getStaticLDB('boudhikDaysList'), // index 3
@@ -146,14 +158,13 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
     ]);
 
 // 2. Assign the results back to your variables based on their index
-    var data = results[0];
-    var data2 = results[1];
-    var data3 = results[2];
-    _boudhikDaysList = results[3];
-    _sewaDaysList = results[4];
-    if (data != null) {
-      var code = data2[data2.indexWhere((e) => e.staticID == data.vayogatID)].code;
-      var freq = data.frequencyID;
+    var data2 = results[0];
+    var data3 = results[1];
+    _boudhikDaysList = results[2];
+    _sewaDaysList = results[3];
+    if (_data != null) {
+      var code = data2[data2.indexWhere((e) => e.staticID == _data.vayogatID)].code;
+      var freq = _data.frequencyID;
       setState(() {
         vayogatCode = code!;
         _frequency = data3;
@@ -197,107 +208,101 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
     setState(() {
       _isFetchingData = true;
     });
-    var dataList;
-    bool isConnected = await Statics.isInternetConnected();
-    if (!isConnected) {
-      Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));
-    } else {
-      final dataList = await Statics.getShaakhaaVruttaDetailsByDateForApp(int.tryParse(widget.shaakhaaID == null ? "0" : widget.shaakhaaID.toString()) ?? 0, dateSelected);
+    // final dataList = await Statics.getShaakhaaVruttaDetailsByDateForApp(int.tryParse(widget.shaakhaaID == null ? "0" : widget.shaakhaaID.toString()) ?? 0, dateSelected);
+    final _body = {
+      "AppUserID": Statics.userDetails["userID"],
+      "ShaakhaaID": int.tryParse(widget.shaakhaaID == null ? "0" : widget.shaakhaaID.toString()) ?? 0,
+      "Vruttadate": dateSelected,
+    };
 
-      // dataList = dateSelected != null
-      //     ? await Statics.getShaakhaaVruttaDetailsByDateForApp(
-      //         int.tryParse(widget.shaakhaaID?.toString() ?? "0") ?? 0,
-      //         dateSelected,
-      //       )
-      //     : await Statics.getShaakhaaVruttaListForApp(null, theId);
+    final dataList = await OfflineDataApiRepo.loadWithFallback(
+      masterTableName: 'ShaakhaVruttaMaster',
+      draftTableName: 'VruttaDraftMaster',
+      keyColumns: ['ShaakhaaID', 'VruttaDate'],
+      keyValues: [_body["ShaakhaaID"], _body["Vruttadate"]],
+      fetchFromApi: () async {
+        final vrutta = await Statics.getShaakhaaVruttaDetailsByDateForApp(_body["ShaakhaaID"], _body["Vruttadate"]);
+        return vrutta?.toJson();
+      },
+    );
 
-      if (dataList != null) {
-        List<dynamic> vruttaList;
-        //
-        // if (dataList is List<dynamic>) {
-        //   log("is list dynamic");
-        //   vruttaList = dataList;
-        //
-        //   List<Map<String, dynamic>> rawData = _sewaDaysList.where((e) => e != null).map((e) => e!.toJson()).toList();
-        //   final apiItems = rawData.map((e) => SewaDaysGroupData.fromJson(e)).toList();
-        //   _sewaDaysGroup = buildGroupedItemsFromApi(apiItems);
-        // } else {
-        log("list having data and vrutta list");
-        vruttaList = dataList.vruttaList;
+    _loadedSource = dataList.source;
 
-        final List<dynamic> rawData = dataList.data;
-        final apiItems = rawData.map((e) => SewaDaysGroupData.fromJson(e as Map<String, dynamic>)).toList();
-        _sewaDaysGroup = buildGroupedItemsFromApi(apiItems);
-        // }
+    // dataList = dateSelected != null
+    //     ? await Statics.getShaakhaaVruttaDetailsByDateForApp(
+    //         int.tryParse(widget.shaakhaaID?.toString() ?? "0") ?? 0,
+    //         dateSelected,
+    //       )
+    //     : await Statics.getShaakhaaVruttaListForApp(null, theId);
 
-        if (vruttaList.isNotEmpty) {
-          var data = ShaakhaaVruttaBAL.fromMap(vruttaList[0]);
-          // }
-          //
-          // if (dataList != null && dataList.vruttaList.isNotEmpty) {
-          //   var data = ShaakhaaVruttaBAL.fromMap(dataList.vruttaList[0]);
+    final _res = await DatabaseHelper.getAllOfflineData<SewaDaysGroupData>(
+      tableName: 'SewaSanskarData',
+      fromMap: SewaDaysGroupData.fromJson,
+    );
 
-          // var data = ShaakhaaVruttaBAL.fromMap(theId == 0 || theId == null ? dataList.vruttaList[0] : dataList[0]);
-          if (!mounted) return;
-          vrutta = data;
-          setState(() {
-            if (vrutta != null) {
-              final formattedDate = dateSelected != null ? DateFormat('dd/MM/yyyy').parse(dateSelected) : null;
-              final hasVruttaDate = vrutta?.vruttaDate?.isNotEmpty ?? false;
+    if (_res.isNotEmpty) _sewaDaysGroup = buildGroupedItemsFromApi(_res);
 
-              _vruttaDate = hasVruttaDate ? DateFormat('yyyy/MM/dd').parse(vrutta!.vruttaDate!) : formattedDate;
-              _vruttaDateCntrl.text = _vruttaDate != null ? DateFormat('dd-MMM-yyyy').format(_vruttaDate!) : '';
+    if (dataList.data != null) {
+      log("list having data and vrutta list");
+      var data = ShaakhaaVruttaBAL.fromMap(dataList.data!);
+      if (!mounted) return;
+      vrutta = data;
+      setState(() {
+        if (vrutta != null) {
+          final formattedDate = dateSelected != null ? DateFormat('dd/MM/yyyy').parse(dateSelected) : null;
+          final hasVruttaDate = vrutta?.vruttaDate?.isNotEmpty ?? false;
 
-              _shishuCtrl.text = vrutta!.shishuCount == null ? "" : vrutta!.shishuCount.toString();
-              _newshishuCtrl.text = vrutta!.newshishuCount == null ? "" : vrutta!.newshishuCount.toString();
-              _baalCtrl.text = vrutta!.baalVidyaarthiCount == null ? "" : vrutta!.baalVidyaarthiCount.toString();
-              _newbaalCtrl.text = vrutta!.newbaalVidyaarthiCount == null ? "" : vrutta!.newbaalVidyaarthiCount.toString();
-              _tarunVidhyaarthiCtrl.text = vrutta!.tarunVidyaarthiCount == null ? "" : vrutta!.tarunVidyaarthiCount.toString();
-              _newtarunVidhyaarthiCtrl.text = vrutta!.newtarunVidyaarthiCount == null ? "" : vrutta!.newtarunVidyaarthiCount.toString();
-              _tarunVyavsaayeeCtrl.text = vrutta!.tarunVyavasaayeeCount == null ? "" : vrutta!.tarunVyavasaayeeCount.toString();
-              _newtarunVyavsaayeeCtrl.text = vrutta!.newtarunVyavasaayeeCount == null ? "" : vrutta!.newtarunVyavasaayeeCount.toString();
-              _proudhaCtrl.text = vrutta!.proudhaVyavasaayeeCount == null ? "" : vrutta!.proudhaVyavasaayeeCount.toString();
-              _newproudhaCtrl.text = vrutta!.newproudhaVyavasaayeeCount == null ? "" : vrutta!.newproudhaVyavasaayeeCount.toString();
-              _matrushaktiCtrl.text = vrutta!.matruskatiCount == null ? "" : vrutta!.matruskatiCount.toString();
-              _newmatrushaktiCtrl.text = vrutta!.newmatruskatiCount == null ? "" : vrutta!.newmatruskatiCount.toString();
-              _abhyaagatCtrl.text = vrutta!.abhyaagatCount == null ? "" : vrutta!.abhyaagatCount.toString();
-              _pravasiKaryakartaCountCtrl.text = vrutta!.pravasiKaryakartaCount == null ? "" : vrutta!.pravasiKaryakartaCount.toString();
-              _anyaPravasiKaryakartaCountCtrl.text = vrutta!.anyaPravasiKaryakartaCount == null ? "" : vrutta!.anyaPravasiKaryakartaCount.toString();
-              _remarkCtrl.text = vrutta!.remark == null ? "" : vrutta!.remark.toString();
+          _vruttaDate = hasVruttaDate ? DateFormat('dd/MM/yyyy').parse(vrutta!.vruttaDate!) : formattedDate;
+          _vruttaDateCntrl.text = _vruttaDate != null ? DateFormat('dd-MMM-yyyy').format(_vruttaDate!) : '';
 
-              // _isMandatoryShaaririk =
-              //     vrutta!.isMandatoryShaaririk == true ? true : false;
+          _shishuCtrl.text = vrutta!.shishuCount == null ? "" : vrutta!.shishuCount.toString();
+          _newshishuCtrl.text = vrutta!.newshishuCount == null ? "" : vrutta!.newshishuCount.toString();
+          _baalCtrl.text = vrutta!.baalVidyaarthiCount == null ? "" : vrutta!.baalVidyaarthiCount.toString();
+          _newbaalCtrl.text = vrutta!.newbaalVidyaarthiCount == null ? "" : vrutta!.newbaalVidyaarthiCount.toString();
+          _tarunVidhyaarthiCtrl.text = vrutta!.tarunVidyaarthiCount == null ? "" : vrutta!.tarunVidyaarthiCount.toString();
+          _newtarunVidhyaarthiCtrl.text = vrutta!.newtarunVidyaarthiCount == null ? "" : vrutta!.newtarunVidyaarthiCount.toString();
+          _tarunVyavsaayeeCtrl.text = vrutta!.tarunVyavasaayeeCount == null ? "" : vrutta!.tarunVyavasaayeeCount.toString();
+          _newtarunVyavsaayeeCtrl.text = vrutta!.newtarunVyavasaayeeCount == null ? "" : vrutta!.newtarunVyavasaayeeCount.toString();
+          _proudhaCtrl.text = vrutta!.proudhaVyavasaayeeCount == null ? "" : vrutta!.proudhaVyavasaayeeCount.toString();
+          _newproudhaCtrl.text = vrutta!.newproudhaVyavasaayeeCount == null ? "" : vrutta!.newproudhaVyavasaayeeCount.toString();
+          _matrushaktiCtrl.text = vrutta!.matruskatiCount == null ? "" : vrutta!.matruskatiCount.toString();
+          _newmatrushaktiCtrl.text = vrutta!.newmatruskatiCount == null ? "" : vrutta!.newmatruskatiCount.toString();
+          _abhyaagatCtrl.text = vrutta!.abhyaagatCount == null ? "" : vrutta!.abhyaagatCount.toString();
+          _pravasiKaryakartaCountCtrl.text = vrutta!.pravasiKaryakartaCount == null ? "" : vrutta!.pravasiKaryakartaCount.toString();
+          _anyaPravasiKaryakartaCountCtrl.text = vrutta!.anyaPravasiKaryakartaCount == null ? "" : vrutta!.anyaPravasiKaryakartaCount.toString();
+          _remarkCtrl.text = vrutta!.remark == null ? "" : vrutta!.remark.toString();
 
-              // _isMandatoryBouddhik =
-              //     vrutta!.isMandatoryBouddhik == true ? true : false;
+          // _isMandatoryShaaririk =
+          //     vrutta!.isMandatoryShaaririk == true ? true : false;
 
-              _isOptionalShaaririk = vrutta?.isOptionalShaaririk ?? false;
+          // _isMandatoryBouddhik =
+          //     vrutta!.isMandatoryBouddhik == true ? true : false;
 
-              _isOptionalOther = vrutta?.isOptionalOther ?? false;
+          _isOptionalShaaririk = vrutta?.isOptionalShaaririk ?? false;
 
-              _isDoneDeepBreathing = vrutta?.isDoneDeepBreathing ?? false;
-              _isDoneDandaPrahaar = vrutta?.isDoneDandaPrahaar ?? false;
-              _isDoneSooryaNamaskaar = vrutta?.isDoneSooryaNamaskaar ?? false;
-              _isDoneSanchalanAbhyaas = vrutta?.isDoneSanchalanAbhyaas ?? false;
-              _isDoneSaanghikGeet = vrutta?.isDoneSaanghikGeet ?? false;
-              _isDoneAmrutaVachan = vrutta?.isDoneAmrutaVachan ?? false;
-              _isDoneSubhaashit = vrutta?.isDoneSubhaashit ?? false;
-              _isDoneUrdhvapad = vrutta?.isDoneUrdhvapad ?? false;
-              _isDoneBoodhKatha = vrutta?.isDoneBoodhKatha ?? false;
-              _isDoneBoudhikDays = vrutta?.isDoneBoudhikDays ?? false;
-              _isDoneSewaDays = vrutta?.isDoneSewaDays ?? false;
+          _isOptionalOther = vrutta?.isOptionalOther ?? false;
 
-              _selectedBoudhikDaysId = _isDoneBoudhikDays ? vrutta?.SelectedBoudhikDaysId : null;
-              _anyaBoudhikDaysCtrl.text = _isDoneBoudhikDays ? vrutta?.AnyaBoudhikDays ?? "" : "";
-              _selectedSewaDaysList = vrutta?.SelectedSewaDaysId?.split(',').map((e) => int.tryParse(e)).where((e) => e != null).cast<int>().toList() ?? [];
-            }
-          });
+          _isDoneDeepBreathing = vrutta?.isDoneDeepBreathing ?? false;
+          _isDoneDandaPrahaar = vrutta?.isDoneDandaPrahaar ?? false;
+          _isDoneSooryaNamaskaar = vrutta?.isDoneSooryaNamaskaar ?? false;
+          _isDoneSanchalanAbhyaas = vrutta?.isDoneSanchalanAbhyaas ?? false;
+          _isDoneSaanghikGeet = vrutta?.isDoneSaanghikGeet ?? false;
+          _isDoneAmrutaVachan = vrutta?.isDoneAmrutaVachan ?? false;
+          _isDoneSubhaashit = vrutta?.isDoneSubhaashit ?? false;
+          _isDoneUrdhvapad = vrutta?.isDoneUrdhvapad ?? false;
+          _isDoneBoodhKatha = vrutta?.isDoneBoodhKatha ?? false;
+          _isDoneBoudhikDays = vrutta?.isDoneBoudhikDays ?? false;
+          _isDoneSewaDays = vrutta?.isDoneSewaDays ?? false;
+
+          _selectedBoudhikDaysId = _isDoneBoudhikDays ? vrutta?.SelectedBoudhikDaysId : null;
+          _anyaBoudhikDaysCtrl.text = _isDoneBoudhikDays ? vrutta?.AnyaBoudhikDays ?? "" : "";
+          _selectedSewaDaysList = vrutta?.SelectedSewaDaysId?.split(',').map((e) => int.tryParse(e)).where((e) => e != null).cast<int>().toList() ?? [];
         }
-        setState(() {
-          _isFetchingData = false;
-        });
-      }
+      });
     }
+    setState(() {
+      _isFetchingData = false;
+    });
   }
 
   _pickFromDate() async {
@@ -364,11 +369,12 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
   }
 
   saveVruttaDetails(BuildContext context) async {
-    var inputData = json.encode({
+    var inputData = {
       "ShaakhaaVruttaID": int.tryParse(widget.vruttaID ?? "") ?? 0,
       "PraantID": 1,
       "ShaakhaaID": int.tryParse(widget.shaakhaaID ?? ""),
       "VruttaDateStr": (_vruttaDate != null ? DateFormat('dd-MM-yyyy').format(_vruttaDate!) : null),
+      "VruttaDate": (_vruttaDate != null ? DateFormat('dd/MM/yyyy').format(_vruttaDate!) : null),
       "ShishuCount": _shishuCtrl.text.trim() == "" ? null : int.parse(_shishuCtrl.text),
       "NewShishuCount": _newshishuCtrl.text.trim() == "" ? null : int.parse(_newshishuCtrl.text),
       "BaalVidyaarthiCount": _baalCtrl.text.trim() == "" ? null : int.parse(_baalCtrl.text),
@@ -404,10 +410,19 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
       "IsOptionalOther": _isOptionalOther,
       "Remark": _remarkCtrl.text.trim() == "" ? null : _remarkCtrl.text,
       "ModifiedBy": Statics.userDetails["userID"]
-    });
-    var data = await Statics.saveShaakhaaVruttaForApp(inputData);
+    };
+
+    final _data = await OfflineDataApiRepo.saveWithFallback(
+      masterTableName: 'ShaakhaVruttaMaster',
+      draftTableName: 'VruttaDraftMaster',
+      keyColumns: ['ShaakhaaID', 'VruttaDate'],
+      loadedSource: _loadedSource!,
+      formData: inputData,
+      saveToApi: () async => await Statics.saveShaakhaaVruttaForApp(json.encode(inputData)),
+    );
+    // var data = await Statics.saveShaakhaaVruttaForApp(json.encode(inputData));
     setState(() {
-      widget.vruttaID = data;
+      widget.vruttaID = _data.data?["OutputShaakhaaVruttaID"] ?? 0;
       if (widget.onSaveDetails != null) widget.onSaveDetails();
       Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
       Navigator.of(context).pop();

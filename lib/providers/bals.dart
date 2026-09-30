@@ -1,6 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../models/value_converter.dart';
+
+class CommonRespModel {
+  String? status;
+  String? message;
+  ShaakhaaMasterBAL? shaakhaaItem;
+  List<ShaakhaaMasterBAL>? shaakhaaList;
+
+  CommonRespModel({this.status, this.message, this.shaakhaaItem, this.shaakhaaList});
+
+  CommonRespModel.fromJson(Map<String, dynamic> json) {
+    status = json['Status'];
+    message = json['Message'];
+    shaakhaaItem = json['ShaakhaaItem'] != null ? new ShaakhaaMasterBAL.fromJson(json['ShaakhaaItem']) : null;
+    if (json['ShaakhaaList'] != null) {
+      shaakhaaList = <ShaakhaaMasterBAL>[];
+      json['ShaakhaaList'].forEach((v) {
+        shaakhaaList!.add(new ShaakhaaMasterBAL.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['Status'] = this.status;
+    data['Message'] = this.message;
+    if (this.shaakhaaList != null) {
+      data['ShaakhaaList'] = this.shaakhaaList!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
 class SwayamsevakBAL {
   int? swayamsevakID;
   int? praantID;
@@ -1037,6 +1070,120 @@ class ShaakhaaMasterBAL {
       this.otherShaaririkVishay,
       this.fromTime,
       this.toTime);
+
+  ShaakhaaMasterBAL.fromJson(Map<String, dynamic> data) {
+    shaakhaaID = data['ShaakhaaID'];
+    praantID = data['PraantID'];
+    geoUnitID = data['GeoUnitID'];
+    geoUnitName = data['GeoUnitName'];
+    frequencyID = data['FrequencyID'];
+    dayOfWeek = data['DaysOfWeek'];
+    dayOfMonth = data['DayOfMonth'];
+    vayogatID = data['VayogatID'];
+    location = data['Location'];
+    timing = data['Timing'];
+    remark = data['Remark'];
+    statusID = data['StatusID'];
+    bhaagID = data['ParentBhaagID'];
+    nagarID = data['ParentNagarID'];
+    shaharID = data['ParentShaharID'];
+    mandalID = data['ParentMandalID'];
+    graamID = data['ParentGraamID'];
+    vastiID = data['ParentVastiID'];
+    isSankalpit = toBool(data['IsSankalpit']);
+    sankalpAadhaar = data['SankalpAadhaar'];
+    sankalpAadhaar1 = data['SankalpAadhaar1'];
+    sankalpAadhaar2 = data['SankalpAadhaar2'];
+    sankalpAadhaar3 = data['SankalpAadhaar3'];
+    sankalpAadhaarSwayamsevakID = data['SankalpAadhaarSwayamsevakID'];
+    sankalpAadhaarSwayamsevakID1 = data['SankalpAadhaarSwayamsevakID1'];
+    sankalpAadhaarSwayamsevakID2 = data['SankalpAadhaarSwayamsevakID2'];
+    sankalpAadhaarSwayamsevakID3 = data['SankalpAadhaarSwayamsevakID3'];
+    sankalpAadhaarSwayamsevakName = data['SankalpAadhaarSwayamsevakName'];
+    sankalpAadhaarSwayamsevakName1 = data['SankalpAadhaarSwayamsevakName1'];
+    sankalpAadhaarSwayamsevakName2 = data['SankalpAadhaarSwayamsevakName2'];
+    sankalpAadhaarSwayamsevakName3 = data['SankalpAadhaarSwayamsevakName3'];
+    sankalpAadhaarShaakhaaID = data['SankalpAadhaarShaakhaaID'];
+    sankalpAadhaarShaakhaaID1 = data['SankalpAadhaarShaakhaaID1'];
+    sankalpAadhaarShaakhaaID2 = data['SankalpAadhaarShaakhaaID2'];
+    sankalpAadhaarShaakhaaID3 = data['SankalpAadhaarShaakhaaID3'];
+    sankalpAadhaarShaakhaaName = data['SankalpAadhaarShaakhaaName'];
+    sankalpAadhaarShaakhaaName1 = data['SankalpAadhaarShaakhaaName1'];
+    sankalpAadhaarShaakhaaName2 = data['SankalpAadhaarShaakhaaName2'];
+    sankalpAadhaarShaakhaaName3 = data['SankalpAadhaarShaakhaaName3'];
+    sankalpCompletionMonth = data['SankalpCompletionMonth'];
+    sankalpCompletionMonth1 = data['SankalpCompletionMonth1'];
+    sankalpCompletionMonth2 = data['SankalpCompletionMonth2'];
+    sankalpCompletionMonth3 = data['SankalpCompletionMonth3'];
+    sankalpCompletionYear = data['SankalpCompletionYear'];
+    sankalpCompletionYear1 = data['SankalpCompletionYear1'];
+    sankalpCompletionYear2 = data['SankalpCompletionYear2'];
+    sankalpCompletionYear3 = data['SankalpCompletionYear3'];
+    hasToli = toBool(data['HasToli']);
+    hasPaalak = toBool(data['HasPaalak']);
+    shaaririkVishayID = data['OptionalShaaririkVishayID'];
+    otherShaaririkVishay = data['OtherOptionalVishay'];
+    fromTime = data['StartTimeStr'];
+    toTime = data['EndTimeStr'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['ShaakhaaID'] = this.shaakhaaID;
+    data['PraantID'] = this.praantID;
+    data['GeoUnitID'] = this.geoUnitID;
+    data['GeoUnitName'] = this.geoUnitName;
+    data['FrequencyID'] = this.frequencyID;
+    data['DaysOfWeek'] = this.dayOfWeek;
+    data['DayOfMonth'] = this.dayOfMonth;
+    data['VayogatID'] = this.vayogatID;
+    data['Location'] = this.location;
+    data['Timing'] = this.timing;
+    data['Remark'] = this.remark;
+    data['StatusID'] = this.statusID;
+    data['ParentBhaagID'] = this.bhaagID;
+    data['ParentNagarID'] = this.nagarID;
+    data['ParentShaharID'] = this.shaharID;
+    data['ParentMandalID'] = this.mandalID;
+    data['ParentGraamID'] = this.graamID;
+    data['ParentVastiID'] = this.vastiID;
+    data['IsSankalpit'] = this.isSankalpit;
+    data['SankalpAadhaar'] = this.sankalpAadhaar;
+    data['SankalpAadhaar1'] = this.sankalpAadhaar1;
+    data['SankalpAadhaar2'] = this.sankalpAadhaar2;
+    data['SankalpAadhaar3'] = this.sankalpAadhaar3;
+    data['SankalpAadhaarSwayamsevakID'] = this.sankalpAadhaarSwayamsevakID;
+    data['SankalpAadhaarSwayamsevakID1'] = this.sankalpAadhaarSwayamsevakID1;
+    data['SankalpAadhaarSwayamsevakID2'] = this.sankalpAadhaarSwayamsevakID2;
+    data['SankalpAadhaarSwayamsevakID3'] = this.sankalpAadhaarSwayamsevakID3;
+    data['SankalpAadhaarSwayamsevakName'] = this.sankalpAadhaarSwayamsevakName;
+    data['SankalpAadhaarSwayamsevakName1'] = this.sankalpAadhaarSwayamsevakName1;
+    data['SankalpAadhaarSwayamsevakName2'] = this.sankalpAadhaarSwayamsevakName2;
+    data['SankalpAadhaarSwayamsevakName3'] = this.sankalpAadhaarSwayamsevakName3;
+    data['SankalpAadhaarShaakhaaID'] = this.sankalpAadhaarShaakhaaID;
+    data['SankalpAadhaarShaakhaaID1'] = this.sankalpAadhaarShaakhaaID1;
+    data['SankalpAadhaarShaakhaaID2'] = this.sankalpAadhaarShaakhaaID2;
+    data['SankalpAadhaarShaakhaaID3'] = this.sankalpAadhaarShaakhaaID3;
+    data['SankalpAadhaarShaakhaaName'] = this.sankalpAadhaarShaakhaaName;
+    data['SankalpAadhaarShaakhaaName1'] = this.sankalpAadhaarShaakhaaName1;
+    data['SankalpAadhaarShaakhaaName2'] = this.sankalpAadhaarShaakhaaName2;
+    data['SankalpAadhaarShaakhaaName3'] = this.sankalpAadhaarShaakhaaName3;
+    data['SankalpCompletionMonth'] = this.sankalpCompletionMonth;
+    data['SankalpCompletionMonth1'] = this.sankalpCompletionMonth1;
+    data['SankalpCompletionMonth2'] = this.sankalpCompletionMonth2;
+    data['SankalpCompletionMonth3'] = this.sankalpCompletionMonth3;
+    data['SankalpCompletionYear'] = this.sankalpCompletionYear;
+    data['SankalpCompletionYear1'] = this.sankalpCompletionYear1;
+    data['SankalpCompletionYear2'] = this.sankalpCompletionYear2;
+    data['SankalpCompletionYear3'] = this.sankalpCompletionYear3;
+    data['HasToli'] = this.hasToli;
+    data['HasPaalak'] = this.hasPaalak;
+    data['OptionalShaaririkVishayID'] = this.shaaririkVishayID;
+    data['OtherOptionalVishay'] = this.otherShaaririkVishay;
+    data['StartTimeStr'] = this.fromTime;
+    data['EndTimeStr'] = this.toTime;
+    return data;
+  }
 }
 
 class SwayamsevakTransferBAL {
@@ -2290,7 +2437,7 @@ class ShaakhaaVruttaBAL {
     shaakhaaVruttaID = map["ShaakhaaVruttaID"];
     praantID = map["PraantID"];
     shaakhaaID = map["ShaakhaaID"];
-    vruttaDate = map["VruttaDateStr"];
+    vruttaDate = map["VruttaDate"] ?? map["VruttaDateStr"];
     shishuCount = map["ShishuCount"];
     newshishuCount = map["NewShishuCount"];
     baalVidyaarthiCount = map["BaalVidyaarthiCount"];
@@ -2306,24 +2453,25 @@ class ShaakhaaVruttaBAL {
     abhyaagatCount = map["AbhyaagatCount"];
     pravasiKaryakartaCount = map["PravasiKaryakartaCount"];
     anyaPravasiKaryakartaCount = map["AnyaPravasiKaryakartaCount"];
-    isMandatoryShaaririk = map["IsMandatoryShaaririk"];
-    isMandatoryBouddhik = map["IsMandatoryBouddhik"];
-    isOptionalShaaririk = map["IsOptionalShaaririk"];
-    isOptionalOther = map["IsOptionalOther"];
+    isMandatoryShaaririk = map["IsMandatoryShaaririk"] == 1 || map["IsMandatoryShaaririk"] == true;
+    isMandatoryBouddhik = map["IsMandatoryBouddhik"] == 1 || map["IsMandatoryBouddhik"] == true;
+    isOptionalShaaririk = map["IsOptionalShaaririk"] == 1 || map["IsOptionalShaaririk"] == true;
+    isOptionalOther = map["IsOptionalOther"] == 1 || map["IsOptionalOther"] == true;
     remark = map["Remark"];
-    isDoneAmrutaVachan = map["IsDoneAmrutaVachan"];
-    isDoneDandaPrahaar = map["IsDoneDandaPrahaar"];
-    isDoneDeepBreathing = map["IsDoneDeepBreathing"];
-    isDoneSaanghikGeet = map["IsDoneSaanghikGeet"];
-    isDoneSanchalanAbhyaas = map["IsDoneSanchalanAbhyaas"];
-    isDoneSooryaNamaskaar = map["IsDoneSooryaNamaskaar"];
-    isDoneSubhaashit = map["IsDoneSubhaashit"];
-    isDoneUrdhvapad = map["IsDoneUrdhvapad"];
-    isDoneBoodhKatha = map["IsDoneBoodhKatha"];
-    isDoneBoudhikDays = map["IsDoneBoudhikDays"];
+
+    isDoneAmrutaVachan = map["IsDoneAmrutaVachan"] == 1 || map["IsDoneAmrutaVachan"] == true;
+    isDoneDandaPrahaar = map["IsDoneDandaPrahaar"] == 1 || map["IsDoneDandaPrahaar"] == true;
+    isDoneDeepBreathing = map["IsDoneDeepBreathing"] == 1 || map["IsDoneDeepBreathing"] == true;
+    isDoneSaanghikGeet = map["IsDoneSaanghikGeet"] == 1 || map["IsDoneSaanghikGeet"] == true;
+    isDoneSanchalanAbhyaas = map["IsDoneSanchalanAbhyaas"] == 1 || map["IsDoneSanchalanAbhyaas"] == true;
+    isDoneSooryaNamaskaar = map["IsDoneSooryaNamaskaar"] == 1 || map["IsDoneSooryaNamaskaar"] == true;
+    isDoneSubhaashit = map["IsDoneSubhaashit"] == 1 || map["IsDoneSubhaashit"] == true;
+    isDoneUrdhvapad = map["IsDoneUrdhvapad"] == 1 || map["IsDoneUrdhvapad"] == true;
+    isDoneBoodhKatha = map["IsDoneBoodhKatha"] == 1 || map["IsDoneBoodhKatha"] == true;
+    isDoneBoudhikDays = map["IsDoneBoudhikDays"] == 1 || map["IsDoneBoudhikDays"] == true;
     SelectedBoudhikDaysId = map["BoudhikDaysId"]?.toString();
     AnyaBoudhikDays = map["AnyaBoudhikDays"];
-    isDoneSewaDays = map["IsDoneSewaDays"];
+    isDoneSewaDays = map["IsDoneSewaDays"] == 1 || map["IsDoneSewaDays"] == true;
     SelectedSewaDaysId = map["SewaDaysId"].toString();
     FrequencyID = map["FrequencyID"];
   }
