@@ -1,16 +1,20 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:multi_select_flutter/multi_select_flutter.dart';
 
+import '../../../helpers/database_helper.dart';
 import '../../../helpers/offline_data_api_repo.dart';
 import '../../../helpers/static_data.dart' as Statics;
 import '../../../models/response_model/shaakhaa_vistaar_vrutta_resp_model.dart';
 import '../../../models/response_model/shaakhaa_vistar_list_resp_model.dart';
 import '../../../providers/bals.dart';
 import '../../../utils/globals.dart';
+import '../../../utils/multi_select_option_widget.dart';
+import '../../shaakhaa_milan_module/edit_shaakhaa_vrutta.dart';
 
 class ShakhaaSaptahFormScreen extends StatefulWidget {
   static const String routeName = '/shaakhaa-vistar-saptah-vrutta-screen';
@@ -20,8 +24,9 @@ class ShakhaaSaptahFormScreen extends StatefulWidget {
   final String? viewType;
   final bool showAppBar;
   final bool isNew;
+  final DateTime? vruttadate;
 
-  const ShakhaaSaptahFormScreen({this.shaakhaa, this.shaakhaaId, this.fromYesterday = false, this.isNew = false, this.showAppBar = true, this.viewType, super.key});
+  const ShakhaaSaptahFormScreen({this.shaakhaa, this.shaakhaaId, this.fromYesterday = false, this.isNew = false, this.showAppBar = true, this.viewType, this.vruttadate, super.key});
 
   @override
   State<ShakhaaSaptahFormScreen> createState() => _ShakhaaSaptahFormScreenState();
@@ -32,6 +37,9 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
 
   VistaarVrutta? vrutta;
   DraftRecordSource? _loadedSource;
+  bool _isFormViewOnly = false;
+
+  Map<String, List<SelectItem<int>>> _sewaDaysGroup = {};
 
   var _isLoading = false;
 
@@ -83,8 +91,9 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
   bool _isDoneSubhaashit = false;
 
   List<StaticMasterBAL?> _boudhikDaysList = [];
-  List<StaticMasterBAL?> _sewaDaysList = [];
-  List<int?> _selectedSewaDaysList = [];
+
+  // List<StaticMasterBAL?> _sewaDaysList = [];
+  List<int> _selectedSewaDaysList = [];
 
   @override
   void initState() {
@@ -110,7 +119,7 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
     // int vruttaID = widget.shaakhaa == null ? 0 : widget.shaakhaa?.pkid ?? 0;
     print("widget.fromYesterday >>>>>>>>>>>> ${widget.fromYesterday}");
     int shaakhaaID = widget.shaakhaa == null ? (widget.shaakhaaId ?? 0) : widget.shaakhaa?.shaakhaaID ?? widget.shaakhaaId ?? 0;
-    _vruttaDateCntrl.text = DateFormat("dd-MMM-yyyy").format(widget.fromYesterday ? DateTime.now().subtract(const Duration(days: 1)) : DateTime.now());
+    _vruttaDateCntrl.text = DateFormat("dd-MMM-yyyy").format(widget.fromYesterday ? DateTime.now().subtract(const Duration(days: 1)) : widget.vruttadate ?? DateTime.now());
     await populateShaakhaVayogat(shaakhaaID.toString());
     // if (vruttaID > 0) {
     await getSwDetails();
@@ -122,7 +131,7 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
     var data2 = await Statics.getStaticLDB('ShaakhaaVayogat');
     var data3 = await Statics.getStaticLDB('ShaakhaaFrequency');
     _boudhikDaysList = await Statics.getStaticLDB('boudhikDaysList');
-    _sewaDaysList = await Statics.getStaticLDB('sewaDaysList');
+    // _sewaDaysList = await Statics.getStaticLDB('sewaDaysList');
     if (widget.shaakhaa != null) {
       var code = data2[data2.indexWhere((e) => e.staticID == widget.shaakhaa!.vayogatID)].code;
       var freq = widget.shaakhaa!.frequencyID;
@@ -137,6 +146,28 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
     }
     if (mounted) setState(() {});
     // _boudhikDaysList.forEach((e) => print("e >>>>>>>>>>>>>>>>>>>> ${e?.toJson()}"));
+  }
+
+  Map<String, List<SelectItem<int>>> buildGroupedItemsFromApi(List<SewaDaysGroupData> data) {
+    // Step 1: collect headers (GroupId == 0) -> {StaticID: headerName}.
+    final Map<int, String> groupHeaders = {};
+    for (final item in data) {
+      if (item.groupId == 0) {
+        groupHeaders[item.staticId] = item.name;
+      }
+    }
+
+    // Step 2: bucket every non-header row under its matching header,
+    // preserving the order headers were first encountered.
+    final Map<String, List<SelectItem<int>>> grouped = {};
+    for (final item in data) {
+      if (item.groupId == 0) continue; // header row itself, not selectable
+      final headerName = groupHeaders[item.groupId] ?? 'Other';
+      grouped.putIfAbsent(headerName, () => []);
+      grouped[headerName]!.add(SelectItem<int>(item.staticId, item.name));
+    }
+
+    return grouped;
   }
 
   getSwDetails() async {
@@ -157,19 +188,31 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
 
     try {
       VistaarVrutta? data;
+
       final _res = await OfflineDataApiRepo.loadWithFallback(
-        masterTableName: 'VistarShaakhaVruttaMaster',
+        masterTableName: widget.isNew ? "VistarShaakhaVruttaMaster" : "ShaakhaVruttaMaster",
         draftTableName: 'VruttaDraftMaster',
         keyColumns: ['ShaakhaaID', 'VruttaDate'],
-        keyValues: [_shaakhaaId, _vruttaDate],
+        keyValues: [_body["ShaakhaaID"], _body["Vruttadate"]],
+        where: '${widget.isNew ? "mapShaakhaaID" : "ShaakhaaID"} = ? AND VruttaDate LIKE ?',
+        whereArgs: [_body["ShaakhaaID"], "${_vruttaDate}%"],
         fetchFromApi: () async {
           final vrutta = await Statics.getShaakhaaSaptahVruttaData(context, _body);
           return vrutta?.toJson();
         },
       );
 
+      _loadedSource = _res.source;
+
       // final _vrutta = await Statics.getShaakhaaSaptahVruttaData(context, _body);
       // final _res = _vrutta?.toJson();
+
+      final _data = await DatabaseHelper.getAllOfflineData<SewaDaysGroupData>(
+        tableName: 'SewaSanskarData',
+        fromMap: SewaDaysGroupData.fromJson,
+      );
+
+      if (_data.isNotEmpty) _sewaDaysGroup = buildGroupedItemsFromApi(_data);
 
       if (!mounted) return;
       if (_res.data == null)
@@ -177,33 +220,32 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
       else
         data = VistaarVrutta.fromJson(_res.data!);
       vrutta = data;
-      _loadedSource = _res.source;
       setState(() {
         if (vrutta != null) {
           // _vruttaDate = ((vrutta!.vruttaDate != null && vrutta!.vruttaDate != "") ? vrutta!.vruttaDate! : null);
           // _vruttaDateCntrl.text = ((vrutta!.vruttaDate != null && vrutta!.vruttaDate != "") ? DateFormat('dd-MMM-yyyy').format(_vruttaDate!) : '');
-          _shishuCtrl.text = vrutta!.shishuCount == null ? "" : vrutta!.shishuCount.toString();
-          _newshishuCtrl.text = vrutta!.newShishuCount == null ? "" : vrutta!.newShishuCount.toString();
-          _baalCtrl.text = vrutta!.baalVidyaarthiCount == null ? "" : vrutta!.baalVidyaarthiCount.toString();
-          _newbaalCtrl.text = vrutta!.newBaalVidyaarthiCount == null ? "" : vrutta!.newBaalVidyaarthiCount.toString();
-          _tarunVidhyaarthiCtrl.text = vrutta!.tarunVidyaarthiCount == null ? "" : vrutta!.tarunVidyaarthiCount.toString();
-          _newtarunVidhyaarthiCtrl.text = vrutta!.newTarunVidyaarthiCount == null ? "" : vrutta!.newTarunVidyaarthiCount.toString();
-          _tarunVyavsaayeeCtrl.text = vrutta!.tarunVyavasaayeeCount == null ? "" : vrutta!.tarunVyavasaayeeCount.toString();
-          _newtarunVyavsaayeeCtrl.text = vrutta!.newTarunVyavasaayeeCount == null ? "" : vrutta!.newTarunVyavasaayeeCount.toString();
-          _proudhaCtrl.text = vrutta!.proudhaVyavasaayeeCount == null ? "" : vrutta!.proudhaVyavasaayeeCount.toString();
-          _newproudhaCtrl.text = vrutta!.newProudhaVyavasaayeeCount == null ? "" : vrutta!.newProudhaVyavasaayeeCount.toString();
-          _matrushaktiCtrl.text = vrutta!.matruskatiCount == null ? "" : vrutta!.matruskatiCount.toString();
-          _newmatrushaktiCtrl.text = vrutta!.newmatruskatiCount == null ? "" : vrutta!.newmatruskatiCount.toString();
-          _abhyaagatCtrl.text = vrutta!.abhyaagatCount == null ? "" : vrutta!.abhyaagatCount.toString();
-          _pravasiKaryakartaCountCtrl.text = vrutta!.pravasiKaryakartaCount == null ? "" : vrutta!.pravasiKaryakartaCount.toString();
-          _anyaPravasiKaryakartaCountCtrl.text = vrutta!.anyaPravasiKaryakartaCount == null ? "" : vrutta!.anyaPravasiKaryakartaCount.toString();
-          _remarkCtrl.text = vrutta!.remark == null ? "" : vrutta!.remark.toString();
+          _shishuCtrl.text = vrutta?.shishuCount == null ? "" : vrutta!.shishuCount.toString();
+          _newshishuCtrl.text = vrutta?.newShishuCount == null ? "" : vrutta!.newShishuCount.toString();
+          _baalCtrl.text = vrutta?.baalVidyaarthiCount == null ? "" : vrutta!.baalVidyaarthiCount.toString();
+          _newbaalCtrl.text = vrutta?.newBaalVidyaarthiCount == null ? "" : vrutta!.newBaalVidyaarthiCount.toString();
+          _tarunVidhyaarthiCtrl.text = vrutta?.tarunVidyaarthiCount == null ? "" : vrutta!.tarunVidyaarthiCount.toString();
+          _newtarunVidhyaarthiCtrl.text = vrutta?.newTarunVidyaarthiCount == null ? "" : vrutta!.newTarunVidyaarthiCount.toString();
+          _tarunVyavsaayeeCtrl.text = vrutta?.tarunVyavasaayeeCount == null ? "" : vrutta!.tarunVyavasaayeeCount.toString();
+          _newtarunVyavsaayeeCtrl.text = vrutta?.newTarunVyavasaayeeCount == null ? "" : vrutta!.newTarunVyavasaayeeCount.toString();
+          _proudhaCtrl.text = vrutta?.proudhaVyavasaayeeCount == null ? "" : vrutta!.proudhaVyavasaayeeCount.toString();
+          _newproudhaCtrl.text = vrutta?.newProudhaVyavasaayeeCount == null ? "" : vrutta!.newProudhaVyavasaayeeCount.toString();
+          _matrushaktiCtrl.text = vrutta?.matruskatiCount == null ? "" : vrutta!.matruskatiCount.toString();
+          _newmatrushaktiCtrl.text = vrutta?.newmatruskatiCount == null ? "" : vrutta!.newmatruskatiCount.toString();
+          _abhyaagatCtrl.text = vrutta?.abhyaagatCount == null ? "" : vrutta!.abhyaagatCount.toString();
+          _pravasiKaryakartaCountCtrl.text = vrutta?.pravasiKaryakartaCount == null ? "" : vrutta!.pravasiKaryakartaCount.toString();
+          _anyaPravasiKaryakartaCountCtrl.text = vrutta?.anyaPravasiKaryakartaCount == null ? "" : vrutta!.anyaPravasiKaryakartaCount.toString();
+          _remarkCtrl.text = vrutta?.remark == null ? "" : vrutta!.remark.toString();
 
           // _isMandatoryShaaririk =
-          //     vrutta!.isMandatoryShaaririk == true ? true : false;
+          //     vrutta?.isMandatoryShaaririk == true ? true : false;
 
           // _isMandatoryBouddhik =
-          //     vrutta!.isMandatoryBouddhik == true ? true : false;
+          //     vrutta?.isMandatoryBouddhik == true ? true : false;
 
           _isOptionalShaaririk = vrutta?.isOptionalShaaririk ?? false;
 
@@ -226,6 +268,26 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
           _selectedSewaDaysList = vrutta?.sewaDaysId?.split(',').map((e) => int.tryParse(e)).where((e) => e != null).cast<int>().toList() ?? [];
         }
       });
+
+      if (_res.source == DraftRecordSource.masterOffline) {
+        // Blocked AT LOAD TIME, per your condition 2.2.1 — before any editing starts.
+        await showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) {
+            return AlertDialog(
+              title: Text(Statics.getLabel("alert")),
+              content: Text(Statics.getLabel("noInternetNoChanges")),
+              actions: [
+                TextButton(onPressed: () => Navigator.of(context).pop(true), child: Text(Statics.getLabel("okay"))),
+              ],
+            );
+          },
+        );
+        _isFormViewOnly = true;
+        setState(() {});
+        return;
+      }
       // print(_vruttaDate);
     } finally {
       if (mounted)
@@ -272,15 +334,9 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
       _isLoading = true;
     });
     try {
-      bool isConnected = await Statics.isInternetConnected();
-      if (!isConnected) {
-        Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));
-      } else {
-        await saveVruttaDetails(context);
-      }
-    } on Exception catch (error) {
-      Statics.showErrorDialog(context, Statics.getLabel('unableToCompleteProcess'));
+      await saveVruttaDetails(context);
     } catch (error) {
+      log("Exception >>> Errors >>>>>>>>>> $error");
       Statics.showErrorDialog(context, Statics.getLabel('unableToCompleteProcess'));
     }
 
@@ -296,6 +352,7 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
       "pkid": vrutta?.pkid ?? widget.shaakhaa?.pkid ?? widget.shaakhaaId,
       "ShaakhaaID": widget.shaakhaaId ?? widget.shaakhaa?.shaakhaaID,
       "date": DateFormat("dd/MM/yyyy").format(DateFormat("dd-MMM-yyyy").parse(_vruttaDateCntrl.text)),
+      "VruttaDate": DateFormat("dd/MM/yyyy").format(DateFormat("dd-MMM-yyyy").parse(_vruttaDateCntrl.text)),
       "VruttaDateStr": DateFormat("dd/MM/yyyy").format(DateFormat("dd-MMM-yyyy").parse(_vruttaDateCntrl.text)),
       "ShishuCount": _shishuCtrl.text.trim() == "" ? null : int.parse(_shishuCtrl.text),
       "NewShishuCount": _newshishuCtrl.text.trim() == "" ? null : int.parse(_newshishuCtrl.text),
@@ -347,20 +404,41 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
       "appuserid": Statics.userDetails["userID"],
     };
 
-    // final outcome = await OfflineDataApiRepo.saveWithFallback(
-    //   masterTableName: 'ShaakhaVruttaMaster',
-    //   draftTableName: 'VruttaDraftMaster',
-    //   keyColumns: ['ShaakhaaID', 'VruttaDate'],
-    //   loadedSource: _loadedSource!,
-    //   // from loadRecord — required to check blockedMasterOffline
-    //   formData: formData!,
-    //   // must include ShaakhaaID and VruttaDate
-    //   saveToApi: () => saveShaakhaVruttaApi(formData!),
-    // );
+    final _data = await OfflineDataApiRepo.saveWithFallback(
+      masterTableName: '${widget.isNew ? "Vistar" : ""}ShaakhaVruttaMaster',
+      draftTableName: 'VruttaDraftMaster',
+      keyColumns: ['ShaakhaaID', 'VruttaDate'],
+      loadedSource: _loadedSource!,
+      formData: inputData,
+      saveToApi: () async => await Statics.saveShaakhaaSaptahVruttaData(context, inputData),
+    );
+    // var data = await Statics.saveShaakhaaVruttaForApp(json.encode(inputData));
 
-    var data = await Statics.saveShaakhaaSaptahVruttaData(context, inputData);
+    if (_data.outcome == DraftSaveOutcome.savedToDraftOffline) {
+      // Blocked AT LOAD TIME, per your condition 2.2.1 — before any editing starts.
+      await showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (ctx) {
+          return PopScope(
+            canPop: false,
+            child: AlertDialog(
+              title: Text(Statics.getLabel("alert")),
+              content: Text(Statics.getLabel("uploadedToDraft")),
+              actions: [
+                TextButton(onPressed: () => Navigator.of(ctx).pop(true), child: Text(Statics.getLabel("okay"))),
+              ],
+            ),
+          );
+        },
+      );
+      // _isFormViewOnly = true;
+      // setState(() {});
+      // return;
+    }
+
     setState(() {});
-    if (data == "Success") {
+    if (_data.data?["Status"] == "Success" || _data.outcome == DraftSaveOutcome.savedToDraftOffline) {
       Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
       if (userLevelId != 1) Navigator.of(context).pop();
     } else {
@@ -385,7 +463,7 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
               padding: EdgeInsets.all(20),
               width: Statics.getDeviceSize(context).width,
               child: AbsorbPointer(
-                absorbing: widget.viewType == "ViewMenu" ? true : false,
+                absorbing: _isFormViewOnly || widget.viewType == "ViewMenu",
                 child: Form(
                   key: _formKey,
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
@@ -426,7 +504,7 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
                             controller: _shishuCtrl,
                             labelText: Statics.getLabel('Total'),
                             onSaved: (value) {
-                              vrutta!.shishuCount = value == "" ? null : int.parse(value!);
+                              vrutta?.shishuCount = value == "" ? null : int.parse(value!);
                             },
                           ),
                         ),
@@ -437,7 +515,7 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
                             expectedController: _shishuCtrl,
                             labelText: Statics.getLabel('newAdmission'),
                             onSaved: (value) {
-                              vrutta!.newShishuCount = value == "" ? null : int.parse(value!);
+                              vrutta?.newShishuCount = value == "" ? null : int.parse(value!);
                             },
                           ),
                         ),
@@ -455,7 +533,7 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
                           controller: _baalCtrl,
                           labelText: Statics.getLabel('Total'),
                           onSaved: (value) {
-                            vrutta!.baalVidyaarthiCount = value == "" ? null : int.parse(value!);
+                            vrutta?.baalVidyaarthiCount = value == "" ? null : int.parse(value!);
                           },
                         ),
                       ),
@@ -466,7 +544,7 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
                           expectedController: _baalCtrl,
                           labelText: Statics.getLabel('newAdmission'),
                           onSaved: (value) {
-                            vrutta!.newBaalVidyaarthiCount = value == "" ? null : int.parse(value!);
+                            vrutta?.newBaalVidyaarthiCount = value == "" ? null : int.parse(value!);
                           },
                         ),
                       ),
@@ -483,7 +561,7 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
                           controller: _tarunVidhyaarthiCtrl,
                           labelText: Statics.getLabel('Total'),
                           onSaved: (value) {
-                            vrutta!.tarunVidyaarthiCount = value == "" ? null : int.parse(value!);
+                            vrutta?.tarunVidyaarthiCount = value == "" ? null : int.parse(value!);
                           },
                         ),
                       ),
@@ -494,7 +572,7 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
                           expectedController: _tarunVidhyaarthiCtrl,
                           labelText: Statics.getLabel('newAdmission'),
                           onSaved: (value) {
-                            vrutta!.newTarunVidyaarthiCount = value == "" ? null : int.parse(value!);
+                            vrutta?.newTarunVidyaarthiCount = value == "" ? null : int.parse(value!);
                           },
                         ),
                       ),
@@ -511,7 +589,7 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
                           controller: _tarunVyavsaayeeCtrl,
                           labelText: Statics.getLabel('Total'),
                           onSaved: (value) {
-                            vrutta!.tarunVyavasaayeeCount = value == "" ? null : int.parse(value!);
+                            vrutta?.tarunVyavasaayeeCount = value == "" ? null : int.parse(value!);
                           },
                         ),
                       ),
@@ -522,7 +600,7 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
                           expectedController: _tarunVyavsaayeeCtrl,
                           labelText: Statics.getLabel('newAdmission'),
                           onSaved: (value) {
-                            vrutta!.newTarunVyavasaayeeCount = value == "" ? null : int.parse(value!);
+                            vrutta?.newTarunVyavasaayeeCount = value == "" ? null : int.parse(value!);
                           },
                         ),
                       ),
@@ -539,7 +617,7 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
                           controller: _proudhaCtrl,
                           labelText: Statics.getLabel('Total'),
                           onSaved: (value) {
-                            vrutta!.proudhaVyavasaayeeCount = value == "" ? null : int.parse(value!);
+                            vrutta?.proudhaVyavasaayeeCount = value == "" ? null : int.parse(value!);
                           },
                         ),
                       ),
@@ -550,7 +628,7 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
                           expectedController: _proudhaCtrl,
                           labelText: Statics.getLabel('newAdmission'),
                           onSaved: (value) {
-                            vrutta!.newProudhaVyavasaayeeCount = value == "" ? null : int.parse(value!);
+                            vrutta?.newProudhaVyavasaayeeCount = value == "" ? null : int.parse(value!);
                           },
                         ),
                       ),
@@ -568,7 +646,7 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
                             controller: _matrushaktiCtrl,
                             labelText: Statics.getLabel('Total'),
                             onSaved: (value) {
-                              vrutta!.matruskatiCount = value == "" ? null : int.parse(value!);
+                              vrutta?.matruskatiCount = value == "" ? null : int.parse(value!);
                             },
                           ),
                         ),
@@ -579,7 +657,7 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
                             expectedController: _matrushaktiCtrl,
                             labelText: Statics.getLabel('newAdmission'),
                             onSaved: (value) {
-                              vrutta!.newmatruskatiCount = value == "" ? null : int.parse(value!);
+                              vrutta?.newmatruskatiCount = value == "" ? null : int.parse(value!);
                             },
                           ),
                         ),
@@ -605,7 +683,7 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
                                       (int.tryParse(_matrushaktiCtrl.text) ?? 0))
                                   .toString()),
                           labelText: Statics.getLabel('Total'),
-                          onChanged: (value) => setState(() => vrutta!.totalCount = value == "" ? null : int.parse(value!)),
+                          onChanged: (value) => setState(() => vrutta?.totalCount = value == "" ? null : int.parse(value!)),
                         ),
                       ),
                       Expanded(
@@ -621,7 +699,7 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
                                       (int.tryParse(_newmatrushaktiCtrl.text) ?? 0))
                                   .toString()),
                           labelText: Statics.getLabel('TotalNewAddCountLabel'),
-                          onChanged: (value) => setState(() => vrutta!.newtotalCount = value == "" ? null : int.parse(value!)),
+                          onChanged: (value) => setState(() => vrutta?.newtotalCount = value == "" ? null : int.parse(value!)),
                         ),
                       ),
                     ]),
@@ -632,7 +710,7 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
                       decoration: InputDecoration(labelText: Statics.getLabel('AbhyaagatCount')),
                       keyboardType: TextInputType.number,
                       onSaved: (value) {
-                        vrutta!.abhyaagatCount = value == "" ? null : int.parse(value!);
+                        vrutta?.abhyaagatCount = value == "" ? null : int.parse(value!);
                       },
                     ),
                     SizedBox(height: 10),
@@ -642,7 +720,7 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
                       decoration: InputDecoration(labelText: Statics.getLabel('PravasiKaryakartaCount2')),
                       keyboardType: TextInputType.number,
                       onSaved: (value) {
-                        vrutta!.abhyaagatCount = value == "" ? null : int.parse(value!);
+                        vrutta?.abhyaagatCount = value == "" ? null : int.parse(value!);
                       },
                     ),
                     SizedBox(height: 10),
@@ -652,7 +730,7 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
                       decoration: InputDecoration(labelText: Statics.getLabel('AnyaPravasiKaryakartaCount')),
                       keyboardType: TextInputType.number,
                       onSaved: (value) {
-                        vrutta!.abhyaagatCount = value == "" ? null : int.parse(value!);
+                        vrutta?.abhyaagatCount = value == "" ? null : int.parse(value!);
                       },
                     ),
                     SizedBox(height: 10),*/
@@ -899,51 +977,14 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
                       ),
                       SizedBox(height: 10),
                       if (_isDoneSewaDays) ...[
-                        MultiSelectDialogField(
-                          title: Text(Statics.getLabel('SewaDays')),
-                          buttonText: Text(Statics.getLabel('SewaDays')),
-                          buttonIcon: Icon(Icons.arrow_drop_down),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                            border: Border.all(color: _sewaDaysList.isEmpty ? Colors.grey.shade400 : Colors.transparent),
-                          ),
-                          confirmText: Text(
-                            Statics.getLabel('Submit'),
-                            style: const TextStyle(color: Colors.purple),
-                          ),
-                          cancelText: Text(
-                            Statics.getLabel('clear'),
-                            style: const TextStyle(color: Colors.purple),
-                          ),
-                          searchable: false,
-                          listType: MultiSelectListType.LIST,
-                          items: _sewaDaysList.map((bg) => MultiSelectItem(bg?.staticID, (bg?.codeForDisplay ?? "--").toString())).toList(),
+                        GroupedMultiSelectField<int>(
+                          title: Statics.getLabel('SewaDays'),
+                          buttonText: Statics.getLabel('SewaDays'),
+                          confirmText: Statics.getLabel('Submit'),
+                          cancelText: Statics.getLabel('clear'),
+                          groupedItems: _sewaDaysGroup,
                           initialValue: _selectedSewaDaysList,
-                          chipDisplay: MultiSelectChipDisplay(
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.purple, width: 0.7),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              // icon: Icon(Icons.done, color: Colors.purple, size: 16),
-                              chipColor: Colors.white,
-                              textStyle: TextStyle(fontSize: 12, color: Colors.purple, fontWeight: FontWeight.w500)),
-                          // onSaved: (newValue) {},
-                          onConfirm: (values) {
-                            _selectedSewaDaysList = values.map((e) {
-                              // Check if the element is an integer
-                              if (e is int) {
-                                return e;
-                              }
-                              // If it's a string, try to parse it
-                              else if (e is String) {
-                                return int.tryParse(e); // Use tryParse to handle invalid strings and return null
-                              }
-                              // Otherwise, return null or handle as needed
-                              return null;
-                            }).toList();
-                            print("valueeeeeeeesssss >>>>>>>>>>>>>>> $values");
-                            setState(() {});
-                          },
+                          onConfirm: (values) => setState(() => _selectedSewaDaysList = values),
                         ),
                         SizedBox(height: 10),
                       ],
@@ -988,14 +1029,14 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
                       decoration: InputDecoration(labelText: Statics.getLabel('Remarks')),
                       keyboardType: TextInputType.text,
                       onSaved: (value) {
-                        vrutta!.remark = value == "" ? null : value;
+                        vrutta?.remark = value == "" ? null : value;
                       },
                     ),
                     SizedBox(height: 20),
                     Center(
                       child: (_isLoading)
                           ? CircularProgressIndicator()
-                          : (widget.viewType == "ViewMenu")
+                          : (_isFormViewOnly || widget.viewType == "ViewMenu")
                               ? Text(Statics.getLabel('canNotMakeChanges'))
                               : MaterialButton(
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),

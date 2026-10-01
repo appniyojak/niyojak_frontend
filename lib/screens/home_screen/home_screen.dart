@@ -59,6 +59,7 @@ import '../survey_screen/survey_form/mandal_survey_form_view.dart';
 import '../survey_screen/survey_form/vasti_survey_form_view.dart';
 import '../survey_screen/vasti_reports_tabs.dart';
 import 'data_details_screen.dart';
+import 'draft_vrutta_screen.dart';
 
 enum OtherLevelSelection { daily, weekly, monthly, yearly }
 
@@ -2590,6 +2591,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     OncePerDayGate.deleteFun("shaakhapustika_monthly");
                   },
                   icon: Icon(Icons.delete_forever_outlined, color: Colors.red)),*/
+              IconButton(
+                tooltip: 'Draft',
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const VruttaDraftScreen()),
+                ),
+                icon: Icon(Icons.all_inbox),
+              ),
               DownloadBadge(),
               // Notification bell with badge
               Stack(

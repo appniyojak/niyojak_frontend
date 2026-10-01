@@ -368,6 +368,7 @@ class LogIn {
       List<Map<String, dynamic>> dataList5 = (body['LogInData']['shaakhalist'] as List).map((item) => item as Map<String, dynamic>).toList();
       if (dataList5.length > 0) {
         print("usrLogIn 17.4");
+        print("dataList5.length >>>  ${dataList5.length}");
 
 // 2. Bulk upsert into the table
         final result = await DatabaseHelper.bulkUpsert<Map<String, dynamic>>(

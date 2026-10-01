@@ -61,6 +61,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
 
   ShaakhaaVruttaBAL? vrutta;
   DraftRecordSource? _loadedSource;
+  bool _isFormViewOnly = false;
   var _isLoading = false;
 
   bool _isFetchingData = false;
@@ -220,9 +221,11 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
       draftTableName: 'VruttaDraftMaster',
       keyColumns: ['ShaakhaaID', 'VruttaDate'],
       keyValues: [_body["ShaakhaaID"], _body["Vruttadate"]],
+      where: 'ShaakhaaID = ? AND VruttaDate LIKE ?',
+      whereArgs: [_body["ShaakhaaID"], "${_body["Vruttadate"]}%"],
       fetchFromApi: () async {
-        final vrutta = await Statics.getShaakhaaVruttaDetailsByDateForApp(_body["ShaakhaaID"], _body["Vruttadate"]);
-        return vrutta?.toJson();
+        final _vrutta = await Statics.getShaakhaaVruttaDetailsByDateForApp(_body["ShaakhaaID"], _body["Vruttadate"]);
+        return _vrutta?.toJson();
       },
     );
 
@@ -242,6 +245,8 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
 
     if (_res.isNotEmpty) _sewaDaysGroup = buildGroupedItemsFromApi(_res);
 
+    log("list having data and vrutta list >>>>>>>>>>> ${dataList.data}");
+    log("list having data and vrutta list >>>>>>>>>>> ${dataList.source}");
     if (dataList.data != null) {
       log("list having data and vrutta list");
       var data = ShaakhaaVruttaBAL.fromMap(dataList.data!);
@@ -255,22 +260,22 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
           _vruttaDate = hasVruttaDate ? DateFormat('dd/MM/yyyy').parse(vrutta!.vruttaDate!) : formattedDate;
           _vruttaDateCntrl.text = _vruttaDate != null ? DateFormat('dd-MMM-yyyy').format(_vruttaDate!) : '';
 
-          _shishuCtrl.text = vrutta!.shishuCount == null ? "" : vrutta!.shishuCount.toString();
-          _newshishuCtrl.text = vrutta!.newshishuCount == null ? "" : vrutta!.newshishuCount.toString();
-          _baalCtrl.text = vrutta!.baalVidyaarthiCount == null ? "" : vrutta!.baalVidyaarthiCount.toString();
-          _newbaalCtrl.text = vrutta!.newbaalVidyaarthiCount == null ? "" : vrutta!.newbaalVidyaarthiCount.toString();
-          _tarunVidhyaarthiCtrl.text = vrutta!.tarunVidyaarthiCount == null ? "" : vrutta!.tarunVidyaarthiCount.toString();
-          _newtarunVidhyaarthiCtrl.text = vrutta!.newtarunVidyaarthiCount == null ? "" : vrutta!.newtarunVidyaarthiCount.toString();
-          _tarunVyavsaayeeCtrl.text = vrutta!.tarunVyavasaayeeCount == null ? "" : vrutta!.tarunVyavasaayeeCount.toString();
-          _newtarunVyavsaayeeCtrl.text = vrutta!.newtarunVyavasaayeeCount == null ? "" : vrutta!.newtarunVyavasaayeeCount.toString();
-          _proudhaCtrl.text = vrutta!.proudhaVyavasaayeeCount == null ? "" : vrutta!.proudhaVyavasaayeeCount.toString();
-          _newproudhaCtrl.text = vrutta!.newproudhaVyavasaayeeCount == null ? "" : vrutta!.newproudhaVyavasaayeeCount.toString();
-          _matrushaktiCtrl.text = vrutta!.matruskatiCount == null ? "" : vrutta!.matruskatiCount.toString();
-          _newmatrushaktiCtrl.text = vrutta!.newmatruskatiCount == null ? "" : vrutta!.newmatruskatiCount.toString();
-          _abhyaagatCtrl.text = vrutta!.abhyaagatCount == null ? "" : vrutta!.abhyaagatCount.toString();
-          _pravasiKaryakartaCountCtrl.text = vrutta!.pravasiKaryakartaCount == null ? "" : vrutta!.pravasiKaryakartaCount.toString();
-          _anyaPravasiKaryakartaCountCtrl.text = vrutta!.anyaPravasiKaryakartaCount == null ? "" : vrutta!.anyaPravasiKaryakartaCount.toString();
-          _remarkCtrl.text = vrutta!.remark == null ? "" : vrutta!.remark.toString();
+          _shishuCtrl.text = vrutta?.shishuCount == null ? "" : vrutta!.shishuCount.toString();
+          _newshishuCtrl.text = vrutta?.newshishuCount == null ? "" : vrutta!.newshishuCount.toString();
+          _baalCtrl.text = vrutta?.baalVidyaarthiCount == null ? "" : vrutta!.baalVidyaarthiCount.toString();
+          _newbaalCtrl.text = vrutta?.newbaalVidyaarthiCount == null ? "" : vrutta!.newbaalVidyaarthiCount.toString();
+          _tarunVidhyaarthiCtrl.text = vrutta?.tarunVidyaarthiCount == null ? "" : vrutta!.tarunVidyaarthiCount.toString();
+          _newtarunVidhyaarthiCtrl.text = vrutta?.newtarunVidyaarthiCount == null ? "" : vrutta!.newtarunVidyaarthiCount.toString();
+          _tarunVyavsaayeeCtrl.text = vrutta?.tarunVyavasaayeeCount == null ? "" : vrutta!.tarunVyavasaayeeCount.toString();
+          _newtarunVyavsaayeeCtrl.text = vrutta?.newtarunVyavasaayeeCount == null ? "" : vrutta!.newtarunVyavasaayeeCount.toString();
+          _proudhaCtrl.text = vrutta?.proudhaVyavasaayeeCount == null ? "" : vrutta!.proudhaVyavasaayeeCount.toString();
+          _newproudhaCtrl.text = vrutta?.newproudhaVyavasaayeeCount == null ? "" : vrutta!.newproudhaVyavasaayeeCount.toString();
+          _matrushaktiCtrl.text = vrutta?.matruskatiCount == null ? "" : vrutta!.matruskatiCount.toString();
+          _newmatrushaktiCtrl.text = vrutta?.newmatruskatiCount == null ? "" : vrutta!.newmatruskatiCount.toString();
+          _abhyaagatCtrl.text = vrutta?.abhyaagatCount == null ? "" : vrutta!.abhyaagatCount.toString();
+          _pravasiKaryakartaCountCtrl.text = vrutta?.pravasiKaryakartaCount == null ? "" : vrutta!.pravasiKaryakartaCount.toString();
+          _anyaPravasiKaryakartaCountCtrl.text = vrutta?.anyaPravasiKaryakartaCount == null ? "" : vrutta!.anyaPravasiKaryakartaCount.toString();
+          _remarkCtrl.text = vrutta?.remark == null ? "" : vrutta!.remark.toString();
 
           // _isMandatoryShaaririk =
           //     vrutta!.isMandatoryShaaririk == true ? true : false;
@@ -303,6 +308,26 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
     setState(() {
       _isFetchingData = false;
     });
+
+    if (dataList.source == DraftRecordSource.masterOffline) {
+      // Blocked AT LOAD TIME, per your condition 2.2.1 — before any editing starts.
+      await showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(Statics.getLabel("alert")),
+            content: Text(Statics.getLabel("noInternetNoChanges")),
+            actions: [
+              TextButton(onPressed: () => Navigator.of(context).pop(true), child: Text(Statics.getLabel("okay"))),
+            ],
+          );
+        },
+      );
+      _isFormViewOnly = true;
+      setState(() {});
+      return;
+    }
   }
 
   _pickFromDate() async {
@@ -347,12 +372,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
       _isLoading = true;
     });
     try {
-      bool isConnected = await Statics.isInternetConnected();
-      if (!isConnected) {
-        Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));
-      } else {
-        await saveVruttaDetails(context);
-      }
+      await saveVruttaDetails(context);
     } on Exception catch (error, stack) {
       log(error.toString());
       log(stack.toString());
@@ -421,12 +441,36 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
       saveToApi: () async => await Statics.saveShaakhaaVruttaForApp(json.encode(inputData)),
     );
     // var data = await Statics.saveShaakhaaVruttaForApp(json.encode(inputData));
+
+    if (_data.outcome == DraftSaveOutcome.savedToDraftOffline) {
+      // Blocked AT LOAD TIME, per your condition 2.2.1 — before any editing starts.
+      await showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (ctx) {
+          return PopScope(
+            canPop: false,
+            child: AlertDialog(
+              title: Text(Statics.getLabel("alert")),
+              content: Text(Statics.getLabel("uploadedToDraft")),
+              actions: [
+                TextButton(onPressed: () => Navigator.of(ctx).pop(true), child: Text(Statics.getLabel("okay"))),
+              ],
+            ),
+          );
+        },
+      );
+      // _isFormViewOnly = true;
+      // setState(() {});
+      // return;
+    }
+
     setState(() {
       widget.vruttaID = _data.data?["OutputShaakhaaVruttaID"] ?? 0;
       if (widget.onSaveDetails != null) widget.onSaveDetails();
       Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
-      Navigator.of(context).pop();
     });
+    Navigator.of(context).pop();
   }
 
   @override
@@ -444,7 +488,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
               padding: EdgeInsets.all(20),
               width: Statics.getDeviceSize(context).width,
               child: AbsorbPointer(
-                absorbing: widget.viewType == "ViewMenu" ? true : false,
+                absorbing: _isFormViewOnly || widget.viewType == "ViewMenu",
                 child: Form(
                   key: _formKey,
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
@@ -486,7 +530,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                             controller: _shishuCtrl,
                             labelText: Statics.getLabel('Total'),
                             onSaved: (value) {
-                              vrutta!.shishuCount = value == "" ? null : int.parse(value!);
+                              vrutta?.shishuCount = value == "" ? null : int.parse(value!);
                             },
                           ),
                         ),
@@ -497,7 +541,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                             expectedController: _shishuCtrl,
                             labelText: Statics.getLabel('newAdmission'),
                             onSaved: (value) {
-                              vrutta!.newshishuCount = value == "" ? null : int.parse(value!);
+                              vrutta?.newshishuCount = value == "" ? null : int.parse(value!);
                             },
                           ),
                         ),
@@ -515,7 +559,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                           controller: _baalCtrl,
                           labelText: Statics.getLabel('Total'),
                           onSaved: (value) {
-                            vrutta!.baalVidyaarthiCount = value == "" ? null : int.parse(value!);
+                            vrutta?.baalVidyaarthiCount = value == "" ? null : int.parse(value!);
                           },
                         ),
                       ),
@@ -526,7 +570,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                           expectedController: _baalCtrl,
                           labelText: Statics.getLabel('newAdmission'),
                           onSaved: (value) {
-                            vrutta!.newbaalVidyaarthiCount = value == "" ? null : int.parse(value!);
+                            vrutta?.newbaalVidyaarthiCount = value == "" ? null : int.parse(value!);
                           },
                         ),
                       ),
@@ -543,7 +587,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                           controller: _tarunVidhyaarthiCtrl,
                           labelText: Statics.getLabel('Total'),
                           onSaved: (value) {
-                            vrutta!.tarunVidyaarthiCount = value == "" ? null : int.parse(value!);
+                            vrutta?.tarunVidyaarthiCount = value == "" ? null : int.parse(value!);
                           },
                         ),
                       ),
@@ -554,7 +598,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                           expectedController: _tarunVidhyaarthiCtrl,
                           labelText: Statics.getLabel('newAdmission'),
                           onSaved: (value) {
-                            vrutta!.newtarunVidyaarthiCount = value == "" ? null : int.parse(value!);
+                            vrutta?.newtarunVidyaarthiCount = value == "" ? null : int.parse(value!);
                           },
                         ),
                       ),
@@ -571,7 +615,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                           controller: _tarunVyavsaayeeCtrl,
                           labelText: Statics.getLabel('Total'),
                           onSaved: (value) {
-                            vrutta!.tarunVyavasaayeeCount = value == "" ? null : int.parse(value!);
+                            vrutta?.tarunVyavasaayeeCount = value == "" ? null : int.parse(value!);
                           },
                         ),
                       ),
@@ -582,7 +626,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                           expectedController: _tarunVyavsaayeeCtrl,
                           labelText: Statics.getLabel('newAdmission'),
                           onSaved: (value) {
-                            vrutta!.newtarunVyavasaayeeCount = value == "" ? null : int.parse(value!);
+                            vrutta?.newtarunVyavasaayeeCount = value == "" ? null : int.parse(value!);
                           },
                         ),
                       ),
@@ -599,7 +643,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                           controller: _proudhaCtrl,
                           labelText: Statics.getLabel('Total'),
                           onSaved: (value) {
-                            vrutta!.proudhaVyavasaayeeCount = value == "" ? null : int.parse(value!);
+                            vrutta?.proudhaVyavasaayeeCount = value == "" ? null : int.parse(value!);
                           },
                         ),
                       ),
@@ -610,7 +654,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                           expectedController: _proudhaCtrl,
                           labelText: Statics.getLabel('newAdmission'),
                           onSaved: (value) {
-                            vrutta!.newproudhaVyavasaayeeCount = value == "" ? null : int.parse(value!);
+                            vrutta?.newproudhaVyavasaayeeCount = value == "" ? null : int.parse(value!);
                           },
                         ),
                       ),
@@ -628,7 +672,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                             controller: _matrushaktiCtrl,
                             labelText: Statics.getLabel('Total'),
                             onSaved: (value) {
-                              vrutta!.matruskatiCount = value == "" ? null : int.parse(value!);
+                              vrutta?.matruskatiCount = value == "" ? null : int.parse(value!);
                             },
                           ),
                         ),
@@ -638,7 +682,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                             expectedController: _matrushaktiCtrl,
                             labelText: Statics.getLabel('newAdmission'),
                             onSaved: (value) {
-                              vrutta!.newmatruskatiCount = value == "" ? null : int.parse(value!);
+                              vrutta?.newmatruskatiCount = value == "" ? null : int.parse(value!);
                             },
                           ),
                         ),
@@ -664,7 +708,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                                   (int.tryParse(_matrushaktiCtrl.text) ?? 0))
                                   .toString()),
                           labelText: Statics.getLabel('Total'),
-                          onChanged: (value) => setState(() => vrutta!.totalCount = value == "" ? null : int.parse(value!)),
+                          onChanged: (value) => setState(() => vrutta?.totalCount = value == "" ? null : int.parse(value!)),
                         ),
                       ),
                       Expanded(
@@ -680,7 +724,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                                   (int.tryParse(_newmatrushaktiCtrl.text) ?? 0))
                                   .toString()),
                           labelText: Statics.getLabel('TotalNewAddCountLabel'),
-                          onChanged: (value) => setState(() => vrutta!.newtotalCount = value == "" ? null : int.parse(value!)),
+                          onChanged: (value) => setState(() => vrutta?.newtotalCount = value == "" ? null : int.parse(value!)),
                         ),
                       ),
                     ]),*/
@@ -691,7 +735,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                       decoration: InputDecoration(labelText: Statics.getLabel('AbhyaagatCount')),
                       keyboardType: TextInputType.number,
                       onSaved: (value) {
-                        vrutta!.abhyaagatCount = value == "" ? null : int.parse(value!);
+                        vrutta?.abhyaagatCount = value == "" ? null : int.parse(value!);
                       },
                     ),
                     SizedBox(height: 10),
@@ -702,7 +746,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                         decoration: InputDecoration(labelText: Statics.getLabel('PravasiKaryakartaCount2')),
                         keyboardType: TextInputType.number,
                         onSaved: (value) {
-                          vrutta!.abhyaagatCount = value == "" ? null : int.parse(value!);
+                          vrutta?.abhyaagatCount = value == "" ? null : int.parse(value!);
                         },
                       ),
                       SizedBox(height: 10),
@@ -712,7 +756,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                         decoration: InputDecoration(labelText: Statics.getLabel('AnyaPravasiKaryakartaCount')),
                         keyboardType: TextInputType.number,
                         onSaved: (value) {
-                          vrutta!.abhyaagatCount = value == "" ? null : int.parse(value!);
+                          vrutta?.abhyaagatCount = value == "" ? null : int.parse(value!);
                         },
                       ),
                       SizedBox(height: 10),*/
@@ -1064,14 +1108,14 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                       decoration: InputDecoration(labelText: Statics.getLabel('Remarks')),
                       keyboardType: TextInputType.text,
                       onSaved: (value) {
-                        vrutta!.remark = value == "" ? null : value;
+                        vrutta?.remark = value == "" ? null : value;
                       },
                     ),
                     SizedBox(height: 20),
                     Center(
                       child: (_isLoading)
                           ? CircularProgressIndicator()
-                          : (widget.viewType == "ViewMenu")
+                          : (_isFormViewOnly || widget.viewType == "ViewMenu")
                               ? Text(Statics.getLabel('canNotMakeChanges'))
                               : MaterialButton(
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),

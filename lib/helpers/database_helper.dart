@@ -86,7 +86,7 @@ class DatabaseHelper {
     pkid INT, isnew INT, IsAnya INT, trail TEXT,
     ShaakhaaID INT , PraantID INT, GeoUnitID INT, GeoUnitName TEXT, FrequencyID INT, FrequencyCode TEXT, VayogatID INT,
     VayogatCode TEXT, IsSankalpit INT, ParentVastiID INT, ParentGraamID INT, ParentMandalID INT, ParentNagarID INT,
-    ParentUpaNagarID INT, ParentBhaagID INT, DayNamesOfWeek TEXT, ModifiedDate TEXT
+    ParentUpaNagarID INT, ParentBhaagID INT, DayNamesOfWeek TEXT, ModifiedDate TEXT, mapShaakhaaID INT
   )
 ''');
 
@@ -151,7 +151,7 @@ class DatabaseHelper {
 );
 ''');
 
-      if (oldVersion < 5) {
+      if (oldVersion < 7) {
         await _ensureColumn(db, 'GeoUnitMaster', 'issankalpit', 'INT');
         await _ensureColumn(db, 'GeoUnitMaster', 'canEdit', 'INT');
         await _ensureColumn(db, 'GeoUnitMaster', 'GeoUnitNameEnglish', 'TEXT');
@@ -160,6 +160,7 @@ class DatabaseHelper {
         await _ensureColumn(db, 'UserDataMaster', 'isvistaruser', 'INT');
         await _ensureColumn(db, 'UserDataMaster', 'vayogatid', 'INT');
         await _ensureColumn(db, 'UserDataMaster', 'vayogatname', 'TEXT');
+        await _ensureColumn(db, 'VistarShaakhaListMaster', 'mapShaakhaaID', 'INT');
       }
     }, onCreate: (db, version) {
       print('initDatabase - database created; version:' + version.toString());
@@ -240,7 +241,7 @@ class DatabaseHelper {
     pkid INT, isnew INT, IsAnya INT, trail TEXT,
     ShaakhaaID INT , PraantID INT, GeoUnitID INT, GeoUnitName TEXT, FrequencyID INT, FrequencyCode TEXT, VayogatID INT,
     VayogatCode TEXT, IsSankalpit INT, ParentVastiID INT, ParentGraamID INT, ParentMandalID INT, ParentNagarID INT,
-    ParentUpaNagarID INT, ParentBhaagID INT, DayNamesOfWeek TEXT, ModifiedDate TEXT
+    ParentUpaNagarID INT, ParentBhaagID INT, DayNamesOfWeek TEXT, ModifiedDate TEXT, mapShaakhaaID INT
   )
 ''');
 
@@ -344,16 +345,21 @@ class DatabaseHelper {
   static Future<T?> getOneOfflineData<T>({
     required String tableName,
     required T Function(Map<String, dynamic> map) fromMap,
-    required String where,
-    required List<Object?> whereArgs,
+    required String? where,
+    required List<Object?>? whereArgs,
   }) async {
     Database db = await database;
+    log("getOneOfflineData >> calling from the table >>>>>> $tableName");
+    if (where != null) log("getOneOfflineData >> with following conditions >>>>>>> $where");
+    if (whereArgs != null) log("getOneOfflineData >> with following args >>>>>>> $whereArgs");
     final rows = await db.query(
       tableName,
       where: where,
       whereArgs: whereArgs,
       limit: 1,
     );
+
+    log("getOneOfflineData >> rows.firstOrNull >>>>> ${rows.firstOrNull}");
 
     if (rows.isEmpty) return null;
     return fromMap(rows.first);

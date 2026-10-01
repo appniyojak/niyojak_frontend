@@ -11,6 +11,7 @@ import '../../helpers/static_data.dart' as Statics;
 import '../../models/response_model/names_data_model.dart';
 import '../../widgets/swayamsevak_card.dart';
 import '../shaakhaa_milan_module/edit_shaakhaa_vrutta.dart';
+import '../shatabdi_vrutta_sankalan/shaakhaa_saptah_vistar/shakhaa_saptah_form_screen.dart';
 import '../swayamsevak_module/edit_module/edit_swayamsevak_basic_info.dart';
 import '../swayamsevak_module/edit_module/edit_swayamsevak_daayitva.dart';
 import '../swayamsevak_module/edit_module/edit_swayamsevak_other_info.dart';
@@ -323,6 +324,8 @@ class _DataGroupTile extends StatelessWidget {
                 final hasValidId = person.id != null && person.id != 0;
                 final isShaakhaa = from == "shaakhaaNames";
 
+                final _isnew = person.isnew == 1;
+
                 // For shaakhaaNames:
                 // - Valid ID  -> Open EditShaakhaaVrutta
                 // - Invalid ID + onTap -> Use external onTap
@@ -330,22 +333,35 @@ class _DataGroupTile extends StatelessWidget {
                 final VoidCallback? itemTap = isShaakhaa
                     ? hasValidId
                         ? () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => EditShaakhaaVrutta(
-                                  shaakhaaID: person.id.toString(),
-                                  vruttaID: null,
-                                  onSaveDetails: null,
-                                  viewType: "EditVrutta",
-                                  vruttadate: person.vdate != null && person.vdate!.isNotEmpty
-                                      ? DateFormat('dd/MM/yyyy').format(
-                                          DateFormat('yyyy-MM-dd').parse(person.vdate!),
-                                        )
-                                      : null,
+                            if (_isnew)
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ShakhaaSaptahFormScreen(
+                                    shaakhaaId: person.id,
+                                    isNew: _isnew,
+                                    viewType: "EditVrutta",
+                                    vruttadate: person.vdate != null && person.vdate!.isNotEmpty ? DateFormat('yyyy-MM-dd').parse(person.vdate!) : null,
+                                  ),
                                 ),
-                              ),
-                            );
+                              );
+                            else
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => EditShaakhaaVrutta(
+                                    shaakhaaID: person.id.toString(),
+                                    vruttaID: null,
+                                    onSaveDetails: null,
+                                    viewType: "EditVrutta",
+                                    vruttadate: person.vdate != null && person.vdate!.isNotEmpty
+                                        ? DateFormat('dd/MM/yyyy').format(
+                                            DateFormat('yyyy-MM-dd').parse(person.vdate!),
+                                          )
+                                        : null,
+                                  ),
+                                ),
+                              );
                           }
                         : onTap != null
                             ? () => onTap!(person)

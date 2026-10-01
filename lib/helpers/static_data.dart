@@ -8,6 +8,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -351,7 +352,7 @@ const String urlsevavastiexceldownload = baseUrlAPI + '/sevavastiexceldownload';
 const String urlsyncshaakhaavruttadata = baseUrlAPI + '/syncshaaandvistarvruttadata';
 //////////////////////////////////////////////////////////////////////////////////////////
 const String patchSuffix = '';
-const String dbVersion = '6';
+const String dbVersion = '7';
 const int shaakhaaFrequencyDaily = 34;
 const int shaakhaaFrequencyWeekly = 35;
 const int shaakhaaFrequencyMonthly = 36;
@@ -606,7 +607,7 @@ Future<bool> isInternetConnected({bool showToast = true}) async {
   //   if (await DataConnectionChecker().hasConnection) return true;
   // }
   // return false;
-  // return false;
+  return false;
 
   try {
     final result = await InternetAddress.lookup('google.com');
@@ -1374,6 +1375,96 @@ Future<GeoUnitMasterBAL?> getGeoUnitsByID(String geoUnitID) async {
         geoUnitID +
         ";",
   );
+
+  GeoUnitMasterBAL _geounit;
+
+  if (result.isNotEmpty) {
+    _geounit = GeoUnitMasterBAL(
+      result[0]['GeoUnitID'],
+      result[0]['PraantID'],
+      result[0]['LevelID'],
+      result[0]['isnew'] ?? 0,
+      result[0]['anya'] ?? 0,
+      result[0]['GeoUnitName'],
+      result[0]['FullName'],
+      result[0]['LevelName'],
+      result[0]['GeoUnitName'],
+      result[0]['DisplaySequence'],
+      null,
+      result[0]['ParentKshetraID'],
+      result[0]['ParentPraantID'],
+      result[0]['ParentMahaanagarID'],
+      result[0]['ParentVibhaagID'],
+      result[0]['ParentBhaagID'],
+      result[0]['ParentNagarID'],
+      result[0]['ParentShaharID'],
+      result[0]['ParentMandalID'],
+      result[0]['ParentVastiID'],
+      result[0]['ParentGraamID'],
+      result[0]['ParentUpaNagarID'],
+      result[0]['issankalpit'],
+      result[0]['canEdit'],
+      result[0]['GeoUnitNameEnglish'],
+      result[0]['GeoUnitNameMarathi'],
+      result[0]['GeoUnitNameHindi'],
+    );
+    return _geounit;
+  } else {
+    return null;
+  }
+}
+
+Future<GeoUnitMasterBAL?> getLocalShaakhaaByID(String geoUnitID) async {
+  var result = await DatabaseHelper.getData(
+    " Select * from GeoUnitMaster a inner join ShaakhaListMaster b ON a.GeoUnitID = b.GeoUnitID WHERE ShaakhaaID=$geoUnitID;",
+  );
+
+  log("GEO QUERY EXEC >>>>>>>>>>>>>>> ${geoUnitID}\n ${result.length}\n ${result.firstOrNull}");
+
+  GeoUnitMasterBAL _geounit;
+
+  if (result.isNotEmpty) {
+    _geounit = GeoUnitMasterBAL(
+      result[0]['GeoUnitID'],
+      result[0]['PraantID'],
+      result[0]['LevelID'],
+      result[0]['isnew'] ?? 0,
+      result[0]['anya'] ?? 0,
+      result[0]['GeoUnitName'],
+      result[0]['FullName'],
+      result[0]['LevelName'],
+      result[0]['GeoUnitName'],
+      result[0]['DisplaySequence'],
+      null,
+      result[0]['ParentKshetraID'],
+      result[0]['ParentPraantID'],
+      result[0]['ParentMahaanagarID'],
+      result[0]['ParentVibhaagID'],
+      result[0]['ParentBhaagID'],
+      result[0]['ParentNagarID'],
+      result[0]['ParentShaharID'],
+      result[0]['ParentMandalID'],
+      result[0]['ParentVastiID'],
+      result[0]['ParentGraamID'],
+      result[0]['ParentUpaNagarID'],
+      result[0]['issankalpit'],
+      result[0]['canEdit'],
+      result[0]['GeoUnitNameEnglish'],
+      result[0]['GeoUnitNameMarathi'],
+      result[0]['GeoUnitNameHindi'],
+    );
+    return _geounit;
+  } else {
+    return null;
+  }
+}
+
+Future<GeoUnitMasterBAL?> getLocalVistarShaakhaaByID(String geoUnitID) async {
+  var result = await DatabaseHelper.getData(
+    " Select * from GeoUnitMaster a inner join VistarShaakhaListMaster b ON a.GeoUnitID = b.GeoUnitID WHERE mapShaakhaaID=$geoUnitID;",
+  );
+
+  log("GEO QUERY EXEC >>>>>>>>>>>>>>> ${geoUnitID}\n ${result.length}\n ${result.firstOrNull}");
 
   GeoUnitMasterBAL _geounit;
 
@@ -5002,7 +5093,7 @@ Future<String> saveAnnualBaithakGraamVikasForApp(String inputJson) async {
 Future<List<ShaakhaaVruttaBAL>?> getShaakhaaVruttaListForApp(context, var shaakhaaID) async {
   // final geo = inputJson["GeoUnitID"];
 
-  return await OfflineDataApiRepo.getList<ShaakhaaVruttaBAL>(
+  final _apiData = await OfflineDataApiRepo.getList<ShaakhaaVruttaBAL>(
     // context: context,
     url: urlGetShaakhaaVruttaListForApp,
     body: {"ShaakhaaID": shaakhaaID, "ShaakhaaVruttaID": null},
@@ -5014,6 +5105,24 @@ Future<List<ShaakhaaVruttaBAL>?> getShaakhaaVruttaListForApp(context, var shaakh
       whereArgs: [shaakhaaID?.toString()],
     ),
   );
+
+  final _draftData = await DatabaseHelper.getAllOfflineData<ShaakhaaVruttaBAL>(
+    tableName: 'VruttaDraftMaster',
+    fromMap: ShaakhaaVruttaBAL.fromMap,
+    where: 'ShaakhaaID = ? AND tablename = ?',
+    whereArgs: [shaakhaaID?.toString(), "ShaakhaVruttaMaster"],
+  );
+
+  final List<ShaakhaaVruttaBAL> combinedData = [..._draftData, ...(_apiData ?? [])];
+
+  combinedData.sort((a, b) {
+    final dateA = DateFormat('dd/MM/yyyy').parse(a.vruttaDate ?? '');
+    final dateB = DateFormat('dd/MM/yyyy').parse(b.vruttaDate ?? '');
+
+    return dateB.compareTo(dateA); // Latest first
+  });
+
+  return combinedData;
 }
 
 Future<ShaakhaaVruttaBAL?> getShaakhaaVruttaDetailsByDateForApp(var shaakhaaID, var vruttadate) async {
@@ -7503,7 +7612,7 @@ Future<VistaarVrutta?> getShaakhaaSaptahVruttaData(BuildContext context, Map<Str
   }
 }
 
-Future<String?> saveShaakhaaSaptahVruttaData(BuildContext context, Map<String, dynamic> inputJson) async {
+Future<Map<String, dynamic>?> saveShaakhaaSaptahVruttaData(BuildContext context, Map<String, dynamic> inputJson) async {
   bool? connected = await isInternetConnected();
   if (connected != true) {
     return null;
@@ -7523,7 +7632,7 @@ Future<String?> saveShaakhaaSaptahVruttaData(BuildContext context, Map<String, d
 
       log("ShaakhaaVistarReportRespModel >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
 
-      return data["Status"]; // ✅ return karna zaroori hai
+      return data; // ✅ return karna zaroori hai
     } else {
       print("Error: ${response.statusCode} - ${response.body}");
       return null; // ✅ error case

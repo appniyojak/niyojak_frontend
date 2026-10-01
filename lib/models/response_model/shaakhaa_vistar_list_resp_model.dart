@@ -31,6 +31,7 @@ class ShaakhaaVistarListRespModel {
 
 class ShaakhaaList {
   int? shaakhaaID;
+  int? mapShaakhaaID;
   int? praantID;
   int? isnew;
   int? isanya;
@@ -79,6 +80,7 @@ class ShaakhaaList {
 
   ShaakhaaList(
       {this.shaakhaaID,
+      this.mapShaakhaaID,
       this.praantID,
       this.isnew,
       this.isanya,
@@ -127,6 +129,7 @@ class ShaakhaaList {
 
   ShaakhaaList.fromJson(Map<String, dynamic> json) {
     shaakhaaID = json['ShaakhaaID'];
+    mapShaakhaaID = json['mapShaakhaaID'];
     praantID = json['PraantID'];
     isnew = json['isnew'];
     isanya = json['isanya'] ?? json['IsAnya'];
@@ -177,6 +180,7 @@ class ShaakhaaList {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['ShaakhaaID'] = this.shaakhaaID;
+    data['mapShaakhaaID'] = this.mapShaakhaaID;
     data['PraantID'] = this.praantID;
     data['isnew'] = this.isnew;
     data['IsAnya'] = this.isanya;

@@ -2365,6 +2365,10 @@ Map<String, String> resEnglish = {
 
   'NagarGraaminTaaluka': 'Taluka\n Count',
   'shaakhaaYuktaTaaluka': 'Shakha-Yukta\n Taluka',
+
+  //--------------------- DRAFT KEYS ---------------------
+  'noInternetNoChanges': 'You cannot perform changes until internet is available',
+  'uploadedToDraft': 'The form has been saved as a draft. It will be uploaded online once an internet connection is available.',
 };
 
 ///1,584
@@ -4746,6 +4750,10 @@ Map<String, String> resMarathi = {
 
   'NagarGraaminTaaluka': 'तालुका\n संख्या',
   'shaakhaaYuktaTaaluka': 'शाखायुक्त\n तालुका',
+
+  //--------------------- DRAFT KEYS ---------------------
+  'noInternetNoChanges': 'इंटरनेट उपलब्ध होईपर्यंत तुम्ही कोणतेही बदल करू शकत नाही.',
+  'uploadedToDraft': 'फॉर्म ड्राफ्ट म्हणून जतन केला आहे. इंटरनेट कनेक्शन उपलब्ध झाल्यानंतर तो ऑनलाइन अपलोड केला जाईल.',
 };
 
 ///1,583
@@ -7124,4 +7132,8 @@ Map<String, String> resHindi = {
 
   'NagarGraaminTaaluka': 'तालुका\n संख्या',
   'shaakhaaYuktaTaaluka': 'शाखायुक्त\n तालुका',
+
+  //--------------------- DRAFT KEYS ---------------------
+  'noInternetNoChanges': 'इंटरनेट उपलब्ध होने तक आप कोई भी बदलाव नहीं कर सकते।',
+  'uploadedToDraft': 'फॉर्म ड्राफ्ट के रूप में सहेजा गया है। इंटरनेट कनेक्शन उपलब्ध होने पर इसे ऑनलाइन अपलोड कर दिया जाएगा',
 };

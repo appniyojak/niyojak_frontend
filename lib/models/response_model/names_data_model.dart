@@ -10,14 +10,16 @@ class DataDetails {
   int? id;
   String? vdate;
   String? type;
+  int? isnew;
 
-  DataDetails({this.value, this.id, this.vdate, this.type});
+  DataDetails({this.value, this.id, this.vdate, this.type, this.isnew});
 
   DataDetails.fromJson(Map<String, dynamic> json) {
     value = json['Value'];
     id = json['id'];
     vdate = json['vdate'];
     type = json['Type'];
+    isnew = json['isnew'] ?? 0;
   }
 
   Map<String, dynamic> toJson() {
@@ -26,6 +28,7 @@ class DataDetails {
     data['id'] = this.id;
     data['vdate'] = this.vdate;
     data['Type'] = this.type;
+    data['isnew'] = this.isnew;
     return data;
   }
 }

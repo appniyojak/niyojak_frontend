@@ -431,7 +431,7 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
               )
             else
               SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                padding: const EdgeInsets.only(left: 20.0, right: 20, bottom: 90),
                 sliver: SliverList.separated(
                   itemCount: _shaakhaaList?.length ?? 0,
                   separatorBuilder: (context, index) => const SizedBox(height: 8),
