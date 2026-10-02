@@ -11,6 +11,7 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../assets/strings/strings.dart';
@@ -607,7 +608,7 @@ Future<bool> isInternetConnected({bool showToast = true}) async {
   //   if (await DataConnectionChecker().hasConnection) return true;
   // }
   // return false;
-  return false;
+  // return false;
 
   try {
     final result = await InternetAddress.lookup('google.com');
@@ -1459,12 +1460,22 @@ Future<GeoUnitMasterBAL?> getLocalShaakhaaByID(String geoUnitID) async {
   }
 }
 
+Future<int> getTableLength(String tableName) async {
+  var result = await DatabaseHelper.getData(" SELECT COUNT(*) as count FROM $tableName");
+
+  int count = Sqflite.firstIntValue(result) ?? 0;
+
+  log("getTableLength >>>>>>>>>>>>>>> ${count}");
+
+  return count;
+}
+
 Future<GeoUnitMasterBAL?> getLocalVistarShaakhaaByID(String geoUnitID) async {
   var result = await DatabaseHelper.getData(
-    " Select * from GeoUnitMaster a inner join VistarShaakhaListMaster b ON a.GeoUnitID = b.GeoUnitID WHERE mapShaakhaaID=$geoUnitID;",
+    " Select * from VistarShaakhaListMaster WHERE mapShaakhaaID=$geoUnitID;",
   );
 
-  log("GEO QUERY EXEC >>>>>>>>>>>>>>> ${geoUnitID}\n ${result.length}\n ${result.firstOrNull}");
+  log("GEO QUERY EXEC getLocalVistarShaakhaaByID >>>>>>>>>>>>>>> ${geoUnitID}\n ${result.length}\n ${result.firstOrNull}");
 
   GeoUnitMasterBAL _geounit;
 

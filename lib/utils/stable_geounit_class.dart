@@ -930,6 +930,10 @@ class GeoHierarchyController extends ChangeNotifier {
 
     final selectedId = state.selectedValues[level];
 
+    if (state.items[level] == null || state.items[level]?.isEmpty == true) {
+      return null;
+    }
+
     final item = state.items[level]?.firstWhere(
       (e) => e.geoUnitID.toString() == selectedId,
       // orElse: () => GeoUnitMasterBAL(),

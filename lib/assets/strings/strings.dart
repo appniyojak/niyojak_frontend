@@ -2369,6 +2369,16 @@ Map<String, String> resEnglish = {
   //--------------------- DRAFT KEYS ---------------------
   'noInternetNoChanges': 'You cannot perform changes until internet is available',
   'uploadedToDraft': 'The form has been saved as a draft. It will be uploaded online once an internet connection is available.',
+  'shaakhaavruttalable': 'Shaakhaa Vrutta',
+  'vistarshaakhaavruttalable': 'Vistar Shaakhaa Vrutta',
+  'vruttadraft': "Vrutta Draft",
+  'deletedrafttitle': "Delete draft ?",
+  'deletedraftsubtitle': "This local draft will be removed permanently.",
+  'syncall': "Sync All",
+  'syncing': "Syncing....",
+  'nopendingdrafts': "No pending drafts",
+  'cannontsyncdrafts': "No internet — cannot sync drafts",
+  'failedtosync': "Sync failed — try again later",
 };
 
 ///1,584
@@ -4754,6 +4764,16 @@ Map<String, String> resMarathi = {
   //--------------------- DRAFT KEYS ---------------------
   'noInternetNoChanges': 'इंटरनेट उपलब्ध होईपर्यंत तुम्ही कोणतेही बदल करू शकत नाही.',
   'uploadedToDraft': 'फॉर्म ड्राफ्ट म्हणून जतन केला आहे. इंटरनेट कनेक्शन उपलब्ध झाल्यानंतर तो ऑनलाइन अपलोड केला जाईल.',
+  'shaakhaavruttalable': 'शाखा वृत्त',
+  'vistarshaakhaavruttalable': 'विस्तार शाखा वृत्त',
+  'vruttadraft': "वृत्त ड्राफ्ट",
+  'deletedrafttitle': "ड्राफ्ट हटवायचा आहे का?",
+  'deletedraftsubtitle': "हा लोकल ड्राफ्ट कायमचा हटवला जाईल.",
+  'syncall': "सर्व सिंक करा",
+  'syncing': "सिंक होत आहे....",
+  'nopendingdrafts': "कोणतेही ड्राफ्ट उरलेले नाहीत",
+  'cannontsyncdrafts': "इंटरनेट उपलब्ध नाही — मसुदे सिंक करता येणार नाहीत",
+  'failedtosync': "सिंक अयशस्वी — कृपया नंतर पुन्हा प्रयत्न करा",
 };
 
 ///1,583
@@ -7136,4 +7156,14 @@ Map<String, String> resHindi = {
   //--------------------- DRAFT KEYS ---------------------
   'noInternetNoChanges': 'इंटरनेट उपलब्ध होने तक आप कोई भी बदलाव नहीं कर सकते।',
   'uploadedToDraft': 'फॉर्म ड्राफ्ट के रूप में सहेजा गया है। इंटरनेट कनेक्शन उपलब्ध होने पर इसे ऑनलाइन अपलोड कर दिया जाएगा',
+  'shaakhaavruttalable': 'शाखा वृत्त',
+  'vistarshaakhaavruttalable': 'विस्तार शाखा वृत्त',
+  'vruttadraft': "वृत्त ड्राफ्ट",
+  'deletedrafttitle': "ड्राफ्ट हटाना है ?",
+  'deletedraftsubtitle': "यह लोकल ड्राफ्ट स्थायी रूप से हटा दिया जाएगा।",
+  'syncall': "सभी सिंक करें",
+  'syncing': "सिंक हो रहा है....",
+  'nopendingdrafts': "कोई ड्राफ्ट बाकी नहीं हैं",
+  'cannontsyncdrafts': "इंटरनेट उपलब्ध नहीं है — ड्राफ्ट सिंक नहीं किए जा सकते",
+  'failedtosync': "सिंक अयशस्वी — कृपया बाद में पुनः प्रयास करें",
 };

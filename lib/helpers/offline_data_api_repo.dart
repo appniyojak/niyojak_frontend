@@ -216,6 +216,8 @@ class OfflineDataApiRepo {
       return DraftSaveResult(data: null, outcome: DraftSaveOutcome.blockedMasterOffline);
     }
 
+    log("Printing the inputData >>>>>>>>> $formData");
+
     if (connected == true) {
       final res = await saveToApi();
 

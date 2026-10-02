@@ -180,22 +180,22 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
     final _vruttaDate = DateFormat("dd/MM/yyyy").format(DateFormat("dd-MMM-yyyy").parse(_vruttaDateCntrl.text));
 
     final _body = {
-      "ShaakhaaID": _shaakhaaId,
-      "pkid": widget.isNew ? widget.shaakhaaId : widget.shaakhaa?.pkid,
+      "ShaakhaaID": widget.shaakhaaId ?? widget.shaakhaa?.shaakhaaID ?? 0,
+      "pkid": widget.shaakhaa?.pkid,
       "date": _vruttaDate,
       "appuserid": int.parse(Statics.userDetails['userID']),
     };
 
     try {
-      VistaarVrutta? data;
+      // VistaarVrutta? data;
 
       final _res = await OfflineDataApiRepo.loadWithFallback(
         masterTableName: widget.isNew ? "VistarShaakhaVruttaMaster" : "ShaakhaVruttaMaster",
         draftTableName: 'VruttaDraftMaster',
         keyColumns: ['ShaakhaaID', 'VruttaDate'],
         keyValues: [_body["ShaakhaaID"], _body["Vruttadate"]],
-        where: '${widget.isNew ? "mapShaakhaaID" : "ShaakhaaID"} = ? AND VruttaDate LIKE ?',
-        whereArgs: [_body["ShaakhaaID"], "${_vruttaDate}%"],
+        where: 'ShaakhaaID = ? AND VruttaDate LIKE ?',
+        whereArgs: [(widget.shaakhaa?.mapShaakhaaID ?? widget.shaakhaa?.shaakhaaID ?? widget.shaakhaaId), "${_vruttaDate}%"],
         fetchFromApi: () async {
           final vrutta = await Statics.getShaakhaaSaptahVruttaData(context, _body);
           return vrutta?.toJson();
@@ -212,14 +212,16 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
         fromMap: SewaDaysGroupData.fromJson,
       );
 
+      // log("_res.data >>>>> ${_res.data}");
+
       if (_data.isNotEmpty) _sewaDaysGroup = buildGroupedItemsFromApi(_data);
 
       if (!mounted) return;
       if (_res.data == null)
-        data = VistaarVrutta();
+        vrutta = VistaarVrutta();
       else
-        data = VistaarVrutta.fromJson(_res.data!);
-      vrutta = data;
+        vrutta = VistaarVrutta.fromJson(_res.data!);
+      // vrutta = data;
       setState(() {
         if (vrutta != null) {
           // _vruttaDate = ((vrutta!.vruttaDate != null && vrutta!.vruttaDate != "") ? vrutta!.vruttaDate! : null);
@@ -289,6 +291,8 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
         return;
       }
       // print(_vruttaDate);
+    } catch (e) {
+      log("printing the error on loadWithFallback >> VistarShaakhaVruttaMaster >> $e");
     } finally {
       if (mounted)
         setState(() {
@@ -350,7 +354,8 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
       "ShaakhaaVruttaID": widget.shaakhaa?.pkid ?? widget.shaakhaaId,
       "PraantID": 1,
       "pkid": vrutta?.pkid ?? widget.shaakhaa?.pkid ?? widget.shaakhaaId,
-      "ShaakhaaID": widget.shaakhaaId ?? widget.shaakhaa?.shaakhaaID,
+      "ShaakhaaID": widget.shaakhaa?.mapShaakhaaID ?? widget.shaakhaa?.shaakhaaID ?? widget.shaakhaaId,
+      "mapShaakhaaID": widget.shaakhaa?.mapShaakhaaID ?? widget.shaakhaa?.shaakhaaID ?? widget.shaakhaaId,
       "date": DateFormat("dd/MM/yyyy").format(DateFormat("dd-MMM-yyyy").parse(_vruttaDateCntrl.text)),
       "VruttaDate": DateFormat("dd/MM/yyyy").format(DateFormat("dd-MMM-yyyy").parse(_vruttaDateCntrl.text)),
       "VruttaDateStr": DateFormat("dd/MM/yyyy").format(DateFormat("dd-MMM-yyyy").parse(_vruttaDateCntrl.text)),

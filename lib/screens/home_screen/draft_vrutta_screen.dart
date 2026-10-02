@@ -178,7 +178,7 @@ class _VruttaDraftScreenState extends State<VruttaDraftScreen> {
       _ => geo.geoUnitNameMarathi,
     };
     if (value != null && value.trim().isNotEmpty) return value;
-    return geo.geoUnitName ?? geo.fullName ?? '-'; // fallback chain if the language-specific field is empty
+    return geo.geoUnitName ?? geo.fullName ?? '--'; // fallback chain if the language-specific field is empty
   }
 
   // ── sync ────────────────────────────────────────────────────────────
@@ -187,6 +187,7 @@ class _VruttaDraftScreenState extends State<VruttaDraftScreen> {
         'UniqueKey': row['UniqueKey'],
         'PraantID': row['PraantID'],
         'ShaakhaaID': row['ShaakhaaID'],
+        'mapShaakhaaID': row['mapShaakhaaID'],
         'pkid': row['pkid'],
         'VruttaDate': _toDdMmYyyy(row['VruttaDate']?.toString()),
         'ShishuCount': row['ShishuCount'],
@@ -231,7 +232,7 @@ class _VruttaDraftScreenState extends State<VruttaDraftScreen> {
 
     final connected = await isInternetConnected();
     if (connected != true) {
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('No internet — cannot sync drafts')));
+      if (mounted) Statics.showToast(Statics.getLabel('cannontsyncdrafts'));
       return;
     }
 
@@ -243,17 +244,22 @@ class _VruttaDraftScreenState extends State<VruttaDraftScreen> {
     };
 
     try {
+      log(urlsyncshaakhaavruttadata);
+      log("req >>> $body");
+
       final response = await http.post(
         Uri.parse(urlsyncshaakhaavruttadata), // confirm this constant's actual name
         headers: {'Content-Type': 'application/json', 'Accept': '*/*'},
         body: jsonEncode(body),
       );
 
-      if (response.statusCode != 200) {
+      final decoded = jsonDecode(response.body) as Map<String, dynamic>;
+      log("res >>>> $decoded");
+
+      if (response.statusCode != 200 || decoded["Status"] != "Success") {
         throw Exception('Sync failed: ${response.statusCode}');
       }
 
-      final decoded = jsonDecode(response.body) as Map<String, dynamic>;
       final conflictShaakhaIds = _parseCsvIds(decoded['shaakhavruttaList']);
       final conflictVistarIds = _parseCsvIds(decoded['shaakhavistarvruttaList']);
       final allConflictIds = {...conflictShaakhaIds, ...conflictVistarIds};
@@ -295,12 +301,10 @@ class _VruttaDraftScreenState extends State<VruttaDraftScreen> {
 
       if (!mounted) return;
       final syncedCount = allSent.length - allConflictIds.length;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Synced $syncedCount — ${allConflictIds.length} already exist online')),
-      );
+      Statics.showToast('Synced $syncedCount — ${allConflictIds.length} already exist online');
     } catch (e) {
       log('Sync exception: $e');
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Sync failed — try again later')));
+      if (mounted) Statics.showToast(Statics.getLabel('failedtosync'));
     } finally {
       if (mounted) setState(() => _syncing = false);
     }
@@ -318,11 +322,11 @@ class _VruttaDraftScreenState extends State<VruttaDraftScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Delete draft?'),
-        content: const Text('This local draft will be removed permanently.'),
+        title: Text(Statics.getLabel('deletedrafttitle')),
+        content: Text(Statics.getLabel('deletedraftsubtitle')),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancel')),
-          TextButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Delete')),
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(Statics.getLabel('Cancel'))),
+          TextButton(onPressed: () => Navigator.pop(ctx, true), child: Text(Statics.getLabel('Delete'))),
         ],
       ),
     );
@@ -341,9 +345,7 @@ class _VruttaDraftScreenState extends State<VruttaDraftScreen> {
   void _editDraft(Map<String, dynamic> row) {
     final vruttaId = row['pkid'];
     if (vruttaId == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('This draft has not synced yet — edit not available offline')),
-      );
+      Statics.showToast('This draft has not synced yet — edit not available offline');
       return;
     }
     Navigator.push(
@@ -417,7 +419,7 @@ class _VruttaDraftScreenState extends State<VruttaDraftScreen> {
                     children: [
                       Icon(Icons.inbox_outlined, size: 32, color: Colors.grey.shade400),
                       const SizedBox(height: 6),
-                      Text('No pending drafts', style: TextStyle(color: Colors.grey.shade500)),
+                      Text(Statics.getLabel('nopendingdrafts'), style: TextStyle(color: Colors.grey.shade500)),
                     ],
                   ),
                 ),
@@ -467,7 +469,7 @@ class _VruttaDraftScreenState extends State<VruttaDraftScreen> {
     final overflows = tp.width > maxWidth;
 
     return SizedBox(
-      width: overflows ? maxWidth : tp.width,
+      width: maxWidth,
       height: cellHeight,
       child: overflows
           ? Marquee(
@@ -582,7 +584,7 @@ class _VruttaDraftScreenState extends State<VruttaDraftScreen> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Theme.of(context).primaryColor,
-        title: const Text('Vrutta Drafts', style: TextStyle(fontWeight: FontWeight.w600)),
+        title: Text(Statics.getLabel('vruttadraft'), style: TextStyle(fontWeight: FontWeight.w600)),
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -596,7 +598,7 @@ class _VruttaDraftScreenState extends State<VruttaDraftScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                 ),
                 icon: _syncing ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white)) : const Icon(Icons.sync, size: 18),
-                label: Text(_syncing ? 'Syncing...' : 'Sync all'),
+                label: Text(Statics.getLabel(_syncing ? 'syncing' : 'syncall')),
               ),
             ),
           ),
@@ -610,8 +612,8 @@ class _VruttaDraftScreenState extends State<VruttaDraftScreen> {
               child: ListView(
                 padding: const EdgeInsets.only(bottom: 24),
                 children: [
-                  _buildSection('Shaakhaa Vrutta', Icons.home_work_outlined, Colors.indigo, _shaakhaRows),
-                  _buildSection('Vistar Shaakhaa Vrutta', Icons.map_outlined, Colors.teal, _vistarRows),
+                  _buildSection(Statics.getLabel('shaakhaavruttalable'), Icons.home_work_outlined, Colors.indigo, _shaakhaRows),
+                  _buildSection(Statics.getLabel('vistarshaakhaavruttalable'), Icons.map_outlined, Colors.teal, _vistarRows),
                 ],
               ),
             ),

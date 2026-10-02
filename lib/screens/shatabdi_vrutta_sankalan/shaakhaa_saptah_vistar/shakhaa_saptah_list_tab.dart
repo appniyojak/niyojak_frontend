@@ -317,6 +317,7 @@ class _ShakhaaSaptahListTabState extends State<ShakhaaSaptahListTab> with Automa
                                                         builder: (context) => ShakhaaSaptahFormScreen(
                                                               shaakhaa: _newShaakhaaList[index],
                                                               viewType: "EditVrutta",
+                                                              isNew: true,
                                                             ))),
                                                 child: ListTile(
                                                   // tileColor: Colors.white,

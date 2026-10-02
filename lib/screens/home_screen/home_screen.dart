@@ -75,6 +75,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   DateTime? currentBackPressTime;
 
+  int _draftCount = 0;
+
   final _myAreaReportController = createGeoController();
   final _swayamsevakController = createGeoController();
   final _anyaInfoController = createGeoController();
@@ -297,6 +299,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _populateChoices();
     _populateDropdownSet2();
     _getGeoUnitID();
+    _draftCount = await Statics.getTableLength("VruttaDraftMaster");
     await Future.wait([
       ///CALLING ONCE FOR PREVENT HITTING OFFLINE API TWICE
       _fetchPanelData(
@@ -717,7 +720,7 @@ class _HomeScreenState extends State<HomeScreen> {
       controller.deepestSelectedGeoUnitId ?? "0",
     );
 
-    if (data['Status'] != "Success") {
+    if (data?['Status'] != "Success") {
       clearData();
       return;
     }
@@ -2596,7 +2599,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => const VruttaDraftScreen()),
                 ),
-                icon: Icon(Icons.all_inbox),
+                icon: Badge(
+                  isLabelVisible: _draftCount > 0,
+                  label: Text('${_draftCount > 0 ? _draftCount : ""}'),
+                  backgroundColor: _draftCount > 0 ? Colors.red : null,
+                  child: Icon(
+                    _draftCount > 0 ? Icons.all_inbox : Icons.inbox,
+                  ),
+                ),
               ),
               DownloadBadge(),
               // Notification bell with badge
