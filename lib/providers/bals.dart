@@ -2323,18 +2323,25 @@ class AnnualBaithakGraamVikasBAL {
 class ShaakhaaVruttaBALRespModel {
   String? status;
   String? message;
-  List<ShaakhaaVruttaBAL>? shaakhaaList;
+  List<ShaakhaaVruttaBAL>? shaakhaaVruttaList;
 
-  ShaakhaaVruttaBALRespModel({this.status, this.message, this.shaakhaaList});
+  ShaakhaaVruttaBALRespModel({this.status, this.message, this.shaakhaaVruttaList});
 
   ShaakhaaVruttaBALRespModel.fromJson(Map<String, dynamic> json) {
     status = json['Status'];
     message = json['Message'];
     if (json['ShaakhaaVruttaList'] != null) {
-      shaakhaaList = <ShaakhaaVruttaBAL>[];
-      json['ShaakhaaVruttaList'].forEach((v) {
-        shaakhaaList!.add(new ShaakhaaVruttaBAL.fromMap(v));
-      });
+      shaakhaaVruttaList = <ShaakhaaVruttaBAL>[];
+
+      final data = json['ShaakhaaVruttaList'];
+
+      if (data is List) {
+        for (final v in data) {
+          shaakhaaVruttaList!.add(ShaakhaaVruttaBAL.fromMap(v));
+        }
+      } else if (data is Map<String, dynamic>) {
+        shaakhaaVruttaList!.add(ShaakhaaVruttaBAL.fromMap(data));
+      }
     }
   }
 
@@ -2342,8 +2349,8 @@ class ShaakhaaVruttaBALRespModel {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['Status'] = this.status;
     data['Message'] = this.message;
-    if (this.shaakhaaList != null) {
-      data['ShaakhaaVruttaList'] = this.shaakhaaList!.map((v) => v.toJson()).toList();
+    if (this.shaakhaaVruttaList != null) {
+      data['ShaakhaaVruttaList'] = this.shaakhaaVruttaList!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -2393,7 +2400,7 @@ class ShaakhaaVruttaBAL {
   int? FrequencyID;
 
   ShaakhaaVruttaBAL(
-      this.shaakhaaVruttaID,
+      {this.shaakhaaVruttaID,
       this.praantID,
       this.shaakhaaID,
       this.vruttaDate,
@@ -2431,7 +2438,7 @@ class ShaakhaaVruttaBAL {
       this.AnyaBoudhikDays,
       this.isDoneSewaDays,
       this.SelectedSewaDaysId,
-      this.FrequencyID);
+      this.FrequencyID});
 
   ShaakhaaVruttaBAL.fromMap(Map<String, dynamic> map) {
     shaakhaaVruttaID = map["ShaakhaaVruttaID"];
@@ -2482,20 +2489,21 @@ class ShaakhaaVruttaBAL {
     data["PraantID"] = this.praantID;
     data["ShaakhaaID"] = this.shaakhaaID;
     data["VruttaDateStr"] = this.vruttaDate;
-    data["ShishuCount"] = this.shishuCount;
-    data["NewShishuCount"] = this.newshishuCount;
-    data["BaalVidyaarthiCount"] = this.baalVidyaarthiCount;
-    data["NewBaalVidyaarthiCount"] = this.newbaalVidyaarthiCount;
-    data["TarunVidyaarthiCount"] = this.tarunVidyaarthiCount;
-    data["NewTarunVidyaarthiCount"] = this.newtarunVidyaarthiCount;
-    data["TarunVyavasaayeeCount"] = this.tarunVyavasaayeeCount;
-    data["NewTarunVyavasaayeeCount"] = this.newtarunVyavasaayeeCount;
-    data["ProudhaVyavasaayeeCount"] = this.proudhaVyavasaayeeCount;
-    data["NewProudhaVyavasaayeeCount"] = this.newproudhaVyavasaayeeCount;
-    data["matruskatiCount"] = this.matruskatiCount;
-    data["MatruskatiCountCount"] = this.matruskatiCount;
-    data["newmatruskatiCount"] = this.newmatruskatiCount;
-    data["NewMatruskatiCountCount"] = this.newmatruskatiCount;
+    data["VruttaDate"] = this.vruttaDate;
+    data["ShishuCount"] = (this.shishuCount ?? 0).toString();
+    data["NewShishuCount"] = (this.newshishuCount ?? 0).toString();
+    data["BaalVidyaarthiCount"] = (this.baalVidyaarthiCount ?? 0).toString();
+    data["NewBaalVidyaarthiCount"] = (this.newbaalVidyaarthiCount ?? 0).toString();
+    data["TarunVidyaarthiCount"] = (this.tarunVidyaarthiCount ?? 0).toString();
+    data["NewTarunVidyaarthiCount"] = (this.newtarunVidyaarthiCount ?? 0).toString();
+    data["TarunVyavasaayeeCount"] = (this.tarunVyavasaayeeCount ?? 0).toString();
+    data["NewTarunVyavasaayeeCount"] = (this.newtarunVyavasaayeeCount ?? 0).toString();
+    data["ProudhaVyavasaayeeCount"] = (this.proudhaVyavasaayeeCount ?? 0).toString();
+    data["NewProudhaVyavasaayeeCount"] = (this.newproudhaVyavasaayeeCount ?? 0).toString();
+    data["matruskatiCount"] = (this.matruskatiCount ?? 0).toString();
+    data["MatruskatiCountCount"] = (this.matruskatiCount ?? 0).toString();
+    data["newmatruskatiCount"] = (this.newmatruskatiCount ?? 0).toString();
+    data["NewMatruskatiCountCount"] = (this.newmatruskatiCount ?? 0).toString();
     data["AbhyaagatCount"] = this.abhyaagatCount;
     data["PravasiKaryakartaCount"] = this.pravasiKaryakartaCount;
     data["AnyaPravasiKaryakartaCount"] = this.anyaPravasiKaryakartaCount;

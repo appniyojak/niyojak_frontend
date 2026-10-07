@@ -99,7 +99,7 @@ class DatabaseHelper {
     Remark TEXT, IsDoneDeepBreathing INT, IsDoneDandaPrahaar INT, IsDoneSooryaNamaskaar INT, IsDoneSanchalanAbhyaas INT,
     IsDoneSaanghikGeet INT, IsDoneAmrutaVachan INT, IsDoneSubhaashit INT, BoudhikDaysId INT, SewaDaysId TEXT, IsDoneUrdhvapad INT,
     IsDoneBoodhKatha INT, IsDoneBoudhikDays INT, IsDoneSewaDays INT, AnyaBoudhikDays TEXT, PravasiKaryakartaCount INT,
-    AnyaPravasiKaryakartaCount INT
+    AnyaPravasiKaryakartaCount INT, FrequencyID INT
   )
 ''');
 
@@ -112,7 +112,7 @@ class DatabaseHelper {
     Remark TEXT, IsDoneDeepBreathing INT, IsDoneDandaPrahaar INT, IsDoneSooryaNamaskaar INT, IsDoneSanchalanAbhyaas INT,
     IsDoneSaanghikGeet INT, IsDoneAmrutaVachan INT, IsDoneSubhaashit INT, BoudhikDaysId INT, SewaDaysId TEXT, IsDoneUrdhvapad INT,
     IsDoneBoodhKatha INT, IsDoneBoudhikDays INT, IsDoneSewaDays INT, AnyaBoudhikDays TEXT, PravasiKaryakartaCount INT,
-    AnyaPravasiKaryakartaCount INT
+    AnyaPravasiKaryakartaCount INT, FrequencyID INT
   )
 ''');
 
@@ -247,14 +247,14 @@ class DatabaseHelper {
 
       db.execute('''
   CREATE TABLE IF NOT EXISTS ShaakhaVruttaMaster (
-    pkid INT, ShaakhaaID INT, VruttaDate TEXT, ShishuCount INT, NewShishuCount INT, BaalVidyaarthiCount INT,
+    pkid INT PRIMARY KEY, ShaakhaaID INT, VruttaDate TEXT, ShishuCount INT, NewShishuCount INT, BaalVidyaarthiCount INT,
     NewBaalVidyaarthiCount INT, TarunVidyaarthiCount INT, NewTarunVidyaarthiCount INT, TarunVyavasaayeeCount INT,
     NewTarunVyavasaayeeCount INT, ProudhaVyavasaayeeCount INT, NewProudhaVyavasaayeeCount INT, matruskatiCount INT,
     newmatruskatiCount INT, totalCount INT, newtotalCount INT, AbhyaagatCount INT, IsOptionalShaaririk INT, IsOptionalOther INT,
     Remark TEXT, IsDoneDeepBreathing INT, IsDoneDandaPrahaar INT, IsDoneSooryaNamaskaar INT, IsDoneSanchalanAbhyaas INT,
     IsDoneSaanghikGeet INT, IsDoneAmrutaVachan INT, IsDoneSubhaashit INT, BoudhikDaysId INT, SewaDaysId TEXT, IsDoneUrdhvapad INT,
     IsDoneBoodhKatha INT, IsDoneBoudhikDays INT, IsDoneSewaDays INT, AnyaBoudhikDays TEXT, PravasiKaryakartaCount INT,
-    AnyaPravasiKaryakartaCount INT
+    AnyaPravasiKaryakartaCount INT, FrequencyID INT
   )
 ''');
 
@@ -267,7 +267,7 @@ class DatabaseHelper {
     Remark TEXT, IsDoneDeepBreathing INT, IsDoneDandaPrahaar INT, IsDoneSooryaNamaskaar INT, IsDoneSanchalanAbhyaas INT,
     IsDoneSaanghikGeet INT, IsDoneAmrutaVachan INT, IsDoneSubhaashit INT, BoudhikDaysId INT, SewaDaysId TEXT, IsDoneUrdhvapad INT,
     IsDoneBoodhKatha INT, IsDoneBoudhikDays INT, IsDoneSewaDays INT, AnyaBoudhikDays TEXT, PravasiKaryakartaCount INT,
-    AnyaPravasiKaryakartaCount INT
+    AnyaPravasiKaryakartaCount INT, FrequencyID INT
   )
 ''');
 

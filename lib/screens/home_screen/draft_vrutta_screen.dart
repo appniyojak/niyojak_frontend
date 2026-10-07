@@ -20,6 +20,7 @@ import '../../helpers/database_helper.dart';
 import '../../helpers/static_data.dart' as Statics;
 import '../../providers/bals.dart';
 import '../shaakhaa_milan_module/edit_shaakhaa_vrutta.dart';
+import '../shatabdi_vrutta_sankalan/shaakhaa_saptah_vistar/shakhaa_saptah_form_screen.dart';
 
 enum _CellType { text, int, bool, date }
 
@@ -318,7 +319,7 @@ class _VruttaDraftScreenState extends State<VruttaDraftScreen> {
 
   // ── row actions ─────────────────────────────────────────────────────
 
-  Future<void> _deleteDraft(Map<String, dynamic> row) async {
+  Future<void> _deleteDraft(Map<String, dynamic> row, {bool isnew = false}) async {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -342,29 +343,45 @@ class _VruttaDraftScreenState extends State<VruttaDraftScreen> {
 
   // ⚠️ Left unimplemented pending your answer above — pkid may be null
   // for a never-synced draft, and EditShaakhaaVrutta needs a vruttaID.
-  void _editDraft(Map<String, dynamic> row) {
-    final vruttaId = row['pkid'];
+  void _editDraft(Map<String, dynamic> row, {bool isnew = false}) {
+    final vruttaId = row['pkid'] ?? row['ShaakhaaID'];
     if (vruttaId == null) {
       Statics.showToast('This draft has not synced yet — edit not available offline');
       return;
     }
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => EditShaakhaaVrutta(
-          shaakhaaID: row['ShaakhaaID'].toString(),
-          vruttaID: vruttaId.toString(),
-          vruttadate: _toDdMmYyyy(row['VruttaDate']?.toString()),
-          onSaveDetails: _loadDrafts,
-          viewType: 'EditVrutta',
+    if (isnew) {
+      final _parsedDate = intl.DateFormat('dd/MM/yyyy').parse(row['VruttaDate'].toString());
+      final _formattedDate = intl.DateFormat('yyyy-MM-dd').format(_parsedDate);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ShakhaaSaptahFormScreen(
+            shaakhaaId: int.tryParse(vruttaId.toString()),
+            isNew: true,
+            viewType: "EditVrutta",
+            vruttadate: row['VruttaDate'] != null && (row['VruttaDate']?.toString().isNotEmpty == true) ? intl.DateFormat('yyyy-MM-dd').parse(_formattedDate) : null,
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => EditShaakhaaVrutta(
+            shaakhaaID: row['ShaakhaaID'].toString(),
+            vruttaID: vruttaId.toString(),
+            vruttadate: _toDdMmYyyy(row['VruttaDate']?.toString()),
+            onSaveDetails: _loadDrafts,
+            viewType: 'EditVrutta',
+          ),
+        ),
+      );
+    }
   }
 
   // ── table building (cosmetic pass) ──────────────────────────────────
 
-  Widget _buildSection(String title, IconData icon, Color accent, List<Map<String, dynamic>> rows) {
+  Widget _buildSection(String title, IconData icon, Color accent, List<Map<String, dynamic>> rows, {bool isnew = false}) {
     final flaggedCount = rows.where((r) => _alreadyOnlineKeys.contains(r['UniqueKey'] as int)).length;
 
     return Padding(
@@ -446,7 +463,7 @@ class _VruttaDraftScreenState extends State<VruttaDraftScreen> {
                     ..._kColumns.map((c) => DataColumn(label: Text(c.label), headingRowAlignment: MainAxisAlignment.center)),
                     DataColumn(label: Text(Statics.getLabel('Status')), headingRowAlignment: MainAxisAlignment.center),
                   ],
-                  rows: List.generate(rows.length, (i) => _buildRow(rows[i], i, accent)),
+                  rows: List.generate(rows.length, (i) => _buildRow(rows[i], i, accent, isnew: isnew)),
                 ),
               ),
             ),
@@ -490,7 +507,7 @@ class _VruttaDraftScreenState extends State<VruttaDraftScreen> {
     );
   }
 
-  DataRow _buildRow(Map<String, dynamic> row, int index, Color accent) {
+  DataRow _buildRow(Map<String, dynamic> row, int index, Color accent, {bool isnew = false}) {
     final isFlagged = _alreadyOnlineKeys.contains(row['UniqueKey'] as int);
     final zebra = index.isEven ? Colors.transparent : Colors.grey.shade50;
 
@@ -504,9 +521,9 @@ class _VruttaDraftScreenState extends State<VruttaDraftScreen> {
         DataCell(Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _actionButton(Icons.edit_outlined, Colors.indigo, 'Edit', () => _editDraft(row)),
+            _actionButton(Icons.edit_outlined, Colors.indigo, 'Edit', () => _editDraft(row, isnew: isnew)),
             const SizedBox(width: 4),
-            _actionButton(Icons.delete_outline, Colors.redAccent, 'Delete', () => _deleteDraft(row)),
+            _actionButton(Icons.delete_outline, Colors.redAccent, 'Delete', () => _deleteDraft(row, isnew: isnew)),
           ],
         )),
         DataCell(_shaakhaNameCell(_shaakhaNameCache['${row['tablename']}:${row['ShaakhaaID']}'] ?? '-')),
@@ -568,7 +585,7 @@ class _VruttaDraftScreenState extends State<VruttaDraftScreen> {
         final text = value?.toString();
         return Center(
           child: Text(
-            text ?? '-',
+            text ?? (col.type == _CellType.int ? '0' : '-'),
             style: text == null ? TextStyle(color: Colors.grey.shade400) : null,
           ),
         );
@@ -613,7 +630,7 @@ class _VruttaDraftScreenState extends State<VruttaDraftScreen> {
                 padding: const EdgeInsets.only(bottom: 24),
                 children: [
                   _buildSection(Statics.getLabel('shaakhaavruttalable'), Icons.home_work_outlined, Colors.indigo, _shaakhaRows),
-                  _buildSection(Statics.getLabel('vistarshaakhaavruttalable'), Icons.map_outlined, Colors.teal, _vistarRows),
+                  _buildSection(Statics.getLabel('vistarshaakhaavruttalable'), Icons.map_outlined, Colors.teal, _vistarRows, isnew: true),
                 ],
               ),
             ),

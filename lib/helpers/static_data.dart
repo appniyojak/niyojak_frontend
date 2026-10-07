@@ -1662,6 +1662,7 @@ Future<List<ShaakhaaList>?> getShaakhaaListData(Map<String, dynamic> inputJson) 
   return await OfflineDataApiRepo.getList<ShaakhaaList>(
     url: urlGetShaakhaasForAppGrid,
     body: inputJson,
+    showInternetToast: false,
     parse: (json) => ShaakhaaVistarListRespModel.fromJson(json).shaakhaaList ?? [],
     fromLocal: () => DatabaseHelper.getAllOfflineData<ShaakhaaList>(
       tableName: 'ShaakhaListMaster',
@@ -1678,6 +1679,7 @@ Future<ShaakhaaMasterBAL?> getShaakhaaByID(String shaakhaaID) async {
   return await OfflineDataApiRepo.getById<ShaakhaaMasterBAL?>(
     url: urlGetShaakhaaDetailsForApp,
     body: {"ShaakhaaID": shaakhaaID},
+    showInternetToast: false,
     parse: (json) => CommonRespModel.fromJson(json).shaakhaaItem,
     fromLocal: () async {
       final _res = await DatabaseHelper.getAllOfflineData<ShaakhaaMasterBAL>(
@@ -5108,7 +5110,7 @@ Future<List<ShaakhaaVruttaBAL>?> getShaakhaaVruttaListForApp(context, var shaakh
     // context: context,
     url: urlGetShaakhaaVruttaListForApp,
     body: {"ShaakhaaID": shaakhaaID, "ShaakhaaVruttaID": null},
-    parse: (json) => ShaakhaaVruttaBALRespModel.fromJson(json).shaakhaaList ?? [],
+    parse: (json) => ShaakhaaVruttaBALRespModel.fromJson(json).shaakhaaVruttaList ?? [],
     fromLocal: () => DatabaseHelper.getAllOfflineData<ShaakhaaVruttaBAL>(
       tableName: 'ShaakhaVruttaMaster',
       fromMap: ShaakhaaVruttaBAL.fromMap,
@@ -5146,7 +5148,8 @@ Future<ShaakhaaVruttaBAL?> getShaakhaaVruttaDetailsByDateForApp(var shaakhaaID, 
   return await OfflineDataApiRepo.getById<ShaakhaaVruttaBAL>(
     url: urlGetShaakhaaVruttabydate,
     body: body,
-    parse: (json) => ShaakhaaVruttaBALRespModel.fromJson(json).shaakhaaList?.firstOrNull,
+    showInternetToast: false,
+    parse: (json) => ShaakhaaVruttaBALRespModel.fromJson(json).shaakhaaVruttaList?.firstOrNull,
     fromLocal: () async {
       final _res = await DatabaseHelper.getAllOfflineData<ShaakhaaVruttaBAL>(
         tableName: 'ShaakhaVruttaMaster',

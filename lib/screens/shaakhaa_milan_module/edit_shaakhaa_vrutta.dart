@@ -223,6 +223,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
       keyValues: [_body["ShaakhaaID"], _body["Vruttadate"]],
       where: 'ShaakhaaID = ? AND VruttaDate LIKE ?',
       whereArgs: [_body["ShaakhaaID"], "${_body["Vruttadate"]}%"],
+      showInternetToast: false,
       fetchFromApi: () async {
         final _vrutta = await Statics.getShaakhaaVruttaDetailsByDateForApp(_body["ShaakhaaID"], _body["Vruttadate"]);
         return _vrutta?.toJson();
@@ -245,65 +246,64 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
 
     if (_res.isNotEmpty) _sewaDaysGroup = buildGroupedItemsFromApi(_res);
 
-    log("list having data and vrutta list >>>>>>>>>>> ${dataList.data}");
-    log("list having data and vrutta list >>>>>>>>>>> ${dataList.source}");
+    log("list having data and vrutta list >>>>>>>>>>> ${dataList.source} \n${dataList.data}");
     if (dataList.data != null) {
       log("list having data and vrutta list");
       var data = ShaakhaaVruttaBAL.fromMap(dataList.data!);
       if (!mounted) return;
       vrutta = data;
-      setState(() {
-        if (vrutta != null) {
-          final formattedDate = dateSelected != null ? DateFormat('dd/MM/yyyy').parse(dateSelected) : null;
-          final hasVruttaDate = vrutta?.vruttaDate?.isNotEmpty ?? false;
+    } else {
+      vrutta = ShaakhaaVruttaBAL();
+    }
+    final formattedDate = dateSelected != null ? DateFormat('dd/MM/yyyy').parse(dateSelected) : null;
+    if (vrutta != null) {
+      final hasVruttaDate = vrutta?.vruttaDate?.isNotEmpty ?? false;
 
-          _vruttaDate = hasVruttaDate ? DateFormat('dd/MM/yyyy').parse(vrutta!.vruttaDate!) : formattedDate;
-          _vruttaDateCntrl.text = _vruttaDate != null ? DateFormat('dd-MMM-yyyy').format(_vruttaDate!) : '';
+      _vruttaDate = hasVruttaDate ? DateFormat('dd/MM/yyyy').parse(vrutta!.vruttaDate!) : formattedDate;
+      _vruttaDateCntrl.text = _vruttaDate != null ? DateFormat('dd-MMM-yyyy').format(_vruttaDate!) : '';
 
-          _shishuCtrl.text = vrutta?.shishuCount == null ? "" : vrutta!.shishuCount.toString();
-          _newshishuCtrl.text = vrutta?.newshishuCount == null ? "" : vrutta!.newshishuCount.toString();
-          _baalCtrl.text = vrutta?.baalVidyaarthiCount == null ? "" : vrutta!.baalVidyaarthiCount.toString();
-          _newbaalCtrl.text = vrutta?.newbaalVidyaarthiCount == null ? "" : vrutta!.newbaalVidyaarthiCount.toString();
-          _tarunVidhyaarthiCtrl.text = vrutta?.tarunVidyaarthiCount == null ? "" : vrutta!.tarunVidyaarthiCount.toString();
-          _newtarunVidhyaarthiCtrl.text = vrutta?.newtarunVidyaarthiCount == null ? "" : vrutta!.newtarunVidyaarthiCount.toString();
-          _tarunVyavsaayeeCtrl.text = vrutta?.tarunVyavasaayeeCount == null ? "" : vrutta!.tarunVyavasaayeeCount.toString();
-          _newtarunVyavsaayeeCtrl.text = vrutta?.newtarunVyavasaayeeCount == null ? "" : vrutta!.newtarunVyavasaayeeCount.toString();
-          _proudhaCtrl.text = vrutta?.proudhaVyavasaayeeCount == null ? "" : vrutta!.proudhaVyavasaayeeCount.toString();
-          _newproudhaCtrl.text = vrutta?.newproudhaVyavasaayeeCount == null ? "" : vrutta!.newproudhaVyavasaayeeCount.toString();
-          _matrushaktiCtrl.text = vrutta?.matruskatiCount == null ? "" : vrutta!.matruskatiCount.toString();
-          _newmatrushaktiCtrl.text = vrutta?.newmatruskatiCount == null ? "" : vrutta!.newmatruskatiCount.toString();
-          _abhyaagatCtrl.text = vrutta?.abhyaagatCount == null ? "" : vrutta!.abhyaagatCount.toString();
-          _pravasiKaryakartaCountCtrl.text = vrutta?.pravasiKaryakartaCount == null ? "" : vrutta!.pravasiKaryakartaCount.toString();
-          _anyaPravasiKaryakartaCountCtrl.text = vrutta?.anyaPravasiKaryakartaCount == null ? "" : vrutta!.anyaPravasiKaryakartaCount.toString();
-          _remarkCtrl.text = vrutta?.remark == null ? "" : vrutta!.remark.toString();
+      _shishuCtrl.text = vrutta?.shishuCount == null ? "" : vrutta!.shishuCount.toString();
+      _newshishuCtrl.text = vrutta?.newshishuCount == null ? "" : vrutta!.newshishuCount.toString();
+      _baalCtrl.text = vrutta?.baalVidyaarthiCount == null ? "" : vrutta!.baalVidyaarthiCount.toString();
+      _newbaalCtrl.text = vrutta?.newbaalVidyaarthiCount == null ? "" : vrutta!.newbaalVidyaarthiCount.toString();
+      _tarunVidhyaarthiCtrl.text = vrutta?.tarunVidyaarthiCount == null ? "" : vrutta!.tarunVidyaarthiCount.toString();
+      _newtarunVidhyaarthiCtrl.text = vrutta?.newtarunVidyaarthiCount == null ? "" : vrutta!.newtarunVidyaarthiCount.toString();
+      _tarunVyavsaayeeCtrl.text = vrutta?.tarunVyavasaayeeCount == null ? "" : vrutta!.tarunVyavasaayeeCount.toString();
+      _newtarunVyavsaayeeCtrl.text = vrutta?.newtarunVyavasaayeeCount == null ? "" : vrutta!.newtarunVyavasaayeeCount.toString();
+      _proudhaCtrl.text = vrutta?.proudhaVyavasaayeeCount == null ? "" : vrutta!.proudhaVyavasaayeeCount.toString();
+      _newproudhaCtrl.text = vrutta?.newproudhaVyavasaayeeCount == null ? "" : vrutta!.newproudhaVyavasaayeeCount.toString();
+      _matrushaktiCtrl.text = vrutta?.matruskatiCount == null ? "" : vrutta!.matruskatiCount.toString();
+      _newmatrushaktiCtrl.text = vrutta?.newmatruskatiCount == null ? "" : vrutta!.newmatruskatiCount.toString();
+      _abhyaagatCtrl.text = vrutta?.abhyaagatCount == null ? "" : vrutta!.abhyaagatCount.toString();
+      _pravasiKaryakartaCountCtrl.text = vrutta?.pravasiKaryakartaCount == null ? "" : vrutta!.pravasiKaryakartaCount.toString();
+      _anyaPravasiKaryakartaCountCtrl.text = vrutta?.anyaPravasiKaryakartaCount == null ? "" : vrutta!.anyaPravasiKaryakartaCount.toString();
+      _remarkCtrl.text = vrutta?.remark == null ? "" : vrutta!.remark.toString();
 
-          // _isMandatoryShaaririk =
-          //     vrutta!.isMandatoryShaaririk == true ? true : false;
+      // _isMandatoryShaaririk =
+      //     vrutta!.isMandatoryShaaririk == true ? true : false;
 
-          // _isMandatoryBouddhik =
-          //     vrutta!.isMandatoryBouddhik == true ? true : false;
+      // _isMandatoryBouddhik =
+      //     vrutta!.isMandatoryBouddhik == true ? true : false;
 
-          _isOptionalShaaririk = vrutta?.isOptionalShaaririk ?? false;
+      _isOptionalShaaririk = vrutta?.isOptionalShaaririk ?? false;
 
-          _isOptionalOther = vrutta?.isOptionalOther ?? false;
+      _isOptionalOther = vrutta?.isOptionalOther ?? false;
 
-          _isDoneDeepBreathing = vrutta?.isDoneDeepBreathing ?? false;
-          _isDoneDandaPrahaar = vrutta?.isDoneDandaPrahaar ?? false;
-          _isDoneSooryaNamaskaar = vrutta?.isDoneSooryaNamaskaar ?? false;
-          _isDoneSanchalanAbhyaas = vrutta?.isDoneSanchalanAbhyaas ?? false;
-          _isDoneSaanghikGeet = vrutta?.isDoneSaanghikGeet ?? false;
-          _isDoneAmrutaVachan = vrutta?.isDoneAmrutaVachan ?? false;
-          _isDoneSubhaashit = vrutta?.isDoneSubhaashit ?? false;
-          _isDoneUrdhvapad = vrutta?.isDoneUrdhvapad ?? false;
-          _isDoneBoodhKatha = vrutta?.isDoneBoodhKatha ?? false;
-          _isDoneBoudhikDays = vrutta?.isDoneBoudhikDays ?? false;
-          _isDoneSewaDays = vrutta?.isDoneSewaDays ?? false;
+      _isDoneDeepBreathing = vrutta?.isDoneDeepBreathing ?? false;
+      _isDoneDandaPrahaar = vrutta?.isDoneDandaPrahaar ?? false;
+      _isDoneSooryaNamaskaar = vrutta?.isDoneSooryaNamaskaar ?? false;
+      _isDoneSanchalanAbhyaas = vrutta?.isDoneSanchalanAbhyaas ?? false;
+      _isDoneSaanghikGeet = vrutta?.isDoneSaanghikGeet ?? false;
+      _isDoneAmrutaVachan = vrutta?.isDoneAmrutaVachan ?? false;
+      _isDoneSubhaashit = vrutta?.isDoneSubhaashit ?? false;
+      _isDoneUrdhvapad = vrutta?.isDoneUrdhvapad ?? false;
+      _isDoneBoodhKatha = vrutta?.isDoneBoodhKatha ?? false;
+      _isDoneBoudhikDays = vrutta?.isDoneBoudhikDays ?? false;
+      _isDoneSewaDays = vrutta?.isDoneSewaDays ?? false;
 
-          _selectedBoudhikDaysId = _isDoneBoudhikDays ? vrutta?.SelectedBoudhikDaysId : null;
-          _anyaBoudhikDaysCtrl.text = _isDoneBoudhikDays ? vrutta?.AnyaBoudhikDays ?? "" : "";
-          _selectedSewaDaysList = vrutta?.SelectedSewaDaysId?.split(',').map((e) => int.tryParse(e)).where((e) => e != null).cast<int>().toList() ?? [];
-        }
-      });
+      _selectedBoudhikDaysId = _isDoneBoudhikDays ? vrutta?.SelectedBoudhikDaysId : null;
+      _anyaBoudhikDaysCtrl.text = _isDoneBoudhikDays ? vrutta?.AnyaBoudhikDays ?? "" : "";
+      _selectedSewaDaysList = vrutta?.SelectedSewaDaysId?.split(',').map((e) => int.tryParse(e)).where((e) => e != null).cast<int>().toList() ?? [];
     }
     setState(() {
       _isFetchingData = false;
@@ -328,6 +328,8 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
       setState(() {});
       return;
     }
+    _isFormViewOnly = false;
+    setState(() {});
   }
 
   _pickFromDate() async {
@@ -487,11 +489,10 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
             child: Container(
               padding: EdgeInsets.all(20),
               width: Statics.getDeviceSize(context).width,
-              child: AbsorbPointer(
-                absorbing: _isFormViewOnly || widget.viewType == "ViewMenu",
-                child: Form(
-                  key: _formKey,
-                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
                     Row(
                       children: [
                         SizedBox(
@@ -516,626 +517,631 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 14),
-                    Text(
-                      Statics.getLabel('ShishuCount') + " " + Statics.getLabel('ShishuCountRange'),
-                      style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
-                    ),
-                    SizedBox(height: 8),
-                    Row(
-                      spacing: 12,
-                      children: [
-                        Expanded(
-                          child: numTextField(
-                            controller: _shishuCtrl,
-                            labelText: Statics.getLabel('Total'),
-                            onSaved: (value) {
-                              vrutta?.shishuCount = value == "" ? null : int.parse(value!);
-                            },
-                          ),
+                    AbsorbPointer(
+                      absorbing: _isFormViewOnly || widget.viewType == "ViewMenu",
+                      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+                        SizedBox(height: 14),
+                        Text(
+                          Statics.getLabel('ShishuCount') + " " + Statics.getLabel('ShishuCountRange'),
+                          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
                         ),
-                        Expanded(
-                          child: numTextField(
-                            readOnly: _shishuCtrl.text.isEmpty,
-                            controller: _newshishuCtrl,
-                            expectedController: _shishuCtrl,
-                            labelText: Statics.getLabel('newAdmission'),
-                            onSaved: (value) {
-                              vrutta?.newshishuCount = value == "" ? null : int.parse(value!);
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 14),
-                    Text(
-                      Statics.getLabel('BaalCount') + " " + Statics.getLabel('BaalCountRange'),
-                      style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
-                    ),
-                    SizedBox(height: 8),
-                    Row(spacing: 12, children: [
-                      Expanded(
-                        child: numTextField(
-                          controller: _baalCtrl,
-                          labelText: Statics.getLabel('Total'),
-                          onSaved: (value) {
-                            vrutta?.baalVidyaarthiCount = value == "" ? null : int.parse(value!);
-                          },
-                        ),
-                      ),
-                      Expanded(
-                        child: numTextField(
-                          readOnly: _baalCtrl.text.isEmpty,
-                          controller: _newbaalCtrl,
-                          expectedController: _baalCtrl,
-                          labelText: Statics.getLabel('newAdmission'),
-                          onSaved: (value) {
-                            vrutta?.newbaalVidyaarthiCount = value == "" ? null : int.parse(value!);
-                          },
-                        ),
-                      ),
-                    ]),
-                    SizedBox(height: 14),
-                    Text(
-                      Statics.getLabel('TarunVidyaarthiCount') + " " + Statics.getLabel('TarunVidyaarthiCountRange'),
-                      style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
-                    ),
-                    SizedBox(height: 8),
-                    Row(spacing: 12, children: [
-                      Expanded(
-                        child: numTextField(
-                          controller: _tarunVidhyaarthiCtrl,
-                          labelText: Statics.getLabel('Total'),
-                          onSaved: (value) {
-                            vrutta?.tarunVidyaarthiCount = value == "" ? null : int.parse(value!);
-                          },
-                        ),
-                      ),
-                      Expanded(
-                        child: numTextField(
-                          readOnly: _tarunVidhyaarthiCtrl.text.isEmpty,
-                          controller: _newtarunVidhyaarthiCtrl,
-                          expectedController: _tarunVidhyaarthiCtrl,
-                          labelText: Statics.getLabel('newAdmission'),
-                          onSaved: (value) {
-                            vrutta?.newtarunVidyaarthiCount = value == "" ? null : int.parse(value!);
-                          },
-                        ),
-                      ),
-                    ]),
-                    SizedBox(height: 14),
-                    Text(
-                      Statics.getLabel('TarunVyavasaayeeCount') + " " + Statics.getLabel('TarunVyavasaayeeCountRange'),
-                      style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
-                    ),
-                    SizedBox(height: 8),
-                    Row(spacing: 12, children: [
-                      Expanded(
-                        child: numTextField(
-                          controller: _tarunVyavsaayeeCtrl,
-                          labelText: Statics.getLabel('Total'),
-                          onSaved: (value) {
-                            vrutta?.tarunVyavasaayeeCount = value == "" ? null : int.parse(value!);
-                          },
-                        ),
-                      ),
-                      Expanded(
-                        child: numTextField(
-                          readOnly: _tarunVyavsaayeeCtrl.text.isEmpty,
-                          controller: _newtarunVyavsaayeeCtrl,
-                          expectedController: _tarunVyavsaayeeCtrl,
-                          labelText: Statics.getLabel('newAdmission'),
-                          onSaved: (value) {
-                            vrutta?.newtarunVyavasaayeeCount = value == "" ? null : int.parse(value!);
-                          },
-                        ),
-                      ),
-                    ]),
-                    SizedBox(height: 14),
-                    Text(
-                      Statics.getLabel('ProudhaCount') + " " + Statics.getLabel('ProudhaCountRange'),
-                      style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
-                    ),
-                    SizedBox(height: 8),
-                    Row(spacing: 12, children: [
-                      Expanded(
-                        child: numTextField(
-                          controller: _proudhaCtrl,
-                          labelText: Statics.getLabel('Total'),
-                          onSaved: (value) {
-                            vrutta?.proudhaVyavasaayeeCount = value == "" ? null : int.parse(value!);
-                          },
-                        ),
-                      ),
-                      Expanded(
-                        child: numTextField(
-                          readOnly: _proudhaCtrl.text.isEmpty,
-                          controller: _newproudhaCtrl,
-                          expectedController: _proudhaCtrl,
-                          labelText: Statics.getLabel('newAdmission'),
-                          onSaved: (value) {
-                            vrutta?.newproudhaVyavasaayeeCount = value == "" ? null : int.parse(value!);
-                          },
-                        ),
-                      ),
-                    ]),
-                    if (_frequency.isNotEmpty && _frequency.firstWhere((e) => e.staticID == frequencyId).code == "Monthly") ...[
-                      SizedBox(height: 14),
-                      Text(
-                        Statics.getLabel('MatrushaktiCount'),
-                        style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
-                      ),
-                      SizedBox(height: 8),
-                      Row(spacing: 12, children: [
-                        Expanded(
-                          child: numTextField(
-                            controller: _matrushaktiCtrl,
-                            labelText: Statics.getLabel('Total'),
-                            onSaved: (value) {
-                              vrutta?.matruskatiCount = value == "" ? null : int.parse(value!);
-                            },
-                          ),
-                        ),
-                        Expanded(
-                          child: numTextField(
-                            controller: _newmatrushaktiCtrl,
-                            expectedController: _matrushaktiCtrl,
-                            labelText: Statics.getLabel('newAdmission'),
-                            onSaved: (value) {
-                              vrutta?.newmatruskatiCount = value == "" ? null : int.parse(value!);
-                            },
-                          ),
-                        ),
-                      ])
-                    ],
-                    /*SizedBox(height: 14),
-                    Text(
-                      Statics.getLabel('TotalCountLabel'),
-                      style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
-                    ),
-                    SizedBox(height: 8),
-                    Row(spacing: 12, children: [
-                      Expanded(
-                        child: numTextField(
-                          readOnly: true,
-                          fillColor: Colors.grey.shade300,
-                          controller: TextEditingController(
-                              text: ((int.tryParse(_shishuCtrl.text) ?? 0) +
-                                  (int.tryParse(_baalCtrl.text) ?? 0) +
-                                  (int.tryParse(_tarunVidhyaarthiCtrl.text) ?? 0) +
-                                  (int.tryParse(_tarunVyavsaayeeCtrl.text) ?? 0) +
-                                  (int.tryParse(_proudhaCtrl.text) ?? 0) +
-                                  (int.tryParse(_matrushaktiCtrl.text) ?? 0))
-                                  .toString()),
-                          labelText: Statics.getLabel('Total'),
-                          onChanged: (value) => setState(() => vrutta?.totalCount = value == "" ? null : int.parse(value!)),
-                        ),
-                      ),
-                      Expanded(
-                        child: numTextField(
-                          readOnly: true,
-                          fillColor: Colors.grey.shade300,
-                          controller: TextEditingController(
-                              text: ((int.tryParse(_newshishuCtrl.text) ?? 0) +
-                                  (int.tryParse(_newbaalCtrl.text) ?? 0) +
-                                  (int.tryParse(_newtarunVidhyaarthiCtrl.text) ?? 0) +
-                                  (int.tryParse(_newtarunVyavsaayeeCtrl.text) ?? 0) +
-                                  (int.tryParse(_newproudhaCtrl.text) ?? 0) +
-                                  (int.tryParse(_newmatrushaktiCtrl.text) ?? 0))
-                                  .toString()),
-                          labelText: Statics.getLabel('TotalNewAddCountLabel'),
-                          onChanged: (value) => setState(() => vrutta?.newtotalCount = value == "" ? null : int.parse(value!)),
-                        ),
-                      ),
-                    ]),*/
-                    SizedBox(height: 10),
-                    TextFormField(
-                      textInputAction: TextInputAction.next,
-                      controller: _abhyaagatCtrl,
-                      decoration: InputDecoration(labelText: Statics.getLabel('AbhyaagatCount')),
-                      keyboardType: TextInputType.number,
-                      onSaved: (value) {
-                        vrutta?.abhyaagatCount = value == "" ? null : int.parse(value!);
-                      },
-                    ),
-                    SizedBox(height: 10),
-                    if (_frequency.isNotEmpty && _frequency.firstWhere((e) => e.staticID == frequencyId).code != "Monthly") ...[
-                      TextFormField(
-                        textInputAction: TextInputAction.next,
-                        controller: _pravasiKaryakartaCountCtrl,
-                        decoration: InputDecoration(labelText: Statics.getLabel('PravasiKaryakartaCount2')),
-                        keyboardType: TextInputType.number,
-                        onSaved: (value) {
-                          vrutta?.abhyaagatCount = value == "" ? null : int.parse(value!);
-                        },
-                      ),
-                      SizedBox(height: 10),
-                      /*TextFormField(
-                        textInputAction: TextInputAction.next,
-                        controller: _anyaPravasiKaryakartaCountCtrl,
-                        decoration: InputDecoration(labelText: Statics.getLabel('AnyaPravasiKaryakartaCount')),
-                        keyboardType: TextInputType.number,
-                        onSaved: (value) {
-                          vrutta?.abhyaagatCount = value == "" ? null : int.parse(value!);
-                        },
-                      ),
-                      SizedBox(height: 10),*/
-                      if (vayogatCode == "Proudh Vyavasaayee")
-                        Column(
+                        SizedBox(height: 8),
+                        Row(
+                          spacing: 12,
                           children: [
-                            SizedBox(
-                              width: Statics.getDeviceSize(context).width * 0.8,
-                              child: CheckboxListTile(
-                                contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                                controlAffinity: ListTileControlAffinity.leading,
-                                title: Text(Statics.getLabel("Minimum5minutesDeepBreathing"), style: TextStyle(fontSize: 15)),
-                                checkColor: Colors.white,
-                                activeColor: Colors.purple,
-                                value: _isDoneDeepBreathing,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _isDoneDeepBreathing = value!;
-                                  });
+                            Expanded(
+                              child: numTextField(
+                                controller: _shishuCtrl,
+                                labelText: Statics.getLabel('Total'),
+                                onSaved: (value) {
+                                  vrutta?.shishuCount = value == "" ? null : int.parse(value!);
                                 },
                               ),
                             ),
-                            SizedBox(height: 10),
-                          ],
-                        )
-                      else if (vayogatCode == "Baal")
-                        Column(
-                          children: [
-                            SizedBox(
-                              width: Statics.getDeviceSize(context).width * 0.8,
-                              child: CheckboxListTile(
-                                contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                                controlAffinity: ListTileControlAffinity.leading,
-                                title: Text(Statics.getLabel("Minimum5minutesUrdhvapad"), style: TextStyle(fontSize: 15)),
-                                checkColor: Colors.white,
-                                activeColor: Colors.purple,
-                                value: _isDoneUrdhvapad,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _isDoneUrdhvapad = value!;
-                                  });
+                            Expanded(
+                              child: numTextField(
+                                readOnly: _shishuCtrl.text.isEmpty,
+                                controller: _newshishuCtrl,
+                                expectedController: _shishuCtrl,
+                                labelText: Statics.getLabel('newAdmission'),
+                                onSaved: (value) {
+                                  vrutta?.newshishuCount = value == "" ? null : int.parse(value!);
                                 },
                               ),
                             ),
-                            SizedBox(height: 10),
-                          ],
-                        )
-                      else
-                        Column(
-                          children: [
-                            SizedBox(
-                              width: Statics.getDeviceSize(context).width * 0.8,
-                              child: CheckboxListTile(
-                                contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                                controlAffinity: ListTileControlAffinity.leading,
-                                title: Text(Statics.getLabel("Minimum1minuteDandaPrahaar"), style: TextStyle(fontSize: 15)),
-                                checkColor: Colors.white,
-                                activeColor: Colors.purple,
-                                value: _isDoneDandaPrahaar,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _isDoneDandaPrahaar = value!;
-                                  });
-                                },
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            SizedBox(
-                              width: Statics.getDeviceSize(context).width * 0.8,
-                              child: CheckboxListTile(
-                                contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                                controlAffinity: ListTileControlAffinity.leading,
-                                title: Text(Statics.getLabel("Minimum5minutesSooryaNamaskaar"), style: TextStyle(fontSize: 15)),
-                                checkColor: Colors.white,
-                                activeColor: Colors.purple,
-                                value: _isDoneSooryaNamaskaar,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _isDoneSooryaNamaskaar = value!;
-                                  });
-                                },
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            SizedBox(
-                              width: Statics.getDeviceSize(context).width * 0.8,
-                              child: CheckboxListTile(
-                                contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                                controlAffinity: ListTileControlAffinity.leading,
-                                title: Text(Statics.getLabel("Minimum5minutesSanchalanAbhyaas"), style: TextStyle(fontSize: 15)),
-                                checkColor: Colors.white,
-                                activeColor: Colors.purple,
-                                value: _isDoneSanchalanAbhyaas,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _isDoneSanchalanAbhyaas = value!;
-                                  });
-                                },
-                              ),
-                            ),
-                            SizedBox(height: 10),
                           ],
                         ),
-
-                      SizedBox(
-                        width: Statics.getDeviceSize(context).width * 0.8,
-                        child: CheckboxListTile(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                          controlAffinity: ListTileControlAffinity.leading,
-                          title: Text(Statics.getLabel("SaanghikGeet"), style: TextStyle(fontSize: 15)),
-                          checkColor: Colors.white,
-                          activeColor: Colors.purple,
-                          value: _isDoneSaanghikGeet,
-                          onChanged: (value) {
-                            setState(() {
-                              _isDoneSaanghikGeet = value!;
-                            });
-                          },
+                        SizedBox(height: 14),
+                        Text(
+                          Statics.getLabel('BaalCount') + " " + Statics.getLabel('BaalCountRange'),
+                          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
                         ),
-                      ),
-                      SizedBox(height: 10),
-                      SizedBox(
-                        width: Statics.getDeviceSize(context).width * 0.8,
-                        child: CheckboxListTile(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                          controlAffinity: ListTileControlAffinity.leading,
-                          title: Text(Statics.getLabel("AmrutaVachan"), style: TextStyle(fontSize: 15)),
-                          checkColor: Colors.white,
-                          activeColor: Colors.purple,
-                          value: _isDoneAmrutaVachan,
-                          onChanged: (value) {
-                            setState(() {
-                              _isDoneAmrutaVachan = value!;
-                            });
-                          },
+                        SizedBox(height: 8),
+                        Row(spacing: 12, children: [
+                          Expanded(
+                            child: numTextField(
+                              controller: _baalCtrl,
+                              labelText: Statics.getLabel('Total'),
+                              onSaved: (value) {
+                                vrutta?.baalVidyaarthiCount = value == "" ? null : int.parse(value!);
+                              },
+                            ),
+                          ),
+                          Expanded(
+                            child: numTextField(
+                              readOnly: _baalCtrl.text.isEmpty,
+                              controller: _newbaalCtrl,
+                              expectedController: _baalCtrl,
+                              labelText: Statics.getLabel('newAdmission'),
+                              onSaved: (value) {
+                                vrutta?.newbaalVidyaarthiCount = value == "" ? null : int.parse(value!);
+                              },
+                            ),
+                          ),
+                        ]),
+                        SizedBox(height: 14),
+                        Text(
+                          Statics.getLabel('TarunVidyaarthiCount') + " " + Statics.getLabel('TarunVidyaarthiCountRange'),
+                          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
                         ),
-                      ),
-                      SizedBox(height: 10),
-                      SizedBox(
-                        width: Statics.getDeviceSize(context).width * 0.8,
-                        child: CheckboxListTile(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                          controlAffinity: ListTileControlAffinity.leading,
-                          title: Text(Statics.getLabel("Subhaashit"), style: TextStyle(fontSize: 15)),
-                          checkColor: Colors.white,
-                          activeColor: Colors.purple,
-                          value: _isDoneSubhaashit,
-                          onChanged: (value) {
-                            setState(() {
-                              _isDoneSubhaashit = value!;
-                            });
-                          },
+                        SizedBox(height: 8),
+                        Row(spacing: 12, children: [
+                          Expanded(
+                            child: numTextField(
+                              controller: _tarunVidhyaarthiCtrl,
+                              labelText: Statics.getLabel('Total'),
+                              onSaved: (value) {
+                                vrutta?.tarunVidyaarthiCount = value == "" ? null : int.parse(value!);
+                              },
+                            ),
+                          ),
+                          Expanded(
+                            child: numTextField(
+                              readOnly: _tarunVidhyaarthiCtrl.text.isEmpty,
+                              controller: _newtarunVidhyaarthiCtrl,
+                              expectedController: _tarunVidhyaarthiCtrl,
+                              labelText: Statics.getLabel('newAdmission'),
+                              onSaved: (value) {
+                                vrutta?.newtarunVidyaarthiCount = value == "" ? null : int.parse(value!);
+                              },
+                            ),
+                          ),
+                        ]),
+                        SizedBox(height: 14),
+                        Text(
+                          Statics.getLabel('TarunVyavasaayeeCount') + " " + Statics.getLabel('TarunVyavasaayeeCountRange'),
+                          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
                         ),
-                      ),
-                      SizedBox(height: 10),
-                      SizedBox(
-                        width: Statics.getDeviceSize(context).width * 0.8,
-                        child: CheckboxListTile(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                          controlAffinity: ListTileControlAffinity.leading,
-                          title: Text(Statics.getLabel("BoodhKathaOnceWeek"), style: TextStyle(fontSize: 15)),
-                          checkColor: Colors.white,
-                          activeColor: Colors.purple,
-                          value: _isDoneBoodhKatha,
-                          onChanged: (value) {
-                            setState(() {
-                              _isDoneBoodhKatha = value!;
-                            });
-                          },
+                        SizedBox(height: 8),
+                        Row(spacing: 12, children: [
+                          Expanded(
+                            child: numTextField(
+                              controller: _tarunVyavsaayeeCtrl,
+                              labelText: Statics.getLabel('Total'),
+                              onSaved: (value) {
+                                vrutta?.tarunVyavasaayeeCount = value == "" ? null : int.parse(value!);
+                              },
+                            ),
+                          ),
+                          Expanded(
+                            child: numTextField(
+                              readOnly: _tarunVyavsaayeeCtrl.text.isEmpty,
+                              controller: _newtarunVyavsaayeeCtrl,
+                              expectedController: _tarunVyavsaayeeCtrl,
+                              labelText: Statics.getLabel('newAdmission'),
+                              onSaved: (value) {
+                                vrutta?.newtarunVyavasaayeeCount = value == "" ? null : int.parse(value!);
+                              },
+                            ),
+                          ),
+                        ]),
+                        SizedBox(height: 14),
+                        Text(
+                          Statics.getLabel('ProudhaCount') + " " + Statics.getLabel('ProudhaCountRange'),
+                          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
                         ),
-                      ),
-                      SizedBox(height: 10),
-                      SizedBox(
-                        width: Statics.getDeviceSize(context).width * 0.8,
-                        child: CheckboxListTile(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                          controlAffinity: ListTileControlAffinity.leading,
-                          title: Text(Statics.getLabel("BoudhikDays"), style: TextStyle(fontSize: 15)),
-                          checkColor: Colors.white,
-                          activeColor: Colors.purple,
-                          value: _isDoneBoudhikDays,
-                          onChanged: (value) {
-                            setState(() {
-                              _isDoneBoudhikDays = value!;
-                            });
-                          },
+                        SizedBox(height: 8),
+                        Row(spacing: 12, children: [
+                          Expanded(
+                            child: numTextField(
+                              controller: _proudhaCtrl,
+                              labelText: Statics.getLabel('Total'),
+                              onSaved: (value) {
+                                vrutta?.proudhaVyavasaayeeCount = value == "" ? null : int.parse(value!);
+                              },
+                            ),
+                          ),
+                          Expanded(
+                            child: numTextField(
+                              readOnly: _proudhaCtrl.text.isEmpty,
+                              controller: _newproudhaCtrl,
+                              expectedController: _proudhaCtrl,
+                              labelText: Statics.getLabel('newAdmission'),
+                              onSaved: (value) {
+                                vrutta?.newproudhaVyavasaayeeCount = value == "" ? null : int.parse(value!);
+                              },
+                            ),
+                          ),
+                        ]),
+                        if (_frequency.isNotEmpty && _frequency.firstWhere((e) => e.staticID == frequencyId).code == "Monthly") ...[
+                          SizedBox(height: 14),
+                          Text(
+                            Statics.getLabel('MatrushaktiCount'),
+                            style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+                          ),
+                          SizedBox(height: 8),
+                          Row(spacing: 12, children: [
+                            Expanded(
+                              child: numTextField(
+                                controller: _matrushaktiCtrl,
+                                labelText: Statics.getLabel('Total'),
+                                onSaved: (value) {
+                                  vrutta?.matruskatiCount = value == "" ? null : int.parse(value!);
+                                },
+                              ),
+                            ),
+                            Expanded(
+                              child: numTextField(
+                                controller: _newmatrushaktiCtrl,
+                                expectedController: _matrushaktiCtrl,
+                                labelText: Statics.getLabel('newAdmission'),
+                                onSaved: (value) {
+                                  vrutta?.newmatruskatiCount = value == "" ? null : int.parse(value!);
+                                },
+                              ),
+                            ),
+                          ])
+                        ],
+                        /*SizedBox(height: 14),
+                        Text(
+                          Statics.getLabel('TotalCountLabel'),
+                          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
                         ),
-                      ),
-                      SizedBox(height: 10),
-                      if (_isDoneBoudhikDays) ...[
-                        buildDropdownField(
-                          label: Statics.getLabel('BoudhikDays'),
-                          value: _selectedBoudhikDaysId,
-                          items: _boudhikDaysList!
-                              .map((bg) => DropdownMenuItem(
-                                    value: bg?.staticID.toString(),
-                                    child: Text(bg?.codeForDisplay ?? "--"),
-                                  ))
-                              .toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              _selectedBoudhikDaysId = value;
-                            });
-                            print(_selectedBoudhikDaysId);
-                            print(_boudhikDaysList.firstWhere((e) => e?.codeForDisplay == Statics.getLabel("anyaOption"))?.staticID);
-                            print(_selectedBoudhikDaysId == _boudhikDaysList.firstWhere((e) => e?.codeForDisplay == Statics.getLabel("anyaOption"))?.staticID.toString());
-                          },
-                          validator: (val) {
-                            if (val == null || val.isEmpty) return Statics.getLabel("optionSelectionRequired");
-                            return null;
+                        SizedBox(height: 8),
+                        Row(spacing: 12, children: [
+                          Expanded(
+                            child: numTextField(
+                              readOnly: true,
+                              fillColor: Colors.grey.shade300,
+                              controller: TextEditingController(
+                                  text: ((int.tryParse(_shishuCtrl.text) ?? 0) +
+                                      (int.tryParse(_baalCtrl.text) ?? 0) +
+                                      (int.tryParse(_tarunVidhyaarthiCtrl.text) ?? 0) +
+                                      (int.tryParse(_tarunVyavsaayeeCtrl.text) ?? 0) +
+                                      (int.tryParse(_proudhaCtrl.text) ?? 0) +
+                                      (int.tryParse(_matrushaktiCtrl.text) ?? 0))
+                                      .toString()),
+                              labelText: Statics.getLabel('Total'),
+                              onChanged: (value) => setState(() => vrutta?.totalCount = value == "" ? null : int.parse(value!)),
+                            ),
+                          ),
+                          Expanded(
+                            child: numTextField(
+                              readOnly: true,
+                              fillColor: Colors.grey.shade300,
+                              controller: TextEditingController(
+                                  text: ((int.tryParse(_newshishuCtrl.text) ?? 0) +
+                                      (int.tryParse(_newbaalCtrl.text) ?? 0) +
+                                      (int.tryParse(_newtarunVidhyaarthiCtrl.text) ?? 0) +
+                                      (int.tryParse(_newtarunVyavsaayeeCtrl.text) ?? 0) +
+                                      (int.tryParse(_newproudhaCtrl.text) ?? 0) +
+                                      (int.tryParse(_newmatrushaktiCtrl.text) ?? 0))
+                                      .toString()),
+                              labelText: Statics.getLabel('TotalNewAddCountLabel'),
+                              onChanged: (value) => setState(() => vrutta?.newtotalCount = value == "" ? null : int.parse(value!)),
+                            ),
+                          ),
+                        ]),*/
+                        SizedBox(height: 10),
+                        TextFormField(
+                          textInputAction: TextInputAction.next,
+                          controller: _abhyaagatCtrl,
+                          decoration: InputDecoration(labelText: Statics.getLabel('AbhyaagatCount')),
+                          keyboardType: TextInputType.number,
+                          onSaved: (value) {
+                            vrutta?.abhyaagatCount = value == "" ? null : int.parse(value!);
                           },
                         ),
                         SizedBox(height: 10),
-                        if (_selectedBoudhikDaysId == _boudhikDaysList.firstWhere((e) => e?.codeForDisplay == Statics.getLabel("anyaOption"))?.staticID.toString())
+                        if (_frequency.isNotEmpty && _frequency.firstWhere((e) => e.staticID == frequencyId).code != "Monthly") ...[
                           TextFormField(
-                            controller: _anyaBoudhikDaysCtrl,
                             textInputAction: TextInputAction.next,
-                            onChanged: (value) => setState(() {}),
-                            decoration: InputDecoration(
-                              labelText: Statics.getLabel("anyaOption"),
-                              labelStyle: const TextStyle(color: Colors.black, fontSize: 14),
-                              // fillColor: Colors.grey.shade50,
-                              // filled: true,
-                              // border: OutlineInputBorder(
-                              //   borderRadius: BorderRadius.circular(8),
-                              //   borderSide: BorderSide.none, // Hide default border
-                              // ),
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12), // Align left of field
-                            ),
-                            style: const TextStyle(color: Colors.black, fontSize: 14),
-                            // Original fields looked greyed out
-                            validator: (val) {
-                              if (val == null || val.isEmpty) return Statics.getLabel("otherInfoValidation");
-                              return null;
+                            controller: _pravasiKaryakartaCountCtrl,
+                            decoration: InputDecoration(labelText: Statics.getLabel('PravasiKaryakartaCount2')),
+                            keyboardType: TextInputType.number,
+                            onSaved: (value) {
+                              vrutta?.abhyaagatCount = value == "" ? null : int.parse(value!);
                             },
                           ),
-                      ],
-                      SizedBox(
-                        width: Statics.getDeviceSize(context).width * 0.8,
-                        child: CheckboxListTile(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                          controlAffinity: ListTileControlAffinity.leading,
-                          title: Text(Statics.getLabel("SewaDays"), style: TextStyle(fontSize: 15)),
-                          checkColor: Colors.white,
-                          activeColor: Colors.purple,
-                          value: _isDoneSewaDays,
-                          onChanged: (value) {
-                            setState(() {
-                              _isDoneSewaDays = value!;
-                            });
-                          },
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      if (_isDoneSewaDays) ...[
-                        GroupedMultiSelectField<int>(
-                          title: Statics.getLabel('SewaDays'),
-                          buttonText: Statics.getLabel('SewaDays'),
-                          confirmText: Statics.getLabel('Submit'),
-                          cancelText: Statics.getLabel('clear'),
-                          groupedItems: _sewaDaysGroup,
-                          initialValue: _selectedSewaDaysList,
-                          onConfirm: (values) => setState(() => _selectedSewaDaysList = values),
-                        ),
-                        SizedBox(height: 10),
-                      ],
-                      // SizedBox(
-                      //   width: Statics.getDeviceSize(context).width * 0.8,
-                      //   child: CheckboxListTile(
-                      //     contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                      //     controlAffinity: ListTileControlAffinity.leading,
-                      //     title: Text(Statics.getLabel("ConductedAnivaaryaShaaririkKaaryakram"),
-                      //         style: TextStyle(fontSize: 15)),
-                      //     checkColor: Colors.white,
-                      //     activeColor: Colors.purple,
-                      //     value: _isMandatoryShaaririk == null
-                      //         ? false
-                      //         : _isMandatoryShaaririk,
-                      //     onChanged: (value) {
-                      //       setState(() {
-                      //         _isMandatoryShaaririk = value;
-                      //       });
-                      //     },
-                      //   ),
-                      // ),
-                      // SizedBox(
-                      //   height: 10
-                      // ),
-                      // SizedBox(
-                      //   width: Statics.getDeviceSize(context).width * 0.8,
-                      //   child: CheckboxListTile(
-                      //     contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                      //     controlAffinity: ListTileControlAffinity.leading,
-                      //     title: Text(Statics.getLabel("ConductedAnivaaryaBouddhikKaaryakram"),
-                      //         style: TextStyle(fontSize: 15)),
-                      //     checkColor: Colors.white,
-                      //     activeColor: Colors.purple,
-                      //     value: _isMandatoryBouddhik == null
-                      //         ? false
-                      //         : _isMandatoryBouddhik,
-                      //     onChanged: (value) {
-                      //       setState(() {
-                      //         _isMandatoryBouddhik = value;
-                      //       });
-                      //     },
-                      //   ),
-                      // ),
-                      // SizedBox(
-                      //   height: 10
-                      // ),
-                      SizedBox(
-                        width: Statics.getDeviceSize(context).width * 0.8,
-                        child: CheckboxListTile(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                          controlAffinity: ListTileControlAffinity.leading,
-                          title: Text(Statics.getLabel("ConductedOptionalShaaririkVishay"), style: TextStyle(fontSize: 15)),
-                          checkColor: Colors.white,
-                          activeColor: Colors.purple,
-                          value: _isOptionalShaaririk,
-                          onChanged: (value) {
-                            setState(() {
-                              _isOptionalShaaririk = value!;
-                            });
-                          },
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      SizedBox(
-                        width: Statics.getDeviceSize(context).width * 0.8,
-                        child: CheckboxListTile(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                          controlAffinity: ListTileControlAffinity.leading,
-                          title: Text(Statics.getLabel("ConductedOtherOptionalKaaryakram"), style: TextStyle(fontSize: 15)),
-                          checkColor: Colors.white,
-                          activeColor: Colors.purple,
-                          value: _isOptionalOther,
-                          onChanged: (value) {
-                            setState(() {
-                              _isOptionalOther = value!;
-                            });
-                          },
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                    ],
-                    TextFormField(
-                      textInputAction: TextInputAction.next,
-                      controller: _remarkCtrl,
-                      decoration: InputDecoration(labelText: Statics.getLabel('Remarks')),
-                      keyboardType: TextInputType.text,
-                      onSaved: (value) {
-                        vrutta?.remark = value == "" ? null : value;
-                      },
-                    ),
-                    SizedBox(height: 20),
-                    Center(
-                      child: (_isLoading)
-                          ? CircularProgressIndicator()
-                          : (_isFormViewOnly || widget.viewType == "ViewMenu")
-                              ? Text(Statics.getLabel('canNotMakeChanges'))
-                              : MaterialButton(
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 15,
-                                    vertical: 8,
-                                  ),
-                                  color: Theme.of(context).primaryColor,
-                                  textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
-                                  onPressed: () {
-                                    // return;
-                                    _submit(context);
-                                  },
-                                  child: Text(
-                                    Statics.getLabel('Submit'),
-                                    style: TextStyle(fontSize: 25),
+                          SizedBox(height: 10),
+                          /*TextFormField(
+                            textInputAction: TextInputAction.next,
+                            controller: _anyaPravasiKaryakartaCountCtrl,
+                            decoration: InputDecoration(labelText: Statics.getLabel('AnyaPravasiKaryakartaCount')),
+                            keyboardType: TextInputType.number,
+                            onSaved: (value) {
+                              vrutta?.abhyaagatCount = value == "" ? null : int.parse(value!);
+                            },
+                          ),
+                          SizedBox(height: 10),*/
+                          if (vayogatCode == "Proudh Vyavasaayee")
+                            Column(
+                              children: [
+                                SizedBox(
+                                  width: Statics.getDeviceSize(context).width * 0.8,
+                                  child: CheckboxListTile(
+                                    contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                                    controlAffinity: ListTileControlAffinity.leading,
+                                    title: Text(Statics.getLabel("Minimum5minutesDeepBreathing"), style: TextStyle(fontSize: 15)),
+                                    checkColor: Colors.white,
+                                    activeColor: Colors.purple,
+                                    value: _isDoneDeepBreathing,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _isDoneDeepBreathing = value!;
+                                      });
+                                    },
                                   ),
                                 ),
-                    )
-                  ]),
+                                SizedBox(height: 10),
+                              ],
+                            )
+                          else if (vayogatCode == "Baal")
+                            Column(
+                              children: [
+                                SizedBox(
+                                  width: Statics.getDeviceSize(context).width * 0.8,
+                                  child: CheckboxListTile(
+                                    contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                                    controlAffinity: ListTileControlAffinity.leading,
+                                    title: Text(Statics.getLabel("Minimum5minutesUrdhvapad"), style: TextStyle(fontSize: 15)),
+                                    checkColor: Colors.white,
+                                    activeColor: Colors.purple,
+                                    value: _isDoneUrdhvapad,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _isDoneUrdhvapad = value!;
+                                      });
+                                    },
+                                  ),
+                                ),
+                                SizedBox(height: 10),
+                              ],
+                            )
+                          else
+                            Column(
+                              children: [
+                                SizedBox(
+                                  width: Statics.getDeviceSize(context).width * 0.8,
+                                  child: CheckboxListTile(
+                                    contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                                    controlAffinity: ListTileControlAffinity.leading,
+                                    title: Text(Statics.getLabel("Minimum1minuteDandaPrahaar"), style: TextStyle(fontSize: 15)),
+                                    checkColor: Colors.white,
+                                    activeColor: Colors.purple,
+                                    value: _isDoneDandaPrahaar,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _isDoneDandaPrahaar = value!;
+                                      });
+                                    },
+                                  ),
+                                ),
+                                SizedBox(height: 10),
+                                SizedBox(
+                                  width: Statics.getDeviceSize(context).width * 0.8,
+                                  child: CheckboxListTile(
+                                    contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                                    controlAffinity: ListTileControlAffinity.leading,
+                                    title: Text(Statics.getLabel("Minimum5minutesSooryaNamaskaar"), style: TextStyle(fontSize: 15)),
+                                    checkColor: Colors.white,
+                                    activeColor: Colors.purple,
+                                    value: _isDoneSooryaNamaskaar,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _isDoneSooryaNamaskaar = value!;
+                                      });
+                                    },
+                                  ),
+                                ),
+                                SizedBox(height: 10),
+                                SizedBox(
+                                  width: Statics.getDeviceSize(context).width * 0.8,
+                                  child: CheckboxListTile(
+                                    contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                                    controlAffinity: ListTileControlAffinity.leading,
+                                    title: Text(Statics.getLabel("Minimum5minutesSanchalanAbhyaas"), style: TextStyle(fontSize: 15)),
+                                    checkColor: Colors.white,
+                                    activeColor: Colors.purple,
+                                    value: _isDoneSanchalanAbhyaas,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _isDoneSanchalanAbhyaas = value!;
+                                      });
+                                    },
+                                  ),
+                                ),
+                                SizedBox(height: 10),
+                              ],
+                            ),
+
+                          SizedBox(
+                            width: Statics.getDeviceSize(context).width * 0.8,
+                            child: CheckboxListTile(
+                              contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                              controlAffinity: ListTileControlAffinity.leading,
+                              title: Text(Statics.getLabel("SaanghikGeet"), style: TextStyle(fontSize: 15)),
+                              checkColor: Colors.white,
+                              activeColor: Colors.purple,
+                              value: _isDoneSaanghikGeet,
+                              onChanged: (value) {
+                                setState(() {
+                                  _isDoneSaanghikGeet = value!;
+                                });
+                              },
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          SizedBox(
+                            width: Statics.getDeviceSize(context).width * 0.8,
+                            child: CheckboxListTile(
+                              contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                              controlAffinity: ListTileControlAffinity.leading,
+                              title: Text(Statics.getLabel("AmrutaVachan"), style: TextStyle(fontSize: 15)),
+                              checkColor: Colors.white,
+                              activeColor: Colors.purple,
+                              value: _isDoneAmrutaVachan,
+                              onChanged: (value) {
+                                setState(() {
+                                  _isDoneAmrutaVachan = value!;
+                                });
+                              },
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          SizedBox(
+                            width: Statics.getDeviceSize(context).width * 0.8,
+                            child: CheckboxListTile(
+                              contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                              controlAffinity: ListTileControlAffinity.leading,
+                              title: Text(Statics.getLabel("Subhaashit"), style: TextStyle(fontSize: 15)),
+                              checkColor: Colors.white,
+                              activeColor: Colors.purple,
+                              value: _isDoneSubhaashit,
+                              onChanged: (value) {
+                                setState(() {
+                                  _isDoneSubhaashit = value!;
+                                });
+                              },
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          SizedBox(
+                            width: Statics.getDeviceSize(context).width * 0.8,
+                            child: CheckboxListTile(
+                              contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                              controlAffinity: ListTileControlAffinity.leading,
+                              title: Text(Statics.getLabel("BoodhKathaOnceWeek"), style: TextStyle(fontSize: 15)),
+                              checkColor: Colors.white,
+                              activeColor: Colors.purple,
+                              value: _isDoneBoodhKatha,
+                              onChanged: (value) {
+                                setState(() {
+                                  _isDoneBoodhKatha = value!;
+                                });
+                              },
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          SizedBox(
+                            width: Statics.getDeviceSize(context).width * 0.8,
+                            child: CheckboxListTile(
+                              contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                              controlAffinity: ListTileControlAffinity.leading,
+                              title: Text(Statics.getLabel("BoudhikDays"), style: TextStyle(fontSize: 15)),
+                              checkColor: Colors.white,
+                              activeColor: Colors.purple,
+                              value: _isDoneBoudhikDays,
+                              onChanged: (value) {
+                                setState(() {
+                                  _isDoneBoudhikDays = value!;
+                                });
+                              },
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          if (_isDoneBoudhikDays) ...[
+                            buildDropdownField(
+                              label: Statics.getLabel('BoudhikDays'),
+                              value: _selectedBoudhikDaysId,
+                              items: _boudhikDaysList!
+                                  .map((bg) => DropdownMenuItem(
+                                        value: bg?.staticID.toString(),
+                                        child: Text(bg?.codeForDisplay ?? "--"),
+                                      ))
+                                  .toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedBoudhikDaysId = value;
+                                });
+                                print(_selectedBoudhikDaysId);
+                                print(_boudhikDaysList.firstWhere((e) => e?.codeForDisplay == Statics.getLabel("anyaOption"))?.staticID);
+                                print(_selectedBoudhikDaysId == _boudhikDaysList.firstWhere((e) => e?.codeForDisplay == Statics.getLabel("anyaOption"))?.staticID.toString());
+                              },
+                              validator: (val) {
+                                if (val == null || val.isEmpty) return Statics.getLabel("optionSelectionRequired");
+                                return null;
+                              },
+                            ),
+                            SizedBox(height: 10),
+                            if (_selectedBoudhikDaysId == _boudhikDaysList.firstWhere((e) => e?.codeForDisplay == Statics.getLabel("anyaOption"))?.staticID.toString())
+                              TextFormField(
+                                controller: _anyaBoudhikDaysCtrl,
+                                textInputAction: TextInputAction.next,
+                                onChanged: (value) => setState(() {}),
+                                decoration: InputDecoration(
+                                  labelText: Statics.getLabel("anyaOption"),
+                                  labelStyle: const TextStyle(color: Colors.black, fontSize: 14),
+                                  // fillColor: Colors.grey.shade50,
+                                  // filled: true,
+                                  // border: OutlineInputBorder(
+                                  //   borderRadius: BorderRadius.circular(8),
+                                  //   borderSide: BorderSide.none, // Hide default border
+                                  // ),
+                                  contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12), // Align left of field
+                                ),
+                                style: const TextStyle(color: Colors.black, fontSize: 14),
+                                // Original fields looked greyed out
+                                validator: (val) {
+                                  if (val == null || val.isEmpty) return Statics.getLabel("otherInfoValidation");
+                                  return null;
+                                },
+                              ),
+                          ],
+                          SizedBox(
+                            width: Statics.getDeviceSize(context).width * 0.8,
+                            child: CheckboxListTile(
+                              contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                              controlAffinity: ListTileControlAffinity.leading,
+                              title: Text(Statics.getLabel("SewaDays"), style: TextStyle(fontSize: 15)),
+                              checkColor: Colors.white,
+                              activeColor: Colors.purple,
+                              value: _isDoneSewaDays,
+                              onChanged: (value) {
+                                setState(() {
+                                  _isDoneSewaDays = value!;
+                                });
+                              },
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          if (_isDoneSewaDays) ...[
+                            GroupedMultiSelectField<int>(
+                              title: Statics.getLabel('SewaDays'),
+                              buttonText: Statics.getLabel('SewaDays'),
+                              confirmText: Statics.getLabel('Submit'),
+                              cancelText: Statics.getLabel('clear'),
+                              groupedItems: _sewaDaysGroup,
+                              initialValue: _selectedSewaDaysList,
+                              onConfirm: (values) => setState(() => _selectedSewaDaysList = values),
+                            ),
+                            SizedBox(height: 10),
+                          ],
+                          // SizedBox(
+                          //   width: Statics.getDeviceSize(context).width * 0.8,
+                          //   child: CheckboxListTile(
+                          //     contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                          //     controlAffinity: ListTileControlAffinity.leading,
+                          //     title: Text(Statics.getLabel("ConductedAnivaaryaShaaririkKaaryakram"),
+                          //         style: TextStyle(fontSize: 15)),
+                          //     checkColor: Colors.white,
+                          //     activeColor: Colors.purple,
+                          //     value: _isMandatoryShaaririk == null
+                          //         ? false
+                          //         : _isMandatoryShaaririk,
+                          //     onChanged: (value) {
+                          //       setState(() {
+                          //         _isMandatoryShaaririk = value;
+                          //       });
+                          //     },
+                          //   ),
+                          // ),
+                          // SizedBox(
+                          //   height: 10
+                          // ),
+                          // SizedBox(
+                          //   width: Statics.getDeviceSize(context).width * 0.8,
+                          //   child: CheckboxListTile(
+                          //     contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                          //     controlAffinity: ListTileControlAffinity.leading,
+                          //     title: Text(Statics.getLabel("ConductedAnivaaryaBouddhikKaaryakram"),
+                          //         style: TextStyle(fontSize: 15)),
+                          //     checkColor: Colors.white,
+                          //     activeColor: Colors.purple,
+                          //     value: _isMandatoryBouddhik == null
+                          //         ? false
+                          //         : _isMandatoryBouddhik,
+                          //     onChanged: (value) {
+                          //       setState(() {
+                          //         _isMandatoryBouddhik = value;
+                          //       });
+                          //     },
+                          //   ),
+                          // ),
+                          // SizedBox(
+                          //   height: 10
+                          // ),
+                          SizedBox(
+                            width: Statics.getDeviceSize(context).width * 0.8,
+                            child: CheckboxListTile(
+                              contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                              controlAffinity: ListTileControlAffinity.leading,
+                              title: Text(Statics.getLabel("ConductedOptionalShaaririkVishay"), style: TextStyle(fontSize: 15)),
+                              checkColor: Colors.white,
+                              activeColor: Colors.purple,
+                              value: _isOptionalShaaririk,
+                              onChanged: (value) {
+                                setState(() {
+                                  _isOptionalShaaririk = value!;
+                                });
+                              },
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          SizedBox(
+                            width: Statics.getDeviceSize(context).width * 0.8,
+                            child: CheckboxListTile(
+                              contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                              controlAffinity: ListTileControlAffinity.leading,
+                              title: Text(Statics.getLabel("ConductedOtherOptionalKaaryakram"), style: TextStyle(fontSize: 15)),
+                              checkColor: Colors.white,
+                              activeColor: Colors.purple,
+                              value: _isOptionalOther,
+                              onChanged: (value) {
+                                setState(() {
+                                  _isOptionalOther = value!;
+                                });
+                              },
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                        ],
+                        TextFormField(
+                          textInputAction: TextInputAction.next,
+                          controller: _remarkCtrl,
+                          decoration: InputDecoration(labelText: Statics.getLabel('Remarks')),
+                          keyboardType: TextInputType.text,
+                          onSaved: (value) {
+                            vrutta?.remark = value == "" ? null : value;
+                          },
+                        ),
+                        SizedBox(height: 20),
+                        Center(
+                          child: (_isLoading)
+                              ? CircularProgressIndicator()
+                              : (_isFormViewOnly || widget.viewType == "ViewMenu")
+                                  ? Text(Statics.getLabel('canNotMakeChanges'))
+                                  : MaterialButton(
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 15,
+                                        vertical: 8,
+                                      ),
+                                      color: Theme.of(context).primaryColor,
+                                      textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+                                      onPressed: () {
+                                        // return;
+                                        _submit(context);
+                                      },
+                                      child: Text(
+                                        Statics.getLabel('Submit'),
+                                        style: TextStyle(fontSize: 25),
+                                      ),
+                                    ),
+                        )
+                      ]),
+                    ),
+                  ],
                 ),
               ),
             ),

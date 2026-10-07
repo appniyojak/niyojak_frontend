@@ -74,6 +74,7 @@ class OfflineDataApiRepo {
     bool Function()? skipLocalFallback,
     BuildContext? context,
     bool fallbackOnException = true,
+    bool showInternetToast = true,
   }) async {
     final showLoader = context != null;
     if (showLoader) showLoaderDialog(context);
@@ -83,6 +84,7 @@ class OfflineDataApiRepo {
         fromLocal: fromLocal,
         skipLocalFallback: skipLocalFallback ?? () => levelId > 7 && levelId != 13,
         fallbackOnException: fallbackOnException,
+        showInternetToast: showInternetToast,
       );
     } catch (e) {
       log("Exception at getList >>>>>>>>> $e");
@@ -100,6 +102,7 @@ class OfflineDataApiRepo {
     bool Function()? skipLocalFallback,
     BuildContext? context,
     bool fallbackOnException = true,
+    bool showInternetToast = true,
   }) async {
     final showLoader = context != null;
     if (showLoader) showLoaderDialog(context);
@@ -109,6 +112,7 @@ class OfflineDataApiRepo {
         fromLocal: fromLocal,
         skipLocalFallback: skipLocalFallback ?? () => levelId > 7 && levelId != 13,
         fallbackOnException: fallbackOnException,
+        showInternetToast: showInternetToast,
       );
     } catch (e) {
       log("Exception at getById >>>>>>>>> $e");
@@ -135,6 +139,7 @@ class OfflineDataApiRepo {
     String discriminatorColumn = 'tablename',
     String? where,
     List<Object?>? whereArgs,
+    bool showInternetToast = true,
   }) async {
     assert(keyColumns.length == keyValues.length, 'keyColumns and keyValues must match in length');
     assert((where == null) == (whereArgs == null), 'where and whereArgs must both be provided or both omitted');
@@ -145,6 +150,7 @@ class OfflineDataApiRepo {
     log("loadWithFallback function called >>>>>>> ");
 
     final resolved = await _fetch<DraftRow>(
+      showInternetToast: showInternetToast,
       apiCall: () async {
         final apiResult = await fetchFromApi();
         return apiResult == null ? null : (apiResult, DraftRecordSource.masterOnline);
@@ -243,6 +249,7 @@ class OfflineDataApiRepo {
     Future<void> Function(R data)? onApiSuccess,
     bool Function()? skipLocalFallback,
     bool fallbackOnException = true,
+    bool showInternetToast = true,
   }) async {
     Future<R?> local() async {
       if (skipLocalFallback?.call() ?? false) return null;
@@ -250,7 +257,7 @@ class OfflineDataApiRepo {
       return await fromLocal();
     }
 
-    final connected = await isInternetConnected();
+    final connected = await isInternetConnected(showToast: showInternetToast);
     if (connected != true) {
       log("offline — going straight to local");
       return local();
@@ -264,8 +271,8 @@ class OfflineDataApiRepo {
       }
       log("api call returned null — falling back to local");
       return await local();
-    } catch (e) {
-      log("Exception at _fetch >>>>>>>>> $e");
+    } catch (e, st) {
+      log("Exception at _fetch >>>>>>>>> $e", error: e, stackTrace: st);
       return fallbackOnException ? await local() : null;
     }
   }
