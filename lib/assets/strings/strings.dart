@@ -2379,6 +2379,7 @@ Map<String, String> resEnglish = {
   'nopendingdrafts': "No pending drafts",
   'cannontsyncdrafts': "No internet — cannot sync drafts",
   'failedtosync': "Sync failed — try again later",
+  'conflictedSyncData': "{length} Vruttas already exist online. Please review and modify your changes accordingly.",
 };
 
 ///1,584
@@ -4774,6 +4775,7 @@ Map<String, String> resMarathi = {
   'nopendingdrafts': "कोणतेही ड्राफ्ट उरलेले नाहीत",
   'cannontsyncdrafts': "इंटरनेट उपलब्ध नाही — ड्राफ्ट सिंक करता येणार नाहीत",
   'failedtosync': "सिंक अयशस्वी — कृपया नंतर पुन्हा प्रयत्न करा",
+  'conflictedSyncData': "{length} वृत्त आधीपासूनच ऑनलाइन उपलब्ध आहेत. कृपया केलेल्या बदलांचे पुनरावलोकन करून त्यानुसार आवश्यक ते बदल करावे.",
 };
 
 ///1,583
@@ -7166,4 +7168,5 @@ Map<String, String> resHindi = {
   'nopendingdrafts': "कोई ड्राफ्ट बाकी नहीं हैं",
   'cannontsyncdrafts': "इंटरनेट उपलब्ध नहीं है — ड्राफ्ट सिंक नहीं किए जा सकते",
   'failedtosync': "सिंक अयशस्वी — कृपया बाद में पुनः प्रयास करें",
+  'conflictedSyncData': "{length} वृत्त पहले से ही ऑनलाइन मौजूद हैं। कृपया अपने किए गए परिवर्तनों की समीक्षा करें और तदनुसार आवश्यक संशोधन करें।",
 };

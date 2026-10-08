@@ -594,10 +594,12 @@ String getLabel(String key, {bool returnKey = false}) {
 }
 
 Size getDeviceSize(BuildContext context) {
-  return MediaQuery.of(
+  return MediaQuery
+      .of(
     context,
     //nullOk: true,
-  ).size;
+  )
+      .size;
 }
 
 Future<bool> isInternetConnected({bool showToast = true}) async {
@@ -627,107 +629,117 @@ Future<bool> isInternetConnected({bool showToast = true}) async {
 void showErrorDialog(BuildContext context, String message) {
   showDialog(
     context: context,
-    builder: (ctx) => AlertDialog(
-      title: Text(getLabel('errorOccurred')),
-      content: Text(message),
-      actions: <Widget>[
-        TextButton(
-          child: Text(getLabel('okay')),
-          onPressed: () {
-            Navigator.of(ctx).pop();
-          },
+    builder: (ctx) =>
+        AlertDialog(
+          title: Text(getLabel('errorOccurred')),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: Text(getLabel('okay')),
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+            ),
+          ],
         ),
-      ],
-    ),
   );
 }
 
 void showConfirmationBox(BuildContext context, String message, String action, String val) {
   showDialog(
     context: context,
-    builder: (ctx) => AlertDialog(
-      title: Text(Statics.getLabel('AskConfirmation')),
-      content: Text(message),
-      actions: <Widget>[
-        TextButton(
-          child: Text(Statics.getLabel('ConfirmationYes')),
-          onPressed: () async {
-            if (action == "ResetPassword") {
-              var data = await resetPassword(val);
-              if (data == "Password Reset Successfully")
-                showToast(getLabel('PasswordResetSuccessfully'));
-              else
-                showToast(getLabel('CouldNotResetPassword'));
-            } else if (action == "DeleteMember") {
-              var data = await deleteSoochiMembers(val);
-              if (data == "Soochi Member Deleted Successfully ")
-                showToast(getLabel('SoochiMemberDeletedSuccessfully'));
-              else
-                showToast(getLabel('CouldnotDeleteSoochiMember'));
-            }
-            Navigator.of(ctx).pop();
-          },
+    builder: (ctx) =>
+        AlertDialog(
+          title: Text(Statics.getLabel('AskConfirmation')),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: Text(Statics.getLabel('ConfirmationYes')),
+              onPressed: () async {
+                if (action == "ResetPassword") {
+                  var data = await resetPassword(val);
+                  if (data == "Password Reset Successfully")
+                    showToast(getLabel('PasswordResetSuccessfully'));
+                  else
+                    showToast(getLabel('CouldNotResetPassword'));
+                } else if (action == "DeleteMember") {
+                  var data = await deleteSoochiMembers(val);
+                  if (data == "Soochi Member Deleted Successfully ")
+                    showToast(getLabel('SoochiMemberDeletedSuccessfully'));
+                  else
+                    showToast(getLabel('CouldnotDeleteSoochiMember'));
+                }
+                Navigator.of(ctx).pop();
+              },
+            ),
+            TextButton(
+              child: Text(Statics.getLabel('ConfirmationNo')),
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+            ),
+          ],
         ),
-        TextButton(
-          child: Text(Statics.getLabel('ConfirmationNo')),
-          onPressed: () {
-            Navigator.of(ctx).pop();
-          },
-        ),
-      ],
-    ),
   );
 }
 
 void showMessageDialog(BuildContext context, String message, {String title = ""}) {
   showDialog(
     context: context,
-    builder: (ctx) => AlertDialog(
-      title: Text(title == "" ? getLabel('alert') : title),
-      content: Text(message),
-      actions: <Widget>[
-        TextButton(
-          child: Text(getLabel('okay')),
-          onPressed: () {
-            Navigator.of(ctx).pop();
-          },
+    builder: (ctx) =>
+        AlertDialog(
+          title: Text(title == "" ? getLabel('alert') : title),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: Text(getLabel('okay')),
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+            ),
+          ],
         ),
-      ],
-    ),
   );
 }
 
 void showHelpDialog(BuildContext context, String message, String title, String videoLabel, String videoLink) {
   showDialog(
     context: context,
-    builder: (ctx) => AlertDialog(
-      title: Text(getLabel(title)),
-      content: SingleChildScrollView(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Html(data: message)])),
-      actions: <Widget>[
-        if (videoLabel != '')
-          TextButton(
-            child: Text(videoLabel),
-            onPressed: () {
-              //launch('https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4');
-              //launch('https://drive.google.com/file/d/16bQa5O280mnBxT3w1PXXIpwIrdsWIx62/view?ts=633ea5fd');
-              launch(videoLink);
-              //launch(baseUrl + '/Images/1Hindi.mp4');
-            },
-          ),
-        TextButton(
-          child: Text(getLabel('okay')),
-          onPressed: () {
-            Navigator.of(ctx).pop();
-          },
+    builder: (ctx) =>
+        AlertDialog(
+          title: Text(getLabel(title)),
+          content: SingleChildScrollView(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Html(data: message)])),
+          actions: <Widget>[
+            if (videoLabel != '')
+              TextButton(
+                child: Text(videoLabel),
+                onPressed: () {
+                  //launch('https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4');
+                  //launch('https://drive.google.com/file/d/16bQa5O280mnBxT3w1PXXIpwIrdsWIx62/view?ts=633ea5fd');
+                  launch(videoLink);
+                  //launch(baseUrl + '/Images/1Hindi.mp4');
+                },
+              ),
+            TextButton(
+              child: Text(getLabel('okay')),
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+            ),
+          ],
         ),
-      ],
-    ),
   );
 }
 
 void showToast(var message, {Toast? toastLength}) {
   Fluttertoast.showToast(
-      msg: message, toastLength: toastLength ?? Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM, timeInSecForIosWeb: 1, backgroundColor: Colors.black, textColor: Colors.white, fontSize: 16.0);
+      msg: message,
+      toastLength: toastLength ?? Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.black,
+      textColor: Colors.white,
+      fontSize: 16.0);
 }
 
 Future<void> populateUserDetailsMap() async {
@@ -1070,26 +1082,26 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForVasti(String levelI
       add +
       (parentType != ""
           ? parentType == "Praant"
-              ? " AND ParentPraantID=" + parentID
-              : parentType == "Mahaanagar"
-                  ? " AND ParentMahaanagarID=" + parentID
-                  : parentType == "Vibhaag"
-                      ? " AND COALESCE(ParentVibhaagID,0)=" + parentID
-                      : parentType == "Bhaag"
-                          ? " AND ParentBhaagID=" + parentID
-                          : parentType == "Shahar"
-                              ? " AND ParentShaharID=" + parentID
-                              : parentType == "Nagar"
-                                  ? " AND ParentNagarID=" + parentID
-                                  : parentType == "Upnagar"
-                                      ? " AND ParentUpaNagarID=" + parentID
-                                      : parentType == "Mandal"
-                                          ? " AND ParentMandalID=" + parentID
-                                          : parentType == "Graam"
-                                              ? " AND ParentGraamID=" + parentID
-                                              : parentType == "Vasti"
-                                                  ? " AND ParentVastiID=" + parentID
-                                                  : ""
+          ? " AND ParentPraantID=" + parentID
+          : parentType == "Mahaanagar"
+          ? " AND ParentMahaanagarID=" + parentID
+          : parentType == "Vibhaag"
+          ? " AND COALESCE(ParentVibhaagID,0)=" + parentID
+          : parentType == "Bhaag"
+          ? " AND ParentBhaagID=" + parentID
+          : parentType == "Shahar"
+          ? " AND ParentShaharID=" + parentID
+          : parentType == "Nagar"
+          ? " AND ParentNagarID=" + parentID
+          : parentType == "Upnagar"
+          ? " AND ParentUpaNagarID=" + parentID
+          : parentType == "Mandal"
+          ? " AND ParentMandalID=" + parentID
+          : parentType == "Graam"
+          ? " AND ParentGraamID=" + parentID
+          : parentType == "Vasti"
+          ? " AND ParentVastiID=" + parentID
+          : ""
           : "") +
       (pattern == "" ? "" : " AND GeoUnitMaster.GeoUnitName LIKE \'$pattern%\'") +
       " ORDER BY GeoUnitMaster.DisplaySequence;";
@@ -1152,26 +1164,26 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForMandal(String level
       add +
       (parentType != ""
           ? parentType == "Praant"
-              ? " AND ParentPraantID=" + parentID
-              : parentType == "Mahaanagar"
-                  ? " AND ParentMahaanagarID=" + parentID
-                  : parentType == "Vibhaag"
-                      ? " AND COALESCE(ParentVibhaagID,0)=" + parentID
-                      : parentType == "Bhaag"
-                          ? " AND ParentBhaagID=" + parentID
-                          : parentType == "Shahar"
-                              ? " AND ParentShaharID=" + parentID
-                              : parentType == "Nagar"
-                                  ? " AND ParentNagarID=" + parentID
-                                  : parentType == "Upnagar"
-                                      ? " AND ParentUpaNagarID=" + parentID
-                                      : parentType == "Mandal"
-                                          ? " AND ParentMandalID=" + parentID
-                                          : parentType == "Graam"
-                                              ? " AND ParentGraamID=" + parentID
-                                              : parentType == "Vasti"
-                                                  ? " AND ParentVastiID=" + parentID
-                                                  : ""
+          ? " AND ParentPraantID=" + parentID
+          : parentType == "Mahaanagar"
+          ? " AND ParentMahaanagarID=" + parentID
+          : parentType == "Vibhaag"
+          ? " AND COALESCE(ParentVibhaagID,0)=" + parentID
+          : parentType == "Bhaag"
+          ? " AND ParentBhaagID=" + parentID
+          : parentType == "Shahar"
+          ? " AND ParentShaharID=" + parentID
+          : parentType == "Nagar"
+          ? " AND ParentNagarID=" + parentID
+          : parentType == "Upnagar"
+          ? " AND ParentUpaNagarID=" + parentID
+          : parentType == "Mandal"
+          ? " AND ParentMandalID=" + parentID
+          : parentType == "Graam"
+          ? " AND ParentGraamID=" + parentID
+          : parentType == "Vasti"
+          ? " AND ParentVastiID=" + parentID
+          : ""
           : "") +
       (pattern == "" ? "" : " AND GeoUnitMaster.GeoUnitName LIKE \'$pattern%\'") +
       " ORDER BY GeoUnitMaster.DisplaySequence;";
@@ -1232,26 +1244,26 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForUpnagar(String leve
       add +
       (parentType != ""
           ? parentType == "Praant"
-              ? " AND ParentPraantID=" + parentID
-              : parentType == "Mahaanagar"
-                  ? " AND ParentMahaanagarID=" + parentID
-                  : parentType == "Vibhaag"
-                      ? " AND COALESCE(ParentVibhaagID,0)=" + parentID
-                      : parentType == "Bhaag"
-                          ? " AND ParentBhaagID=" + parentID
-                          : parentType == "Shahar"
-                              ? " AND ParentShaharID=" + parentID
-                              : parentType == "Nagar"
-                                  ? " AND ParentNagarID=" + parentID
-                                  : parentType == "Upnagar"
-                                      ? " AND ParentUpaNagarID=" + parentID
-                                      : parentType == "Mandal"
-                                          ? " AND ParentMandalID=" + parentID
-                                          : parentType == "Graam"
-                                              ? " AND ParentGraamID=" + parentID
-                                              : parentType == "Vasti"
-                                                  ? " AND ParentVastiID=" + parentID
-                                                  : ""
+          ? " AND ParentPraantID=" + parentID
+          : parentType == "Mahaanagar"
+          ? " AND ParentMahaanagarID=" + parentID
+          : parentType == "Vibhaag"
+          ? " AND COALESCE(ParentVibhaagID,0)=" + parentID
+          : parentType == "Bhaag"
+          ? " AND ParentBhaagID=" + parentID
+          : parentType == "Shahar"
+          ? " AND ParentShaharID=" + parentID
+          : parentType == "Nagar"
+          ? " AND ParentNagarID=" + parentID
+          : parentType == "Upnagar"
+          ? " AND ParentUpaNagarID=" + parentID
+          : parentType == "Mandal"
+          ? " AND ParentMandalID=" + parentID
+          : parentType == "Graam"
+          ? " AND ParentGraamID=" + parentID
+          : parentType == "Vasti"
+          ? " AND ParentVastiID=" + parentID
+          : ""
           : "") +
       (pattern == "" ? "" : " AND GeoUnitMaster.GeoUnitName LIKE \'$pattern%\'") +
       " ORDER BY GeoUnitMaster.DisplaySequence;";
@@ -1306,26 +1318,26 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParent(String levelID, Strin
       (isSankalpit ? " AND issankalpit=0" : "") +
       (parentType != ""
           ? parentType == "Praant"
-              ? " AND ParentPraantID=" + parentID
-              : parentType == "Mahaanagar"
-                  ? " AND ParentMahaanagarID=" + parentID
-                  : parentType == "Vibhaag"
-                      ? " AND ParentVibhaagID=" + parentID
-                      : parentType == "Bhaag"
-                          ? " AND ParentBhaagID=" + parentID
-                          : parentType == "Shahar"
-                              ? " AND ParentShaharID=" + parentID
-                              : parentType == "Nagar"
-                                  ? " AND ParentNagarID=" + parentID
-                                  : parentType == "Upnagar"
-                                      ? " AND ParentUpaNagarID=" + parentID
-                                      : parentType == "Mandal"
-                                          ? " AND ParentMandalID=" + parentID
-                                          : parentType == "Graam"
-                                              ? " AND ParentGraamID=" + parentID
-                                              : parentType == "Vasti"
-                                                  ? " AND ParentVastiID=" + parentID
-                                                  : ""
+          ? " AND ParentPraantID=" + parentID
+          : parentType == "Mahaanagar"
+          ? " AND ParentMahaanagarID=" + parentID
+          : parentType == "Vibhaag"
+          ? " AND ParentVibhaagID=" + parentID
+          : parentType == "Bhaag"
+          ? " AND ParentBhaagID=" + parentID
+          : parentType == "Shahar"
+          ? " AND ParentShaharID=" + parentID
+          : parentType == "Nagar"
+          ? " AND ParentNagarID=" + parentID
+          : parentType == "Upnagar"
+          ? " AND ParentUpaNagarID=" + parentID
+          : parentType == "Mandal"
+          ? " AND ParentMandalID=" + parentID
+          : parentType == "Graam"
+          ? " AND ParentGraamID=" + parentID
+          : parentType == "Vasti"
+          ? " AND ParentVastiID=" + parentID
+          : ""
           : "") +
       (pattern == "" ? "" : " AND ${isAbhiyaan ? "AbhiyaanGeoUnitMaster" : "GeoUnitMaster"}.GeoUnitName LIKE \'$pattern%\'") +
       " ORDER BY ${isAbhiyaan ? "AbhiyaanGeoUnitMaster" : "GeoUnitMaster"}.DisplaySequence;";
@@ -1404,7 +1416,7 @@ Future<GeoUnitMasterBAL?> getGeoUnitsByID(String geoUnitID) async {
       result[0]['ParentGraamID'],
       result[0]['ParentUpaNagarID'],
       result[0]['issankalpit'],
-      result[0]['canEdit'],
+      result[0]['canEdit'] ?? false,
       result[0]['GeoUnitNameEnglish'],
       result[0]['GeoUnitNameMarathi'],
       result[0]['GeoUnitNameHindi'],
@@ -1430,7 +1442,7 @@ Future<GeoUnitMasterBAL?> getLocalShaakhaaByID(String geoUnitID) async {
       result[0]['PraantID'],
       result[0]['LevelID'],
       result[0]['isnew'] ?? 0,
-      result[0]['anya'] ?? 0,
+      result[0]['isanya'] ?? result[0]['anya'] ?? 0,
       result[0]['GeoUnitName'],
       result[0]['FullName'],
       result[0]['LevelName'],
@@ -1470,7 +1482,7 @@ Future<int> getTableLength(String tableName) async {
   return count;
 }
 
-Future<GeoUnitMasterBAL?> getLocalVistarShaakhaaByID(String geoUnitID) async {
+Future<GeoUnitMasterBAL?> getLocalVistarShaakhaaByIDGeoMaster(String geoUnitID) async {
   var result = await DatabaseHelper.getData(
     " Select * from VistarShaakhaListMaster WHERE mapShaakhaaID=$geoUnitID;",
   );
@@ -1510,6 +1522,21 @@ Future<GeoUnitMasterBAL?> getLocalVistarShaakhaaByID(String geoUnitID) async {
       result[0]['GeoUnitNameHindi'],
     );
     return _geounit;
+  } else {
+    return null;
+  }
+}
+
+Future<ShaakhaaList?> getLocalVistarShaakhaaByID(String geoUnitID) async {
+  var result = await DatabaseHelper.getData(
+    " Select * from VistarShaakhaListMaster WHERE mapShaakhaaID=$geoUnitID;",
+  );
+
+  log("GEO QUERY EXEC getLocalVistarShaakhaaByID >>>>>>>>>>>>>>> ${geoUnitID}\n ${result.length}\n ${result.firstOrNull}");
+
+  if (result.isNotEmpty) {
+    final _data = ShaakhaaList.fromJson(result.first);
+    return _data;
   } else {
     return null;
   }
@@ -1663,13 +1690,17 @@ Future<List<ShaakhaaList>?> getShaakhaaListData(Map<String, dynamic> inputJson) 
     url: urlGetShaakhaasForAppGrid,
     body: inputJson,
     showInternetToast: false,
-    parse: (json) => ShaakhaaVistarListRespModel.fromJson(json).shaakhaaList ?? [],
-    fromLocal: () => DatabaseHelper.getAllOfflineData<ShaakhaaList>(
-      tableName: 'ShaakhaListMaster',
-      fromMap: ShaakhaaList.fromJson,
-      where: whereCnd,
-      whereArgs: whereArgs,
-    ),
+    parse: (json) =>
+    ShaakhaaVistarListRespModel
+        .fromJson(json)
+        .shaakhaaList ?? [],
+    fromLocal: () =>
+        DatabaseHelper.getAllOfflineData<ShaakhaaList>(
+          tableName: 'ShaakhaListMaster',
+          fromMap: ShaakhaaList.fromJson,
+          where: whereCnd,
+          whereArgs: whereArgs,
+        ),
   );
 }
 
@@ -1680,7 +1711,10 @@ Future<ShaakhaaMasterBAL?> getShaakhaaByID(String shaakhaaID) async {
     url: urlGetShaakhaaDetailsForApp,
     body: {"ShaakhaaID": shaakhaaID},
     showInternetToast: false,
-    parse: (json) => CommonRespModel.fromJson(json).shaakhaaItem,
+    parse: (json) =>
+    CommonRespModel
+        .fromJson(json)
+        .shaakhaaItem,
     fromLocal: () async {
       final _res = await DatabaseHelper.getAllOfflineData<ShaakhaaMasterBAL>(
         tableName: 'ShaakhaListMaster',
@@ -1739,7 +1773,15 @@ Future<dynamic> getSoochiDetails(var soochiID) async {
 
   var data = responseBody['SoochiItem'];
 
-  return SoochiMasterBAL(data["SoochiID"], data["PraantID"], data["SoochiName"], data["OwnerSwayamsevakID"], data["OwnerSwayamsevakFullName"], data["StatusID"], data["StatusCode"], data["Remark"]);
+  return SoochiMasterBAL(
+      data["SoochiID"],
+      data["PraantID"],
+      data["SoochiName"],
+      data["OwnerSwayamsevakID"],
+      data["OwnerSwayamsevakFullName"],
+      data["StatusID"],
+      data["StatusCode"],
+      data["Remark"]);
 }
 
 Future<List<dynamic>> getSoochiMembers(var soochiID) async {
@@ -2076,11 +2118,25 @@ Future<dynamic> refreshDashboardData(String? userID, String? targetGeoUnitID) as
   if (message == "Home Screen Data Returned") {
     lstdashboardSadyaSthitiData = [];
     if (listShaakhaaCountByVayogat.length > 0) {
-      int shaakhaa = 0, mandali = 0, maasik = 0, saaptaa = 0, sankalpitShaakhaa = 0, sankalpitSaaptaa = 0;
-      int sankalpitMaasikMilanCount = 0, sankalpitSanghaMandaliCount = 0, registersanghMandali = 0, registermasikMilan = 0;
+      int shaakhaa = 0,
+          mandali = 0,
+          maasik = 0,
+          saaptaa = 0,
+          sankalpitShaakhaa = 0,
+          sankalpitSaaptaa = 0;
+      int sankalpitMaasikMilanCount = 0,
+          sankalpitSanghaMandaliCount = 0,
+          registersanghMandali = 0,
+          registermasikMilan = 0;
 
-      int shaakhaaTotal = 0, mandaliTotal = 0, maasikTotal = 0, saaptaaTotal = 0, sankalpitMaasikMilanCountTotal = 0, sankalpitSanghaMandaliCountTotal = 0;
-      int sankalpitShaakhaaTotal = 0, sankalpitSaaptaaTotal = 0;
+      int shaakhaaTotal = 0,
+          mandaliTotal = 0,
+          maasikTotal = 0,
+          saaptaaTotal = 0,
+          sankalpitMaasikMilanCountTotal = 0,
+          sankalpitSanghaMandaliCountTotal = 0;
+      int sankalpitShaakhaaTotal = 0,
+          sankalpitSaaptaaTotal = 0;
       for (var data in listShaakhaaCountByVayogat) {
         shaakhaa = data['ShaakhaaCount'] == null ? 0 : data['ShaakhaaCount'];
         shaakhaaTotal = shaakhaaTotal + shaakhaa;
@@ -2140,7 +2196,8 @@ Future<dynamic> refreshDashboardData(String? userID, String? targetGeoUnitID) as
 
     lstGatividhiKaaryakartaa = [];
     if (listKaaryakartaaCountByGatividhi.length > 0) {
-      int kartaaCount = 0, totalCount = 0;
+      int kartaaCount = 0,
+          totalCount = 0;
       for (var data in listKaaryakartaaCountByGatividhi) {
         kartaaCount = (data['KaaryakartaaCount'] == null ? 0 : data['KaaryakartaaCount']);
         totalCount = totalCount + kartaaCount;
@@ -2152,7 +2209,8 @@ Future<dynamic> refreshDashboardData(String? userID, String? targetGeoUnitID) as
 
     lstAayaamKaaryakartaa = [];
     if (listKaaryakartaaCountByAayaam.length > 0) {
-      int kartaaCount = 0, totalCount = 0;
+      int kartaaCount = 0,
+          totalCount = 0;
       for (var data in listKaaryakartaaCountByAayaam) {
         kartaaCount = (data['KaaryakartaaCount'] == null ? 0 : data['KaaryakartaaCount']);
         totalCount = totalCount + kartaaCount;
@@ -2164,7 +2222,8 @@ Future<dynamic> refreshDashboardData(String? userID, String? targetGeoUnitID) as
 
     lstPreritKaaryakartaa = [];
     if (listKaaryakartaaCountByPreritSansthaa.length > 0) {
-      int kartaaCount = 0, totalCount = 0;
+      int kartaaCount = 0,
+          totalCount = 0;
       for (var data in listKaaryakartaaCountByPreritSansthaa) {
         kartaaCount = (data['KaaryakartaaCount'] == null ? 0 : data['KaaryakartaaCount']);
         totalCount = totalCount + kartaaCount;
@@ -2192,7 +2251,8 @@ Future<dynamic> refreshDashboardData(String? userID, String? targetGeoUnitID) as
 
     lstSocialOrgKaaryakartaa = [];
     if (listKaaryakartaaCountBySocialOrg.length > 0) {
-      int kartaaCount = 0, totalCount = 0;
+      int kartaaCount = 0,
+          totalCount = 0;
       for (var data in listKaaryakartaaCountBySocialOrg) {
         kartaaCount = (data['KaaryakartaaCount'] == null ? 0 : data['KaaryakartaaCount']);
         totalCount = totalCount + kartaaCount;
@@ -2220,7 +2280,8 @@ Future<dynamic> refreshDashboardData(String? userID, String? targetGeoUnitID) as
 
     lstStudentCategory = [];
     if (listStudentCountByCategory.length > 0) {
-      int studentCount = 0, totalStudent = 0;
+      int studentCount = 0,
+          totalStudent = 0;
       for (var data in listStudentCountByCategory) {
         studentCount = (data['CountByStudentCategory'] == null ? 0 : data['CountByStudentCategory']);
         totalStudent = totalStudent + studentCount;
@@ -2232,7 +2293,8 @@ Future<dynamic> refreshDashboardData(String? userID, String? targetGeoUnitID) as
 
     lstVyavasaayeeCategory = [];
     if (listVyavasaayeeCountByCategory.length > 0) {
-      int vyavasaayeeCount = 0, totalVyavasaayee = 0;
+      int vyavasaayeeCount = 0,
+          totalVyavasaayee = 0;
       for (var data in listVyavasaayeeCountByCategory) {
         vyavasaayeeCount = (data['CountByVyavasaayeeCategory'] == null ? 0 : data['CountByVyavasaayeeCategory']);
         totalVyavasaayee = totalVyavasaayee + vyavasaayeeCount;
@@ -2244,9 +2306,18 @@ Future<dynamic> refreshDashboardData(String? userID, String? targetGeoUnitID) as
 
     lstYesterdayVruttaDetail = [];
     if (listYesterdayVruttaDetail.length > 0) {
-      int baalCnt = 0, totalBaal = 0, tarunVidyaarthiCnt = 0, totalTarunVidyaarthi = 0;
-      int tarunVyavasaayeeCnt = 0, totalTarunVyavasaayee = 0, proudhCnt = 0, totalProudh = 0;
-      int shishuCnt = 0, totalShishu = 0, abhyaagatCnt = 0, totalAbhyaagat = 0;
+      int baalCnt = 0,
+          totalBaal = 0,
+          tarunVidyaarthiCnt = 0,
+          totalTarunVidyaarthi = 0;
+      int tarunVyavasaayeeCnt = 0,
+          totalTarunVyavasaayee = 0,
+          proudhCnt = 0,
+          totalProudh = 0;
+      int shishuCnt = 0,
+          totalShishu = 0,
+          abhyaagatCnt = 0,
+          totalAbhyaagat = 0;
       for (var data in listYesterdayVruttaDetail) {
         baalCnt = (data['BaalVidyaarthiCount'] == null ? 0 : data['BaalVidyaarthiCount']);
         totalBaal = totalBaal + baalCnt;
@@ -2280,13 +2351,31 @@ Future<dynamic> refreshDashboardData(String? userID, String? targetGeoUnitID) as
       }
       // Totals row
       lstYesterdayVruttaDetail.add(
-        new YesterdayVruttaDetailBAL(0, 0, getLabel('Total'), 0, '', 0, '', totalShishu, totalBaal, totalTarunVidyaarthi, totalTarunVyavasaayee, totalProudh, totalAbhyaagat),
+        new YesterdayVruttaDetailBAL(
+            0,
+            0,
+            getLabel('Total'),
+            0,
+            '',
+            0,
+            '',
+            totalShishu,
+            totalBaal,
+            totalTarunVidyaarthi,
+            totalTarunVyavasaayee,
+            totalProudh,
+            totalAbhyaagat),
       );
     }
 
     lstYesterdayVruttaSummary = [];
     if (listYesterdayVruttaSummary.length > 0) {
-      int shCnt = 0, totalShaakhaa = 0, spCnt = 0, totalSaaptaa = 0, mdCnt = 0, totalMandali = 0;
+      int shCnt = 0,
+          totalShaakhaa = 0,
+          spCnt = 0,
+          totalSaaptaa = 0,
+          mdCnt = 0,
+          totalMandali = 0;
       for (var data in listYesterdayVruttaSummary) {
         shCnt = (data['ShaakhaaCount'] == null ? 0 : data['ShaakhaaCount']);
         totalShaakhaa = totalShaakhaa + shCnt;
@@ -2294,25 +2383,61 @@ Future<dynamic> refreshDashboardData(String? userID, String? targetGeoUnitID) as
         totalSaaptaa = totalSaaptaa + spCnt;
         mdCnt = (data['MilanMandaliCount'] == null ? 0 : data['MilanMandaliCount']);
         totalMandali = totalMandali + mdCnt;
-        lstYesterdayVruttaSummary.add(new YesterdayVruttaSummaryBAL(data['GeoUnitID'], data['GeoUnitName'], data['VayogatID'], data['VayogatCode'], shCnt, spCnt, mdCnt));
+        lstYesterdayVruttaSummary.add(new YesterdayVruttaSummaryBAL(
+            data['GeoUnitID'],
+            data['GeoUnitName'],
+            data['VayogatID'],
+            data['VayogatCode'],
+            shCnt,
+            spCnt,
+            mdCnt));
       }
       // Totals row
-      lstYesterdayVruttaSummary.add(new YesterdayVruttaSummaryBAL(0, getLabel('Total'), 0, '', totalShaakhaa, totalSaaptaa, totalMandali));
+      lstYesterdayVruttaSummary.add(new YesterdayVruttaSummaryBAL(
+          0,
+          getLabel('Total'),
+          0,
+          '',
+          totalShaakhaa,
+          totalSaaptaa,
+          totalMandali));
     }
 
     lstYesterdayPraantData = [];
     if (listYesterdayPraantShaakhaaCountByVayogat.length > 0) {
-      int shaakhaa = 0, saaptaa = 0;
-      int shaakhaaTotal = 0, saaptaaTotal = 0;
+      int shaakhaa = 0,
+          saaptaa = 0;
+      int shaakhaaTotal = 0,
+          saaptaaTotal = 0;
       for (var data in listYesterdayPraantShaakhaaCountByVayogat) {
         shaakhaa = data['ShaakhaaCount'] == null ? 0 : data['ShaakhaaCount'];
         shaakhaaTotal = shaakhaaTotal + shaakhaa;
         saaptaa = data['SaaptaahikCount'] == null ? 0 : data['SaaptaahikCount'];
         saaptaaTotal = saaptaaTotal + saaptaa;
-        lstYesterdayPraantData.add(new DashboardSadyaSthitiDataBAL(data['VayogatID'], data['VayogatCode'], shaakhaa, null, saaptaa, null, null, null, null, null));
+        lstYesterdayPraantData.add(new DashboardSadyaSthitiDataBAL(
+            data['VayogatID'],
+            data['VayogatCode'],
+            shaakhaa,
+            null,
+            saaptaa,
+            null,
+            null,
+            null,
+            null,
+            null));
       }
       // Totals row
-      lstYesterdayPraantData.add(new DashboardSadyaSthitiDataBAL(0, getLabel('Total'), shaakhaaTotal, null, saaptaaTotal, null, null, null, null, null));
+      lstYesterdayPraantData.add(new DashboardSadyaSthitiDataBAL(
+          0,
+          getLabel('Total'),
+          shaakhaaTotal,
+          null,
+          saaptaaTotal,
+          null,
+          null,
+          null,
+          null,
+          null));
     }
 
     lstSankalpByAadhaarData = [];
@@ -2344,11 +2469,25 @@ Future<dynamic> refreshDashboardData(String? userID, String? targetGeoUnitID) as
 
         if (shaakhaa == 0 && saaptaa == 0) continue;
         lstSankalpByAadhaarData.add(
-          new SankalpByAadhaarBAL(data['VayogatID'], data['VayogatCode'], data['SankalpAadhaar'], shaakhaa, saaptaa, sankalpitMasikMilankCount, sankalpitSanghaMandalikCount),
+          new SankalpByAadhaarBAL(
+              data['VayogatID'],
+              data['VayogatCode'],
+              data['SankalpAadhaar'],
+              shaakhaa,
+              saaptaa,
+              sankalpitMasikMilankCount,
+              sankalpitSanghaMandalikCount),
         );
       }
       // Totals row
-      lstSankalpByAadhaarData.add(new SankalpByAadhaarBAL(0, getLabel('Total'), '', totalShaakhaa, totalSaaptaa, totalsankalpitMasikMilankCount, totalsankalpitSanghaMandalikCount));
+      lstSankalpByAadhaarData.add(new SankalpByAadhaarBAL(
+          0,
+          getLabel('Total'),
+          '',
+          totalShaakhaa,
+          totalSaaptaa,
+          totalsankalpitMasikMilankCount,
+          totalsankalpitSanghaMandalikCount));
     }
 
     lstBhaugolikVistaar = [];
@@ -2877,7 +3016,10 @@ Future<void> syncOfflineUserSyncData(int syncVers, String tableName) async {
       );
     }
 
-    if (responseBody['deleteGeoUnitID'] != null && responseBody['deleteGeoUnitID'].toString().trim().isNotEmpty) {
+    if (responseBody['deleteGeoUnitID'] != null && responseBody['deleteGeoUnitID']
+        .toString()
+        .trim()
+        .isNotEmpty) {
       final _geoDeleteList = responseBody['deleteGeoUnitID'].toString().split(",").toList();
 
       await DatabaseHelper.deleteBulkByKeyIn(
@@ -2981,7 +3123,7 @@ Future<NagarVastiSampurnaModel?> vastisarvekshanAllReportData(context, String? u
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   var response =
-      await http.post(Uri.parse(urlNagarVastisarvekshanReport), headers: jHeaders, body: json.encode({"AppUserID": userID, "GeoUnitID": int.tryParse(targetGeoUnitID ?? "0") ?? 0, "type": levelType}));
+  await http.post(Uri.parse(urlNagarVastisarvekshanReport), headers: jHeaders, body: json.encode({"AppUserID": userID, "GeoUnitID": int.tryParse(targetGeoUnitID ?? "0") ?? 0, "type": levelType}));
 
   print(json.encode({"AppUserID": userID, "GeoUnitID": int.tryParse(targetGeoUnitID ?? "0") ?? 0, "type": levelType}));
   log("api ==>  $urlNagarVastisarvekshanReport");
@@ -3117,7 +3259,7 @@ Future<MandalVastisarvekshanReportModel?> vastisarvekshanOnlyMandalReportData(co
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   var response =
-      await http.post(Uri.parse(mandalVastisarvekshanReport), headers: jHeaders, body: json.encode({"AppUserID": userID, "GeoUnitID": int.tryParse(targetGeoUnitID ?? "0") ?? 0, "type": levelType}));
+  await http.post(Uri.parse(mandalVastisarvekshanReport), headers: jHeaders, body: json.encode({"AppUserID": userID, "GeoUnitID": int.tryParse(targetGeoUnitID ?? "0") ?? 0, "type": levelType}));
 
   print(json.encode({"AppUserID": userID, "GeoUnitID": int.tryParse(targetGeoUnitID ?? "0") ?? 0, "type": levelType}));
   log("response ==>  $response");
@@ -3294,9 +3436,22 @@ Future<dynamic> getDashboardDataByGeoUnit(String userID, String targetGeoUnitID)
 
     tgLstdashboardSadyaSthitiData = [];
     if (listShaakhaaCountByVayogat.length > 0) {
-      int shaakhaa = 0, mandali = 0, maasik = 0, saaptaa = 0, sankalpitShaakhaa = 0, sankalpitSaaptaa = 0;
-      int shaakhaaTotal = 0, mandaliTotal = 0, maasikTotal = 0, saaptaaTotal = 0, sankalpitMaasikMilanCount = 0, sankalpitSanghaMandaliCount = 0;
-      int sankalpitShaakhaaTotal = 0, sankalpitSaaptaaTotal = 0, sankalpitMaasikMilanTotal = 0, sankalpitSanghaMandaliTotal = 0;
+      int shaakhaa = 0,
+          mandali = 0,
+          maasik = 0,
+          saaptaa = 0,
+          sankalpitShaakhaa = 0,
+          sankalpitSaaptaa = 0;
+      int shaakhaaTotal = 0,
+          mandaliTotal = 0,
+          maasikTotal = 0,
+          saaptaaTotal = 0,
+          sankalpitMaasikMilanCount = 0,
+          sankalpitSanghaMandaliCount = 0;
+      int sankalpitShaakhaaTotal = 0,
+          sankalpitSaaptaaTotal = 0,
+          sankalpitMaasikMilanTotal = 0,
+          sankalpitSanghaMandaliTotal = 0;
       for (var data in listShaakhaaCountByVayogat) {
         shaakhaa = data['ShaakhaaCount'] == null ? 0 : data['ShaakhaaCount'];
         shaakhaaTotal = shaakhaaTotal + shaakhaa;
@@ -3348,7 +3503,8 @@ Future<dynamic> getDashboardDataByGeoUnit(String userID, String targetGeoUnitID)
 
     tgLstGatividhiKaaryakartaa = [];
     if (listKaaryakartaaCountByGatividhi.length > 0) {
-      int kartaaCount = 0, totalCount = 0;
+      int kartaaCount = 0,
+          totalCount = 0;
       for (var data in listKaaryakartaaCountByGatividhi) {
         kartaaCount = (data['KaaryakartaaCount'] == null ? 0 : data['KaaryakartaaCount']);
         totalCount = totalCount + kartaaCount;
@@ -3360,7 +3516,8 @@ Future<dynamic> getDashboardDataByGeoUnit(String userID, String targetGeoUnitID)
 
     tgLstAayaamKaaryakartaa = [];
     if (listKaaryakartaaCountByAayaam.length > 0) {
-      int kartaaCount = 0, totalCount = 0;
+      int kartaaCount = 0,
+          totalCount = 0;
       for (var data in listKaaryakartaaCountByAayaam) {
         kartaaCount = (data['KaaryakartaaCount'] == null ? 0 : data['KaaryakartaaCount']);
         totalCount = totalCount + kartaaCount;
@@ -3375,7 +3532,8 @@ Future<dynamic> getDashboardDataByGeoUnit(String userID, String targetGeoUnitID)
 
     tgLstPreritKaaryakartaa = [];
     if (listKaaryakartaaCountByPreritSansthaa.length > 0) {
-      int kartaaCount = 0, totalCount = 0;
+      int kartaaCount = 0,
+          totalCount = 0;
       for (var data in listKaaryakartaaCountByPreritSansthaa) {
         kartaaCount = (data['KaaryakartaaCount'] == null ? 0 : data['KaaryakartaaCount']);
         totalCount = totalCount + kartaaCount;
@@ -3403,7 +3561,8 @@ Future<dynamic> getDashboardDataByGeoUnit(String userID, String targetGeoUnitID)
 
     tgLstSocialOrgKaaryakartaa = [];
     if (listKaaryakartaaCountBySocialOrg.length > 0) {
-      int kartaaCount = 0, totalCount = 0;
+      int kartaaCount = 0,
+          totalCount = 0;
       for (var data in listKaaryakartaaCountBySocialOrg) {
         kartaaCount = (data['KaaryakartaaCount'] == null ? 0 : data['KaaryakartaaCount']);
         totalCount = totalCount + kartaaCount;
@@ -3431,7 +3590,8 @@ Future<dynamic> getDashboardDataByGeoUnit(String userID, String targetGeoUnitID)
 
     tgLstStudentCategory = [];
     if (listStudentCountByCategory.length > 0) {
-      int studentCount = 0, totalStudent = 0;
+      int studentCount = 0,
+          totalStudent = 0;
       for (var data in listStudentCountByCategory) {
         studentCount = (data['CountByStudentCategory'] == null ? 0 : data['CountByStudentCategory']);
         totalStudent = totalStudent + studentCount;
@@ -3443,7 +3603,8 @@ Future<dynamic> getDashboardDataByGeoUnit(String userID, String targetGeoUnitID)
 
     tgLstVyavasaayeeCategory = [];
     if (listVyavasaayeeCountByCategory.length > 0) {
-      int vyavasaayeeCount = 0, totalVyavasaayee = 0;
+      int vyavasaayeeCount = 0,
+          totalVyavasaayee = 0;
       for (var data in listVyavasaayeeCountByCategory) {
         vyavasaayeeCount = (data['CountByVyavasaayeeCategory'] == null ? 0 : data['CountByVyavasaayeeCategory']);
         totalVyavasaayee = totalVyavasaayee + vyavasaayeeCount;
@@ -3455,7 +3616,12 @@ Future<dynamic> getDashboardDataByGeoUnit(String userID, String targetGeoUnitID)
 
     tgLstYesterdayVruttaSummary = [];
     if (listYesterdayVruttaSummary.length > 0) {
-      int shCnt = 0, totalShaakhaa = 0, spCnt = 0, totalSaaptaa = 0, mdCnt = 0, totalMandali = 0;
+      int shCnt = 0,
+          totalShaakhaa = 0,
+          spCnt = 0,
+          totalSaaptaa = 0,
+          mdCnt = 0,
+          totalMandali = 0;
       for (var data in listYesterdayVruttaSummary) {
         shCnt = (data['ShaakhaaCount'] == null ? 0 : data['ShaakhaaCount']);
         totalShaakhaa = totalShaakhaa + shCnt;
@@ -3463,17 +3629,40 @@ Future<dynamic> getDashboardDataByGeoUnit(String userID, String targetGeoUnitID)
         totalSaaptaa = totalSaaptaa + spCnt;
         mdCnt = (data['MilanMandaliCount'] == null ? 0 : data['MilanMandaliCount']);
         totalMandali = totalMandali + mdCnt;
-        tgLstYesterdayVruttaSummary.add(new YesterdayVruttaSummaryBAL(data['GeoUnitID'], data['GeoUnitName'], data['VayogatID'], data['VayogatCode'], shCnt, spCnt, mdCnt));
+        tgLstYesterdayVruttaSummary.add(new YesterdayVruttaSummaryBAL(
+            data['GeoUnitID'],
+            data['GeoUnitName'],
+            data['VayogatID'],
+            data['VayogatCode'],
+            shCnt,
+            spCnt,
+            mdCnt));
       }
       // Totals row
-      tgLstYesterdayVruttaSummary.add(new YesterdayVruttaSummaryBAL(0, getLabel('Total'), 0, '', totalShaakhaa, totalSaaptaa, totalMandali));
+      tgLstYesterdayVruttaSummary.add(new YesterdayVruttaSummaryBAL(
+          0,
+          getLabel('Total'),
+          0,
+          '',
+          totalShaakhaa,
+          totalSaaptaa,
+          totalMandali));
     }
 
     tgLstYesterdayVruttaDetail = [];
     if (listYesterdayVruttaDetail.length > 0) {
-      int baalCnt = 0, totalBaal = 0, tarunVidyaarthiCnt = 0, totalTarunVidyaarthi = 0;
-      int tarunVyavasaayeeCnt = 0, totalTarunVyavasaayee = 0, proudhCnt = 0, totalProudh = 0;
-      int shishuCnt = 0, totalShishu = 0, abhyaagatCnt = 0, totalAbhyaagat = 0;
+      int baalCnt = 0,
+          totalBaal = 0,
+          tarunVidyaarthiCnt = 0,
+          totalTarunVidyaarthi = 0;
+      int tarunVyavasaayeeCnt = 0,
+          totalTarunVyavasaayee = 0,
+          proudhCnt = 0,
+          totalProudh = 0;
+      int shishuCnt = 0,
+          totalShishu = 0,
+          abhyaagatCnt = 0,
+          totalAbhyaagat = 0;
       for (var data in listYesterdayVruttaDetail) {
         baalCnt = (data['BaalVidyaarthiCount'] == null ? 0 : data['BaalVidyaarthiCount']);
         totalBaal = totalBaal + baalCnt;
@@ -3507,7 +3696,20 @@ Future<dynamic> getDashboardDataByGeoUnit(String userID, String targetGeoUnitID)
       }
       // Totals row
       tgLstYesterdayVruttaDetail.add(
-        new YesterdayVruttaDetailBAL(0, 0, getLabel('Total'), 0, '', 0, '', totalShishu, totalBaal, totalTarunVidyaarthi, totalTarunVyavasaayee, totalProudh, totalAbhyaagat),
+        new YesterdayVruttaDetailBAL(
+            0,
+            0,
+            getLabel('Total'),
+            0,
+            '',
+            0,
+            '',
+            totalShishu,
+            totalBaal,
+            totalTarunVidyaarthi,
+            totalTarunVyavasaayee,
+            totalProudh,
+            totalAbhyaagat),
       );
     }
 
@@ -3545,11 +3747,25 @@ Future<dynamic> getDashboardDataByGeoUnit(String userID, String targetGeoUnitID)
         totalmaasikMilanCount = totalmaasikMilanCount + maasikMilanCount;
 
         tgLstSankalpByAadhaarData.add(
-          new SankalpByAadhaarBAL(data['VayogatID'], data['VayogatCode'], data['SankalpAadhaar'], shaakhaa, saaptaa, sankalpitMasikMilankCount, sankalpitSanghaMandalikCount),
+          new SankalpByAadhaarBAL(
+              data['VayogatID'],
+              data['VayogatCode'],
+              data['SankalpAadhaar'],
+              shaakhaa,
+              saaptaa,
+              sankalpitMasikMilankCount,
+              sankalpitSanghaMandalikCount),
         );
       }
       // Totals row
-      tgLstSankalpByAadhaarData.add(new SankalpByAadhaarBAL(0, getLabel('Total'), '', totalShaakhaa, totalSaaptaa, totalsankalpitMasikMilankCount, totalsankalpitSanghaMandalikCount));
+      tgLstSankalpByAadhaarData.add(new SankalpByAadhaarBAL(
+          0,
+          getLabel('Total'),
+          '',
+          totalShaakhaa,
+          totalSaaptaa,
+          totalsankalpitMasikMilankCount,
+          totalsankalpitSanghaMandalikCount));
     }
 
     tgLstBhaugolikVistaar = [];
@@ -5110,13 +5326,17 @@ Future<List<ShaakhaaVruttaBAL>?> getShaakhaaVruttaListForApp(context, var shaakh
     // context: context,
     url: urlGetShaakhaaVruttaListForApp,
     body: {"ShaakhaaID": shaakhaaID, "ShaakhaaVruttaID": null},
-    parse: (json) => ShaakhaaVruttaBALRespModel.fromJson(json).shaakhaaVruttaList ?? [],
-    fromLocal: () => DatabaseHelper.getAllOfflineData<ShaakhaaVruttaBAL>(
-      tableName: 'ShaakhaVruttaMaster',
-      fromMap: ShaakhaaVruttaBAL.fromMap,
-      where: 'ShaakhaaID = ?',
-      whereArgs: [shaakhaaID?.toString()],
-    ),
+    parse: (json) =>
+    ShaakhaaVruttaBALRespModel
+        .fromJson(json)
+        .shaakhaaVruttaList ?? [],
+    fromLocal: () =>
+        DatabaseHelper.getAllOfflineData<ShaakhaaVruttaBAL>(
+          tableName: 'ShaakhaVruttaMaster',
+          fromMap: ShaakhaaVruttaBAL.fromMap,
+          where: 'ShaakhaaID = ?',
+          whereArgs: [shaakhaaID?.toString()],
+        ),
   );
 
   final _draftData = await DatabaseHelper.getAllOfflineData<ShaakhaaVruttaBAL>(
@@ -5126,7 +5346,19 @@ Future<List<ShaakhaaVruttaBAL>?> getShaakhaaVruttaListForApp(context, var shaakh
     whereArgs: [shaakhaaID?.toString(), "ShaakhaVruttaMaster"],
   );
 
-  final List<ShaakhaaVruttaBAL> combinedData = [..._draftData, ...(_apiData ?? [])];
+// Get all dates available in API data
+  final apiDates = (_apiData ?? []).map((e) =>
+  e.vruttaDate
+      ?.split(' ')
+      .first).where((date) => date != null && date!.isNotEmpty).toSet();
+
+// Remove draft records whose date already exists in API data
+  final filteredDraftData = _draftData.where((draft) => !apiDates.contains(draft.vruttaDate)).toList();
+
+  final List<ShaakhaaVruttaBAL> combinedData = [
+    ...filteredDraftData,
+    ...(_apiData ?? []),
+  ];
 
   combinedData.sort((a, b) {
     final dateA = DateFormat('dd/MM/yyyy').parse(a.vruttaDate ?? '');
@@ -5149,7 +5381,11 @@ Future<ShaakhaaVruttaBAL?> getShaakhaaVruttaDetailsByDateForApp(var shaakhaaID, 
     url: urlGetShaakhaaVruttabydate,
     body: body,
     showInternetToast: false,
-    parse: (json) => ShaakhaaVruttaBALRespModel.fromJson(json).shaakhaaVruttaList?.firstOrNull,
+    parse: (json) =>
+    ShaakhaaVruttaBALRespModel
+        .fromJson(json)
+        .shaakhaaVruttaList
+        ?.firstOrNull,
     fromLocal: () async {
       final _res = await DatabaseHelper.getAllOfflineData<ShaakhaaVruttaBAL>(
         tableName: 'ShaakhaVruttaMaster',
@@ -5296,7 +5532,12 @@ Future<String> _getDirectoryPathFun(String fileName) async {
   } else {
     dir = await getApplicationDocumentsDirectory();
   }
-  final ts = DateTime.now().toIso8601String().replaceAll(':', '-').split(".").first;
+  final ts = DateTime
+      .now()
+      .toIso8601String()
+      .replaceAll(':', '-')
+      .split(".")
+      .first;
   final path = '${dir!.path}/${fileName}_$ts.xlsx';
   log(path);
   return path;
@@ -5557,20 +5798,18 @@ Future<dynamic> getSwayamsevakOtherInfoForApp(String swayamsevakID) async {
   return data;
 }
 
-Future<List<GeoUnitMasterBAL>> getGeoUnitMasterForApp(
-  String geoUnitID,
-  String praantID,
-  String geoUnitName,
-  String levelID,
-  String parentMahaanagarID,
-  String parentVibhaagID,
-  String parentBhaagID,
-  String parentShaharID,
-  String parentNagarID,
-  String parentMandalID,
-  String parentGraamID,
-  String parentVastiID,
-) async {
+Future<List<GeoUnitMasterBAL>> getGeoUnitMasterForApp(String geoUnitID,
+    String praantID,
+    String geoUnitName,
+    String levelID,
+    String parentMahaanagarID,
+    String parentVibhaagID,
+    String parentBhaagID,
+    String parentShaharID,
+    String parentNagarID,
+    String parentMandalID,
+    String parentGraamID,
+    String parentVastiID,) async {
   bool? connected = await isInternetConnected();
   if (connected != true) {
     return [];
@@ -6757,7 +6996,9 @@ Future<List<Bhaitakdata>?> SaveSadbhavBaithakVruttaData({required BuildContext c
     // Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
     final responseData = json.decode(response.body);
     if (responseData["Status"].toString() == "Success" || responseData["Status"].toString() == "200") {
-      return SadbhavKendraRespModel.fromJson(responseData).bhaitakdata;
+      return SadbhavKendraRespModel
+          .fromJson(responseData)
+          .bhaitakdata;
     }
     if (responseData["Status"].toString() == "404") {
       Statics.showToast(Statics.getLabel('baithakDateValidation'));
@@ -7118,7 +7359,9 @@ Future<List<Bhaitakdata>?> SavePramukhJanVruttaData({required BuildContext conte
     // Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
     final responseData = json.decode(response.body);
     if (responseData["Status"].toString() == "Success" || responseData["Status"].toString() == "200") {
-      return SadbhavKendraRespModel.fromJson(responseData).bhaitakdata;
+      return SadbhavKendraRespModel
+          .fromJson(responseData)
+          .bhaitakdata;
     }
     if (responseData["Status"].toString() == "404") {
       Statics.showToast(Statics.getLabel('baithakDateValidation'));
@@ -7264,7 +7507,9 @@ Future<List<Bhaitakdata>?> SaveYuvaSangamVruttaData({required BuildContext conte
     final responseData = json.decode(response.body);
     if (responseData["Status"].toString() == "Success" || responseData["Status"].toString() == "200") {
       Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
-      return SadbhavKendraRespModel.fromJson(responseData).bhaitakdata;
+      return SadbhavKendraRespModel
+          .fromJson(responseData)
+          .bhaitakdata;
     }
     if (responseData["Status"].toString() == "404") {
       Statics.showToast(Statics.getLabel('baithakDateValidation'));
@@ -7574,18 +7819,22 @@ Future<List<ShaakhaaList>?> getShaakhaaSaptahListData(BuildContext context, Map<
     body: inputJson,
     context: context,
     // shows/pops loader
-    parse: (json) => ShaakhaaVistarListRespModel.fromJson(json).shaakhaaList ?? [],
-    fromLocal: () => DatabaseHelper.getAllOfflineData<ShaakhaaList>(
-      tableName: 'VistarShaakhaListMaster',
-      fromMap: ShaakhaaList.fromJson,
-      where: geo == 0
-          ? null
-          : '''
+    parse: (json) =>
+    ShaakhaaVistarListRespModel
+        .fromJson(json)
+        .shaakhaaList ?? [],
+    fromLocal: () =>
+        DatabaseHelper.getAllOfflineData<ShaakhaaList>(
+          tableName: 'VistarShaakhaListMaster',
+          fromMap: ShaakhaaList.fromJson,
+          where: geo == 0
+              ? null
+              : '''
           ParentBhaagID = ? OR ParentNagarID = ? OR ParentUpaNagarID = ?
           OR ParentMandalID = ? OR ParentGraamID = ? OR ParentVastiID = ? OR ? IS NULL
       ''',
-      whereArgs: geo == 0 ? null : List.filled(7, geo),
-    ),
+          whereArgs: geo == 0 ? null : List.filled(7, geo),
+        ),
   );
 }
 
@@ -8167,7 +8416,11 @@ Widget createWidgetFromString(BuildContext context, String label, double width, 
     height: 90,
     padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
     alignment: alignment,
-    color: (isTotalRow ? Theme.of(context).colorScheme.secondary.withOpacity(0.1) : Colors.white),
+    color: (isTotalRow ? Theme
+        .of(context)
+        .colorScheme
+        .secondary
+        .withOpacity(0.1) : Colors.white),
   );
 }
 
@@ -8178,7 +8431,11 @@ Widget createWidgetFromIcon(BuildContext context, IconData? iconData, double wid
     height: height,
     padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
     alignment: alignment,
-    color: (isTotalRow ? Theme.of(context).colorScheme.secondary.withOpacity(0.1) : Colors.white),
+    color: (isTotalRow ? Theme
+        .of(context)
+        .colorScheme
+        .secondary
+        .withOpacity(0.1) : Colors.white),
   );
 }
 

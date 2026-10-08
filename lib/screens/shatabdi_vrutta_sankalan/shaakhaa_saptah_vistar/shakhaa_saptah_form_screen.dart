@@ -133,7 +133,8 @@ class _ShakhaaSaptahFormScreenState extends State<ShakhaaSaptahFormScreen> {
     _boudhikDaysList = await Statics.getStaticLDB('boudhikDaysList');
     // _sewaDaysList = await Statics.getStaticLDB('sewaDaysList');
     if (widget.shaakhaa != null) {
-      var code = data2[data2.indexWhere((e) => e.staticID == widget.shaakhaa!.vayogatID)].code;
+      final _ind = data2.indexWhere((e) => e.staticID == widget.shaakhaa!.vayogatID);
+      var code = _ind != -1 ? data2[_ind].code : '';
       var freq = widget.shaakhaa!.frequencyID;
       setState(() {
         vayogatCode = code!;

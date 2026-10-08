@@ -160,7 +160,7 @@ class _VruttaDraftScreenState extends State<VruttaDraftScreen> {
       final id = entry.value['id'] as int;
       final tablename = entry.value['tablename'] as String;
 
-      final geo = tablename == 'VistarShaakhaVruttaMaster' ? await Statics.getLocalVistarShaakhaaByID(id.toString()) : await Statics.getLocalShaakhaaByID(id.toString());
+      final geo = tablename == 'VistarShaakhaVruttaMaster' ? await Statics.getLocalVistarShaakhaaByIDGeoMaster(id.toString()) : await Statics.getLocalShaakhaaByID(id.toString());
 
       return MapEntry(entry.key, geo == null ? '-' : _resolveName(geo));
     }));
@@ -303,6 +303,7 @@ class _VruttaDraftScreenState extends State<VruttaDraftScreen> {
       if (!mounted) return;
       final syncedCount = allSent.length - allConflictIds.length;
       Statics.showToast('Synced $syncedCount — ${allConflictIds.length} already exist online');
+      Statics.showMessageDialog(context, Statics.getLabel("conflictedSyncData").replaceAll("{length}", "${allConflictIds.length}"));
     } catch (e) {
       log('Sync exception: $e');
       if (mounted) Statics.showToast(Statics.getLabel('failedtosync'));
@@ -343,7 +344,7 @@ class _VruttaDraftScreenState extends State<VruttaDraftScreen> {
 
   // ⚠️ Left unimplemented pending your answer above — pkid may be null
   // for a never-synced draft, and EditShaakhaaVrutta needs a vruttaID.
-  void _editDraft(Map<String, dynamic> row, {bool isnew = false}) {
+  void _editDraft(Map<String, dynamic> row, {bool isnew = false}) async {
     final vruttaId = row['pkid'] ?? row['ShaakhaaID'];
     if (vruttaId == null) {
       Statics.showToast('This draft has not synced yet — edit not available offline');
@@ -352,12 +353,16 @@ class _VruttaDraftScreenState extends State<VruttaDraftScreen> {
     if (isnew) {
       final _parsedDate = intl.DateFormat('dd/MM/yyyy').parse(row['VruttaDate'].toString());
       final _formattedDate = intl.DateFormat('yyyy-MM-dd').format(_parsedDate);
+
+      final _shaakhaa = await Statics.getLocalVistarShaakhaaByID(row['ShaakhaaID'].toString());
+
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => ShakhaaSaptahFormScreen(
             shaakhaaId: int.tryParse(vruttaId.toString()),
             isNew: true,
+            shaakhaa: _shaakhaa,
             viewType: "EditVrutta",
             vruttadate: row['VruttaDate'] != null && (row['VruttaDate']?.toString().isNotEmpty == true) ? intl.DateFormat('yyyy-MM-dd').parse(_formattedDate) : null,
           ),
